@@ -1,0 +1,19 @@
+/* input & select design - width m&s */
+#vp-wrapper .vp-input,
+#vp-wrapper .vp-select {
+    width: 176px;
+    height: 24px;
+}
+#vp-wrapper .vp-input.m,
+#vp-wrapper .vp-select.m {
+    width: 116px;
+}
+#vp-wrapper .vp-input.s,
+#vp-wrapper .vp-select.s {
+    width: 55px;
+}
+/* range */
+#vp-wrapper .vp-range {
+    display: inline;
+    width: 116px;
+}

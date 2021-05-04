@@ -1,0 +1,74 @@
+/* select boxes */
+.vp-ins-box {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-gap: 10px;
+    padding: 5px 14px 0px 14px;
+}
+.vp-ins-select-container {
+    
+}
+.vp-ins-select-title {
+    font-weight: bold;
+    padding: 5px 5px 5px 0px;
+}
+#vp-wrapper .vp-ins-select-container input.vp-ins-search {
+    width: 100%;
+}
+.vp-ins-select-box {
+    margin-top: 5px;
+    border: 0.25px solid #C4C4C4;
+}
+.vp-ins-select-list {
+    height: 200px;
+    width: 100%;
+
+    list-style: none;
+    margin: 0px;
+    padding: 0px 5px 0px 5px;
+    color: #696969;
+
+    overflow: auto;
+}
+.vp-ins-select-list::-webkit-scrollbar {
+    height: 5px;
+    width: 5px;
+}
+.vp-ins-select-list::-webkit-scrollbar-track {
+    border-radius: 0;
+    background: #eeeeee;
+}
+
+.vp-ins-select-list::-webkit-scrollbar-thumb {
+    border-radius: 0;
+    background: #b0b0b0;
+}
+.vp-ins-select-item {
+    margin-top: 3px;
+    margin-bottom: 3px;
+    cursor: pointer;
+}
+.vp-ins-select-item span {
+    background: #e0e0e0;
+    border-radius: 10px;
+    padding: 0px 5px 0px 5px;
+    margin-right: 5px;
+}
+.vp-ins-select-item:hover {
+    color: #F37704;
+}
+.vp-ins-select-item:hover span {
+    background: #F37704;
+    color: #FFFFFF;
+}
+.vp-ins-option-box.api {
+    width: 95%;
+}
+
+.vp-ins-parameter-box {
+    grid-column: 1/3;
+}
+.vp-ins-parameter {
+    width: 100% !important;
+}

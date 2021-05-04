@@ -1,0 +1,211 @@
+:root {
+  --color: #C4C4C4;
+  --bgcolor: #696969;
+}
+.vp-plot-kind {
+  /* background: #F5F5F5; */
+  width: 320px;
+  display: grid;
+  grid-template-rows: repeat(2, 100px);
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 100px;
+
+  grid-gap: 4.5px;
+  margin-bottom: 20px;
+}
+.vp-plot-item {
+  /* display: flex; */
+  justify-content: center;
+  align-items: center;
+  padding: 3px;
+  box-sizing: border-box;
+  position: relative;
+  font-size: 1em;
+  font-weight: 900;
+  /* text-shadow: 3px 0 0 rgba(white, .5); */
+  cursor: pointer;
+}
+/* .vp-plot-item::before {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  border-radius: 10px;
+  box-sizing: border-box;
+  width: calc(100% - 10px);
+  height: calc(100% - 10px);
+  z-index: -1;
+}
+.vp-plot-item::after {
+  content: attr(data-show-text);
+  display: block;
+  height: 100%;
+  width: 100%;
+  line-height: 80px;
+  opacity: 0;
+  text-align: center;
+  color: white;
+  position: absolute;
+  border-radius: 15px;
+  background: var(--bgcolor);
+  -moz-transition: all 0.5s;
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
+}
+
+.vp-plot-item:hover:after {
+  opacity: 0.6;
+}
+.vp-plot-item.selected:after {
+  opacity: 0.8;
+} */
+.vp-plot-item .vp-plot-name {
+  width: 100%;
+  height: 13px;
+  font-family: Apple SD Gothic Neo;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 11px;
+  line-height: 13px;
+  text-align: center;
+
+  margin-top: 3px;
+}
+.vp-plot-item.selected .vp-plot-thumb {
+  border: 0.25px solid  var(--hightlight-color);
+}
+.vp-plot-item.selected .vp-plot-name {
+  color:  var(--font-hightlight) !important;
+}
+.vp-plot-item .vp-plot-thumb {
+  width: 100%;
+  height: 80%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+
+  border: 0.25px solid #828282;
+}
+.vp-plot-item .vp-plot-thumb.line {
+  background-image: url(../../resource/pandas/plot/line.JPG);
+}
+.vp-plot-item .vp-plot-thumb.bar {
+  background-image: url(../../resource/pandas/plot/bar.JPG);
+}
+.vp-plot-item .vp-plot-thumb.barh {
+  background-image: url(../../resource/pandas/plot/barh.JPG);
+}
+.vp-plot-item .vp-plot-thumb.hist {
+  background-image: url(../../resource/pandas/plot/hist.JPG);
+}
+.vp-plot-item .vp-plot-thumb.box {
+  background-image: url(../../resource/pandas/plot/box.JPG);
+}
+.vp-plot-item .vp-plot-thumb.kde {
+  background-image: url(../../resource/pandas/plot/kde.JPG);
+}
+.vp-plot-item .vp-plot-thumb.area {
+  background-image: url(../../resource/pandas/plot/area.JPG);
+}
+.vp-plot-item .vp-plot-thumb.pie {
+  background-image: url(../../resource/pandas/plot/pie.JPG);
+}
+.vp-plot-item .vp-plot-thumb.scatter {
+  background-image: url(../../resource/pandas/plot/scatter.JPG);
+}
+.vp-plot-item .vp-plot-thumb.hexbin {
+  background-image: url(../../resource/pandas/plot/hexbin.JPG);
+}
+
+.vp-plot-cmap {
+  /* width: 200px; */
+  width: 176px;
+  height: 25px;
+  border: 0.25px solid var(--color);
+  /* box-shadow: 1px 1px 3px 1px var(--color);
+  border-radius: 5px; */
+  margin-top: 5px;
+
+  position: relative;
+  display: flex;
+  z-index: 1500;
+
+  cursor: pointer;
+
+  padding: 0px 5px 0px 5px;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='darkgray' height='14' viewBox='0 0 24 24' width='14' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+  background-repeat: no-repeat;
+  background-position-x: 100%;
+  background-position-y: 5px;
+}
+.vp-plot-cmap span {
+  font-size: 1em;
+  font-weight: 700;
+  line-height: 25px;
+  padding-left: 5px;
+}
+.vp-plot-cmap-selector {
+  width: 176px;
+  height: 150px;
+  overflow: auto;
+
+  position: absolute;
+  /* display: none; */
+  top: 100%;
+  left: 0;
+  right: 0;
+  transition: all 0.5s;
+  background-color: white;
+  border: 0.25px solid var(--color);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 1000;
+}
+.vp-plot-cmap-selector .vp-plot-cmap-item { 
+  width: 100%;
+  height: 40px;
+  /* background-image: attr(data-url url); */
+  /* background-image: url(../../resource/pandas/cmap/Accent.JPG); */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+
+  border: 2px solid transparent;
+  position: relative;
+  display: block;
+  cursor: pointer;
+  transition: all 0.5s;
+
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+                              supported by Chrome, Edge, Opera and Firefox */
+}
+.vp-plot-cmap-selector .vp-plot-cmap-item:hover {
+  cursor: pointer;
+  border-color: var(--color);
+}
+.vp-plot-cmap-selector .vp-plot-cmap-item.selected{
+  border-color: var(--color);
+}
+
+.vp-plot-cmap-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.vp-plot-cmap-wrapper.open .vp-plot-cmap-selector {
+  opacity: 1;
+  visibility: visible;
+  /* display: block; */
+  pointer-events: all;
+}
+
+/* 사용자 옵션 설정 input */
+#vp-wrapper .vp-option-page #vp_userOption input[type="text"] {
+  width: 100%;
+}
