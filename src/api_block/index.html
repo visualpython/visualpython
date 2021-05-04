@@ -1,0 +1,156 @@
+<div class="vp-apiblock-container">
+    <input type="hidden" class="vp-gene-meta"/>
+    <div class="vp-option-page"
+         style="padding: 0px;" >
+
+
+            <div class='vp-apiblock-body'>
+                <div class="vp-apiblock-main">
+                    <div class='vp-apiblock-left vp-apiblock-scrollbar no-selection'>
+                        
+                        <!-- Search bar -->
+                        <div class="vp-apiblock-menu-search-container">
+                            <input id="vp_menuSearchBox" class="vp-menu-search-box" type="text" placeholder="Search"/>
+                            <i class="fa fa-search vp-menu-search-icon"></i>
+                        </div>
+
+                        <div class="vp-apiblock-tab-navigation-body 
+                                    vp-apiblock-tab-navigation-body-1">
+     
+                            <div class='vp-apiblock-tab-navigation-node-container'> 
+    
+                                <div class='vp-apiblock-tab-navigation-node-block'
+                                     style='padding-left: 0px;'>
+
+                                     <div class='vp-block-blocktab-name-title
+                                                  vp-apiblock-category vp-apiblock-blocktab-logic
+                                                  vp-accordion-caption'
+                                            data-category="logic">Logic
+                                    </div>
+                                    <div class="vp-block-group-box vp-block-group-box-logic" style="display:none;">
+
+                                    </div>
+                                    
+
+                                    <div class='vp-block-blocktab-name-title
+                                                 vp-apiblock-category vp-apiblock-blocktab-api
+                                                 vp-accordion-caption'
+                                            data-category="api">Library
+                                    </div> 
+                                    <div class='vp-block-group-box vp-block-group-box-api' style="display:none;">
+
+                                    </div>
+
+                                    <div class='vp-block-blocktab-name-title
+                                            vp-apiblock-category vp-apiblock-blocktab-da
+                                            vp-accordion-caption'
+                                            data-category="da">Data Analysis
+                                    </div>
+                                    <div class='vp-block-group-box vp-block-group-box-da' style="display:none;">
+
+                                    </div>
+
+                                    <div class='vp-block-blocktab-name-title
+                                            vp-apiblock-category vp-apiblock-blocktab-ai
+                                            vp-accordion-caption'
+                                            data-category="ai">AI
+                                    </div>
+                                    <div class='vp-block-group-box vp-block-group-box-ai' style="display:none;">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="vp-apiblock-tab-navigation-body 
+                                    vp-apiblock-tab-navigation-body-2">
+                            <div class='vp-apiblock-tab-navigation-node-container'> 
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class='vp-apiblock-right'>
+                        
+                        <div id="vp_apiblock_board_main_title">
+                            <input id="vp_apiblock_board_makenode_input" 
+                                   type="text" 
+                                   placeholder="Untitled"></input>
+                            <input id="vp_apiblock_board_makenode_path" type="hidden"/>
+                            <div class="vp-apiblock-menu-button" >
+
+                                <div class='vp-apiblock-menu-button-inner'>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class='vp-apiblock-board-body 
+                                    vp-apiblock-scrollbar'>
+                        </div>
+
+                        <!-- Code/Text 블럭 생성하는 플로팅 버튼 -->
+                        <div class="vp-apiblock-board-button-container">
+                            <div id="vp_apiblock_board_node_plus_button_container" class="vp-apiblock-style-flex-row">
+                                <div id="vp_apiblock_board_node_plus_button" class="vp-apiblock-option-plus-button">
+                                + Code
+                                </div>
+                                <div id="vp_apiblock_board_text_plus_button" class="vp-apiblock-option-plus-button" style="margin-left: 10px">
+                                + Text
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+              
+                    <div class="vp-apiblock-option-tab
+                                vp-apiblock-option-scrollbar"
+                         id='vp_apiblock_option_page'>
+                        <div class="vp-apiblock-option-navigator">
+                            <div class="vp-apiblock-option-navigator-label">
+                                <span class="vp-orange-text">Visual Python 1.1.0</span>
+                            </div>
+                            <div class="vp-apiblock-option-new-to-save" title="something modified...">
+
+                            </div>
+                        </div>
+                        <div class='vp-apiblock-tab-navigation-node-block vp-apiblock-scrollbar'>
+                            <div class="vp-apiblock-option-container">
+                                <div class="vp-apiblock-option-tab-none">
+                                    <!-- (N/A) -->
+                                    Welcome to <strong>Visual Python</strong> !
+                                    <br/><br/>
+                                    Visual Python is GUI based Python code generator, developed on Jupyter Notebook as an extension.
+                                    <br/><br/>
+                                    For more up-to-date information, visit our website : 
+                                    <a href="https://www.visualpython.ai" target="_blank">www.visualpython.ai</a>
+                                </div>
+                                <div class="vp-apiblock-option-tab-preview" style="display:none;">
+                                    <!-- Overall Code Preview-->
+                                    <textarea id="vp_overallCodePreview" name="code"></textarea>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="vp-apiblock-option-preview-container vp-apiblock-scrollbar" style="display:none;">
+                            <!-- Option Page Code Preview-->
+                            <textarea id="vp_optionCodePreview" name="code"></textarea>
+                        </div>
+                        <div class="vp-apiblock-option-buttons-container no-selection">
+                            <div id="vp_apiblock_board_option_preview_button" class="vp-button add vp-apiblock-option-button vp-apiblock-option-preview-button">
+                            Preview
+                            </div>
+                            <div id="vp_apiblock_board_option_cancel_button" class="vp-button cancel vp-apiblock-option-button vp-apiblock-option-cancel-button">
+                            Cancel
+                            </div>
+                            <div id="vp_apiblock_board_option_apply_button" class="vp-button disabled activated vp-apiblock-option-button vp-apiblock-option-apply-button">
+                            Apply
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+  
+       
+    </div>
+
+</div>

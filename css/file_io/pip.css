@@ -1,0 +1,60 @@
+.vp-pip-inner-box {
+    min-height: 350px;
+    width: 90%;
+    margin: 10px 10px 10px 10px;
+}
+#vp-wrapper input.vp-pip-search {
+    width: 100%;
+    height: 25px;
+}
+#vp-wrapper select.vp-select.l {
+    width: 100%;
+    height: 30px;
+    margin-top: 10px;
+    padding-left: 25px;
+    background-position: 8px 50%;
+    background-image: url('../../resource/play-mini-fill(dark grey).svg');
+}
+
+.vp-pip-loading-box {
+    min-height: 300px;
+    margin-top: 10px;
+}
+.vp-pip-package-box {
+    max-height: 300px;
+    overflow: auto;
+    margin-top: 10px;
+}
+.vp-pip-package-table {
+    width: 100%;
+}
+.vp-pip-package-table td {
+    cursor: pointer;
+}
+.vp-pip-package-table tr:not(:first):hover {
+    background: #C4C4C4;
+}
+.vp-pip-package-table tr.selected {
+    color:  var(--font-hightlight);
+}
+
+
+/* pip command line */
+.vp-pip-add-btn {
+    width: 464px;
+}
+.vp-icon-btn {
+    cursor: pointer;
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+.vp-add-col {
+    background-image: url(../../resource/plus_circle.svg);
+}
+.vp-pip-del {
+    background-image: url(../../resource/close_big.svg);
+}

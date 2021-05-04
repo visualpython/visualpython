@@ -1,0 +1,36 @@
+:root {
+    --color: #525252;
+}
+#vp_var_variableBox table tr:not(:first-child):hover,
+#vp_var_variableBox table tr.selected {
+    color:  var(--font-hightlight);
+    background-color: #F5F5F5;
+}
+#vp_var_variableBox table tr td:first-child:hover {
+    cursor: pointer;
+}
+
+#vp_varDetailTable table th, 
+#vp_varDetailTable table td {
+    padding: 3px;
+}
+#vp_varDetailTable table th {
+    background-color: lightgray;
+}
+
+#vp_varRefresh:hover {
+    cursor: pointer;
+}
+#vp_var_variableBox {
+    width: 95%;
+    height: 150px;
+    overflow: hidden;
+}
+#vp_varDetailTable:empty::after {
+    content: '(Nothing Selected)';
+}
+#vp_varDetailTable {
+    width: 95%;
+    height: 300px;
+    overflow: auto;
+}
