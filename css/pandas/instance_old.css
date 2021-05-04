@@ -1,0 +1,100 @@
+.vp-option-title {
+    display: inline-block;
+    color: #696969;
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 15.6px;
+    margin: 16px 0px 14px 14px;
+}
+.vp-var-api-box {
+    color: #696969;
+    background-color: #F5F5F5;
+    padding: 10px 15px;
+    max-width: 90%;
+    max-height: 100px;
+    overflow: auto;
+}
+.vp-var-api-list {
+    list-style: none;
+    margin-block-start: 0px;
+    margin-block-end: 0px;
+    margin-inline-start: 16px;
+    margin-inline-end: 0px;
+    padding-inline-start: 0px;
+    color: #696969;
+}
+.vp-var-api-list .vp-var-api-item {
+    font-weight: 400;
+    cursor: pointer;
+    margin-bottom: 2px;
+}
+#vp_varRefresh {
+    color: var(--api-console-bg);
+    cursor: pointer;
+
+    display: inline-block;
+    margin-left: 3px;
+    width: 15px;
+    height: 15px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background: transparent;
+    background-image: url(../../resource/pandas/refresh.png);
+}
+
+.vp-icon-btn {
+    cursor: pointer;
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+.vp-add-col {
+    /*color:  var(--font-hightlight);*/
+    background-image: url(../../resource/plus_circle.svg);
+}
+.vp-del-col,
+.vp-close-view {
+    background-image: url(../../resource/close_big.svg);
+}
+.vp-close-view {
+    z-index: 99;
+    float: right;
+}
+
+/* variable view style */
+.vp-var-view-box {
+    display: none;
+    position: absolute;
+    width: 350px;
+    height: 200px;
+    border: 0.25px solid #C4C4C4;
+    background: #FFFFFF;
+    color: #696969;
+    padding: 5px;
+    z-index: 99;
+    right: 4%;
+}
+#vp-wrapper .vp-var-view-box .vp-var-view-div {
+    max-height: 84px;
+    overflow: auto;
+}
+#vp-wrapper .vp-var-view-box table.vp-option-table.vp-var-view-list,
+#vp-wrapper .vp-var-view-box table.vp-option-table.vp-var-view-detail {
+    margin-left: 10px;
+}
+#vp-wrapper .vp-var-view-box .vp-var-view-list tbody tr:hover {
+    background: #C4C4C4;
+    padding: 3px;
+    cursor: pointer;
+}
+#vp-wrapper .vp-var-view-box .vp-var-view-list tbody tr.selected {
+    color:  var(--font-hightlight);
+}
+#vp_varDetailArray {
+    max-height: 50px;
+    overflow: auto;
+}

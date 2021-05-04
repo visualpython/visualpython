@@ -1,0 +1,110 @@
+/* udf editor - CodeMirror */
+#vp-wrapper .vp-udf-page  .CodeMirror { border: 1px solid silver; }
+#vp-wrapper .vp-udf-page  .CodeMirror-empty { outline: 1px solid #c22; }
+#vp-wrapper .vp-udf-page  .CodeMirror-empty.CodeMirror-focused { outline: none; }
+#vp-wrapper .vp-udf-page  .CodeMirror pre.CodeMirror-placeholder { color: #999; }
+
+#vp-wrapper .vp-udf-page  .CodeMirror-scroll { min-height: 80px; max-height: 250px;}
+
+/* udf option header */
+.vp-option-header {
+    padding-bottom: 3px;
+}
+.vp-option-header label {
+    width: 73px;
+}
+.vp-option-header input {
+    width: calc(100% - 160px);
+}
+.vp-option-header button {
+    width: 70px;
+}
+
+/* udf list table */
+#vp_udfList tr:not(:first-child):hover,
+#vp_udfList tr.selected {
+    color:  var(--font-hightlight);
+    background-color: #F5F5F5;
+}
+#vp_udfList .vp-udf-check:checked + span {
+    color:  var(--font-hightlight);
+}
+.vp-udf-key {
+    cursor: pointer;
+}
+.vp-udf-key.selected {
+    color:  var(--font-hightlight);
+}
+.vp-udf-key span {
+    text-overflow: ellipsis;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* code td 긴 문자열 생략 */
+.vp-udf-code,
+.vp-udf-code pre {
+    text-overflow: ellipsis; 
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 250px;
+    margin: 0px;
+    padding: 0px;
+
+    background: #ffffff00;
+    border: 0px;
+}
+
+/* 새로고침 버튼 */
+#vp_udfRefresh {
+    padding: 5px;
+}
+#vp_udfRefresh:hover {
+    cursor: pointer;
+}
+
+/* 삭제 버튼 */
+.vp-del-col {
+    background-image: url(../../resource/close_big.svg);
+    cursor: pointer;
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+
+/* 버튼 */
+.vp-btn {
+    background: #F5F5F5;
+    border: 0.25px solid #C4C4C4;
+    box-sizing: border-box;
+    border-radius: 2px;
+    height: 24px;
+    width: 70px;
+    min-width: fit-content;
+}
+.vp-option-btn-box {
+    height: 30px;
+    padding: 5px 0px 5px 0px;
+}
+.vp-create-btn {
+    float: left;
+}
+.vp-delete-btn {
+    float: right;
+}
+
+/* code block add popup menu */
+.vp-cm-popup {
+    display:none;
+    position: absolute;
+    background-color: #8b8b8b;
+    box-shadow: 1px 1px 3px 0px grey;
+    z-index: 999;
+}
+.vp-cm-popup-menu {
+    min-height: 20px;
+    cursor: pointer;
+}

@@ -1,0 +1,110 @@
+:root {
+    --color: #525252;
+}
+#vp-wrapper .grid-container {
+    display: grid;
+    width: 80px;
+    height: 80px;
+    grid-template-rows: repeat(1, 80px);
+    grid-template-columns: repeat(1, 1fr);
+    grid-auto-rows: 80px;
+}
+#vp-wrapper .grid-item {
+    width: 70px;
+    line-height: 70px;
+    max-height: 70px;
+    height: 100%;
+    margin: 5px;
+    background-color: lightgray;
+    align-items: center;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 1px 1px 5px 1px var(--color);
+}
+#vp-wrapper .grid-item:hover,
+#vp-wrapper .grid-item.selected {
+    cursor: pointer;
+    background-color: gray;
+}
+
+
+/* 색상 스타일 선택 */
+.vp-plot-cmap {
+    width: 90%;
+    height: 50px;
+    box-shadow: 1px 1px 3px 1px var(--color);
+    border-radius: 10px;
+    margin-top: 5px;
+  
+    position: relative;
+    display: flex;
+    z-index: 1500;
+}
+.vp-plot-cmap span {
+    font-size: 15px;
+    font-weight: 900;
+    text-shadow: 3px 0 0 rgba(white, .5);
+    line-height: 50px;
+    padding-left: 10px;
+}
+.vp-plot-cmap-selector {
+    width: 90%;
+    height: 200px;
+    overflow: auto;
+  
+    position: absolute;
+    /* display: none; */
+    top: 100%;
+    left: 0;
+    right: 0;
+    transition: all 0.5s;
+    background-color: white;
+    border: 0.5px solid var(--color);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 1000;
+}
+.vp-plot-cmap-selector .vp-plot-cmap-item { 
+    width: 100%;
+    height: 50px;
+    /* background-image: attr(data-url url); */
+    /* background-image: url(../../resource/pandas/cmap/Accent.JPG); */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+  
+    border: 2px solid transparent;
+    position: relative;
+    display: block;
+    cursor: pointer;
+    transition: all 0.5s;
+
+    color: var(--color);
+}
+/* .vp-plot-cmap-selector .vp-plot-cmap-item:hover {
+    cursor: pointer;
+    border-color: var(--color);
+} */
+
+.vp-plot-cmap-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+.vp-plot-cmap-wrapper.open .vp-plot-cmap-selector {
+    opacity: 1;
+    visibility: visible;
+    /* display: block; */
+    pointer-events: all;
+}
+
+/* range */
+#vp-wrapper input[type="range"].subplot-range {
+    display: inline;
+    width: 150px;
+}
+#vp-wrapper .input-range {
+    width: 50px;
+    text-align: right;
+}

@@ -1,0 +1,173 @@
+<html>
+    <head>
+        <script src='jquery.js'></script>
+        <script src='jqueryui.js'></script>
+        <!-- <script src='http://code.jquery.com/jquery-latest.min.js'></script> -->
+        <!-- <script src='https://code.jquery.com/ui/1.12.1/jquery-ui.js'></script> -->
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel='stylesheet' type='text/css' href='nodeEditor.css' />
+    </head>
+    <body>
+
+        <div class='blpn-nodeEditor-body'>
+            <div class='blpn-nodeEditor-left'>
+                <svg id="svg">
+                </svg>
+                <div class='blpn-nodeEditor-tab-click'>
+                    click
+                </div>
+            </div>
+            <div class='blpn-nodeEditor-right'>
+                <div class='blpn-nodeEditor-tab-title'> Pallete</div>
+
+                <div class='blpn-nodeEditor-tab-navigation'>
+                    <div class='blpn-nodeEditor-tab-navigation-element'>
+                        <span>Node</span>
+                    </div>
+                    <div class='blpn-nodeEditor-tab-navigation-element'>
+                        <span>Template</span>
+                    </div>
+                    <div class='blpn-nodeEditor-tab-navigation-element'>
+                        <span>Option</span>
+                    </div>
+                </div>
+
+                <div class='blpn-nodeEditor-tab-search-input'>
+                    <input type='text' placeholder='search node'></input>
+                </div>
+                
+                <div class='blpn-nodeEditor-tab-navigation-node-container
+                            blpn-nodeEditor-scrollbar'> 
+
+                    <div class='blpn-nodeEditor-tab-navigation-node-block'>
+                        <div class='blpn-nodeEditor-tab-navigation-node-block-title'>
+                            <div class='blpn-panel-area-vertical-btn'>▼</div>
+                            <span>Block</span>
+                        </div>
+
+                        <div class='blpn-nodeEditor-tab-navigation-node-body
+                                    blpn-nodeEditor-tab-navigation-node-block-body'>
+                        </div>
+                    </div>
+                
+                    <div class='blpn-nodeEditor-tab-navigation-node-block'>
+                        <div class='blpn-nodeEditor-tab-navigation-node-block-title'>
+                            <div class='blpn-panel-area-vertical-btn'>▼</div>
+                            <span>Operator</span>
+                        </div>
+
+                        <div class='blpn-nodeEditor-tab-navigation-node-body
+                                    blpn-nodeEditor-tab-navigation-node-operator-body'>
+                            <!-- <div class='blpn-nodeEditor-tab-navigation-node-block-body-btn'>
+                                <span>+</span>
+                            </div>
+                            <div class='blpn-nodeEditor-tab-navigation-node-block-body-btn'>
+                                <span>-</span>
+                            </div>
+                            <div class='blpn-nodeEditor-tab-navigation-node-block-body-btn'>
+                                <span>x</span>
+                            </div>
+                            <div class='blpn-nodeEditor-tab-navigation-node-block-body-btn'>
+                                <span>+</span>
+                            </div>
+                            <div class='blpn-nodeEditor-tab-navigation-node-block-body-btn'>
+                                <span>=</span>
+                            </div>
+                            <div class='blpn-nodeEditor-tab-navigation-node-block-body-btn'>
+                                <span>≠≠</span>
+                            </div>
+                            <div class='blpn-nodeEditor-tab-navigation-node-block-body-btn'>
+                                <span>==</span>
+                            </div>      
+                            <div class='blpn-nodeEditor-tab-navigation-node-block-body-btn'>
+                                <span><</span>
+                            </div>
+                            <div class='blpn-nodeEditor-tab-navigation-node-block-body-btn'>
+                                <span>≤</span>
+                            </div>
+                            <div class='blpn-nodeEditor-tab-navigation-node-block-body-btn'>
+                                <span>＞</span>
+                            </div>
+                            <div class='blpn-nodeEditor-tab-navigation-node-block-body-btn'>
+                                <span>≥</span>
+                            </div>
+                            <div class='blpn-nodeEditor-tab-navigation-node-block-body-btn'>
+                                <span>+=</span>
+                            </div>
+                            <div class='blpn-nodeEditor-tab-navigation-node-block-body-btn'>
+                                <span>-=</span>
+                            </div> -->
+                        </div>
+                    </div>
+                    
+                    <div class='blpn-nodeEditor-tab-navigation-node-block'>
+                        <div class='blpn-nodeEditor-tab-navigation-node-block-title'>
+                            <div class='blpn-panel-area-vertical-btn'>▼</div>
+                            <span>Variable</span>
+                        </div>
+
+                        <div class='blpn-nodeEditor-tab-navigation-node-body
+                                    blpn-nodeEditor-tab-navigation-node-variable-body'>
+                            <div class='blpn-nodeEditor-tab-navigation-node-block-body-btn'>
+                                <span>Number</span>
+                            </div>
+                            <div class='blpn-nodeEditor-tab-navigation-node-block-body-btn'>
+                                <span>String</span>
+                            </div>
+                            <div class='blpn-nodeEditor-tab-navigation-node-block-body-btn'>
+                                <span>String</span>
+                            </div>
+                            <div class='blpn-nodeEditor-tab-navigation-node-block-body-btn'>
+                                <span>String</span>
+                            </div>
+                            <div class='blpn-nodeEditor-tab-navigation-node-block-body-btn'>
+                                <span>List</span>
+                            </div>
+                            <div class='blpn-nodeEditor-tab-navigation-node-block-body-btn'>
+                                <span>Dictionary</span>
+                            </div>
+                        </div>
+
+                   
+                    </div>
+
+                    <div class='blpn-nodeEditor-tab-navigation-node-block'>
+                        <div class='blpn-nodeEditor-tab-navigation-node-block-title'>
+                            <div class='blpn-panel-area-vertical-btn'>▼</div>
+                            <span>Function</span>
+                        </div>
+
+                        <div class='blpn-nodeEditor-tab-navigation-node-body
+                                    blpn-nodeEditor-tab-navigation-node-function-body'>
+                            <div class='blpn-nodeEditor-tab-navigation-node-block-body-btn'>
+                                <span>range</span>
+                            </div>
+                            <div class='blpn-nodeEditor-tab-navigation-node-block-body-btn'>
+                                <span>enumerate</span>
+                            </div>
+                            <div class='blpn-nodeEditor-tab-navigation-node-block-body-btn'>
+                                <span>len</span>
+                            </div>
+                            <div class='blpn-nodeEditor-tab-navigation-node-block-body-btn'>
+                                <span>int</span>
+                            </div>
+                            <div class='blpn-nodeEditor-tab-navigation-node-block-body-btn'>
+                                <span>str</span>
+                            </div>
+                            <div class='blpn-nodeEditor-tab-navigation-node-block-body-btn'>
+                                <span>float</span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+     
+
+
+          
+        <script src='index.js'></script>
+    </body>
+</html>
