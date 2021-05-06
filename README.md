@@ -13,7 +13,7 @@
 # Visual Python
 
 [![PyPI version shields.io](https://img.shields.io/pypi/v/visualpython)](https://pypi.python.org/pypi/visualpython/)
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-red)](https://www.gnu.org/licenses/gpl-3.0.html)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-green)](https://www.gnu.org/licenses/gpl-3.0.html)
 [![Website: VP Hub](https://img.shields.io/badge/Website-VP%20Hub-orange)](https://www.visualpython.ai)
 
 
