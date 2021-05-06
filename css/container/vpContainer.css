@@ -1,0 +1,241 @@
+.vp-header {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 3px 5px;
+}
+
+.vp-header-buttons {
+    text-align: right;
+    display: inline-block;
+}
+
+.vp-header-buttons button.vp-on-btn {
+    float: left;
+    background-color: rgb(255, 255, 0)
+}
+
+.vp-main-container {
+    display: flex;
+    flex-direction: row;
+    overflow: auto;
+}
+
+.vp-body-container {
+    width: 100%;
+    margin: 2px 5px;
+}
+
+.vp-body-container .vp-body-page {
+    overflow-y: auto;
+}
+
+.vp-btn {
+    width: 100px;
+    height: 30px;
+    min-width: 75px;
+    min-height: 25px;
+    margin: 8px;
+    position: relative;
+    display: inline-block;
+    font-size: 12px;
+    overflow: hidden;
+    border-width: 0;
+    outline: none;
+    border-radius: 2px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .6);
+
+    color: #525252;
+
+    transition: background-color .3s;
+    background-color: rgb(240, 240, 240);
+}
+
+.vp-btn.vp-float-right {
+    float: right;
+}
+.vp-btn:hover,
+.vp-btn:focus {
+    background-color: rgb(250, 250, 250);   
+}
+
+.vp-btn.vp-tiny {
+    min-width: 20px;
+    width: 20px;
+    min-height: 17px;
+    height: 17px;
+}
+
+.vp-btn.vp-small {
+    min-width: 45px;
+    width: 45px;
+    min-height: 20px;
+    height: 20px;
+}
+
+.vp-btn.vp-huge-btn {
+    width: 150px;
+    height: 50px;
+}
+
+.vp-btn.vp-thin {
+    width: 80px;
+    min-height: 20px;
+    height: 20px;
+}
+
+.vp-btn.vp-navi-func-btn {
+    /* width: 100px;
+    height: 40px; */
+    width: 90px;
+    min-height: 1.2em;
+    line-height: 1.2em;
+    height: 1.4em;
+}
+
+.vp-btn.vp-navi-func-btn span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    word-wrap:break-word;
+    line-height: 1.2em;
+    height: 1.4em;
+}
+
+.vp-btn.btn-gray {
+    color: #ecf0f1;
+    background-color: #525252;
+}
+
+.vp-btn.btn-gray:hover,
+.vp-btn.btn-gray:focus {
+    background-color: #5e5e5e;
+}
+
+.vp-arrow-up {
+    display: inline-block;
+    width: 15px;
+    height: 13px;
+    cursor: pointer;
+    vertical-align: middle;
+    background-image: url(../../resource/arrow_up.png);
+}
+
+.vp-arrow-down {
+    display: inline-block;
+    width: 15px;
+    height: 13px;
+    cursor: pointer;
+    vertical-align: middle;
+    background-image: url(../../resource/arrow_down.png);
+}
+
+.vp-arrow-right {
+    display: inline-block;
+    width: 13px;
+    height: 15px;
+    cursor: pointer;
+    vertical-align: middle;
+    background-image: url(../../resource/arrow_right.png);
+}
+
+.vp-arrow-left {
+    display: inline-block;
+    width: 13px;
+    height: 15px;
+    cursor: pointer;
+    vertical-align: middle;
+    background-image: url(../../resource/arrow_left.png);
+}
+
+#vp_APIBrowser .vp-api-group {
+    /* border-style: solid;
+    border-radius: 10px;
+    border-color: #757575;
+    border-width: 1px; */
+    padding: 4px 7px;
+    margin-top: 7px;
+}
+
+.vp-api-group .vp-span-group {
+    display: block;
+    width: fit-content;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 0px 5px;
+}
+
+.vp-api-group .vp-span-func {
+    display: block;
+    width: fit-content;
+    cursor: pointer;
+    padding: 3px 13px;
+}
+
+#vp_nodeEditPalette {
+    border-style: solid;
+    border-color: #757575;
+    border-width: 1px;
+}
+
+#vp_optionGreenRoom {
+    height: 0 !important;
+}
+
+.vp-note-container {
+    display: none;
+    min-width: 270px;
+    max-width: 350px;
+    padding: 2px 5px;
+    border-left-style: solid;
+    border-left-color: #757575;
+    border-left-width: 1px;
+}
+
+.vp-note-container .vp-note-node {
+    border-style: solid;
+    border-radius: 8px;
+    border-width: 1px;
+    border-color: #757575;
+    padding: 3px 4px;
+    margin-bottom: 5px;
+}
+
+.vp-note-container .vp-note-node .vp-node-gene-code.vp-node-ellipsis {
+    margin: 3px 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    word-wrap:break-word;
+    line-height: 1.2em;
+    height: 2.4em;
+}
+
+.vp-note-container .vp-note-node .vp-node-gene-code.vp-node-all {
+    margin: 3px 5px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    word-wrap:break-word;
+    line-height: 1.2em;
+}
+
+.vp-node-index {
+    font-weight: bold;
+}
+.vp-node-type {
+    width: 95px;
+    margin-left: 15px;
+}
+
+/* option-page 삭제 필요 */
+.vp-option-page {
+    border-style: solid;
+    border-radius: 10px;
+    border-color: #757575;
+    border-width: 1px;
+    padding: 4px 7px;
+    margin-top: 7px;
+}

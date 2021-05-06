@@ -1,0 +1,3 @@
+# ignore vscode intellisense compile option file
+jsconfig.json
+new/*

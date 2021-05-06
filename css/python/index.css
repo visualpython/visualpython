@@ -1,0 +1,184 @@
+.vp-pythonCom-container > .vp-pythonCom-packagePage.vp-minimize {
+    height: 40px;
+    overflow: hidden;
+}
+
+.vp-minimize {
+    height: 40px;
+    overflow: hidden;
+}
+
+.vp-pythonCom-block {
+    padding: 5px;
+    border-bottom: 1px solid darkgray;
+}
+
+.vp-pythonCom-func-btn {
+    position: relative;
+    
+    padding: 1rem;
+
+    z-index: 10;
+    background-color: #545454;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .6);
+
+    color: white;
+    border-width: 0;
+    outline: 0;
+}
+
+.vp-pythonCom-func-btn:hover {
+    cursor: pointer;
+    transition: 0.7s;
+    background-color: #545494;
+}
+
+.vp-pythonCom-style-flex-row-evenly {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-flow: wrap;
+}
+
+.vp-pythonCom-style-flex-row {
+    display: flex;
+    flex-direction: row;
+}
+.vp-pythonCom-style-flex-row-wrap {
+    display: flex;
+    flex-direction: row;
+    flex-flow: wrap;
+}
+
+.vp-pythonCom-style-flex-row-center {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.vp-pythonCom-style-flex-row-center-wrap {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-flow: wrap;
+}
+
+.vp-pythonCom-style-flex-row-between {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.vp-pythonCom-style-flex-row-start {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.vp-pythonCom-style-flex-row-end {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.vp-pythonCom-style-flex-column {
+    display: flex;
+    flex-direction: column;
+}
+.vp-pythonCom-style-flex-column-wrap {
+    display: flex;
+    flex-direction: column;
+    flex-flow: wrap;
+}
+
+.vp-pythonCom-style-flex-column-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.vp-pythonCom-style-flex-column-center-wrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-flow: wrap;
+}
+
+
+.vp-pythonCom-style-margin-right-5px {
+    margin-right: 5px; 
+}
+
+.vp-pythonCom-style-margin-top-10px {
+    margin-top: 10px; 
+}
+
+.vp-pythonCom-style-padding-0_5rem {
+    padding: 0.5rem;
+}
+
+.vp-pythonCom-style-padding-1rem {
+    padding: 1rem;
+}
+/* .vp-pythonCom-input {
+    
+} */
+
+.vp-pythonCom-selected {
+    background-color: #545454;
+}
+
+.vp-pythonCom-not-selected {
+    background-color: white;
+    color: #545454;
+}
+
+
+/* // old version */
+.vp-python-func-btn {
+    position: relative;
+    
+    padding: 1rem;
+
+    z-index: 10;
+    background-color: #545454;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .6);
+
+    color: white;
+    border-width: 0;
+    outline: 0;
+}
+
+.vp-python-func-btn:hover {
+    cursor: pointer;
+    transition: 0.7s;
+    background-color: #545494;
+}
+
+.vp-python-com-style-flex-row-evenly {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.vp-python-com-style-flex-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.vp-python-com-style-flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.vp-python-com-style-flex-column-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.vp-pythonCom-line:hover {
+    cursor: pointer;
+    transition: 0.7s;
+    background-color: beige!important;
+}
+
