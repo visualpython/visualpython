@@ -443,11 +443,6 @@ define([
 
         /** option page - apply 버튼 클릭 함수 바인딩 */
         $(document).on(STR_CLICK, VP_ID_PREFIX + VP_APIBLOCK_BOARD_OPTION_APPLY_BUTTON, function() {
-            // if disabled, do nothing
-            if ($(this).hasClass('disabled')) {
-                return;
-            }
-
             blockContainer.applyBlock();
         });
 
