@@ -601,7 +601,8 @@ define([
             if (libObj._name != undefined) {
                 if (libObj._level == 0) {
                     var open = false;
-                    if (libObj._name == 'Common') {
+                    if (libObj._name == 'Common'
+                        || libObj._name == 'Pandas') {
                         // Common은 처음에 열어놓고 시작
                         open = true;
                     }
