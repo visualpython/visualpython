@@ -261,6 +261,9 @@ define([
                 this.reRenderAllBlock_asc();
                 this.resetBlockListAndRenderThisBlock(block);
             }
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -289,6 +292,9 @@ define([
                     this.resetOptionPage();
                     this.reRenderAllBlock_asc();
                 }
+                return true;
+            } else {
+                return false;
             }
             
     }

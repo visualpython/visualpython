@@ -443,7 +443,12 @@ define([
 
         /** option page - apply 버튼 클릭 함수 바인딩 */
         $(document).on(STR_CLICK, VP_ID_PREFIX + VP_APIBLOCK_BOARD_OPTION_APPLY_BUTTON, function() {
-            blockContainer.applyBlock();
+            var isApplied = blockContainer.applyBlock();
+
+            if (isApplied) {
+                // #11 applied! popup
+                vpCommon.renderSuccessMessage('Applied!');
+            }
         });
 
         /**
