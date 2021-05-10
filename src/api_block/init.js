@@ -443,12 +443,16 @@ define([
 
         /** option page - apply 버튼 클릭 함수 바인딩 */
         $(document).on(STR_CLICK, VP_ID_PREFIX + VP_APIBLOCK_BOARD_OPTION_APPLY_BUTTON, function() {
-            // if disabled, do nothing
-            if ($(this).hasClass('disabled')) {
-                return;
-            }
+            var appliedBlock = blockContainer.applyBlock();
 
-            blockContainer.applyBlock();
+            if (appliedBlock) {
+                // #11 applied! popup
+                vpCommon.renderSuccessMessage('Applied!');
+
+                // #10 scroll to selected/applied block
+                var appliedBlockDom = appliedBlock.getBlockMainDom();
+                $(VP_CLASS_PREFIX + VP_CLASS_APIBLOCK_BOARD).animate({scrollTop: $(appliedBlockDom).position().top}, "fast");
+            }
         });
 
         /**
@@ -601,7 +605,8 @@ define([
             if (libObj._name != undefined) {
                 if (libObj._level == 0) {
                     var open = false;
-                    if (libObj._name == 'Common') {
+                    if (libObj._name == 'Common'
+                        || libObj._name == 'Pandas') {
                         // Common은 처음에 열어놓고 시작
                         open = true;
                     }
