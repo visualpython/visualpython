@@ -261,6 +261,9 @@ define([
                 this.reRenderAllBlock_asc();
                 this.resetBlockListAndRenderThisBlock(block);
             }
+            return block;
+        } else {
+            return null;
         }
     }
 
@@ -289,6 +292,9 @@ define([
                     this.resetOptionPage();
                     this.reRenderAllBlock_asc();
                 }
+                return block;
+            } else {
+                return null;
             }
             
     }
@@ -298,8 +304,6 @@ define([
         var passChecking = false;
         if (block) {
             if (block.isModified) {
-                // set apply button enabled
-                $(VP_ID_PREFIX + VP_APIBLOCK_BOARD_OPTION_APPLY_BUTTON).removeClass('disabled');
                 // show title alert
                 $(VP_CLASS_PREFIX + 'vp-apiblock-option-new-to-save').css('display', 'block');
             } else {
@@ -338,20 +342,16 @@ define([
                         block.state_backup['isFinally'] = nowState['isFinally'];
                 }
                 if (!passChecking && JSON.stringify(nowState) != JSON.stringify(block.state_backup)) {
-                    // set apply button enabled
-                    $(VP_ID_PREFIX + VP_APIBLOCK_BOARD_OPTION_APPLY_BUTTON).removeClass('disabled');
                     // show title alert
                     $(VP_CLASS_PREFIX + 'vp-apiblock-option-new-to-save').css('display', 'block');
 
                     // set this block to isModified = true
                     block.isModified = true;
                 } else {
-                    $(VP_ID_PREFIX + VP_APIBLOCK_BOARD_OPTION_APPLY_BUTTON).addClass('disabled');
                     $(VP_CLASS_PREFIX + 'vp-apiblock-option-new-to-save').css('display', 'none');
                 }
             }
         } else {
-            $(VP_ID_PREFIX + VP_APIBLOCK_BOARD_OPTION_APPLY_BUTTON).addClass('disabled');
             $(VP_CLASS_PREFIX + 'vp-apiblock-option-new-to-save').css('display', 'none');
         }
     }
