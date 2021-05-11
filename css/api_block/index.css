@@ -595,6 +595,11 @@
     flex-direction: column;
     justify-content: center;
 }
+.vp-apiblock-style-flex-column-between {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
 
 .vp-apiblock-style-flex-row-around {
     display: flex;
@@ -605,11 +610,6 @@
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
-}
-.vp-apiblock-style-flex-row-between {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
 }
 .vp-apiblock-style-flex-row-end {
     display: flex;
@@ -1019,6 +1019,11 @@
     touch-action: none;
     display: inline-block;
     background-color: white;
+}
+
+.vp-apiblock-param-box-btn {
+    width: 100px;
+    margin: 10px 0px;
 }
 
 .vp-apiblock-option-plus-button {
