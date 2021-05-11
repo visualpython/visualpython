@@ -105,9 +105,9 @@ define([
     }
     
     const DEF_BLOCK_ARG6_TYPE = {
-        NONE: 'none'
-        , ARGS: '*args'
-        , KWARGS: '**kwargs'
+        NONE: 'Default Args'
+        , ARGS: 'Variable Args'
+        , KWARGS: 'Keyword Args'
     }
 
     const DEF_BLOCK_SELECT_VALUE_ARG_TYPE = {
@@ -503,7 +503,6 @@ define([
 
     /** const Option  */
     const VP_CLASS_APIBLOCK_OPTION_INPUT = 'vp-apiblock-option-input';
-
 
     /** const Css Style */
     const VP_CLASS_STYLE_FLEX_ROW = 'vp-apiblock-style-flex-row';

@@ -1021,6 +1021,11 @@
     background-color: white;
 }
 
+.vp-apiblock-param-box-btn {
+    width: 100px;
+    margin: 10px 0px;
+}
+
 .vp-apiblock-option-plus-button {
     min-width: 80px;
     height: 30px;
