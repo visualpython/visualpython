@@ -201,8 +201,8 @@ define([
         // vpSubsetEditor
         this.state.variable.subsetEditor = new vpSubsetEditor(this, "vp_instanceVariable", true);
         this.state.allocate.subsetEditor = new vpSubsetEditor(this, "vp_instanceAllocate", true);
-        this.state.variable.subsetEditor.hideButton();
-        this.state.allocate.subsetEditor.hideButton();
+        this.state.variable.subsetEditor.disableButton();
+        this.state.allocate.subsetEditor.disableButton();
 
         this.ALLOW_SUBSET_TYPES = that.pointer.subsetEditor.getAllowSubsetTypes();
 
@@ -213,7 +213,7 @@ define([
         this.state.allocate.insEditor = new vpInstanceEditor(this, "vp_instanceAllocate", 'vp_allocateInsEditContainer');
 
         that.state.variable.insEditor.show();
-        that.state.allocate.insEditor.hide();
+        that.state.allocate.insEditor.show();
 
         // variable load
         that.reloadInsEditor();
@@ -241,19 +241,19 @@ define([
             $(that.wrapSelector('.CodeMirror')).removeClass('selected');
             if (insEditorType == 'variable') {
                 // variable
-                that.state.variable.insEditor.show();
-                that.state.allocate.insEditor.hide();
+                // that.state.variable.insEditor.show();
+                // that.state.allocate.insEditor.hide();
                 that.pointer = that.state.variable;
                 $(that.wrapSelector('.variable .CodeMirror')).addClass('selected');
             } else if (insEditorType == 'allocate'){
                 // allocate
-                that.state.variable.insEditor.hide();
-                that.state.allocate.insEditor.show();
+                // that.state.variable.insEditor.hide();
+                // that.state.allocate.insEditor.show();
                 that.pointer = that.state.allocate;
                 $(that.wrapSelector('.allocate .CodeMirror')).addClass('selected');
             } else {
-                that.state.variable.insEditor.hide();
-                that.state.allocate.insEditor.hide();
+                // that.state.variable.insEditor.hide();
+                // that.state.allocate.insEditor.hide();
             }
         });
 
@@ -281,20 +281,20 @@ define([
 
             if (insEditorType == 'variable') {
                 // variable
-                that.state.variable.insEditor.show();
-                that.state.allocate.insEditor.hide();
+                // that.state.variable.insEditor.show();
+                // that.state.allocate.insEditor.hide();
                 that.state.selectedBox = 'variable';
                 that.pointer = that.state.variable;
             } else if (insEditorType == 'allocate'){
                 // allocate
-                that.state.variable.insEditor.hide();
-                that.state.allocate.insEditor.show();
+                // that.state.variable.insEditor.hide();
+                // that.state.allocate.insEditor.show();
                 that.state.selectedBox = 'allocate';
                 that.pointer = that.state.allocate;
             } else {
                 that.state.selectedBox = '';
-                that.state.variable.insEditor.hide();
-                that.state.allocate.insEditor.hide();
+                // that.state.variable.insEditor.hide();
+                // that.state.allocate.insEditor.hide();
             }
         });
 
@@ -388,9 +388,9 @@ define([
             var varType = varObj.type;
 
             if (that.ALLOW_SUBSET_TYPES.includes(varType)) {
-                tempPointer.subsetEditor.showButton();
+                tempPointer.subsetEditor.enableButton();
             } else {
-                tempPointer.subsetEditor.hideButton();
+                tempPointer.subsetEditor.disableButton();
             }
         };
 

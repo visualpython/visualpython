@@ -4,13 +4,15 @@
     display: grid;
     grid-template-columns: 50% 50%;
     grid-gap: 10px;
-    padding: 5px 14px 0px 14px;
+    /* padding: 5px 14px 0px 14px; */
+    padding-right: 14px;
 }
 .vp-ins-select-container {
     
 }
 .vp-ins-select-title {
-    font-weight: bold;
+    font-weight: 700;
+    color: var(--hightlight-color);
     padding: 5px 5px 5px 0px;
 }
 #vp-wrapper .vp-ins-select-container input.vp-ins-search {
@@ -21,7 +23,7 @@
     border: 0.25px solid #C4C4C4;
 }
 .vp-ins-select-list {
-    height: 200px;
+    height: 145px;
     width: 100%;
 
     list-style: none;
