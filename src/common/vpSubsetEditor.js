@@ -192,8 +192,8 @@ define([
 
         // set button next to input tag
         var buttonTag = new sb.StringBuilder();
-        buttonTag.appendFormat('<button type="button" class="{0} {1}">{2}</button>'
-                                , VP_DS_BTN, this.uuid, '...');
+        buttonTag.appendFormat('<button type="button" class="{0} {1} {2}">{3}</button>'
+                                , VP_DS_BTN, this.uuid, 'vp-button', 'Edit');
         $(this.pageThis.wrapSelector('#' + this.targetId)).parent().append(buttonTag.toString());
 
         // add popup div
@@ -1144,7 +1144,9 @@ define([
         var that = this;
         // open popup
         $(document).on('click', vpCommon.formatString('.{0}.{1}', VP_DS_BTN, this.uuid), function(event) {
-            that.open();
+            if (!$(this).hasClass('disabled')) {
+                that.open();
+            }
         });
         
         // close popup
@@ -1657,6 +1659,17 @@ define([
 
     SubsetEditor.prototype.hideButton = function() {
         $(this.pageThis.wrapSelector('.' + VP_DS_BTN + '.' + this.uuid)).hide();
+    }
+
+    SubsetEditor.prototype.disableButton = function() {
+        var buttonEle = $(this.pageThis.wrapSelector('.' + VP_DS_BTN + '.' + this.uuid));
+        if (!buttonEle.hasClass('disabled')) {
+            buttonEle.addClass('disabled');
+        }
+    }
+
+    SubsetEditor.prototype.enableButton = function() {
+        $(this.pageThis.wrapSelector('.' + VP_DS_BTN + '.' + this.uuid)).removeClass('disabled');
     }
 
     SubsetEditor.prototype.showButton = function() {
