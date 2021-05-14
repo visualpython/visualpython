@@ -12,6 +12,10 @@
     background-color: rgba(0,0,0,.4);
 }
 
+.vp-ds-button {
+    width: 45px;
+}
+
 .vp-ds-container {
     position: relative;
     left: 50%;

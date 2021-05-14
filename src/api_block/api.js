@@ -14,6 +14,8 @@ define([
 
             , FOR_BLOCK_ARG3_TYPE
 
+            , DEF_BLOCK_ARG6_TYPE
+
             , STR_GRP_DEFINE
             , STR_GRP_CONTROL
             , STR_GRP_EXECUTE
@@ -369,9 +371,9 @@ define([
          defInParamList.forEach(( defInParam, index ) => {
             const { arg3, arg5 ,arg6 } = defInParam;
                  
-            if (arg6 == '*args') {
+            if (arg6 == DEF_BLOCK_ARG6_TYPE.ARGS) {
                 defInParamStr += '*';
-            } else if (arg6 == '**kwargs') {
+            } else if (arg6 == DEF_BLOCK_ARG6_TYPE.KWARGS) {
                 defInParamStr += '**';
             }
  

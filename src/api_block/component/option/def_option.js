@@ -28,8 +28,10 @@ define([
             , VP_CLASS_STYLE_FLEX_ROW_BETWEEN
 
 
+            , VP_CLASS_STYLE_WIDTH_5PERCENT
             , VP_CLASS_STYLE_WIDTH_20PERCENT
             , VP_CLASS_STYLE_WIDTH_25PERCENT
+            , VP_CLASS_STYLE_WIDTH_30PERCENT
             , VP_CLASS_STYLE_WIDTH_100PERCENT
 
             , VP_CLASS_APIBLOCK_PARAM_DELETE_BTN
@@ -262,16 +264,17 @@ define([
     
             idStr = `vp_apiblockDefOptionName${uuid}`;
             classStr = `vp-apiblock-input-def-name-${uuid}`;
-            blockCodeName = 'Name';
-            inputStyleStr = 'width: 82%';
+            blockCodeName = 'Function Name';
+            inputStyleStr = 'width: 100%';
 
             var nameDom = $(`<div class='vp-apiblock-blockoption-block 
-                                         vp-apiblock-style-flex-row-between' 
-                                   style='position:relative;'>
-                               <span class='vp-block-optiontab-name 
-                                            vp-apiblock-style-flex-column-center'>
+                                         vp-apiblock-style-flex-column-between' 
+                                   style='position:relative; height: 50px; margin-bottom: 15px; '>
+                               <div class='vp-block-optiontab-name 
+                                            vp-apiblock-style-flex-column-center
+                                            vp-orange-text'>
                                    ${blockCodeName}
-                               </span>
+                               </div>
                                <input id='${idStr}'
                                       class='vp-apiblock-blockoption-input ${classStr}'
                                       style='${inputStyleStr}' 
@@ -352,11 +355,33 @@ define([
             var loadedVariableNameList_arg6 = [ ...Object.values( DEF_BLOCK_ARG6_TYPE ) ];
             
             var inParamDom = $(`<div class='vp-apiblock-blockoption-block 
-                                         vp-apiblock-style-flex-row-between'>
-                                    <span class='vp-block-optiontab-name 
-                                                 vp-apiblock-style-flex-column-center'>
-                                        In param
-                                    </span>
+                                         vp-apiblock-style-flex-row-between'
+                                    style="margin-bottom: 3px;">
+                                    <div class='vp-block-optiontab-name 
+                                                vp-apiblock-style-flex-column-center 
+                                                ${VP_CLASS_STYLE_WIDTH_25PERCENT}
+                                                vp-orange-text'>
+                                       Parameter
+                                    </div>
+                                    <div class='vp-block-optiontab-name 
+                                                vp-apiblock-style-flex-column-center
+                                                vp-orange-text' style="width: 20px;">
+                                    </div>
+                                    <div class='vp-block-optiontab-name 
+                                                vp-apiblock-style-flex-column-center 
+                                                ${VP_CLASS_STYLE_WIDTH_25PERCENT}
+                                                vp-orange-text'>
+                                       Value
+                                    </div>
+                                    <div class='vp-block-optiontab-name 
+                                                vp-apiblock-style-flex-column-center 
+                                                ${VP_CLASS_STYLE_WIDTH_25PERCENT}
+                                                vp-orange-text'>
+                                       Argument Type
+                                    </div>
+                                    <div class='vp-block-optiontab-name 
+                                                vp-apiblock-style-flex-row-between' style="width: 15px;">
+                                    </div>
                                 </div>`);
 
             var defInParamContainer = $(`<div class='vp-apiblock-tab-navigation-node-block-title'>
@@ -385,7 +410,7 @@ define([
 
                 var sbDefVariable = new sb.StringBuilder();
                 sbDefVariable.appendFormatLine("<div class='{0} {1}'>", VP_CLASS_STYLE_FLEX_ROW_BETWEEN 
-                                                                            , VP_CLASS_STYLE_WIDTH_25PERCENT);
+                                                                            , VP_CLASS_STYLE_WIDTH_20PERCENT);
                 // Deprecated: don't show this on ui
                 // if (arg6 == DEF_BLOCK_ARG6_TYPE.ARGS) {
                 //     sbDefVariable.appendLine("<span class='vp-apiblock-style-flex-column-center'>*</span>");
@@ -413,8 +438,8 @@ define([
                     var suggestInputArg5 =  MakeVpSuggestInputText_apiblock(VP_ID_APIBLOCK_OPTION_DEF_ARG_5 + index + uuid
                                                                                                 , arg5
                                                                                                 , loadedVariableNameList_arg5
-                                                                                                , VP_CLASS_STYLE_WIDTH_20PERCENT
-                                                                                                , 'Default Val'
+                                                                                                , VP_CLASS_STYLE_WIDTH_25PERCENT
+                                                                                                , 'Value'
                                                                                                 , function(selectedValue) {
                                                                                                     bindSelectValueEventFunc_def(selectedValue, 
                                                                                                                                 index,
@@ -422,7 +447,7 @@ define([
                                                                             }); 
                     sbDefParam.appendLine(suggestInputArg5.toString());                                                                  
                     var sbselectBoxArg6 = MakeOptionSelectBox(VP_ID_APIBLOCK_OPTION_DEF_ARG_6 + index + uuid
-                                                                                , VP_CLASS_STYLE_WIDTH_20PERCENT
+                                                                                , VP_CLASS_STYLE_WIDTH_25PERCENT
                                                                                 , arg6
                                                                                 , loadedVariableNameList_arg6);
                     sbDefParam.appendLine(sbselectBoxArg6.toString()); 
@@ -445,7 +470,7 @@ define([
             defInParamContainer.append(defInParamBody);
             defBlockOption.append(defInParamContainer);
  
-            var defPlusButton = MakeOptionPlusButton(VP_CLASS_APIBLOCK_PARAM_PLUS_BTN + uuid, '+ Param');
+            var defPlusButton = MakeOptionPlusButton(VP_CLASS_APIBLOCK_PARAM_PLUS_BTN + uuid, '+ Parameter', 'vp-apiblock-param-box-btn');
             defBlockOption.append(defPlusButton);
     
             /** bottom block option 탭에 렌더링된 dom객체 생성 */

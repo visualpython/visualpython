@@ -62,21 +62,22 @@ define([
     
             idStr = `vp_apiblockClassOptionName${uuid}`;
             classStr = `vp-apiblock-input-class-name-${uuid}`;
-            blockCodeName = 'Name';
-            inputStyleStr = 'width: 82%';
+            blockCodeName = 'Class Name';
+            inputStyleStr = 'width: 100%';
            
             var nameDom = $(`<div class='vp-apiblock-blockoption-block 
-                                         vp-apiblock-style-flex-row-between' 
-                                   style='position:relative;'>
-                               <span class='vp-block-optiontab-name 
-                                            vp-apiblock-style-flex-column-center'>
+                                         vp-apiblock-style-flex-column-between' 
+                                   style='position:relative; height: 50px; margin-bottom: 15px;'>
+                               <div class='vp-block-optiontab-name 
+                                            vp-apiblock-style-flex-column-center
+                                            vp-orange-text'>
                                    ${blockCodeName}
-                               </span>
+                               </div>
                                <input id='${idStr}'
                                       class='vp-apiblock-blockoption-input ${classStr}'
                                       style='${inputStyleStr}' 
                                       value="${name}"
-                                      placeholder='input code line' ></input>   
+                                      placeholder='input class name' ></input>   
                                                                                 
                            </div>`);
                            
@@ -90,21 +91,21 @@ define([
             var uuid = thisBlock.getUUID();
             var parentClassName = thisBlock.getState(STATE_parentClassName);
      
-            var name = 'Inheritance';
+            var name = 'Super Class Name';
             var classStr = `vp-apiblock-input-param-${0}-${uuid}`;
-            var inputStyleStr = 'width:66%;';
+            var inputStyleStr = 'width:100%;';
      
      
             var nameDom = $(`<div class='vp-apiblock-blockoption-block  
-                                         vp-apiblock-style-flex-row-between' 
-                                    style='position:relative;'>
-                                    <span class='vp-block-optiontab-name 
-                                                 vp-apiblock-style-flex-column-center'>${name}</span>
+                                         vp-apiblock-style-flex-column-between' 
+                                    style='position:relative; height: 50px; '>
+                                    <div class='vp-block-optiontab-name 
+                                                 vp-apiblock-style-flex-column-center'>${name}</div>
                                     <input class='vp-apiblock-blockoption-input 
                                                   ${classStr}'
                                         style='${inputStyleStr}' 
                                         value="${parentClassName}"
-                                        placeholder='input parent class' ></input>   
+                                        placeholder='input super class name' ></input>   
                                                                                     
                             </div>`);
             return nameDom;

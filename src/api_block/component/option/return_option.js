@@ -91,8 +91,8 @@ define([
             var returnOutParamList = thisBlock.getState(STATE_returnOutParamList);
             var returnOutParamContainer = $(`<div class='vp-apiblock-ifoption-container'>
                                                 <div class='vp-apiblock-tab-navigation-node-block-title'>
-                                                    <span class='vp-block-optiontab-name'>
-                                                        param
+                                                    <span class='vp-block-optiontab-name vp-orange-text'>
+                                                        Parameter
                                                     </span>
                                                     <div class='vp-apiblock-style-flex-row-center' >
                                             
@@ -112,7 +112,7 @@ define([
                
                                             </div>`);
 
-                 var returnOutParamInput = `<input placeholder="input param" 
+                 var returnOutParamInput = `<input placeholder="input parameter" 
                                                     class="vp-apiblock-blockoption-input 
                                                             ${VP_CLASS_STYLE_WIDTH_95PERCENT}
                                                         ${classStr}" 
@@ -131,7 +131,7 @@ define([
             returnOutParamContainer.append(returnOutParamBody);
             returnBlockOption.append(returnOutParamContainer);
 
-            var plusButton = MakeOptionPlusButton(VP_CLASS_APIBLOCK_PARAM_PLUS_BTN + uuid, '+ Param', '');
+            var plusButton = MakeOptionPlusButton(VP_CLASS_APIBLOCK_PARAM_PLUS_BTN + uuid, '+ Parameter', 'vp-apiblock-param-box-btn');
             returnBlockOption.append(plusButton);
     
             /** bottom block option 탭에 렌더링된 dom객체 생성 */
