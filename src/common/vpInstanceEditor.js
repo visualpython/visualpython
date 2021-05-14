@@ -146,9 +146,13 @@ define([
 
         tag.appendFormatLine('<div class="{0} {1}">', VP_INS_SELECT_CONTAINER, 'attr');
         tag.appendFormatLine('<div class="vp-multilang {0}">Attribute</div>', VP_INS_SELECT_TITLE);
+
+        tag.appendFormatLine('<div style="{0}">', 'position: relative;');
         tag.appendFormatLine('<input class="vp-input {0} {1}" type="text" placeholder="search attribute" />', VP_INS_SEARCH, 'attr');
-        tag.appendFormatLine('<i class="{0} {1}"></i>', 'fa fa-search', 'vp-ins-search-icon');
         tag.appendFormatLine('<input class="{0} {1}" type="hidden"/>', VP_INS_TYPE, 'attr');
+        tag.appendFormatLine('<i class="{0} {1}"></i>', 'fa fa-search', 'vp-ins-search-icon');
+        tag.appendLine('</div>');
+
         tag.appendFormatLine('<div class="{0} {1}">', VP_INS_SELECT_BOX, 'attr');
         tag.appendFormatLine('<ul class="{0} {1}">', VP_INS_SELECT_LIST, 'attr');
         tag.appendLine('</ul>');
@@ -157,9 +161,13 @@ define([
 
         tag.appendFormatLine('<div class="{0} {1}">', VP_INS_SELECT_CONTAINER, 'method');
         tag.appendFormatLine('<div class="vp-multilang {0}">Method</div>', VP_INS_SELECT_TITLE);
+
+        tag.appendFormatLine('<div style="{0}">', 'position: relative;');
         tag.appendFormatLine('<input class="vp-input {0} {1}" type="text" placeholder="search method" />', VP_INS_SEARCH, 'method');
         tag.appendFormatLine('<input class="{0} {1}" type="hidden"/>', VP_INS_TYPE, 'method');
         tag.appendFormatLine('<i class="{0} {1}"></i>', 'fa fa-search', 'vp-ins-search-icon');
+        tag.appendLine('</div>');
+        
         tag.appendFormatLine('<div class="{0} {1}">', VP_INS_SELECT_BOX, 'method');
         tag.appendFormatLine('<ul class="{0} {1}">', VP_INS_SELECT_LIST, 'method');
         tag.appendLine('</ul>');
