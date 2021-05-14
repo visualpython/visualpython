@@ -235,6 +235,18 @@ define([
             that.reloadInsEditor();
         });
 
+        // backspace
+        $(document).on('keyup', this.wrapSelector('.CodeMirror'), function(event) {
+            var keycode =  event.keyCode 
+                        ? event.keyCode 
+                        : event.which;
+            if (keycode == 8) {
+                // backspace
+                that.popStack();
+                that.reloadInsEditor();
+            }
+        });
+
         // subset button clicked
         $(document).on('click', this.wrapSelector('.vp-ds-button'), function(event) {
             var insEditorType = $(this).closest('.vp-instance-box').hasClass('variable')? 'variable': 'allocate';
@@ -369,11 +381,10 @@ define([
     }
 
     VariablePackage.prototype.popStack = function(replace=true) {
-        if (this.pointer.stack.length <= 0) {
-            return '';
-        }
-        
         var lastValue = this.pointer.stack.pop();
+        if (!lastValue) {
+            lastValue = '';
+        }
         if (replace) {
             this.updateValue('', lastValue);
         }
