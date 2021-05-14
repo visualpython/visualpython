@@ -49,7 +49,7 @@
 /* udf editor - CodeMirror */
 #vp-wrapper .vp-option-page .vp-instance-box .CodeMirror { 
     display: inline-block;
-    width: calc(100% - 60px);
+    width: calc(100% - 55px);
     height: 30px;
     border: 1px solid silver;
     overflow: hidden;
