@@ -616,11 +616,11 @@
         <path aa="AA">visualpython - numpy</path>
         <desc>Numpy 패키지 라이브러리</desc>
 
-        <item id="np_importNumpy" type="function" level="1" name="import" tag="넘파이, IMPORT NUMPY">
+        <!-- <item id="np_importNumpy" type="function" level="1" name="import" tag="넘파이, IMPORT NUMPY">
             <path>visualpython - numpy - import numpy</path>
             <desc>Import Numpy</desc>
             <file>numpy/pageList/numpyImport/numpyImport.js</file>
-        </item>
+        </item> -->
 
         <item id="pkg_arrayCreation" type="package" level="1" name="Array creation" tag="넘파이, NUMPY, FUNCTION">
             <path aa="AA">visualpython - numpy - array creation</path>
@@ -1210,11 +1210,11 @@
             <desc>변수 조회해서 복사하는 화면</desc>
             <file>pandas/variables.js</file>
         </item> -->
-        <item id="pd_importPandas" type="function" level="1" name="import" tag="판다스, IMPORT PANDAS">
+        <!-- <item id="pd_importPandas" type="function" level="1" name="import" tag="판다스, IMPORT PANDAS">
             <path>visualpython - pandas - import pandas</path>
             <desc>Import Pandas</desc>
             <file>pandas/import.js</file>
-        </item>        
+        </item>         -->
         <!-- plotting -->
         <item id="pd_plot" type="function" level="1" name="plot" tag="차트 그리기, PLOT, DRAW CHART FOR PANDAS, PLOT">
             <path>visualpython - pandas - plot</path>
