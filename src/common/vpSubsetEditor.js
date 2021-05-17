@@ -1622,6 +1622,8 @@ define([
      * open popup
      */
     SubsetEditor.prototype.open = function() {
+        $(this.wrapSelector()).show();
+
         if (!this.codepreview) {
             // var previewTextarea = $('#vp_previewCode')[0];
             var previewTextarea = $(this.wrapSelector('#vp_previewCode'))[0];
@@ -1653,8 +1655,6 @@ define([
 
         // reload pandasObject on open
         this.loadVariables();
-
-        $(this.wrapSelector()).show();
     }
 
     /**
