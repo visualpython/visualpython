@@ -131,10 +131,14 @@ define([
         // load using kernel
         var dataTypes = this.showOthers? []: this.dataTypes;
         kernelApi.searchVarList(dataTypes, function(result) {
-            var varList = JSON.parse(result);
-            that.state.varList = varList;
-            // render variable list
-            that.loadVariableList(varList);
+            try {
+                var varList = JSON.parse(result);
+                that.state.varList = varList;
+                // render variable list
+                that.loadVariableList(varList);
+            } catch (ex) {
+                console.log(ex);
+            }
         });
     }
 

@@ -285,6 +285,10 @@ define([
                     // re-render block header
                     var codeLineStr = block.getNowCodeLine();
                     block.writeCode(codeLineStr);
+                    this.resetBlockList();
+                    this.resetOptionPage();
+                    this.reRenderAllBlock_asc();
+
                 } else {
                     // blockList에 없으면, 삭제
                     block.deleteBlock_childBlockList();
@@ -349,6 +353,7 @@ define([
                     block.isModified = true;
                 } else {
                     $(VP_CLASS_PREFIX + 'vp-apiblock-option-new-to-save').css('display', 'none');
+                    block.isModified = false;
                 }
             }
         } else {
