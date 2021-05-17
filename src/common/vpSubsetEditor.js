@@ -150,28 +150,6 @@ define([
         this.bindEvent();
         this.init();
 
-        // set codemirror
-        this.codepreview = codemirror.fromTextArea($('#vp_previewCode')[0], {
-            mode: {
-                name: 'python',
-                version: 3,
-                singleLineStringErrors: false
-            },  // text-cell(markdown cell) set to 'htmlmixed'
-            height: '100%',
-            width: '100%',
-            indentUnit: 4,
-            matchBrackets: true,
-            readOnly:true,
-            autoRefresh: true,
-            // lineWrapping: false, // text-cell(markdown cell) set to true
-            // indentWithTabs: true,
-            theme: "ipython",
-            extraKeys: {"Enter": "newlineAndIndentContinueMarkdownList"},
-            scrollbarStyle: "null"
-        });
-        this.setPreview('# Code Preview');
-        
-
         // set readonly
         if (useInputVariable) {
             $(this.wrapSelector('.' + VP_DS_PANDAS_OBJECT)).attr('disabled', true);
@@ -384,7 +362,7 @@ define([
      * Wrap Selector for data selector popup with its uuid
      * @param {string} query 
      */
-    SubsetEditor.prototype.wrapSelector = function(query) {
+    SubsetEditor.prototype.wrapSelector = function(query = '') {
         return vpCommon.formatString('.{0}.{1} {2}', VP_DS, this.uuid, query);
     }
 
@@ -1644,17 +1622,46 @@ define([
      * open popup
      */
     SubsetEditor.prototype.open = function() {
+        if (!this.codepreview) {
+            // var previewTextarea = $('#vp_previewCode')[0];
+            var previewTextarea = $(this.wrapSelector('#vp_previewCode'))[0];
+            // if (wrappedTextarea) {
+            //     previewTextarea = wrappedTextarea;
+            // }
+            // set codemirror
+            this.codepreview = codemirror.fromTextArea(previewTextarea, {
+                mode: {
+                    name: 'python',
+                    version: 3,
+                    singleLineStringErrors: false
+                },  // text-cell(markdown cell) set to 'htmlmixed'
+                height: '100%',
+                width: '100%',
+                indentUnit: 4,
+                matchBrackets: true,
+                readOnly:true,
+                autoRefresh: true,
+                // lineWrapping: false, // text-cell(markdown cell) set to true
+                // indentWithTabs: true,
+                theme: "ipython",
+                extraKeys: {"Enter": "newlineAndIndentContinueMarkdownList"},
+                scrollbarStyle: "null"
+            });
+            this.setPreview('# Code Preview');
+        }
+        this.codepreview.refresh();
+
         // reload pandasObject on open
         this.loadVariables();
 
-        $(vpCommon.formatString(".{0}.{1}", VP_DS, this.uuid)).show();
+        $(this.wrapSelector()).show();
     }
 
     /**
      * close popup
      */
     SubsetEditor.prototype.close = function() {
-        $(vpCommon.formatString(".{0}.{1}", VP_DS, this.uuid)).hide();
+        $(this.wrapSelector()).hide();
     }
 
     SubsetEditor.prototype.hideButton = function() {
@@ -1908,12 +1915,14 @@ define([
     }
 
     SubsetEditor.prototype.setPreview = function(previewCodeStr) {
-        this.codepreview.setValue(previewCodeStr);
-        this.codepreview.save();
-        var that = this;
-        setTimeout(function() {
-            that.codepreview.refresh();
-        }, 1);
+        if (this.codepreview) {
+            this.codepreview.setValue(previewCodeStr);
+            this.codepreview.save();
+            var that = this;
+            setTimeout(function() {
+                that.codepreview.refresh();
+            }, 1);
+        }
     }
 
     return SubsetEditor
