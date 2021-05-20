@@ -1626,32 +1626,37 @@ define([
 
         if (!this.codepreview) {
             // var previewTextarea = $('#vp_previewCode')[0];
-            var previewTextarea = $(this.wrapSelector('#vp_previewCode'))[0];
-            // if (wrappedTextarea) {
-            //     previewTextarea = wrappedTextarea;
+            // var previewTextarea = $(this.wrapSelector('#vp_previewCode'))[0];
+            var previewTextarea = $(this.wrapSelector('textarea'))[0];
+            // if (!previewTextarea) {
+            //     previewTextarea = $('#vp_previewCode')[0];
             // }
-            // set codemirror
-            this.codepreview = codemirror.fromTextArea(previewTextarea, {
-                mode: {
-                    name: 'python',
-                    version: 3,
-                    singleLineStringErrors: false
-                },  // text-cell(markdown cell) set to 'htmlmixed'
-                height: '100%',
-                width: '100%',
-                indentUnit: 4,
-                matchBrackets: true,
-                readOnly:true,
-                autoRefresh: true,
-                // lineWrapping: false, // text-cell(markdown cell) set to true
-                // indentWithTabs: true,
-                theme: "ipython",
-                extraKeys: {"Enter": "newlineAndIndentContinueMarkdownList"},
-                scrollbarStyle: "null"
-            });
-            this.setPreview('# Code Preview');
+            if (previewTextarea) {
+                // set codemirror
+                this.codepreview = codemirror.fromTextArea(previewTextarea, {
+                    mode: {
+                        name: 'python',
+                        version: 3,
+                        singleLineStringErrors: false
+                    },  // text-cell(markdown cell) set to 'htmlmixed'
+                    height: '100%',
+                    width: '100%',
+                    indentUnit: 4,
+                    matchBrackets: true,
+                    readOnly:true,
+                    autoRefresh: true,
+                    // lineWrapping: false, // text-cell(markdown cell) set to true
+                    // indentWithTabs: true,
+                    theme: "ipython",
+                    extraKeys: {"Enter": "newlineAndIndentContinueMarkdownList"},
+                    scrollbarStyle: "null"
+                });
+                this.setPreview('# Code Preview');
+                this.codepreview.refresh();
+            }
+        } else {
+            this.codepreview.refresh();
         }
-        this.codepreview.refresh();
 
         // reload pandasObject on open
         this.loadVariables();
