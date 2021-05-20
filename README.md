@@ -1,27 +1,12 @@
-<!--
-#========================================================================
-# Filename : README.md
-# Function : control visualpython for Window/Linux/Mac
-# Creator  : Black Logic
-# Version  : 1.1.1
-# License  : GPLv3
-# Date     : 2020 07.27
-# Mdate    : 2021 05.07
-#========================================================================
--->
-
 # Visual Python
-
 [![PyPI version shields.io](https://img.shields.io/pypi/v/visualpython)](https://pypi.python.org/pypi/visualpython/)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-green)](https://www.gnu.org/licenses/gpl-3.0.html)
-[![Website: VP Hub](https://img.shields.io/badge/Website-VP%20Hub-orange)](https://www.visualpython.ai)
-
-
-<br>
+[![Code of Conduct: Contributor Covenant](https://img.shields.io/badge/Code%20of%20Conduct-Contributor%20Covenant-blueviolet)](https://github.com/visualpython/visualpython/blob/main/CODE_OF_CONDUCT.md)
 
 ## Introduction
 Visual Python is a GUI-based Python code generator, developed on the Jupyter Notebook environment as an extension. 
-<br>
+
+<img src="https://i.esdrop.com/d/7o0dj05m8rnz/sgKUVlLpRx.png" width="85%">
 
 1. Key Features 
 * Automatically generates Python code based on a graphic user interface <br>
@@ -39,7 +24,6 @@ Non-programmers will be able to : <br>
 * learn the Python language more easily <br>
 * manage big data with minimal coding skills <br>
 
-<br>
 
 ## Getting Started
 
@@ -93,20 +77,18 @@ uninstall  - uninstall packages
 upgrade    - version upgrade
 version    - version check
 ```
-<br>
+
 
 ## Mission & Vision
-
-
 **Mission** <br>
 To support technology and education so that anyone can leverage big data analytics to create a variety of social values.
 
 **Vision** <br>
-To create an environment where you can learn and use big data analytics skills easily.
+To create an environment where everyone can learn and use big data analytics skills easily.
 
-
-<br>
+## Contributing
+If you are interested in contributing to the Visual Python, please see [`CONTRIBUTING.md`](CONTRIBUTING.md). <br>
+All skills from programmers, non-programmers, designers are welcomed.
 
 ## License
-
 GNU GPLv3 (See LICENSE file).
