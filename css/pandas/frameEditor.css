@@ -1,0 +1,114 @@
+
+.vp-fe {
+    display: grid;
+    grid-row-gap: 5px;
+}
+
+.vp-fe-df-box {
+    /* margin-bottom: 5px; */
+}
+
+.vp-fe #vp_feVariable { 
+    width: 125px;
+    margin-left: 5px;
+}
+
+.vp-fe-df-refresh {
+    cursor: pointer;
+}
+
+.vp-fe-menu-box {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+}
+
+.vp-fe-menu-box .vp-fe-menu-item {
+    height: 30px;
+    background: #FFFFFF;
+    border: 0.25px solid #E4E4E4;
+    box-sizing: border-box;
+    box-shadow: 1px 1px 2px rgb(0 0 0 / 10%);
+    border-radius: 2px;
+    line-height: 30px;
+    font-size: 11px;
+    text-align: center;
+    color: #696969;
+    cursor: pointer;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    text-overflow: ellipsis;
+    /* overflow: hidden; */
+    white-space: nowrap;
+    padding: 0px 5px;
+}
+
+.vp-fe-menu-box .vp-fe-menu-item:hover {
+    background: #F8F8F8;
+}
+
+.vp-fe-info {
+    margin: 0px;
+}
+.vp-fe-info .vp-accordion-header {
+    background: #F5F5F5;
+}
+
+.vp-fe-table {
+    height: 350px;
+    background: var(--border-gray-color);
+    overflow: auto;
+}
+.vp-fe-table table {
+    border-collapse: separate;
+    margin-top: 0px;
+    margin-left: 0px;
+}
+.vp-fe-table thead th {
+    position: sticky;
+    top: 0;
+    background: #FFFFFF;
+    border-bottom: 1px solid #000000;
+}
+
+.vp-fe-table tbody tr:nth-child(odd) {
+    background: #F5F5F5;
+}
+.vp-fe-table tbody tr:nth-child(even) {
+    background: #FFFFFF;
+}
+
+.vp-fe-table th.selected {
+    color: var(--hightlight-color);
+}
+
+.vp-fe-table th:hover {
+    cursor: pointer;
+    /* background: var(--light-gray-color); */
+    /* background: rgba(66, 165, 245, 0.2); */
+}
+
+/* row hover */
+.vp-fe-table tbody tr:hover { 
+    background-color: rgba(66, 165, 245, 0.2);
+}
+
+/* column hover */
+/* .vp-fe-table thead th:not(:first-child):hover::after { 
+    background: rgba(66, 165, 245, 0.2);
+    content: '';  
+    height: 100000px;    
+    left: 0;
+    position: absolute;  
+    top: -5000px;
+    width: 100%;
+    z-index: -1;        
+} */
+
+.vp-fe-table-more {
+    margin: 5px;
+}

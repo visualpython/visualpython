@@ -22,6 +22,10 @@
                                 supported by Chrome, Edge, Opera and Firefox */
 }
 
+.vp-button:hover {
+    background: #F8F8F8;
+}
+
 .vp-button.cancel {
     background: #E5E5E5;
 }
