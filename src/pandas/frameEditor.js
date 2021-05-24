@@ -6,40 +6,17 @@ define([
     , 'nbextensions/visualpython/src/common/StringBuilder'
     , 'nbextensions/visualpython/src/common/vpFuncJS'
     , 'nbextensions/visualpython/src/common/kernelApi'
-], function (requirejs, $, vpCommon, vpConst, sb, vpFuncJS, kernelApi) {
+    , 'nbextensions/visualpython/src/pandas/common/commonPandas'
+    , 'nbextensions/visualpython/src/pandas/common/pandasGenerator'
+    , 'nbextensions/visualpython/src/common/vpFrameEditor'
+], function (requirejs, $, vpCommon, vpConst, sb, vpFuncJS, kernelApi, libPandas, pdGen
+    , vpFrameEditor) {
     // 옵션 속성
     const funcOptProp = {
         stepCount : 1
         , funcName : "Frame Editor"
         , funcID : "pd_frameEditor"
-        , libID : "pd000"
-    }
-
-    const VP_FE = 'vp-fe';
-    const VP_FE_DF_BOX = 'vp-fe-df-box';
-    const VP_FE_DF_REFRESH = 'vp-fe-df-refresh';
-
-    const VP_FE_MENU_BOX = 'vp-fe-menu-box';
-    const VP_FE_MENU_ITEM = 'vp-fe-menu-item';
-
-    const VP_FE_TABLE = 'vp-fe-table';
-    const VP_FE_TABLE_MORE = 'vp-fe-table-more';
-
-    const TABLE_LINES = 5;
-
-    const FRAME_EDIT_TYPE = {
-        INIT: 0,
-        DELETE: 1,
-        RENAME: 2,
-        DROP_NA: 3,
-        DROP_DUP: 4,
-        ONE_HOT_ENCODING: 5,
-        SET_IDX: 6,
-        REPLACE: 7,
-
-        ADD_COL: 8,
-        ADD_ROW: 9,
-        SHOW: 10
+        , libID : "pd126"
     }
 
     /**
@@ -77,7 +54,7 @@ define([
      * @param {function} callback 호출자(컨테이너) 의 콜백함수
      */
     var initOption = function(callback, meta) {
-        vpCommon.loadHtml(vpCommon.wrapSelector(vpCommon.formatString("#{0}", vpConst.OPTION_GREEN_ROOM)), "pandas/common/commonEmptyPage.html", optionLoadCallback, callback, meta);
+        vpCommon.loadHtml(vpCommon.wrapSelector(vpCommon.formatString("#{0}", vpConst.OPTION_GREEN_ROOM)), "pandas/common/commonPandas.html", optionLoadCallback, callback, meta);
     }
 
     /**
@@ -87,19 +64,7 @@ define([
     var PandasPackage = function(uuid) {
         this.uuid = uuid;   // Load html 영역의 uuid.
         // pandas 함수
-        this.package = {
-            input: [
-                { name: 'vp_feVariable' }
-            ]
-        }
-        this.state = {
-            origin_obj: '',
-            temp_obj: '',
-            selected: '',
-            axis: 0,
-            lines: TABLE_LINES,
-            steps: []
-        }
+        this.package = libPandas._PANDAS_FUNCTION[funcOptProp.libID];
     }
 
 
@@ -125,265 +90,23 @@ define([
      */
     PandasPackage.prototype.initHtml = function() {
         this.loadCss(Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH + "pandas/commonPandas.css");
-        this.loadCss(Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH + "pandas/frameEditor.css");
-        this.renderThis();
-        this.bindEvents();
+        
+        this.bindOptions();
 
-        this.loadVariableList();
+        this.subsetEditor = new vpFrameEditor(this, "i0");
     }
 
-    PandasPackage.prototype.renderThis = function() {
-        var page = new sb.StringBuilder();
-        page.appendFormatLine('<div class="{0}">', VP_FE);
-        // Select DataFrame
-        page.appendFormatLine('<div class="{0}">', VP_FE_DF_BOX);
-        page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_feVariable', 'vp-orange-text', 'DataFrame');
-        page.appendFormatLine('<select id="{0}">', 'vp_feVariable');
-        page.appendLine('</select>');
-        page.appendFormatLine('<i class="{0} {1}"></i>', VP_FE_DF_REFRESH, 'fa fa-refresh');
-        page.appendLine('</div>');
-
-        // Menus
-        page.appendFormatLine('<div class="{0}">', VP_FE_MENU_BOX);
-        // menu 1. delete
-        page.appendFormatLine('<div class="{0} {1}" data-type="{2}">{3}</div>'
-                            , VP_FE_MENU_ITEM, 'vp-fe-menu-delete', FRAME_EDIT_TYPE.DELETE, 'Delete');
-        // menu 2. rename
-        page.appendFormatLine('<div class="{0} {1}" data-type="{2}">{3}</div>'
-                            , VP_FE_MENU_ITEM, 'vp-fe-menu-rename', FRAME_EDIT_TYPE.RENAME, 'Rename');
-        // menu 3. drop
-        page.appendFormatLine('<div class="{0} {1}" data-type="{2}">{3}</div>'
-                            , VP_FE_MENU_ITEM, 'vp-fe-menu-drop', FRAME_EDIT_TYPE.DROP_NA, 'Drop'); //TODO: NA & Duplicate selection needed
-        // menu 4. one-hot encoding
-        page.appendFormatLine('<div class="{0} {1}" data-type="{2}">{3}</div>'
-                            , VP_FE_MENU_ITEM, 'vp-fe-menu-ohe', FRAME_EDIT_TYPE.ONE_HOT_ENCODING, 'One-Hot Encoding');
-        // menu 5. set/reset index
-        page.appendFormatLine('<div class="{0} {1}" data-type="{2}">{3}</div>'
-                            , VP_FE_MENU_ITEM, 'vp-fe-menu-index', FRAME_EDIT_TYPE.SET_IDX, 'Set Index');
-        // menu 6. replace
-        page.appendFormatLine('<div class="{0} {1}" data-type="{2}">{3}</div>'
-                            , VP_FE_MENU_ITEM, 'vp-fe-menu-replace', FRAME_EDIT_TYPE.REPLACE, 'Replace');
-
-        page.appendLine('</div>'); // End of Menus
-
-        // Info Box
-        var infoBox = this.createOptionContainer('Column Info');
-        infoBox.addClass('vp-fe-info');
-        // TODO: get selected columns info
-        infoBox.appendContent('column info'); // value_counts()
-        page.appendFormatLine('{0}', infoBox.toTagString());
-
-        // Table
-        page.appendFormatLine('<div class="{0}">', VP_FE_TABLE);
-
-        page.appendLine('</div>'); // End of Table
-
-        page.appendLine('</div>');
-
-        this.setPage(page.toString());
-    }
-
-    PandasPackage.prototype.loadVariableList = function() {
-        var that = this;
-        // load using kernel
-        var dataTypes = ['DataFrame'];
-        kernelApi.searchVarList(dataTypes, function(result) {
-            try {
-                var varList = JSON.parse(result);
-                // render variable list
-                // replace
-                $(that.wrapSelector('#vp_feVariable')).replaceWith(function() {
-                    return that.renderVariableList(varList);
-                });
-                $(that.wrapSelector('#vp_feVariable')).trigger('change');
-            } catch (ex) {
-                // console.log(ex);
-            }
-        });
-    }
-
-    PandasPackage.prototype.renderVariableList = function(varList) {
-        var tag = new sb.StringBuilder();
-        var beforeValue = $(this.wrapSelector('#vp_feVariable')).val();
-        tag.appendFormatLine('<select id="{0}">', 'vp_feVariable');
-        varList.forEach(vObj => {
-            // varName, varType
-            var label = vObj.varName;
-            tag.appendFormatLine('<option value="{0}" data-type="{1}" {2}>{3}</option>'
-                                , vObj.varName, vObj.varType
-                                , beforeValue == vObj.varName?'selected':''
-                                , label);
-        });
-        tag.appendLine('</select>'); // VP_VS_VARIABLES
-        return tag.toString();
-    }
-
-    PandasPackage.prototype.renderTable = function(renderedText, isHtml=true) {
-        var tag = new sb.StringBuilder();
-        // Table
-        tag.appendFormatLine('<div class="{0} {1}">', VP_FE_TABLE, 'rendered_html');
-        if (isHtml) {
-            var renderedTable = $(renderedText).find('table');
-            tag.appendFormatLine('<table class="dataframe">{0}</table>', renderedTable.html());
-            // More button
-            tag.appendFormatLine('<div class="{0} {1}">More...</div>', VP_FE_TABLE_MORE, 'vp-button');
-        } else {
-            tag.appendFormatLine('<pre>{0}</pre>', renderedText);
+    /**
+     * Pandas 기본 패키지 바인딩
+     */
+    PandasPackage.prototype.bindOptions = function() {
+        // HTML 구성
+        pdGen.vp_showInterface(this);
+        // if it has no additional options, remove that box
+        if (this.package.variable == undefined || this.package.variable.length <= 0) {
+            $(this.wrapSelector('#vp_optionBox')).closest('div.vp-accordion-container').remove();
         }
-        tag.appendLine('</div>'); // End of Table
-        return tag.toString();
-    }
-    
-    PandasPackage.prototype.loadCode = function(type) {
-        var that = this;
-
-        var tempObj = this.state.temp_obj;
-        var orgObj = this.state.origin_obj;
-        var selectedName = this.state.selected;
-        var axis = this.state.axis;
-        var lines = this.state.lines;
-
-        var code = new sb.StringBuilder();
-        switch (parseInt(type)) {
-            case FRAME_EDIT_TYPE.INIT:
-                code.appendFormatLine('{0} = {1}.copy()', tempObj, orgObj);
-                break;
-            case FRAME_EDIT_TYPE.DELETE:
-                code.appendFormatLine("{0}.drop(['{1}'], axis={2}, inplace=True)", tempObj, selectedName, axis);
-                break;
-            case FRAME_EDIT_TYPE.RENAME:
-                break;
-            case FRAME_EDIT_TYPE.DROP_NA:
-                var locObj = '';
-                if (axis == 0) {
-                    locObj = vpCommon.formatString('.loc[{0},]', selectedName);
-                } else {
-                    locObj = vpCommon.formatString('.loc[,{0}]', selectedName);
-                }
-                code.appendFormatLine("{0}{1}.dropna(axis={2}, inplace=True)", tempObj, locObj, axis);
-                break;
-            case FRAME_EDIT_TYPE.DROP_DUP:
-                if (axis == 0) {
-                    locObj = vpCommon.formatString('.loc[{0},]', selectedName);
-                } else {
-                    locObj = vpCommon.formatString('.loc[,{0}]', selectedName);
-                }
-                code.appendFormatLine("{0}{1}.drop_duplicates(axis={2}, inplace=True)", tempObj, locObj, axis);
-                break;
-            case FRAME_EDIT_TYPE.ONE_HOT_ENCODING:
-                break;
-            case FRAME_EDIT_TYPE.SET_IDX:
-                break;
-            case FRAME_EDIT_TYPE.REPLACE:
-                break;
-            case FRAME_EDIT_TYPE.SHOW:
-                break;
-        }
-        code.appendFormat('{0}.head({1})', tempObj, lines);
-
-        Jupyter.notebook.kernel.execute(
-            code.toString(),
-            {
-                iopub: {
-                    output: function(msg) {
-                        if (msg.content.data) {
-                            var htmlText = String(msg.content.data["text/html"]);
-                            var codeText = String(msg.content.data["text/plain"]);
-                            if (htmlText != 'undefined') {
-                                $(that.wrapSelector('.' + VP_FE_TABLE)).replaceWith(function() {
-                                    return that.renderTable(htmlText);
-                                });
-                            } else if (codeText != 'undefined') {
-                                // plain text as code
-                                $(that.wrapSelector('.' + VP_FE_TABLE)).replaceWith(function() {
-                                    return that.renderTable(codeText, false);
-                                });
-                            } else {
-                                $(that.wrapSelector('.' + VP_FE_TABLE)).replaceWith(function() {
-                                    return that.renderTable('');
-                                });
-                            }
-                            that.state.steps.push(code.toString());
-                        } else {
-                            var errorContent = new sb.StringBuilder();
-                            if (msg.content.ename) {
-                                errorContent.appendFormatLine('<div class="{0}">', VP_DS_DATA_ERROR_BOX);
-                                errorContent.appendLine('<i class="fa fa-exclamation-triangle"></i>');
-                                errorContent.appendFormatLine('<label class="{0}">{1}</label>'
-                                                            , VP_DS_DATA_ERROR_BOX_TITLE, msg.content.ename);
-                                if (msg.content.evalue) {
-                                    // errorContent.appendLine('<br/>');
-                                    errorContent.appendFormatLine('<pre>{0}</pre>', msg.content.evalue.split('\\n').join('<br/>'));
-                                }
-                                errorContent.appendLine('</div>');
-                            }
-                            $(that.wrapSelector('.' + VP_FE_TABLE)).replaceWith(function() {
-                                return that.renderTable(errorContent);
-                            });
-                        }
-                    }
-                }
-            },
-            { silent: false, store_history: true, stop_on_error: true }
-        );
-    }
-
-
-    PandasPackage.prototype.bindEvents = function() {
-        var that = this;
-
-        // select df
-        $(document).on('change', this.wrapSelector('#vp_feVariable'), function() {
-            // set temporary df
-            var origin = $(this).val();
-
-            // initialize state values
-            that.state.origin_obj = origin;
-            that.state.temp_obj = '_vp_temp_' + origin;
-            that.state.selected = '';
-            that.state.axis = 0;
-            that.state.lines = TABLE_LINES;
-            that.state.steps = [];
-
-            // load code with temporary df
-            that.loadCode(FRAME_EDIT_TYPE.INIT);
-        });
-
-        // refresh df
-        $(document).on('click', this.wrapSelector('.vp-fe-df-refresh'), function() {
-            that.loadVariableList();
-        });
-
-        // select column
-        $(document).on('click', this.wrapSelector('.' + VP_FE_TABLE + ' thead th'), function() {
-            $(that.wrapSelector('.' + VP_FE_TABLE + ' th')).removeClass('selected');
-            $(this).addClass('selected');
-
-            that.state.axis = 1; // column
-            that.state.selected = $(this).text();
-        });
-
-        // select row
-        $(document).on('click', this.wrapSelector('.' + VP_FE_TABLE + ' tbody th'), function() {
-            $(that.wrapSelector('.' + VP_FE_TABLE + ' th')).removeClass('selected');
-            $(this).addClass('selected');
-
-            that.state.axis = 0; // index(row)
-            that.state.selected = $(this).text();
-        });
-
-        // more rows
-        $(document).on('click', this.wrapSelector('.' + VP_FE_TABLE_MORE), function() {
-            that.state.lines += TABLE_LINES;
-            that.loadCode(FRAME_EDIT_TYPE.SHOW);
-        });
-
-        // click button
-        $(document).on('click', this.wrapSelector('.' + VP_FE_MENU_ITEM), function() {
-            var editType = $(this).attr('data-type');
-            that.loadCode(editType);
-        });
-    }
+    };
 
     /**
      * 코드 생성
@@ -395,7 +118,7 @@ define([
         
 
         // 코드 생성
-        var result = this.state.steps.join('\n');
+        var result = pdGen.vp_codeGenerator(this.uuid, this.package);
         if (result == null) return "BREAK_RUN"; // 코드 생성 중 오류 발생
         sbCode.append(result);
         

@@ -5353,6 +5353,29 @@ define([
                     label: 'Return to'
                 }
             ]
+        },
+        'pd126': {
+            id: 'frame_editor',
+            name: 'Frame Editor',
+            library: 'pandas',
+            description : 'pandas object editor',
+            code: '${o0} = ${i0}',
+            input: [
+                {
+                    name:'i0',
+                    type:'var',
+                    label: 'Code',
+                    component: 'var_select',
+                    var_type: ['DataFrame']
+                }
+            ],
+            output: [
+                {
+                    name:'o0',
+                    type:'var',
+                    label: 'Return to'
+                }
+            ]
         }
     }
 
