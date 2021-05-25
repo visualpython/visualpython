@@ -189,3 +189,36 @@
     white-space: -o-pre-wrap; /* Opera 7 */
     word-wrap: break-all; /* Internet Explorer 5.5+ */
 }
+
+/** buttons */
+.vp-fe-btn-box {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+.vp-fe-btn-apply {
+    width: 80px;
+    height: 30px;
+    background: #F37704;
+    border: 0.25px solid #C4C4C4;
+    box-sizing: border-box;
+    border-radius: 2px;
+    text-align: center;
+    color: #FFFFFF; 
+}
+.vp-fe-btn-apply:hover {
+    background:  var(--hightlight-color);
+}
+.vp-fe-btn-cancel {
+    width: 80px;
+    height: 30px;
+    background: #E5E5E5;
+    border: 0.25px solid #C4C4C4;
+    box-sizing: border-box;
+    border-radius: 2px;
+    text-align: center;
+    color: #696969;
+}
+.vp-fe-btn-cancel:hover {
+    background: #ccc;
+}

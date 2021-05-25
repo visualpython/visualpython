@@ -40,7 +40,12 @@ define([
     const VP_FE_INFO = 'vp-fe-info';
     const VP_FE_INFO_CONTENT = 'vp-fe-info-content';
 
-    const TABLE_LINES = 5;
+    const VP_FE_BUTTON_BOX = 'vp-fe-btn-box';
+    const VP_FE_BUTTON_CANCEL = 'vp-fe-btn-cancel';
+    const VP_FE_BUTTON_APPLY = 'vp-fe-btn-apply';
+
+    // search rows count at once
+    const TABLE_LINES = 10;
 
     const FRAME_EDIT_TYPE = {
         INIT: 0,
@@ -72,7 +77,7 @@ define([
         this.state = {
             originObj: '',
             tempObj: '',
-            selected: '',
+            selected: [],
             axis: 0,
             lines: TABLE_LINES,
             steps: []
@@ -88,7 +93,7 @@ define([
 
     FrameEditor.prototype.open = function() {
         this.loadVariableList();
-        
+
         $(this.wrapSelector()).show();
     }
 
@@ -104,7 +109,7 @@ define([
     }
 
     FrameEditor.prototype.initState = function() {
-        this.state.selected = '';
+        this.state.selected = [];
         this.state.axis = -1;
         this.state.lines = TABLE_LINES;
         this.state.steps = [];
@@ -179,6 +184,15 @@ define([
         page.appendFormatLine('{0}', infoBox.toTagString());
 
         page.appendLine('</div>'); // VP_FE_BODY
+
+        // apply button
+        page.appendFormatLine('<div class="{0}">', VP_FE_BUTTON_BOX);
+        page.appendFormatLine('<button type="button" class="{0}">{1}</button>'
+                                , VP_FE_BUTTON_CANCEL, 'Cancel');
+        page.appendFormatLine('<button type="button" class="{0}">{1}</button>'
+                                , VP_FE_BUTTON_APPLY, 'Apply');
+        page.appendLine('</div>');
+
         page.appendLine('</div>'); // VP_FE_CONTAINER
         page.appendLine('</div>'); // VP_FE
 
@@ -226,8 +240,7 @@ define([
         // Table
         tag.appendFormatLine('<div class="{0} {1}">', VP_FE_TABLE, 'rendered_html');
         if (isHtml) {
-            var renderedTable = $(renderedText).find('table');
-            tag.appendFormatLine('<table class="dataframe">{0}</table>', renderedTable.html());
+            tag.appendFormatLine('<table class="dataframe">{0}</table>', renderedText);
             // More button
             tag.appendFormatLine('<div class="{0} {1}">More...</div>', VP_FE_TABLE_MORE, 'vp-button');
         } else {
@@ -242,9 +255,9 @@ define([
         var code = new sb.StringBuilder();
         code.appendFormat("{0}", this.state.tempObj);
         if (this.state.selected != '') {
-            code.appendFormat(".loc[{0},{1}]"
-                            , this.state.axis==0?this.state.selected:":"
-                            , this.state.axis==1?"'"+this.state.selected+"'":":");
+            code.appendFormat(".loc[[{0}],[{1}]]"
+                            , this.state.axis==0?this.state.selected.join(','):":"
+                            , this.state.axis==1?this.state.selected.join(','):":");
         }
         code.append(".value_counts()");
         console.log(code.toString());
@@ -300,54 +313,56 @@ define([
             case FRAME_EDIT_TYPE.SHOW:
                 break;
         }
-        code.appendFormat('{0}.head({1})', tempObj, lines);
+        var addStackCode = code.toString();
 
-        Jupyter.notebook.kernel.execute(
-            code.toString(),
-            {
-                iopub: {
-                    output: function(msg) {
-                        if (msg.content.data) {
-                            var htmlText = String(msg.content.data["text/html"]);
-                            var codeText = String(msg.content.data["text/plain"]);
-                            if (htmlText != 'undefined') {
-                                $(that.wrapSelector('.' + VP_FE_TABLE)).replaceWith(function() {
-                                    return that.renderTable(htmlText);
-                                });
-                            } else if (codeText != 'undefined') {
-                                // plain text as code
-                                $(that.wrapSelector('.' + VP_FE_TABLE)).replaceWith(function() {
-                                    return that.renderTable(codeText, false);
-                                });
-                            } else {
-                                $(that.wrapSelector('.' + VP_FE_TABLE)).replaceWith(function() {
-                                    return that.renderTable('');
-                                });
-                            }
-                            that.loadInfo();
-                            that.state.steps.push(code.toString());
-                        } else {
-                            var errorContent = new sb.StringBuilder();
-                            if (msg.content.ename) {
-                                errorContent.appendFormatLine('<div class="{0}">', VP_DS_DATA_ERROR_BOX);
-                                errorContent.appendLine('<i class="fa fa-exclamation-triangle"></i>');
-                                errorContent.appendFormatLine('<label class="{0}">{1}</label>'
-                                                            , VP_DS_DATA_ERROR_BOX_TITLE, msg.content.ename);
-                                if (msg.content.evalue) {
-                                    // errorContent.appendLine('<br/>');
-                                    errorContent.appendFormatLine('<pre>{0}</pre>', msg.content.evalue.split('\\n').join('<br/>'));
-                                }
-                                errorContent.appendLine('</div>');
-                            }
-                            $(that.wrapSelector('.' + VP_FE_TABLE)).replaceWith(function() {
-                                return that.renderTable(errorContent);
-                            });
+        // search codes //TODO: python 코드로 정리해서 가져올 것
+        code.appendFormat("{0}.head({1}).to_json(orient='{2}')", tempObj, lines, 'split');
+
+        kernelApi.executePython(code.toString(), function(result) {
+            console.log(result);
+            try {
+                // var data = JSON.parse(result);
+                var data = JSON.parse(result.substr(1,result.length - 2));
+                var columnList = data.columns;
+                var indexList = data.index;
+                var dataList = data.data;
+
+                // table
+                var table = new sb.StringBuilder();
+                // table.appendFormatLine('<table border="{0}" class="{1}">', 1, 'dataframe');
+                table.appendLine('<thead>');
+                table.appendLine('<tr><th></th>');
+                columnList && columnList.forEach(col => {
+                    table.appendFormatLine('<th data-label="{0}">{1}</th>', vpCommon.convertToStr(col), col);
+                });
+                table.appendLine('</tr>');
+                table.appendLine('</thead>');
+                table.appendLine('<tbody>');
+
+                dataList && dataList.forEach((row, idx) => {
+                    table.appendLine('<tr>');
+                    table.appendFormatLine('<th data-label="{0}">{1}</th>', vpCommon.convertToStr(indexList[idx]), indexList[idx]);
+                    row.forEach(cell => {
+                        if (cell == null) {
+                            cell = 'NaN';
                         }
-                    }
-                }
-            },
-            { silent: false, store_history: true, stop_on_error: true }
-        );
+                        table.appendFormatLine('<td>{0}</td>', cell);
+                    });
+                    table.appendLine('</tr>');
+                });
+                table.appendLine('</tbody>');
+
+                $(that.wrapSelector('.' + VP_FE_TABLE)).replaceWith(function() {
+                    return that.renderTable(table.toString());
+                });
+                // load info
+                that.loadInfo();
+                // add to stack
+                that.state.steps.push(addStackCode);
+            } catch (err) {
+                console.log(err);
+            }
+        });
     }
 
 
@@ -391,7 +406,7 @@ define([
         // select column
         $(document).on('click', this.wrapSelector('.' + VP_FE_TABLE + ' thead th'), function() {
             var hasSelected = $(this).hasClass('selected');
-            $(that.wrapSelector('.' + VP_FE_TABLE + ' th')).removeClass('selected');
+            $(that.wrapSelector('.' + VP_FE_TABLE + ' tbody th')).removeClass('selected');
             if (!hasSelected) {
                 $(this).addClass('selected');
                 that.state.axis = 1; // column
@@ -407,7 +422,7 @@ define([
         // select row
         $(document).on('click', this.wrapSelector('.' + VP_FE_TABLE + ' tbody th'), function() {
             var hasSelected = $(this).hasClass('selected');
-            $(that.wrapSelector('.' + VP_FE_TABLE + ' th')).removeClass('selected');
+            $(that.wrapSelector('.' + VP_FE_TABLE + ' thead th')).removeClass('selected');
             if (!hasSelected) {
                 $(this).addClass('selected');
                 that.state.axis = 0; // index(row)
