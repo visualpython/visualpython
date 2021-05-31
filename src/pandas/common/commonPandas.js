@@ -5365,7 +5365,7 @@ define([
                     name:'i0',
                     type:'var',
                     label: 'Code',
-                    component: 'var_select',
+                    component: 'textarea',
                     var_type: ['DataFrame']
                 }
             ],

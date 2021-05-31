@@ -115,12 +115,14 @@ define([
     PandasPackage.prototype.generateCode = function(addCell, exec) {
         
         var sbCode = new sb.StringBuilder();
-        
 
         // 코드 생성
-        var result = pdGen.vp_codeGenerator(this.uuid, this.package);
-        if (result == null) return "BREAK_RUN"; // 코드 생성 중 오류 발생
-        sbCode.append(result);
+        var codeValue = $(this.wrapSelector('#i0')).val();
+        var returnValue = $(this.wrapSelector('#o0')).val();
+        if (returnValue && returnValue != '') {
+            sbCode.appendFormat('{0} = ', returnValue);
+        }
+        sbCode.append(codeValue);
         
 
         if (addCell) this.cellExecute(sbCode.toString(), exec);
