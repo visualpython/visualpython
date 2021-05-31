@@ -179,6 +179,15 @@ define([
                 vp_generateVarSelect(tag, obj.var_type, obj.value);
                 tblInput.appendChild(tag);
                 break;
+            case 'textarea':
+                var textarea = $(`<textarea id="${obj.name}" class="vp-textarea">${(obj.default==undefined?'':obj.default)}</textarea>`);
+                // cell metadata test
+                if (getValue && obj.value != undefined) {
+                    // metadata 에 저장된 값으로 표시
+                    textarea.val(obj.value);
+                }
+                $(tblInput).append(textarea);
+                break;
             case 'table':
                 // break;
             case 'file':
