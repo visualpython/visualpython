@@ -1221,11 +1221,16 @@
             <desc>데이터를 차트로 표현하는 함수</desc>
             <file>pandas/plot.js</file>
         </item>
+        <item id="pd_frameEditor" type="function" level="1" name="Frame Editor" tag="FRAME EDITOR">
+            <path>visualpython - pandas - subset</path>
+            <desc>frame editor</desc>
+            <file>pandas/frameEditor.js</file>
+        </item>
         <item id="pd_subset" type="function" level="1" name="Subset" tag="SUBSET">
             <path>visualpython - pandas - subset</path>
             <desc>subset dataframe</desc>
             <file>pandas/subset.js</file>
-        </item>   
+        </item>
         <!-- Input/output -->
         <item id="pd_inputOutput" type="package" level="1" name="Input/output" tag="파일 불러오기, 저장, FILE INPUT OUTPUT">
             <path>visualpython - pandas - input output</path>

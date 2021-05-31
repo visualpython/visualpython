@@ -130,6 +130,22 @@ define([
     }
 
     /**
+     * Convert to string format if not numeric
+     * @param {*} code 
+     * @returns 
+     */
+    var convertToStr = function(code) {
+        if (!$.isNumeric(code)) {
+            if (code.includes("'")) {
+                code = `"${code}"`;
+            } else {
+                code = `'${code}'`;
+            }
+        }
+        return code;
+    }
+
+    /**
      * check duplicate variable name
      * @param {string} varName 
      */
@@ -338,5 +354,6 @@ define([
         // 추가
         , kernelExecute: kernelExecute
         , cellExecute: cellExecute
+        , convertToStr: convertToStr
     };
 });

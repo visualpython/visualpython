@@ -137,7 +137,7 @@ define([
                 // render variable list
                 that.loadVariableList(varList);
             } catch (ex) {
-                console.log(ex);
+                // console.log(ex);
             }
         });
     }
