@@ -243,6 +243,63 @@ define([
         //     }
         // });
 
+        /** Apps Menu Open */
+        $(document).on(STR_CLICK, '#vp_menuApps', function() {
+            var appContainer = $('.vp-apiblock-menu-apps-container');
+            if (appContainer.hasClass('show')) {
+                appContainer.removeClass('show');
+            } else {
+                appContainer.addClass('show');
+            }
+        });
+
+        /** Apps Menu item click */
+        $(document).on(STR_CLICK,'.vp-apiblock-menu-apps-item', function() {
+            var menu = $(this).attr('data-menu');
+            switch (menu)
+            {
+                case 'snippets':
+                    var funcID = 'com_udf';
+                    var naviInfo = getNavigationInfo(funcID);
+                    /** board에 선택한 API List 블럭 생성 */
+                    blockContainer.createAPIListBlock(funcID, naviInfo);
+                    break;
+                case 'variable':
+                    var funcID = 'com_variables';
+                    var naviInfo = getNavigationInfo(funcID);
+                    /** board에 선택한 API List 블럭 생성 */
+                    blockContainer.createAPIListBlock(funcID, naviInfo);
+                    break;
+                case 'file':
+                    // TODO: file
+                    break;
+                case 'instance':
+                    var funcID = 'com_instance';
+                    var naviInfo = getNavigationInfo(funcID);
+                    /** board에 선택한 API List 블럭 생성 */
+                    blockContainer.createAPIListBlock(funcID, naviInfo);
+                    break;
+                case 'subset':
+                    var funcID = 'pd_subset';
+                    var naviInfo = getNavigationInfo(funcID);
+                    /** board에 선택한 API List 블럭 생성 */
+                    blockContainer.createAPIListBlock(funcID, naviInfo);
+                    break;
+                case 'frame':
+                    var funcID = 'pd_frameEditor';
+                    var naviInfo = getNavigationInfo(funcID);
+                    /** board에 선택한 API List 블럭 생성 */
+                    blockContainer.createAPIListBlock(funcID, naviInfo);
+                    break;
+                case 'chart':
+                    var funcID = 'mp_plot';
+                    var naviInfo = getNavigationInfo(funcID);
+                    /** board에 선택한 API List 블럭 생성 */
+                    blockContainer.createAPIListBlock(funcID, naviInfo);
+                    break;
+            }
+        });
+
         /** Logic, API, Data Analysis 의 > 버튼 클릭 */
         $(document).on(STR_CLICK,`.vp-apiblock-panel-area-vertical-btn`, function(){
             if ($(this).hasClass(`vp-apiblock-arrow-down`)) {
@@ -591,6 +648,14 @@ define([
             if (evt.target.id != 'vp_apiblock_menu_box') {
                 // close block menu
                 $(vpCommon.wrapSelector(vpCommon.formatString('#{0}', VP_ID_APIBLOCK_MENU_BOX))).hide();
+            }
+            if (evt.target.id != 'vp_menuAppsContainer'
+                && evt.target.id != 'vp_menuApps') {
+                // close apps menu
+                $(vpCommon.wrapSelector('#vp_menuAppsContainer')).removeClass('show');
+            }
+            if (!$(evt.target).hasClass('vp-temp-popup-menu')) {
+                $('.vp-temp-popup-menu').hide();
             }
         });
 

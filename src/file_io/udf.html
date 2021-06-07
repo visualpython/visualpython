@@ -1,13 +1,59 @@
 <!-- TEST: Added class 'cm-s-ipython' to give codemirror same style with Jupyter -->
 <div class="vp-option-page vp-udf-page cm-s-ipython" id="vp_inputPage">
-    <div class="vp-option-header">
+    <div class="vp-sn-body">
+        <div class="vp-sn-header">
+            <label>Snippets</label>
+            <div class="vp-sn-menu">
+                <img src="/nbextensions/visualpython/resource/snippets/more.svg" />
+                <div class="vp-sn-menu-box vp-temp-popup-menu">
+                    <div class="vp-sn-menu-item" data-menu="import">Import</div>
+                    <div class="vp-sn-menu-item" data-menu="export">
+                        Export
+                        <img src="/nbextensions/visualpython/resource/snippets/export.svg" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="vp-sn-search-box">
+            <input type="text" class="vp-sn-search" placeholder="Search"/>
+            <i class="fa fa-search"></i>
+        </div>
+        <div class="vp-sn-func-box">
+            <div class="vp-sn-func-left">
+                <!-- <button class="vp-button vp-sn-button vp-sn-filter" data-menu="filter">
+                    Filter <i class="fa fa-filter"></i>
+                </button> -->
+                <div class="vp-sn-filter" data-menu="filter">
+                    <img src="/nbextensions/visualpython/resource/snippets/sort.svg" />
+                </div>
+                <div class="vp-sn-filter-menu-box vp-temp-popup-menu">
+                    <div class="vp-sn-filter-menu-item" data-menu="name">by Names</div>
+                    <div class="vp-sn-filter-menu-item" data-menu="date">by Dates</div>
+                </div>
+            </div>
+            <div class="vp-sn-func-right">
+                <div class="vp-sn-func-export-mode">
+                    <input type="hidden" class="vp-sn-filename" />
+                    <input type="hidden" class="vp-sn-filepath" />
+                    <button class="vp-button activated vp-sn-export" data-menu="export">Export</button>
+                    <input type="checkbox" class="vp-sn-checkbox vp-sn-check-all" />
+                </div>
+                <div class="vp-sn-func-default-mode">
+                    <button class="vp-button vp-sn-create" data-menu="create">+ Snippet</button>
+                </div>
+            </div>
+        </div>
+        <div class="vp-sn-table">
+            
+        </div>
+    </div>
+
+    <!-- <div class="vp-option-header">
         <label for="vp_udfTitle">UDC Name: </label> 
         <input type="text" id="vp_udfTitle" class="vp-input" placeholder="title to save"/> 
         <button type="button" id="vp_udfSave" class="vp-btn vp-save-btn">Save</button>
     </div>
     <form id="vp_optionForm">
-        <!-- <label for="vp_userCode">User Code</label> -->
-        <!-- TEST: CodeMirror -->
         <textarea id="vp_userCode" name="code" style="display: none;" placeholder="input user code"></textarea>
     </form>
     <br/>
@@ -17,21 +63,11 @@
         <button type="button" id="vp_udfRefresh" class="vp-btn">Refresh</button>
         <button type="button" id="vp_udfDelete" class="vp-btn vp-delete-btn">Delete</button>
     </div>
-    <!-- <div class="vp-accordion-container vp-accordion-open">
-        <div class="vp-accordion-header">
-            <span class="vp-accordion-indicator"></span>
-            <span class="vp-accordion-caption" data-caption-id="TODO:Variable">Saved Udf List
-                <i id="vp_udfRefresh" class="fa fa-refresh"></i>
-            </span>
-        </div>
-        <div class="vp-accordion-content"> -->
-            <table id="vp_udfList" class="vp-option-table vp-option-horizontal-table-layout">
-                <colgroup><col width="100px"/><col width="*"/></colgroup>
-                <tr>
-                    <th>UDC Name</th>
-                    <th>Code</th>
-                </tr>
-            </table>
-        <!-- </div>
-    </div> -->
+    <table id="vp_udfList" class="vp-option-table vp-option-horizontal-table-layout">
+        <colgroup><col width="100px"/><col width="*"/></colgroup>
+        <tr>
+            <th>UDC Name</th>
+            <th>Code</th>
+        </tr>
+    </table> -->
 </div>

@@ -11,7 +11,9 @@ define([
     , 'codemirror/mode/python/python'
     , 'notebook/js/codemirror-ipython'
     , 'codemirror/addon/display/placeholder'
-], function (requirejs, $, vpCommon, vpConst, sb, vpFuncJS, vpSetting, CodeMirror, cmpython, cmip) {
+    , 'codemirror/addon/display/autorefresh'
+], function (requirejs, $, vpCommon, vpConst, sb, vpFuncJS, vpSetting
+            , CodeMirror, cmpython, cmip) {
     // 옵션 속성
     const funcOptProp = {
         stepCount : 1
@@ -47,7 +49,7 @@ define([
 
             // after load cell metadata, set codemirror value
             // optionPackage.vp_userCode.setValue($(vpCommon.wrapSelector('#vp_userCode')).val());
-            optionPackage.bindCodeMirror();
+            // optionPackage.bindCodeMirror();
         }
     }
     
@@ -70,6 +72,9 @@ define([
                 { name: 'vp_userCode' }
             ]
         }
+
+        this.codemirrorList = {};
+        this.title_no = 0;
     }
 
     /**
@@ -93,8 +98,9 @@ define([
      * html 내부 binding 처리
      */
     OptionPackage.prototype.initHtml = function() {
-        var that = this;
         this.loadCss(Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH + "file_io/udf.css");
+
+        this.bindEvent();
         
         // bind values after loading html
         this.package.input && this.package.input.forEach(obj => {
@@ -103,6 +109,13 @@ define([
                 tag.val(obj.value);
             }
         });
+
+        // load udf list
+        this.loadUdfList();
+    }
+
+    OptionPackage.prototype.bindEvent = function() {
+        var that = this;
 
         // save udf
         $(this.wrapSelector('#vp_udfSave')).click(function() {
@@ -127,9 +140,6 @@ define([
             // load again
             that.loadUdfList();
         });
-
-        // load udf list
-        this.loadUdfList();
 
         // load when refresh clicks
         $(this.wrapSelector('#vp_udfRefresh')).click(function(event) {
@@ -204,70 +214,282 @@ define([
             // load again
             that.loadUdfList();
         }); 
+
+
+
+        ///////////////////// new /////////////////////////////////////////
+
+        // toggle item codebox 
+        $(document).on('click', this.wrapSelector('.vp-sn-item-header .vp-sn-indicator'), function() {
+            var parent = $(this).parent();
+            var hasOpen = $(this).hasClass('open');
+            // hide all codebox
+            $(that.wrapSelector('.vp-sn-indicator')).removeClass('open');
+            $(that.wrapSelector('.vp-sn-item-code')).hide();
+            
+            if (!hasOpen) {
+                // show code
+                $(this).addClass('open');
+                $(parent).parent().find('.vp-sn-item-code').show();
+            } else {
+                // hide code
+                $(parent).parent().find('.vp-sn-item-code').hide();
+            }
+        });
+
+        // menu popup
+        $(document).on('click', this.wrapSelector('.vp-sn-menu'), function(evt) {
+            evt.stopPropagation();
+            $(that.wrapSelector('.vp-sn-menu-box')).toggle();
+        });
+
+        // filter menu popup
+        $(document).on('click', this.wrapSelector('.vp-sn-filter'), function(evt) {
+            evt.stopPropagation();
+            $(that.wrapSelector('.vp-sn-filter-menu-box')).toggle();
+        });
+
+        // menu click 
+        $(document).on('click', this.wrapSelector('.vp-sn-menu-item'), function(evt) {
+            var menu = $(this).data('menu');
+            if (menu == 'import') {
+                // TODO:
+
+            } else if (menu == 'export') {
+                // set as export mode
+                $(that.wrapSelector('.vp-sn-body')).addClass('vp-sn-export-mode');
+
+
+            }
+        });
+
+        // search item 
+        $(document).on('change', this.wrapSelector('.vp-sn-search'), function(evt) {
+            var value = $(this).val();
+            if (value != '') {
+                $(that.wrapSelector('.vp-sn-item')).hide();
+                $(that.wrapSelector('.vp-sn-item')).filter(function() {
+                    return $(this).data('title').search(value) >= 0;
+                }).show();
+            } else {
+                $(that.wrapSelector('.vp-sn-item')).show();
+            }
+        });
+
+        // filter item
+        $(document).on('click', this.wrapSelector('.vp-sn-filter-menu-item'), function() {
+            var menu = $(this).data('menu');
+            if (menu == 'name') {
+                // sort by name
+                $(that.wrapSelector('.vp-sn-item')).sort(function(a, b) {
+                    var titleA = $(a).data('title');
+                    var titleB = $(b).data('title');
+                    return titleA > titleB ? 1 : -1
+                }).appendTo($(that.wrapSelector('.vp-sn-table')))
+            } else if (menu == 'date') {
+                // sort by date
+                $(that.wrapSelector('.vp-sn-item')).sort(function(a, b) {
+                    var timeA = $(a).data('timestamp');
+                    var timeB = $(b).data('timestamp');
+                    return timeA < timeB ? 1 : -1
+                }).appendTo($(that.wrapSelector('.vp-sn-table')))
+            }
+        });
+
+        // create item
+        $(document).on('click', this.wrapSelector('.vp-sn-create'), function() {
+            var titleList = Object.keys(that.codemirrorList);
+            var newTitle = 'untitled' + that.title_no;
+            while(titleList.includes(newTitle)) {
+                that.title_no += 1;
+                newTitle = 'untitled' + that.title_no;
+            }
+
+            var timestamp = new Date().getTime();
+            var newItem = $(that.renderSnippetItem(newTitle, '', timestamp));
+            $(that.wrapSelector('.vp-sn-table')).append(newItem);
+
+            // save it
+            var newSnippet = { [newTitle]: { code: '', timestamp: timestamp } };
+            vpSetting.saveUserDefinedCode(newSnippet);
+
+            var tag = $(that.wrapSelector('.vp-sn-item[data-title="' + newTitle + '"] textarea'));
+            that.bindCodeMirror(newTitle, tag[0]);
+            $(newItem).find('.vp-sn-indicator').trigger('click');
+
+            that.title_no += 1;
+        });
+
+        // item title save
+        $(document).on('change', this.wrapSelector('.vp-sn-item-title'), function(evt) {
+            var prevTitle = $(this).closest('.vp-sn-item').data('title');
+            var newTitle = $(this).val();
+
+            that.codemirrorList[prevTitle].save();
+            var code = that.codemirrorList[prevTitle].getValue();
+            // 기존 title 제거
+            vpSetting.removeUserDefinedCode(prevTitle);
+            
+            // 새 title로 저장
+            // save udf
+            var newTimestamp = new Date().getTime();
+            var newSnippet = { [newTitle]: { code: code, timestamp: newTimestamp } };
+            vpSetting.saveUserDefinedCode(newSnippet);
+
+            // update title & codemirror
+            $(this).closest('.vp-sn-item').data('title', newTitle);
+            // update codemirror
+            that.codemirrorList[newTitle] = that.codemirrorList[prevTitle];
+            delete that.codemirrorList[prevTitle];
+        });
+
+        // item menu click
+        $(document).on('click', this.wrapSelector('.vp-sn-item-menu-item'), function(evt) {
+            var menu = $(this).data('menu');
+            var title = $(this).closest('.vp-sn-item').data('title');
+            if (menu == 'duplicate') {
+                var dupNo = 1;
+                var timestamp = new Date().getTime();
+                var dupTitle = title + '_dup' + dupNo;
+                var titleList = Object.keys(that.codemirrorList);
+                // set duplicate title
+                while(titleList.includes(dupTitle)) {
+                    dupNo += 1;
+                    dupTitle = title + '_dup' + dupNo;
+                }
+
+                // add duplicated one
+                var code = that.codemirrorList[title].getValue();
+
+                var dupItem = $(that.renderSnippetItem(dupTitle, code, timestamp));
+                $(that.wrapSelector('.vp-sn-table')).append(dupItem);
+
+                // save it
+                var dupSnippet = { [dupTitle]: { code: code, timestamp: timestamp } };
+                vpSetting.saveUserDefinedCode(dupSnippet);
+
+                var tag = $(that.wrapSelector('.vp-sn-item-code textarea[data-title="' + dupTitle + '"]'));
+                that.bindCodeMirror(dupTitle, tag[0]);
+                $(dupItem).find('.vp-sn-indicator').trigger('click');
+
+            } else if (menu == 'delete') {
+                if (title && vpSetting.getUserDefinedCode(title)) {
+                    // remove key
+                    vpSetting.removeUserDefinedCode(title);
+                    // remove item
+                    $(that.wrapSelector('.vp-sn-item[data-title="' + title + '"]')).remove();
+
+                    // vp-multilang for success message
+                    vpCommon.renderSuccessMessage('Successfully removed!');
+                } else {
+                    vpCommon.renderAlertModal('No key available...');
+                    // load again
+                    that.loadUdfList();
+                }
+                
+            }
+        });
+
+        //////////////// export mode ///////////////////////
+        // check all
+        $(document).on('change', this.wrapSelector('.vp-sn-check-all'), function() {
+            var checked = $(this).prop('checked');
+            $(that.wrapSelector('.vp-sn-item-check')).prop('checked', checked);
+        });
+
+        // check items
+        $(document).on('change', this.wrapSelector('.vp-sn-item-check'), function() {
+            var checked = $(this).prop('checked');
+            // if unchecked at least one item, uncheck check-all
+            if (!checked) {
+                $(that.wrapSelector('.vp-sn-check-all')).prop('checked', false);
+            } else {
+                // if all checked, check check-all
+                var allLength = $(that.wrapSelector('.vp-sn-item-check')).length;
+                var checkedLength = $(that.wrapSelector('.vp-sn-item-check:checked')).length;
+                if (allLength == checkedLength) {
+                    $(that.wrapSelector('.vp-sn-check-all')).prop('checked', true);
+                }
+            }
+        });
+
+        // export snippets
+        $(document).on('click', this.wrapSelector('.vp-sn-export'), function() {
+            // get checked snippets
+            var snippets = {};
+            $(that.wrapSelector('.vp-sn-item-check:checked')).each((idx, tag) => {
+                var title = $(tag).closest('.vp-sn-item').data('title');
+                var codemirror = that.codemirrorList[title];
+                codemirror.save();
+                var code = codemirror.getValue();
+                snippets[title] = code;
+            }); 
+
+            // make as file
+            var file = JSON.stringify(snippets);
+
+        });
         
-        
+    }
+
+    OptionPackage.prototype.renderSnippetItem = function(title, code, timestamp) {
+        var item = new sb.StringBuilder();
+        item.appendFormatLine('<div class="{0}" data-title="{1}" data-timestamp="{2}">', 'vp-sn-item', title, timestamp);
+        item.appendFormatLine('<div class="{0}">', 'vp-sn-item-header');
+        item.appendFormatLine('<div class="{0}"></div>', 'vp-sn-indicator');
+        item.appendFormatLine('<input type="text" class="{0}" value="{1}" />', 'vp-sn-item-title', title);
+        item.appendFormatLine('<div class="{0}">', 'vp-sn-item-menu');
+        item.appendFormatLine('<div class="{0}" data-menu="{1}">'
+                            , 'vp-sn-item-menu-item', 'duplicate');
+        item.appendFormatLine('<img src="{0}"/>', '/nbextensions/visualpython/resource/snippets/duplicate.svg');
+        item.appendLine('</div>');
+        item.appendFormatLine('<div class="{0}" data-menu="{1}">'
+                            , 'vp-sn-item-menu-item', 'delete');
+        item.appendFormatLine('<img src="{0}"/>', '/nbextensions/visualpython/resource/snippets/delete.svg');
+        item.appendLine('</div>'); 
+        item.appendLine('</div>'); // end of vp-sn-item-menu
+        // export mode checkbox
+        item.appendFormatLine('<input type="checkbox" class="{0} {1}"/>', 'vp-sn-checkbox', 'vp-sn-item-check');
+        item.appendLine('</div>'); // end of vp-sn-item-header
+        item.appendFormatLine('<div class="{0}">', 'vp-sn-item-code');
+        item.appendFormatLine('<textarea>{0}</textarea>', code);
+        item.appendLine('</div>'); // end of vp-sn-item-code
+        item.appendLine('</div>'); // end of vp-sn-item
+        return item.toString();
     }
 
     OptionPackage.prototype.loadUdfList = function() {
         var that = this;
 
         // clear table except head
-        $(this.wrapSelector('#vp_udfList tr:not(:first)')).remove();
+        $(this.wrapSelector('.vp-sn-table')).html('');
 
         // load udf list to table 'vp_udfList'
         vpSetting.loadUserDefinedCodeList(function(udfList) {
-    
+            var snippets = new sb.StringBuilder();
             udfList.forEach(obj => {
                 if (obj.code != null && obj.code != undefined) {
-                    var trow = $(`<tr></tr>`);
-                    var tdTitle = $(`<td class="vp-udf-key"><label><input type="checkbox" class="vp-udf-check" value="${obj.name}"/><span>${obj.name}</span></label></td>`);
-                    var tdCode = $(`<td class="vp-udf-code"><pre title="${obj.code}">${obj.code}</pre></td>`);
-                    // var tdDelete = $(`<td><button type="button" data-key="${obj.name}">X</button></td>`);
-                    // var tdDelete = $(`<td><div class="vp-del-col" data-key="${obj.name}"></div></td>`);
-        
-                    // click title to load code on udf textarea
-                    trow.click(function() {
-                        var key = $(this).find('.vp-udf-check').val();
-                        if (key == undefined || key === "") {
-                            // 키가 존재하지 않습니다.
-                            vpCommon.renderAlertModal('The key is not available now.');
-                            return;
-                        }
-                        // 선택 표시
-                        // $(this).closest('table').find('.vp-udf-key').removeClass('selected');
-                        $(this).closest('table').find('.vp-udf-check').prop('checked', false)
-                        // $(this).addClass('selected');
-                        $(this).find('.vp-udf-check').prop('checked', true);
 
-                        var code = $(this).find('.vp-udf-code pre').text();
-
-                        // load code on udf textarea
-                        // key title
-                        $(that.wrapSelector('#vp_udfTitle')).val(key);
-                        // code
-                        $(that.wrapSelector('#vp_userCode')).val(code);
-                        that.vp_userCode.setValue(code);
-
-                    });
-        
-                    trow.append(tdTitle);
-                    trow.append(tdCode);
-        
-                    $(that.wrapSelector('#vp_udfList')).append(trow);
+                    var item = that.renderSnippetItem(obj.name, obj.code.code, obj.code.timestamp);
+                    snippets.append(item);
                 }
             });
+            $(that.wrapSelector('.vp-sn-table')).html(snippets.toString());
+
+            // load codemirror
+            var codeList = $(that.wrapSelector('.vp-sn-item-code textarea'));
+            codeList.each((idx, tag) => {
+                var title = $(tag).closest('.vp-sn-item').data('title');
+                that.bindCodeMirror(title, tag);
+            });
         });
+
         
 
     }
 
-    /**
-     * Bind CodeMirror to Textarea
-     */
-    OptionPackage.prototype.bindCodeMirror = function() {
-        var that = this;
-
-        this.vp_userCode = CodeMirror.fromTextArea($(this.wrapSelector('#vp_userCode'))[0], {
+    OptionPackage.prototype.bindCodeMirror = function(title, tag) {
+        var codemirrorConfig = {
             mode: {
                 name: 'python',
                 version: 3,
@@ -276,108 +498,42 @@ define([
             indentUnit: 4,
             matchBrackets: true,
             lineNumbers: true,
-            autoRefresh:true,
+            autoRefresh: true,
             lineWrapping: true, // text-cell(markdown cell) set to true
             theme: "default",
             extraKeys: {"Enter": "newlineAndIndentContinueMarkdownList"}
+        };
+
+        var prevValue = $(tag).val();
+        var codemirror = CodeMirror.fromTextArea(tag, codemirrorConfig);
+        codemirror.setValue(prevValue);
+        this.codemirrorList[title] = codemirror;
+
+        // bind code change
+        // item code save
+        codemirror.on('change', function() {
+            var title = $(tag).closest('.vp-sn-item').data('title');
+            codemirror.save();
+            var code = codemirror.getValue();
+            
+            // save changed code
+            var timestamp = new Date().getTime();
+            var updateSnippet = { [title]: { code: code, timestamp: timestamp } };
+            vpSetting.saveUserDefinedCode(updateSnippet);
         });
-        // this.vp_userCode.setSize(null, 100);
-        this.vp_userCode.setValue($(this.wrapSelector('#vp_userCode')).val());
-
-        // focus on codemirror
-        this.vp_userCode.focus();
-
-        /**
-         * CodeMirror reference : https://codemirror.net/index.html
-         *  
-         * CodeMirror object Usage :
-         * 1. Get value
-         *  vp_testCodeMirror.getValue()
-         * 2. Set value
-         *  vp_testCodeMirror.setValue('string')
-         * 3. Apply to original textarea
-         *  vp_testCodeMirror.save()
-         * 4. Get Textarea object
-         *  vp_testCodeMirror.getTextArea()
-         * 
-         * Prefix box Textarea
-         *  var vp_prefix = CodeMirror.fromTextArea($('#vp_prefixBox textarea')[0], { mode:'htmlmixed', lineNumbers: true, theme: 'default'});
-         * Postfix box Textarea
-         *  var vp_postfix = CodeMirror.fromTextArea($('#vp_postfixBox textarea')[0], { mode: 'htmlmixed', lineNumbers: true, theme: 'default'});
-         */
-
-        // Deprecated: no api board for udf page
-        // var popupTag = `<div id="vp_cmPopup" class="vp-cm-popup no-selection"><span id="vp_cmAddBlock" class="vp-cm-popup-menu"><i class="fa fa-plus"></i> add code block</span></div>`;
-        // $(this.wrapSelector('')).prepend($(popupTag));
-        // $('#vp_cmPopup').hide();
-
-        // // click - add block : add code block to vpCode Container
-        // $('#vp_cmAddBlock').click(function() {
-        //     if (that.vp_userCode != undefined) {
-        //         var selection = that.vp_userCode.getSelection();
-
-        //         if (selection == '' || selection.trim().length <= 0) {
-        //             return false;
-        //         }
-
-        //         var blockObj = { 
-        //             code: selection, 
-        //             type: 'code',
-        //             metadata: {
-        //                 funcID: funcOptProp.funcID,
-        //                 prefix: [],
-        //                 postfix: [],
-        //                 options: [
-        //                     { id: 'vp_userCode', value: selection }
-        //                 ]
-        //             }
-        //         };
-    
-        //         vpCode.addBlock(blockObj);
-        //     }
-        // });
-
-        // $('.CodeMirror-lines').unbind('contextmenu');
-        // // TEST: selection
-        // $('.CodeMirror-lines').on('contextmenu', function(event) {
-        //     event.preventDefault();
-        //     event.stopPropagation();
-
-        //     var selection = that.vp_userCode.getSelection();
-
-        //     if (selection == '' || selection.trim().length <= 0) {
-        //         return false;
-        //     }
-
-        //     $('#vp_cmPopup').css({
-        //         position: 'fixed',
-        //         left: event.pageX,
-        //         top: event.pageY
-        //     });
-        //     $('#vp_cmPopup').show();
-
-        //     return false;
-        // });
-
-        // // popup menu disappear
-        // $('body').on('click', function(event) {
-        //     var target = event.target;
-        //     $('#vp_cmPopup').hide();
-        // });
-
-        // $('.CodeMirror-lines').attr('title', 'drag text and right click to add block');
     }
 
+    
     /**
      * 코드 생성
      * @param {boolean} exec 실행여부
      */
     OptionPackage.prototype.generateCode = function(addCell, exec) {
         var sbCode = new sb.StringBuilder();
-        sbCode.append(this.vp_userCode.getValue());
+        // sbCode.append(this.vp_userCode.getValue());
 
         // save codemirror value to origin textarea
-        this.vp_userCode.save();
+        // this.vp_userCode.save();
 
         if (addCell) this.cellExecute(sbCode.toString(), exec);
 
