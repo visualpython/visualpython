@@ -542,89 +542,80 @@ define([
  
      /** for param 생성 */
      var GenerateForCode = function(thatBlock) {
-         var forParam = thatBlock.getState(STATE_forParam);
-         const { arg1, arg2, arg3, arg4, arg5, arg6, arg7 } = forParam;
+        var forParam = thatBlock.getState(STATE_forParam);
+        const { arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 } = forParam;
  
-         var forParamStr = ``;
+        var forParamStr = ``;
  
-         if (arg1 !== STR_EMPTY) {
-             forParamStr += arg1;
-             forParamStr += ' ';
-         }
- 
-         if (arg3 == FOR_BLOCK_ARG3_TYPE.ENUMERATE && arg1 !== STR_EMPTY && arg4 !== STR_EMPTY) { 
-             forParamStr += ',';
-         }
- 
-         if (arg3 == FOR_BLOCK_ARG3_TYPE.ENUMERATE && arg4 !== STR_EMPTY) {
+         
+        if ((arg3 == FOR_BLOCK_ARG3_TYPE.VARIABLE || arg3 == FOR_BLOCK_ARG3_TYPE.TYPING) && arg4 !== STR_EMPTY) {
              forParamStr += arg4;
-             forParamStr += ' ';
-         }
+        }
+        if ((arg3 == FOR_BLOCK_ARG3_TYPE.VARIABLE || arg3 == FOR_BLOCK_ARG3_TYPE.TYPING) && arg1 !== STR_EMPTY && arg4 !== STR_EMPTY) { 
+            forParamStr += ',';
+        } 
+            
+        if (arg1 !== STR_EMPTY) {
+            forParamStr += arg1;
+        }
  
-         forParamStr += 'in';
-         forParamStr += ' ';
- 
-         if (arg3 == FOR_BLOCK_ARG3_TYPE.ZIP) {
-             forParamStr += arg3;
-             forParamStr += '(';
-             forParamStr += arg2;
- 
-             if (arg7 !== '') {
-                 forParamStr += ',';
-                 forParamStr += ' ';
-                 forParamStr += arg7;
-             }
- 
-             forParamStr += ')';
- 
-         } else if (arg3 ==  FOR_BLOCK_ARG3_TYPE.ENUMERATE ) {
-             forParamStr += arg3;
-             forParamStr += '(';
-             forParamStr += arg2;
-             forParamStr += ')';
- 
-         } else if (arg3 ==  FOR_BLOCK_ARG3_TYPE.RANGE ) {
-             forParamStr += arg3;
-             forParamStr += '(';
- 
-             if (arg5 !== '') {
-                 forParamStr += arg5;
-             }
- 
-             if (arg5 !== '' && arg2 !== '') { 
-                 forParamStr += ',';
-             }
- 
-             if (arg2 !== '') {
-                 forParamStr += ' ';
-                 forParamStr += arg2;
-             }
- 
-             if ((arg5 !== '' || arg2 !== '') && arg6 !== '') { 
-                 forParamStr += ',';
-             }
- 
-             if (arg6 !== '') {
-                 forParamStr += ' ';
-                 forParamStr += arg6;
-             }
-   
-             forParamStr += ')';
- 
-         } else {
-            if (arg3 != FOR_BLOCK_ARG3_TYPE.INPUT_STR) {
-                forParamStr += arg3;
-            } 
+        forParamStr += ' ';
+        forParamStr += 'in';
+        forParamStr += ' ';
 
-            if (arg2 != '') {
-                if (arg3 == '' || arg3 == FOR_BLOCK_ARG3_TYPE.INPUT_STR) {
-                    forParamStr += arg2;
-                } else {
-                    forParamStr += '(';
-                    forParamStr += arg2;
-                    forParamStr += ')';
-                }
+        if (arg3 == FOR_BLOCK_ARG3_TYPE.VARIABLE) {
+        //  forParamStr += arg3;
+            forParamStr += '(';
+            forParamStr += arg8;
+            forParamStr += ')';
+
+        } else if (arg3 ==  FOR_BLOCK_ARG3_TYPE.TYPING ) {
+        //  forParamStr += arg3;
+            forParamStr += '(';
+            forParamStr += arg7;
+            forParamStr += ')';
+
+        } else if (arg3 ==  FOR_BLOCK_ARG3_TYPE.RANGE ) {
+            forParamStr += 'range(';
+
+            if (arg5 !== '') {
+                forParamStr += arg5;
             }
+
+            if (arg5 !== '' && arg2 !== '') { 
+                forParamStr += ',';
+            }
+
+            if (arg2 !== '') {
+                forParamStr += ' ';
+                forParamStr += arg2;
+            }
+
+            if ((arg5 !== '' || arg2 !== '') && arg6 !== '') { 
+                forParamStr += ',';
+            }
+
+            if (arg6 !== '') {
+                forParamStr += ' ';
+                forParamStr += arg6;
+            }
+
+            forParamStr += ')';
+
+        } else {
+        if (arg3 != FOR_BLOCK_ARG3_TYPE.INPUT_STR) {
+            forParamStr += arg3;
+        }
+
+        if (arg2 != '') {
+            if (arg3 == '' || arg3 == FOR_BLOCK_ARG3_TYPE.INPUT_STR) {
+                forParamStr += arg2;
+            } else {
+                forParamStr += '(';
+                forParamStr += arg2;
+                forParamStr += ')';
+            }
+        }
 
         }
 
