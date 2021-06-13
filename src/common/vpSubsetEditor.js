@@ -476,6 +476,7 @@ define([
      * @param {Array} rowList 
      */
     SubsetEditor.prototype.renderRowSlicingBox = function(rowList) {
+        var that = this;
         var tag = new sb.StringBuilder();
         tag.appendFormatLine('<div class="{0}">', VP_DS_SLICING_BOX);
         var vpRowStart = new vpSuggestInputText.vpSuggestInputText();
@@ -484,9 +485,10 @@ define([
         vpRowStart.setPlaceholder('start');
         vpRowStart.setSuggestList(function() { return rowList });
         vpRowStart.setSelectEvent(function(value, item) {
-            $(this.wrapSelector()).val(value);
+            $(this.wrapSelector()).val(item.code);
             $(this.wrapSelector()).attr('data-code', item.code);
-            $(this.wrapSelector()).trigger('change');
+            // $(this.wrapSelector()).trigger('change');
+            that.generateCode();
         });
         vpRowStart.setNormalFilter(false);
 
@@ -496,9 +498,10 @@ define([
         vpRowEnd.setPlaceholder('end');
         vpRowEnd.setSuggestList(function() { return rowList });
         vpRowEnd.setSelectEvent(function(value, item) {
-            $(this.wrapSelector()).val(value);
+            $(this.wrapSelector()).val(item.code);
             $(this.wrapSelector()).attr('data-code', item.code);
-            $(this.wrapSelector()).trigger('change');
+            // $(this.wrapSelector()).trigger('change');
+            that.generateCode();
         });
         vpRowEnd.setNormalFilter(false);
 
@@ -575,6 +578,7 @@ define([
      * @param {Array} colList 
      */
     SubsetEditor.prototype.renderColumnSlicingBox = function(colList) {
+        var that = this;
         var tag = new sb.StringBuilder();
         tag.appendFormatLine('<div class="{0}">', VP_DS_SLICING_BOX);
         tag.appendFormatLine('<label class="{0}">{1}</label>'
@@ -587,9 +591,9 @@ define([
         vpColStart.setPlaceholder('start');
         vpColStart.setSuggestList(function() { return colList });
         vpColStart.setSelectEvent(function(value, item) {
-            $(this.wrapSelector()).val(value);
-            $(this.wrapSelector()).attr('data-code', item.code);
-            $(this.wrapSelector()).trigger('change');
+            $(this.wrapSelector()).val(item.code);
+            $(this.wrapSelector()).data('code', item.code);
+            that.generateCode();
         });
         vpColStart.setNormalFilter(false);
 
@@ -599,9 +603,9 @@ define([
         vpColEnd.setPlaceholder('end');
         vpColEnd.setSuggestList(function() { return colList });
         vpColEnd.setSelectEvent(function(value, item) {
-            $(this.wrapSelector()).val(value);
-            $(this.wrapSelector()).attr('data-code', item.code);
-            $(this.wrapSelector()).trigger('change');
+            $(this.wrapSelector()).val(item.code);
+            $(this.wrapSelector()).data('code', item.code);
+            that.generateCode();
         });
         vpColEnd.setNormalFilter(false);
 
@@ -623,6 +627,17 @@ define([
         var tag = new sb.StringBuilder();
         tag.appendFormatLine('<table class="{0}">', VP_DS_CONDITION_TBL);
         tag.appendLine('<tr>');
+        // tag.appendLine('<td colspan="4"><div class="vp-icon-btn vp-add-col" title="Add Condition"></i></td>');
+        tag.appendFormatLine('<td colspan="4"><button type="button" class="{0} {1}">{2}</button></td>'
+                            , VP_DS_BUTTON_ADD_CONDITION, 'vp-add-col', '+ Condition');
+        tag.appendLine('</tr>');
+        tag.appendLine('</table>');
+        return tag.toString();
+    }
+
+    SubsetEditor.prototype.renderConditionBox = function(colList) {
+        var tag = new sb.StringBuilder();
+        tag.appendLine('<tr>');
         tag.appendLine('<td>');
         // del col
         tag.appendLine('<div class="vp-icon-btn vp-del-col"></div>');
@@ -631,20 +646,7 @@ define([
         tag.appendLine(this.renderConditionVariableInput(varList, this.state.pandasObject, this.state.dataType));
 
         tag.appendLine('<div class="vp-td-line">');
-        // tag.appendLine('<input type="text" class="vp-input m vp-col-list" placeholder="Column Name"/>');
         tag.appendLine(this.renderConditionColumnInput(colList));
-
-        // tag.appendLine('<input type="text" class="vp-input s vp-oper-list" placeholder="Oper"/>');
-        // var vpOperSuggest = new vpSuggestInputText.vpSuggestInputText();
-        // vpOperSuggest.addClass('vp-input s vp-oper-list');
-        // vpOperSuggest.setPlaceholder("Oper");
-        // vpOperSuggest.setSuggestList(function() { return ['==', '!=', 'in', 'not in', '<', '<=', '>', '>=']; });
-        // vpOperSuggest.setSelectEvent(function(value) {
-        //     $(this.wrapSelector()).val(value);
-        //     $(this.wrapSelector()).trigger('change');
-        // });
-        // vpOperSuggest.setNormalFilter(false);
-        // tag.appendLine(vpOperSuggest.toTagString());
         tag.appendFormatLine('<select class="{0} {1}">', 'vp-select s', 'vp-oper-list');
         var operList = ['', '==', '!=', 'in', 'not in', '<', '<=', '>', '>=']
         operList.forEach(oper => {
@@ -667,12 +669,6 @@ define([
 
         tag.appendLine('</td>');
         tag.appendLine('</tr>');
-        tag.appendLine('<tr>');
-        // tag.appendLine('<td colspan="4"><div class="vp-icon-btn vp-add-col" title="Add Condition"></i></td>');
-        tag.appendFormatLine('<td colspan="4"><button type="button" class="{0} {1}">{2}</button></td>'
-                            , VP_DS_BUTTON_ADD_CONDITION, 'vp-add-col', '+ Condition');
-        tag.appendLine('</tr>');
-        tag.appendLine('</table>');
         return tag.toString();
     }
 
@@ -1467,12 +1463,6 @@ define([
             event.stopPropagation();
             
             var colList = $(that.wrapSelector('.' + VP_DS_CONDITION_TBL + ' tr td:not(:last)'));
-            if (colList.length <= 1) {
-                // clear
-                // add new column
-                that.handleColumnAdd();
-            }
-
             // clear previous one
             $(this).closest('tr').remove();
             $(that.wrapSelector('.' + VP_DS_CONDITION_TBL + ' .vp-oper-connect:last')).hide();
@@ -1481,7 +1471,8 @@ define([
         });
 
         // typing on slicing
-        $(document).on('change', this.wrapSelector('.slicing input[type="text"]'), function() {
+        $(document).on('change', this.wrapSelector('.vp-ds-slicing-box input[type="text"]'), function() {
+            $(this).data('code', $(this).val());
             that.generateCode();
         });
 
@@ -1693,40 +1684,15 @@ define([
      */
     SubsetEditor.prototype.handleColumnAdd = function() {
         var that = this;
-        var clone = $(this.wrapSelector('.' + VP_DS_CONDITION_TBL + ' tr:first')).clone();
-
-        clone.find('input').val('');
-        clone.find('.vp-condition').attr({'placeholder': ''});
-
-        clone.find('.vp-cond-var').parent().replaceWith(function() {
-            return that.renderConditionVariableInput(that.state.dataList, that.state.pandasObject, that.state.dataType);
-        });
-        // clone.find('.vp-cond-var').val(this.state.pandasObject);
-
-        // set column suggest input
-        clone.find('.vp-col-list').replaceWith(function() {
-            return that.renderConditionColumnInput(that.state.columnList);
-        });
-
-        // set operater suggest input
-        // clone.find('.vp-oper-list').replaceWith(function() {
-        //     var suggestInput = new vpSuggestInputText.vpSuggestInputText();
-        //     suggestInput.addClass('vp-input s vp-oper-list');
-        //     suggestInput.setPlaceholder("Oper");
-        //     suggestInput.setSuggestList(function() { return ['==', '!=', 'and', 'or', 'in', 'not in', '<', '<=', '>', '>=']; });
-        //     suggestInput.setSelectEvent(function(value) {
-        //         $(this.wrapSelector()).val(value);
-        //         $(this.wrapSelector()).trigger('change');
-        //     });
-        //     suggestInput.setNormalFilter(false);
-        //     return suggestInput.toTagString();
-        // });
+        // var clone = $(this.wrapSelector('.' + VP_DS_CONDITION_TBL + ' tr:first')).clone();
+        var conditonBox = $(this.renderConditionBox(this.state.columnList));
 
         // hide last connect operator
-        clone.find('.vp-oper-connect').hide();
+        conditonBox.find('.vp-oper-connect').hide();
+
         // show connect operator right before last one
         $(this.wrapSelector('.' + VP_DS_CONDITION_TBL + ' .vp-oper-connect:last')).show();
-        clone.insertBefore(this.wrapSelector('.' + VP_DS_CONDITION_TBL + ' tr:last'));
+        conditonBox.insertBefore(this.wrapSelector('.' + VP_DS_CONDITION_TBL + ' tr:last'));
     }
 
     /**
@@ -1768,7 +1734,7 @@ define([
             if (rowTags.length > 0) {
                 var rowList = [];
                 for (var i = 0; i < rowTags.length; i++) {
-                    var rowValue = $(rowTags[i]).attr('data-code');
+                    var rowValue = $(rowTags[i]).data('code');
                     if (rowValue) {
                         rowList.push(rowValue);
                     }
@@ -1778,8 +1744,8 @@ define([
                 rowSelection.append(':');
             }
         } else if (this.state.rowType == 'slicing') {
-            var start = $(this.wrapSelector('.' + VP_DS_ROW_SLICE_START)).attr('data-code');
-            var end = $(this.wrapSelector('.' + VP_DS_ROW_SLICE_END)).attr('data-code');
+            var start = $(this.wrapSelector('.' + VP_DS_ROW_SLICE_START)).data('code');
+            var end = $(this.wrapSelector('.' + VP_DS_ROW_SLICE_END)).data('code');
             rowSelection.appendFormat('{0}:{1}', start?start:'', end?end:'');
         } else if (this.state.rowType == 'condition') {
             // condition
@@ -1788,8 +1754,8 @@ define([
             for (var i = 0; i < condList.length; i++) {
                 var colTag = $(condList[i]);
                 var varName = colTag.find('.vp-cond-var').val();
-                var varType = colTag.find('.vp-cond-var').attr('data-type');
-                var colName = colTag.find('.vp-col-list').find('option:selected').attr('data-code');
+                var varType = colTag.find('.vp-cond-var').data('type');
+                var colName = colTag.find('.vp-col-list').find('option:selected').data('code');
                 colName = colName? colName: '';
                 var oper = colTag.find('.vp-oper-list').val();
                 var useText = colTag.find('.vp-cond-use-text').prop('checked');
@@ -1855,7 +1821,7 @@ define([
                 if (colTags.length > 0) {
                     var colList = [];
                     for (var i = 0; i < colTags.length; i++) {
-                        var colValue = $(colTags[i]).attr('data-code');
+                        var colValue = $(colTags[i]).data('code');
                         if (colValue) {
                             colList.push(colValue);
                         }
@@ -1879,8 +1845,8 @@ define([
                     colSelection.append(':');
                 }
             } else if (this.state.colType == 'slicing') {
-                var start = $(this.wrapSelector('.' + VP_DS_COL_SLICE_START)).attr('data-code');
-                var end = $(this.wrapSelector('.' + VP_DS_COL_SLICE_END)).attr('data-code');
+                var start = $(this.wrapSelector('.' + VP_DS_COL_SLICE_START)).data('code');
+                var end = $(this.wrapSelector('.' + VP_DS_COL_SLICE_END)).data('code');
                 colSelection.appendFormat('{0}:{1}', start? start: '', end? end: '');
             }
         }

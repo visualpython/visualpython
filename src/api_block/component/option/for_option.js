@@ -7,11 +7,15 @@ define([
     , '../../constData.js'
     , '../base/index.js'
 
+    , 'nbextensions/visualpython/src/common/component/vpVarSelector'
+
 ], function ( $, sb, 
-                api, constData, baseComponent ) {
+                api, constData, baseComponent, vpVarSelector) {
                     
     const { GenerateForCode
             , GenerateListforConditionList } = api;
+
+    const VarSelector = vpVarSelector;
              
     const { FOR_BLOCK_TYPE
             , FOR_BLOCK_ARG3_TYPE
@@ -26,6 +30,7 @@ define([
             , VP_ID_APIBLOCK_OPTION_FOR_ARG_5
             , VP_ID_APIBLOCK_OPTION_FOR_ARG_6
             , VP_ID_APIBLOCK_OPTION_FOR_ARG_7
+            , VP_ID_APIBLOCK_OPTION_FOR_ARG_8
             , VP_ID_APIBLOCK_OPTION_FOR_ARG_3_INPUT_STR
             , VP_ID_APIBLOCK_OPTION_FOR_ARG_3_DEFAULT
 
@@ -37,7 +42,9 @@ define([
             , VP_CLASS_STYLE_FLEX_COLUMN_CENTER
 
             , VP_CLASS_STYLE_WIDTH_20PERCENT
+            , VP_CLASS_STYLE_WIDTH_30PERCENT
             , VP_CLASS_STYLE_WIDTH_40PERCENT
+            , VP_CLASS_STYLE_WIDTH_50PERCENT
             , VP_CLASS_STYLE_WIDTH_80PERCENT
             , VP_CLASS_STYLE_WIDTH_100PERCENT
 
@@ -59,7 +66,8 @@ define([
             , STATE_forBlockOptionType } = constData;
 
     const { MakeOptionContainer
-            , MakeVpSuggestInputText_apiblock } = baseComponent;    
+            , MakeVpSuggestInputText_apiblock
+            , MakeOptionSelectBox } = baseComponent;    
 
     var InitForBlockOption = function(thisBlock, optionPageSelector) {
         var uuid = thisBlock.getUUID();
@@ -120,28 +128,27 @@ define([
             var forParamStr = GenerateForCode(thisBlock);
             $(VP_CLASS_PREFIX + VP_CLASS_APIBLOCK_BLOCK_HEADER + uuid).html(forParamStr);
 
-            if ($(this).val() == STR_EMPTY) {
+            // if ($(this).val() == STR_EMPTY) {
                 blockContainerThis.renderBlockOptionTab();
-            }
+            // }
   
             event.stopPropagation();
         });
 
-        $(document).off(STR_CHANGE, VP_ID_PREFIX + VP_ID_APIBLOCK_OPTION_FOR_ARG_3 + uuid);
-        $(document).on(STR_CHANGE, VP_ID_PREFIX + VP_ID_APIBLOCK_OPTION_FOR_ARG_3 + uuid, function(event) {
-            var forParam = thisBlock.getState(STATE_forParam);
-            thisBlock.setState({
-                [STATE_forParam]: {
-                    ...forParam
-                    , arg3 :  $(STR_COLON_SELECTED, this).val()  
-                }
-            });
-            var forParamStr = GenerateForCode(thisBlock);
-            $(VP_CLASS_PREFIX + VP_CLASS_APIBLOCK_BLOCK_HEADER + uuid).html(forParamStr);
-            blockContainerThis.renderBlockOptionTab();
-            event.stopPropagation();
-        });
-
+        // $(document).off(STR_CHANGE, VP_ID_PREFIX + VP_ID_APIBLOCK_OPTION_FOR_ARG_3 + uuid);
+        // $(document).on(STR_CHANGE, VP_ID_PREFIX + VP_ID_APIBLOCK_OPTION_FOR_ARG_3 + uuid, function(event) {
+        //     var forParam = thisBlock.getState(STATE_forParam);
+        //     thisBlock.setState({
+        //         [STATE_forParam]: {
+        //             ...forParam
+        //             , arg3 :  $(STR_COLON_SELECTED, this).val()  
+        //         }
+        //     });
+        //     var forParamStr = GenerateForCode(thisBlock);
+        //     $(VP_CLASS_PREFIX + VP_CLASS_APIBLOCK_BLOCK_HEADER + uuid).html(forParamStr);
+        //     blockContainerThis.renderBlockOptionTab();
+        //     event.stopPropagation();
+        // });
 
         /**
          * @event_function
@@ -222,6 +229,25 @@ define([
             event.stopPropagation();
         });
 
+        /**
+         * @event_function
+         * for arg8 변경 
+         */
+        $(document).off(STR_CHANGE_KEYUP_PASTE + ' var_changed', VP_ID_PREFIX + VP_ID_APIBLOCK_OPTION_FOR_ARG_8 + uuid);
+        $(document).on(STR_CHANGE_KEYUP_PASTE + ' var_changed', VP_ID_PREFIX + VP_ID_APIBLOCK_OPTION_FOR_ARG_8 + uuid, function(event) {
+            var forParam = thisBlock.getState(STATE_forParam);
+            thisBlock.setState({
+                [STATE_forParam]: {
+                    ...forParam
+                    , arg8 : event.value
+                }
+            });
+            var forParamStr = GenerateForCode(thisBlock);
+            $(VP_CLASS_PREFIX + VP_CLASS_APIBLOCK_BLOCK_HEADER + uuid).html(forParamStr);
+
+            event.stopPropagation();
+        });
+
         /** for arg3 inputStr 변경
          * @event_function
          */
@@ -249,7 +275,7 @@ define([
             thisBlock.setState({
                 [STATE_forParam]: {
                     ...forParam
-                    , arg3Default: $(this).val() 
+                    , arg3Default: $(this).val()
                 }
             });
             var forParamStr = GenerateForCode(thisBlock);
@@ -326,6 +352,11 @@ define([
                     ...forParam
                     , arg7 : selectedValue
                 }
+            } else if (FOR_BLOCK_SELECT_VALUE_ARG_TYPE.ARG8 == argType) {
+                updatedValue = {
+                    ...forParam
+                    , arg8 : selectedValue
+                }
             } else if (FOR_BLOCK_SELECT_VALUE_ARG_TYPE.ARG3_DEFAULT == argType) {
                 updatedValue = {
                     ...forParam
@@ -353,9 +384,9 @@ define([
         var renderThisComponent = function() {
             var optionContainerDom = MakeOptionContainer(thisBlock);
             var loadedVariableNameList = blockContainerThis.getKernelLoadedVariableNameList();
-            var loadedVariableNameList_arg1 = [ ...loadedVariableNameList,  `vp_i`];
-            var loadedVariableNameList_arg4 = [ ...loadedVariableNameList,  `vp_j`];
-            var loadedVariableNameList_arg3 = [ ...Object.values( FOR_BLOCK_ARG3_TYPE )];
+            var loadedVariableNameList_arg1 = [ ...loadedVariableNameList ];
+            var loadedVariableNameList_arg4 = [ ...loadedVariableNameList ];
+            var loadedVariableNameList_arg3 = [ ...Object.values( FOR_BLOCK_ARG3_TYPE) ];
             /** 0,1,2,3 */
             var loadedVariableNameList_arg5 = [ ...loadedVariableNameList, '0','1','2','3','4','5','6','7','8','9'];
             /** 9 */
@@ -368,7 +399,7 @@ define([
             /** For Type 설정 */
             var forParamState = thisBlock.getState(STATE_forParam);  
 
-            const { arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg3Default, arg3InputStr } = forParamState;
+            const { arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg3Default, arg3InputStr } = forParamState;
 
             var sbforParam = new sb.StringBuilder();
             sbforParam.appendFormatLine("<div class='{0}' style='{1}'>", VP_CLASS_STYLE_FLEX_ROW_BETWEEN, 
@@ -378,7 +409,7 @@ define([
             var $sbforParamDom1 = $(sbforParamDom1);
 
             var sbforName = new sb.StringBuilder();
-            sbforName.appendFormatLine("<div class='{0} {1}'", VP_CLASS_STYLE_FLEX_COLUMN_CENTER, VP_CLASS_APIBLOCK_OPTION_NAME);
+            sbforName.appendFormatLine("<div class='{0} {1} {2}'", VP_CLASS_STYLE_FLEX_COLUMN_CENTER, VP_CLASS_APIBLOCK_OPTION_NAME, 'vp-orange-text');
             sbforName.appendFormatLine("style='{0} '>", '');
             sbforName.appendFormatLine("{0}", 'for');
             sbforName.appendLine("</div>");
@@ -387,31 +418,37 @@ define([
             var sbforVariable = new sb.StringBuilder();
             sbforVariable.appendFormatLine("<div class='{0} {1}'>", VP_CLASS_STYLE_FLEX_ROW_BETWEEN 
                                                                   , VP_CLASS_STYLE_WIDTH_80PERCENT);
+
+            /** For arg4 - Index */
+            if (arg3 == FOR_BLOCK_ARG3_TYPE.VARIABLE
+                || arg3 == FOR_BLOCK_ARG3_TYPE.TYPING) {
+                var sbforParamArg1Input4 = MakeVpSuggestInputText_apiblock(VP_ID_APIBLOCK_OPTION_FOR_ARG_4 + uuid
+                    , arg4
+                    , loadedVariableNameList_arg4
+                    , VP_CLASS_STYLE_WIDTH_100PERCENT
+                    , 'Index'
+                    , function(selectedValue) {
+                        bindSelectValueEventFunc_for(selectedValue, 
+                            FOR_BLOCK_SELECT_VALUE_ARG_TYPE.ARG4);
+                });
+                sbforVariable.appendLine(sbforParamArg1Input4);
+            }
+
             /** For arg1 */
             var sbforParamArg1Input = MakeVpSuggestInputText_apiblock(VP_ID_APIBLOCK_OPTION_FOR_ARG_1 + uuid
                                                                     ,arg1
                                                                     ,loadedVariableNameList_arg1
                                                                     , VP_CLASS_STYLE_WIDTH_100PERCENT
-                                                                    , STR_VARIABLE
+                                                                    , 'Item'
                                                                     , function(selectedValue) {
                                                                         bindSelectValueEventFunc_for(selectedValue, 
                                                                             FOR_BLOCK_SELECT_VALUE_ARG_TYPE.ARG1);
                                                                     });
 
             sbforVariable.appendLine(sbforParamArg1Input);
-            var sbforParamArg1Input4 = MakeVpSuggestInputText_apiblock(VP_ID_APIBLOCK_OPTION_FOR_ARG_4 + uuid
-                                                                        ,arg4
-                                                                        ,loadedVariableNameList_arg4
-                                                                        , VP_CLASS_STYLE_WIDTH_100PERCENT
-                                                                        , STR_VARIABLE
-                                                                        , function(selectedValue) {
-                                                                            bindSelectValueEventFunc_for(selectedValue, 
-                                                                                FOR_BLOCK_SELECT_VALUE_ARG_TYPE.ARG4);
-                                                                        });
-
-            sbforVariable.appendLine(sbforParamArg1Input4);
             sbforVariable.appendLine("</div>");
             $sbforParamDom1.append(sbforVariable.toString());
+            
 
             var sbforParam2 = new sb.StringBuilder();
             sbforParam2.appendFormatLine("<div class='{0}' style='{1}'>", VP_CLASS_STYLE_FLEX_ROW_BETWEEN, 
@@ -422,7 +459,7 @@ define([
 
             /** For in */
             var sbforParamIn = new sb.StringBuilder();
-            sbforParamIn.appendFormatLine("<div class='{0} {1}'", VP_CLASS_STYLE_FLEX_COLUMN_CENTER, VP_CLASS_APIBLOCK_OPTION_NAME);
+            sbforParamIn.appendFormatLine("<div class='{0} {1} {2}'", VP_CLASS_STYLE_FLEX_COLUMN_CENTER, VP_CLASS_APIBLOCK_OPTION_NAME, 'vp-orange-text');
             sbforParamIn.appendFormatLine("style='{0} {1}'>", 'width: 5%;','');
             sbforParamIn.appendFormatLine("{0}", 'in');
             sbforParamIn.appendLine("</div>");
@@ -432,72 +469,137 @@ define([
             var sbforArgContainer = new sb.StringBuilder();
             sbforArgContainer.appendFormatLine("<div class='{0} {1}'>", VP_CLASS_STYLE_FLEX_ROW_BETWEEN 
                                                                         , VP_CLASS_STYLE_WIDTH_80PERCENT);
-            var sbforParamArg3 = MakeVpSuggestInputText_apiblock(VP_ID_APIBLOCK_OPTION_FOR_ARG_3 + uuid
-                                                                , arg3
-                                                                , loadedVariableNameList_arg3
-                                                                , VP_CLASS_STYLE_WIDTH_40PERCENT
-                                                                , 'Method'
-                                                                , function(selectedValue) {
-                                                                    bindSelectValueEventFunc_for(selectedValue, 
-                                                                        FOR_BLOCK_SELECT_VALUE_ARG_TYPE.ARG3);
-                                                                });    
+            // var sbforParamArg3 = MakeVpSuggestInputText_apiblock(VP_ID_APIBLOCK_OPTION_FOR_ARG_3 + uuid
+            //                                                     , arg3
+            //                                                     , loadedVariableNameList_arg3
+            //                                                     , VP_CLASS_STYLE_WIDTH_40PERCENT
+            //                                                     , 'Method'
+            //                                                     , function(selectedValue) {
+            //                                                         bindSelectValueEventFunc_for(selectedValue, 
+            //                                                             FOR_BLOCK_SELECT_VALUE_ARG_TYPE.ARG3);
+            //                                                     });    
+            var sbforParamArg3 = MakeOptionSelectBox(VP_ID_APIBLOCK_OPTION_FOR_ARG_3 + uuid
+                , VP_CLASS_STYLE_WIDTH_100PERCENT
+                , arg3
+                , loadedVariableNameList_arg3);
 
-            sbforArgContainer.appendLine(sbforParamArg3);             
+            sbforArgContainer.appendLine(sbforParamArg3);   
+            $sbforParamDom2.append(sbforArgContainer.toString());
+            
+            // next line div
+            var sbforParam3 = new sb.StringBuilder();
+            sbforParam3.appendFormatLine("<div class='{0}' style='{1}'>", VP_CLASS_STYLE_FLEX_ROW_BETWEEN, 
+                                                                        'margin-top: 5px;');
+            sbforParam3.appendLine("</div>");
+            var sbforParamDom3 = sbforParam3.toString();
+            var $sbforParamDom3 = $(sbforParamDom3);
 
+            var sbforParamLine = new sb.StringBuilder();
+            sbforParamLine.appendFormatLine("<div class='{0}'", VP_CLASS_STYLE_FLEX_COLUMN_CENTER);
+            sbforParamLine.appendFormatLine("style='{0} {1}'>", 'width: 5%;','');
+            sbforParamLine.appendLine("</div>");
+            $sbforParamDom3.append(sbforParamLine.toString());
+            
+            sbforArgContainer.clear();    
+            sbforArgContainer.appendFormatLine("<div class='{0} {1}'>", VP_CLASS_STYLE_FLEX_ROW_BETWEEN 
+                                                                        , VP_CLASS_STYLE_WIDTH_80PERCENT);
+            
+            // argContainer header
+            if (arg3 == FOR_BLOCK_ARG3_TYPE.RANGE) {
+                sbforArgContainer.appendFormatLine("<div class='{0} {1} {2}'>{3}</div>", VP_CLASS_STYLE_FLEX_COLUMN_CENTER 
+                                                    , VP_CLASS_STYLE_WIDTH_100PERCENT, 'vp-orange-text'
+                                                    , 'Start');
+                sbforArgContainer.appendFormatLine("<div class='{0} {1} {2}'>{3}</div>", VP_CLASS_STYLE_FLEX_COLUMN_CENTER 
+                                                    , VP_CLASS_STYLE_WIDTH_100PERCENT, ''
+                                                    , 'Stop');
+                sbforArgContainer.appendFormatLine("<div class='{0} {1} {2}'>{3}</div>", VP_CLASS_STYLE_FLEX_COLUMN_CENTER 
+                                                    , VP_CLASS_STYLE_WIDTH_100PERCENT, ''
+                                                    , 'Step');
+            }
+            if (arg3 == FOR_BLOCK_ARG3_TYPE.VARIABLE) {
+                sbforArgContainer.appendFormatLine("<div class='{0} {1} {2}'>{3}</div>", VP_CLASS_STYLE_FLEX_COLUMN_CENTER 
+                                                    , VP_CLASS_STYLE_WIDTH_50PERCENT, 'vp-orange-text'
+                                                    , 'Data Type');
+                sbforArgContainer.appendFormatLine("<div class='{0} {1} {2}'>{3}</div>", VP_CLASS_STYLE_FLEX_COLUMN_CENTER 
+                                                    , VP_CLASS_STYLE_WIDTH_50PERCENT, 'vp-orange-text'
+                                                    , 'Data');
+            }
+            sbforArgContainer.appendLine("</div>");
+            $sbforParamDom3.append(sbforArgContainer.toString());
+            
+            // next line div
+            var sbforParam4 = new sb.StringBuilder();
+            sbforParam4.appendFormatLine("<div class='{0}' style='{1}'>", VP_CLASS_STYLE_FLEX_ROW_BETWEEN, 
+                                                                        'margin-top: 5px;');
+            sbforParam4.appendLine("</div>");
+            var sbforParamDom4 = sbforParam4.toString();
+            var $sbforParamDom4 = $(sbforParamDom4);
+
+            $sbforParamDom4.append(sbforParamLine.toString());
+            
+            sbforArgContainer.clear();
+            sbforArgContainer.appendFormatLine("<div class='{0} {1}'>", VP_CLASS_STYLE_FLEX_ROW_BETWEEN 
+                                                                        , VP_CLASS_STYLE_WIDTH_80PERCENT);
+            // argContainer inputs
             if (arg3 == FOR_BLOCK_ARG3_TYPE.RANGE) {
                 var sbforParamArg5 = MakeVpSuggestInputText_apiblock(VP_ID_APIBLOCK_OPTION_FOR_ARG_5 + uuid
                                                                         ,arg5
                                                                         ,loadedVariableNameList_arg5
-                                                                        , VP_CLASS_STYLE_WIDTH_20PERCENT
+                                                                        , VP_CLASS_STYLE_WIDTH_100PERCENT
                                                                         , STR_VALUE
                                                                         , function(selectedValue) {
                                                                             bindSelectValueEventFunc_for(selectedValue, 
                                                                                 FOR_BLOCK_SELECT_VALUE_ARG_TYPE.ARG5);
-                                                                        });
+                });
                 sbforArgContainer.appendLine(sbforParamArg5);
-            }            
 
-            if (arg3 == STR_EMPTY
-                || arg3 == FOR_BLOCK_ARG3_TYPE.ZIP 
-                || arg3 == FOR_BLOCK_ARG3_TYPE.RANGE 
-                || arg3 == FOR_BLOCK_ARG3_TYPE.ENUMERATE) {
                 var sbforParamArg2 = MakeVpSuggestInputText_apiblock(VP_ID_APIBLOCK_OPTION_FOR_ARG_2 + uuid
                     ,arg2
                     ,loadedVariableNameList_arg2
-                    , VP_CLASS_STYLE_WIDTH_20PERCENT
+                    , VP_CLASS_STYLE_WIDTH_100PERCENT
                     , STR_VALUE
                     , function(selectedValue) {
                         bindSelectValueEventFunc_for(selectedValue, 
                             FOR_BLOCK_SELECT_VALUE_ARG_TYPE.ARG2);
-                    });
+                });
                 sbforArgContainer.appendLine(sbforParamArg2);
+
+                var sbforParamArg6 = MakeVpSuggestInputText_apiblock(VP_ID_APIBLOCK_OPTION_FOR_ARG_6 + uuid
+                    , arg6
+                    , loadedVariableNameList_arg6
+                    , VP_CLASS_STYLE_WIDTH_100PERCENT
+                    , STR_VALUE
+                    , function(selectedValue) {
+                        bindSelectValueEventFunc_for(selectedValue, 
+                            FOR_BLOCK_SELECT_VALUE_ARG_TYPE.ARG6);
+                });
+                sbforArgContainer.appendLine(sbforParamArg6);
+            }            
+
+            if (arg3 == FOR_BLOCK_ARG3_TYPE.VARIABLE) {
+                var dataTypes = ['DataFrame', 'Series', 'nparray', 'list', 'str'];
+                var varSelector = new vpVarSelector(dataTypes, 'DataFrame', true, true);
+                varSelector.setComponentId(VP_ID_APIBLOCK_OPTION_FOR_ARG_8 + uuid);
+                varSelector.addBoxClass(VP_CLASS_STYLE_WIDTH_100PERCENT);
+                varSelector.addBoxClass(VP_CLASS_STYLE_FLEX_ROW_BETWEEN);
+                varSelector.addTypeClass(VP_CLASS_STYLE_WIDTH_50PERCENT);
+                varSelector.addVarClass(VP_CLASS_STYLE_WIDTH_50PERCENT);
+                varSelector.setValue(arg8);
+                sbforArgContainer.appendLine(varSelector.render());
             }
             
-            if (arg3 == FOR_BLOCK_ARG3_TYPE.ZIP) {
+            if (arg3 == FOR_BLOCK_ARG3_TYPE.TYPING) {
                 var sbforParamArg7 = MakeVpSuggestInputText_apiblock(VP_ID_APIBLOCK_OPTION_FOR_ARG_7 + uuid
                                                                     ,arg7
                                                                     ,loadedVariableNameList_arg7
-                                                                    , VP_CLASS_STYLE_WIDTH_20PERCENT
-                                                                    , STR_VALUE
+                                                                    , VP_CLASS_STYLE_WIDTH_100PERCENT
+                                                                    , 'User Input'
                                                                     , function(selectedValue) {
                                                                         bindSelectValueEventFunc_for(selectedValue, 
                                                                             FOR_BLOCK_SELECT_VALUE_ARG_TYPE.ARG7);
                                                                     });
                 sbforArgContainer.appendLine(sbforParamArg7);
-            }  
-
-            if (arg3 == FOR_BLOCK_ARG3_TYPE.RANGE) {
-                var sbforParamArg6 = MakeVpSuggestInputText_apiblock(VP_ID_APIBLOCK_OPTION_FOR_ARG_6 + uuid
-                                                                    , arg6
-                                                                    , loadedVariableNameList_arg6
-                                                                    , VP_CLASS_STYLE_WIDTH_20PERCENT
-                                                                    , STR_VALUE
-                                                                    , function(selectedValue) {
-                                                                        bindSelectValueEventFunc_for(selectedValue, 
-                                                                            FOR_BLOCK_SELECT_VALUE_ARG_TYPE.ARG6);
-                                                                    });
-                sbforArgContainer.appendLine(sbforParamArg6);
-            }      
+            }     
 
             if (arg3 == FOR_BLOCK_ARG3_TYPE.DEFAULT) {
                 var sbforParamArg7 = MakeVpSuggestInputText_apiblock(VP_ID_APIBLOCK_OPTION_FOR_ARG_3_DEFAULT + uuid
@@ -513,33 +615,33 @@ define([
             }
 
             sbforArgContainer.appendLine("</div>");
-            $sbforParamDom2.append(sbforArgContainer.toString());
+            $sbforParamDom4.append(sbforArgContainer.toString());
 
             optionContainerDom.append($sbforParamDom1);
             optionContainerDom.append($sbforParamDom2);
+            optionContainerDom.append($sbforParamDom3);
+            optionContainerDom.append($sbforParamDom4);
+
             /** bottom block option 탭에 렌더링된 dom객체 생성 */
             $(optionPageSelector).append(optionContainerDom);
 
             $(VP_ID_PREFIX + VP_ID_APIBLOCK_OPTION_FOR_ARG_1 + uuid).val(arg1);
             $(VP_ID_PREFIX + VP_ID_APIBLOCK_OPTION_FOR_ARG_2 + uuid).val(arg2);
-            if (arg3 == FOR_BLOCK_ARG3_TYPE.INPUT_STR) {
-                $(VP_ID_PREFIX + VP_ID_APIBLOCK_OPTION_FOR_ARG_3 + uuid).val(STR_EMPTY);
-            } else {
-                $(VP_ID_PREFIX + VP_ID_APIBLOCK_OPTION_FOR_ARG_3 + uuid).val(arg3);
-            }
+            $(VP_ID_PREFIX + VP_ID_APIBLOCK_OPTION_FOR_ARG_3 + uuid).val(arg3);
             $(VP_ID_PREFIX + VP_ID_APIBLOCK_OPTION_FOR_ARG_4 + uuid).val(arg4);
 
             /** For arg4 */
-            if (arg3 == FOR_BLOCK_ARG3_TYPE.ENUMERATE) {
-                $(VP_ID_PREFIX + VP_ID_APIBLOCK_OPTION_FOR_ARG_4 + uuid).addClass(VP_CLASS_STYLE_OPACITY_1);
-                $(VP_ID_PREFIX + VP_ID_APIBLOCK_OPTION_FOR_ARG_4 + uuid).css(STR_MARGIN_LEFT,'5px');
-            } else {
-                $(VP_ID_PREFIX + VP_ID_APIBLOCK_OPTION_FOR_ARG_4 + uuid).addClass(VP_CLASS_STYLE_OPACITY_0);
-            }
+            // if (arg3 == FOR_BLOCK_ARG3_TYPE.ENUMERATE) {
+            //     $(VP_ID_PREFIX + VP_ID_APIBLOCK_OPTION_FOR_ARG_4 + uuid).addClass(VP_CLASS_STYLE_OPACITY_1);
+            //     $(VP_ID_PREFIX + VP_ID_APIBLOCK_OPTION_FOR_ARG_4 + uuid).css(STR_MARGIN_LEFT,'5px');
+            // } else {
+            //     $(VP_ID_PREFIX + VP_ID_APIBLOCK_OPTION_FOR_ARG_4 + uuid).addClass(VP_CLASS_STYLE_OPACITY_0);
+            // }
 
             $(VP_ID_PREFIX + VP_ID_APIBLOCK_OPTION_FOR_ARG_5 + uuid).val(arg5);
             $(VP_ID_PREFIX + VP_ID_APIBLOCK_OPTION_FOR_ARG_6 + uuid).val(arg6);
             $(VP_ID_PREFIX + VP_ID_APIBLOCK_OPTION_FOR_ARG_7 + uuid).val(arg7);
+            $(VP_ID_PREFIX + VP_ID_APIBLOCK_OPTION_FOR_ARG_8 + uuid).val(arg8);
 
             return optionContainerDom;
         }

@@ -121,9 +121,13 @@ define([
     }
 
     const FOR_BLOCK_ARG3_TYPE = {
-        ZIP: 'zip'
-        , RANGE: 'range'
-        , ENUMERATE: 'enumerate'
+        // ZIP: 'zip'
+        // , RANGE: 'range'
+        // , ENUMERATE: 'enumerate'
+        // edit for block types
+        RANGE: 'Range'
+        , VARIABLE: 'Variable'
+        , TYPING: 'Typing'
     }
 
     const FOR_BLOCK_SELECT_VALUE_ARG_TYPE = {

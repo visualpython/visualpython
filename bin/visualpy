@@ -4,21 +4,24 @@
 # Filename : visualpy
 # function : control visualpython for Mac/Linux
 # Creator  : BlackLogic  - LJ
-# version  : 2.1
+# version  : 2.2
 # License  :
 # Date     : 2020 07.27
-# Mdate    : 2020 12.29
+# Mdate    : 2021 06.04
 #============================================================================
 
-v_path1=`pip show visualpython | grep Location | awk -F': ' '{print $2}'`
+v_pip=pip
+which pip3 > /dev/null 2>&1 && v_pip=pip3
+
+v_path1=`${v_pip} show visualpython | grep Location | awk -F': ' '{print $2}'`
 v_prod='visualpython'
 v_str1='jupyter nbextension'
 v_str2='visualpython/src/main'
-v_unst='pip uninstall '${v_prod}
-v_upgr='pip install '${v_prod}' --upgrade'
-#v_srch='pip search '${v_prod}
-v_str3='pip list -o '
-v_str4='pip show '${v_prod}
+v_unst='${v_pip} uninstall '${v_prod}
+v_upgr='${v_pip} install '${v_prod}' --upgrade'
+#v_srch='${v_pip} search '${v_prod}
+v_str3='${v_pip} list -o '
+v_str4='${v_pip} show '${v_prod}
 #v_list=`${v_str3} | grep -i ${v_prod}`
 v_curt=`${v_str4} | grep 'Version' | cut -d ' ' -f 2`
 v_option=$1
@@ -294,7 +297,7 @@ f_prt_extensiondir() {
     echo "jupyter contrib nbextension install --user"
     f_prt_line2
     echo "for pip"
-    echo "pip install -e jupyter_contrib_nbextensions"
+    echo "${v_pip} install -e jupyter_contrib_nbextensions"
     echo "jupyter contrib nbextension install --user"
     f_prt_line1
 }

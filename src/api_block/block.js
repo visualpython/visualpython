@@ -255,11 +255,12 @@ define([
             , forParam: {
                 arg1: STR_EMPTY
                 , arg2: STR_EMPTY
-                , arg3: FOR_BLOCK_ARG3_TYPE.INPUT_STR
+                , arg3: FOR_BLOCK_ARG3_TYPE.RANGE
                 , arg4: STR_EMPTY
                 , arg5: STR_EMPTY
                 , arg6: STR_EMPTY
                 , arg7: STR_EMPTY
+                , arg8: STR_EMPTY
 
                 , arg3InputStr: STR_EMPTY
                 , arg3Default: STR_EMPTY

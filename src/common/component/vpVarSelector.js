@@ -36,6 +36,9 @@ define([
         this.attributes = {
         };
 
+        this.typeClass = [];
+        this.varClass = [];
+
         this.dataTypes = dataTypes;
         if (defaultType == '') {
             if (dataTypes.length > 0) {
@@ -71,6 +74,14 @@ define([
         this.class.push(classname);
     }
 
+    VarSelector.prototype.addTypeClass = function(classname) {
+        this.typeClass.push(classname);
+    }
+
+    VarSelector.prototype.addVarClass = function(classname) {
+        this.varClass.push(classname);
+    }
+
     VarSelector.prototype.addAttribute = function(key, value) {
         this.attributes.push({[key]: value});
     }
@@ -94,7 +105,7 @@ define([
         //                     this.attributes.id? 'id="' + this.attributes.id + '"': '');
 
         // data type selector
-        tag.appendFormatLine('<select class="{0} {1}">', VP_VS_DATA_TYPE, 'vp-select m');
+        tag.appendFormatLine('<select class="{0} {1} {2}">', VP_VS_DATA_TYPE, 'vp-select m', this.typeClass.join(' '));
         this.dataTypes.forEach((v, i) => {
             tag.appendFormatLine('<option value="{0}" {1}>{2}</option>', v
                                 , this.defaultType == v?'selected':'', v);
@@ -144,7 +155,7 @@ define([
 
     VarSelector.prototype.renderVariableList = function(varList) {
         var tag = new sb.StringBuilder();
-        tag.appendFormatLine('<select class="{0} {1}" {2}>', VP_VS_VARIABLES, 'vp-select m'
+        tag.appendFormatLine('<select class="{0} {1} {2}" {3}>', VP_VS_VARIABLES, 'vp-select m', this.varClass.join(' ')
                             , this.state.selectedType == 'typing'? 'style="display:none;"':'');
         varList.forEach(vObj => {
             // varName, varType
