@@ -4,31 +4,28 @@ rem #==========================================================================
 rem # Filename : visualpy.bat
 rem # function : control Visual Python for windows
 rem # Creator  : BlackLogic - LJ
-rem # version  : 2.2
+rem # version  : 2.1
 rem # License  : GPLv3
 rem # Date     : 2020 07.30
-rem # MDate    : 2021 06.04
+rem # MDate    : 2020 12.29
 rem #==========================================================================
 
 rem ## setting variables
-
-set v_pip=pip
-where pip3 > /dev/null 2>&1 && set v_pip=pip3
 
 set v_prod=visualpython
 (echo "%v_prod%" & echo.) | findstr /O . | more +1 | (set /P RESULT= & call exit /B %%RESULT%%)
 set /A v_prd_length=%ERRORLEVEL%-5
 set v_option=%1
-for /f "delims=, tokens=1*" %%i in ('%v_pip% show %v_prod% 2^>^&1 ^| find "Location"') do (
+for /f "delims=, tokens=1*" %%i in ('pip show %v_prod% 2^>^&1 ^| find "Location"') do (
 set v_1=%%i)
 set v_path1=%v_1:~10%
 set v_str1=jupyter nbextension
 set v_str2=%v_prod%/src/main
-set v_srch=%v_pip% search %v_prod%
-set v_upgr=%v_pip% install %v_prod% --upgrade
-set v_unst=%v_pip% uninstall %v_prod%
-set v_ckup=%v_pip% list -o
-set v_show=%v_pip% show %v_prod%
+set v_srch=pip search %v_prod%
+set v_upgr=pip install %v_prod% --upgrade
+set v_unst=pip uninstall %v_prod%
+set v_ckup=pip list -o
+set v_show=pip show %v_prod%
 
 rem check env & setting path2
 where /q conda-env
