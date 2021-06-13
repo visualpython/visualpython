@@ -577,12 +577,13 @@ define([
             var saveFilePath = $(VP_ID_PREFIX + VP_ID_APIBLOCK_BOARD_MAKE_NODE_PATH).val(); // path
 
             // TEST: File Navigation
-            // var state = {
+            var state = {
+                fileType: FileNavigation.SAVE_FILE
 
-            // };
-            // var fileNavigation = new FileNavigation(FileNavigation.FILE_TYPE.SAVE_VP_NOTE, state);
-
-            // return;
+            };
+            var fileNavigation = new FileNavigation(FileNavigation.FILE_TYPE.SAVE_VP_NOTE, state);
+            fileNavigation.open();
+            return;
 
             /** 빈 string이거나 
              *  Untitled이면 File navigation을 open */

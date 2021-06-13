@@ -195,6 +195,9 @@
 }
 
 /* export mode */
+.vp-sn-export-mode .vp-sn-menu {
+    display: none;
+}
 .vp-sn-export-mode .vp-sn-func-export-mode {
     display: block;
 }
@@ -245,7 +248,7 @@
     background-image: url(../../resource/chevron_big_down.svg) !important;
 }
 .vp-sn-item-title {
-    width: calc(100% - 70px);
+    width: calc(100% - 80px);
     outline: none;
     border: 0.5px solid white !important;
 }
@@ -257,6 +260,9 @@
     transition: 0.7s;
     border: 1px solid #FFCF73;
     border: 0.5px solid var(--hightlight-color) !important;
+}
+.vp-sn-imported-item {
+    color: var(--hightlight-color);
 }
 .vp-sn-item-menu {
     float: right;

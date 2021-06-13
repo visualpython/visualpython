@@ -6,13 +6,17 @@ define([
     , 'nbextensions/visualpython/src/common/StringBuilder'
     , 'nbextensions/visualpython/src/common/vpFuncJS'
     , 'nbextensions/visualpython/src/common/vpSetting'
-    // TEST: CodeMirror
+    // file navigation
+    , 'nbextensions/visualpython/src/pandas/fileNavigation/index'
+
+    // CodeMirror
     , 'codemirror/lib/codemirror'
     , 'codemirror/mode/python/python'
     , 'notebook/js/codemirror-ipython'
     , 'codemirror/addon/display/placeholder'
     , 'codemirror/addon/display/autorefresh'
 ], function (requirejs, $, vpCommon, vpConst, sb, vpFuncJS, vpSetting
+            , fileNavigation
             , CodeMirror, cmpython, cmip) {
     // 옵션 속성
     const funcOptProp = {
@@ -74,7 +78,23 @@ define([
         }
 
         this.codemirrorList = {};
+        this.importedList = [];
         this.title_no = 0;
+
+        // file navigation : state 데이터 목록
+        this.state = {
+            paramData:{
+                encoding: "utf-8" // 인코딩
+                , delimiter: ","  // 구분자
+            },
+            returnVariable:"",    // 반환값
+            isReturnVariable: false,
+            fileExtension: ["sn"] // 확장자
+        };
+        this.fileResultState = {
+            pathInputId : this.wrapSelector('.vp-sn-filepath'),
+            fileInputId : this.wrapSelector('.vp-sn-filename')
+        };
     }
 
     /**
@@ -250,16 +270,31 @@ define([
         });
 
         // menu click 
-        $(document).on('click', this.wrapSelector('.vp-sn-menu-item'), function(evt) {
+        $(document).on('click', this.wrapSelector('.vp-sn-menu-item'), async function(evt) {
             var menu = $(this).data('menu');
             if (menu == 'import') {
-                // TODO:
+                var loadURLstyle = Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH;
+                var loadURLhtml = Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.SOURCE_PATH + "component/fileNavigation/index.html";
+                
+                that.loadCss( loadURLstyle + "component/fileNavigation.css");
+        
+                await $(`<div id="vp_fileNavigation"></div>`)
+                .load(loadURLhtml, () => {
 
+                    $('#vp_fileNavigation').removeClass("hide");
+                    $('#vp_fileNavigation').addClass("show");
+
+                    var { vp_init
+                            , vp_bindEventFunctions } = fileNavigation;
+                        
+                    fileNavigation.vp_init(that, "READ_SNIPPETS");
+                    // fileNavigation.vp_init(that.getStateAll());
+                    fileNavigation.vp_bindEventFunctions();
+                })
+                .appendTo("#site");
             } else if (menu == 'export') {
                 // set as export mode
                 $(that.wrapSelector('.vp-sn-body')).addClass('vp-sn-export-mode');
-
-
             }
         });
 
@@ -414,7 +449,39 @@ define([
         });
 
         // export snippets
-        $(document).on('click', this.wrapSelector('.vp-sn-export'), function() {
+        $(document).on('click', this.wrapSelector('.vp-sn-export'), async function() {
+            var checked = $(that.wrapSelector('.vp-sn-item-check:checked'));
+            if (checked.length <= 0) {
+                return ;
+            }
+
+            var loadURLstyle = Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH;
+            var loadURLhtml = Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.SOURCE_PATH + "component/fileNavigation/index.html";
+            
+            that.loadCss( loadURLstyle + "component/fileNavigation.css");
+    
+            await $(`<div id="vp_fileNavigation"></div>`)
+            .load(loadURLhtml, () => {
+
+                $('#vp_fileNavigation').removeClass("hide");
+                $('#vp_fileNavigation').addClass("show");
+
+                var { vp_init
+                        , vp_bindEventFunctions } = fileNavigation;
+                    
+                fileNavigation.vp_init(that, "SAVE_SNIPPETS");
+                // fileNavigation.vp_init(that.getStateAll());
+                fileNavigation.vp_bindEventFunctions();
+            })
+            .appendTo("#site");
+
+        });
+
+        // export complete event
+        $(document).on('snippetSaved.fileNavigation', this.wrapSelector('.vp-sn-filepath'), function(evt) {
+            var fileName = evt.path;
+            var selectedPath = $(this).val();
+
             // get checked snippets
             var snippets = {};
             $(that.wrapSelector('.vp-sn-item-check:checked')).each((idx, tag) => {
@@ -428,16 +495,66 @@ define([
             // make as file
             var file = JSON.stringify(snippets);
 
+            var cmd = new sb.StringBuilder();
+            cmd.appendFormatLine('%%writefile "{0}"', selectedPath);
+            cmd.append(file);
+            Jupyter.notebook.kernel.execute(cmd.toString());
+            
+            vpCommon.renderSuccessMessage(fileName + ' exported ');
+
+            // return to default mode
+            $(that.wrapSelector('.vp-sn-body')).removeClass('vp-sn-export-mode');
+        });
+
+        // import complete event
+        $(document).on('snippetRead.fileNavigation', this.wrapSelector('.vp-sn-filepath'), function(evt) {
+            var selectedPath = $(this).val();
+            fetch(selectedPath).then(function(file) {
+                if (file.status != 200) {
+                    alert("The file format is not valid.");
+                    return;
+                }
+        
+                file.text().then(function(data) {
+                    var snippetData = JSON.parse(data);
+                    var timestamp = new Date().getTime();
+
+                    var keys = Object.keys(snippetData);
+                    var importKeys = [];
+                    keys.forEach(key => {
+                        var importKey = key;
+                        var importNo = 1;
+                        var titleList = Object.keys(that.codemirrorList);
+                        // set duplicate title
+                        while(titleList.includes(importKey)) {
+                            importKey = key + '_imported' + importNo;
+                            importNo += 1;
+                        }
+                        var newSnippet = { [importKey]: { code: snippetData[key], timestamp: timestamp } };
+                        vpSetting.saveUserDefinedCode(newSnippet);
+
+                        importKeys.push(importKey);
+                    });
+                    that.importedList = [ ...importKeys ];
+
+                    that.loadUdfList();
+
+                    vpCommon.renderSuccessMessage(fileName + ' imported ');
+                });
+            });
         });
         
     }
 
-    OptionPackage.prototype.renderSnippetItem = function(title, code, timestamp) {
+    OptionPackage.prototype.renderSnippetItem = function(title, code, timestamp, hasImported=false) {
         var item = new sb.StringBuilder();
         item.appendFormatLine('<div class="{0}" data-title="{1}" data-timestamp="{2}">', 'vp-sn-item', title, timestamp);
         item.appendFormatLine('<div class="{0}">', 'vp-sn-item-header');
         item.appendFormatLine('<div class="{0}"></div>', 'vp-sn-indicator');
         item.appendFormatLine('<input type="text" class="{0}" value="{1}" />', 'vp-sn-item-title', title);
+        if (hasImported) {
+            item.appendFormatLine('<i class="{0}"></i>', 'fa fa-circle vp-sn-imported-item');
+        }
         item.appendFormatLine('<div class="{0}">', 'vp-sn-item-menu');
         item.appendFormatLine('<div class="{0}" data-menu="{1}">'
                             , 'vp-sn-item-menu-item', 'duplicate');
@@ -470,7 +587,12 @@ define([
             udfList.forEach(obj => {
                 if (obj.code != null && obj.code != undefined) {
 
-                    var item = that.renderSnippetItem(obj.name, obj.code.code, obj.code.timestamp);
+                    var hasImported = false;
+                    if (that.importedList.includes(obj.name)) {
+                        // set new label
+                        hasImported = true;
+                    }
+                    var item = that.renderSnippetItem(obj.name, obj.code.code, obj.code.timestamp, hasImported);
                     snippets.append(item);
                 }
             });

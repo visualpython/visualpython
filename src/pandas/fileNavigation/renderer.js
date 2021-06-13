@@ -47,7 +47,8 @@ define([
         var fileOptionData = fileNavigationState.getFileOptionData();
 
         /** Pandas > File IO > to_csv(), to_excel(), to_json(), to_pickle() 네비게이션 클릭시 */
-        if(fileNavigationtype == FILE_NAVIGATION_TYPE.SAVE_FILE){
+        if(fileNavigationtype == FILE_NAVIGATION_TYPE.SAVE_FILE
+            || fileNavigationtype == FILE_NAVIGATION_TYPE.SAVE_SNIPPETS){
             var saveFileDataBtn = $(`<button class='fileNavigationPage-btn-saveVisualPython'
                                              style='margin-left: 10px;'>Save</button>`);
             var cancelFileDataBtn = $(`<button class='fileNavigationPage-btn-cabcelVisualPython'
@@ -419,13 +420,28 @@ define([
             });
         }
 
-        /** 김민주 추가. Markdown 이미지 파일 선택 완료시 이벤트 발동 */
+        /** Markdown 이미지 파일 선택 완료시 이벤트 발동 */
         // imgFileOpenForMarkdown.fileNavigation
         if (fileNavigationState.getFileNavigationtype() === FILE_NAVIGATION_TYPE.READ_IMG_FOR_MARKDOWN) {
             $(document).trigger({
                 type: fileNavigationState.getTriggerName(),
                 path: `${filePathStr}`
             })
+        }
+
+        /** Snippets 저장 후 이벤트 발동 */
+        if (fileNavigationState.getFileNavigationtype() === FILE_NAVIGATION_TYPE.SAVE_SNIPPETS) {
+            $(fileNavigationRendererThis.fileResultState.pathInputId).trigger({
+                type: 'snippetSaved.fileNavigation',
+                path:`${filePathStr}`
+            });
+        }
+        /** Snippets 불러오기 후 이벤트 발동 */
+        if (fileNavigationState.getFileNavigationtype() === FILE_NAVIGATION_TYPE.READ_SNIPPETS) {
+            $(fileNavigationRendererThis.fileResultState.pathInputId).trigger({
+                type: 'snippetRead.fileNavigation',
+                path:`${filePathStr}`
+            });
         }
    
         $('#vp_fileNavigation').remove();

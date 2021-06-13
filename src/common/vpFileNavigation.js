@@ -130,14 +130,12 @@ define([
             that.renderThis(dirObj);
             that.bindEvent();
 
-            that.open();
+            $('#vp_fileNavigation.' + this.uuid).show();
         }).appendTo("#site");
     }
 
     FileNavigation.prototype.open = function() {
         this.init();
-        
-        $('#vp_fileNavigation.' + this.uuid).show();
     }
 
     FileNavigation.prototype.close = function() {
@@ -375,7 +373,11 @@ define([
     }
 
     FileNavigation.prototype.bindEvent = function() {
-        
+        var that = this;
+        // close
+        $(document).on('click', this.wrapSelector('.fileNavigationPage-closedBtn'), function() {
+            that.close();
+        });
     }
 
     FileNavigation.prototype.handleSelectFile = function(relativeDirPath, filePathStr) {
