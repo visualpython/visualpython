@@ -258,6 +258,10 @@ define([
             var menu = $(this).attr('data-menu');
             switch (menu)
             {
+                case 'import':
+                    break;
+                case 'markdown':
+                    break;
                 case 'snippets':
                     var funcID = 'com_udf';
                     var naviInfo = getNavigationInfo(funcID);
@@ -296,6 +300,18 @@ define([
                     var naviInfo = getNavigationInfo(funcID);
                     /** board에 선택한 API List 블럭 생성 */
                     blockContainer.createAPIListBlock(funcID, naviInfo);
+                    break;
+                case 'merge':
+                    // TODO: Merge
+                    break;
+                case 'groupby':
+                    // TODO: Groupby
+                    break;
+                case 'reshape':
+                    // TODO: Reshape
+                    break;
+                case 'timeseries':
+                    // TODO: TimeSeries
                     break;
             }
         });
