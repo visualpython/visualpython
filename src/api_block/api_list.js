@@ -319,7 +319,7 @@ define([
         var that;
         $(vpCommon.wrapSelector(vpCommon.formatString("#{0}", vpConst.OPTION_GREEN_ROOM), vpCommon.formatString(".{0}", vpConst.API_OPTION_PAGE))).each(function() {
             $(this).find("h4:eq(0)").hide();
-            $(this).find("hr:eq(0)").hide();
+            // $(this).find("hr:eq(0)").hide();
             $(vpCommon.wrapSelector(vpCommon.formatString("#{0}", vpConst.OPTION_LOAD_AREA))).html($(this));
             $(vpCommon.wrapSelector(vpCommon.formatString(".{0}", VP_CLASS_APIBLOCK_OPTION_TAB_SELECTOR))).append($(this));
             that = $(this);
