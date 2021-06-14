@@ -11,6 +11,8 @@
                         Export
                         <img src="/nbextensions/visualpython/resource/snippets/export.svg" />
                     </div>
+                    <hr style="margin:0px;"/>
+                    <div class="vp-sn-menu-item" data-menu="default-snippets">Default Snippets</div>
                 </div>
             </div>
         </div>
@@ -20,26 +22,24 @@
         </div>
         <div class="vp-sn-func-box">
             <div class="vp-sn-func-left">
-                <!-- <button class="vp-button vp-sn-button vp-sn-filter" data-menu="filter">
-                    Filter <i class="fa fa-filter"></i>
-                </button> -->
-                <div class="vp-sn-filter" data-menu="filter">
+                <div class="vp-sn-sort" data-menu="sort" title="Sort">
                     <img src="/nbextensions/visualpython/resource/snippets/sort.svg" />
                 </div>
-                <div class="vp-sn-filter-menu-box vp-temp-popup-menu">
-                    <div class="vp-sn-filter-menu-item" data-menu="name">by Names</div>
-                    <div class="vp-sn-filter-menu-item" data-menu="date">by Dates</div>
+                <div class="vp-sn-sort-menu-box vp-temp-popup-menu">
+                    <div class="vp-sn-sort-menu-item" data-menu="name">by Names</div>
+                    <div class="vp-sn-sort-menu-item" data-menu="date">by Dates</div>
                 </div>
             </div>
             <div class="vp-sn-func-right">
                 <div class="vp-sn-func-export-mode">
                     <input type="hidden" class="vp-sn-filename" />
                     <input type="hidden" class="vp-sn-filepath" />
+                    <button class="vp-button cancel vp-sn-export" data-menu="cancel">Cancel</button>
                     <button class="vp-button activated vp-sn-export" data-menu="export">Export</button>
                     <input type="checkbox" class="vp-sn-checkbox vp-sn-check-all" />
                 </div>
                 <div class="vp-sn-func-default-mode">
-                    <button class="vp-button vp-sn-create" data-menu="create">+ Snippet</button>
+                    <button class="vp-button vp-sn-create" data-menu="create" title="Create new snippet">+ Snippet</button>
                 </div>
             </div>
         </div>

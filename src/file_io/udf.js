@@ -263,10 +263,10 @@ define([
             $(that.wrapSelector('.vp-sn-menu-box')).toggle();
         });
 
-        // filter menu popup
-        $(document).on('click', this.wrapSelector('.vp-sn-filter'), function(evt) {
+        // sort menu popup
+        $(document).on('click', this.wrapSelector('.vp-sn-sort'), function(evt) {
             evt.stopPropagation();
-            $(that.wrapSelector('.vp-sn-filter-menu-box')).toggle();
+            $(that.wrapSelector('.vp-sn-sort-menu-box')).toggle();
         });
 
         // menu click 
@@ -295,6 +295,38 @@ define([
             } else if (menu == 'export') {
                 // set as export mode
                 $(that.wrapSelector('.vp-sn-body')).addClass('vp-sn-export-mode');
+
+                // check all
+                $(that.wrapSelector('.vp-sn-check-all')).prop('checked', true);
+                $(that.wrapSelector('.vp-sn-item-check')).prop('checked', true);
+            } else if (menu == 'default-snippets') {
+                // import default snippets
+                var defaultSnippets = {
+                    'default import': 'import numpy as np\nimport pandas as pd\nimport matplotlib.pyplot as plt\n%matplotlib inline\nimport seaborn as sns'
+                }
+                var timestamp = new Date().getTime();
+
+                var keys = Object.keys(defaultSnippets);
+                var importKeys = [];
+                keys.forEach(key => {
+                    var importKey = key;
+                    var importNo = 1;
+                    var titleList = Object.keys(that.codemirrorList);
+                    // set duplicate title
+                    while(titleList.includes(importKey)) {
+                        importKey = key + '_imported' + importNo;
+                        importNo += 1;
+                    }
+                    var newSnippet = { [importKey]: { code: defaultSnippets[key], timestamp: timestamp } };
+                    vpSetting.saveUserDefinedCode(newSnippet);
+
+                    importKeys.push(importKey);
+                });
+                that.importedList = [ ...importKeys ];
+
+                that.loadUdfList();
+
+                vpCommon.renderSuccessMessage('Default snippets imported');
             }
         });
 
@@ -311,8 +343,8 @@ define([
             }
         });
 
-        // filter item
-        $(document).on('click', this.wrapSelector('.vp-sn-filter-menu-item'), function() {
+        // sort item
+        $(document).on('click', this.wrapSelector('.vp-sn-sort-menu-item'), function() {
             var menu = $(this).data('menu');
             if (menu == 'name') {
                 // sort by name
@@ -450,30 +482,37 @@ define([
 
         // export snippets
         $(document).on('click', this.wrapSelector('.vp-sn-export'), async function() {
-            var checked = $(that.wrapSelector('.vp-sn-item-check:checked'));
-            if (checked.length <= 0) {
-                return ;
-            }
-
-            var loadURLstyle = Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH;
-            var loadURLhtml = Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.SOURCE_PATH + "component/fileNavigation/index.html";
-            
-            that.loadCss( loadURLstyle + "component/fileNavigation.css");
+            var menu = $(this).data('menu');
+            if (menu == 'cancel') {
+                // cancel
+                // return to default mode
+                $(that.wrapSelector('.vp-sn-body')).removeClass('vp-sn-export-mode');
+            } else if (menu == 'export') {
+                var checked = $(that.wrapSelector('.vp-sn-item-check:checked'));
+                if (checked.length <= 0) {
+                    return ;
+                }
     
-            await $(`<div id="vp_fileNavigation"></div>`)
-            .load(loadURLhtml, () => {
-
-                $('#vp_fileNavigation').removeClass("hide");
-                $('#vp_fileNavigation').addClass("show");
-
-                var { vp_init
-                        , vp_bindEventFunctions } = fileNavigation;
-                    
-                fileNavigation.vp_init(that, "SAVE_SNIPPETS");
-                // fileNavigation.vp_init(that.getStateAll());
-                fileNavigation.vp_bindEventFunctions();
-            })
-            .appendTo("#site");
+                var loadURLstyle = Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH;
+                var loadURLhtml = Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.SOURCE_PATH + "component/fileNavigation/index.html";
+                
+                that.loadCss( loadURLstyle + "component/fileNavigation.css");
+        
+                await $(`<div id="vp_fileNavigation"></div>`)
+                .load(loadURLhtml, () => {
+    
+                    $('#vp_fileNavigation').removeClass("hide");
+                    $('#vp_fileNavigation').addClass("show");
+    
+                    var { vp_init
+                            , vp_bindEventFunctions } = fileNavigation;
+                        
+                    fileNavigation.vp_init(that, "SAVE_SNIPPETS");
+                    // fileNavigation.vp_init(that.getStateAll());
+                    fileNavigation.vp_bindEventFunctions();
+                })
+                .appendTo("#site");
+            }
 
         });
 
@@ -556,12 +595,12 @@ define([
             item.appendFormatLine('<i class="{0}"></i>', 'fa fa-circle vp-sn-imported-item');
         }
         item.appendFormatLine('<div class="{0}">', 'vp-sn-item-menu');
-        item.appendFormatLine('<div class="{0}" data-menu="{1}">'
-                            , 'vp-sn-item-menu-item', 'duplicate');
+        item.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}">'
+                            , 'vp-sn-item-menu-item', 'duplicate', 'Duplicate');
         item.appendFormatLine('<img src="{0}"/>', '/nbextensions/visualpython/resource/snippets/duplicate.svg');
         item.appendLine('</div>');
-        item.appendFormatLine('<div class="{0}" data-menu="{1}">'
-                            , 'vp-sn-item-menu-item', 'delete');
+        item.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}">'
+                            , 'vp-sn-item-menu-item', 'delete', 'Delete');
         item.appendFormatLine('<img src="{0}"/>', '/nbextensions/visualpython/resource/snippets/delete.svg');
         item.appendLine('</div>'); 
         item.appendLine('</div>'); // end of vp-sn-item-menu
