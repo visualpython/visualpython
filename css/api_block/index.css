@@ -25,7 +25,7 @@
 
 .vp-apiblock-left {
     /* padding: 1.5rem; */
-    padding: 5px; /* 수정 */
+    /* padding: 5px; */
     background-color: white;
     
     /* 수정 */
@@ -54,8 +54,10 @@
 
 .vp-apiblock-menu-search-container {
     position: relative;
-    display: inline-block;
-    width: 160px;
+    /* display: inline-block;
+    width: 160px; */
+    padding: 10px 5px;
+    border-bottom: 0.25px solid var(--border-gray-color);
 }
 
 .vp-menu-search-box {
@@ -66,8 +68,8 @@
 .vp-menu-search-icon {
     position: absolute;
     color: #C4C4C4;
-    right: 7px;
-    top: 7px;
+    right: 12px;
+    top: 17px;
 }
 
 .vp-apiblock-menu-apps {
@@ -106,20 +108,24 @@
 }
 .vp-apiblock-menu-apps-grid {
     display: grid;
-    grid-template-columns: 65px 65px 65px 65px;
-    grid-template-rows: 65px 65px 65px 65px;
+    grid-template-columns: repeat(3, 58px);
+    grid-template-rows: repeat(3, 58px);
     grid-column-gap: 5px;
     grid-row-gap: 5px;
+
+    margin: 10px 0px;
 }
 .vp-apiblock-menu-apps-item {
-    width: 65px;
-    height: 65px;
+    width: 58;
+    height: 58px;
     text-align: center;
     border: 0.25px solid #C4C4C4;
     box-sizing: border-box;
     box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.1);
     border-radius: 2px;
     padding: 12px 0px;
+
+    cursor: pointer;
 }
 .vp-apiblock-menu-apps-item.line1 {
     background: #F9B52A;
@@ -139,7 +145,7 @@
 }
 .vp-apiblock-menu-apps-name {
     color: #FFFFFF;
-    font-size: 12px;
+    font-size: 11px;
 }
 
 .vp-apiblock-menu-box {
@@ -160,6 +166,10 @@
 #vp_apiblock_menu_delete:hover {    
     background: var(--hightlight-color);
     color: white;
+}
+
+.vp-apiblock-tab-navigation-body {
+    padding: 0px 5px;
 }
 
 .vp-apiblock-option-tab {
