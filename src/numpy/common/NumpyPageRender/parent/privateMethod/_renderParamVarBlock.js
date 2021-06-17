@@ -6,7 +6,7 @@ define ([
      * @param {numpyPageRenderer this} numpyPageRendererThis 
      */
     var _renderParamVarBlock = function(numpyPageRendererThis, title) {
-        var uuid = vpCommon.getUUID();
+        var uuid = 'u' + vpCommon.getUUID();
         var numpyPageRendererThis = numpyPageRendererThis;
         var importPackageThis = numpyPageRendererThis.getImportPackageThis();
         var numpyStateGenerator = numpyPageRendererThis.getStateGenerator();

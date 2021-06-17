@@ -36,7 +36,7 @@ define([
     var Snippets = function(pageThis, targetId) {
         this.pageThis = pageThis;
         this.targetId = targetId;
-        this.uuid = vpCommon.getUUID();
+        this.uuid = 'u' + vpCommon.getUUID();
 
         this.state = {
 

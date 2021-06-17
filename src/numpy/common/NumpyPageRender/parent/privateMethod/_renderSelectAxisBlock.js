@@ -8,7 +8,7 @@ define ([
      * @param {numpyPageRenderer this} numpyPageRendererThis 
      */
     var _renderSelectAxisBlock = function(numpyPageRendererThis) {
-        var uuid = vpCommon.getUUID();
+        var uuid = 'u' + vpCommon.getUUID();
         var numpyPageRendererThis = numpyPageRendererThis;
         var importPackageThis = numpyPageRendererThis.getImportPackageThis();
         var numpyStateGenerator = numpyPageRendererThis.getStateGenerator();

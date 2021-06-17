@@ -27,12 +27,12 @@ define([
         // document.getElementsByTagName("head")[0].appendChild(link);
         // 컨테이너에서 전달된 callback 함수가 존재하면 실행.
         if (typeof(callback) === 'function') {
-            var uuid = vpCommon.getUUID();
+            var uuid = 'u' + vpCommon.getUUID();
             // 최대 10회 중복되지 않도록 체크
             for (var idx = 0; idx < 10; idx++) {
                 // 이미 사용중인 uuid 인 경우 다시 생성
                 if ($(vpConst.VP_CONTAINER_ID).find("." + uuid).length > 0) {
-                    uuid = vpCommon.getUUID();
+                    uuid = 'u' + vpCommon.getUUID();
                 }
             }
             $(vpCommon.wrapSelector(vpConst.OPTION_GREEN_ROOM)).find(vpConst.OPTION_PAGE).addClass(uuid);

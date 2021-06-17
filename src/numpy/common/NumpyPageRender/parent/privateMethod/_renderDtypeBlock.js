@@ -8,7 +8,7 @@ define ([
      * @param {numpyPageRenderer this} numpyPageRendererThis 
      */
     var _renderDtypeBlock = function(numpyPageRendererThis) {
-        var uuid = vpCommon.getUUID();
+        var uuid = 'u' + vpCommon.getUUID();
         var numpyStateGenerator = numpyPageRendererThis.getStateGenerator();
 
         const { dtype } = numpyStateGenerator.getStateAll();

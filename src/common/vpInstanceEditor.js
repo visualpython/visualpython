@@ -41,7 +41,7 @@ define([
     var InstanceEditor = function(pageThis, targetId, containerId='vp-wrapper', popup=false) {
         this.pageThis = pageThis;
         this.targetId = targetId;
-        this.uuid = vpCommon.getUUID();
+        this.uuid = 'u' + vpCommon.getUUID();
         this.containerId = containerId;
         this.popup = popup;
 

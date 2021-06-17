@@ -117,7 +117,7 @@ define([
     var SubsetEditor = function(pageThis, targetId, useInputVariable=false) {
         this.pageThis = pageThis;
         this.targetId = targetId;
-        this.uuid = vpCommon.getUUID();
+        this.uuid = 'u' + vpCommon.getUUID();
         this.useInputVariable = useInputVariable;
 
         // specify pandas object types

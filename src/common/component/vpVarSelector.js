@@ -23,7 +23,7 @@ define([
         $(this.wrapSelector('.vp-vs-tester')).html(varSelector.render());
      */
     var VarSelector = function(dataTypes, defaultType='', showOthers=true, useTyping=true) {
-        this.uuid = vpCommon.getUUID();
+        this.uuid = 'u' + vpCommon.getUUID();
         this.label = {
             'others': 'Others',
             'typing': 'Typing'

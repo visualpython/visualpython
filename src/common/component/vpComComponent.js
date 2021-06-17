@@ -19,7 +19,7 @@ define([
      * 컨트롤 uuid 생성
      */
     vpComComponent.prototype.setUUID = function() {
-        this._UUID = vpCommon.getUUID();
+        this._UUID = 'u' + vpCommon.getUUID();
     }
 
     /**
