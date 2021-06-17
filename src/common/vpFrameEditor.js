@@ -90,21 +90,15 @@ define([
         this.targetId = targetId;
         this.uuid = vpCommon.getUUID();
 
-        // state
-        this.state = {
-            originObj: '',
-            tempObj: '_vp',
-            selected: [],
-            axis: 0,
-            lines: TABLE_LINES,
-            steps: [],
-            popup: FRAME_EDIT_TYPE.NONE
-        }
+        this.renderButton();
 
-        this.codepreview = undefined;
-
-        this.bindEvent();
-        this.init();
+        var that = this;
+        // open popup
+        $(vpCommon.formatString('.{0}.{1}', VP_FE_BTN, this.uuid)).on('click', function(event) {
+            if (!$(this).hasClass('disabled')) {
+                that.open();
+            }
+        });
     }
 
     FrameEditor.prototype.wrapSelector = function(query = '') {
@@ -112,8 +106,7 @@ define([
     }
 
     FrameEditor.prototype.open = function() {
-        this.loadVariableList();
-
+        this.init();
         $(this.wrapSelector()).show();
 
         if (!this.codepreview) {
@@ -152,17 +145,33 @@ define([
     }
 
     FrameEditor.prototype.close = function() {
-        $(this.wrapSelector()).hide();
+        this.unbindEvent();
+        $(this.wrapSelector()).remove();
     }
 
     FrameEditor.prototype.init = function() {
-        this.pageThis.loadCss(Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH + "common/frameEditor.css");
+        // state
+        this.state = {
+            originObj: '',
+            tempObj: '_vp',
+            selected: [],
+            axis: 0,
+            lines: TABLE_LINES,
+            steps: [],
+            popup: FRAME_EDIT_TYPE.NONE
+        }
 
-        this.renderButton();
-        this.renderThis();
+        this.codepreview = undefined;
 
+        vpCommon.loadCss(Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH + "common/frameEditor.css");
+
+        this.render();
+        this.bindEvent();
+        
         // this.setDraggableBox();
         this.setDraggableColumns();
+
+        this.loadVariableList();
     }
 
     FrameEditor.prototype.initState = function() {
@@ -177,7 +186,9 @@ define([
         var buttonTag = new sb.StringBuilder();
         buttonTag.appendFormat('<button type="button" class="{0} {1} {2}">{3}</button>'
                                 , VP_FE_BTN, this.uuid, 'vp-button', 'Edit');
-        $(this.pageThis.wrapSelector('#' + this.targetId)).parent().append(buttonTag.toString());
+        if (this.pageThis) {
+            $(this.pageThis.wrapSelector('#' + this.targetId)).parent().append(buttonTag.toString());
+        }
     }
 
     FrameEditor.prototype.setPreview = function(previewCodeStr) {
@@ -191,7 +202,7 @@ define([
         }
     }
 
-    FrameEditor.prototype.renderThis = function() {
+    FrameEditor.prototype.render = function() {
         var page = new sb.StringBuilder();
         page.appendFormatLine('<div class="{0} {1}">', VP_FE, this.uuid);
         page.appendFormatLine('<div class="{0}">', VP_FE_CONTAINER);
@@ -338,6 +349,7 @@ define([
                 });
                 $(that.wrapSelector('#vp_feVariable')).trigger('change');
             } catch (ex) {
+                console.log('FrameEditor:', result);
                 // console.log(ex);
             }
         });
@@ -515,7 +527,7 @@ define([
         }); 
     }
 
-    FrameEditor.prototype.getCode = function(type, content={}) {
+    FrameEditor.prototype.getTypeCode = function(type, content={}) {
         var tempObj = this.state.tempObj;
         var orgObj = this.state.originObj;
 
@@ -668,15 +680,30 @@ define([
         });
     }
 
+    FrameEditor.prototype.unbindEvent = function() {
+        $(document).off(this.wrapSelector('*'));
+
+        $(document).off('click', this.wrapSelector('.' + VP_FE_CLOSE));
+        $(document).off('change', this.wrapSelector('#vp_feVariable'));
+        $(document).off('click', this.wrapSelector('.vp-fe-df-refresh'));
+        $(document).off('contextmenu', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN));
+        $(document).off('contextmenu', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW));
+        $(document).off('click', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN));
+        $(document).off('click', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW));
+        $(document).off('click', this.wrapSelector('.' + VP_FE_ADD_COLUMN));
+        $(document).off('click', this.wrapSelector('.' + VP_FE_ADD_ROW));
+        $(document).off('click', this.wrapSelector('.' + VP_FE_TABLE_MORE));
+        $(document).off('click', this.wrapSelector('.' + VP_FE_MENU_ITEM));
+        $(document).off('click', this.wrapSelector('.' + VP_FE_POPUP_OK));
+        $(document).off('click', this.wrapSelector('.' + VP_FE_POPUP_CANCEL));
+        $(document).off('click', this.wrapSelector('.' + VP_FE_POPUP_CLOSE));
+        $(document).off('click', this.wrapSelector('.' + VP_FE_BUTTON_CANCEL));
+        $(document).off('click', this.wrapSelector('.' + VP_FE_BUTTON_APPLY));
+
+    }
 
     FrameEditor.prototype.bindEvent = function() {
         var that = this;
-        // open popup
-        $(document).on('click', vpCommon.formatString('.{0}.{1}', VP_FE_BTN, this.uuid), function(event) {
-            if (!$(this).hasClass('disabled')) {
-                that.open();
-            }
-        });
         
         // close popup
         $(document).on('click', this.wrapSelector('.' + VP_FE_CLOSE), function(event) {
@@ -697,7 +724,7 @@ define([
             that.initState();
 
             // load code with temporary df
-            that.loadCode(that.getCode(FRAME_EDIT_TYPE.INIT));
+            that.loadCode(that.getTypeCode(FRAME_EDIT_TYPE.INIT));
             that.loadInfo();
         });
 
@@ -756,7 +783,8 @@ define([
         });
 
         // select column
-        $(document).on('click', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN), function() {
+        $(document).on('click', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN), function(evt) {
+            evt.stopPropagation();
             var hasSelected = $(this).hasClass('selected');
             $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW)).removeClass('selected');
             if (!hasSelected) {
@@ -800,7 +828,7 @@ define([
         // more rows
         $(document).on('click', this.wrapSelector('.' + VP_FE_TABLE_MORE), function() {
             that.state.lines += TABLE_LINES;
-            that.loadCode(that.getCode(FRAME_EDIT_TYPE.SHOW));
+            that.loadCode(that.getTypeCode(FRAME_EDIT_TYPE.SHOW));
         });
 
         // click menu item
@@ -814,13 +842,13 @@ define([
                     that.openInputPopup(editType);
                     return;
             }
-            that.loadCode(that.getCode(editType));
+            that.loadCode(that.getTypeCode(editType));
         });
 
         // ok input popup
         $(document).on('click', this.wrapSelector('.' + VP_FE_POPUP_OK), function() {
             // TODO: ok input popup
-            that.loadCode(that.getCode(that.state.popup, that.getPopupContent()));
+            that.loadCode(that.getTypeCode(that.state.popup, that.getPopupContent()));
             that.closeInputPopup();
         });
 
@@ -841,8 +869,20 @@ define([
 
         // click apply
         $(document).on('click', this.wrapSelector('.' + VP_FE_BUTTON_APPLY), function() {
-            $(that.pageThis.wrapSelector('#' + that.targetId)).val(that.state.steps.join('\n'));
-            $(that.pageThis.wrapSelector('#' + that.targetId)).trigger('frame_apply');
+            var code = that.state.steps.join('\n');
+            if (that.pageThis) {
+                $(that.pageThis.wrapSelector('#' + that.targetId)).val(code);
+                $(that.pageThis.wrapSelector('#' + that.targetId)).trigger({
+                    type: 'frame_apply',
+                    code: code
+                });
+            } else {
+                $(vpCommon.wrapSelector('#' + that.targetId)).val(code);
+                $(vpCommon.wrapSelector('#' + that.targetId)).trigger({
+                    type: 'frame_apply',
+                    code: code
+                });
+            }
             that.close();
         });
     }
