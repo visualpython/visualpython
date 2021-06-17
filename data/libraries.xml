@@ -17,17 +17,17 @@
             <desc>사용 패키지 선언 타이틀 캡션 테스트</desc>
             <file>file_io/import.js</file>
         </item>
-        <item id="com_instance" type="function" level="1" name="Instance" tag="INSTANCE, 인스턴스, 한 줄 코드">
+        <!-- <item id="com_instance" type="function" level="1" name="Instance" tag="INSTANCE, 인스턴스, 한 줄 코드">
             <path>visualpython - common - instance</path>
             <desc>Instance</desc>
             <file>file_io/instance.js</file>
-        </item>
+        </item> -->
         <!-- <item id="com_markdown" type="function" level="1" name="Markdown" tag="MARKDOWN">
             <path>visualpython - common - markdown</path>
             <desc>마크다운</desc>
             <file>markdown/markdown.js</file>
         </item> -->
-        <item id="com_variables" type="function" level="1" name="Variable List" tag="VARIABLES, 변수">
+        <!-- <item id="com_variables" type="function" level="1" name="Variable List" tag="VARIABLES, 변수">
             <path>visualpython - common - variables</path>
             <desc>변수 정보</desc>
             <file>file_io/variables.js</file>
@@ -36,7 +36,7 @@
             <path>visualpython - common - udf</path>
             <desc>사용자 코드 입력</desc>
             <file>file_io/udf.js</file>
-        </item>
+        </item> -->
         <!-- <item id="com_sample" type="function" level="1" name="optionSample" tag="SAMPLE">
             <path>visualpython - common - optionSample</path>
             <desc>옵션 샘플</desc>
@@ -1221,7 +1221,7 @@
             <desc>데이터를 차트로 표현하는 함수</desc>
             <file>pandas/plot.js</file>
         </item>
-        <item id="pd_frameEditor" type="function" level="1" name="Frame Editor" tag="FRAME EDITOR">
+        <!-- <item id="pd_frameEditor" type="function" level="1" name="Frame Editor" tag="FRAME EDITOR">
             <path>visualpython - pandas - subset</path>
             <desc>frame editor</desc>
             <file>pandas/frameEditor.js</file>
@@ -1230,7 +1230,7 @@
             <path>visualpython - pandas - subset</path>
             <desc>subset dataframe</desc>
             <file>pandas/subset.js</file>
-        </item>
+        </item> -->
         <!-- Input/output -->
         <item id="pd_inputOutput" type="package" level="1" name="Input/output" tag="파일 불러오기, 저장, FILE INPUT OUTPUT">
             <path>visualpython - pandas - input output</path>
