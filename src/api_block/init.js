@@ -254,52 +254,54 @@ define([
         });
 
         /** Apps Menu item click */
+        /** Apps Menu item click */
         $(document).on(STR_CLICK,'.vp-apiblock-menu-apps-item', function() {
             var menu = $(this).attr('data-menu');
             switch (menu)
             {
                 case 'import':
+                    blockContainer.createAppsPage('/nbextensions/visualpython/src/file_io/import.js', {
+                        title: 'Import',
+                        width: '500px'
+                    });
                     break;
                 case 'markdown':
+                    // blockContainer.createAppsPage('/nbextensions/visualpython/src/markdown/markdown.js', {
+                    //     title: 'Markdown'
+                    // }, function(funcJS) {
+                    //     funcJS.bindOptionEventForPopup();
+                    // });
+                    blockContainer.createTextBlock();
                     break;
                 case 'snippets':
-                    var funcID = 'com_udf';
-                    var naviInfo = getNavigationInfo(funcID);
-                    /** board에 선택한 API List 블럭 생성 */
-                    blockContainer.createAPIListBlock(funcID, naviInfo);
+                    blockContainer.createAppsPage('/nbextensions/visualpython/src/file_io/udf.js', {
+                        title: 'Snippets'
+                    });
                     break;
                 case 'variable':
-                    var funcID = 'com_variables';
-                    var naviInfo = getNavigationInfo(funcID);
-                    /** board에 선택한 API List 블럭 생성 */
-                    blockContainer.createAPIListBlock(funcID, naviInfo);
+                    blockContainer.createAppsPage('/nbextensions/visualpython/src/file_io/variables.js', {
+                        title: 'Variables'
+                    });
                     break;
                 case 'file':
                     // TODO: file
+                    blockContainer.createAppsPage('nbextensions/visualpython/src/common/vpFile');
                     break;
                 case 'instance':
-                    var funcID = 'com_instance';
-                    var naviInfo = getNavigationInfo(funcID);
-                    /** board에 선택한 API List 블럭 생성 */
-                    blockContainer.createAPIListBlock(funcID, naviInfo);
+                    blockContainer.createAppsPage('/nbextensions/visualpython/src/file_io/instance.js', {
+                        title: 'Instance'
+                    });
                     break;
                 case 'subset':
-                    var funcID = 'pd_subset';
-                    var naviInfo = getNavigationInfo(funcID);
-                    /** board에 선택한 API List 블럭 생성 */
-                    blockContainer.createAPIListBlock(funcID, naviInfo);
+                    blockContainer.createAppsPage('nbextensions/visualpython/src/common/vpSubsetEditor');
                     break;
                 case 'frame':
-                    var funcID = 'pd_frameEditor';
-                    var naviInfo = getNavigationInfo(funcID);
-                    /** board에 선택한 API List 블럭 생성 */
-                    blockContainer.createAPIListBlock(funcID, naviInfo);
+                    blockContainer.createAppsPage('nbextensions/visualpython/src/common/vpFrameEditor');
                     break;
                 case 'chart':
-                    var funcID = 'mp_plot';
-                    var naviInfo = getNavigationInfo(funcID);
-                    /** board에 선택한 API List 블럭 생성 */
-                    blockContainer.createAPIListBlock(funcID, naviInfo);
+                    blockContainer.createAppsPage('/nbextensions/visualpython/src/matplotlib/plot.js', {
+                        title: 'Chart'
+                    });
                     break;
                 case 'merge':
                     // TODO: Merge
@@ -314,6 +316,77 @@ define([
                     // TODO: TimeSeries
                     break;
             }
+        });
+
+        /** Apps Menu Apply event */
+        $(document).on('popup_apply subset_apply frame_apply', '#vp_appsCode', function(evt) {
+            var code = evt.code;
+            var title = evt.title;
+
+            var isFirstBlock = false;
+            const blockList = blockContainer.getBlockList();
+            /** board에 블럭이 0개 일때
+             *  즉 블럭이 처음으로 생성되는 경우
+             */
+            if (blockList.length == 0) {
+                isFirstBlock = true;
+            }
+
+            var createdBlock = undefined;
+            if (title == 'Markdown') {
+
+                createdBlock = blockContainer.createTextBlock(code);
+
+                // createdBlock = blockContainer.createBlock(BLOCK_CODELINE_TYPE.TEXT);
+                // createdBlock.apply();
+                // createdBlock.setFuncID(STR_TEXT_BLOCK_MARKDOWN_FUNCID);
+                // createdBlock.setOptionPageLoadCallback(optionPageLoadCallback_block);
+                // createdBlock.setLoadOption(loadOption_block);
+                // createdBlock.setState({
+                //     [STATE_codeLine]: code
+                // });
+
+                // /** board에 블럭이 0개일 경우 */
+                // if (isFirstBlock == true) {
+                //     createdBlock.setDirection(BLOCK_DIRECTION.ROOT);
+                //     blockContainer.reNewContainerDom();
+                // /** board에 블럭이 1개 이상 일 경우 */         
+                // } else {
+                //     /** board의 가장 아래 블럭을 가져옴 */
+                //     var lastBottomBlock = blockContainer.getRootToLastBottomBlock();
+                //     lastBottomBlock.appendBlock(createdBlock, BLOCK_DIRECTION.DOWN);
+                // }
+                // blockContainer.reRenderAllBlock_asc(); 
+                // blockContainer.resetBlockList();
+                // blockContainer.setSelectBlock(createdBlock);
+
+                // createdBlock.writeCode(`<p>${code}</p>`);
+                // createdBlock.renderSelectedBlockBorderColor(true);
+            } else {
+                // 1. add code block
+                // create block as group block
+                createdBlock = blockContainer.createBlock(BLOCK_CODELINE_TYPE.CODE, null, null, true);
+                // set code
+                createdBlock.setState({
+                    customCodeLine: code
+                });
+                createdBlock.writeCode(code);
+                createdBlock.apply();
+                if (isFirstBlock == true) {
+                    // if it is first block, set as ROOT
+                    createdBlock.setDirection(BLOCK_DIRECTION.ROOT);
+                } else {
+                    var lastBottomBlock = blockContainer.getRootToLastBottomBlock();
+                    lastBottomBlock.appendBlock(createdBlock, BLOCK_DIRECTION.DOWN);
+                }
+                blockContainer.addNodeBlock(createdBlock);
+                blockContainer.reRenderAllBlock_asc();
+                blockContainer.resetBlockListAndRenderThisBlock(createdBlock);
+    
+            }
+
+            // 2. add cell and run cell
+            createdBlock.runThisBlock();
         });
 
         /** Logic, API, Data Analysis 의 > 버튼 클릭 */

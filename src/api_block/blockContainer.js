@@ -1,7 +1,8 @@
 const { now } = require("jquery");
 
 define([
-    'nbextensions/visualpython/src/common/vpCommon'
+    'require'
+    , 'nbextensions/visualpython/src/common/vpCommon'
     , 'nbextensions/visualpython/src/common/vpFuncJS'
     , 'nbextensions/visualpython/src/common/metaDataHandler'
     , 'nbextensions/visualpython/src/common/constant'
@@ -15,9 +16,12 @@ define([
 
     , './component/blockMenu.js'
 
+    , 'nbextensions/visualpython/src/common/vpPopupPage'
+
     , 'codemirror/lib/codemirror'
-], function ( vpCommon, vpFuncJS, md, vpConst, sb,
+], function (requirejs, vpCommon, vpFuncJS, md, vpConst, sb,
               shadowBlock, api, api_list, constData, block, BlockMenu
+              , popupPage
               , codemirror) {
 
     const { RemoveSomeBlockAndGetBlockList
@@ -220,6 +224,9 @@ define([
 
         // blockmenu
         this.blockMenu = new BlockMenu(this);
+
+        // loadedAppsMenu
+        this.appsMenu = null;
     }
 
     /** Apply not saved block */
@@ -1745,7 +1752,7 @@ define([
         return createdBlock;
     }
 
-    BlockContainer.prototype.createTextBlock = function() {
+    BlockContainer.prototype.createTextBlock = function(textCode = STR_SAMPLE_TEXT) {
         /** board에 블럭이 
          *  0개일 경우 isFirstBlock true
          *  1개 이상일 경우 isFirstBlock false 
@@ -1763,7 +1770,7 @@ define([
         createdBlock.setOptionPageLoadCallback(optionPageLoadCallback_block);
         createdBlock.setLoadOption(loadOption_block);
         createdBlock.setState({
-            [STATE_codeLine]: STR_SAMPLE_TEXT
+            [STATE_codeLine]: textCode
         });
 
         /** board에 블럭이 0개일 경우 */
@@ -1783,7 +1790,7 @@ define([
         setClosureBlock(createdBlock);
         loadOption_textBlock(STR_TEXT_BLOCK_MARKDOWN_FUNCID, optionPageLoadCallback_block);
 
-        createdBlock.writeCode(`<p>${STR_SAMPLE_TEXT}</p>`);
+        createdBlock.writeCode(`<p>${textCode}</p>`);
         createdBlock.renderSelectedBlockBorderColor(true);
         return createdBlock;
     }
@@ -1816,6 +1823,40 @@ define([
         setClosureBlock(createdBlock_api);
         loadOption_block(funcID, optionPageLoadCallback_block);
         this.resetBlockListAndRenderThisBlock(createdBlock_api);
+    }
+
+    BlockContainer.prototype.createAppsPage = function(moduleFile, config={}, callback=undefined) {
+        var that = this;
+
+        // var loadUrl = 'markdown/markdown.js';
+        // var loadUrl = 'common/' + moduleFile;
+        var loadUrl = moduleFile;
+        requirejs([loadUrl], function (loaded) {
+            console.log(loaded);
+
+            if (Object.keys(loaded).includes('initOption')) {
+                loaded.initOption(function(funcJS) {
+                    that.appsMenu = new popupPage(funcJS, 'vp_appsCode');
+                    // library page
+                    $(vpCommon.wrapSelector(vpCommon.formatString("#{0}", vpConst.OPTION_GREEN_ROOM), vpCommon.formatString(".{0}", vpConst.API_OPTION_PAGE))).each(function() {
+                        that.appsMenu.open({
+                            ...config,
+                            pageDom: $(this)
+                        });
+                    });
+                    if (callback) {
+                        callback(funcJS);
+                    }
+                }, undefined);
+            } else {
+                // save appsMenu object
+                that.appsMenu = new loaded(null, 'vp_appsCode');
+                that.appsMenu.open();
+            }
+
+
+        });
+        return this.appsMenu;
     }
 
     /** 블럭을 이동할 때,

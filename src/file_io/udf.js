@@ -137,108 +137,6 @@ define([
     OptionPackage.prototype.bindEvent = function() {
         var that = this;
 
-        // save udf
-        $(this.wrapSelector('#vp_udfSave')).click(function() {
-            // if title is not empty
-            var key = $(that.wrapSelector('#vp_udfTitle')).val();
-            if (key == undefined || key === "") {
-                vpCommon.renderAlertModal('Please enter the title');
-                return;
-            }
-
-            // save codemirror value to origin textarea
-            that.vp_userCode.save();
-            var code = that.vp_userCode.getValue();
-
-            // save udf
-            var saveUdf = { [key]: code };
-            vpSetting.saveUserDefinedCode(saveUdf);
-
-            // FIXME: vp-multilang for success message
-            vpCommon.renderSuccessMessage('Successfully saved!');
-
-            // load again
-            that.loadUdfList();
-        });
-
-        // load when refresh clicks
-        $(this.wrapSelector('#vp_udfRefresh')).click(function(event) {
-            event.stopPropagation();
-            that.loadUdfList();
-            // show success message
-            vpCommon.renderSuccessMessage('Refreshed!');
-        });
-
-        // new button clicked
-        $(this.wrapSelector('#vp_udfCreate')).click(function() {
-            that.vp_userCode.save();
-            var code = that.vp_userCode.getValue();
-
-            if (code && code.length > 0) {
-                // ask clearing codes
-                that.openMultiBtnModal_new("Save Code", "Would you like to save previous code and clear it?"
-                , ["Just Clear", "Cancel", "Save and Clear"]
-                , [()=> {
-                    // clear code
-                    $(that.wrapSelector('#vp_udfTitle')).val('');
-                    $(that.wrapSelector('#vp_userCode')).val('');
-                    that.vp_userCode.setValue('');
-                }, ()=> {
-
-                }, ()=> {
-                    // save and clear code
-                    // save
-                    var key = $(that.wrapSelector('#vp_udfTitle')).val();
-                    if (key == undefined || key === "") {
-                        key = '_temporary';
-                    }
-
-                    // save codemirror value to origin textarea
-                    that.vp_userCode.save();
-                    var code = that.vp_userCode.getValue();
-
-                    // save udf
-                    var saveUdf = { [key]: code };
-                    vpSetting.saveUserDefinedCode(saveUdf);
-
-                    // clear code
-                    $(that.wrapSelector('#vp_udfTitle')).val('');
-                    $(that.wrapSelector('#vp_userCode')).val('');
-                    that.vp_userCode.setValue('');
-
-                    // load again
-                    that.loadUdfList();
-                }]);
-            } else {
-                // clear code
-                $(that.wrapSelector('#vp_udfTitle')).val('');
-                $(that.wrapSelector('#vp_userCode')).val('');
-                that.vp_userCode.setValue('');
-            }
-        });
-
-        // delete button clicked
-        $(this.wrapSelector('#vp_udfDelete')).click(function() {
-            // remove key from list
-            var key = $(that.wrapSelector('#vp_udfList')).find('.vp-udf-check:checked').val();
-            if (key && vpSetting.getUserDefinedCode(key)) {
-                // remove key
-                vpSetting.removeUserDefinedCode(key);
-
-                // FIXME: vp-multilang for success message
-                vpCommon.renderSuccessMessage('Successfully removed!');
-            } else {
-                vpCommon.renderAlertModal('No key available...');
-            }
-            
-            // load again
-            that.loadUdfList();
-        }); 
-
-
-
-        ///////////////////// new /////////////////////////////////////////
-
         // toggle item codebox 
         $(document).on('click', this.wrapSelector('.vp-sn-item-header .vp-sn-indicator'), function() {
             var parent = $(this).parent();
@@ -443,6 +341,7 @@ define([
                 if (title && vpSetting.getUserDefinedCode(title)) {
                     // remove key
                     vpSetting.removeUserDefinedCode(title);
+                    delete that.codemirrorList[title];
                     // remove item
                     $(that.wrapSelector('.vp-sn-item[data-title="' + title + '"]')).remove();
 

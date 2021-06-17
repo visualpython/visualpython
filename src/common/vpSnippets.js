@@ -63,7 +63,7 @@ define([
     }
 
     Snippets.prototype.init = function() {
-        this.pageThis.loadCss(Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH + "common/snippets.css");
+        vpCommon.loadCss(Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH + "common/snippets.css");
         this.render();
     }
 
@@ -101,7 +101,7 @@ define([
     Snippets.prototype.unbindEvent = function() {
 
     }
-
+    
 
     return Snippets;
 });
