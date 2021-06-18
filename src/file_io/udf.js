@@ -379,7 +379,20 @@ define([
         $(document).on('click', this.wrapSelector('.vp-sn-item-menu-item'), function(evt) {
             var menu = $(this).data('menu');
             var title = $(this).closest('.vp-sn-item').data('title');
-            if (menu == 'duplicate') {
+            if (menu == 'run') {
+                var item = $(this).closest('.vp-sn-item');
+                var title = $(item).data('title');
+
+                // get codemirror
+                that.codemirrorList[title].save();
+                var code = that.codemirrorList[title].getValue();
+                $(vpCommon.wrapSelector('#vp_appsCode')).val(code);
+                $(vpCommon.wrapSelector('#vp_appsCode')).trigger({
+                    type: 'popup_apply',
+                    title: 'Snippets',
+                    code: code 
+                });
+            } else if (menu == 'duplicate') {
                 var dupNo = 1;
                 var timestamp = new Date().getTime();
                 var dupTitle = title + '_dup' + dupNo;
@@ -562,6 +575,10 @@ define([
         }
         item.appendFormatLine('<div class="{0}">', 'vp-sn-item-menu');
         item.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}">'
+                            , 'vp-sn-item-menu-item', 'run', 'Run');
+        item.appendFormatLine('<img src="{0}"/>', '/nbextensions/visualpython/resource/snippets/run.svg');
+        item.appendLine('</div>');
+        item.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}">'
                             , 'vp-sn-item-menu-item', 'duplicate', 'Duplicate');
         item.appendFormatLine('<img src="{0}"/>', '/nbextensions/visualpython/resource/snippets/duplicate.svg');
         item.appendLine('</div>');
@@ -661,6 +678,19 @@ define([
 
         // save codemirror value to origin textarea
         // this.vp_userCode.save();
+
+        // selected snippet
+        var selected = $(this.wrapSelector('.vp-sn-item-header.selected'));
+        if (selected) {
+            var item = $(selected).closest('.vp-sn-item');
+            var title = $(item).data('title');
+
+            // get codemirror
+            this.codemirrorList[title].save();
+            var code = this.codemirrorList[title].getValue();
+            sbCode.append(code);
+        }
+
 
         if (addCell) this.cellExecute(sbCode.toString(), exec);
 

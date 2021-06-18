@@ -67,12 +67,15 @@ define([
         page.appendLine('</div>');  // body end
 
         // button box
-        page.appendFormatLine('<div class="{0}">', VP_PP_BUTTON_BOX);
-        page.appendFormatLine('<button type="button" class="{0}">{1}</button>'
-                                , VP_PP_BUTTON_CANCEL, 'Cancel');
-        page.appendFormatLine('<button type="button" class="{0}">{1}</button>'
-                                , VP_PP_BUTTON_APPLY, 'Apply');
-        page.appendLine('</div>');
+        // Snippets menu don't use buttons
+        if (title != 'Snippets') {
+            page.appendFormatLine('<div class="{0}">', VP_PP_BUTTON_BOX);
+            page.appendFormatLine('<button type="button" class="{0}">{1}</button>'
+                                    , VP_PP_BUTTON_CANCEL, 'Cancel');
+            page.appendFormatLine('<button type="button" class="{0}">{1}</button>'
+                                    , VP_PP_BUTTON_APPLY, 'Apply');
+            page.appendLine('</div>');
+        }
 
         page.appendLine('</div>');  // container end
         page.appendLine('</div>');  // VP_PP end
@@ -100,6 +103,18 @@ define([
         $(this.wrapSelector()).remove();
     }
 
+    PopupPage.prototype.apply = function() {
+        if (this.pageThis) {
+            var code = this.pageThis.generateCode(false, false);
+            $(vpCommon.wrapSelector('#' + this.targetId)).val(code);
+            $(vpCommon.wrapSelector('#' + this.targetId)).trigger({
+                type: 'popup_apply',
+                title: this.config.title,
+                code: code 
+            });
+        }
+    }
+
     PopupPage.prototype.bindEvent = function() {
         var that = this;
 
@@ -115,15 +130,7 @@ define([
 
         // click apply
         $(document).on('click', this.wrapSelector('.' + VP_PP_BUTTON_APPLY), function() {
-            if (that.pageThis) {
-                var code = that.pageThis.generateCode(false, false);
-                $(vpCommon.wrapSelector('#' + that.targetId)).val(code);
-                $(vpCommon.wrapSelector('#' + that.targetId)).trigger({
-                    type: 'popup_apply',
-                    title: that.config.title,
-                    code: code 
-                });
-            }
+            that.apply();
             that.close();
         });
     }
