@@ -2626,7 +2626,7 @@ define([
         this.hideOptionPreviewBox();
         $(VP_ID_PREFIX + VP_APIBLOCK_BOARD_OPTION_PREVIEW_BUTTON).removeClass('enabled');
 
-        this.setNavigator(BLOCK_CODELINE_TYPE.NONE, 'Visual Python 1.1.4');
+        this.setNavigator(BLOCK_CODELINE_TYPE.NONE, 'Visual Python 1.1.5');
         this.setFocusedPageType(FOCUSED_PAGE_TYPE.BOARD);
         $('.vp-apiblock-option-tab-none').css(STR_DISPLAY, STR_BLOCK);
     }
