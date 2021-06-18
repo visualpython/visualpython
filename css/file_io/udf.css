@@ -1,5 +1,6 @@
 /* udf editor - CodeMirror */
 #vp-wrapper .vp-udf-page  .CodeMirror { border: 1px solid silver; }
+#vp-wrapper .vp-udf-page  .CodeMirror.CodeMirror-focused { border: 1px solid var(--hightlight-color); }
 #vp-wrapper .vp-udf-page  .CodeMirror-empty { outline: 1px solid #c22; }
 #vp-wrapper .vp-udf-page  .CodeMirror-empty.CodeMirror-focused { outline: none; }
 #vp-wrapper .vp-udf-page  .CodeMirror pre.CodeMirror-placeholder { color: #999; }
