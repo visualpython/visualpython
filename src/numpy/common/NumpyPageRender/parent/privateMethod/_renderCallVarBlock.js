@@ -7,7 +7,7 @@ define ([
      * @param {numpyPageRenderer this} numpyPageRendererThis 
      */
     var _renderCallVarBlock = function(numpyPageRendererThis) {
-        var uuid = vpCommon.getUUID();
+        var uuid = 'u' + vpCommon.getUUID();
         var numpyPageRendererThis = numpyPageRendererThis;
         var numpyStateGenerator = numpyPageRendererThis.getStateGenerator();
         var sbTagString = new sb.StringBuilder();

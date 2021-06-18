@@ -11,7 +11,7 @@ define ([
     */
     var _renderInputIndexValueBlock = function(numpyPageRendererThis, title, bindFuncData) {
     
-        var uuid = vpCommon.getUUID();
+        var uuid = 'u' + vpCommon.getUUID();
         var numpyPageRendererThis = numpyPageRendererThis;
         var importPackageThis = numpyPageRendererThis.getImportPackageThis();
         var rootTagSelector = numpyPageRendererThis.getRequiredPageSelector();

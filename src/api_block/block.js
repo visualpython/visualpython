@@ -330,7 +330,7 @@ define([
          */
         this.type = type; // this 블럭의 타입 값 (type은 class : 1, def: 2, if: 3 ...)
         this.childBlockUUIDList = []; // vpnote 저장용 데이터
-        this.uuid = vpCommon.getUUID(); // this 블럭의 고유 값
+        this.uuid = 'u' + vpCommon.getUUID(); // this 블럭의 고유 값
         this.direction = BLOCK_DIRECTION.NONE; // this 블럭의 위치 값. 
                                                // 위치는 this 블럭의 부모로 부터 DOWN, INDENT인지 결정됨
                                                

@@ -131,16 +131,20 @@
     position: absolute;
     top: 0px;
     right: 40px;
-    width: 70px;
-    height: 50px;
+    /* width: 70px;
+    height: 50px; */
     border: 0.25px solid var(--border-gray-color);
     background: #FFFFFF;
+    padding: 5px;
 }
 .vp-sn-menu-item {
     height: 25px;
     line-height: 25px;
     padding: 0px 5px;
     cursor: pointer;
+}
+.vp-sn-menu-item:hover {
+    color: var(--font-hightlight);
 }
 
 .vp-sn-search-box {
@@ -166,22 +170,26 @@
 .vp-sn-func-right {
     float: right;
 }
-.vp-sn-filter {
+.vp-sn-sort {
     cursor: pointer;
 }
-.vp-sn-filter-menu-box {
+.vp-sn-sort-menu-box {
     display: none;
     position: absolute;
-    width: 80px;
-    height: 50px;
+    /* width: 80px;
+    height: 50px; */
     border: 0.25px solid var(--border-gray-color);
     background: #FFFFFF;
+    padding: 5px;
 }
-.vp-sn-filter-menu-item {
+.vp-sn-sort-menu-item {
     height: 25px;
     line-height: 25px;
     padding: 0px 5px;
     cursor: pointer;
+}
+.vp-sn-sort-menu-item:hover {
+    color: var(--font-hightlight);
 }
 
 .vp-sn-func-export-mode {

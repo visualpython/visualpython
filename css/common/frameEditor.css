@@ -51,6 +51,7 @@
     line-height: 20px;
     top: 5px;
     text-align: center;
+    cursor: pointer;
 }
 
 .vp-fe-body {

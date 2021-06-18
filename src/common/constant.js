@@ -48,7 +48,7 @@ define ([
      * toolbar btn properties
      */
     const TOOLBAR_BTN_INFO = {
-        HELP: "Visual Python 1.1.3"
+        HELP: "Visual Python 1.1.4"
         // , ICON: "fa-angellist"
         , ICON: "vp-main-icon"
         , ID: "vpBtnToggle"

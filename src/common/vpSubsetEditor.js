@@ -117,11 +117,31 @@ define([
     var SubsetEditor = function(pageThis, targetId, useInputVariable=false) {
         this.pageThis = pageThis;
         this.targetId = targetId;
-        this.uuid = vpCommon.getUUID();
+        this.uuid = 'u' + vpCommon.getUUID();
         this.useInputVariable = useInputVariable;
 
         // specify pandas object types
         this.pdObjTypes = ['DataFrame', 'Series'];
+
+        // render button
+        this.renderButton();
+
+        var that = this;
+        // open popup
+        $(vpCommon.formatString('.{0}.{1}', VP_DS_BTN, this.uuid)).on('click', function(event) {
+            if (!$(this).hasClass('disabled')) {
+                that.open();
+            }
+        });
+    }
+
+    /**
+     * Initialize SubsetEditor's variables
+     * & set button next to input tag
+     */
+    SubsetEditor.prototype.init = function() {
+        // load css
+        vpCommon.loadCss(Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH + "common/subsetEditor.css");
 
         this.state = {
             viewAll: false,
@@ -146,34 +166,32 @@ define([
             columnList: [],
             colPointer: { start: -1, end: -1 }
         }
+
+        this.codepreview = undefined;
         
+        // render popup div
+        this.render();
         this.bindEvent();
-        this.init();
 
         // set readonly
-        if (useInputVariable) {
+        if (this.useInputVariable) {
             $(this.wrapSelector('.' + VP_DS_PANDAS_OBJECT)).attr('disabled', true);
         }
 
-        this.loadVariables();
+        this.loadVariables();  
     }
 
-    /**
-     * Initialize SubsetEditor's variables
-     * & set button next to input tag
-     */
-    SubsetEditor.prototype.init = function() {
-        // load css
-        this.pageThis.loadCss(Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH + "common/subsetEditor.css");
-
-        // Init variables
-
+    SubsetEditor.prototype.renderButton = function() {
         // set button next to input tag
         var buttonTag = new sb.StringBuilder();
         buttonTag.appendFormat('<button type="button" class="{0} {1} {2}">{3}</button>'
                                 , VP_DS_BTN, this.uuid, 'vp-button', 'Edit');
-        $(this.pageThis.wrapSelector('#' + this.targetId)).parent().append(buttonTag.toString());
-
+        if (this.pageThis) {
+            $(this.pageThis.wrapSelector('#' + this.targetId)).parent().append(buttonTag.toString());
+        }
+    }
+    
+    SubsetEditor.prototype.render = function() {
         // add popup div
         var popupTag = new sb.StringBuilder();
         popupTag.appendFormat('<div class="{0} {1}">', VP_DS, this.uuid);
@@ -351,7 +369,6 @@ define([
         // $(vpCommon.formatString("#{0}", vpConst.VP_CONTAINER_ID)).append(popupTag.toString());
         $('#vp-wrapper').append(popupTag.toString());
         $(vpCommon.formatString(".{0}.{1}", VP_DS, this.uuid)).hide();
-        
     }
 
     SubsetEditor.prototype.getAllowSubsetTypes = function() {
@@ -828,8 +845,11 @@ define([
      SubsetEditor.prototype.loadVariables = function() {
         var that = this;
         var types = that.pdObjTypes; //[]; //['DataFrame', 'Series'];
-        if (this.useInputVariable) {
-            var prevValue = $(this.pageThis.wrapSelector('#' + this.targetId)).val();
+        var prevValue = '';
+        if (this.pageThis) {
+            prevValue = $(this.pageThis.wrapSelector('#' + this.targetId)).val();
+        }
+        if (this.useInputVariable && prevValue != '') {
             $(this.wrapSelector('.' + VP_DS_PANDAS_OBJECT)).val(prevValue);
 
             // get type of variable
@@ -1097,6 +1117,36 @@ define([
         
     }
 
+    SubsetEditor.prototype.unbindEvent = function() {
+        $(document).off(this.wrapSelector('*'));
+
+        $(document).off('click', this.wrapSelector('.' + VP_DS_CLOSE));
+        $(document).off('var_changed change', this.wrapSelector('.' + VP_DS_PANDAS_OBJECT));
+        $(document).off('change', this.wrapSelector('.' + VP_DS_USE_COPY));
+        $(document).off('change', this.wrapSelector('.' + VP_DS_SUBSET_TYPE));
+        $(document).off('change', this.wrapSelector('.' + VP_DS_TO_FRAME));
+        $(document).off('click', this.wrapSelector('.' + VP_DS_TAB_SELECTOR_BTN));
+        $(document).off('change', this.wrapSelector('.' + VP_DS_DATA_VIEW_ALL));
+        $(document).off('change', this.wrapSelector('.' + VP_DS_ROWTYPE));
+        $(document).off('change', this.wrapSelector('.' + VP_DS_COLTYPE));
+        $(document).off('change', this.wrapSelector('.' + VP_DS_INDEXING_TIMESTAMP));
+        $(document).off('change', this.wrapSelector('.select-row .' + VP_DS_SELECT_SEARCH));
+        $(document).off('change', this.wrapSelector('.select-col .' + VP_DS_SELECT_SEARCH));
+        $(document).off('click', this.wrapSelector('.' + VP_DS_SELECT_ITEM));
+        $(document).off('click', this.wrapSelector('.' + VP_DS_SELECT_ADD_BTN));
+        $(document).off('click', this.wrapSelector('.' + VP_DS_SELECT_DEL_BTN));
+        $(document).off('click', this.wrapSelector('.vp-add-col'));
+        $(document).off('click', this.wrapSelector('.vp-del-col'));
+        $(document).off('change', this.wrapSelector('.vp-ds-slicing-box input[type="text"]'));
+        $(document).off('change var_changed', this.wrapSelector('.vp-ds-cond-tbl .vp-cond-var'));
+        $(document).off('change', this.wrapSelector('.vp-ds-cond-tbl .vp-col-list'));
+        $(document).off('change', this.wrapSelector('.vp-ds-cond-tbl .vp-cond-use-text'));
+        $(document).off('change', this.wrapSelector('.vp-ds-cond-tbl input[type="text"]'));
+        $(document).off('change', this.wrapSelector('.vp-ds-cond-tbl select'));
+        $(document).off('click', this.wrapSelector('.' + VP_DS_BUTTON_APPLY));
+        $(document).off('click', this.wrapSelector('.' + VP_DS_BUTTON_CANCEL));
+    }
+
     /**
      * Bind All Events
      * - open popup
@@ -1116,12 +1166,6 @@ define([
      */
     SubsetEditor.prototype.bindEvent = function() {
         var that = this;
-        // open popup
-        $(document).on('click', vpCommon.formatString('.{0}.{1}', VP_DS_BTN, this.uuid), function(event) {
-            if (!$(this).hasClass('disabled')) {
-                that.open();
-            }
-        });
         
         // close popup
         $(document).on('click', this.wrapSelector('.' + VP_DS_CLOSE), function(event) {
@@ -1561,8 +1605,19 @@ define([
         // apply
         $(document).on('click', this.wrapSelector('.' + VP_DS_BUTTON_APPLY), function(event) {
             var code = that.generateCode();
-            $(that.pageThis.wrapSelector('#' + that.targetId)).val(code);
-            $(that.pageThis.wrapSelector('#' + that.targetId)).trigger('subset_apply');
+            if (that.pageThis) {
+                $(that.pageThis.wrapSelector('#' + that.targetId)).val(code);
+                $(that.pageThis.wrapSelector('#' + that.targetId)).trigger({
+                    type: 'subset_apply',
+                    code: code
+                });
+            } else {
+                $(vpCommon.wrapSelector('#' + that.targetId)).val(code);
+                $(vpCommon.wrapSelector('#' + that.targetId)).trigger({
+                    type: 'subset_apply',
+                    code: code
+                });
+            }
             that.close();
         });
 
@@ -1613,6 +1668,7 @@ define([
      * open popup
      */
     SubsetEditor.prototype.open = function() {
+        this.init();
         $(this.wrapSelector()).show();
 
         if (!this.codepreview) {
@@ -1648,35 +1704,41 @@ define([
         } else {
             this.codepreview.refresh();
         }
-
-        // reload pandasObject on open
-        this.loadVariables();
     }
 
     /**
      * close popup
      */
     SubsetEditor.prototype.close = function() {
+        this.unbindEvent();
         $(this.wrapSelector()).hide();
     }
 
     SubsetEditor.prototype.hideButton = function() {
-        $(this.pageThis.wrapSelector('.' + VP_DS_BTN + '.' + this.uuid)).hide();
+        if (this.pageThis) {
+            $(this.pageThis.wrapSelector('.' + VP_DS_BTN + '.' + this.uuid)).hide();
+        }
     }
 
     SubsetEditor.prototype.disableButton = function() {
-        var buttonEle = $(this.pageThis.wrapSelector('.' + VP_DS_BTN + '.' + this.uuid));
-        if (!buttonEle.hasClass('disabled')) {
-            buttonEle.addClass('disabled');
+        if (this.pageThis) {
+            var buttonEle = $(this.pageThis.wrapSelector('.' + VP_DS_BTN + '.' + this.uuid));
+            if (!buttonEle.hasClass('disabled')) {
+                buttonEle.addClass('disabled');
+            }
         }
     }
 
     SubsetEditor.prototype.enableButton = function() {
-        $(this.pageThis.wrapSelector('.' + VP_DS_BTN + '.' + this.uuid)).removeClass('disabled');
+        if (this.pageThis) {
+            $(this.pageThis.wrapSelector('.' + VP_DS_BTN + '.' + this.uuid)).removeClass('disabled');
+        }
     }
 
     SubsetEditor.prototype.showButton = function() {
-        $(this.pageThis.wrapSelector('.' + VP_DS_BTN + '.' + this.uuid)).show();
+        if (this.pageThis) {
+            $(this.pageThis.wrapSelector('.' + VP_DS_BTN + '.' + this.uuid)).show();
+        }
     }
 
     /**

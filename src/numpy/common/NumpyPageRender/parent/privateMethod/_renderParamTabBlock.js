@@ -39,7 +39,7 @@ define ([
         var importPackageThis = numpyPageRenderThis.getImportPackageThis();
         var rootTagSelector = numpyPageRenderThis.getRequiredPageSelector();
         var mainPage = $(importPackageThis.wrapSelector(rootTagSelector));
-        var uuid = vpCommon.getUUID();
+        var uuid = 'u' + vpCommon.getUUID();
         var tabTitle = tabDataObj.tabTitle;
 
         /** */
