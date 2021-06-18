@@ -172,6 +172,7 @@ define([
      */
     PandasPackage.prototype.initHtml = function() {
         this.showFunctionTitle();
+        this.loadCss(Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH + "pandas/commonPandas.css");
         this.loadCss(Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH + "file_io/fileio.css");
 
         this.bindOptions();
@@ -217,6 +218,20 @@ define([
         var selectedType = this.fileState[pageType]['selectedType'];
         var package = { ...libPandas._PANDAS_FUNCTION[fileTypeObj[selectedType]] };
         this.fileState[pageType].package = package;
+        this.state.fileExtension = that.fileExtensions[selectedType];
+        this.fileResultState = {
+            ...this.fileState[pageType].fileResultState
+        };
+
+        if (pageType == 'Write') {
+            if (selectedType == 'json') {
+                this.fileResultState.pathInputId = this.wrapSelector(prefix + '#path_or_buf');
+            }
+            if (selectedType == 'pickle') {
+                this.fileResultState.pathInputId = this.wrapSelector(prefix + '#path');
+            }
+        }
+
         // render interface
         pdGen.vp_showInterfaceOnPage(this, this.wrapSelector('#vp_file' + pageType), package);
 
@@ -238,38 +253,34 @@ define([
         $(this.wrapSelector(prefix + '#fileType')).change(function() {
             var value = $(this).val();
             that.fileState[pageType].selectedType = value;
-            that.state.fileExtension = that.fileExtensions[value];
-            that.fileResultState = {
-                ...that.fileState[pageType].fileResultState
-            };
-
-            if (pageType == 'Write') {
-                if (value == 'json') {
-                    that.fileResultState.pathInputId = that.wrapSelector(prefix + '#path_or_buf');
-                }
-                if (value == 'pickle') {
-                    that.fileResultState.pathInputId = that.wrapSelector(prefix + '#path');
-                }
-            }
 
             // reload
             that.renderPage(pageType);
         });
 
         // 파일 네비게이션 버튼 추가
-        if (pageType == 'Write' && selectedType == 'json') {
-            $(this.fileState[pageType]['fileResultState']['pathInputId']).parent().html(
-                vpCommon.formatString('<input type="text" class="vp-input input-single" id="path_or_buf" index="0" placeholder="" value="" title=""><div id="vp_openFileNavigationBtn" class="{0}"></div>'
-                , vpConst.FILE_BROWSER_INPUT_BUTTON)
-            );
-        } else if (pageType == 'Write' && selectedType == 'pickle') {
-            $(this.fileState[pageType]['fileResultState']['pathInputId']).parent().html(
-                vpCommon.formatString('<input type="text" class="vp-input input-single" id="path" index="0" placeholder="" value="" title=""><div id="vp_openFileNavigationBtn" class="{0}"></div>'
-                , vpConst.FILE_BROWSER_INPUT_BUTTON)
-            );
+        if (pageType == 'Write') {
+            if (selectedType == 'json') {
+                $(prefix + '#path_or_buf').parent().html(
+                    vpCommon.formatString('<input type="text" class="vp-input input-single" id="path_or_buf" index="0" placeholder="" value="" title=""><div id="vp_openFileNavigationBtn" class="{0}"></div>'
+                    , vpConst.FILE_BROWSER_INPUT_BUTTON)
+                );
+            } else if (selectedType == 'pickle') {
+                $(prefix + '#path').parent().html(
+                    vpCommon.formatString('<input type="text" class="vp-input input-single" id="path" index="0" placeholder="" value="" title=""><div id="vp_openFileNavigationBtn" class="{0}"></div>'
+                    , vpConst.FILE_BROWSER_INPUT_BUTTON)
+                );
+            } else {
+                $(this.fileState[pageType]['fileResultState']['pathInputId']).parent().html(
+                    vpCommon.formatString('<input type="text" class="vp-input input-single" id="{0}" index="0" placeholder="" value="" title=""><div id="vp_openFileNavigationBtn" class="{1}"></div>'
+                        , 'i1'
+                        , vpConst.FILE_BROWSER_INPUT_BUTTON)
+                );
+            }
         } else {
             $(this.fileState[pageType]['fileResultState']['pathInputId']).parent().html(
-                vpCommon.formatString('<input type="text" class="vp-input input-single" id="i0" index="0" placeholder="" value="" title=""><div id="vp_openFileNavigationBtn" class="{0}"></div>'
+                vpCommon.formatString('<input type="text" class="vp-input input-single" id="{0}" index="0" placeholder="" value="" title=""><div id="vp_openFileNavigationBtn" class="{1}"></div>'
+                    , 'i0'
                     , vpConst.FILE_BROWSER_INPUT_BUTTON)
             );
         }

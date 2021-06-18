@@ -713,7 +713,7 @@ define([
          */
         $(document).on("fileReadSelected.fileNavigation", function(e) {
             // 선택 파일 확장자가 노트 세이브 파일인 경우만 동작
-            if (e.path.substring(e.path.lastIndexOf(".") + 1) === vpConst.VP_NOTE_EXTENSION) {
+            if (e.file.substring(e.file.lastIndexOf(".") + 1) === vpConst.VP_NOTE_EXTENSION) {
                 openNotePageAction_newVersion();
             }
         });
@@ -723,7 +723,7 @@ define([
          */
         $(document).on("fileSaveSelected.fileNavigation", function(e) {
             // 선택 파일 확장자가 노트 세이브 파일인 경우만 동작
-            if (e.path.substring(e.path.lastIndexOf(".") + 1) === vpConst.VP_NOTE_EXTENSION) {
+            if (e.file.substring(e.file.lastIndexOf(".") + 1) === vpConst.VP_NOTE_EXTENSION) {
                 var selectedPath = $(vpCommon.wrapSelector(vpCommon.formatString("#{0}", vpConst.VP_NOTE_REAL_FILE_PATH))).val();
                 var saveFileName = selectedPath.substring(selectedPath.lastIndexOf("/") + 1);
                 // FIXME: 여기부분 수정해야 함

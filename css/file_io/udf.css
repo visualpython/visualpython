@@ -1,5 +1,6 @@
 /* udf editor - CodeMirror */
 #vp-wrapper .vp-udf-page  .CodeMirror { border: 1px solid silver; }
+#vp-wrapper .vp-udf-page  .CodeMirror.CodeMirror-focused { border: 1px solid var(--hightlight-color); }
 #vp-wrapper .vp-udf-page  .CodeMirror-empty { outline: 1px solid #c22; }
 #vp-wrapper .vp-udf-page  .CodeMirror-empty.CodeMirror-focused { outline: none; }
 #vp-wrapper .vp-udf-page  .CodeMirror pre.CodeMirror-placeholder { color: #999; }
@@ -7,7 +8,7 @@
 #vp-wrapper .vp-udf-page  .CodeMirror-scroll { min-height: 80px; max-height: 250px;}
 
 /* udf option header */
-.vp-option-header {
+/* .vp-option-header {
     padding-bottom: 3px;
 }
 .vp-option-header label {
@@ -18,10 +19,10 @@
 }
 .vp-option-header button {
     width: 70px;
-}
+} */
 
 /* udf list table */
-#vp_udfList tr:not(:first-child):hover,
+/* #vp_udfList tr:not(:first-child):hover,
 #vp_udfList tr.selected {
     color:  var(--font-hightlight);
     background-color: #F5F5F5;
@@ -39,10 +40,10 @@
     text-overflow: ellipsis;
     width: 100%;
     overflow: hidden;
-}
+} */
 
 /* code td 긴 문자열 생략 */
-.vp-udf-code,
+/* .vp-udf-code,
 .vp-udf-code pre {
     text-overflow: ellipsis; 
     overflow: hidden;
@@ -53,15 +54,15 @@
 
     background: #ffffff00;
     border: 0px;
-}
+} */
 
 /* 새로고침 버튼 */
-#vp_udfRefresh {
+/* #vp_udfRefresh {
     padding: 5px;
 }
 #vp_udfRefresh:hover {
     cursor: pointer;
-}
+} */
 
 /* 삭제 버튼 */
 .vp-del-col {
@@ -243,6 +244,9 @@
     border: 0.25px solid var(--border-gray-color);
     box-sizing: border-box;
 }
+.vp-sn-item-header.selected {
+    background: #F5F5F5;
+}
 .vp-sn-item-header .vp-sn-indicator {
     display: inline-block;
     cursor: pointer;
@@ -255,18 +259,17 @@
 .vp-sn-item-header .vp-sn-indicator.open {
     background-image: url(../../resource/chevron_big_down.svg) !important;
 }
-.vp-sn-item-title {
+#vp_udfPage .vp-sn-item-header input.vp-sn-item-title {
     width: calc(100% - 80px);
     outline: none;
-    border: 0.5px solid white !important;
+    background: transparent;
+    border: 0.5px solid transparent;
 }
-.vp-sn-item.selected .vp-sn-item-title {
-    background: #F5F5F5;
+#vp_udfPage .vp-sn-item-header.selected input.vp-sn-item-title {
     color: var(--font-hightlight);
 }
-.vp-sn-item-title:focus {
+#vp_udfPage .vp-sn-item-header input.vp-sn-item-title:focus {
     transition: 0.7s;
-    border: 1px solid #FFCF73;
     border: 0.5px solid var(--hightlight-color) !important;
 }
 .vp-sn-imported-item {

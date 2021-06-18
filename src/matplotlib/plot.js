@@ -605,6 +605,8 @@ define([
         // view button click - view little popup to show variable & details
         $(this.wrapSelector('.vp-select-data')).click(function(event) {
             var axes = $(this).data('axes');
+
+            var btnPos = $(this)[0].getBoundingClientRect();
             
             if($(that.wrapSelector('#vp_varViewBox')).is(":hidden")) {
                 // refresh variables
@@ -612,12 +614,16 @@ define([
                     // set position
                     var boxSize = { width: 280, height: 260 };
                     var boxPosition = { position: 'fixed', left: event.pageX - 20, top: event.pageY + 20 };
-                    if (event.pageX + boxSize.width > window.innerWidth) {
-                        boxPosition.left = event.pageX - boxSize.width;
-                    }
-                    if (event.pageY + boxSize.height > window.innerHeight) {
-                        boxPosition.top = event.pageY - boxSize.height - 20;
-                    }
+                    // if (event.pageX + boxSize.width > window.innerWidth) {
+                    //     boxPosition.left = event.pageX - boxSize.width;
+                    // }
+                    // if (event.pageY + boxSize.height > window.innerHeight) {
+                    //     boxPosition.top = event.pageY - boxSize.height - 20;
+                    // }
+
+                    // set as center
+                    boxPosition.left = 'calc(50% - 140px)'
+                    boxPosition.top = 'calc(50% - 130px)'
                     $('#vp_varViewBox').css({
                         ...boxPosition
                     });
