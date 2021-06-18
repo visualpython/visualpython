@@ -284,8 +284,10 @@ define([
                     });
                     break;
                 case 'file':
-                    // TODO: file
-                    blockContainer.createAppsPage('nbextensions/visualpython/src/common/vpFile');
+                    blockContainer.createAppsPage('/nbextensions/visualpython/src/file_io/fileio.js', {
+                        title: 'File',
+                        width: '500px'
+                    });
                     break;
                 case 'instance':
                     blockContainer.createAppsPage('/nbextensions/visualpython/src/file_io/instance.js', {
@@ -300,7 +302,8 @@ define([
                     break;
                 case 'chart':
                     blockContainer.createAppsPage('/nbextensions/visualpython/src/matplotlib/plot.js', {
-                        title: 'Chart'
+                        title: 'Chart',
+                        width: '600px'
                     });
                     break;
                 case 'merge':

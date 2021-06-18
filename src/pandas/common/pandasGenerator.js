@@ -35,13 +35,18 @@ define([
         Jupyter.notebook.get_selected_cell().metadata.vp = codeMd;
     }
 
+    var vp_showInterface = function(pageThis) {
+        var divTag = pageThis.wrapSelector('');
+        var funcSetting = pageThis.package;
+
+        vp_showInterfaceOnPage(pageThis, divTag, funcSetting);
+    }
+
      /**
      * 정의된 설정값을 토대로 입출력 및 옵션 항목 그려주기
      * @param {*} funcSetting 
      */
-    var vp_showInterface = function(pageThis) {
-        var divTag = pageThis.wrapSelector('');
-        var funcSetting = pageThis.package;
+    var vp_showInterfaceOnPage = function(pageThis, divTag, funcSetting) {
 
         // cell metadata test : metadata 값 받아와서 뿌려주기
         // _VP_CODEMD = Jupyter.notebook.get_selected_cell().metadata.vp;
@@ -58,7 +63,7 @@ define([
             var obj = JSON.parse(JSON.stringify(o)); // 깊은 복사
             // if ('input' in _VP_CODEMD)
             //     obj.value = _VP_CODEMD.input[i].value;
-            tblInput.append(vp_createTag(pageThis, obj, false, true, (obj.required == false? false: true)));
+            tblInput.append(vp_createTag(divTag, obj, false, true, (obj.required == false? false: true)));
         });
 
         // 옵션값을 위한 태그 생성
@@ -69,7 +74,7 @@ define([
             var obj = JSON.parse(JSON.stringify(o)); // 깊은 복사
             // if ('variable' in _VP_CODEMD)
             //     obj.value = _VP_CODEMD.variable[i].value;
-            tblOption.append(vp_createTag(pageThis, obj, true, true, (obj.required == true? true: false)));
+            tblOption.append(vp_createTag(divTag, obj, true, true, (obj.required == true? true: false)));
         });
 
         // 출력값을 위한 태그 생성
@@ -80,19 +85,19 @@ define([
             var obj = JSON.parse(JSON.stringify(o)); // 깊은 복사
             // if ('output' in _VP_CODEMD)
             //     obj.value = _VP_CODEMD.output[i].value;
-            tblOutput.append(vp_createTag(pageThis, obj, false, true, (obj.required == true? true: false)));
+            tblOutput.append(vp_createTag(divTag, obj, false, true, (obj.required == true? true: false)));
         });
     }
 
     /**
      * 입출력/옵션의 type에 따라 특정 태그 구현하기
-     * @param {object} pageThis
+     * @param {object} divTag
      * @param {*} obj 
      * @param {boolean} showKey 
      * @param {boolean} getValue 
      * @returns {HTMLTableRowElement} tblRow (TR태그)
      */
-    var vp_createTag = function(pageThis, obj, showKey=false, getValue=false, required=false) {
+    var vp_createTag = function(divTag, obj, showKey=false, getValue=false, required=false) {
         // TR 태그 & TD 라벨 태그 생성
         var tblRow = document.createElement('tr');
         // tblRow.innerHTML = ('<td><label for='+obj.name+'>'+ obj.label + (showKey?' ('+obj.name+')':'') +'</label> &nbsp;</td>')
@@ -164,7 +169,7 @@ define([
                     'id': obj.name,
                     'class': 'vp-input'
                 });
-                vp_generateVarSuggestInput(pageThis, obj);
+                vp_generateVarSuggestInput(divTag, obj);
                 tblInput.appendChild(tag);
                 break;
             case 'var_multi':
@@ -222,7 +227,7 @@ define([
      * 알맞은 type 변수 목록을 suggestInput 태그로 반환
      * @param {object} obj
      */
-    var vp_generateVarSuggestInput = function(pageThis, obj) {
+    var vp_generateVarSuggestInput = function(divTag, obj) {
         var types = obj.var_type;
         var defaultValue = obj.value;
 
@@ -248,13 +253,13 @@ define([
             suggestInput.addClass('vp-input');
             suggestInput.setSuggestList(function() { return varList; });
             suggestInput.setNormalFilter(false);
-            suggestInput.setValue($(pageThis.wrapSelector('#' + obj.name)).val());
+            suggestInput.setValue($(divTag + ' #' + obj.name).val());
             suggestInput.setSelectEvent(function(selectedValue) {
                 // trigger change
-                $(pageThis.wrapSelector('#' + obj.name)).val(selectedValue);
-                $(pageThis.wrapSelector('#' + obj.name)).trigger('select_suggestvalue');
+                $(divTag + ' #' + obj.name).val(selectedValue);
+                $(divTag + ' #' + obj.name).trigger('select_suggestvalue');
             });
-            $(pageThis.wrapSelector('#' + obj.name)).replaceWith(function() {
+            $(divTag + ' #' + obj.name).replaceWith(function() {
                 return suggestInput.toTagString();
             });
         });
@@ -542,6 +547,10 @@ define([
                     if (v.required == true) {
                         // throw new Error(v.label+'에 값을 입력해주세요.');
                         // throw new Error("'" + v.label + "' is required.");
+
+                        // 출력 변수 없을 경우 공백으로 만들기
+                        code = code.split(id).join('');
+                        code = code.split(' = ').join('');
                     } else {
                         // 출력 변수 없을 경우 공백으로 만들기
                         code = code.split(id).join('');
@@ -647,6 +656,7 @@ define([
 
     return {
         vp_showInterface: vp_showInterface,
+        vp_showInterfaceOnPage: vp_showInterfaceOnPage,
         vp_codeGenerator: vp_codeGenerator,
         vp_generateVarSelect: vp_generateVarSelect,
         vp_searchVarList: vp_searchVarList,

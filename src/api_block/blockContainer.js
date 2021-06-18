@@ -1832,8 +1832,6 @@ define([
         // var loadUrl = 'common/' + moduleFile;
         var loadUrl = moduleFile;
         requirejs([loadUrl], function (loaded) {
-            console.log(loaded);
-
             if (Object.keys(loaded).includes('initOption')) {
                 loaded.initOption(function(funcJS) {
                     that.appsMenu = new popupPage(funcJS, 'vp_appsCode');
