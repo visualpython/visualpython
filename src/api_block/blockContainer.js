@@ -1835,6 +1835,7 @@ define([
             if (Object.keys(loaded).includes('initOption')) {
                 loaded.initOption(function(funcJS) {
                     that.appsMenu = new popupPage(funcJS, 'vp_appsCode');
+                    funcJS.wrapSelector = that.appsMenu.wrapSelector;
                     // library page
                     $(vpCommon.wrapSelector(vpCommon.formatString("#{0}", vpConst.OPTION_GREEN_ROOM), vpCommon.formatString(".{0}", vpConst.API_OPTION_PAGE))).each(function() {
                         that.appsMenu.open({

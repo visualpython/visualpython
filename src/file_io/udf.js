@@ -333,7 +333,7 @@ define([
                 var dupSnippet = { [dupTitle]: { code: code, timestamp: timestamp } };
                 vpSetting.saveUserDefinedCode(dupSnippet);
 
-                var tag = $(that.wrapSelector('.vp-sn-item-code textarea[data-title="' + dupTitle + '"]'));
+                var tag = $(that.wrapSelector('.vp-sn-item[data-title="' + dupTitle + '"] textarea'));
                 that.bindCodeMirror(dupTitle, tag[0]);
                 $(dupItem).find('.vp-sn-indicator').trigger('click');
 
