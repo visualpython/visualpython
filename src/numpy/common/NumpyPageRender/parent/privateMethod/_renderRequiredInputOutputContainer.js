@@ -3,8 +3,8 @@ define ([
 ], function( vpCommon ) {
 
     var _renderRequiredInputOutputContainer = function(numpyPageRendererThis) {
-        var uuid = vpCommon.getUUID();
-        var newUuid = vpCommon.getUUID();
+        var uuid = 'u' + vpCommon.getUUID();
+        var newUuid = 'u' + vpCommon.getUUID();
         var numpyPageRendererThis = numpyPageRendererThis;
      
         var rootTagSelector = numpyPageRendererThis.getRootTagSelector();

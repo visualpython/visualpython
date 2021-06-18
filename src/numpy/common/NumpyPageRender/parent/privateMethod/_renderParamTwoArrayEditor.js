@@ -19,7 +19,7 @@ define ([
         var importPackageThis = numpyPageRenderThis.getImportPackageThis();
         var numpyStateGenerator = numpyPageRenderThis.getStateGenerator();
         var twoarrayDom = $(importPackageThis.wrapSelector(tagSelector));
-        var uuid = vpCommon.getUUID();
+        var uuid = 'u' + vpCommon.getUUID();
 
         /** 기존의 렌더링된 2차원 배열 editor <diV> 블록을 삭제*/
         twoarrayDom.empty();

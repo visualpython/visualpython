@@ -49,12 +49,12 @@ define([
         // document.getElementsByTagName("head")[0].appendChild(link);
         // 컨테이너에서 전달된 callback 함수가 존재하면 실행.
         if (typeof(callback) === 'function') {
-            var uuid = vpCommon.getUUID();
+            var uuid = 'u' + vpCommon.getUUID();
             // 최대 10회 중복되지 않도록 체크
             for (var idx = 0; idx < 10; idx++) {
                 // 이미 사용중인 uuid 인 경우 다시 생성
                 if ($(vpConst.VP_CONTAINER_ID).find("." + uuid).length > 0) {
-                    uuid = vpCommon.getUUID();
+                    uuid = 'u' + vpCommon.getUUID();
                 }
             }
             $(vpCommon.wrapSelector(vpCommon.formatString("#{0}", vpConst.OPTION_GREEN_ROOM))).find(vpCommon.formatString(".{0}", vpConst.API_OPTION_PAGE)).addClass(uuid);
@@ -605,6 +605,8 @@ define([
         // view button click - view little popup to show variable & details
         $(this.wrapSelector('.vp-select-data')).click(function(event) {
             var axes = $(this).data('axes');
+
+            var btnPos = $(this)[0].getBoundingClientRect();
             
             if($(that.wrapSelector('#vp_varViewBox')).is(":hidden")) {
                 // refresh variables
@@ -612,12 +614,16 @@ define([
                     // set position
                     var boxSize = { width: 280, height: 260 };
                     var boxPosition = { position: 'fixed', left: event.pageX - 20, top: event.pageY + 20 };
-                    if (event.pageX + boxSize.width > window.innerWidth) {
-                        boxPosition.left = event.pageX - boxSize.width;
-                    }
-                    if (event.pageY + boxSize.height > window.innerHeight) {
-                        boxPosition.top = event.pageY - boxSize.height - 20;
-                    }
+                    // if (event.pageX + boxSize.width > window.innerWidth) {
+                    //     boxPosition.left = event.pageX - boxSize.width;
+                    // }
+                    // if (event.pageY + boxSize.height > window.innerHeight) {
+                    //     boxPosition.top = event.pageY - boxSize.height - 20;
+                    // }
+
+                    // set as center
+                    boxPosition.left = 'calc(50% - 140px)'
+                    boxPosition.top = 'calc(50% - 130px)'
                     $('#vp_varViewBox').css({
                         ...boxPosition
                     });

@@ -394,29 +394,33 @@ define([
         /** 최초의 path가 C:/Users/L.E.E/Desktop/Bit Python이라면, baseFolder는 Bit Python
          *  현재 이동한 시점의 path에서 baseFolder인 Bit Python가 존재하지 않을 때
          */
+        var pathInput = '';
+        var fileInput = `${filePathStr}`;
         if (upDirectoryCount > 0 
             && currentDirStr.indexOf(baseFolder) === -1) {
             /** 2020년 12월 21일 single quote 삭제 */
-            $(fileNavigationRendererThis.fileResultState.pathInputId).val(`${prefixUpDirectory}${relativeDirPath}${slashstr}${filePathStr}`);
-            $(fileNavigationRendererThis.fileResultState.fileInputId).val(`${filePathStr}`);
-        /** 현재 이동한 시점의 path에서 baseFolder인 Bit Python가 존재할 때 */
+            pathInput = `${prefixUpDirectory}${relativeDirPath}${slashstr}${filePathStr}`;
+            /** 현재 이동한 시점의 path에서 baseFolder인 Bit Python가 존재할 때 */
         } else {
-            $(fileNavigationRendererThis.fileResultState.pathInputId).val(`./${relativeDirPath}${slashstr}${filePathStr}`);
-            $(fileNavigationRendererThis.fileResultState.fileInputId).val(`${filePathStr}`);
+            pathInput = `./${relativeDirPath}${slashstr}${filePathStr}`;
         }
+        $(fileNavigationRendererThis.fileResultState.pathInputId).val(pathInput);
+        $(fileNavigationRendererThis.fileResultState.fileInputId).val(fileInput);
         
         // vpCommon.renderSuccessMessage(filePathStr + ' selection ' + 'completed');
         
         /** 장안태 추가. 파일 선택 완료시 문서 이벤트 발동 */
         if (fileNavigationState.getFileNavigationtype() === FILE_NAVIGATION_TYPE.SAVE_FILE) {
             $(document).trigger({
-                type:"fileSaveSelected.fileNavigation",
-                path:`${filePathStr}`
+                type: "fileSaveSelected.fileNavigation",
+                file: fileInput,
+                path: pathInput
             });
         } else {
             $(document).trigger({
-                type:"fileReadSelected.fileNavigation",
-                path:`${filePathStr}`
+                type: "fileReadSelected.fileNavigation",
+                file: fileInput,
+                path: pathInput
             });
         }
 
@@ -425,7 +429,8 @@ define([
         if (fileNavigationState.getFileNavigationtype() === FILE_NAVIGATION_TYPE.READ_IMG_FOR_MARKDOWN) {
             $(document).trigger({
                 type: fileNavigationState.getTriggerName(),
-                path: `${filePathStr}`
+                file: fileInput,
+                path: pathInput
             })
         }
 
@@ -433,14 +438,16 @@ define([
         if (fileNavigationState.getFileNavigationtype() === FILE_NAVIGATION_TYPE.SAVE_SNIPPETS) {
             $(fileNavigationRendererThis.fileResultState.pathInputId).trigger({
                 type: 'snippetSaved.fileNavigation',
-                path:`${filePathStr}`
+                file: fileInput,
+                path: pathInput
             });
         }
         /** Snippets 불러오기 후 이벤트 발동 */
         if (fileNavigationState.getFileNavigationtype() === FILE_NAVIGATION_TYPE.READ_SNIPPETS) {
             $(fileNavigationRendererThis.fileResultState.pathInputId).trigger({
                 type: 'snippetRead.fileNavigation',
-                path:`${filePathStr}`
+                file: fileInput,
+                path: pathInput
             });
         }
    

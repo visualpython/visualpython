@@ -33,12 +33,12 @@ define([
         // document.getElementsByTagName("head")[0].appendChild(link);
         // 컨테이너에서 전달된 callback 함수가 존재하면 실행.
         if (typeof(callback) === 'function') {
-            var uuid = vpCommon.getUUID();
+            var uuid = 'u' + vpCommon.getUUID();
             // 최대 10회 중복되지 않도록 체크
             for (var idx = 0; idx < 10; idx++) {
                 // 이미 사용중인 uuid 인 경우 다시 생성
                 if ($(vpConst.VP_CONTAINER_ID).find("." + uuid).length > 0) {
-                    uuid = vpCommon.getUUID();
+                    uuid = 'u' + vpCommon.getUUID();
                 }
             }
             $(vpCommon.wrapSelector(vpCommon.formatString("#{0}", vpConst.OPTION_GREEN_ROOM))).find(vpCommon.formatString(".{0}", vpConst.API_OPTION_PAGE)).addClass(uuid);
@@ -80,6 +80,9 @@ define([
         this.codemirrorList = {};
         this.importedList = [];
         this.title_no = 0;
+
+        // double click setter
+        this.clicked = 0;
 
         // file navigation : state 데이터 목록
         this.state = {
@@ -137,125 +140,23 @@ define([
     OptionPackage.prototype.bindEvent = function() {
         var that = this;
 
-        // save udf
-        $(this.wrapSelector('#vp_udfSave')).click(function() {
-            // if title is not empty
-            var key = $(that.wrapSelector('#vp_udfTitle')).val();
-            if (key == undefined || key === "") {
-                vpCommon.renderAlertModal('Please enter the title');
-                return;
-            }
-
-            // save codemirror value to origin textarea
-            that.vp_userCode.save();
-            var code = that.vp_userCode.getValue();
-
-            // save udf
-            var saveUdf = { [key]: code };
-            vpSetting.saveUserDefinedCode(saveUdf);
-
-            // FIXME: vp-multilang for success message
-            vpCommon.renderSuccessMessage('Successfully saved!');
-
-            // load again
-            that.loadUdfList();
-        });
-
-        // load when refresh clicks
-        $(this.wrapSelector('#vp_udfRefresh')).click(function(event) {
-            event.stopPropagation();
-            that.loadUdfList();
-            // show success message
-            vpCommon.renderSuccessMessage('Refreshed!');
-        });
-
-        // new button clicked
-        $(this.wrapSelector('#vp_udfCreate')).click(function() {
-            that.vp_userCode.save();
-            var code = that.vp_userCode.getValue();
-
-            if (code && code.length > 0) {
-                // ask clearing codes
-                that.openMultiBtnModal_new("Save Code", "Would you like to save previous code and clear it?"
-                , ["Just Clear", "Cancel", "Save and Clear"]
-                , [()=> {
-                    // clear code
-                    $(that.wrapSelector('#vp_udfTitle')).val('');
-                    $(that.wrapSelector('#vp_userCode')).val('');
-                    that.vp_userCode.setValue('');
-                }, ()=> {
-
-                }, ()=> {
-                    // save and clear code
-                    // save
-                    var key = $(that.wrapSelector('#vp_udfTitle')).val();
-                    if (key == undefined || key === "") {
-                        key = '_temporary';
-                    }
-
-                    // save codemirror value to origin textarea
-                    that.vp_userCode.save();
-                    var code = that.vp_userCode.getValue();
-
-                    // save udf
-                    var saveUdf = { [key]: code };
-                    vpSetting.saveUserDefinedCode(saveUdf);
-
-                    // clear code
-                    $(that.wrapSelector('#vp_udfTitle')).val('');
-                    $(that.wrapSelector('#vp_userCode')).val('');
-                    that.vp_userCode.setValue('');
-
-                    // load again
-                    that.loadUdfList();
-                }]);
-            } else {
-                // clear code
-                $(that.wrapSelector('#vp_udfTitle')).val('');
-                $(that.wrapSelector('#vp_userCode')).val('');
-                that.vp_userCode.setValue('');
-            }
-        });
-
-        // delete button clicked
-        $(this.wrapSelector('#vp_udfDelete')).click(function() {
-            // remove key from list
-            var key = $(that.wrapSelector('#vp_udfList')).find('.vp-udf-check:checked').val();
-            if (key && vpSetting.getUserDefinedCode(key)) {
-                // remove key
-                vpSetting.removeUserDefinedCode(key);
-
-                // FIXME: vp-multilang for success message
-                vpCommon.renderSuccessMessage('Successfully removed!');
-            } else {
-                vpCommon.renderAlertModal('No key available...');
-            }
-            
-            // load again
-            that.loadUdfList();
-        }); 
-
-
-
-        ///////////////////// new /////////////////////////////////////////
-
         // toggle item codebox 
-        $(document).on('click', this.wrapSelector('.vp-sn-item-header .vp-sn-indicator'), function() {
-            var parent = $(this).parent();
-            var hasOpen = $(this).hasClass('open');
-            // hide all codebox
-            $(that.wrapSelector('.vp-sn-indicator')).removeClass('open');
-            $(that.wrapSelector('.vp-sn-item-code')).hide();
+        // $(document).on('click', this.wrapSelector('.vp-sn-item-header .vp-sn-indicator'), function() {
+        //     var parent = $(this).parent();
+        //     var hasOpen = $(this).hasClass('open');
+        //     // hide all codebox
+        //     $(that.wrapSelector('.vp-sn-indicator')).removeClass('open');
+        //     $(that.wrapSelector('.vp-sn-item-code')).hide();
             
-            if (!hasOpen) {
-                // show code
-                $(this).addClass('open');
-                $(parent).parent().find('.vp-sn-item-code').show();
-            } else {
-                // hide code
-                $(parent).parent().find('.vp-sn-item-code').hide();
-            }
-        });
+        //     if (!hasOpen) {
+        //         // show code
+        //         $(this).addClass('open');
+        //         $(parent).parent().find('.vp-sn-item-code').show();
+        //     } else {
+        //         // hide code
+        //         $(parent).parent().find('.vp-sn-item-code').hide();
+        //     }
+        // });
 
         // menu popup
         $(document).on('click', this.wrapSelector('.vp-sn-menu'), function(evt) {
@@ -263,10 +164,10 @@ define([
             $(that.wrapSelector('.vp-sn-menu-box')).toggle();
         });
 
-        // filter menu popup
-        $(document).on('click', this.wrapSelector('.vp-sn-filter'), function(evt) {
+        // sort menu popup
+        $(document).on('click', this.wrapSelector('.vp-sn-sort'), function(evt) {
             evt.stopPropagation();
-            $(that.wrapSelector('.vp-sn-filter-menu-box')).toggle();
+            $(that.wrapSelector('.vp-sn-sort-menu-box')).toggle();
         });
 
         // menu click 
@@ -295,6 +196,38 @@ define([
             } else if (menu == 'export') {
                 // set as export mode
                 $(that.wrapSelector('.vp-sn-body')).addClass('vp-sn-export-mode');
+
+                // check all
+                $(that.wrapSelector('.vp-sn-check-all')).prop('checked', true);
+                $(that.wrapSelector('.vp-sn-item-check')).prop('checked', true);
+            } else if (menu == 'default-snippets') {
+                // import default snippets
+                var defaultSnippets = {
+                    'default import': 'import numpy as np\nimport pandas as pd\nimport matplotlib.pyplot as plt\n%matplotlib inline\nimport seaborn as sns'
+                }
+                var timestamp = new Date().getTime();
+
+                var keys = Object.keys(defaultSnippets);
+                var importKeys = [];
+                keys.forEach(key => {
+                    var importKey = key;
+                    var importNo = 1;
+                    var titleList = Object.keys(that.codemirrorList);
+                    // set duplicate title
+                    while(titleList.includes(importKey)) {
+                        importKey = key + '_imported' + importNo;
+                        importNo += 1;
+                    }
+                    var newSnippet = { [importKey]: { code: defaultSnippets[key], timestamp: timestamp } };
+                    vpSetting.saveUserDefinedCode(newSnippet);
+
+                    importKeys.push(importKey);
+                });
+                that.importedList = [ ...importKeys ];
+
+                that.loadUdfList();
+
+                vpCommon.renderSuccessMessage('Default snippets imported');
             }
         });
 
@@ -311,8 +244,8 @@ define([
             }
         });
 
-        // filter item
-        $(document).on('click', this.wrapSelector('.vp-sn-filter-menu-item'), function() {
+        // sort item
+        $(document).on('click', this.wrapSelector('.vp-sn-sort-menu-item'), function() {
             var menu = $(this).data('menu');
             if (menu == 'name') {
                 // sort by name
@@ -355,34 +288,111 @@ define([
             that.title_no += 1;
         });
 
+        // item header click (toggle & select item) &  double click (edit title)
+        $(document).on('click', this.wrapSelector('.vp-sn-item-header'), function(evt) {
+            var thisHeader = this;
+            that.clicked++;
+            if (that.clicked == 1) {
+                setTimeout(function(){
+                    if(that.clicked > 1) {
+                        // double click
+                        // enable input
+                        $(thisHeader).find('.vp-sn-item-title').prop('disabled', false);
+                        $(thisHeader).find('.vp-sn-item-title').focus();
+
+                    } 
+                    // single click
+                    // select item
+                    // remove selection
+                    $(that.wrapSelector('.vp-sn-item-header')).removeClass('selected');
+                    // select item
+                    $(thisHeader).addClass('selected');
+
+                    // toggle item
+                    var parent = $(thisHeader).parent();
+                    var indicator = $(thisHeader).find('.vp-sn-indicator');
+                    var hasOpen = $(indicator).hasClass('open');
+                    // hide all codebox
+                    $(that.wrapSelector('.vp-sn-indicator')).removeClass('open');
+                    $(that.wrapSelector('.vp-sn-item-code')).hide();
+                    
+                    if (that.clicked > 1 || !hasOpen) {
+                        // show code
+                        $(indicator).addClass('open');
+                        $(parent).find('.vp-sn-item-code').show();
+                    } else {
+                        // hide code
+                        $(parent).find('.vp-sn-item-code').hide();
+                    }
+                    that.clicked = 0;
+                }, 200);
+            }
+            evt.stopPropagation();
+        });
+
+        // prevent occuring header click event by clicking input
+        $(document).on('click', this.wrapSelector('.vp-sn-item-title'), function(evt) {
+            evt.stopPropagation();
+        });
+
         // item title save
-        $(document).on('change', this.wrapSelector('.vp-sn-item-title'), function(evt) {
+        $(document).on('blur', this.wrapSelector('.vp-sn-item-title'), function(evt) {
             var prevTitle = $(this).closest('.vp-sn-item').data('title');
-            var newTitle = $(this).val();
+            var inputTitle = $(this).val();
 
-            that.codemirrorList[prevTitle].save();
-            var code = that.codemirrorList[prevTitle].getValue();
-            // 기존 title 제거
-            vpSetting.removeUserDefinedCode(prevTitle);
-            
-            // 새 title로 저장
-            // save udf
-            var newTimestamp = new Date().getTime();
-            var newSnippet = { [newTitle]: { code: code, timestamp: newTimestamp } };
-            vpSetting.saveUserDefinedCode(newSnippet);
+            if (prevTitle == inputTitle) {
+                ;
+            } else {
+                // check duplicated
+                var titleList = Object.keys(that.codemirrorList);
+                var newTitle = inputTitle;
+                var dupNo = 0
+                while(titleList.includes(newTitle)) {
+                    dupNo += 1;
+                    newTitle = inputTitle + '_' + dupNo;
+                }
+    
+                that.codemirrorList[prevTitle].save();
+                var code = that.codemirrorList[prevTitle].getValue();
+                // 기존 title 제거
+                vpSetting.removeUserDefinedCode(prevTitle);
+                
+                // 새 title로 저장
+                // save udf
+                var newTimestamp = new Date().getTime();
+                var newSnippet = { [newTitle]: { code: code, timestamp: newTimestamp } };
+                vpSetting.saveUserDefinedCode(newSnippet);
+    
+                // update title & codemirror
+                $(this).closest('.vp-sn-item-title').val(newTitle);
+                $(this).closest('.vp-sn-item').data('title', newTitle);
+                // update codemirror
+                that.codemirrorList[newTitle] = that.codemirrorList[prevTitle];
+                delete that.codemirrorList[prevTitle];
+            }
 
-            // update title & codemirror
-            $(this).closest('.vp-sn-item').data('title', newTitle);
-            // update codemirror
-            that.codemirrorList[newTitle] = that.codemirrorList[prevTitle];
-            delete that.codemirrorList[prevTitle];
+            // disable
+            $(this).prop('disabled', true);
         });
 
         // item menu click
         $(document).on('click', this.wrapSelector('.vp-sn-item-menu-item'), function(evt) {
             var menu = $(this).data('menu');
             var title = $(this).closest('.vp-sn-item').data('title');
-            if (menu == 'duplicate') {
+            if (menu == 'run') {
+                var item = $(this).closest('.vp-sn-item');
+                var title = $(item).data('title');
+
+                // get codemirror
+                that.codemirrorList[title].save();
+                var code = that.codemirrorList[title].getValue();
+                $(vpCommon.wrapSelector('#vp_appsCode')).val(code);
+                $(vpCommon.wrapSelector('#vp_appsCode')).trigger({
+                    type: 'popup_apply',
+                    title: 'Snippets',
+                    code: code 
+                });
+            } else if (menu == 'duplicate') {
                 var dupNo = 1;
                 var timestamp = new Date().getTime();
                 var dupTitle = title + '_dup' + dupNo;
@@ -403,7 +413,7 @@ define([
                 var dupSnippet = { [dupTitle]: { code: code, timestamp: timestamp } };
                 vpSetting.saveUserDefinedCode(dupSnippet);
 
-                var tag = $(that.wrapSelector('.vp-sn-item-code textarea[data-title="' + dupTitle + '"]'));
+                var tag = $(that.wrapSelector('.vp-sn-item[data-title="' + dupTitle + '"] textarea'));
                 that.bindCodeMirror(dupTitle, tag[0]);
                 $(dupItem).find('.vp-sn-indicator').trigger('click');
 
@@ -411,6 +421,7 @@ define([
                 if (title && vpSetting.getUserDefinedCode(title)) {
                     // remove key
                     vpSetting.removeUserDefinedCode(title);
+                    delete that.codemirrorList[title];
                     // remove item
                     $(that.wrapSelector('.vp-sn-item[data-title="' + title + '"]')).remove();
 
@@ -450,36 +461,43 @@ define([
 
         // export snippets
         $(document).on('click', this.wrapSelector('.vp-sn-export'), async function() {
-            var checked = $(that.wrapSelector('.vp-sn-item-check:checked'));
-            if (checked.length <= 0) {
-                return ;
-            }
-
-            var loadURLstyle = Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH;
-            var loadURLhtml = Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.SOURCE_PATH + "component/fileNavigation/index.html";
-            
-            that.loadCss( loadURLstyle + "component/fileNavigation.css");
+            var menu = $(this).data('menu');
+            if (menu == 'cancel') {
+                // cancel
+                // return to default mode
+                $(that.wrapSelector('.vp-sn-body')).removeClass('vp-sn-export-mode');
+            } else if (menu == 'export') {
+                var checked = $(that.wrapSelector('.vp-sn-item-check:checked'));
+                if (checked.length <= 0) {
+                    return ;
+                }
     
-            await $(`<div id="vp_fileNavigation"></div>`)
-            .load(loadURLhtml, () => {
-
-                $('#vp_fileNavigation').removeClass("hide");
-                $('#vp_fileNavigation').addClass("show");
-
-                var { vp_init
-                        , vp_bindEventFunctions } = fileNavigation;
-                    
-                fileNavigation.vp_init(that, "SAVE_SNIPPETS");
-                // fileNavigation.vp_init(that.getStateAll());
-                fileNavigation.vp_bindEventFunctions();
-            })
-            .appendTo("#site");
+                var loadURLstyle = Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH;
+                var loadURLhtml = Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.SOURCE_PATH + "component/fileNavigation/index.html";
+                
+                that.loadCss( loadURLstyle + "component/fileNavigation.css");
+        
+                await $(`<div id="vp_fileNavigation"></div>`)
+                .load(loadURLhtml, () => {
+    
+                    $('#vp_fileNavigation').removeClass("hide");
+                    $('#vp_fileNavigation').addClass("show");
+    
+                    var { vp_init
+                            , vp_bindEventFunctions } = fileNavigation;
+                        
+                    fileNavigation.vp_init(that, "SAVE_SNIPPETS");
+                    // fileNavigation.vp_init(that.getStateAll());
+                    fileNavigation.vp_bindEventFunctions();
+                })
+                .appendTo("#site");
+            }
 
         });
 
         // export complete event
         $(document).on('snippetSaved.fileNavigation', this.wrapSelector('.vp-sn-filepath'), function(evt) {
-            var fileName = evt.path;
+            var fileName = evt.file;
             var selectedPath = $(this).val();
 
             // get checked snippets
@@ -551,17 +569,21 @@ define([
         item.appendFormatLine('<div class="{0}" data-title="{1}" data-timestamp="{2}">', 'vp-sn-item', title, timestamp);
         item.appendFormatLine('<div class="{0}">', 'vp-sn-item-header');
         item.appendFormatLine('<div class="{0}"></div>', 'vp-sn-indicator');
-        item.appendFormatLine('<input type="text" class="{0}" value="{1}" />', 'vp-sn-item-title', title);
+        item.appendFormatLine('<input type="text" class="{0}" value="{1}" disabled/>', 'vp-sn-item-title', title);
         if (hasImported) {
             item.appendFormatLine('<i class="{0}"></i>', 'fa fa-circle vp-sn-imported-item');
         }
         item.appendFormatLine('<div class="{0}">', 'vp-sn-item-menu');
-        item.appendFormatLine('<div class="{0}" data-menu="{1}">'
-                            , 'vp-sn-item-menu-item', 'duplicate');
+        item.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}">'
+                            , 'vp-sn-item-menu-item', 'run', 'Run');
+        item.appendFormatLine('<img src="{0}"/>', '/nbextensions/visualpython/resource/snippets/run.svg');
+        item.appendLine('</div>');
+        item.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}">'
+                            , 'vp-sn-item-menu-item', 'duplicate', 'Duplicate');
         item.appendFormatLine('<img src="{0}"/>', '/nbextensions/visualpython/resource/snippets/duplicate.svg');
         item.appendLine('</div>');
-        item.appendFormatLine('<div class="{0}" data-menu="{1}">'
-                            , 'vp-sn-item-menu-item', 'delete');
+        item.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}">'
+                            , 'vp-sn-item-menu-item', 'delete', 'Delete');
         item.appendFormatLine('<img src="{0}"/>', '/nbextensions/visualpython/resource/snippets/delete.svg');
         item.appendLine('</div>'); 
         item.appendLine('</div>'); // end of vp-sn-item-menu
@@ -656,6 +678,19 @@ define([
 
         // save codemirror value to origin textarea
         // this.vp_userCode.save();
+
+        // selected snippet
+        var selected = $(this.wrapSelector('.vp-sn-item-header.selected'));
+        if (selected) {
+            var item = $(selected).closest('.vp-sn-item');
+            var title = $(item).data('title');
+
+            // get codemirror
+            this.codemirrorList[title].save();
+            var code = this.codemirrorList[title].getValue();
+            sbCode.append(code);
+        }
+
 
         if (addCell) this.cellExecute(sbCode.toString(), exec);
 

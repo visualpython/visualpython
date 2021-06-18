@@ -26,7 +26,7 @@ define([
      * @constructor
      */
     var FileNavigation = function(type, state) {
-        this.uuid = vpCommon.getUUID();
+        this.uuid = 'u' + vpCommon.getUUID();
         this.type = type;
         // state types
         this.state = {

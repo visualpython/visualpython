@@ -31,12 +31,12 @@ define([
     var optionLoadCallback = function(callback, meta) {
         // 컨테이너에서 전달된 callback 함수가 존재하면 실행.
         if (typeof(callback) === 'function') {
-            var uuid = vpCommon.getUUID();
+            var uuid = 'u' + vpCommon.getUUID();
             // 최대 10회 중복되지 않도록 체크
             for (var idx = 0; idx < 10; idx++) {
                 // 이미 사용중인 uuid 인 경우 다시 생성
                 if ($(vpConst.VP_CONTAINER_ID).find("." + uuid).length > 0) {
-                    uuid = vpCommon.getUUID();
+                    uuid = 'u' + vpCommon.getUUID();
                 }
             }
             $(vpCommon.wrapSelector(vpCommon.formatString("#{0}", vpConst.OPTION_GREEN_ROOM))).find(vpCommon.formatString(".{0}", vpConst.API_OPTION_PAGE)).addClass(uuid);
@@ -179,7 +179,12 @@ define([
         var that = this;
 
         const textBlock = that.getBlock();
-        const textarea = textBlock.getBlockOptionPageDom().find(`#vp_markdownEditor`).get(0);
+        var textarea;
+        if (textBlock) {
+            textarea = textBlock.getBlockOptionPageDom().find(`#vp_markdownEditor`).get(0);
+        } else {
+            textarea = $(vpCommon.formatString(".{0} #{1}{2}", that.uuid, vpConst.VP_ID_PREFIX, "markdownEditor")).get(0);
+        }
         var gCode = textarea.value;
 
         $(this.wrapSelector(vpCommon.formatString(".{0} #{1}{2} input[type=hidden]", this.uuid, vpConst.VP_ID_PREFIX, "attachEncdoedDataArea"))).each(function() {
@@ -271,6 +276,69 @@ define([
             // var textarea = $(vpCommon.formatString(".{0} #{1}{2}", that.uuid, vpConst.VP_ID_PREFIX, "markdownEditor")).get(0);
             const textBlock = that.getBlock();
             const textarea = textBlock.getBlockOptionPageDom().find(`#vp_markdownEditor`).get(0);
+            that.importImageByPath(textarea, $(that.wrapSelector("#vp_imgFilePath")).val());
+        });
+    }
+
+    Markdown.prototype.bindOptionEventForPopup = function() {
+        var that = this;
+        $(document).on(vpCommon.formatString("propertychange change keyup paste input.{0}", that.uuid), that.wrapSelector(vpCommon.formatString("#{0}{1}", vpConst.VP_ID_PREFIX, "markdownEditor")), function(evt) {
+            evt.stopPropagation();
+            previewRender(that.uuid, $(this).val());
+        });
+
+        $(document).on(vpCommon.formatString("click.{0}", that.uuid), that.wrapSelector(vpCommon.formatString(".{0} div[class^={1}]", vpConst.VP_MARKDOWN_EDITOR_TOOLBAR + that.uuid, vpConst.VP_MARKDOWN_TOOBAR_BTN)), function(evt) {
+            // jquery object convert to javascript object for get selection properies
+            // console.log($(vpCommon.formatString(".{0} #{1}{2}", that.uuid, vpConst.VP_ID_PREFIX, "markdownEditor")));
+            const textarea = $(vpCommon.formatString(".{0} #{1}{2}", that.uuid, vpConst.VP_ID_PREFIX, "markdownEditor")).get(0);
+
+            if ($(this).hasClass(vpConst.VP_MARKDOWN_TOOBAR_BTN_TITLE)) {
+                adjustTitle(textarea);
+            } else if ($(this).hasClass(vpConst.VP_MARKDOWN_TOOBAR_BTN_BOLD)) {
+                adjustBold(textarea);
+            } else if ($(this).hasClass(vpConst.VP_MARKDOWN_TOOBAR_BTN_ITALIC)) {
+                adjustItalic(textarea);
+            } else if ($(this).hasClass(vpConst.VP_MARKDOWN_TOOBAR_BTN_CODE)) {
+                adjustCode(textarea);
+            } else if ($(this).hasClass(vpConst.VP_MARKDOWN_TOOBAR_BTN_LINK)) {
+                adjustLink(textarea);
+            } else if ($(this).hasClass(vpConst.VP_MARKDOWN_TOOBAR_BTN_IMAGE)) {
+                // 클릭시 hidden file control 오픈처리. 선택시 처리는 hidden file control onChange에서 처리
+                // $(this).parent().find(vpCommon.formatString(".{0}", vpConst.VP_MARKDOWN_TOOBAR_INPUT_FILE_IMAGE)).click();
+                openImageFile(that.uuid);
+            } else if ($(this).hasClass(vpConst.VP_MARKDOWN_TOOBAR_BTN_INDENT)) {
+                addIndentStyle(textarea);
+            } else if ($(this).hasClass(vpConst.VP_MARKDOWN_TOOBAR_BTN_ORDER_LIST)) {
+                addOrderdList(textarea);
+            } else if ($(this).hasClass(vpConst.VP_MARKDOWN_TOOBAR_BTN_UNORDER_LIST)) {
+                addUnorderdList(textarea);
+            } else if ($(this).hasClass(vpConst.VP_MARKDOWN_TOOBAR_BTN_HORIZONTAL_LINE)) {
+                addHorizontalLine(textarea);
+            }
+            
+            // 이미지 로드의 경우 처리단계에서 랜더링 호출 하므로 이곳에서 호출하면 중복
+            if (!$(this).hasClass(vpConst.VP_MARKDOWN_TOOBAR_BTN_IMAGE)) {
+                // 마크다운 렌더링 시행
+                const textarea = $(vpCommon.formatString(".{0} #{1}{2}", that.uuid, vpConst.VP_ID_PREFIX, "markdownEditor")).get(0);
+                previewRender(that.uuid, textarea.value);
+                
+                // change 트리거 발생 - 입력값 저장 및 좌측 번호칸 동기화
+                $(textarea).trigger('change');
+            }
+        });
+        
+        // $(document).on(vpCommon.formatString("change.{0}", that.uuid), that.wrapSelector(vpCommon.formatString(".{0}", vpConst.VP_MARKDOWN_TOOBAR_INPUT_FILE_IMAGE)), function(evt) {
+        //     // jquery object convert to javascript object for get selection properies
+        //     var textarea = $(vpCommon.formatString(".{0} #{1}{2}", that.uuid, vpConst.VP_ID_PREFIX, "markdownEditor")).get(0);
+
+        //     // importImage(that.uuid, textarea, evt.target.files[0]);
+        //     that.importImage(that.uuid, textarea, evt.target.files[0]);
+        // });
+
+        $(document).off(vpCommon.formatString("imgFileOpenForMarkdown.fileNavigation.{0}", that.uuid));
+        $(document).on(vpCommon.formatString("imgFileOpenForMarkdown.fileNavigation.{0}", that.uuid), function(e) {
+            // jquery object convert to javascript object for get selection properies
+            var textarea = $(vpCommon.formatString(".{0} #{1}{2}", that.uuid, vpConst.VP_ID_PREFIX, "markdownEditor")).get(0);
             that.importImageByPath(textarea, $(that.wrapSelector("#vp_imgFilePath")).val());
         });
     }

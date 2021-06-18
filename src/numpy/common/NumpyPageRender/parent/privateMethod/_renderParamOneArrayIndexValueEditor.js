@@ -21,7 +21,7 @@ define ([
         var importPackageThis = numpyPageRenderThis.getImportPackageThis();
         var numpyStateGenerator = numpyPageRenderThis.getStateGenerator();
         var editorDom = $(importPackageThis.wrapSelector(tagSelector));
-        var uuid = vpCommon.getUUID();
+        var uuid = 'u' + vpCommon.getUUID();
         editorDom.empty();
 
         /**

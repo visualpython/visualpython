@@ -15,7 +15,7 @@ define ([
         var numpyPageRenderThis = numpyPageRenderThis;
         var importPackageThis = numpyPageRenderThis.getImportPackageThis();
         var numpyStateGenerator = numpyPageRenderThis.getStateGenerator();
-        var uuid = vpCommon.getUUID();
+        var uuid = 'u' + vpCommon.getUUID();
         var dom;
         switch(funcId){
             /**
