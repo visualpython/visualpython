@@ -497,7 +497,7 @@ define([
 
         // export complete event
         $(document).on('snippetSaved.fileNavigation', this.wrapSelector('.vp-sn-filepath'), function(evt) {
-            var fileName = evt.path;
+            var fileName = evt.file;
             var selectedPath = $(this).val();
 
             // get checked snippets
