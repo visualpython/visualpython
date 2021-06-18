@@ -1,0 +1,125 @@
+<div class="vp-option-page" id="vp_varPage">
+    <div id="vp_variableBox">
+        <div class="vp-instance-toolbar">
+            <input type="hidden" id="vp_stateLeft"/>
+            <input type="hidden" id="vp_stateRight"/>
+            <input type="button" id="vp_instanceClear" class="vp-toolbar-button" value="Clear"/>
+            <input type="button" id="vp_instanceBackspace" class="vp-toolbar-button" value="Backspace"/>
+            <input type="button" id="vp_instanceToggleEquality" class="vp-toolbar-button " value="Enable Equality"/>
+        </div>
+        <div class="vp-instance-base">
+            <!-- Left Instance -->
+            <div id="vp_leftInstance" class="vp-instance-box left selected"></div>
+            <!-- Toggle Box -->
+            <div class="vp-instance-toggle-box">
+                <!-- <input type="button" id="vp_instanceToggle" class="vp-instance-toggle-btn" value="T"> -->
+                <button id="vp_instanceToggle" class="vp-instance-toggle-btn">
+                    <i class="fa fa-exchange" style="transform: rotate(90deg);"></i>
+                </button>
+            </div>
+            <!-- Right Instance -->
+            <div id="vp_rightInstance" class="vp-instance-box right"></div>
+        </div>
+        <div class="vp-instance-status">
+            <table class="vp-option-table">
+                <colgroup><col width="60px"><col width="*"></colgroup>
+                <tbody>
+                    <tr>
+                        <td><span class="vp-multilang vp-select-title">Type</span></td>
+                        <td>
+                            <span id="vp_instanceType"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="vp-instance-option-base">
+            <div class="vp-instance-option-box argument">
+                <span class="vp-multilang vp-option-title">Argument Option</span>
+                <table class="vp-option-table">
+                    <colgroup><col width="20%"><col width="*"></colgroup>
+                    <tr>
+                        <td><label>Arguments</label></td>
+                        <td>
+                            <input type="text" id="vp_insArguments" class="vp-input l" placeholder="key=value"/>
+                            <input type="button" id="vp_insArgOk" class="vp-apply-button" value="Apply"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="vp-instance-option-box object">
+                <span class="vp-multilang vp-option-title">Object Option</span>
+                <table class="vp-option-table">
+                    <colgroup><col width="20%"><col width="*"></colgroup>
+                    <tr>
+                        <td><label>Columns</label></td>
+                        <td>
+                            <input type="hidden" id="vp_colMeta"/>
+                            <table id="vp_colList">
+                                <tr>
+                                    <td>
+                                        <input type="text" class="vp-input m vp-col-list" placeholder="Column Name"/>
+                                        <input type="text" class="vp-input s vp-oper-list" placeholder="Oper"/>
+                                        <input class="vp-input m vp-condition" type="text" placeholder=""/>
+                                        <select class="vp-select s vp-oper-connect">
+                                            <option value="&">and</option>
+                                            <option value="|">or</option>
+                                        </select>
+                                        <div class="vp-icon-btn vp-del-col"></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4"><div id="vp_addCol" class="vp-icon-btn vp-add-col"></i></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="vp_useIndexer">Use Indexer</label></td>
+                        <td>
+                            <select id="vp_useIndexer" class="vp-select vp-use-indexer">
+                                <option value="">None</option>
+                                <option value=".loc[{child}]">loc</option>
+                                <!-- <option value=".iloc[{child}]">iloc</option> -->
+                                <!-- <option value=".at[{child}]">at</option> -->
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="vp_returnType">Return type</label></td>
+                        <td>
+                            <select id="vp_returnType" class="vp-select vp-return-type" disabled>
+                                <option value="DataFrame">DataFrame</option>
+                                <option value="Series">Series</option>
+                            </select>
+                            <input type="button" id="vp_insObjOk" class="vp-apply-button" value="Apply"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <!-- <hr style="margin: 0px;"/> -->
+        <div class="vp-instance-select-base">
+            <div class="vp-instance-select-container">
+                <div class="vp-multilang vp-select-title">Attribute</div>
+                <input id="vp_insAttrSearch" class="vp-input vp-instance-search attr" type="text" placeholder="search attribute" />
+                <input id="vp_insAttrType" class="vp-instance-type" type="hidden"/>
+                <div id="vp_insAttr" class="vp-instance-select-box">
+                    <ul class="vp-select-list">
+                    </ul>
+                </div>
+            </div>
+            <div class="vp-instance-select-container">
+                <div class="vp-multilang vp-select-title">Method</div>
+                <input id="vp_insMethodSearch" class="vp-input vp-instance-search method" type="text" placeholder="search method" />
+                <input id="vp_insMethodType" class="vp-instance-type" type="hidden"/>
+                <div id="vp_insMethod" class="vp-instance-select-box">
+                    <ul class="vp-select-list">
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+
+    </div>
+</div>

@@ -1,0 +1,131 @@
+<div class="vp-option-page" id="vp_varPage">
+    <div id="vp_varViewBox" class="vp-var-view-box">
+        <div class="vp-icon-btn vp-close-view"></div>
+        <div class="vp-var-view-div">
+            <table id="vp_varViewList" class="vp-option-table vp-var-view-list no-selection">
+                <colgroup><col width="40%"/><col width="*"/></colgroup>
+                <thead>
+                    <tr><th>Variable</th><th>DataType</th></tr>
+                    <tr><th colspan="2"><hr style="margin: 0px;"/></th></tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+        </div>
+        <hr style="margin: 0px;"/>
+        <div id="vp_varViewDetail">   
+            <table class="vp-option-table vp-var-view-detail no-selection">
+                <colgroup><col width="40%"/><col width="*"/></colgroup>
+                <tbody>
+                    <tr>
+                        <th>columns</th>
+                        <td><select id="vp_varDetailColList" class="vp-select"></select></td>
+                    </tr>
+                    <tr>
+                        <th>dtype</th>
+                        <td><span id="vp_varDetailDtype"><!-- column/series dtype --></span></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <pre id="vp_varDetailArray">
+                                <!-- detail array -->
+                            </pre>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div id="vp_variableBox">
+        <!-- <span type="button" class="vp-opt-action-btn vp-cbtn-white-orange" id="vp_addBlock">Add Block</span>
+        <span type="button" class="vp-opt-action-btn vp-cbtn-orange-white" id="vp_runBlock">Run Block</span> -->
+        <span class="vp-multilang vp-option-title">Instance Option</span>
+        <table class="vp-option-table">
+            <colgroup><col width="20%"><col width="*"></colgroup>
+            <tr>
+                <td><label for="vp_varList">Variable</label></td>
+                <td>
+                    <select id="vp_varList" class="vp-select"></select> 
+                    <input id="vp_varView" type="button" value="View"/>
+                    <div id="vp_varRefresh" class="vp-icon-btn"></div>
+                </td>
+            </tr>
+            <tr>
+                <td><span class="vp-multilang">DataType</span></td>
+                <td><span id="vp_varDataType"></span></td>
+            </tr>
+            <tr>
+                <td colspan="2"><hr style="margin: 0px;"/></td>
+            </tr>
+            <tr>
+                <td><label>Columns</label></td>
+                <td>
+                    <input type="hidden" id="vp_colMeta"/>
+                    <table id="vp_colList">
+                        <tr>
+                            <td>
+                                <select class="vp-select m vp-col-list"></select>
+                                <select class="vp-select s vp-oper-list">
+                                    <option value="">none</option>
+                                    <option value="==">==</option>
+                                    <option value="!=">!=</option>
+                                    <option value="in">in</option>
+                                    <option value="not in">not in</option>
+                                    <option value="<"><</option>
+                                    <option value="<="><=</option>
+                                    <option value=">">></option>
+                                    <option value=">=">>=</option>
+                                </select>
+                                <input class="vp-input m vp-condition" type="text" placeholder=""/>
+                                <select class="vp-select s vp-oper-connect">
+                                    <option value="&">and</option>
+                                    <option value="|">or</option>
+                                </select>
+                                <div class="vp-icon-btn vp-del-col"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4"><div id="vp_addCol" class="vp-icon-btn vp-add-col"></i></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <!-- <td><label for="vp_idxList">Indexes</label></td>
+                <td><select id="vp_idxList"></select></td> -->
+                <td><label for="vp_returnType">Return type</label></td>
+                <td><select id="vp_returnType" class="vp-select vp-return-type" disabled>
+                    <option value="DataFrame">DataFrame</option>
+                    <option value="Series">Series</option>
+                </select></td>
+            </tr>
+            <tr>
+                <td colspan="2"><hr style="margin: 0px;"/></td>
+            </tr>
+            <tr>
+                <td><label for="vp_varApiSearch">Method</label></td>
+                <td>
+                    <input id="vp_varApiSearch" class="vp-input" type="text" placeholder="search api" />
+                    <input id="vp_varApiFuncId" type="hidden"/>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <div id="vp_varApiList" class="vp-var-api-box">
+                        <ul class="vp-var-api-list">
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"><hr style="margin: 0px;"/></td>
+            </tr>
+            <tr>
+                <td><label for="vp_returnVariable">Return to</label></td>
+                <td><input id="vp_returnVariable" class="vp-input" type="text" placeholder="return variable" /></td>
+            </tr>
+        </table>
+    </div>
+</div>

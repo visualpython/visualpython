@@ -1,0 +1,374 @@
+<div class="vp-option-page" id="vp_subplot">
+    <div id="vp_varViewBox" class="vp-var-view-box">
+        <div class="vp-icon-btn vp-close-view"><i class="fa fa-close"></i></div>
+        <div class="vp-var-view-div">
+            <table id="vp_varViewList" class="vp-option-table vp-var-view-list no-selection">
+                <colgroup><col width="40%"/><col width="*"/></colgroup>
+                <thead>
+                    <tr><th>Variable</th><th>DataType</th></tr>
+                    <tr><th colspan="2"><hr style="margin: 0px;"/></th></tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+        </div>
+        <hr style="margin: 0px;"/>
+        <div id="vp_varViewDetail">   
+            <table class="vp-option-table vp-var-view-detail no-selection">
+                <colgroup><col width="40%"/><col width="*"/></colgroup>
+                <thead>
+                    <tr>
+                        <th>columns</th>
+                        <th>methods</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div id="vp_varDetailColList" class="vp-column-select">
+                                
+                            </div>
+                        </td>
+                        <td>
+                            <div id="vp_varDetailArray" class="vp-method-select">
+                                <!-- detail array -->
+
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="var-view-footer">
+            <input id="vp_varSelectCode" type="text" class="vp-input" readonly/>
+            <input id="vp_varSelectBtn" type="button" value="select"/>
+        </div>
+    </div>
+    <form id="vp_optionForm">
+        
+        <div class="vp-accordion-container vp-accordion-open">
+            <div class="vp-accordion-header"><span class="vp-accordion-indicator"></span><span class="vp-accordion-caption" data-caption-id="TODO:Variable">Required Input & Output</span></div>
+            <div id="vp_plotSetting" class="vp-accordion-content">
+                <!-- <span class="vp-multilang vp-option-title">
+                    <input type="checkbox" class="bool-checkbox" id="disableChart" />
+                    <label for="disableChart">차트 생성 안 함</label>&nbsp;
+                </span> -->
+                
+                
+                <table class="vp-option-table">
+                    <colgroup><col width="20%"><col width="*"></colgroup>
+                    <tr style="display: hidden;">
+                        <th>
+                            <!-- <label for="i0">대상 변수</label> -->
+                        </th>
+                        <td>
+                            <!-- <input type="text" class="vp-input input-single" id="i0_input" index=0 value="plt"/> -->
+                            <input type="hidden" class="vp-input input-single" id="i0" index=0 value="plt"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="kind" class="vp-orange-text">Chart Type</label>
+                        </th>
+                        <td>
+                            <select id="kind" class="vp-select option-select">
+                                
+                            </select>
+                            <div id="vp_plotKind" class="vp-plot-kind">
+                                <div class="vp-plot-item" id="vp_plotLine" data-kind="plot" data-show-text="Line">
+                                    <div class="vp-plot-thumb plot"></div>
+                                </div>
+                                <div class="vp-plot-item" id="vp_plotBar" data-kind="bar" data-show-text="Bar">
+                                    <div class="vp-plot-thumb bar"></div>
+                                </div>
+                                <div class="vp-plot-item" id="vp_plotBarh" data-kind="barh" data-show-text="Horizontal Bar">
+                                    <div class="vp-plot-thumb barh"></div>
+                                </div>
+                                <div class="vp-plot-item" id="vp_plotHist" data-kind="hist" data-show-text="Histogram">
+                                    <div class="vp-plot-thumb hist"></div>
+                                </div>
+                                <div class="vp-plot-item" id="vp_plotBox" data-kind="boxplot" data-show-text="Box Plot">
+                                    <div class="vp-plot-thumb boxplot"></div>
+                                </div>
+                                <div class="vp-plot-item" id="vp_plotStack" data-kind="stackplot" data-show-text="Stack Plot">
+                                    <div class="vp-plot-thumb stackplot"></div>
+                                </div>
+                                <div class="vp-plot-item" id="vp_plotPie" data-kind="pie" data-show-text="Pie Chart">
+                                    <div class="vp-plot-thumb pie"></div>
+                                </div>
+                                <div class="vp-plot-item" id="vp_plotScatter" data-kind="scatter" data-show-text="Scatter Plot">
+                                    <div class="vp-plot-thumb scatter"></div>
+                                </div>
+                                <div class="vp-plot-item" id="vp_plotHexbin" data-kind="hexbin" data-show-text="Hexbin Plot">
+                                    <div class="vp-plot-thumb hexbin"></div>
+                                </div>
+                                <div class="vp-plot-item" id="vp_plotContour" data-kind="contour" data-show-text="Contour Plot">
+                                    <div class="vp-plot-thumb contour"></div>
+                                </div>
+                                <div class="vp-plot-item" id="vp_plotImshow" data-kind="imshow" data-show-text="Image Plot">
+                                    <div class="vp-plot-thumb imshow"></div>
+                                </div>
+                                <div class="vp-plot-item" id="vp_plotErrorbar" data-kind="errorbar" data-show-text="Error Bar">
+                                    <div class="vp-plot-thumb errorbar"></div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="x" class="vp-orange-text">X Data</label>
+                        </th>
+                        <td>
+                            <input type="text" class="vp-input input-single" id="x" index=0 />
+                            <input type="button" class="vp-select-data" data-axes="x" value="select"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="y" class="vp-orange-text">Y Data</label>
+                        </th>
+                        <td>
+                            <input type="text" class="vp-input input-single" id="y" index=0 />
+                            <input type="button" class="vp-select-data" data-axes="y" value="select"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="z" class="vp-orange-text">Z Data</label>
+                        </th>
+                        <td>
+                            <input type="text" class="vp-input -single" id="z" index=0 placeholder="[[2-dimension]]"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="bins" class="vp-orange-text">Bins</label>
+                        </th>
+                        <td>
+                            <input type="text" class="vp-input input-single" id="bins" index=0 value="10"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="extent">X, Y Extent</label>
+                        </th>
+                        <td>
+                            <input type="text" class="vp-input input-single" id="extent" index=0 placeholder="[xmin, xmax, ymin, ymax]"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="origin">Origin</label> <!-- 축 기준-->
+                        </th>
+                        <td>
+                            <input type="text" class="vp-input input-single" id="origin" index=0 value="lower"/> <!-- TODO: 옵션 선택가능하게 변경-->
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="cmap">Color Map</label>
+                        </th>
+                        <td>
+                            <select id="cmap" class="vp-select option-select">
+                            </select>
+                            <div class="vp-plot-cmap-wrapper">
+                                <div id="vp_plotCmap" class="vp-plot-cmap">
+                                    <span id="vp_selectedCmap" class="vp-multilang" data-caption-id="nothing_selected">none</span>
+                                </div>
+                                <div id="vp_plotCmapSelector" class="vp-plot-cmap-selector">
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="label">Chart Label</label>
+                        </th>
+                        <td>
+                            <input type="text" class="vp-input input-single" id="label" index=0 />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="color">Color</label>
+                        </th>
+                        <td>
+                            <input id="useColor" type="checkbox"/> 
+                            <label for="useColor">
+                                use color
+                            </label><br/>
+                            <input type="color" id="color"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="markerSelector">Marker</label>
+                        </th>
+                        <td>
+                            <select id="markerSelector" class="vp-select option-select">
+                                <option name="markerSelector" value="marker">Custom</option>
+                                <option name="markerSelector" value="." data-img="m00.png" data-caption-id="point">.</option>
+                                <option name="markerSelector" value="," data-img="m01.png" data-caption-id="pixel">,</option>
+                                <option name="markerSelector" value="o" data-img="m02.png" data-caption-id="circle">o</option>
+                                <option name="markerSelector" value="v" data-img="m03.png" data-caption-id="triangle_down">▼</option>
+                                <option name="markerSelector" value="^" data-img="m04.png" data-caption-id="triangle_up">▲</option>
+                                <option name="markerSelector" value="<" data-img="m05.png" data-caption-id="triangle_left">◀</option>
+                                <option name="markerSelector" value=">" data-img="m06.png" data-caption-id="triangle_right">▶</option>
+                                <option name="markerSelector" value="1" data-img="m07.png" data-caption-id="tri_down">┬</option>
+                                <option name="markerSelector" value="2" data-img="m08.png" data-caption-id="tri_up">┵</option>
+                                <option name="markerSelector" value="3" data-img="m09.png" data-caption-id="tri_left">┤</option>
+                                <option name="markerSelector" value="4" data-img="m10.png" data-caption-id="tri_right">├</option>
+                                <option name="markerSelector" value="8" data-img="m11.png" data-caption-id="octagon">octagon</option>
+                                <option name="markerSelector" value="s" data-img="m12.png" data-caption-id="square">square</option>
+                                <option name="markerSelector" value="p" data-img="m13.png" data-caption-id="pentagon">pentagon</option>
+                                <option name="markerSelector" value="P" data-img="m23.png" data-caption-id="plus (filled)">filled plus</option>
+                                <option name="markerSelector" value="*" data-img="m14.png" data-caption-id="star">star</option>
+                                <option name="markerSelector" value="h" data-img="m15.png" data-caption-id="hexagon1">hexagon1</option>
+                                <option name="markerSelector" value="H" data-img="m16.png" data-caption-id="hexagon2">hexagon2</option>
+                                <option name="markerSelector" value="+" data-img="m17.png" data-caption-id="plus">plus</option>
+                                <option name="markerSelector" value="x" data-img="m18.png" data-caption-id="x">x</option>
+                                <option name="markerSelector" value="X" data-img="m24.png" data-caption-id="x (filled)">filled x</option>
+                                <option name="markerSelector" value="D" data-img="m19.png" data-caption-id="diamond">diamond</option>
+                                <option name="markerSelector" value="d" data-img="m20.png" data-caption-id="thin_diamond">thin diamond</option>
+                            </select>
+                            <br/><input type="text" id="marker" class="vp-input input-single"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="linestyle">Line Style</label>
+                        </th>
+                        <td>
+                            <select id="linestyle" class="vp-select option-select">
+                                <option name="linestyle" value="-" selected>solid</option>
+                                <option name="linestyle" value="--">dashed</option>
+                                <option name="linestyle" value=":">dotted</option>
+                                <option name="linestyle" value="-.">dash-dot</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr id="vp_userOptionRow">
+                        <th>
+                            <label for="vp_userOption">User Option</label>
+                        </th>
+                        <td>
+                            <input id="vp_userOption" type="text" class="vp-input" placeholder="key=value, key=value ..."/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="vp-accordion-container vp-accordion-gray-color">
+            <div class="vp-accordion-header"><span class="vp-accordion-indicator"></span><span class="vp-accordion-caption" data-caption-id="TODO:Variable">Additional Options</span></div>
+            <div id="vp_plotOptional" class="vp-accordion-content">
+                <table class="vp-option-table">
+                    <colgroup><col width="20%"><col width="*"></colgroup>
+                    <tr>
+                        <th>
+                            <label for="title">Title</label>
+                        </th>
+                        <td>
+                            <input type="text" class="vp-input input-single" id="title" index=0 />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="xlabel">X Label</label>
+                        </th>
+                        <td>
+                            <input type="text" class="vp-input input-single" id="xlabel" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="ylabel">Y Label</label>
+                        </th>
+                        <td>
+                            <input type="text" class="vp-input input-single" id="ylabel" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="xlim">X Limit</label>
+                        </th>
+                        <td>
+                            <input type="text" class="vp-input input-single" id="xlim" placeholder="(min, max)"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="ylim">Y Limit</label>
+                        </th>
+                        <td>
+                            <input type="text" class="vp-input input-single" id="ylim" placeholder="(min, max)"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><hr style="margin:0"/></td>
+                    </tr>
+                    <!-- <tr>
+                        <th>
+                            legend
+                        </th>
+                        <td>
+                            <input id="vp_showLegend" type="checkbox"/>
+                            <label for="vp_showLegend">show legend</label>
+                        </td>
+                    </tr> -->
+                    <tr>
+                        <th><label for="legendTitle">Legend Title</label></th>
+                        <td><input type="text" class="vp-input" id="legendTitle" /></td>
+                    </tr>
+                    <tr>
+                        <th><label for="legendLabel">Legend Labels</label></th>
+                        <td><input type="text" class="vp-input" id="legendLabel" /></td>
+                    </tr>
+                    <tr>
+                        <th><label for="legendLoc">Legend Position</label></th>
+                        <td><select id="legendLoc" class="vp-select">
+                            <option name="legendLoc" value="best" selected="selected">auto</option>
+                            <option name="legendLoc" value="upper right">upper right</option>
+                            <option name="legendLoc" value="upper left">upper left</option>
+                            <option name="legendLoc" value="lower left">lower left</option>
+                            <option name="legendLoc" value="lower right">lower right</option>
+                            <option name="legendLoc" value="center left">center left</option>
+                            <option name="legendLoc" value="center right">center right</option>
+                            <option name="legendLoc" value="lower center">lower center</option>
+                            <option name="legendLoc" value="upper center">upper center</option>
+                            <option name="legendLoc" value="center">center</option>
+                        </select></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><hr style="margin:0"/></td>
+                    </tr>
+                    <tr>
+                        <td>Save Figure</td>
+                        <td>
+                            <input type="text" class="vp-input input-single" id="savefigpath" placeholder="file.png" />
+                            <!-- <input type="button" value="File" class="vp-navi-btn black" id="vp_openFileNavigationBtn"><span id="fileName"></span> -->
+                            <div id="vp_openFileNavigationBtn" class="vp-file-browser-button"></div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <!-- <div id="vp_userOption" class="vp-pandas-block vp-user-option-box vp-minimize" id="vp_variableArea">
+            <div class="vp-accordion-header"><span class="vp-accordion-indicator"></span><span class="vp-accordion-caption" data-caption-id="TODO:Variable">User Option</span></div>
+            <div class="vp-list-container">
+                <table class="vp-tbl-search-result vp-option-table w90">
+                    <colgroup><col width="20%"/><col width="*"/><col width="10%"/></colgroup>
+                    <tr>
+                        <th><span class="vp-multilang" data-caption-id="TODO:Variabe">옵션 키</span></th>
+                        <th><span class="vp-multilang" data-caption-id="TODO:Variabe">옵션 값</span></th>
+                        <th>X</th>
+                    </tr>
+                    <tr>
+                        <td colspan="3"><input type="button" id="vp_addOption" class="w100" value="옵션 추가"></td>
+                    </tr>
+                </table>
+            </div>
+        </div> -->
+        
+    </form>
+</div>

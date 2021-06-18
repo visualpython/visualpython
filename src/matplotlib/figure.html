@@ -1,0 +1,53 @@
+<div class="vp-option-page" id="vp_inputPage">
+    <form id="vp_optionForm">
+        <div class="vp-accordion-container vp-accordion-open">
+            <div class="vp-accordion-header"><span class="vp-accordion-indicator"></span><span class="vp-accordion-caption" data-caption-id="TODO:Variable">Required Input & Output</span></div>
+            <div id="vp_inputOutputBox" class="vp-accordion-content">
+                <table class="vp-option-table">
+                    <colgroup><col width="20%"><col width="*"></colgroup>
+                    <tr>
+                        <td>
+                            <label for="o0" class="vp-orange-text">Return to</label>
+                        </td>
+                        <td>
+                            <input type="text" class="vp-input input-single" id="o0" index=0 value="fig"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="i0">Row, Column</label>
+                        </td>
+                        <td>
+                            <input type="range" class="subplot-range" id="subplotsRowsRange" min="0" max="30" value="1"/>
+                            <input type="number" class="vp-input s input-range number-only" id="subplotsRows" index=0 placeholder="row" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" value="1"/>
+                            <br/>
+                            <input type="range" class="subplot-range" id="subplotsColsRange" min="0" max="30" value="1"/>
+                            <input type="number" class="vp-input s input-range number-only" id="subplotsCols" index=1 placeholder="column" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" value="1"/>
+                        </td>
+                    </tr>
+                    <!-- <tr>
+                        <td>
+                            <label for="subplot">plot option 설정</label>
+                        </td>
+                        <td>
+                            <div id="vp_subplotsGrid" class="grid-container" data-row=1 data-col=1>
+                                <div class="grid-item subplot" data-idx=0 data-row=0 data-col=0>
+                                    [0]
+                                </div>
+                            </div>
+                        </td>
+                    </tr> -->
+                    <tr>
+                        <td>
+                            <label for="figsize">Figure Size</label>
+                        </td>
+                        <td>
+                            <input type="text" class="vp-input input-single" id="figsize" index=0 placeholder="(width, height)"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </form>
+    <br/>
+</div>

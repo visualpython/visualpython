@@ -1,0 +1,216 @@
+﻿sl_no,gender,ssc_p,ssc_b,hsc_p,hsc_b,hsc_s,degree_p,degree_t,workex,etest_p,specialisation,mba_p,status,salary
+1,M,67.00,Others,91.00,Others,Commerce,58.00,Sci&Tech,No,55,Mkt&HR,58.8,Placed,270000
+2,M,79.33,Central,78.33,Others,Science,77.48,Sci&Tech,Yes,86.5,Mkt&Fin,66.28,Placed,200000
+3,M,65.00,Central,68.00,Central,Arts,64.00,Comm&Mgmt,No,75,Mkt&Fin,57.8,Placed,250000
+4,M,56.00,Central,52.00,Central,Science,52.00,Sci&Tech,No,66,Mkt&HR,59.43,Not Placed,
+5,M,85.80,Central,73.60,Central,Commerce,73.30,Comm&Mgmt,No,96.8,Mkt&Fin,55.5,Placed,425000
+6,M,55.00,Others,49.80,Others,Science,67.25,Sci&Tech,Yes,55,Mkt&Fin,51.58,Not Placed,
+7,F,46.00,Others,49.20,Others,Commerce,79.00,Comm&Mgmt,No,74.28,Mkt&Fin,53.29,Not Placed,
+8,M,82.00,Central,64.00,Central,Science,66.00,Sci&Tech,Yes,67,Mkt&Fin,62.14,Placed,252000
+9,M,73.00,Central,79.00,Central,Commerce,72.00,Comm&Mgmt,No,91.34,Mkt&Fin,61.29,Placed,231000
+10,M,58.00,Central,70.00,Central,Commerce,61.00,Comm&Mgmt,No,54,Mkt&Fin,52.21,Not Placed,
+11,M,58.00,Central,61.00,Central,Commerce,60.00,Comm&Mgmt,Yes,62,Mkt&HR,60.85,Placed,260000
+12,M,69.60,Central,68.40,Central,Commerce,78.30,Comm&Mgmt,Yes,60,Mkt&Fin,63.7,Placed,250000
+13,F,47.00,Central,55.00,Others,Science,65.00,Comm&Mgmt,No,62,Mkt&HR,65.04,Not Placed,
+14,F,77.00,Central,87.00,Central,Commerce,59.00,Comm&Mgmt,No,68,Mkt&Fin,68.63,Placed,218000
+15,M,62.00,Central,47.00,Central,Commerce,50.00,Comm&Mgmt,No,76,Mkt&HR,54.96,Not Placed,
+16,F,65.00,Central,75.00,Central,Commerce,69.00,Comm&Mgmt,Yes,72,Mkt&Fin,64.66,Placed,200000
+17,M,63.00,Central,66.20,Central,Commerce,65.60,Comm&Mgmt,Yes,60,Mkt&Fin,62.54,Placed,300000
+18,F,55.00,Central,67.00,Central,Commerce,64.00,Comm&Mgmt,No,60,Mkt&Fin,67.28,Not Placed,
+19,F,63.00,Central,66.00,Central,Commerce,64.00,Comm&Mgmt,No,68,Mkt&HR,64.08,Not Placed,
+20,M,60.00,Others,67.00,Others,Arts,70.00,Comm&Mgmt,Yes,50.48,Mkt&Fin,77.89,Placed,236000
+21,M,62.00,Others,65.00,Others,Commerce,66.00,Comm&Mgmt,No,50,Mkt&HR,56.7,Placed,265000
+22,F,79.00,Others,76.00,Others,Commerce,85.00,Comm&Mgmt,No,95,Mkt&Fin,69.06,Placed,393000
+23,F,69.80,Others,60.80,Others,Science,72.23,Sci&Tech,No,55.53,Mkt&HR,68.81,Placed,360000
+24,F,77.40,Others,60.00,Others,Science,64.74,Sci&Tech,Yes,92,Mkt&Fin,63.62,Placed,300000
+25,M,76.50,Others,97.70,Others,Science,78.86,Sci&Tech,No,97.4,Mkt&Fin,74.01,Placed,360000
+26,F,52.58,Others,54.60,Central,Commerce,50.20,Comm&Mgmt,Yes,76,Mkt&Fin,65.33,Not Placed,
+27,M,71.00,Others,79.00,Others,Commerce,66.00,Comm&Mgmt,Yes,94,Mkt&Fin,57.55,Placed,240000
+28,M,63.00,Others,67.00,Others,Commerce,66.00,Comm&Mgmt,No,68,Mkt&HR,57.69,Placed,265000
+29,M,76.76,Others,76.50,Others,Commerce,67.50,Comm&Mgmt,Yes,73.35,Mkt&Fin,64.15,Placed,350000
+30,M,62.00,Central,67.00,Central,Commerce,58.00,Comm&Mgmt,No,77,Mkt&Fin,51.29,Not Placed,
+31,F,64.00,Central,73.50,Central,Commerce,73.00,Comm&Mgmt,No,52,Mkt&HR,56.7,Placed,250000
+32,F,67.00,Central,53.00,Central,Science,65.00,Sci&Tech,No,64,Mkt&HR,58.32,Not Placed,
+33,F,61.00,Central,81.00,Central,Commerce,66.40,Comm&Mgmt,No,50.89,Mkt&HR,62.21,Placed,278000
+34,F,87.00,Others,65.00,Others,Science,81.00,Comm&Mgmt,Yes,88,Mkt&Fin,72.78,Placed,260000
+35,M,62.00,Others,51.00,Others,Science,52.00,Others,No,68.44,Mkt&HR,62.77,Not Placed,
+36,F,69.00,Central,78.00,Central,Commerce,72.00,Comm&Mgmt,No,71,Mkt&HR,62.74,Placed,300000
+37,M,51.00,Central,44.00,Central,Commerce,57.00,Comm&Mgmt,No,64,Mkt&Fin,51.45,Not Placed,
+38,F,79.00,Central,76.00,Central,Science,65.60,Sci&Tech,No,58,Mkt&HR,55.47,Placed,320000
+39,F,73.00,Others,58.00,Others,Science,66.00,Comm&Mgmt,No,53.7,Mkt&HR,56.86,Placed,240000
+40,M,81.00,Others,68.00,Others,Science,64.00,Sci&Tech,No,93,Mkt&Fin,62.56,Placed,411000
+41,F,78.00,Central,77.00,Others,Commerce,80.00,Comm&Mgmt,No,60,Mkt&Fin,66.72,Placed,287000
+42,F,74.00,Others,63.16,Others,Commerce,65.00,Comm&Mgmt,Yes,65,Mkt&HR,69.76,Not Placed,
+43,M,49.00,Others,39.00,Central,Science,65.00,Others,No,63,Mkt&Fin,51.21,Not Placed,
+44,M,87.00,Others,87.00,Others,Commerce,68.00,Comm&Mgmt,No,95,Mkt&HR,62.9,Placed,300000
+45,F,77.00,Others,73.00,Others,Commerce,81.00,Comm&Mgmt,Yes,89,Mkt&Fin,69.7,Placed,200000
+46,F,76.00,Central,64.00,Central,Science,72.00,Sci&Tech,No,58,Mkt&HR,66.53,Not Placed,
+47,F,70.89,Others,71.98,Others,Science,65.60,Comm&Mgmt,No,68,Mkt&HR,71.63,Not Placed,
+48,M,63.00,Central,60.00,Central,Commerce,57.00,Comm&Mgmt,Yes,78,Mkt&Fin,54.55,Placed,204000
+49,M,63.00,Others,62.00,Others,Commerce,68.00,Comm&Mgmt,No,64,Mkt&Fin,62.46,Placed,250000
+50,F,50.00,Others,37.00,Others,Arts,52.00,Others,No,65,Mkt&HR,56.11,Not Placed,
+51,F,75.20,Central,73.20,Central,Science,68.40,Comm&Mgmt,No,65,Mkt&HR,62.98,Placed,200000
+52,M,54.40,Central,61.12,Central,Commerce,56.20,Comm&Mgmt,No,67,Mkt&HR,62.65,Not Placed,
+53,F,40.89,Others,45.83,Others,Commerce,53.00,Comm&Mgmt,No,71.2,Mkt&HR,65.49,Not Placed,
+54,M,80.00,Others,70.00,Others,Science,72.00,Sci&Tech,No,87,Mkt&HR,71.04,Placed,450000
+55,F,74.00,Central,60.00,Others,Science,69.00,Comm&Mgmt,No,78,Mkt&HR,65.56,Placed,216000
+56,M,60.40,Central,66.60,Others,Science,65.00,Comm&Mgmt,No,71,Mkt&HR,52.71,Placed,220000
+57,M,63.00,Others,71.40,Others,Commerce,61.40,Comm&Mgmt,No,68,Mkt&Fin,66.88,Placed,240000
+58,M,68.00,Central,76.00,Central,Commerce,74.00,Comm&Mgmt,No,80,Mkt&Fin,63.59,Placed,360000
+59,M,74.00,Central,62.00,Others,Science,68.00,Comm&Mgmt,No,74,Mkt&Fin,57.99,Placed,268000
+60,M,52.60,Central,65.58,Others,Science,72.11,Sci&Tech,No,57.6,Mkt&Fin,56.66,Placed,265000
+61,M,74.00,Central,70.00,Central,Science,72.00,Comm&Mgmt,Yes,60,Mkt&Fin,57.24,Placed,260000
+62,M,84.20,Central,73.40,Central,Commerce,66.89,Comm&Mgmt,No,61.6,Mkt&Fin,62.48,Placed,300000
+63,F,86.50,Others,64.20,Others,Science,67.40,Sci&Tech,No,59,Mkt&Fin,59.69,Placed,240000
+64,M,61.00,Others,70.00,Others,Commerce,64.00,Comm&Mgmt,No,68.5,Mkt&HR,59.5,Not Placed,
+65,M,80.00,Others,73.00,Others,Commerce,75.00,Comm&Mgmt,No,61,Mkt&Fin,58.78,Placed,240000
+66,M,54.00,Others,47.00,Others,Science,57.00,Comm&Mgmt,No,89.69,Mkt&HR,57.1,Not Placed,
+67,M,83.00,Others,74.00,Others,Science,66.00,Comm&Mgmt,No,68.92,Mkt&HR,58.46,Placed,275000
+68,M,80.92,Others,78.50,Others,Commerce,67.00,Comm&Mgmt,No,68.71,Mkt&Fin,60.99,Placed,275000
+69,F,69.70,Central,47.00,Central,Commerce,72.70,Sci&Tech,No,79,Mkt&HR,59.24,Not Placed,
+70,M,73.00,Central,73.00,Central,Science,66.00,Sci&Tech,Yes,70,Mkt&Fin,68.07,Placed,275000
+71,M,82.00,Others,61.00,Others,Science,62.00,Sci&Tech,No,89,Mkt&Fin,65.45,Placed,360000
+72,M,75.00,Others,70.29,Others,Commerce,71.00,Comm&Mgmt,No,95,Mkt&Fin,66.94,Placed,240000
+73,M,84.86,Others,67.00,Others,Science,78.00,Comm&Mgmt,No,95.5,Mkt&Fin,68.53,Placed,240000
+74,M,64.60,Central,83.83,Others,Commerce,71.72,Comm&Mgmt,No,86,Mkt&Fin,59.75,Placed,218000
+75,M,56.60,Central,64.80,Central,Commerce,70.20,Comm&Mgmt,No,84.27,Mkt&Fin,67.2,Placed,336000
+76,F,59.00,Central,62.00,Others,Commerce,77.50,Comm&Mgmt,No,74,Mkt&HR,67,Not Placed,
+77,F,66.50,Others,70.40,Central,Arts,71.93,Comm&Mgmt,No,61,Mkt&Fin,64.27,Placed,230000
+78,M,64.00,Others,80.00,Others,Science,65.00,Sci&Tech,Yes,69,Mkt&Fin,57.65,Placed,500000
+79,M,84.00,Others,90.90,Others,Science,64.50,Sci&Tech,No,86.04,Mkt&Fin,59.42,Placed,270000
+80,F,69.00,Central,62.00,Central,Science,66.00,Sci&Tech,No,75,Mkt&HR,67.99,Not Placed,
+81,F,69.00,Others,62.00,Others,Commerce,69.00,Comm&Mgmt,Yes,67,Mkt&HR,62.35,Placed,240000
+82,M,81.70,Others,63.00,Others,Science,67.00,Comm&Mgmt,Yes,86,Mkt&Fin,70.2,Placed,300000
+83,M,63.00,Central,67.00,Central,Commerce,74.00,Comm&Mgmt,No,82,Mkt&Fin,60.44,Not Placed,
+84,M,84.00,Others,79.00,Others,Science,68.00,Sci&Tech,Yes,84,Mkt&Fin,66.69,Placed,300000
+85,M,70.00,Central,63.00,Others,Science,70.00,Sci&Tech,Yes,55,Mkt&Fin,62,Placed,300000
+86,F,83.84,Others,89.83,Others,Commerce,77.20,Comm&Mgmt,Yes,78.74,Mkt&Fin,76.18,Placed,400000
+87,M,62.00,Others,63.00,Others,Commerce,64.00,Comm&Mgmt,No,67,Mkt&Fin,57.03,Placed,220000
+88,M,59.60,Central,51.00,Central,Science,60.00,Others,No,75,Mkt&HR,59.08,Not Placed,
+89,F,66.00,Central,62.00,Central,Commerce,73.00,Comm&Mgmt,No,58,Mkt&HR,64.36,Placed,210000
+90,F,84.00,Others,75.00,Others,Science,69.00,Sci&Tech,Yes,62,Mkt&HR,62.36,Placed,210000
+91,F,85.00,Others,90.00,Others,Commerce,82.00,Comm&Mgmt,No,92,Mkt&Fin,68.03,Placed,300000
+92,M,52.00,Central,57.00,Central,Commerce,50.80,Comm&Mgmt,No,67,Mkt&HR,62.79,Not Placed,
+93,F,60.23,Central,69.00,Central,Science,66.00,Comm&Mgmt,No,72,Mkt&Fin,59.47,Placed,230000
+94,M,52.00,Central,62.00,Central,Commerce,54.00,Comm&Mgmt,No,72,Mkt&HR,55.41,Not Placed,
+95,M,58.00,Central,62.00,Central,Commerce,64.00,Comm&Mgmt,No,53.88,Mkt&Fin,54.97,Placed,260000
+96,M,73.00,Central,78.00,Others,Commerce,65.00,Comm&Mgmt,Yes,95.46,Mkt&Fin,62.16,Placed,420000
+97,F,76.00,Central,70.00,Central,Science,76.00,Comm&Mgmt,Yes,66,Mkt&Fin,64.44,Placed,300000
+98,F,70.50,Central,62.50,Others,Commerce,61.00,Comm&Mgmt,No,93.91,Mkt&Fin,69.03,Not Placed,
+99,F,69.00,Central,73.00,Central,Commerce,65.00,Comm&Mgmt,No,70,Mkt&Fin,57.31,Placed,220000
+100,M,54.00,Central,82.00,Others,Commerce,63.00,Sci&Tech,No,50,Mkt&Fin,59.47,Not Placed,
+101,F,45.00,Others,57.00,Others,Commerce,58.00,Comm&Mgmt,Yes,56.39,Mkt&HR,64.95,Not Placed,
+102,M,63.00,Central,72.00,Central,Commerce,68.00,Comm&Mgmt,No,78,Mkt&HR,60.44,Placed,380000
+103,F,77.00,Others,61.00,Others,Commerce,68.00,Comm&Mgmt,Yes,57.5,Mkt&Fin,61.31,Placed,300000
+104,M,73.00,Central,78.00,Central,Science,73.00,Sci&Tech,Yes,85,Mkt&HR,65.83,Placed,240000
+105,M,69.00,Central,63.00,Others,Science,65.00,Comm&Mgmt,Yes,55,Mkt&HR,58.23,Placed,360000
+106,M,59.00,Central,64.00,Others,Science,58.00,Sci&Tech,No,85,Mkt&HR,55.3,Not Placed,
+107,M,61.08,Others,50.00,Others,Science,54.00,Sci&Tech,No,71,Mkt&Fin,65.69,Not Placed,
+108,M,82.00,Others,90.00,Others,Commerce,83.00,Comm&Mgmt,No,80,Mkt&HR,73.52,Placed,200000
+109,M,61.00,Central,82.00,Central,Commerce,69.00,Comm&Mgmt,No,84,Mkt&Fin,58.31,Placed,300000
+110,M,52.00,Central,63.00,Others,Science,65.00,Sci&Tech,Yes,86,Mkt&HR,56.09,Not Placed,
+111,F,69.50,Central,70.00,Central,Science,72.00,Sci&Tech,No,57.2,Mkt&HR,54.8,Placed,250000
+112,M,51.00,Others,54.00,Others,Science,61.00,Sci&Tech,No,60,Mkt&HR,60.64,Not Placed,
+113,M,58.00,Others,61.00,Others,Commerce,61.00,Comm&Mgmt,No,58,Mkt&HR,53.94,Placed,250000
+114,F,73.96,Others,79.00,Others,Commerce,67.00,Comm&Mgmt,No,72.15,Mkt&Fin,63.08,Placed,280000
+115,M,65.00,Central,68.00,Others,Science,69.00,Comm&Mgmt,No,53.7,Mkt&HR,55.01,Placed,250000
+116,F,73.00,Others,63.00,Others,Science,66.00,Comm&Mgmt,No,89,Mkt&Fin,60.5,Placed,216000
+117,M,68.20,Central,72.80,Central,Commerce,66.60,Comm&Mgmt,Yes,96,Mkt&Fin,70.85,Placed,300000
+118,M,77.00,Others,75.00,Others,Science,73.00,Sci&Tech,No,80,Mkt&Fin,67.05,Placed,240000
+119,M,76.00,Central,80.00,Central,Science,78.00,Sci&Tech,Yes,97,Mkt&HR,70.48,Placed,276000
+120,M,60.80,Central,68.40,Central,Commerce,64.60,Comm&Mgmt,Yes,82.66,Mkt&Fin,64.34,Placed,940000
+121,M,58.00,Others,40.00,Others,Science,59.00,Comm&Mgmt,No,73,Mkt&HR,58.81,Not Placed,
+122,F,64.00,Central,67.00,Others,Science,69.60,Sci&Tech,Yes,55.67,Mkt&HR,71.49,Placed,250000
+123,F,66.50,Central,66.80,Central,Arts,69.30,Comm&Mgmt,Yes,80.4,Mkt&Fin,71,Placed,236000
+124,M,74.00,Others,59.00,Others,Commerce,73.00,Comm&Mgmt,Yes,60,Mkt&HR,56.7,Placed,240000
+125,M,67.00,Central,71.00,Central,Science,64.33,Others,Yes,64,Mkt&HR,61.26,Placed,250000
+126,F,84.00,Central,73.00,Central,Commerce,73.00,Comm&Mgmt,No,75,Mkt&Fin,73.33,Placed,350000
+127,F,79.00,Others,61.00,Others,Science,75.50,Sci&Tech,Yes,70,Mkt&Fin,68.2,Placed,210000
+128,F,72.00,Others,60.00,Others,Science,69.00,Comm&Mgmt,No,55.5,Mkt&HR,58.4,Placed,250000
+129,M,80.40,Central,73.40,Central,Science,77.72,Sci&Tech,Yes,81.2,Mkt&HR,76.26,Placed,400000
+130,M,76.70,Central,89.70,Others,Commerce,66.00,Comm&Mgmt,Yes,90,Mkt&Fin,68.55,Placed,250000
+131,M,62.00,Central,65.00,Others,Commerce,60.00,Comm&Mgmt,No,84,Mkt&Fin,64.15,Not Placed,
+132,F,74.90,Others,57.00,Others,Science,62.00,Others,Yes,80,Mkt&Fin,60.78,Placed,360000
+133,M,67.00,Others,68.00,Others,Commerce,64.00,Comm&Mgmt,Yes,74.4,Mkt&HR,53.49,Placed,300000
+134,M,73.00,Central,64.00,Others,Commerce,77.00,Comm&Mgmt,Yes,65,Mkt&HR,60.98,Placed,250000
+135,F,77.44,Central,92.00,Others,Commerce,72.00,Comm&Mgmt,Yes,94,Mkt&Fin,67.13,Placed,250000
+136,F,72.00,Central,56.00,Others,Science,69.00,Comm&Mgmt,No,55.6,Mkt&HR,65.63,Placed,200000
+137,F,47.00,Central,59.00,Central,Arts,64.00,Comm&Mgmt,No,78,Mkt&Fin,61.58,Not Placed,
+138,M,67.00,Others,63.00,Central,Commerce,72.00,Comm&Mgmt,No,56,Mkt&HR,60.41,Placed,225000
+139,F,82.00,Others,64.00,Others,Science,73.00,Sci&Tech,Yes,96,Mkt&Fin,71.77,Placed,250000
+140,M,77.00,Central,70.00,Central,Commerce,59.00,Comm&Mgmt,Yes,58,Mkt&Fin,54.43,Placed,220000
+141,M,65.00,Central,64.80,Others,Commerce,69.50,Comm&Mgmt,Yes,56,Mkt&Fin,56.94,Placed,265000
+142,M,66.00,Central,64.00,Central,Science,60.00,Comm&Mgmt,No,60,Mkt&HR,61.9,Not Placed,
+143,M,85.00,Central,60.00,Others,Science,73.43,Sci&Tech,Yes,60,Mkt&Fin,61.29,Placed,260000
+144,M,77.67,Others,64.89,Others,Commerce,70.67,Comm&Mgmt,No,89,Mkt&Fin,60.39,Placed,300000
+145,M,52.00,Others,50.00,Others,Arts,61.00,Comm&Mgmt,No,60,Mkt&Fin,58.52,Not Placed,
+146,M,89.40,Others,65.66,Others,Science,71.25,Sci&Tech,No,72,Mkt&HR,63.23,Placed,400000
+147,M,62.00,Central,63.00,Others,Science,66.00,Comm&Mgmt,No,85,Mkt&HR,55.14,Placed,233000
+148,M,70.00,Central,74.00,Central,Commerce,65.00,Comm&Mgmt,No,83,Mkt&Fin,62.28,Placed,300000
+149,F,77.00,Central,86.00,Central,Arts,56.00,Others,No,57,Mkt&Fin,64.08,Placed,240000
+150,M,44.00,Central,58.00,Central,Arts,55.00,Comm&Mgmt,Yes,64.25,Mkt&HR,58.54,Not Placed,
+151,M,71.00,Central,58.66,Central,Science,58.00,Sci&Tech,Yes,56,Mkt&Fin,61.3,Placed,690000
+152,M,65.00,Central,65.00,Central,Commerce,75.00,Comm&Mgmt,No,83,Mkt&Fin,58.87,Placed,270000
+153,F,75.40,Others,60.50,Central,Science,84.00,Sci&Tech,No,98,Mkt&Fin,65.25,Placed,240000
+154,M,49.00,Others,59.00,Others,Science,65.00,Sci&Tech,Yes,86,Mkt&Fin,62.48,Placed,340000
+155,M,53.00,Central,63.00,Others,Science,60.00,Comm&Mgmt,Yes,70,Mkt&Fin,53.2,Placed,250000
+156,M,51.57,Others,74.66,Others,Commerce,59.90,Comm&Mgmt,Yes,56.15,Mkt&HR,65.99,Not Placed,
+157,M,84.20,Central,69.40,Central,Science,65.00,Sci&Tech,Yes,80,Mkt&HR,52.72,Placed,255000
+158,M,66.50,Central,62.50,Central,Commerce,60.90,Comm&Mgmt,No,93.4,Mkt&Fin,55.03,Placed,300000
+159,M,67.00,Others,63.00,Others,Science,64.00,Sci&Tech,No,60,Mkt&Fin,61.87,Not Placed,
+160,M,52.00,Central,49.00,Others,Commerce,58.00,Comm&Mgmt,No,62,Mkt&HR,60.59,Not Placed,
+161,M,87.00,Central,74.00,Central,Science,65.00,Sci&Tech,Yes,75,Mkt&HR,72.29,Placed,300000
+162,M,55.60,Others,51.00,Others,Commerce,57.50,Comm&Mgmt,No,57.63,Mkt&HR,62.72,Not Placed,
+163,M,74.20,Central,87.60,Others,Commerce,77.25,Comm&Mgmt,Yes,75.2,Mkt&Fin,66.06,Placed,285000
+164,M,63.00,Others,67.00,Others,Science,64.00,Sci&Tech,No,75,Mkt&Fin,66.46,Placed,500000
+165,F,67.16,Central,72.50,Central,Commerce,63.35,Comm&Mgmt,No,53.04,Mkt&Fin,65.52,Placed,250000
+166,F,63.30,Central,78.33,Others,Commerce,74.00,Comm&Mgmt,No,80,Mkt&Fin,74.56,Not Placed,
+167,M,62.00,Others,62.00,Others,Commerce,60.00,Comm&Mgmt,Yes,63,Mkt&HR,52.38,Placed,240000
+168,M,67.90,Others,62.00,Others,Science,67.00,Sci&Tech,Yes,58.1,Mkt&Fin,75.71,Not Placed,
+169,F,48.00,Central,51.00,Central,Commerce,58.00,Comm&Mgmt,Yes,60,Mkt&HR,58.79,Not Placed,
+170,M,59.96,Others,42.16,Others,Science,61.26,Sci&Tech,No,54.48,Mkt&HR,65.48,Not Placed,
+171,F,63.40,Others,67.20,Others,Commerce,60.00,Comm&Mgmt,No,58.06,Mkt&HR,69.28,Not Placed,
+172,M,80.00,Others,80.00,Others,Commerce,72.00,Comm&Mgmt,Yes,63.79,Mkt&Fin,66.04,Placed,290000
+173,M,73.00,Others,58.00,Others,Commerce,56.00,Comm&Mgmt,No,84,Mkt&HR,52.64,Placed,300000
+174,F,52.00,Others,52.00,Others,Science,55.00,Sci&Tech,No,67,Mkt&HR,59.32,Not Placed,
+175,M,73.24,Others,50.83,Others,Science,64.27,Sci&Tech,Yes,64,Mkt&Fin,66.23,Placed,500000
+176,M,63.00,Others,62.00,Others,Science,65.00,Sci&Tech,No,87.5,Mkt&HR,60.69,Not Placed,
+177,F,59.00,Central,60.00,Others,Commerce,56.00,Comm&Mgmt,No,55,Mkt&HR,57.9,Placed,220000
+178,F,73.00,Central,97.00,Others,Commerce,79.00,Comm&Mgmt,Yes,89,Mkt&Fin,70.81,Placed,650000
+179,M,68.00,Others,56.00,Others,Science,68.00,Sci&Tech,No,73,Mkt&HR,68.07,Placed,350000
+180,F,77.80,Central,64.00,Central,Science,64.20,Sci&Tech,No,75.5,Mkt&HR,72.14,Not Placed,
+181,M,65.00,Central,71.50,Others,Commerce,62.80,Comm&Mgmt,Yes,57,Mkt&Fin,56.6,Placed,265000
+182,M,62.00,Central,60.33,Others,Science,64.21,Sci&Tech,No,63,Mkt&HR,60.02,Not Placed,
+183,M,52.00,Others,65.00,Others,Arts,57.00,Others,Yes,75,Mkt&Fin,59.81,Not Placed,
+184,M,65.00,Central,77.00,Central,Commerce,69.00,Comm&Mgmt,No,60,Mkt&HR,61.82,Placed,276000
+185,F,56.28,Others,62.83,Others,Commerce,59.79,Comm&Mgmt,No,60,Mkt&HR,57.29,Not Placed,
+186,F,88.00,Central,72.00,Central,Science,78.00,Others,No,82,Mkt&HR,71.43,Placed,252000
+187,F,52.00,Central,64.00,Central,Commerce,61.00,Comm&Mgmt,No,55,Mkt&Fin,62.93,Not Placed,
+188,M,78.50,Central,65.50,Central,Science,67.00,Sci&Tech,Yes,95,Mkt&Fin,64.86,Placed,280000
+189,M,61.80,Others,47.00,Others,Commerce,54.38,Comm&Mgmt,No,57,Mkt&Fin,56.13,Not Placed,
+190,F,54.00,Central,77.60,Others,Commerce,69.20,Comm&Mgmt,No,95.65,Mkt&Fin,66.94,Not Placed,
+191,F,64.00,Others,70.20,Central,Commerce,61.00,Comm&Mgmt,No,50,Mkt&Fin,62.5,Not Placed,
+192,M,67.00,Others,61.00,Central,Science,72.00,Comm&Mgmt,No,72,Mkt&Fin,61.01,Placed,264000
+193,M,65.20,Central,61.40,Central,Commerce,64.80,Comm&Mgmt,Yes,93.4,Mkt&Fin,57.34,Placed,270000
+194,F,60.00,Central,63.00,Central,Arts,56.00,Others,Yes,80,Mkt&HR,56.63,Placed,300000
+195,M,52.00,Others,55.00,Others,Commerce,56.30,Comm&Mgmt,No,59,Mkt&Fin,64.74,Not Placed,
+196,M,66.00,Central,76.00,Central,Commerce,72.00,Comm&Mgmt,Yes,84,Mkt&HR,58.95,Placed,275000
+197,M,72.00,Others,63.00,Others,Science,77.50,Sci&Tech,Yes,78,Mkt&Fin,54.48,Placed,250000
+198,F,83.96,Others,53.00,Others,Science,91.00,Sci&Tech,No,59.32,Mkt&HR,69.71,Placed,260000
+199,F,67.00,Central,70.00,Central,Commerce,65.00,Others,No,88,Mkt&HR,71.96,Not Placed,
+200,M,69.00,Others,65.00,Others,Commerce,57.00,Comm&Mgmt,No,73,Mkt&HR,55.8,Placed,265000
+201,M,69.00,Others,60.00,Others,Commerce,65.00,Comm&Mgmt,No,87.55,Mkt&Fin,52.81,Placed,300000
+202,M,54.20,Central,63.00,Others,Science,58.00,Comm&Mgmt,No,79,Mkt&HR,58.44,Not Placed,
+203,M,70.00,Central,63.00,Central,Science,66.00,Sci&Tech,No,61.28,Mkt&HR,60.11,Placed,240000
+204,M,55.68,Others,61.33,Others,Commerce,56.87,Comm&Mgmt,No,66,Mkt&HR,58.3,Placed,260000
+205,F,74.00,Others,73.00,Others,Commerce,73.00,Comm&Mgmt,Yes,80,Mkt&Fin,67.69,Placed,210000
+206,M,61.00,Others,62.00,Others,Commerce,65.00,Comm&Mgmt,No,62,Mkt&Fin,56.81,Placed,250000
+207,M,41.00,Central,42.00,Central,Science,60.00,Comm&Mgmt,No,97,Mkt&Fin,53.39,Not Placed,
+208,M,83.33,Central,78.00,Others,Commerce,61.00,Comm&Mgmt,Yes,88.56,Mkt&Fin,71.55,Placed,300000
+209,F,43.00,Central,60.00,Others,Science,65.00,Comm&Mgmt,No,92.66,Mkt&HR,62.92,Not Placed,
+210,M,62.00,Central,72.00,Central,Commerce,65.00,Comm&Mgmt,No,67,Mkt&Fin,56.49,Placed,216000
+211,M,80.60,Others,82.00,Others,Commerce,77.60,Comm&Mgmt,No,91,Mkt&Fin,74.49,Placed,400000
+212,M,58.00,Others,60.00,Others,Science,72.00,Sci&Tech,No,74,Mkt&Fin,53.62,Placed,275000
+213,M,67.00,Others,67.00,Others,Commerce,73.00,Comm&Mgmt,Yes,59,Mkt&Fin,69.72,Placed,295000
+214,F,74.00,Others,66.00,Others,Commerce,58.00,Comm&Mgmt,No,70,Mkt&HR,60.23,Placed,204000
+215,M,62.00,Central,58.00,Others,Science,53.00,Comm&Mgmt,No,89,Mkt&HR,60.22,Not Placed,

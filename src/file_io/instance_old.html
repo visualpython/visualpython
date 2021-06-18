@@ -1,0 +1,152 @@
+<div class="vp-option-page" id="vp_varPage">
+    <div id="vp_variableBox">
+        <div class="vp-instance-toolbar">
+            <input type="button" id="vp_instanceClear" class="vp-toolbar-button" value="Clear"/>
+            <input type="button" id="vp_instanceBackspace" class="vp-toolbar-button" value="Backspace"/>
+            <input type="button" id="vp_instanceToggleEquality" class="vp-toolbar-button " value="Enable Equality"/>
+        </div>
+        <div class="vp-instance-base">
+            <!-- Left Instance -->
+            <div id="vp_leftInstance" class="vp-instance-box left selected"></div>
+            <!-- Toggle Box -->
+            <div class="vp-instance-toggle-box">
+                <!-- <input type="button" id="vp_instanceToggle" class="vp-instance-toggle-btn" value="T"> -->
+                <button id="vp_instanceToggle" class="vp-instance-toggle-btn">
+                    <i class="fa fa-exchange" style="transform: rotate(90deg);"></i>
+                </button>
+            </div>
+            <!-- Right Instance -->
+            <div id="vp_rightInstance" class="vp-instance-box right"></div>
+        </div>
+        <!-- <span type="button" class="vp-opt-action-btn vp-cbtn-white-orange" id="vp_addBlock">Add Block</span>
+        <span type="button" class="vp-opt-action-btn vp-cbtn-orange-white" id="vp_runBlock">Run Block</span> -->
+        <div class="vp-instance-status">
+            <table class="vp-option-table">
+                <colgroup><col width="60px"><col width="*"></colgroup>
+                <tbody>
+                    <!-- <tr>
+                        <td><span class="vp-multilang vp-select-title">Code</span></td>
+                        <td><span id="vp_instanceCode"></span></td>
+                    </tr> -->
+                    <tr>
+                        <td><span class="vp-multilang vp-select-title">Type</span></td>
+                        <td>
+                            <span id="vp_instanceType"></span>
+                            <input type="hidden" id="vp_instanceCode"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- <span class="vp-multilang vp-select-title">Data Type</span>
+            <span id="vp_instanceType"></span> -->
+        </div>
+        <!-- <hr style="margin: 0px;"/> -->
+        <div class="vp-instance-option-base">
+            <div class="vp-instance-option-box argument">
+                <span class="vp-multilang vp-option-title">Arguments</span>
+                <input type="text" id="vp_insArguments" class="vp-input l" placeholder="key=value"/>
+                <input type="button" id="vp_insArgOk" class="vp-apply-button" value="Apply"/>
+            </div>
+            <div class="vp-instance-option-box object">
+                <span class="vp-multilang vp-option-title">Instance Option</span>
+                <table class="vp-option-table">
+                    <colgroup><col width="20%"><col width="*"></colgroup>
+                    <tr>
+                        <td><label>Columns</label></td>
+                        <td>
+                            <input type="hidden" id="vp_colMeta"/>
+                            <table id="vp_colList">
+                                <tr>
+                                    <td>
+                                        <!-- <select class="vp-select m vp-col-list"></select> -->
+                                        <input type="text" class="vp-input m vp-col-list" placeholder="Column Name"/>
+                                        <!-- <select class="vp-select s vp-oper-list">
+                                            <option value="">none</option>
+                                            <option value="==">==</option>
+                                            <option value="!=">!=</option>
+                                            <option value="in">in</option>
+                                            <option value="not in">not in</option>
+                                            <option value="<"><</option>
+                                            <option value="<="><=</option>
+                                            <option value=">">></option>
+                                            <option value=">=">>=</option>
+                                        </select> -->
+                                        <input type="text" class="vp-input s vp-oper-list" placeholder="Oper"/>
+                                        <input class="vp-input m vp-condition" type="text" placeholder=""/>
+                                        <select class="vp-select s vp-oper-connect">
+                                            <option value="&">and</option>
+                                            <option value="|">or</option>
+                                        </select>
+                                        <div class="vp-icon-btn vp-del-col"></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4"><div id="vp_addCol" class="vp-icon-btn vp-add-col"></i></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <!-- <td><label for="vp_idxList">Indexes</label></td>
+                        <td><select id="vp_idxList"></select></td> -->
+                        <td><label for="vp_returnType">Return type</label></td>
+                        <td>
+                            <select id="vp_returnType" class="vp-select vp-return-type" disabled>
+                                <option value="DataFrame">DataFrame</option>
+                                <option value="Series">Series</option>
+                            </select>
+                            <input type="button" id="vp_insObjOk" class="vp-apply-button" value="Apply"/>
+                    </td>
+                    </tr>
+                    <!-- <tr>
+                        <td colspan="2"><hr style="margin: 0px;"/></td>
+                    </tr>
+                    <tr>
+                        <td><label for="vp_varApiSearch">Method</label></td>
+                        <td>
+                            <input id="vp_varApiSearch" class="vp-input" type="text" placeholder="search api" />
+                            <input id="vp_varApiFuncId" type="hidden"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <div id="vp_varApiList" class="vp-var-api-box">
+                                <ul class="vp-var-api-list">
+                                </ul>
+                            </div>
+                        </td>
+                    </tr> -->
+                    <!-- <tr>
+                        <td colspan="2"><hr style="margin: 0px;"/></td>
+                    </tr>
+                    <tr>
+                        <td><label for="vp_returnVariable">Return to</label></td>
+                        <td><input id="vp_returnVariable" class="vp-input" type="text" placeholder="return variable" /></td>
+                    </tr> -->
+                </table>
+            </div>
+        </div>
+        <!-- <hr style="margin: 0px;"/> -->
+        <div class="vp-instance-select-base">
+            <div class="vp-instance-select-container">
+                <div class="vp-multilang vp-select-title">Attribute</div>
+                <input id="vp_insAttrSearch" class="vp-input vp-instance-search attr" type="text" placeholder="search attribute" />
+                <div id="vp_insAttr" class="vp-instance-select-box">
+                    <ul class="vp-select-list">
+                    </ul>
+                </div>
+            </div>
+            <div class="vp-instance-select-container">
+                <div class="vp-multilang vp-select-title">Method</div>
+                <input id="vp_insMethodSearch" class="vp-input vp-instance-search method" type="text" placeholder="search method" />
+                <div id="vp_insMethod" class="vp-instance-select-box">
+                    <ul class="vp-select-list">
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+
+    </div>
+</div>

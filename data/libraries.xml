@@ -1,0 +1,1717 @@
+<library ver="0.0.1">
+    <item id="com_setting" type="function" level="0" name="Setting" tag="SETTING, 설정">
+        <path>visualpython - common - setting</path>
+        <desc>설정</desc>
+        <file>file_io/settings.js</file>
+    </item>
+    <item id="com_pip" type="function" level="0" name="Package Management" tag="PIP, INSTALL, UPDATE, PYTHON INSTALL PACKAGE">
+        <path>visualpython - common - pip</path>
+        <desc>파이썬 패키지 설치</desc>
+        <file>file_io/pip.js</file>
+    </item>
+    <item id="pkg_common" type="package" level="0" name="Common" tag="공통, COMMON">
+        <path aa="AA">visualpython - common</path>
+        <desc>공용 함수 그룹</desc>
+        <item id="com_import" type="function" level="1" name="Import" tag="IMPORT, PACKAGE">
+            <path>visualpython - common - import</path>
+            <desc>사용 패키지 선언 타이틀 캡션 테스트</desc>
+            <file>file_io/import.js</file>
+        </item>
+        <!-- <item id="com_instance" type="function" level="1" name="Instance" tag="INSTANCE, 인스턴스, 한 줄 코드">
+            <path>visualpython - common - instance</path>
+            <desc>Instance</desc>
+            <file>file_io/instance.js</file>
+        </item> -->
+        <!-- <item id="com_markdown" type="function" level="1" name="Markdown" tag="MARKDOWN">
+            <path>visualpython - common - markdown</path>
+            <desc>마크다운</desc>
+            <file>markdown/markdown.js</file>
+        </item> -->
+        <!-- <item id="com_variables" type="function" level="1" name="Variable List" tag="VARIABLES, 변수">
+            <path>visualpython - common - variables</path>
+            <desc>변수 정보</desc>
+            <file>file_io/variables.js</file>
+        </item>
+        <item id="com_udf" type="function" level="1" name="User Snippets" tag="USER SNIPPETS, 사용자 코드 입력">
+            <path>visualpython - common - udf</path>
+            <desc>사용자 코드 입력</desc>
+            <file>file_io/udf.js</file>
+        </item> -->
+        <!-- <item id="com_sample" type="function" level="1" name="optionSample" tag="SAMPLE">
+            <path>visualpython - common - optionSample</path>
+            <desc>옵션 샘플</desc>
+            <file>container/optionSample.js</file>
+        </item> -->
+        <!-- <item id="com_import2" type="function" level="1" name="IMPORT PACKAGE2" tag="IMPORT, PACKAGE">
+            <path>visualpython - common - import2</path>
+            <desc>사용 패키지 선언 타이틀 캡션 테스트 2</desc>
+            <file>file_io/import_sample2.js</file>
+        </item>
+        <item id="com_test1" type="function" level="1" name="TEST 1" tag="TEST, 시험, 테스트">
+            <path>visualpython - common - test 1</path>
+            <desc>버튼 바인딩 테스트</desc>
+            <file>test/test1.js</file>
+        </item>
+        <item id="com_test2" type="function" level="1" name="TEST 2" tag="TEST, 시험, 테스트">
+            <path>visualpython - common - test 2</path>
+            <desc>버튼 바인딩 테스트</desc>
+        </item>
+        <item id="com_testG1" type="package" level="1" name="TEST grp1" tag="TEST, 시험, 테스트">
+            <path>visualpython - common - test group 1</path>
+            <desc>테스트 그룹</desc>
+            <item id="comTst_test3" type="function" level="2" name="TEST 3" tag="TEST, 시험, 테스트">
+                <path>visualpython - common - test group 1 - test 3</path>
+                <desc>버튼 바인딩 테스트</desc>
+                <file>test/test3.js</file>
+            </item>
+            <item id="comTst_test4" type="function" level="2" name="TEST 4" tag="TEST, 시험, 테스트">
+                <path>visualpython - common - test group 1 - test 4</path>
+                <desc>버튼 바인딩 테스트</desc>
+                <file>test/test4.js</file>
+            </item>
+        </item> -->
+    </item>
+
+    <item id="api_block" type="function" level="0" name="API Block" tag="API, BLOCK">
+        <path aa="AA">visualpython - api block</path>
+        <desc>api block</desc>
+            <file>api_block/index.js</file>
+    </item>
+
+    <item id="pkg_python" type="package" level="0" name="Python" tag="파이썬, PYTHON">
+        <path aa="AA">visualpython - python</path>
+        <desc>python 공통</desc>
+        <item id="python_builtInFunctions" type="package" level="1" name="Built-in functions" tag="파이썬, 내장함수">
+            <path>visualpython - python - built in function</path>
+            <desc>내장함수</desc>
+            <!-- reference : https://docs.python.org/3/library/functions.html -->
+            <!-- <item id="pyBuilt___import__" type="function" level="2" name="__import__" tag="파이썬, 내장함수, PYTHON, __IMPORT__">
+                <path>visualpython - python - built in functions - __import__</path>
+                <desc>__import__</desc>
+                <file>__import__.js</file>
+            </item> -->
+            <item id="pyBuilt_abs" type="function" level="2" name="abs" tag="파이썬, 내장함수, PYTHON, ABS">
+                <path>visualpython - python - built in functions - abs</path>
+                <desc>abs</desc>
+                <file>python_common/abs.js</file>
+            </item>
+            <item id="pyBuilt_all" type="function" level="2" name="all" tag="파이썬, 내장함수, PYTHON, ALL">
+                <path>visualpython - python - built in functions - all</path>
+                <desc>all</desc>
+                <file>python_common/all.js</file>
+            </item>
+            <item id="pyBuilt_any" type="function" level="2" name="any" tag="파이썬, 내장함수, PYTHON, ANY">
+                <path>visualpython - python - built in functions - any</path>
+                <desc>any</desc>
+                <file>python_common/any.js</file>
+            </item>
+            <item id="pyBuilt_ascii" type="function" level="2" name="ascii" tag="파이썬, 내장함수, PYTHON, ASCII">
+                <path>visualpython - python - built in functions - ascii</path>
+                <desc>ascii</desc>
+                <file>python_common/ascii.js</file>
+            </item>
+            <item id="pyBuilt_bin" type="function" level="2" name="bin" tag="파이썬, 내장함수, PYTHON, BIN">
+                <path>visualpython - python - built in functions - bin</path>
+                <desc>bin</desc>
+                <file>python_common/bin.js</file>
+            </item>
+            <item id="pyBuilt_bool" type="function" level="2" name="bool" tag="파이썬, 내장함수, PYTHON, BOOL">
+                <path>visualpython - python - built in functions - bool</path>
+                <desc>bool</desc>
+                <file>python_common/bool.js</file>
+            </item>
+            <item id="pyBuilt_breakpoint" type="function" level="2" name="breakpoint" tag="파이썬, 내장함수, PYTHON, BREAKPOINT">
+                <path>visualpython - python - built in functions - breakpoint</path>
+                <desc>breakpoint</desc>
+                <file>python_common/breakpoint.js</file>
+            </item>
+            <item id="pyBuilt_bytearray" type="function" level="2" name="bytearray" tag="파이썬, 내장함수, PYTHON, BYTEARRAY">
+                <path>visualpython - python - built in functions - bytearray</path>
+                <desc>bytearray</desc>
+                <file>python_common/bytearray.js</file>
+            </item>
+            <item id="pyBuilt_bytes" type="function" level="2" name="bytes" tag="파이썬, 내장함수, PYTHON, BYTES">
+                <path>visualpython - python - built in functions - bytes</path>
+                <desc>bytes</desc>
+                <file>python_common/bytes.js</file>
+            </item>
+            <item id="pyBuilt_callable" type="function" level="2" name="callable" tag="파이썬, 내장함수, PYTHON, CALLABLE">
+                <path>visualpython - python - built in functions - callable</path>
+                <desc>callable</desc>
+                <file>python_common/callable.js</file>
+            </item>
+            <item id="pyBuilt_chr" type="function" level="2" name="chr" tag="파이썬, 내장함수, PYTHON, CHR">
+                <path>visualpython - python - built in functions - chr</path>
+                <desc>chr</desc>
+                <file>python_common/chr.js</file>
+            </item>
+            <item id="pyBuilt_classmethod" type="function" level="2" name="classmethod" tag="파이썬, 내장함수, PYTHON, CLASSMETHOD">
+                <path>visualpython - python - built in functions - classmethod</path>
+                <desc>classmethod</desc>
+                <file>python_common/classmethod.js</file>
+            </item>
+            <!-- <item id="pyBuilt_compile" type="function" level="2" name="compile" tag="파이썬, 내장함수, PYTHON, COMPILE">
+                <path>visualpython - python - built in functions - compile</path>
+                <desc>compile</desc>
+                <file>python_common/compile.js</file>
+            </item> -->
+            <item id="pyBuilt_complex" type="function" level="2" name="complex" tag="파이썬, 내장함수, PYTHON, COMPLEX">
+                <path>visualpython - python - built in functions - complex</path>
+                <desc>complex</desc>
+                <file>python_common/complex.js</file>
+            </item>
+            <item id="pyBuilt_delattr" type="function" level="2" name="delattr" tag="파이썬, 내장함수, PYTHON, DELATTR">
+                <path>visualpython - python - built in functions - delattr</path>
+                <desc>delattr</desc>
+                <file>python_common/delattr.js</file>
+            </item>
+            <item id="pyBuilt_dict" type="function" level="2" name="dict" tag="파이썬, 내장함수, PYTHON, DICT">
+                <path>visualpython - python - built in functions - dict</path>
+                <desc>dict</desc>
+                <file>python_common/dict.js</file>
+            </item>
+            <item id="pyBuilt_dir" type="function" level="2" name="dir" tag="파이썬, 내장함수, PYTHON, DIR">
+                <path>visualpython - python - built in functions - dir</path>
+                <desc>dir</desc>
+                <file>python_common/dir.js</file>
+            </item>
+            <item id="pyBuilt_divmod" type="function" level="2" name="divmod" tag="파이썬, 내장함수, PYTHON, DIVMOD">
+                <path>visualpython - python - built in functions - divmod</path>
+                <desc>divmod</desc>
+                <file>python_common/divmod.js</file>
+            </item>
+            <item id="pyBuilt_enumerate" type="function" level="2" name="enumerate" tag="파이썬, 내장함수, PYTHON, ENUMERATE">
+                <path>visualpython - python - built in functions - enumerate</path>
+                <desc>enumerate</desc>
+                <file>python_common/enumerate.js</file>
+            </item>
+            <item id="pyBuilt_eval" type="function" level="2" name="eval" tag="파이썬, 내장함수, PYTHON, EVAL">
+                <path>visualpython - python - built in functions - eval</path>
+                <desc>eval</desc>
+                <file>python_common/eval.js</file>
+            </item>
+            <item id="pyBuilt_exec" type="function" level="2" name="exec" tag="파이썬, 내장함수, PYTHON, EXEC">
+                <path>visualpython - python - built in functions - exec</path>
+                <desc>exec</desc>
+                <file>python_common/exec.js</file>
+            </item>
+            <item id="pyBuilt_filter" type="function" level="2" name="filter" tag="파이썬, 내장함수, PYTHON, FILTER">
+                <path>visualpython - python - built in functions - filter</path>
+                <desc>filter</desc>
+                <file>python_common/filter.js</file>
+            </item>
+            <item id="pyBuilt_float" type="function" level="2" name="float" tag="파이썬, 내장함수, PYTHON, FLOAT">
+                <path>visualpython - python - built in functions - float</path>
+                <desc>float</desc>
+                <file>python_common/float.js</file>
+            </item>
+            <item id="pyBuilt_format" type="function" level="2" name="format" tag="파이썬, 내장함수, PYTHON, FORMAT">
+                <path>visualpython - python - built in functions - format</path>
+                <desc>format</desc>
+                <file>python_common/format.js</file>
+            </item>
+            <item id="pyBuilt_frozenset" type="function" level="2" name="frozenset" tag="파이썬, 내장함수, PYTHON, FROZENSET">
+                <path>visualpython - python - built in functions - frozenset</path>
+                <desc>frozenset</desc>
+                <file>python_common/frozenset.js</file>
+            </item>
+            <item id="pyBuilt_getattr" type="function" level="2" name="getattr" tag="파이썬, 내장함수, PYTHON, GETATTR">
+                <path>visualpython - python - built in functions - getattr</path>
+                <desc>getattr</desc>
+                <file>python_common/getattr.js</file>
+            </item>
+            <item id="pyBuilt_globals" type="function" level="2" name="globals" tag="파이썬, 내장함수, PYTHON, GLOBALS">
+                <path>visualpython - python - built in functions - globals</path>
+                <desc>globals</desc>
+                <file>python_common/globals.js</file>
+            </item>
+            <item id="pyBuilt_hasattr" type="function" level="2" name="hasattr" tag="파이썬, 내장함수, PYTHON, HASATTR">
+                <path>visualpython - python - built in functions - hasattr</path>
+                <desc>hasattr</desc>
+                <file>python_common/hasattr.js</file>
+            </item>
+            <item id="pyBuilt_hash" type="function" level="2" name="hash" tag="파이썬, 내장함수, PYTHON, HASH">
+                <path>visualpython - python - built in functions - hash</path>
+                <desc>hash</desc>
+                <file>python_common/hash.js</file>
+            </item>
+            <item id="pyBuilt_help" type="function" level="2" name="help" tag="파이썬, 내장함수, PYTHON, HELP">
+                <path>visualpython - python - built in functions - help</path>
+                <desc>help</desc>
+                <file>python_common/help.js</file>
+            </item>
+            <item id="pyBuilt_hex" type="function" level="2" name="hex" tag="파이썬, 내장함수, PYTHON, HEX">
+                <path>visualpython - python - built in functions - hex</path>
+                <desc>hex</desc>
+                <file>python_common/hex.js</file>
+            </item>
+            <item id="pyBuilt_id" type="function" level="2" name="id" tag="파이썬, 내장함수, PYTHON, ID">
+                <path>visualpython - python - built in functions - id</path>
+                <desc>id</desc>
+                <file>python_common/id.js</file>
+            </item>
+            <item id="pyBuilt_input" type="function" level="2" name="input" tag="파이썬, 내장함수, PYTHON, INPUT">
+                <path>visualpython - python - built in functions - input</path>
+                <desc>input</desc>
+                <file>python_common/input.js</file>
+            </item>
+            <item id="pyBuilt_int" type="function" level="2" name="int" tag="파이썬, 내장함수, PYTHON, INT">
+                <path>visualpython - python - built in functions - int</path>
+                <desc>int</desc>
+                <file>python_common/int.js</file>
+            </item>
+            <item id="pyBuilt_isinstance" type="function" level="2" name="isinstance" tag="파이썬, 내장함수, PYTHON, ISINSTANCE">
+                <path>visualpython - python - built in functions - isinstance</path>
+                <desc>isinstance</desc>
+                <file>python_common/isinstance.js</file>
+            </item>
+            <item id="pyBuilt_issubclass" type="function" level="2" name="issubclass" tag="파이썬, 내장함수, PYTHON, ISSUBCLASS">
+                <path>visualpython - python - built in functions - issubclass</path>
+                <desc>issubclass</desc>
+                <file>python_common/issubclass.js</file>
+            </item>
+            <item id="pyBuilt_iter" type="function" level="2" name="iter" tag="파이썬, 내장함수, PYTHON, ITER">
+                <path>visualpython - python - built in functions - iter</path>
+                <desc>iter</desc>
+                <file>python_common/iter.js</file>
+            </item>
+            <item id="pyBuilt_len" type="function" level="2" name="len" tag="파이썬, 내장함수, PYTHON, LEN">
+                <path>visualpython - python - built in functions - len</path>
+                <desc>len</desc>
+                <file>python_common/len.js</file>
+            </item>
+            <item id="pyBuilt_list" type="function" level="2" name="list" tag="파이썬, 내장함수, PYTHON, LIST">
+                <path>visualpython - python - built in functions - list</path>
+                <desc>list</desc>
+                <file>python_common/list.js</file>
+            </item>
+            <item id="pyBuilt_locals" type="function" level="2" name="locals" tag="파이썬, 내장함수, PYTHON, LOCALS">
+                <path>visualpython - python - built in functions - locals</path>
+                <desc>locals</desc>
+                <file>python_common/locals.js</file>
+            </item>
+            <item id="pyBuilt_map" type="function" level="2" name="map" tag="파이썬, 내장함수, PYTHON, MAP">
+                <path>visualpython - python - built in functions - map</path>
+                <desc>map</desc>
+                <file>python_common/map.js</file>
+            </item>
+            <item id="pyBuilt_max" type="function" level="2" name="max" tag="파이썬, 내장함수, PYTHON, MAX">
+                <path>visualpython - python - built in functions - max</path>
+                <desc>max</desc>
+                <file>python_common/max.js</file>
+            </item>
+            <item id="pyBuilt_memoryview" type="function" level="2" name="memoryview" tag="파이썬, 내장함수, PYTHON, MEMORYVIEW">
+                <path>visualpython - python - built in functions - memoryview</path>
+                <desc>memoryview</desc>
+                <file>python_common/memoryview.js</file>
+            </item>
+            <item id="pyBuilt_min" type="function" level="2" name="min" tag="파이썬, 내장함수, PYTHON, MIN">
+                <path>visualpython - python - built in functions - min</path>
+                <desc>min</desc>
+                <file>python_common/min.js</file>
+            </item>
+            <item id="pyBuilt_next" type="function" level="2" name="next" tag="파이썬, 내장함수, PYTHON, NEXT">
+                <path>visualpython - python - built in functions - next</path>
+                <desc>next</desc>
+                <file>python_common/next.js</file>
+            </item>
+            <item id="pyBuilt_object" type="function" level="2" name="object" tag="파이썬, 내장함수, PYTHON, OBJECT">
+                <path>visualpython - python - built in functions - object</path>
+                <desc>object</desc>
+                <file>python_common/object.js</file>
+            </item>
+            <item id="pyBuilt_oct" type="function" level="2" name="oct" tag="파이썬, 내장함수, PYTHON, OCT">
+                <path>visualpython - python - built in functions - oct</path>
+                <desc>oct</desc>
+                <file>python_common/oct.js</file>
+            </item>
+            <item id="pyBuilt_open" type="function" level="2" name="open" tag="파이썬, 내장함수, PYTHON, OPEN">
+                <path>visualpython - python - built in functions - open</path>
+                <desc>open</desc>
+                <file>python_common/open.js</file>
+            </item>
+            <item id="pyBuilt_ord" type="function" level="2" name="ord" tag="파이썬, 내장함수, PYTHON, ORD">
+                <path>visualpython - python - built in functions - ord</path>
+                <desc>ord</desc>
+                <file>python_common/ord.js</file>
+            </item>
+            <item id="pyBuilt_pow" type="function" level="2" name="pow" tag="파이썬, 내장함수, PYTHON, POW">
+                <path>visualpython - python - built in functions - pow</path>
+                <desc>pow</desc>
+                <file>python_common/pow.js</file>
+            </item>
+            <item id="pyBuilt_print" type="function" level="2" name="print" tag="파이썬, 내장함수, PYTHON, PRINT">
+                <path>visualpython - python - built in functions - print</path>
+                <desc>print</desc>
+                <file>python_common/print.js</file>
+            </item>
+            <item id="pyBuilt_property" type="function" level="2" name="property" tag="파이썬, 내장함수, PYTHON, PROPERTY">
+                <path>visualpython - python - built in functions - property</path>
+                <desc>property</desc>
+                <file>python_common/property.js</file>
+            </item>
+            <item id="pyBuilt_range" type="function" level="2" name="range" tag="파이썬, 내장함수, PYTHON, RANGE">
+                <path>visualpython - python - built in functions - range</path>
+                <desc>range</desc>
+                <file>python_common/range.js</file>
+            </item>
+            <item id="pyBuilt_repr" type="function" level="2" name="repr" tag="파이썬, 내장함수, PYTHON, REPR">
+                <path>visualpython - python - built in functions - repr</path>
+                <desc>repr</desc>
+                <file>python_common/repr.js</file>
+            </item>
+            <item id="pyBuilt_reversed" type="function" level="2" name="reversed" tag="파이썬, 내장함수, PYTHON, REVERSED">
+                <path>visualpython - python - built in functions - reversed</path>
+                <desc>reversed</desc>
+                <file>python_common/reversed.js</file>
+            </item>
+            <item id="pyBuilt_round" type="function" level="2" name="round" tag="파이썬, 내장함수, PYTHON, ROUND">
+                <path>visualpython - python - built in functions - round</path>
+                <desc>round</desc>
+                <file>python_common/round.js</file>
+            </item>
+            <item id="pyBuilt_set" type="function" level="2" name="set" tag="파이썬, 내장함수, PYTHON, SET">
+                <path>visualpython - python - built in functions - set</path>
+                <desc>set</desc>
+                <file>python_common/set.js</file>
+            </item>
+            <item id="pyBuilt_setattr" type="function" level="2" name="setattr" tag="파이썬, 내장함수, PYTHON, SETATTR">
+                <path>visualpython - python - built in functions - setattr</path>
+                <desc>setattr</desc>
+                <file>python_common/setattr.js</file>
+            </item>
+            <item id="pyBuilt_slice" type="function" level="2" name="slice" tag="파이썬, 내장함수, PYTHON, SLICE">
+                <path>visualpython - python - built in functions - slice</path>
+                <desc>slice</desc>
+                <file>python_common/slice.js</file>
+            </item>
+            <item id="pyBuilt_sorted" type="function" level="2" name="sorted" tag="파이썬, 내장함수, PYTHON, SORTED">
+                <path>visualpython - python - built in functions - sorted</path>
+                <desc>sorted</desc>
+                <file>python_common/sorted.js</file>
+            </item>
+            <item id="pyBuilt_staticmethod" type="function" level="2" name="staticmethod" tag="파이썬, 내장함수, PYTHON, STATICMETHOD">
+                <path>visualpython - python - built in functions - staticmethod</path>
+                <desc>staticmethod</desc>
+                <file>python_common/staticmethod.js</file>
+            </item>
+            <item id="pyBuilt_str" type="function" level="2" name="str" tag="파이썬, 내장함수, PYTHON, STR">
+                <path>visualpython - python - built in functions - str</path>
+                <desc>str</desc>
+                <file>python_common/str.js</file>
+            </item>
+            <item id="pyBuilt_sum" type="function" level="2" name="sum" tag="파이썬, 내장함수, PYTHON, SUM">
+                <path>visualpython - python - built in functions - sum</path>
+                <desc>sum</desc>
+                <file>python_common/sum.js</file>
+            </item>
+            <item id="pyBuilt_super" type="function" level="2" name="super" tag="파이썬, 내장함수, PYTHON, SUPER">
+                <path>visualpython - python - built in functions - super</path>
+                <desc>super</desc>
+                <file>python_common/super.js</file>
+            </item>
+            <item id="pyBuilt_tuple" type="function" level="2" name="tuple" tag="파이썬, 내장함수, PYTHON, TUPLE">
+                <path>visualpython - python - built in functions - tuple</path>
+                <desc>tuple</desc>
+                <file>python_common/tuple.js</file>
+            </item>
+            <item id="pyBuilt_type" type="function" level="2" name="type" tag="파이썬, 내장함수, PYTHON, TYPE">
+                <path>visualpython - python - built in functions - type</path>
+                <desc>type</desc>
+                <file>python_common/type.js</file>
+            </item>
+            <item id="pyBuilt_vars" type="function" level="2" name="vars" tag="파이썬, 내장함수, PYTHON, VARS">
+                <path>visualpython - python - built in functions - vars</path>
+                <desc>vars</desc>
+                <file>python_common/vars.js</file>
+            </item>
+            <item id="pyBuilt_zip" type="function" level="2" name="zip" tag="파이썬, 내장함수, PYTHON, ZIP">
+                <path>visualpython - python - built in functions - zip</path>
+                <desc>zip</desc>
+                <file>python_common/zip.js</file>
+            </item>
+
+        </item>
+
+        <item id="python_moduleFunctions" type="package" level="1" name="Module functions" tag="파이썬, 외장함수">
+            <path>visualpython - python - module functions</path>
+            <desc>외장함수</desc>
+            <!-- reference : https://docs.python.org/3/py-modindex.html -->
+            <!-- <item id="pyMod_calendar" type="package" level="2" name="calendar" tag="파이썬, 외장함수, PYTHON, CALENDAR">
+                <path>visualpython - python - module functions - calendar</path>
+                <desc>calendar</desc>
+            </item> -->
+            <item id="pyMod_glob" type="package" level="2" name="glob" tag="파이썬, 외장함수, PYTHON, GLOB">
+                <path>visualpython - python - module functions - glob</path>
+                <desc>glob</desc>
+                <!-- <item id="pyModFunc_glob" type="function" level="3" name="glob" tag="파이썬, 외장함수, PYTHON, GLOB, GLOB">
+                    <path>visualpython - python - module functions - glob - glob</path>
+                    <desc>glob</desc>
+                    <file>glob/glob.js</file>
+                </item> -->
+            </item>
+            <item id="pyMod_os" type="package" level="2" name="os" tag="파이썬, 외장함수, PYTHON, OS">
+                <path>visualpython - python - module functions - os</path>
+                <desc>os</desc>
+                <!-- <item id="pyModFunc_chdir" type="function" level="3" name="chdir" tag="파이썬, 외장함수, PYTHON, OS, CHDIR">
+                    <path>visualpython - python - module functions - os - chdir</path>
+                    <desc>chdir</desc>
+                    <file>os/chdir.js</file>
+                </item>
+                <item id="pyModFunc_environ" type="function" level="3" name="environ" tag="파이썬, 외장함수, PYTHON, OS, ENVIRON">
+                    <path>visualpython - python - module functions - os - environ</path>
+                    <desc>environ</desc>
+                    <file>os/environ.js</file>
+                </item>
+                <item id="pyModFunc_getcwd" type="function" level="3" name="getcwd" tag="파이썬, 외장함수, PYTHON, OS, GETCWD">
+                    <path>visualpython - python - module functions - os - getcwd</path>
+                    <desc>getcwd</desc>
+                    <file>os/getcwd.js</file>
+                </item>
+                <item id="pyModFunc_rename" type="function" level="3" name="rename" tag="파이썬, 외장함수, PYTHON, OS, RENAME">
+                    <path>visualpython - python - module functions - os - rename</path>
+                    <desc>rename</desc>
+                    <file>os/rename.js</file>
+                </item>
+                <item id="pyModFunc_unlink" type="function" level="3" name="unlink" tag="파이썬, 외장함수, PYTHON, OS, UNLINK">
+                    <path>visualpython - python - module functions - os - unlink</path>
+                    <desc>unlink</desc>
+                    <file>os/unlink.js</file>
+                </item> -->
+            </item>
+            <item id="pyMod_pickle" type="package" level="2" name="pickle" tag="파이썬, 외장함수, PYTHON, PICKLE">
+                <path>visualpython - python - module functions - pickle</path>
+                <desc>pickle</desc>
+                <!-- <item id="pyModFunc_dump" type="function" level="3" name="dump" tag="파이썬, 외장함수, PYTHON, PICKLE, DUMP">
+                    <path>visualpython - python - module functions - pickle - dump</path>
+                    <desc>dump</desc>
+                    <file>pickle/dump.js</file>
+                </item>
+                <item id="pyModFunc_load" type="function" level="3" name="load" tag="파이썬, 외장함수, PYTHON, PICKLE, LOAD">
+                    <path>visualpython - python - module functions - pickle - load</path>
+                    <desc>load</desc>
+                    <file>pickle/load.js</file>
+                </item> -->
+            </item>
+            <item id="pyMod_random" type="package" level="2" name="random" tag="파이썬, 외장함수, PYTHON, RANDOM">
+                <path>visualpython - python - module functions - random</path>
+                <desc>random</desc>
+                <!-- <item id="pyModFunc_choice" type="function" level="3" name="choice" tag="파이썬, 외장함수, PYTHON, RANDOM, CHOICE">
+                    <path>visualpython - python - module functions - random - choice</path>
+                    <desc>choice</desc>
+                    <file>random/choice.js</file>
+                </item>
+                <item id="pyModFunc_randint" type="function" level="3" name="randint" tag="파이썬, 외장함수, PYTHON, RANDOM, RANDINT">
+                    <path>visualpython - python - module functions - random - randint</path>
+                    <desc>randint</desc>
+                    <file>random/randint.js</file>
+                </item>
+                <item id="pyModFunc_random" type="function" level="3" name="random" tag="파이썬, 외장함수, PYTHON, RANDOM, RANDOM">
+                    <path>visualpython - python - module functions - random - random</path>
+                    <desc>random</desc>
+                    <file>random/random.js</file>
+                </item>
+                <item id="pyModFunc_shuffle" type="function" level="3" name="shuffle" tag="파이썬, 외장함수, PYTHON, RANDOM, SHUFFLE">
+                    <path>visualpython - python - module functions - random - shuffle</path>
+                    <desc>shuffle</desc>
+                    <file>random/shuffle.js</file>
+                </item> -->
+            </item>
+            <item id="pyMod_shutil" type="package" level="2" name="shutil" tag="파이썬, 외장함수, PYTHON, SHUTIL">
+                <path>visualpython - python - module functions - shutil</path>
+                <desc>shutil</desc>
+                <!-- <item id="pyModFunc_copy" type="function" level="3" name="copy" tag="파이썬, 외장함수, PYTHON, SHUTIL, COPY">
+                    <path>visualpython - python - module functions - shutil - copy</path>
+                    <desc>copy</desc>
+                    <file>shutil/copy.js</file>
+                </item> -->
+            </item>
+            <item id="pyMod_sys" type="package" level="2" name="sys" tag="파이썬, 외장함수, PYTHON, SYS">
+                <path>visualpython - python - module functions - sys</path>
+                <desc>sys</desc>
+                <!-- <item id="pyModFunc_argv" type="function" level="3" name="argv" tag="파이썬, 외장함수, PYTHON, SYS, ARGV">
+                    <path>visualpython - python - module functions - sys - argv</path>
+                    <desc>argv</desc>
+                    <file>sys/argv.js</file>
+                </item>
+                <item id="pyModFunc_exit" type="function" level="3" name="exit" tag="파이썬, 외장함수, PYTHON, SYS, EXIT">
+                    <path>visualpython - python - module functions - sys - exit</path>
+                    <desc>exit</desc>
+                    <file>sys/exit.js</file>
+                </item>
+                <item id="pyModFunc_path" type="function" level="3" name="path" tag="파이썬, 외장함수, PYTHON, SYS, PATH">
+                    <path>visualpython - python - module functions - sys - path</path>
+                    <desc>path</desc>
+                    <file>sys/path.js</file>
+                </item> -->
+            </item>
+            <item id="pyMod_tempfile" type="package" level="2" name="tempfile" tag="파이썬, 외장함수, PYTHON, TEMPFILE">
+                <path>visualpython - python - module functions - tempfile</path>
+                <desc>tempfile</desc>
+                <!-- <item id="pyModFunc_mktemp" type="function" level="3" name="mktemp" tag="파이썬, 외장함수, PYTHON, TEMPFILE, MKTEMP">
+                    <path>visualpython - python - module functions - tempfile - mktemp</path>
+                    <desc>mktemp</desc>
+                    <file>tempfile/mktemp.js</file>
+                </item>
+                <item id="pyModFunc_TemporaryFile" type="function" level="3" name="TemporaryFile" tag="파이썬, 외장함수, PYTHON, TEMPFILE, TEMPORARYFILE">
+                    <path>visualpython - python - module functions - tempfile - TemporaryFile</path>
+                    <desc>TemporaryFile</desc>
+                    <file>tempfile/TemporaryFile.js</file>
+                </item> -->
+            </item>
+            <item id="pyMod_threading" type="package" level="2" name="threading" tag="파이썬, 외장함수, PYTHON, THREADING">
+                <path>visualpython - python - module functions - threading</path>
+                <desc>threading</desc>
+                <!-- <item id="pyModFunc_Thread" type="function" level="3" name="Thread" tag="파이썬, 외장함수, PYTHON, THREADING, THREAD">
+                    <path>visualpython - python - module functions - threading - Thread</path>
+                    <desc>Thread</desc>
+                    <file>threading/Thread.js</file>
+                </item> -->
+            </item>
+            <item id="pyMod_time" type="package" level="2" name="time" tag="파이썬, 외장함수, PYTHON, TIME">
+                <path>visualpython - python - module functions - time</path>
+                <desc>time</desc>
+                <!-- <item id="pyModFunc_asctime" type="function" level="3" name="asctime" tag="파이썬, 외장함수, PYTHON, TIME, ASCTIME">
+                    <path>visualpython - python - module functions - time - asctime</path>
+                    <desc>asctime</desc>
+                    <file>time/asctime.js</file>
+                </item>
+                <item id="pyModFunc_ctime" type="function" level="3" name="ctime" tag="파이썬, 외장함수, PYTHON, TIME, CTIME">
+                    <path>visualpython - python - module functions - time - ctime</path>
+                    <desc>ctime</desc>
+                    <file>time/ctime.js</file>
+                </item>
+                <item id="pyModFunc_localtime" type="function" level="3" name="localtime" tag="파이썬, 외장함수, PYTHON, TIME, LOCALTIME">
+                    <path>visualpython - python - module functions - time - localtime</path>
+                    <desc>localtime</desc>
+                    <file>time/localtime.js</file>
+                </item>
+                <item id="pyModFunc_sleep" type="function" level="3" name="sleep" tag="파이썬, 외장함수, PYTHON, TIME, SLEEP">
+                    <path>visualpython - python - module functions - time - sleep</path>
+                    <desc>sleep</desc>
+                    <file>time/sleep.js</file>
+                </item>
+                <item id="pyModFunc_strftime" type="function" level="3" name="strftime" tag="파이썬, 외장함수, PYTHON, TIME, STRFTIME">
+                    <path>visualpython - python - module functions - time - strftime</path>
+                    <desc>strftime</desc>
+                    <file>time/strftime.js</file>
+                </item>
+                <item id="pyModFunc_time" type="function" level="3" name="time" tag="파이썬, 외장함수, PYTHON, TIME, TIME">
+                    <path>visualpython - python - module functions - time - time</path>
+                    <desc>time</desc>
+                    <file>time/time.js</file>
+                </item> -->
+            </item>
+        </item>
+
+        <item id="python_userDefFunctions" type="package" level="1" name="User defined functions" tag="파이썬, 사용자 정의 함수">
+            <path>visualpython - python - user defined functions</path>
+            <desc>사용자 정의 함수</desc>
+            <!-- TODO: 사용자 정의 함수 구성 -->
+        </item>
+
+    </item>
+
+    <item id="pkg_numpy" type="package" level="0" name="Numpy" tag="넘파이, NUMPY">
+        <path aa="AA">visualpython - numpy</path>
+        <desc>Numpy 패키지 라이브러리</desc>
+
+        <!-- <item id="np_importNumpy" type="function" level="1" name="import" tag="넘파이, IMPORT NUMPY">
+            <path>visualpython - numpy - import numpy</path>
+            <desc>Import Numpy</desc>
+            <file>numpy/pageList/numpyImport/numpyImport.js</file>
+        </item> -->
+
+        <item id="pkg_arrayCreation" type="package" level="1" name="Array creation" tag="넘파이, NUMPY, FUNCTION">
+            <path aa="AA">visualpython - numpy - array creation</path>
+            <desc>Array creation</desc>
+
+            <item id="np_array" type="function" level="2" name="array" tag="넘파이, NP, ARRAY, NP.ARRAY, NUMPY">
+                <path>visualpython - numpy - np.array</path>
+                <desc>np.array</desc>
+                <file>numpy/pageList/functionList/array/index.js</file>
+            </item>
+
+            <item id="np_zeros" type="function" level="2" name="zeros" tag="넘파이, NP, ZEROS, NP.ZEROS, NUMPY">
+                <path>visualpython - numpy - np.zeros</path>
+                <desc>np.zeros</desc>
+                <file>numpy/pageList/functionList/zeros/index.js</file>
+            </item>
+            <item id="np_ones" type="function" level="2" name="ones" tag="넘파이, NP, ONES, NP.ONES, NUMPY">
+                <path>visualpython - numpy - np.ones</path>
+                <desc>np.ones</desc>
+                <file>numpy/pageList/functionList/ones/index.js</file>
+            </item>
+            <item id="np_empty" type="function" level="2" name="empty" tag="넘파이, NP, EMPTY, NP.EMPTY, NUMPY">
+                <path>visualpython - numpy - np.empty</path>
+                <desc>np.empty</desc>
+                <file>numpy/pageList/functionList/empty/index.js</file>
+            </item>
+            <!-- <item id="np_eye" type="function" level="2" name="eye" tag="넘파이, NP, EYE, NP.EYE, NUMPY">
+                <path>visualpython - numpy - np.eye</path>
+                <desc>np.eye</desc>
+                <file>numpy/pageList/functionList/eye/index.js</file>
+            </item> -->
+            <!-- <item id="np_identity" type="function" level="2" name="identity" tag="넘파이, NP, IDENTITY, NP.IDENTITY, NUMPY">
+                <path>visualpython - numpy - np.identity</path>
+                <desc>np.identity</desc>
+                <file>numpy/pageList/functionList/identity/index.js</file>
+            </item>
+            <item id="np_full" type="function" level="2" name="full" tag="넘파이, NP, FULL, NP.FULL, NUMPY">
+                <path>visualpython - numpy - np.full</path>
+                <desc>np.full</desc>
+                <file>numpy/pageList/functionList/full/index.js</file>
+            </item> -->
+            <item id="np_copy" type="function" level="2" name="copy" tag="넘파이, NP, COPY, NP.COPY, NUMPY">
+                <path>visualpython - numpy - np.copy</path>
+                <desc>np.copy</desc>
+                <file>numpy/pageList/functionList/copy/index.js</file>
+            </item>
+        </item>
+
+        <item id="pkg_numericalRanges" type="package" level="1" name="Numerical ranges" tag="넘파이, NUMPY, FUNCTION">
+            <path aa="AA">visualpython - numpy - numerical ranges</path>
+            <desc>Numerical ranges</desc>
+
+            <item id="np_arange" type="function" level="2" name="arange" tag="넘파이, NP, ARANGE, NP.ARANGE, NUMPY">
+                <path>visualpython - numpy - np.arange</path>
+                <desc>np.arange</desc>
+                <file>numpy/pageList/functionList/arange/index.js</file>
+            </item>
+
+            <!-- <item id="np_linspace" type="function" level="2" name="linspace" tag="넘파이, NP, LINSPACE, NP.LINSPACE, NUMPY">
+                <path>visualpython - numpy - np.linspace</path>
+                <desc>np.linspace</desc>
+                <file>numpy/pageList/functionList/linspace/index.js</file>
+            </item> -->
+        </item>
+
+        <item id="pkg_joiningArrays" type="package" level="1" name="Joining arrays" tag="넘파이, NUMPY, FUNCTION">
+            <path aa="AA">visualpython - numpy - joining arrays</path>
+            <desc>Joining arrays</desc>
+
+            <item id="np_concatenate" type="function" level="2" name="concatenate" tag="넘파이, NP, CONCATENATE, NP.CONCATENATE, NUMPY">
+                <path>visualpython - numpy - np.concatenate</path>
+                <desc>np.concatenate</desc>
+                <file>numpy/pageList/functionList/concatenate/index.js</file>
+            </item>
+
+            <item id="np_stack" type="function" level="2" name="stack" tag="넘파이, NP, STACK, NP.STACK, NUMPY">
+                <path>visualpython - numpy - np.stack</path>
+                <desc>np.stack</desc>
+                <file>numpy/pageList/functionList/stack/index.js</file>
+            </item>
+            <item id="np_dstack" type="function" level="2" name="dstack" tag="넘파이, NP, DSTACK, NP.DSTACK, NUMPY">
+                <path>visualpython - numpy - np.dstack</path>
+                <desc>np.dstack</desc>
+                <file>numpy/pageList/functionList/dstack/index.js</file>
+            </item>
+            <item id="np_hstack" type="function" level="2" name="hstack" tag="넘파이, NP, HSTACK, NP.HSTACK, NUMPY">
+                <path>visualpython - numpy - np.hstack</path>
+                <desc>np.hstack</desc>
+                <file>numpy/pageList/functionList/hstack/index.js</file>
+            </item>
+
+            <item id="np_vstack" type="function" level="2" name="vstack" tag="넘파이, NP, VSTACK, NP.VSTACK, NUMPY">
+                <path>visualpython - numpy - np.vstack</path>
+                <desc>np.vstack</desc>
+                <file>numpy/pageList/functionList/vstack/index.js</file>
+            </item>
+        </item>
+
+        <item id="pkg_splittingArrays" type="package" level="1" name="Splitting arrays" tag="넘파이, NUMPY, FUNCTION">
+            <path aa="AA">visualpython - numpy - splitting arrays</path>
+            <desc>Splitting arrays</desc>
+
+            <item id="np_split" type="function" level="2" name="split" tag="넘파이, NP, SPLIT, NP.SPLIT, NUMPY">
+                <path>visualpython - numpy - np.split</path>
+                <desc>np.split</desc>
+                <file>numpy/pageList/functionList/split/index.js</file>
+            </item>
+
+            <item id="np_dsplit" type="function" level="2" name="dsplit" tag="넘파이, NP, DSPLIT, NP.DSPLIT, NUMPY">
+                <path>visualpython - numpy - np.dsplit</path>
+                <desc>np.dsplit</desc>
+                <file>numpy/pageList/functionList/dsplit/index.js</file>
+            </item>
+            <item id="np_hsplit" type="function" level="2" name="hsplit" tag="넘파이, NP, HSPLIT, NP.HSPLIT, NUMPY">
+                <path>visualpython - numpy - np.hsplit</path>
+                <desc>np.hsplit</desc>
+                <file>numpy/pageList/functionList/hsplit/index.js</file>
+            </item>
+            <item id="np_vsplit" type="function" level="2" name="vsplit" tag="넘파이, NP, VSPLIT, NP.VSPLIT, NUMPY">
+                <path>visualpython - numpy - np.vsplit</path>
+                <desc>np.vsplit</desc>
+                <file>numpy/pageList/functionList/vsplit/index.js</file>
+            </item>
+
+        </item>
+
+        <item id="pkg_shapeManipulation" type="package" level="1" name="Shape manipulation" tag="넘파이, NUMPY, FUNCTION">
+            <path aa="AA">visualpython - numpy - shape manipulation</path>
+            <desc>Shape manipulation</desc>
+
+            <item id="np_reshape" type="function" level="2" name="reshape" tag="넘파이, NP, RESHAPE, NP.RESHAPE, NUMPY">
+                <path>visualpython - numpy - np.reshape</path>
+                <desc>np.reshape</desc>
+                <file>numpy/pageList/functionList/reshape/index.js</file>
+            </item>
+
+            <item id="np_transpose" type="function" level="2" name="transpose" tag="넘파이, NP, TRANSPOSE, NP.TRANSPOSE, NUMPY">
+                <path>visualpython - numpy - np.transpose</path>
+                <desc>np.transpose</desc>
+                <file>numpy/pageList/functionList/transpose/index.js</file>
+            </item> 
+
+            <item id="np_t" type="function" level="2" name="T" tag="넘파이, NP, T, NP.T, NUMPY">
+                <path>visualpython - numpy - np.T</path>
+                <desc>np.T</desc>
+                <file>numpy/pageList/functionList/T/index.js</file>
+            </item>
+<!-- 
+            <item id="np_swapaxes" type="function" level="2" name="swapaxes" tag="넘파이, NP, SWAPAXES, NP.SWAPAXES, NUMPY">
+                <path>visualpython - numpy - np.swapaxes</path>
+                <desc>np.swapaxes</desc>
+                <file>numpy/pageList/functionList/swapaxes/index.js</file>
+            </item> -->
+
+            <item id="np_flatten" type="function" level="2" name="flatten" tag="넘파이, NP, FLATTEN, NP.FLATTEN, NUMPY">
+                <path>visualpython - numpy - np.flatten</path>
+                <desc>np.flatten</desc>
+                <file>numpy/pageList/functionList/flatten/index.js</file>
+            </item>
+            <!-- <item id="np_flip" type="function" level="2" name="flip" tag="넘파이, NP, FLIP, NP.FLIP, NUMPY">
+                <path>visualpython - numpy - np.flip</path>
+                <desc>np.flip</desc>
+                <file>numpy/pageList/functionList/flip/index.js</file>
+            </item> -->
+            <!-- <item id="np_ravel" type="function" level="2" name="ravel" tag="넘파이, NP, RAVEL, NP.RAVEL, NUMPY">
+                <path>visualpython - numpy - np.ravel</path>
+                <desc>np.ravel</desc>
+                <file>numpy/pageList/functionList/ravel/index.js</file>
+            </item> -->
+        </item>
+        <!-- Numpy statistics -->
+        <item id="pkg_numpyStatistics" type="package" level="1" name="Statistics" tag="넘파이, NUMPY, STATISTICS">
+            <path aa="AA">visualpython - numpy - statistics</path>
+            <desc>Numpy statistics</desc>
+
+            <item id="np_평균" type="function" level="2" name="mean" tag="넘파이, 평균, NP, MEAN, NP.MEAN, NUMPY">
+                <path>visualpython - numpy - statistics - np.mean</path>
+                <desc>np.mean</desc>
+                <file>numpy/pageList/statisticsList/mean/index.js</file>
+            </item>
+            <item id="np_분산" type="function" level="2" name="var" tag="넘파이, 분산, NP, VAR, NP.VAR, NUMPY">
+                <path>visualpython - numpy - statistics - np.var</path>
+                <desc>np.var</desc>
+                <file>numpy/pageList/statisticsList/var/index.js</file>
+            </item>
+            <item id="np_표준편차" type="function" level="2" name="std" tag="넘파이, 표준편차, NP, STD, NP.STD, NUMPY">
+                <path>visualpython - numpy - statistics - np.std </path>
+                <desc>np.std</desc>
+                <file>numpy/pageList/statisticsList/std/index.js</file>
+            </item>
+
+            <item id="np_최대값" type="function" level="2" name="max" tag="넘파이, 최대값, NP, MAX, NP.MAX, NUMPY">
+                <path>visualpython - numpy - statistics - np.max</path>
+                <desc>np.max</desc>
+                <file>numpy/pageList/statisticsList/max/index.js</file>
+            </item>
+            <item id="np_최소값" type="function" level="2" name="min" tag="넘파이, 최소값, NP, MIN, NP.MIN, NUMPY">
+                <path>visualpython - numpy - statistics - np.min</path>
+                <desc>np.min</desc>
+                <file>numpy/pageList/statisticsList/min/index.js</file>
+            </item>
+            <item id="np_중앙값" type="function" level="2" name="median" tag="넘파이, 중앙값, NP, MEDIAN, NP.MEDIAN, NUMPY">
+                <path>visualpython - numpy - statistics - np.median</path>
+                <desc>np.median</desc>
+                <file>numpy/pageList/statisticsList/median/index.js</file>
+            </item>
+
+            <item id="np_사분위수" type="function" level="2" name="percentile" tag="넘파이, 사분위수, NP, PERCENTILE, NP.PERCENTILE, NUMPY">
+                <path>visualpython - numpy - statistics - np.percentile</path>
+                <desc>np.percentile</desc>
+                <file>numpy/pageList/statisticsList/percentile/index.js</file>
+            </item>
+        </item>
+
+        <item id="pkg_numpyUniversalLinearAlgebra" type="package" level="2" name="Linear algebra" tag="넘파이, 선형대수, NUMPY, UNIVERSAL, INEAR, ALGEBRA, LINEAR ALGEBRA">
+            <path aa="AA">visualpython - numpy - universal functions - linear algebra</path>
+            <desc>Linear algebra</desc>
+
+            <item id="np_linalg_inv" type="function" level="3" name="linalg.inv" tag="넘파이, NP, LINALG INV, NP.LINALG.INV, NUMPY">
+                <path>visualpython - numpy - np.linalg.inv</path>
+                <desc>np.linalg.inv</desc>
+                <file>numpy/pageList/functionList/linalgInv/index.js</file>
+            </item>
+
+            <item id="np_linalg_det" type="function" level="3" name="linalg.det" tag="넘파이, NP, LINALG, NP.LINALG.DET, NUMPY">
+                <path>visualpython - numpy - universal functions - np.linalg.det</path>
+                <desc>np.linalg.det</desc>
+                <file>numpy/pageList/universalFunctionList/linearAlgebra/linalgDet/index.js</file>
+            </item>
+
+            <item id="np_linalg_eig" type="function" level="3" name="linalg.eig" tag="넘파이, NP, LINALG, NP.LINALG.EIG, NUMPY">
+                <path>visualpython - numpy - universal functions - np.linalg.eig</path>
+                <desc>np.linalg.eig</desc>
+                <file>numpy/pageList/universalFunctionList/linearAlgebra/linalgEig/index.js</file>
+            </item>
+
+            <item id="np_linalg_svd" type="function" level="3" name="linalg.svd" tag="넘파이, NP, LINALG, NP.LINALG.SVD, NUMPY">
+                <path>visualpython - numpy - universal functions - np.linalg.svd</path>
+                <desc>np.linalg.svd</desc>
+                <file>numpy/pageList/universalFunctionList/linearAlgebra/linalgSvd/index.js</file>
+            </item>
+  
+            <!-- <item id="np_linalg_solve" type="function" level="3" name="linalg.solve" tag="넘파이, NP, LINALG, NP.LINALG.SOLVE, NUMPY">
+                <path>visualpython - numpy - universal functions - np.linalg.solve</path>
+                <desc>np.linalg.solve</desc>
+                <file>numpy/pageList/universalFunctionList/linearAlgebra/linalgSolve/index.js</file>
+            </item> -->
+
+            <item id="np_trace" type="function" level="3" name="trace" tag="넘파이, NP, TRACE, NP.TRACE, NUMPY">
+                <path>visualpython - numpy - universal functions - np.trace</path>
+                <desc>np.trace</desc>
+                <file>numpy/pageList/universalFunctionList/linearAlgebra/Trace/index.js</file>
+            </item>
+
+            <!-- <item id="np_diag" type="function" level="2" name="diag" tag="넘파이, NP, DIAG, NP.DIAG, NUMPY">
+                <path>visualpython - numpy - np.diag</path>
+                <desc>np.diag</desc>
+                <file>numpy/pageList/functionList/diag/index.js</file>
+            </item> -->
+
+            <item id="np_dot" type="function" level="2" name="dot" tag="넘파이, NP, DOT, NP.DOT, NUMPY">
+                <path>visualpython - numpy - np.dot</path>
+                <desc>np.dot</desc>
+                <file>numpy/pageList/functionList/dot/index.js</file>
+            </item>
+        </item>
+
+            <item id="pkg_numpyUniversalBinaryArithmetic" type="package" level="2" name="Math operation" tag="넘파이, 다항 수학 연산, NUMPY, UNIVERSAL, BINARY, ARITHMETIC">
+                <path aa="AA">visualpython - numpy - universal functions - math operation</path>
+                <desc>Numpy Math Operation</desc>
+
+                <item id="np_add" type="function" level="3" name="add" tag="넘파이, 더하기, NP, ADD, NP.ADD, NUMPY">
+                    <path>visualpython - numpy - universal functions - np.add</path>
+                    <desc>np.add</desc>
+                    <file>numpy/pageList/universalFunctionList/binary/arithmetic/add/index.js</file>
+                </item>
+                <item id="np_divide" type="function" level="3" name="divide" tag="넘파이, 나누기, NP, DIVIDE, NP.DIVIDE, NUMPY">
+                    <path>visualpython - numpy - universal functions - np.divide</path>
+                    <desc>np.divide</desc>
+                    <file>numpy/pageList/universalFunctionList/binary/arithmetic/divide/index.js</file>
+                </item>
+                <item id="np_floor_divide" type="function" level="3" name="floor_divide" tag="넘파이, 나누기, NP, DIVIDE, NP.DIVIDE, NUMPY">
+                    <path>visualpython - numpy - universal functions - np.floor_divide</path>
+                    <desc>np.floor_divide</desc>
+                    <file>numpy/pageList/universalFunctionList/binary/arithmetic/floor_divide/index.js</file>
+                </item>
+                <item id="np_fmax" type="function" level="3" name="fmax" tag="넘파이, NP, FMAX, NP.FMAX, NUMPY">
+                    <path>visualpython - numpy - universal functions - np.fmax</path>
+                    <desc>np.fmax</desc>
+                    <file>numpy/pageList/universalFunctionList/binary/arithmetic/fmax/index.js</file>
+                </item>   
+                <item id="np_fmin" type="function" level="3" name="fmin" tag="넘파이, NP, FMIN, NP.FMIN, NUMPY">
+                    <path>visualpython - numpy - universal functions - np.fmin</path>
+                    <desc>np.fmin</desc>
+                    <file>numpy/pageList/universalFunctionList/binary/arithmetic/fmin/index.js</file>
+                </item>   
+                <item id="np_maximum" type="function" level="3" name="maximum" tag="넘파이, NP, MAXIMUM, NP.MAXIMUM, NUMPY">
+                    <path>visualpython - numpy - universal functions - np.maximum</path>
+                    <desc>np.maximum</desc>
+                    <file>numpy/pageList/universalFunctionList/binary/arithmetic/maximum/index.js</file>
+                </item>   
+                <item id="np_minimum" type="function" level="3" name="minimum" tag="넘파이, NP, MINIMUM, NP.MINIMUM, NUMPY">
+                    <path>visualpython - numpy - universal functions - np.minimum</path>
+                    <desc>np.minimum</desc>
+                    <file>numpy/pageList/universalFunctionList/binary/arithmetic/minimum/index.js</file>
+                </item>  
+                <item id="np_mod" type="function" level="3" name="mod" tag="넘파이, NP, MOD, NP.MOD, NUMPY">
+                    <path>visualpython - numpy - universal functions - np.mod</path>
+                    <desc>np.mod</desc>
+                    <file>numpy/pageList/universalFunctionList/binary/arithmetic/mod/index.js</file>
+                </item>   
+                <item id="np_sum" type="function" level="2" name="sum" tag="넘파이, NP, SUM, NP.SUM, NUMPY">
+                    <path>visualpython - numpy - np.sum</path>
+                    <desc>np.sum</desc>
+                    <file>numpy/pageList/functionList/sum/index.js</file>
+                </item>
+                <item id="np_multiply" type="function" level="3" name="multiply" tag="넘파이, NP, MULTIPLY, NP.MULTIPLY, NUMPY">
+                    <path>visualpython - numpy - universal functions - np.multiply</path>
+                    <desc>np.multiply</desc>
+                    <file>numpy/pageList/universalFunctionList/binary/arithmetic/multiply/index.js</file>
+                </item>   
+                <item id="np_prod" type="function" level="2" name="prod" tag="넘파이, NP, PROD, NP.PROD, NUMPY">
+                    <path>visualpython - numpy - np.prod</path>
+                    <desc>np.prod</desc>
+                    <file>numpy/pageList/functionList/prod/index.js</file>
+                </item>
+                <!-- <item id="np_diff" type="function" level="2" name="diff" tag="넘파이, NP, DIFF, NP.DIFF, NUMPY">
+                    <path>visualpython - numpy - np.diff</path>
+                    <desc>np.diff</desc>
+                    <file>numpy/pageList/functionList/diff/index.js</file>
+                </item> -->
+                <item id="np_power" type="function" level="3" name="power" tag="넘파이, NP, POWER, NP.POWER, NUMPY">
+                    <path>visualpython - numpy - universal functions - np.power</path>
+                    <desc>np.power</desc>
+                    <file>numpy/pageList/universalFunctionList/binary/arithmetic/power/index.js</file>
+                </item>   
+                <item id="np_subtract" type="function" level="3" name="subtract" tag="넘파이, NP, SUBTRACT, NP.SUBTRACT, NUMPY">
+                    <path>visualpython - numpy - universal functions - np.subtract</path>
+                    <desc>np.subtract</desc>
+                    <file>numpy/pageList/universalFunctionList/binary/arithmetic/subtract/index.js</file>
+                </item>  
+
+                <!-- / -->
+                   <item id="np_abs" type="function" level="3" name="abs" tag="넘파이, 절대값, NP, ABS, NP.ABS, NUMPY">
+                    <path>visualpython - numpy - universal functions - np.abs</path>
+                    <desc>np.abs</desc>
+                    <file>numpy/pageList/universalFunctionList/unary/arithmetic/abs/index.js</file>
+                </item>
+
+                <item id="np_ceil" type="function" level="3" name="ceil" tag="넘파이, 올림, NP, CEIL, NP.CEIL, NUMPY">
+                    <path>visualpython - numpy - universal functions - np.ceil</path>
+                    <desc>np.ceil</desc>
+                    <file>numpy/pageList/universalFunctionList/unary/arithmetic/ceil/index.js</file>
+                </item>
+
+                <item id="np_exp" type="function" level="3" name="exp" tag="넘파이, 지수함수, NP, EXP, NP.EXP, NUMPY">
+                    <path>visualpython - numpy - universal functions - np.exp</path>
+                    <desc>np.exp</desc>
+                    <file>numpy/pageList/universalFunctionList/unary/arithmetic/exp/index.js</file>
+                </item>
+
+                <item id="np_fabs" type="function" level="3" name="fabs" tag="넘파이, 부동 소수점 절대값, NP, FABS, NP.FABS, NUMPY">
+                    <path>visualpython - numpy - universal functions - np.fabs</path>
+                    <desc>np.fabs</desc>
+                    <file>numpy/pageList/universalFunctionList/unary/arithmetic/fabs/index.js</file>
+                </item>
+
+                <item id="np_floor" type="function" level="3" name="floor" tag="넘파이, 내림, NP, FLOOR, NP.FLOOR, NUMPY">
+                    <path>visualpython - numpy - universal functions - np.floor</path>
+                    <desc>np.floor</desc>
+                    <file>numpy/pageList/universalFunctionList/unary/arithmetic/floor/index.js</file>
+                </item>
+
+                <item id="np_log" type="function" level="3" name="log" tag="넘파이, 로그, NP, LOG, NP.LOG, NUMPY">
+                    <path>visualpython - numpy - universal functions - np.log</path>
+                    <desc>np.log</desc>
+                    <file>numpy/pageList/universalFunctionList/unary/arithmetic/log/index.js</file>
+                </item>
+
+                <item id="np_log1p" type="function" level="3" name="log1p" tag="넘파이, 로그, NP, LOG1P, NP.LOG1P, NUMPY">
+                    <path>visualpython - numpy - universal functions - np.log1p</path>
+                    <desc>np.log1p</desc>
+                    <file>numpy/pageList/universalFunctionList/unary/arithmetic/log1p/index.js</file>
+                </item>
+
+                <item id="np_log2" type="function" level="3" name="log2" tag="넘파이, 로그, NP, LOG2, NP.LOG2, NUMPY">
+                    <path>visualpython - numpy - universal functions - np.log2</path>
+                    <desc>np.log2</desc>
+                    <file>numpy/pageList/universalFunctionList/unary/arithmetic/log2/index.js</file>
+                </item>
+
+                <item id="np_log10" type="function" level="3" name="log10" tag="넘파이, 로그, NP, LOG10, NP.LOG10, NUMPY">
+                    <path>visualpython - numpy - universal functions - np.log10</path>
+                    <desc>np.log10</desc>
+                    <file>numpy/pageList/universalFunctionList/unary/arithmetic/log10/index.js</file>
+                </item>
+
+                <item id="np_modf" type="function" level="3" name="modf" tag="넘파이, NP, MODF, NP.MODF, NUMPY">
+                    <path>visualpython - numpy - universal functions - np.modf</path>
+                    <desc>np.modf</desc>
+                    <file>numpy/pageList/universalFunctionList/unary/arithmetic/modf/index.js</file>
+                </item>
+                
+                <item id="np_rint" type="function" level="3" name="rint" tag="넘파이, NP, RINT, NP.RINT, NUMPY">
+                    <path>visualpython - numpy - universal functions - np.rint</path>
+                    <desc>np.rint</desc>
+                    <file>numpy/pageList/universalFunctionList/unary/arithmetic/rint/index.js</file>
+                </item>
+
+                <item id="np_sqrt" type="function" level="3" name="sqrt" tag="넘파이, 제곱근, NP, SQRT, NP.SQRT, NUMPY">
+                    <path>visualpython - numpy - universal functions - np.sqrt</path>
+                    <desc>np.sqrt</desc>
+                    <file>numpy/pageList/universalFunctionList/unary/arithmetic/sqrt/index.js</file>
+                </item>
+
+                <item id="np_square" type="function" level="3" name="square" tag="넘파이, 제곱, NP, SQUARE, NP.SQUARE, NUMPY">
+                    <path>visualpython - numpy - universal functions - np.square</path>
+                    <desc>np.square</desc>
+                    <file>numpy/pageList/universalFunctionList/unary/arithmetic/square/index.js</file>
+                </item>
+            </item>
+
+            <item id="pkg_numpyUniversalUnaryLogical" type="package" level="2" name="Boolean operation" tag="넘파이, BOOLEAN 연산, NUMPY, UNIVERSAL, UNARY, BOOLEAN, LOGICAL">
+                <path aa="AA">visualpython - numpy - universal functions - boolean operation</path>
+                <desc>Numpy boolean operation</desc>
+
+                <item id="np_all" type="function" level="3" name="all" tag="넘파이, 모두, NP, ALL, NP.ALL, NUMPY">
+                    <path>visualpython - numpy - universal functions - boolean operation - np.all</path>
+                    <desc>np.all</desc>
+                    <file>numpy/pageList/universalFunctionList/unary/logical/all/index.js</file>
+                </item>
+                
+                <item id="np_any" type="function" level="3" name="any" tag="넘파이,비교, 모두, NP, ANY, NP.ANY, NUMPY">
+                    <path>visualpython - numpy - universal functions - boolean operation - np.any</path>
+                    <desc>np.any</desc>
+                    <file>numpy/pageList/universalFunctionList/unary/logical/any/index.js</file>
+                </item>
+
+                <item id="np_isanan" type="function" level="3" name="isanan" tag="넘파이, 비교, NP, ISANAN, NP.ISANAN, NUMPY">
+                    <path>visualpython - numpy - universal functions - boolean operation - np.isanan</path>
+                    <desc>np.isanan</desc>
+                    <file>numpy/pageList/universalFunctionList/unary/logical/isanan/index.js</file>
+                </item>
+
+                <item id="np_isfinite" type="function" level="3" name="isfinite" tag="넘파이, 비교, NP, ISFINITE, NP.ISFINITE, NUMPY">
+                    <path>visualpython - numpy - universal functions - boolean operation - np.isfinite</path>
+                    <desc>np.isfinite</desc>
+                    <file>numpy/pageList/universalFunctionList/unary/logical/isfinite/index.js</file>
+                </item>
+
+                <item id="np_isinf" type="function" level="3" name="isinf" tag="넘파이, 비교, NP, ISINF, NP.ISINF, NUMPY">
+                    <path>visualpython - numpy - universal functions - boolean operation - np.isinf</path>
+                    <desc>np.isinf</desc>
+                    <file>numpy/pageList/universalFunctionList/unary/logical/isinf/index.js</file>
+                </item>
+
+                <item id="np_isnan" type="function" level="3" name="isnan" tag="넘파이, 비교, NP, ISNAN, NP.ISNAN, NUMPY">
+                    <path>visualpython - numpy - universal functions - boolean operation - np.isnan</path>
+                    <desc>np.isnan</desc>
+                    <file>numpy/pageList/universalFunctionList/unary/logical/isnan/index.js</file>
+                </item>
+
+                <item id="np_isneginf" type="function" level="3" name="isneginf" tag="넘파이, 비교, NP, ISNEGINF, NP.ISNEGINF, NUMPY">
+                    <path>visualpython - numpy - universal functions - boolean operation - np.isneginf</path>
+                    <desc>np.isneginf</desc>
+                    <file>numpy/pageList/universalFunctionList/unary/logical/isneginf/index.js</file>
+                </item>
+
+                <item id="np_isposinf" type="function" level="3" name="isposinf" tag="넘파이, 비교, NP, ISPOSINF, NP.ISPOSINF, NUMPY">
+                    <path>visualpython - numpy - universal functions - boolean operation - np.isposinf</path>
+                    <desc>np.isposinf</desc>
+                    <file>numpy/pageList/universalFunctionList/unary/logical/isposinf/index.js</file>
+                </item>
+                    
+                <item id="np_logical_not" type="function" level="3" name="logical_not" tag="넘파이, 비교, NP, LOGICAL_NOT, NP.LOGICAL_NOT, NUMPY">
+                    <path>visualpython - numpy - universal functions - boolean operation - np.logical_not</path>
+                    <desc>np.logical_not</desc>
+                    <file>numpy/pageList/universalFunctionList/unary/logical/logical_not/index.js</file>
+                </item>
+            </item>
+
+            <item id="pkg_numpyUniversalTrigonometric" type="package" level="2" name="Trigonometric functions" tag="넘파이, 삼각함수, NUMPY, UNIVERSAL, TRIGONOMETRIC">
+                <path aa="AA">visualpython - numpy - universal functions - trigonometric functions</path>
+                <desc>Numpy trigonometric functions</desc>
+
+                <item id="np_sin" type="function" level="3" name="sin" tag="넘파이, NP, SIN, NP.SIN, NUMPY">
+                    <path>visualpython - numpy - np.sin</path>
+                    <desc>np.sin</desc>
+                    <file>numpy/pageList/universalFunctionList/trigonometric/sin/index.js</file>
+                </item>
+                <item id="np_cos" type="function" level="3" name="cos" tag="넘파이, NP, COS, NP.COS, NUMPY">
+                    <path>visualpython - numpy - np.cos</path>
+                    <desc>np.cos</desc>
+                    <file>numpy/pageList/universalFunctionList/trigonometric/cos/index.js</file>
+                </item>
+                <item id="np_tan" type="function" level="3" name="tan" tag="넘파이, NP, TAN, NP.TAN, NUMPY">
+                    <path>visualpython - numpy - np.tan</path>
+                    <desc>np.tan</desc>
+                    <file>numpy/pageList/universalFunctionList/trigonometric/tan/index.js</file>
+                </item>
+                <item id="np_arcsin" type="function" level="3" name="arcsin" tag="넘파이, NP, SIN, NP.SIN, NUMPY">
+                    <path>visualpython - numpy - np.arcsin</path>
+                    <desc>np.arcsin</desc>
+                    <file>numpy/pageList/universalFunctionList/trigonometric/arcsin/index.js</file>
+                </item>
+                <item id="np_arccos" type="function" level="3" name="arccos" tag="넘파이, NP, COS, NP.COS, NUMPY">
+                    <path>visualpython - numpy - np.arccos</path>
+                    <desc>np.arccos</desc>
+                    <file>numpy/pageList/universalFunctionList/trigonometric/arccos/index.js</file>
+                </item>
+                <item id="np_arctan" type="function" level="3" name="arctan" tag="넘파이, NP, TAN, NP.TAN, NUMPY">
+                    <path>visualpython - numpy - np.arctan</path>
+                    <desc>np.arctan</desc>
+                    <file>numpy/pageList/universalFunctionList/trigonometric/arctan/index.js</file>
+                </item>
+            </item>
+
+            <item id="pkg_numpyUniversalComparator" type="package" level="2" name="Comparison operation" tag="넘파이, 비교 연산, NUMPY, UNIVERSAL, COMPARATOR">
+                <path aa="AA">visualpython - numpy - universal functions - comparison operation</path>
+                <desc>Numpy Comparison Operation</desc>
+
+                <item id="np_equal" type="function" level="3" name="equal" tag="넘파이, 같음, NP, EQUAL, NP.EQUAL, NUMPY">
+                    <path>visualpython - numpy - universal functions - comparison operation - np.equal</path>
+                    <desc>np.equal</desc>
+                    <file>numpy/pageList/universalFunctionList/binary/comparator/equal/index.js</file>
+                </item>
+
+                <item id="np_greater" type="function" level="3" name="greater" tag="넘파이, 크다, NP, GREATER, NP.GREATER, NUMPY">
+                    <path>visualpython - numpy - universal functions - comparison operation - np.greater</path>
+                    <desc>np.greater</desc>
+                    <file>numpy/pageList/universalFunctionList/binary/comparator/greater/index.js</file>
+                </item>
+
+                <item id="np_greater_equal" type="function" level="3" name="greater_equal" tag="넘파이, 크거나같다, NP, GREATER, EQUAL, NP.EQUAL, NP.GREATER, NUMPY">
+                    <path>visualpython - numpy - universal functions - comparison operation - np.greater_equal</path>
+                    <desc>np.greater_equal</desc>
+                    <file>numpy/pageList/universalFunctionList/binary/comparator/greater_equal/index.js</file>
+                </item>
+
+                <item id="np_less" type="function" level="3" name="less" tag="넘파이, 작다, NP, LESS, NP.LESS, NUMPY">
+                    <path>visualpython - numpy - universal functions - comparison operation - np.less</path>
+                    <desc>np.less</desc>
+                    <file>numpy/pageList/universalFunctionList/binary/comparator/less/index.js</file>
+                </item>
+
+                <item id="np_less_equal" type="function" level="3" name="less_equal" tag="넘파이, 크거나같다, NP, LESS, EQUAL, NP.EQUAL, NP.LESS, NUMPY">
+                    <path>visualpython - numpy - universal functions - comparison operation - np.less_equal</path>
+                    <desc>np.less_equal</desc>
+                    <file>numpy/pageList/universalFunctionList/binary/comparator/less_equal/index.js</file>
+                </item>
+
+                <item id="np_not_equal" type="function" level="3" name="not_equal" tag="넘파이, 크거나같다, NP, LESS, EQUAL, NP.EQUAL, NP.LESS, NUMPY">
+                    <path>visualpython - numpy - universal functions - comparison operation - np.not_equal</path>
+                    <desc>np.not_equal</desc>
+                    <file>numpy/pageList/universalFunctionList/binary/comparator/not_equal/index.js</file>
+                </item>
+
+            </item>
+
+            <item id="pkg_numpyUniversalRandom" type="package" level="2" name="Random number generation" tag="넘파이, 난수 생성, NUMPY, UNIVERSAL, RANDOM">
+                <path aa="AA">visualpython - numpy - universal functions - random number generation</path>
+                <desc>Numpy Random Number Generation</desc>
+
+                <item id="np_randomRandint" type="function" level="3" name="randint" tag="넘파이, 난수 생성, NUMPY, UNIVERSAL, RANDOM, NP.RANDOM.RANDINT, NP, RANDOM, RANDINT">
+                    <path>visualpython - numpy - universal functions - random number generation - np.random.randint </path>
+                    <desc>np.random.randint</desc>
+                    <file>numpy/pageList/universalFunctionList/random/randint/index.js</file>
+                </item>
+                <item id="np_randomRand" type="function" level="3" name="rand" tag="넘파이, 난수 생성, NUMPY, UNIVERSAL, RANDOM, NP.RANDOM.RAND, NP, RANDOM, RAND">
+                    <path>visualpython - numpy - universal functions - random number generation - np.random.rand </path>
+                    <desc>np.random.rand</desc>
+                    <file>numpy/pageList/universalFunctionList/random/rand/index.js</file>
+                </item>
+            </item>
+         <!-- Numpy universal functions -->
+
+
+    
+    </item>
+
+    <item id="pkg_pandas" type="package" level="0" name="Pandas" tag="판다스, PANDAS">
+        <path>visualpython - pandas</path>
+        <desc>판다스 함수 그룹</desc>
+        <!-- TEST: 변수 조회해서 복사하기 -->
+        <!-- <item id="pd_getVariables" type="function" level="1" name="변수 조회" tag="변수 조회, GET VARIABLES">
+            <path>visualpython - pandas - get variables</path>
+            <desc>변수 조회해서 복사하는 화면</desc>
+            <file>pandas/variables.js</file>
+        </item> -->
+        <!-- <item id="pd_importPandas" type="function" level="1" name="import" tag="판다스, IMPORT PANDAS">
+            <path>visualpython - pandas - import pandas</path>
+            <desc>Import Pandas</desc>
+            <file>pandas/import.js</file>
+        </item>         -->
+        <!-- plotting -->
+        <item id="pd_plot" type="function" level="1" name="plot" tag="차트 그리기, PLOT, DRAW CHART FOR PANDAS, PLOT">
+            <path>visualpython - pandas - plot</path>
+            <desc>데이터를 차트로 표현하는 함수</desc>
+            <file>pandas/plot.js</file>
+        </item>
+        <!-- <item id="pd_frameEditor" type="function" level="1" name="Frame Editor" tag="FRAME EDITOR">
+            <path>visualpython - pandas - subset</path>
+            <desc>frame editor</desc>
+            <file>pandas/frameEditor.js</file>
+        </item>
+        <item id="pd_subset" type="function" level="1" name="Subset" tag="SUBSET">
+            <path>visualpython - pandas - subset</path>
+            <desc>subset dataframe</desc>
+            <file>pandas/subset.js</file>
+        </item> -->
+        <!-- Input/output -->
+        <item id="pd_inputOutput" type="package" level="1" name="Input/output" tag="파일 불러오기, 저장, FILE INPUT OUTPUT">
+            <path>visualpython - pandas - input output</path>
+            <desc>파일 불러오기 및 저장</desc>
+            <!-- 샘플 데이터 불러오기 -->
+            <item id="pdIo_sampleCsv" type="function" level="2" name="Sample csv" tag="샘플 데이터 불러오기, LOAD SAMPLE DATA AS A DATAFRAME">
+                <path>visualpython - pandas - input output - sample csv</path>
+                <desc>샘플 데이터로 데이터프레임 객체 생성</desc>
+                <file>pandas/sampleCsv.js</file>
+            </item>
+            <item id="pdIo_readFile" type="function" level="2" name="Read File" tag="파일 불러오기, 읽기, READ CSV EXCEL JSON PICKLE, READ_CSV, READ_EXCEL, READ_JSON, READ_PICKLE">
+                <path>visualpython - pandas - input output - read file</path>
+                <desc>파일을 읽어 판다스 객체로 변환</desc>
+                <file>pandas/readFile.js</file>
+            </item>
+            <!-- <item id="pdIo_readCsv" type="function" level="2" name="read_csv" tag="CSV파일 불러오기, 읽기, READ CSV, LOAD CSV, READ_CSV">
+                <path>visualpython - pandas - input output - read csv</path>
+                <desc>CSV 파일을 읽어 판다스 객체로 변환</desc>
+                <file>pandas/readCsv.js</file>
+            </item>
+            <item id="pdIo_readExcel" type="function" level="2" name="read_excel" tag="EXCEL파일 불러오기, 읽기, READ EXCEL, LOAD EXCEL, READ_EXCEL">
+                <path>visualpython - pandas - input output - read excel</path>
+                <desc>Excel 파일을 읽어 판다스 객체로 변환</desc>
+                <file>pandas/readExcel.js</file>
+            </item>
+            <item id="pdIo_readJson" type="function" level="2" name="read_json" tag="JSON파일 불러오기, 읽기, READ JSON, LOAD JSON, READ_JSON">
+                <path>visualpython - pandas - input output - read json</path>
+                <desc>Json 파일을 읽어 판다스 객체로 변환</desc>
+                <file>pandas/readJson.js</file>
+            </item>
+            <item id="pdIo_readPickle" type="function" level="2" name="read_pickle" tag="PICKLE파일 불러오기, 읽기, READ PICKLE, LOAD PICKLE, READ_PICKLE">
+                <path>visualpython - pandas - input output - read pickle</path>
+                <desc>Pickle 파일을 읽어 판다스 객체로 변환</desc>
+                <file>pandas/readPickle.js</file>
+            </item> -->
+            <item id="pdIo_toFile" type="function" level="2" name="To File" tag="파일로 저장, 쓰기, WRITE FILE, TO_CSV, TO_EXCEL, TO_JSON, TO_PICKLE">
+                <path>visualpython - pandas - input output - write file</path>
+                <desc>판다스 객체를 파일로 저장</desc>
+                <file>pandas/toFile.js</file>
+            </item>
+            <!-- <item id="pdIo_toCsv" type="function" level="2" name="to_csv" tag="CSV파일로 저장, 쓰기, WRITE CSV, DOWNLOAD TO CSV, TO_CSV">
+                <path>visualpython - pandas - input output - write csv</path>
+                <desc>판다스 객체를 CSV 파일로 저장</desc>
+                <file>pandas/toCsv.js</file>
+            </item>
+            <item id="pdIo_toExcel" type="function" level="2" name="to_excel" tag="EXCEL파일로 저장, 쓰기, WRITE EXCEL, DOWNLOAD TO EXCEL, TO_EXCEL">
+                <path>visualpython - pandas - input output - write excel</path>
+                <desc>판다스 객체를 EXCEL 파일로 저장</desc>
+                <file>pandas/toExcel.js</file>
+            </item>
+            <item id="pdIo_toJson" type="function" level="2" name="to_json" tag="JSON파일로 저장, 쓰기, WRITE JSON, DOWNLOAD TO JSON, TO_JSON">
+                <path>visualpython - pandas - input output - write json</path>
+                <desc>판다스 객체를 JSON 파일로 저장</desc>
+                <file>pandas/toJson.js</file>
+            </item>
+            <item id="pdIo_toPickle" type="function" level="2" name="to_pickle" tag="PICKLE파일로 저장, 쓰기, WRITE PICKLE, DOWNLOAD TO PICKLE, TO_PICKLE">
+                <path>visualpython - pandas - input output - write pickle</path>
+                <desc>판다스 객체를 PICKLE 파일로 저장</desc>
+                <file>pandas/toPickle.js</file>
+            </item> -->
+        </item>
+        <!-- customed group : Pandas objects -->
+        <item id="pd_pandasObjects" type="package" level="1" name="Pandas objects" tag="판다스 객체, PANDAS OBJECTS">
+            <path>visualpython - pandas - pandas objects</path>
+            <desc>판다스 객체</desc>
+            <item id="pdPdo_series" type="function" level="2" name="Series" tag="시리즈 객체 생성, CREATE SERIES">
+                <path>visualpython - pandas - pandas objects - series</path>
+                <desc>Series 객체 생성</desc>
+                <file>pandas/series.js</file>
+            </item>
+            <item id="pdPdo_dataframe" type="function" level="2" name="DataFrame" tag="데이터프레임 객체 생성, CREATE DATAFRAME">
+                <path>visualpython - pandas - pandas objects - dataframe</path>
+                <desc>DataFrame 객체 생성</desc>
+                <file>pandas/dataframe.js</file>
+            </item>
+            <item id="pdPdo_index" type="function" level="2" name="Index objects" tag="인덱스 객체 생성, CREATE INDEX">
+                <path>visualpython - pandas - pandas objects - index</path>
+                <desc>Index 객체 생성</desc>
+                <file>pandas/index.js</file>
+            </item>
+            <item id="pdPdo_copy" type="function" level="2" name="copy" tag="객체 복사, COPY PANDAS OBJECT, COPY">
+                <path>visualpython - pandas - pandas objects - copy</path>
+                <desc>판다스 객체 복사</desc>
+                <file>pandas/copy.js</file>
+            </item>
+        </item>
+        <!-- customed group : data information -->
+        <item id="pd_infoData" type="package" level="1" name="Data info" tag="데이터 정보, DATA INFO">
+            <path>visualpython - pandas - data info</path>
+            <desc>데이터 정보를 확인하는 함수</desc>
+            <item id="pdIdt_head" type="function" level="2" name="head" tag="데이터 앞부분 조회, SEARCH HEAD DATA, HEAD">
+                <path>visualpython - pandas - data info - head</path>
+                <desc>데이터 앞부분 조회</desc>
+                <file>pandas/head.js</file>
+            </item>
+            <item id="pdIdt_tail" type="function" level="2" name="tail" tag="데이터 뒷부분 조회, SEARCH TAIL DATA, TAIL">
+                <path>visualpython - pandas - data info - tail</path>
+                <desc>데이터 뒷부분 조회</desc>
+                <file>pandas/tail.js</file>
+            </item>
+            <item id="pdIdt_take" type="function" level="2" name="take" tag="데이터 일부분 조회, TAKE DATA, TAKE">
+                <path>visualpython - pandas - data info - take</path>
+                <desc>데이터 일부분 조회</desc>
+                <file>pandas/take.js</file>
+            </item>
+            <item id="pdIdt_values" type="function" level="2" name="values" tag="데이터 확인, GET VALUES, .VALUES">
+                <path>visualpython - pandas - data info - get values</path>
+                <desc>판다스 객체의 데이터 확인</desc>
+                <file>pandas/getValues.js</file>
+            </item>
+            <item id="pdIdt_index" type="function" level="2" name="index" tag="인덱스 조회, GET INDEX, .INDEX">
+                <path>visualpython - pandas - data info - get index</path>
+                <desc>인덱스 확인</desc>
+                <file>pandas/getIndex.js</file>
+            </item>
+            <item id="pdIdt_columns" type="function" level="2" name="columns" tag="컬럼 조회, GET COLUMNS, .COLUMNS">
+                <path>visualpython - pandas - data info - get columns</path>
+                <desc>컬럼 확인</desc>
+                <file>pandas/getColumns.js</file>
+            </item>
+            <item id="pdIdt_len" type="function" level="2" name="len" tag="길이, 크기 조회, GET LENGTH, LEN">
+                <path>visualpython - pandas - data info - get length</path>
+                <desc>길이 조회</desc>
+                <file>pandas/getLength.js</file>
+            </item>
+            <item id="pdIdt_valueCounts" type="function" level="2" name="value_counts" tag="데이터별 개수 조회, GET VALUE COUNTS, .VALUE_COUNTS">
+                <path>visualpython - pandas - data info - get value counts</path>
+                <desc>데이터별 개수 조회</desc>
+                <file>pandas/getValueCounts.js</file>
+            </item>
+            <item id="pdIdt_info" type="function" level="2" name="info" tag="데이터 기본정보 조회, GET BASIC INFO FROM DATAFRAME, INFO">
+                <path>visualpython - pandas - data info - get info</path>
+                <desc>데이터프레임 기본 정보 조회</desc>
+                <file>pandas/getInfo.js</file>
+            </item>
+            <item id="pdIdt_describe" type="function" level="2" name="describe" tag="데이터 상세정보 조회, GET DETAILED INFO FROM DATAFRAME OR SERIES, DESCRIBE">
+                <path>visualpython - pandas - data info - get described info</path>
+                <desc>판다스 객체 상세 정보 조회</desc>
+                <file>pandas/getDescribedInfo.js</file>
+            </item>
+            <item id="pdIdt_transpose" type="function" level="2" name="T" tag="데이터 객체 행/열 전환, TRANSPOSE, .T">
+                <path>visualpython - pandas - data info - transpose</path>
+                <desc>데이터 객체 행/열 전환</desc>
+                <file>pandas/transpose.js</file>
+            </item>
+            <item id="pdIdt_unique" type="function" level="2" name="unique" tag="데이터 고유값 조회, GET UNIQUE DATA, UNIQUE">
+                <path>visualpython - pandas - data info - get unique</path>
+                <desc>데이터프레임 고유값 조회</desc>
+                <file>pandas/getUnique.js</file>
+            </item>
+        </item>
+        <!-- General functions -->
+        <item id="pd_generalFunc" type="package" level="1" name="General functions" tag="일반 함수, GENERAL FUNCTIONS">
+            <path>visualpython - pandas - general functions</path>
+            <desc>일반 함수</desc>
+            <!-- 단순 연산 -->
+            <item id="pdFunc_objCal" type="function" level="2" name="Object Calculation" tag="데이터 객체 간 연산, OBJECT CALCULATION">
+                <path>visualpython - pandas - general functions - object calculation</path>
+                <desc>데이터 객체 간 연산</desc>
+                <file>pandas/objCal.js</file>
+            </item>
+            <item id="pdFunc_basicCal" type="function" level="2" name="Basic Calculation" tag="기본 산술연산, BASIC CALCULATION">
+                <path>visualpython - pandas - general functions - basic calculation</path>
+                <desc>기본 연산</desc>
+                <file>pandas/basicCal.js</file>
+            </item>
+            <!-- 병합 결합 -->
+            <item id="pdFunc_merge" type="function" level="2" name="merge" tag="데이터 병합, 결합, MERGE, JOIN, MERGE">
+                <path>visualpython - pandas - general functions - merge</path>
+                <desc>데이터프레임 병합</desc>
+                <file>pandas/merge.js</file>
+            </item>
+            <item id="pdFunc_concat" type="function" level="2" name="concat" tag="데이터 연결, 결합, CONCATENATE, CONCAT">
+                <path>visualpython - pandas - general functions - concat</path>
+                <desc>데이터 결합</desc>
+                <file>pandas/concat.js</file>
+            </item>
+            <!-- 데이터 재구성 -->
+            <item id="pdFunc_reindex" type="function" level="2" name="reindex" tag="REINDEX">
+                <path>visualpython - pandas - general functions - reindex</path>
+                <desc>Pandas 객체의 index 수정</desc>
+                <file>pandas/reindex.js</file>
+            </item>
+            <item id="pdFunc_setIndex" type="function" level="2" name="set_index" tag="SET INDEX">
+                <path>visualpython - pandas - general functions - set index</path>
+                <desc><!-- TODO: 설명 --></desc>
+                <file>pandas/setIndex.js</file>
+            </item>
+            <item id="pdFunc_resetIndex" type="function" level="2" name="reset_index" tag="RESET INDEX">
+                <path>visualpython - pandas - general functions - reset index</path>
+                <desc><!-- TODO: 설명 --></desc>
+                <file>pandas/resetIndex.js</file>
+            </item>
+            <item id="pdFunc_stack" type="function" level="2" name="stack" tag="STACK">
+                <path>visualpython - pandas - general functions - stack</path>
+                <desc><!-- TODO: 설명 --></desc>
+                <file>pandas/stack.js</file>
+            </item>
+            <item id="pdFunc_unstack" type="function" level="2" name="unstack" tag="UNSTACK">
+                <path>visualpython - pandas - general functions - unstack</path>
+                <desc><!-- TODO: 설명 --></desc>
+                <file>pandas/unstack.js</file>
+            </item>
+            <item id="pdFunc_pivot" type="function" level="2" name="pivot" tag="PIVOT">
+                <path>visualpython - pandas - general functions - pivot</path>
+                <desc><!-- TODO: 설명 --></desc>
+                <file>pandas/pivot.js</file>
+            </item>
+            <item id="pdFunc_melt" type="function" level="2" name="melt" tag="MELT">
+                <path>visualpython - pandas - general functions - melt</path>
+                <desc><!-- TODO: 설명 --></desc>
+                <file>pandas/melt.js</file>
+            </item>
+            <item id="pdFunc_pivotTable" type="function" level="2" name="pivot_table" tag="PIVOT TABLE">
+                <path>visualpython - pandas - general functions - pivot table</path>
+                <desc><!-- TODO: 설명 --></desc>
+                <file>pandas/pivotTable.js</file>
+            </item>
+            <!-- 값 치환 -->
+            <item id="pdFunc_replace" type="function" level="2" name="replace" tag="값 치환, 대체, REPLACE VALUE, REPLACE">
+                <path>visualpython - pandas - general functions - replace</path>
+                <desc>값 치환</desc>
+                <file>pandas/replace.js</file>
+            </item>
+            <!-- 중복값 처리 -->
+            <item id="pdFunc_isDuplicated" type="function" level="2" name="duplicated" tag="중복여부 확인, CHECK IF DUPLICATED, DUPLICATED">
+                <path>visualpython - pandas - general functions - is duplicated</path>
+                <desc>중복여부 확인</desc>
+                <file>pandas/isDuplicated.js</file>
+            </item>
+            <item id="pdFunc_dropDuplicates" type="function" level="2" name="drop_duplicates" tag="중복값 제거, DROP DUPLICATES, REMOVE DUPLICATES, DROP_DUPICATES">
+                <path>visualpython - pandas - general functions - drop duplicates</path>
+                <desc>중복값 제거</desc>
+                <file>pandas/dropDuplicates.js</file>
+            </item>
+            <!-- 결측치 처리 -->
+            <item id="pdFunc_isNull" type="function" level="2" name="isnull" tag="결측치 확인, NULL값 확인, IS NULL, IS MISSING VALUE, ISNULL">
+                <path>visualpython - pandas - general functions - is null</path>
+                <desc>결측치 여부를 마스킹해서 확인</desc>
+                <file>pandas/isNull.js</file>
+            </item>
+            <item id="pdFunc_notNull" type="function" level="2" name="notnull" tag="결측치 아닌 값 확인, NOT NULL인 값 확인, NOT NULL, NOTNULL">
+                <path>visualpython - pandas - general functions - not null</path>
+                <desc>결측치가 아닌 값을 마스킹해서 확인</desc>
+                <file>pandas/notNull.js</file>
+            </item>
+            <item id="pdFunc_dropNA" type="function" level="2" name="dropna" tag="결측치 제거, DROP NA, REMOVE MISSING VALUES, DROPNA">
+                <path>visualpython - pandas - general functions - drop na</path>
+                <desc>결측치 제거</desc>
+                <file>pandas/dropNA.js</file>
+            </item>
+            <item id="pdFunc_fillNA" type="function" level="2" name="fillna" tag="결측치 채우기, FILL NA, REPLACE AND FILL MISSING VALUES, FILLNA">
+                <path>visualpython - pandas - general functions - fill na</path>
+                <desc>결측치를 대체값으로 치환</desc>
+                <file>pandas/fillNA.js</file>
+            </item>
+            <item id="pdFunc_combineFirst" type="function" level="2" name="combine_first" tag="결측치 대체, COMBINE FIRST, REPLACE MISSING VALUES WITH OTHER DATA, COMBINE_FIRST">
+                <path>visualpython - pandas - general functions - combine first</path>
+                <desc>결측치를 대응하는 위치의 값으로 치환</desc>
+                <file>pandas/combineFirst.js</file>
+            </item>
+        </item>
+        <!-- pandas arrays -->
+        <item id="pd_pdArrays" type="package" level="1" name="pandas arrays" tag="배열 객체, PANDAS ARRAYS">
+            <path>visualpython - pandas - pandas arrays</path>
+            <desc>배열 객체</desc>
+            <item id="pdParr_period" type="function" level="2" name="Period" tag="PERIOD 객체 생성, CREATE PERIOD">
+                <path>visualpython - pandas - pandas arrays - period</path>
+                <desc>Period 객체 생성</desc>
+                <file>pandas/period.js</file>
+            </item>
+            <item id="pdParr_periodIndex" type="function" level="2" name="PeriodIndex" tag="PERIOD INDEX 객체 생성, CREATE PERIOD INDEX">
+                <path>visualpython - pandas - pandas arrays - period index</path>
+                <desc>Period Index 객체 생성</desc>
+                <file>pandas/periodIndex.js</file>
+            </item>
+            <item id="pdParr_timestamp" type="function" level="2" name="Timestamp" tag="TIMESTAMP 객체 생성, CREATE TIMESTAMP">
+                <path>visualpython - pandas - pandas arrays - timestamp</path>
+                <desc>Timestamp 객체 생성</desc>
+                <file>pandas/timestamp.js</file>
+            </item>
+        </item>
+        <!-- GroupBy -->
+        <item id="pd_groupby" type="package" level="1" name="GroupBy" tag="그룹, GROUP BY">
+            <path>visualpython - pandas - groupby</path>
+            <desc>그룹</desc>
+            <item id="pdGrp_groupby" type="function" level="2" name="groupby" tag="데이터 그룹화, GROUP BY DATA, GROUPBY">
+                <path>visualpython - pandas - groupby - groupby</path>
+                <desc>데이터의 그룹 연산</desc>
+                <file>pandas/groupby.js</file>
+            </item>
+            <item id="pdGrp_groups" type="function" level="2" name="groups" tag="데이터 그룹 정보, GROUPS INFORMATION, .GROUPS">
+                <path>visualpython - pandas - groupby - groups</path>
+                <desc>데이터 그룹 정보</desc>
+                <file>pandas/groups.js</file>
+            </item>
+            <item id="pdGrp_agg" type="function" level="2" name="agg" tag="집계 연산, AGG, AGG">
+                <path>visualpython - pandas - groupby - agg</path>
+                <desc>데이터의 집계 연산</desc>
+                <file>pandas/agg.js</file>
+            </item>
+            <item id="pdGrp_sum" type="function" level="2" name="sum" tag="집계 연산, 합, SUM, SUM">
+                <path>visualpython - pandas - groupby - sum</path>
+                <desc>데이터의 합 연산</desc>
+                <file>pandas/agg_sum.js</file>
+            </item>
+            <item id="pdGrp_mean" type="function" level="2" name="mean" tag="집계 연산, 평균, MEAN, MEAN">
+                <path>visualpython - pandas - groupby - mean</path>
+                <desc>데이터의 평균값</desc>
+                <file>pandas/agg_mean.js</file>
+            </item>
+            <item id="pdGrp_count" type="function" level="2" name="count" tag="집계 연산, 개수, COUNT, COUNT">
+                <path>visualpython - pandas - groupby - count</path>
+                <desc>데이터 개수</desc>
+                <file>pandas/agg_count.js</file>
+            </item>
+            <item id="pdGrp_max" type="function" level="2" name="max" tag="집계 연산, 최댓값, MAX, MAX">
+                <path>visualpython - pandas - groupby - max</path>
+                <desc>데이터의 최댓값</desc>
+                <file>pandas/agg_max.js</file>
+            </item>
+            <item id="pdGrp_min" type="function" level="2" name="min" tag="집계 연산, 최솟값, MIN, MIN">
+                <path>visualpython - pandas - groupby - min</path>
+                <desc>데이터의 최솟값</desc>
+                <file>pandas/agg_min.js</file>
+            </item>
+            <item id="pdGrp_median" type="function" level="2" name="median" tag="집계 연산, 중앙값, MEDIAN, MEDIAN">
+                <path>visualpython - pandas - groupby - median</path>
+                <desc>데이터의 중앙값</desc>
+                <file>pandas/agg_median.js</file>
+            </item>
+            <item id="pdGrp_std" type="function" level="2" name="std" tag="집계 연산, 표준 편차, STD, STANDARD DEVIATION, STD">
+                <path>visualpython - pandas - groupby - std</path>
+                <desc>데이터의 표준편차</desc>
+                <file>pandas/agg_std.js</file>
+            </item>
+            <item id="pdGrp_quantile" type="function" level="2" name="quantile" tag="집계 연산, 백분위 수, QUANTILE, QUANTILE">
+                <path>visualpython - pandas - groupby - quantile</path>
+                <desc>데이터의 백분위 수</desc>
+                <file>pandas/agg_quantile.js</file>
+            </item>
+        </item>
+        <!-- customed group : Sort data -->
+        <item id="pd_sortData" type="package" level="1" name="Sort Data" tag="데이터 정렬, SORT DATA">
+            <path>visualpython - pandas - sort data</path>
+            <desc>데이터를 정렬할 수 있는 함수</desc>
+            <item id="pdSdt_sortByIndex" type="function" level="2" name="sort_index" tag="인덱스로 정렬, SORT BY INDEX, SORT_INDEX">
+                <path>visualpython - pandas - sort data - sort by index</path>
+                <desc>인덱스로 정렬</desc>
+                <file>pandas/sortByIndex.js</file>
+            </item>
+            <item id="pdSdt_sortByValues" type="function" level="2" name="sort_values" tag="값으로 정렬, SORT BY VALUES, SORT_VALUES">
+                <path>visualpython - pandas - sort data - sort by values</path>
+                <desc>값으로 정렬</desc>
+                <file>pandas/sortByValues.js</file>
+            </item>
+        </item>
+        <!-- customed group : Row / Column -->
+        <item id="pd_rowcol" type="package" level="1" name="Row/Column" tag="행/열, ROW, COLUMN">
+                <path>visualpython - pandas - rowcol</path>
+                <desc>행/열</desc>
+                <item id="pdEdtRC_insertRow" type="function" level="2" name="Add row value" tag="행 추가, INSERT ROW VALUE">
+                    <path>visualpython - pandas - rowcol - insert row</path>
+                    <desc>행 추가</desc>
+                    <file>pandas/insertRow.js</file>
+                </item>
+                <item id="pdEdtRC_insertColumn" type="function" level="2" name="Add column value" tag="열 추가, INSERT COLUMN VALUE">
+                    <path>visualpython - pandas - rowcol - insert col</path>
+                    <desc>열 추가</desc>
+                    <file>pandas/insertColumn.js</file>
+                </item>
+                <item id="pdEdtRC_dropRowCol" type="function" level="2" name="drop" tag="행/열 삭제, DROP ROW COLUMN, DROP">
+                    <path>visualpython - pandas - rowcol - drop rowcol</path>
+                    <desc>행/열 삭제</desc>
+                    <file>pandas/dropRowCol.js</file>
+                </item>
+            </item>
+        <!-- 기간 연산 -->
+        <!-- <item id="pd_periodOperation" type="package" level="1" name="기간 연산" tag="기간 연산, PERIOD OPERATION">
+            <path>visualpython - pandas - period operation</path>
+            <desc>기간 연산 함수</desc>
+            <item id="pdPO_dataRange" type="function" level="2" name="DATE_RANGE" tag="DATE RANGE">
+                <path>visualpython - pandas - period operation - date range</path>
+                <desc></desc>
+                <file>pandas/dateRange.js</file>
+            </item>
+            <item id="pdPO_periodRange" type="function" level="2" name="PERIOD RANGE" tag="PERIOD RANGE">
+                <path>visualpython - pandas - period operation - period range</path>
+                <desc></desc>
+                <file>pandas/periodRange.js</file>
+            </item>
+            <item id="pdPO_toPeriod" type="function" level="2" name="TO PERIOD" tag="TO PERIOD">
+                <path>visualpython - pandas - period operation - to period</path>
+                <desc></desc>
+                <file>pandas/toPeriod.js</file>
+            </item>
+            <item id="pdPO_toTimestamp" type="function" level="2" name="TO TIMESTAMP" tag="TO TIMESTAMP">
+                <path>visualpython - pandas - period operation - to timestamp</path>
+                <desc></desc>
+                <file>pandas/toTimestamp.js</file>
+            </item>
+            <item id="pdPO_toDatetime" type="function" level="2" name="TO DATETIME" tag="TO DATETIME">
+                <path>visualpython - pandas - period operation - to datetime</path>
+                <desc></desc>
+                <file>pandas/toDatetime.js</file>
+            </item>
+            <item id="pdPO_dateShift" type="function" level="2" name="DATE SHIFT" tag="DATE SHIFT">
+                <path>visualpython - pandas - period operation - date shift</path>
+                <desc></desc>
+                <file>pandas/dateShift.js</file>
+            </item>
+            <item id="pdPO_tzLocalize" type="function" level="2" name="TZLOCALIZE" tag="TIMEZONE LOCALIZE, TZ LOCALIZE">
+                <path>visualpython - pandas - period operation - timezone localize</path>
+                <desc></desc>
+                <file>pandas/tzLocalize.js</file>
+            </item>
+            <item id="pdPO_tzConvert" type="function" level="2" name="TZCONVERT" tag="TIMEZONE CONVERT, TZ CONVERT">
+                <path>visualpython - pandas - period operation - tz convert</path>
+                <desc></desc>
+                <file>pandas/tzConvert.js</file>
+            </item>
+        </item> -->
+    </item>
+    
+    <item id="pkg_matplotlib" type="package" level="0" name="Matplotlib" tag="시각화, MATPLOTLIB, CHART">
+        <path>visualpython - matplotlib</path>
+        <desc>MATPLOTLIB 시각화 도구</desc>
+        <item id="mp_importMatplotlib" type="function" level="1" name="import" tag="IMPORT MATPLOTLIB">
+            <path>visualpython - matplotlib - import matplotlib</path>
+            <desc>Import Matplotlib</desc>
+            <file>matplotlib/import.js</file>
+        </item>
+        <item id="mp_plot" type="function" level="1" name="Create chart" tag="MATPLOTLIB CHART PLOT 구성, PLOT, CHART">
+            <path>visualpython - matplotlib - plot</path>
+            <desc>차트 구성하는 기능</desc>
+            <file>matplotlib/plot.js</file>
+        </item>
+        <item id="mp_figure" type="function" level="1" name="subplots" tag="MATPLOTLIB FIGURE 구성, FIGURE, SUBPLOTS">
+            <path>visualpython - matplotlib - figure</path>
+            <desc>Figure 구성하는 기능</desc>
+            <file>matplotlib/figure.js</file>
+        </item>
+        <!-- <item id="mp_magic" type="function" level="1" name="%matplotlib" tag="MATPLOTLIB 차트 표시 설정, MATPLOTLIB CHART INTERFACE SETTINGS, MAGIC">
+            <path>visualpython - matplotlib - magic</path>
+            <desc>Matplotlib 차트 표시 설정</desc>
+            <file>matplotlib/magic.js</file>
+        </item>
+        <item id="mp_font" type="function" level="1" name="Font setting" tag="MATPLOTLIB 폰트 설정, 한글 라벨 설정, CHANGE FONT SETTINGS FOR MATPLOTLIB">
+            <path>visualpython - matplotlib - font</path>
+            <desc>Matplotlib 폰트 설정</desc>
+            <file>matplotlib/font.js</file>
+        </item> -->
+        <!-- <item id="mp_setting" type="function" level="1" name="Matplot 런타임 설정" tag="MATPLOTLIB 런타임 설정, MATPLOTLIB RUNTIME SETTINGS, RCPARAMS">
+            <path>visualpython - matplotlib - setting</path>
+            <desc>Matplotlib 런타임 설정</desc>
+            <file>matplotlib/setting.js</file>
+        </item> -->
+        <!-- <item id="mp_style" type="function" level="1" name="style" tag="MATPLOTLIB 스타일 설정, 스타일 시트 변경, CHANGE STYLE SHEET FOR MATPLOTLIB">
+            <path>visualpython - matplotlib - style</path>
+            <desc>Matplotlib 스타일 설정</desc>
+            <file>matplotlib/style.js</file>
+        </item>
+        <item id="mp_saveImg" type="function" level="1" name="savefig" tag="MATPLOTLIB 차트 이미지 저장, SAVE CHART PLOT IMAGE TO FILE">
+            <path>visualpython - matplotlib - save img</path>
+            <desc>Matplotlib 차트이미지 저장</desc>
+            <file>matplotlib/saveImg.js</file>
+        </item> -->
+        <!-- <item id="mp_plotNew" type="function" level="1" name="Make Chart" tag="MATPLOTLIB CHART PLOT 구성, PLOT, CHART">
+            <path>visualpython - matplotlib - chart</path>
+            <desc>차트 구성하는 기능</desc>
+            <file>matplotlib/plot_new.js</file>
+        </item> -->
+    </item>
+
+    <!-- <item id="pkg_scipy" type="package" level="0" name="SCIPY" tag="사이파이, SCIPY">
+        <path aa="AA">visualpython - Scipy</path>
+        <desc>Scipy 패키지 라이브러리</desc>
+    </item> -->
+
+    <!-- <item id="pkg_etc" type="package" level="0" name="ETC" tag="기타, ETC">
+        <path>visualpython - etc</path>
+        <desc>기타 함수 그룹</desc>
+    </item> -->
+</library>

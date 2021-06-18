@@ -1,0 +1,126 @@
+<div class="vp-option-page" id="vp_inputPage">
+    <form id="vp_optionForm">
+        
+        <div class="vp-accordion-container vp-accordion-open">
+            <div class="vp-accordion-header"><span class="vp-accordion-indicator"></span><span class="vp-accordion-caption" data-caption-id="TODO:Variable">Required Input & Output</span></div>
+            <div id="vp_inputOutputBox" class="vp-accordion-content">
+                <table class="vp-option-table">
+                    <colgroup><col width="30%"><col width="*"></colgroup>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="vp-accordion-container vp-accordion-open">
+            <div class="vp-accordion-header"><span class="vp-accordion-indicator"></span><span class="vp-accordion-caption" data-caption-id="TODO:Variable">Chart Option</span></div>
+            <div id="vp_optionBox" class="vp-accordion-content">
+                <table class="vp-option-table">
+                    <colgroup><col width="30%"><col width="*"></colgroup>
+                    <tbody>
+                        <tr>
+                            <td><span class="vp-multilang" data-caption-id="plot_kind">Chart Type</span></td>
+                            <td>
+                                <div id="vp_plotKind" class="vp-plot-kind">
+                                    <div class="vp-plot-item" id="vp_plotLine" data-kind="line" data-show-text="line">
+                                        <div class="vp-plot-thumb line"></div>
+                                        <div class="vp-plot-name">Line</div>
+                                    </div>
+                                    <div class="vp-plot-item" id="vp_plotBar" data-kind="bar" data-show-text="bar">
+                                        <div class="vp-plot-thumb bar"></div>
+                                        <div class="vp-plot-name">Bar</div>
+                                    </div>
+                                    <div class="vp-plot-item" id="vp_plotBarh" data-kind="barh" data-show-text="barh">
+                                        <div class="vp-plot-thumb barh"></div>
+                                        <div class="vp-plot-name">Bar(horizon)</div>
+                                    </div>
+                                    <div class="vp-plot-item" id="vp_plotHist" data-kind="hist" data-show-text="hist">
+                                        <div class="vp-plot-thumb hist"></div>
+                                        <div class="vp-plot-name">Histogram</div>
+                                    </div>
+                                    <div class="vp-plot-item" id="vp_plotBox" data-kind="box" data-show-text="box">
+                                        <div class="vp-plot-thumb box"></div>
+                                        <div class="vp-plot-name">Box Plot</div>
+                                    </div>
+                                    <div class="vp-plot-item" id="vp_plotKde" data-kind="kde" data-show-text="KDE">
+                                        <div class="vp-plot-thumb kde"></div>
+                                        <div class="vp-plot-name">KDE</div>
+                                    </div>
+                                    <div class="vp-plot-item" id="vp_plotArea" data-kind="area" data-show-text="Area">
+                                        <div class="vp-plot-thumb area"></div>
+                                        <div class="vp-plot-name">Area Chart</div>
+                                    </div>
+                                    <div class="vp-plot-item" id="vp_plotPie" data-kind="pie" data-show-text="pie">
+                                        <div class="vp-plot-thumb pie"></div>
+                                        <div class="vp-plot-name">Pie Chart</div>
+                                    </div>
+                                    <div class="vp-plot-item" id="vp_plotScatter" data-kind="scatter" data-show-text="Scatter">
+                                        <div class="vp-plot-thumb scatter"></div>
+                                        <div class="vp-plot-name">Scatter Plot</div>
+                                    </div>
+                                    <div class="vp-plot-item" id="vp_plotHexbin" data-kind="hexbin" data-show-text="Hexbin">
+                                        <div class="vp-plot-thumb hexbin"></div>
+                                        <div class="vp-plot-name">Hexbin Plot</div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- user option -->
+                        <tr>
+                            <td><label for="vp_userOption">User Option</label></td>
+                            <td>
+                                <input id="vp_userOption" type="text" class="vp-input" placeholder="key=value, key=value ..."/>
+                                <!-- TODO: input enter -> block create in div -->
+                                <!-- <input type="text" id="vp_userOption" placeholder="key=value"/>
+                                <div id="vp_userOptionList">
+
+                                </div> -->
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- <div class="vp-accordion-container vp-accordion-open">
+            <div class="vp-accordion-header"><span class="vp-accordion-indicator"></span><span class="vp-accordion-caption" data-caption-id="TODO:Variable">Chart Data Option</span></div>
+            <div id="vp_optionBox" class="vp-accordion-content">
+                <table class="vp-option-table">
+                    <colgroup><col width="30%"><col width="*"></colgroup>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div> -->
+        <div class="vp-accordion-container vp-accordion-gray-color">
+            <div class="vp-accordion-header"><span class="vp-accordion-indicator"></span><span class="vp-accordion-caption" data-caption-id="TODO:Variable">Chart Graphics Option</span></div>
+            <div id="vp_graphicsOptionBox" class="vp-accordion-content">
+                <table class="vp-option-table">
+                    <colgroup><col width="30%"><col width="*"></colgroup>
+                    <tbody>
+                        <tr>
+                            <td><span class="vp-multilang" data-caption-id="plot_cmap">Color Palette</span></td>
+                            <td>
+                                <div class="vp-plot-cmap-wrapper">
+                                    <div id="vp_plotCmap" class="vp-plot-cmap">
+                                        <span id="vp_selectedCmap" class="vp-multilang" data-caption-id="nothing_selected">None</span>
+                                        <!-- <div class="arrow"></div> -->
+                                    </div>
+                                    <div id="vp_plotCmapSelector" class="vp-plot-cmap-selector">
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- <div class="vp-accordion-container vp-accordion-gray-color">
+            <div class="vp-accordion-header"><span class="vp-accordion-indicator"></span><span class="vp-accordion-caption" data-caption-id="TODO:Variable">User Option</span></div>
+            <div id="vp_userOptionBox" class="vp-list-container">
+            </div>
+        </div> -->
+        
+    </form>
+</div>

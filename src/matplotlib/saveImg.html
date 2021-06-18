@@ -1,0 +1,30 @@
+<div class="vp-option-page" id="vp_inputPage">
+    <form id="vp_optionForm">
+        
+        <div class="vp-accordion-container vp-accordion-open">
+            <div class="vp-accordion-header"><span class="vp-accordion-indicator"></span><span class="vp-accordion-caption" data-caption-id="TODO:Variable">Required Input & Output</span></div>
+            <div id="vp_inputOutputBox" class="vp-accordion-content">
+                <table class="vp-option-table">
+                    <tr>
+                        <td>
+                            <label for="figureVar"><span class="vp-multilang" data-caption-id="mp_saveFigureVar">Figure To Save</span></label>
+                        </td>
+                        <td>
+                            <input type="text" class="vp-input input-single" id="figureVar" title="use focused plot if input nothing"/><br/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="imgFileName" class="vp-orange-text"><span class="vp-multilang" data-caption-id="mp_imgFileName">File Path</span></label>
+                        </td>
+                        <td>
+                            <input type="text" class="vp-input input-single" id="imgFileName" placeholder="./file.png" />
+                            <input type="button" value="path" class="vp-navi-btn black" id="vp_openFileNavigationBtn"><span id="fileName"></span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+    </form>
+</div>
