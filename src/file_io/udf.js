@@ -81,6 +81,9 @@ define([
         this.importedList = [];
         this.title_no = 0;
 
+        // double click setter
+        this.clicked = 0;
+
         // file navigation : state 데이터 목록
         this.state = {
             paramData:{
@@ -138,22 +141,22 @@ define([
         var that = this;
 
         // toggle item codebox 
-        $(document).on('click', this.wrapSelector('.vp-sn-item-header .vp-sn-indicator'), function() {
-            var parent = $(this).parent();
-            var hasOpen = $(this).hasClass('open');
-            // hide all codebox
-            $(that.wrapSelector('.vp-sn-indicator')).removeClass('open');
-            $(that.wrapSelector('.vp-sn-item-code')).hide();
+        // $(document).on('click', this.wrapSelector('.vp-sn-item-header .vp-sn-indicator'), function() {
+        //     var parent = $(this).parent();
+        //     var hasOpen = $(this).hasClass('open');
+        //     // hide all codebox
+        //     $(that.wrapSelector('.vp-sn-indicator')).removeClass('open');
+        //     $(that.wrapSelector('.vp-sn-item-code')).hide();
             
-            if (!hasOpen) {
-                // show code
-                $(this).addClass('open');
-                $(parent).parent().find('.vp-sn-item-code').show();
-            } else {
-                // hide code
-                $(parent).parent().find('.vp-sn-item-code').hide();
-            }
-        });
+        //     if (!hasOpen) {
+        //         // show code
+        //         $(this).addClass('open');
+        //         $(parent).parent().find('.vp-sn-item-code').show();
+        //     } else {
+        //         // hide code
+        //         $(parent).parent().find('.vp-sn-item-code').hide();
+        //     }
+        // });
 
         // menu popup
         $(document).on('click', this.wrapSelector('.vp-sn-menu'), function(evt) {
@@ -285,27 +288,91 @@ define([
             that.title_no += 1;
         });
 
+        // item header click (toggle & select item) &  double click (edit title)
+        $(document).on('click', this.wrapSelector('.vp-sn-item-header'), function(evt) {
+            var thisHeader = this;
+            that.clicked++;
+            if (that.clicked == 1) {
+                setTimeout(function(){
+                    if(that.clicked > 1) {
+                        // double click
+                        // enable input
+                        $(thisHeader).find('.vp-sn-item-title').prop('disabled', false);
+                        $(thisHeader).find('.vp-sn-item-title').focus();
+
+                    } 
+                    // single click
+                    // select item
+                    // remove selection
+                    $(that.wrapSelector('.vp-sn-item-header')).removeClass('selected');
+                    // select item
+                    $(thisHeader).addClass('selected');
+
+                    // toggle item
+                    var parent = $(thisHeader).parent();
+                    var indicator = $(thisHeader).find('.vp-sn-indicator');
+                    var hasOpen = $(indicator).hasClass('open');
+                    // hide all codebox
+                    $(that.wrapSelector('.vp-sn-indicator')).removeClass('open');
+                    $(that.wrapSelector('.vp-sn-item-code')).hide();
+                    
+                    if (that.clicked > 1 || !hasOpen) {
+                        // show code
+                        $(indicator).addClass('open');
+                        $(parent).find('.vp-sn-item-code').show();
+                    } else {
+                        // hide code
+                        $(parent).find('.vp-sn-item-code').hide();
+                    }
+                    that.clicked = 0;
+                }, 200);
+            }
+            evt.stopPropagation();
+        });
+
+        // prevent occuring header click event by clicking input
+        $(document).on('click', this.wrapSelector('.vp-sn-item-title'), function(evt) {
+            evt.stopPropagation();
+        });
+
         // item title save
-        $(document).on('change', this.wrapSelector('.vp-sn-item-title'), function(evt) {
+        $(document).on('blur', this.wrapSelector('.vp-sn-item-title'), function(evt) {
             var prevTitle = $(this).closest('.vp-sn-item').data('title');
-            var newTitle = $(this).val();
+            var inputTitle = $(this).val();
 
-            that.codemirrorList[prevTitle].save();
-            var code = that.codemirrorList[prevTitle].getValue();
-            // 기존 title 제거
-            vpSetting.removeUserDefinedCode(prevTitle);
-            
-            // 새 title로 저장
-            // save udf
-            var newTimestamp = new Date().getTime();
-            var newSnippet = { [newTitle]: { code: code, timestamp: newTimestamp } };
-            vpSetting.saveUserDefinedCode(newSnippet);
+            if (prevTitle == inputTitle) {
+                ;
+            } else {
+                // check duplicated
+                var titleList = Object.keys(that.codemirrorList);
+                var newTitle = inputTitle;
+                var dupNo = 0
+                while(titleList.includes(newTitle)) {
+                    dupNo += 1;
+                    newTitle = inputTitle + '_' + dupNo;
+                }
+    
+                that.codemirrorList[prevTitle].save();
+                var code = that.codemirrorList[prevTitle].getValue();
+                // 기존 title 제거
+                vpSetting.removeUserDefinedCode(prevTitle);
+                
+                // 새 title로 저장
+                // save udf
+                var newTimestamp = new Date().getTime();
+                var newSnippet = { [newTitle]: { code: code, timestamp: newTimestamp } };
+                vpSetting.saveUserDefinedCode(newSnippet);
+    
+                // update title & codemirror
+                $(this).closest('.vp-sn-item-title').val(newTitle);
+                $(this).closest('.vp-sn-item').data('title', newTitle);
+                // update codemirror
+                that.codemirrorList[newTitle] = that.codemirrorList[prevTitle];
+                delete that.codemirrorList[prevTitle];
+            }
 
-            // update title & codemirror
-            $(this).closest('.vp-sn-item').data('title', newTitle);
-            // update codemirror
-            that.codemirrorList[newTitle] = that.codemirrorList[prevTitle];
-            delete that.codemirrorList[prevTitle];
+            // disable
+            $(this).prop('disabled', true);
         });
 
         // item menu click
@@ -489,7 +556,7 @@ define([
         item.appendFormatLine('<div class="{0}" data-title="{1}" data-timestamp="{2}">', 'vp-sn-item', title, timestamp);
         item.appendFormatLine('<div class="{0}">', 'vp-sn-item-header');
         item.appendFormatLine('<div class="{0}"></div>', 'vp-sn-indicator');
-        item.appendFormatLine('<input type="text" class="{0}" value="{1}" />', 'vp-sn-item-title', title);
+        item.appendFormatLine('<input type="text" class="{0}" value="{1}" disabled/>', 'vp-sn-item-title', title);
         if (hasImported) {
             item.appendFormatLine('<i class="{0}"></i>', 'fa fa-circle vp-sn-imported-item');
         }
