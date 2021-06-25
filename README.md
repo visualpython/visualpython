@@ -2,6 +2,7 @@
 [![PyPI version shields.io](https://img.shields.io/pypi/v/visualpython)](https://pypi.python.org/pypi/visualpython/)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-green)](https://www.gnu.org/licenses/gpl-3.0.html)
 [![Code of Conduct: Contributor Covenant](https://img.shields.io/badge/Code%20of%20Conduct-Contributor%20Covenant-blueviolet)](https://github.com/visualpython/visualpython/blob/main/CODE_OF_CONDUCT.md)
+<img alt="open collective badge" src="https://opencollective.com/visual_python/tiers/backer/badge.svg?label=backer&color=yellow"/>
 
 ## Introduction
 Visual Python is a GUI-based Python code generator, developed on the Jupyter Notebook environment as an extension. 
