@@ -135,9 +135,10 @@ define([
             try {
                 var importMeta = JSON.parse(decodeURIComponent(this.metadata.options.find(x=>x.id=='vp_importMeta').value));
                 importMeta && importMeta.forEach((obj, i) => {
-                    var tagTr = $(`<tr><td><input id="vp_library${i}" type="text" class="vp-input m vp-add-library" placeholder="library name" required value="${obj.library.toLowerCase()}"/></td>
-                    <td><input id="vp_alias${i}" type="text" class="vp-input m vp-add-alias" placeholder="as" value="${obj.alias}"/></td>
-                    <td><input type="button" class="vp-remove-option w100" style="width:100%;" value="x"></td></tr>`);
+                    // var tagTr = $(`<tr><td><input id="vp_library${i}" type="text" class="vp-input m vp-add-library" placeholder="library name" required value="${obj.library.toLowerCase()}"/></td>
+                    // <td><input id="vp_alias${i}" type="text" class="vp-input m vp-add-alias" placeholder="as" value="${obj.alias}"/></td>
+                    // <td><input type="button" class="vp-remove-option w100" style="width:100%;" value="x"></td></tr>`);
+                    var tagTr = $(that.renderLibraryRow(i, obj.library.toLowerCase(), obj.alias));
                 
                     $(this.wrapSelector("#vp_tblImport tr:last")).before(tagTr);
                 });
@@ -148,10 +149,11 @@ define([
                 //         <option value="as">as</option>
                 //         <option value="import">import</option>
                 //     </select>
-                var tagTr = $(`<tr><td><input id="vp_library${i}" type="text" class="vp-input m vp-add-library" placeholder="library name" required value="${package.library.toLowerCase()}"/></td>
-                <td><input id="vp_alias${i}" type="text" class="vp-input m vp-add-alias" placeholder="as" value="${package.alias}"/></td>
-                <td><input type="button" class="vp-remove-option w100" style="width:100%;" value="x"></td></tr>`);
-            
+                // var tagTr = $(`<tr><td><input id="vp_library${i}" type="text" class="vp-input m vp-add-library" placeholder="library name" required value="${package.library.toLowerCase()}"/></td>
+                // <td><input id="vp_alias${i}" type="text" class="vp-input m vp-add-alias" placeholder="as" value="${package.alias}"/></td>
+                // <td><input type="button" class="vp-remove-option w100" style="width:100%;" value="x"></td></tr>`);
+                var tagTr = $(that.renderLibraryRow(i, package.library.toLowerCase(), package.alias));
+
                 $(this.wrapSelector("#vp_tblImport tr:last")).before(tagTr);
     
                 // add to package input
@@ -168,9 +170,12 @@ define([
 
         // 라이브러리 추가
         $(this.wrapSelector('#vp_addLibrary')).click(function() {
-            var tagTr = $(`<tr><td><input type="text" class="vp-add-library" placeholder="library name" required/></td>
-            <td><input type="text" class="vp-input m vp-add-alias" placeholder="alias"/></td>
-            <td><input type="button" class="vp-remove-option w100" style="width:100%;" value="x"></td></tr>`);
+            var libsLength = $(that.wrapSelector("#vp_tblImport tr:not(:first):not(:last)")).length;
+
+            // var tagTr = $(`<tr><td><input type="text" class="vp-add-library" placeholder="library name" required/></td>
+            // <td><input type="text" class="vp-input m vp-add-alias" placeholder="alias"/></td>
+            // <td><input type="button" class="vp-remove-option w100" style="width:100%;" value="x"></td></tr>`);
+            var tagTr = $(that.renderLibraryRow(libsLength, '', ''));
 
             $(that.wrapSelector("#vp_tblImport tr:last")).before(tagTr);
         });
@@ -193,6 +198,24 @@ define([
         //     }
         // });
         
+    }
+
+    ImportPackage.prototype.renderLibraryRow = function(idx, libraryName, aliasName) {
+        var tag = new sb.StringBuilder();
+        /**
+         * <td><input id="vp_library${i}" type="text" class="vp-input m vp-add-library" placeholder="library name" required value="${package.library.toLowerCase()}"/></td>
+                <td><input id="vp_alias${i}" type="text" class="vp-input m vp-add-alias" placeholder="as" value="${package.alias}"/></td>
+                <td><input type="button" class="vp-remove-option w100" style="width:100%;" value="x"></td></tr>
+         */
+        tag.append('<tr>');
+        tag.appendFormat('<td><input id="{0}" type="text" class="{1}" placeholder="{2}" required value="{3}"/></td>'
+                        , 'vp_library' + idx, 'vp-input m vp-add-library', 'Type library name', libraryName);
+        tag.appendFormat('<td><input id="{0}" type="text" class="{1}" placeholder="{2}" value="{3}"/></td>'
+                        , 'vp_alias' + idx, 'vp-input m vp-add-alias', 'Type alias', aliasName);
+        // tag.appendFormat('<td><input type="button" class="{0}" style="width:100%;" value="{1}"></td>', 'vp-remove-option w100', 'x');
+        tag.appendFormat('<td><i class="{0} {1}"></i></td>', 'fa fa-close', 'vp-remove-option w100 vp-cursor');
+        tag.append('</tr>');
+        return tag.toString();
     }
 
     /**

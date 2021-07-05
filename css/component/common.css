@@ -55,3 +55,8 @@
     color: #696969;
     cursor: not-allowed;
 }
+
+/* cursor as pointer */
+.vp-cursor {
+    cursor: pointer;
+}
