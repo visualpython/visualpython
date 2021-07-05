@@ -119,7 +119,7 @@
     width: 58;
     height: 58px;
     text-align: center;
-    border: 0.25px solid #C4C4C4;
+    /* border: 0.25px solid #C4C4C4; */
     box-sizing: border-box;
     box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.1);
     border-radius: 2px;
