@@ -32,6 +32,7 @@ define([
 
     const VP_FE_DF_BOX = 'vp-fe-df-box';
     const VP_FE_DF_REFRESH = 'vp-fe-df-refresh';
+    const VP_FE_DF_SHOWINFO = 'vp-fe-df-showinfo';
 
     const VP_FE_MENU_BOX = 'vp-fe-menu-box';
     const VP_FE_MENU_ITEM = 'vp-fe-menu-item';
@@ -54,6 +55,9 @@ define([
     const VP_FE_INFO = 'vp-fe-info';
     const VP_FE_INFO_TITLE = 'vp-fe-info-title';
     const VP_FE_INFO_CONTENT = 'vp-fe-info-content';
+
+    const VP_FE_INFO_ERROR_BOX = 'vp-fe-info-error-box';
+    const VP_FE_INFO_ERROR_BOX_TITLE = 'vp-fe-info-error-box-title';
 
     const VP_FE_BUTTON_BOX = 'vp-fe-btn-box';
     const VP_FE_BUTTON_CANCEL = 'vp-fe-btn-cancel';
@@ -234,6 +238,7 @@ define([
         page.appendFormatLine('<select id="{0}">', 'vp_feVariable');
         page.appendLine('</select>');
         page.appendFormatLine('<i class="{0} {1}"></i>', VP_FE_DF_REFRESH, 'fa fa-refresh');
+        page.appendFormatLine('<button class="{0} {1}"><i class="{2}"></i> View Info</button>', VP_FE_DF_SHOWINFO, 'vp-button', 'fa fa-columns');
         page.appendLine('</div>');
 
         // Table
@@ -241,13 +246,14 @@ define([
 
         page.appendLine('</div>'); // End of Table
 
+        page.appendLine('</div>'); // VP_FE_BODY
+        
         // Info Box
         page.appendFormatLine('<div class="{0}">', VP_FE_INFO);
         page.appendFormatLine('<div class="{0}">Info</div>', VP_FE_INFO_TITLE);
         page.appendFormatLine('<div class="{0}">content</div>', VP_FE_INFO_CONTENT);
         page.appendLine('</div>'); // End of VP_FE_INFO
 
-        page.appendLine('</div>'); // VP_FE_BODY
 
         // apply button
         page.appendFormatLine('<div class="{0}">', VP_FE_BUTTON_BOX);
@@ -391,11 +397,11 @@ define([
         content.appendLine('<table><tr>');
         content.appendFormatLine('<th><label>New {0} name</label></th>', type);
         content.appendFormatLine('<td><input type="text" class="{0}"/>', 'vp-popup-input1');
-        content.appendFormatLine('<label><input type="checkbox" class="{0}"/><span>{1}</span></label>', 'vp-popup-istext1','Text');
+        content.appendFormatLine('<label><input type="checkbox" class="{0}" checked/><span>{1}</span></label>', 'vp-popup-istext1','Text');
         content.appendLine('</td></tr><tr>');
         content.appendLine('<th><label>Value</label></th>');
         content.appendFormatLine('<td><input type="text" class="{0}"/>', 'vp-popup-input2');
-        content.appendFormatLine('<label><input type="checkbox" class="{0}"/><span>{1}</span></label>', 'vp-popup-istext2','Text');
+        content.appendFormatLine('<label><input type="checkbox" class="{0}" checked/><span>{1}</span></label>', 'vp-popup-istext2','Text');
         content.appendLine('</td></tr></table>');
         return content.toString();
     }
@@ -494,6 +500,27 @@ define([
         
     }
 
+    FrameEditor.prototype.showInfo = function() {
+        $(this.wrapSelector('.' + VP_FE_INFO)).show();
+    }
+
+    FrameEditor.prototype.hideInfo = function() {
+        $(this.wrapSelector('.' + VP_FE_INFO)).hide();
+    }
+
+    FrameEditor.prototype.renderInfoPage = function(renderedText, isHtml = true) {
+        var tag = new sb.StringBuilder();
+        tag.appendFormatLine('<div class="{0} {1}">', VP_FE_INFO_CONTENT
+                            , 'rendered_html'); // 'rendered_html' style from jupyter output area
+        if (isHtml) {
+            tag.appendLine(renderedText);
+        } else {
+            tag.appendFormatLine('<pre>{0}</pre>', renderedText);
+        }
+        tag.appendLine('</div>');
+        return tag.toString();
+    }
+
     FrameEditor.prototype.loadInfo = function() {
         var that = this;
 
@@ -506,7 +533,8 @@ define([
         this.state.selected = selected;
 
         var code = new sb.StringBuilder();
-        code.appendFormat("{0}", this.state.tempObj);
+        var locObj = new sb.StringBuilder();
+        locObj.appendFormat("{0}", this.state.tempObj);
         if (this.state.selected != '') {
             var rowCode = ':';
             var colCode = ':';
@@ -516,15 +544,62 @@ define([
             if (this.state.axis == 1) {
                 colCode = '[' + this.state.selected.join(',') + ']';
             }
-            code.appendFormat(".loc[{0},{1}]", rowCode, colCode);
+            locObj.appendFormat(".loc[{0},{1}]", rowCode, colCode);
         }
-        code.append(".value_counts()");
-        kernelApi.executePython(code.toString(), function(result) {
-            $(that.wrapSelector('.' + VP_FE_INFO_CONTENT)).replaceWith(function() {
-                // return vpCommon.formatString('<div class="{0}"><pre>{1}</pre></div>', VP_FE_INFO_CONTENT, result);
-                return vpCommon.formatString('<div class="{0}">{1}</div>', VP_FE_INFO_CONTENT, result);
-            });
-        }); 
+        // code.append(".value_counts()");
+        code.appendFormat('_vp_display_dataframe_info({0})', locObj.toString());
+        
+        // kernelApi.executePython(code.toString(), function(result) {
+        //     $(that.wrapSelector('.' + VP_FE_INFO_CONTENT)).replaceWith(function() {
+        //         // return vpCommon.formatString('<div class="{0}"><pre>{1}</pre></div>', VP_FE_INFO_CONTENT, result);
+        //         return vpCommon.formatString('<div class="{0}">{1}</div>', VP_FE_INFO_CONTENT, result);
+        //     });
+        // }); 
+
+        Jupyter.notebook.kernel.execute(
+            code.toString(),
+            {
+                iopub: {
+                    output: function(msg) {
+                        if (msg.content.data) {
+                            var htmlText = String(msg.content.data["text/html"]);
+                            var codeText = String(msg.content.data["text/plain"]);
+                            if (htmlText != 'undefined') {
+                                $(that.wrapSelector('.' + VP_FE_INFO_CONTENT)).replaceWith(function() {
+                                    return that.renderInfoPage(htmlText);
+                                });
+                            } else if (codeText != 'undefined') {
+                                // plain text as code
+                                $(that.wrapSelector('.' + VP_FE_INFO_CONTENT)).replaceWith(function() {
+                                    return that.renderInfoPage(codeText, false);
+                                });
+                            } else {
+                                $(that.wrapSelector('.' + VP_FE_INFO_CONTENT)).replaceWith(function() {
+                                    return that.renderInfoPage('');
+                                });
+                            }
+                        } else {
+                            var errorContent = new sb.StringBuilder();
+                            if (msg.content.ename) {
+                                errorContent.appendFormatLine('<div class="{0}">', VP_FE_INFO_ERROR_BOX);
+                                errorContent.appendLine('<i class="fa fa-exclamation-triangle"></i>');
+                                errorContent.appendFormatLine('<label class="{0}">{1}</label>'
+                                                            , VP_FE_INFO_ERROR_BOX_TITLE, msg.content.ename);
+                                if (msg.content.evalue) {
+                                    // errorContent.appendLine('<br/>');
+                                    errorContent.appendFormatLine('<pre>{0}</pre>', msg.content.evalue.split('\\n').join('<br/>'));
+                                }
+                                errorContent.appendLine('</div>');
+                            }
+                            $(that.wrapSelector('.' + VP_FE_INFO_CONTENT)).replaceWith(function() {
+                                return that.renderInfoPage(errorContent);
+                            });
+                        }
+                    }
+                }
+            },
+            { silent: false, store_history: true, stop_on_error: true }
+        );
     }
 
     FrameEditor.prototype.getTypeCode = function(type, content={}) {
@@ -577,6 +652,9 @@ define([
                 code.appendFormat("{0}{1}.drop_duplicates(axis={2}, inplace=True)", tempObj, locObj, axis);
                 break;
             case FRAME_EDIT_TYPE.ONE_HOT_ENCODING:
+                if (axis == 1) {
+                    code.appendFormat("{0} = pd.get_dummies(data={1}, columns=[{2}])", tempObj, tempObj, selectedName);
+                }
                 break;
             case FRAME_EDIT_TYPE.SET_IDX:
                 break;
@@ -733,6 +811,15 @@ define([
             that.loadVariableList();
         });
 
+        // show info
+        $(document).on('click', this.wrapSelector('.vp-fe-df-showinfo'), function() {
+            that.showInfo();
+        });
+
+        $(document).on('click', this.wrapSelector('.' + VP_FE_INFO), function(evt) {
+            evt.stopPropagation();
+        });
+
         // menu on column
         $(document).on('contextmenu', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN), function(event) {
             event.preventDefault();
@@ -779,6 +866,10 @@ define([
             if (evt.target.id != 'vp_apiblock_menu_box') {
                 // close menu
                 that.hideMenu();
+            }
+            if (!$(evt.target).hasClass(VP_FE_DF_SHOWINFO)) {
+                // close info
+                that.hideInfo();
             }
         });
 
@@ -840,9 +931,12 @@ define([
                 case FRAME_EDIT_TYPE.ADD_ROW:
                 case FRAME_EDIT_TYPE.RENAME:
                     that.openInputPopup(editType);
-                    return;
+                    break;
+                default:
+                    that.loadCode(that.getTypeCode(editType));
+                    break;
             }
-            that.loadCode(that.getTypeCode(editType));
+            that.hideMenu();
         });
 
         // ok input popup

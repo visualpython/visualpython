@@ -1,6 +1,8 @@
 """
 Pandas Objects Command
 """
+import pandas as _vp_pd
+from IPython.core.display import display
 
 def _vp_get_rows_list(df):
     """
@@ -60,3 +62,14 @@ def _vp_get_dataframe_as_list(df):
     Get Dataframe as List
     """
     return df.values.tolist()
+
+def _vp_display_dataframe_info(df):
+    """
+    Get info of dataframe
+    """
+    display(df.shape)
+    _notnull = df.notnull().sum()
+    _types = df.dtypes
+    _desc = df.describe().T
+    _info = _vp_pd.concat([_notnull, _types], axis=1, keys=['Non-Null Count','Dtype'])
+    display(_vp_pd.concat([_info, _desc], axis=1))
