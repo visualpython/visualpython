@@ -461,6 +461,11 @@
     font-size: 10px;
 }
 
+.vp-apiblock-group-list:empty::after {
+    content: 'Work In Progress...';
+    color: var(--gray-color);
+}
+
 
 .vp-apiblock-tab-title {
     font-size: 16px;
@@ -547,7 +552,7 @@
     transition: mask-position 0.3s, -webkit-mask-position 0.3s; */
 
     overflow-y: auto;
-    -webkit-mask-position: left top;
+    --webkit-mask-position: left top;
 }
 
 /* .vp-apiblock-scrollbar:hover {
