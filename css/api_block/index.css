@@ -564,9 +564,9 @@
     width: 5px;
     height: 5px;
 } 
-.vp-apiblock-scrollbar::-webkit-scrollbar-track {
+/* .vp-apiblock-scrollbar::-webkit-scrollbar-track {
     box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
-}  
+}   */
 .vp-apiblock-scrollbar::-webkit-scrollbar-thumb {
     border: 0.3px solid #C4C4C4;
     background: #C4C4C4;
