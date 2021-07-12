@@ -76,11 +76,12 @@ define([
         DROP_DUP: 5,
         ONE_HOT_ENCODING: 6,
         SET_IDX: 7,
-        REPLACE: 8,
+        RESET_IDX: 8,
+        REPLACE: 9,
 
-        ADD_COL: 9,
-        ADD_ROW: 10,
-        SHOW: 11
+        ADD_COL: 97,
+        ADD_ROW: 98,
+        SHOW: 99
     }
 
     /**
@@ -275,17 +276,17 @@ define([
         // Menus
         page.appendFormatLine('<div class="{0}" style="display:none; position: fixed;">', VP_FE_MENU_BOX);
         // menu 1. Add Column
-        page.appendFormatLine('<div class="{0} {1}" data-type="{2}">{3}</div>'
-                            , VP_FE_MENU_ITEM, 'vp-fe-menu-add-column', FRAME_EDIT_TYPE.ADD_COL, 'Add Column');
+        page.appendFormatLine('<div class="{0} {1}" data-type="{2}" data-axis="{3}">{4}</div>'
+                            , VP_FE_MENU_ITEM, 'vp-fe-menu-add-column', FRAME_EDIT_TYPE.ADD_COL, 'col', 'Add Column');
         // menu 2. Add Row
-        page.appendFormatLine('<div class="{0} {1}" data-type="{2}">{3}</div>'
-                            , VP_FE_MENU_ITEM, 'vp-fe-menu-add-row', FRAME_EDIT_TYPE.ADD_ROW, 'Add Row');
+        page.appendFormatLine('<div class="{0} {1}" data-type="{2}" data-axis="{3}">{4}</div>'
+                            , VP_FE_MENU_ITEM, 'vp-fe-menu-add-row', FRAME_EDIT_TYPE.ADD_ROW, 'row', 'Add Row');
         // menu 3. drop
         page.appendFormatLine('<div class="{0} {1}" data-type="{2}">{3}<i class="{4}" style="{5}"></i>'
                             , VP_FE_MENU_ITEM, 'vp-fe-menu-drop', FRAME_EDIT_TYPE.DROP, 'Drop'
                             , 'fa fa-caret-right', 'padding-left: 5px;'); //TODO: NA & Duplicate selection needed
         // sub-menu 1.
-        page.appendFormatLine('<div class="{0}" style="{1}">', VP_FE_MENU_SUB_BOX, 'top: 50px;');
+        page.appendFormatLine('<div class="{0}" style="{1}">', VP_FE_MENU_SUB_BOX, 'top: 25px;');
         // menu 3-1. drop
         page.appendFormatLine('<div class="{0} {1}" data-type="{2}">{3}</div>'
                             , VP_FE_MENU_ITEM, 'vp-fe-menu-drop', FRAME_EDIT_TYPE.DROP, 'Drop');
@@ -293,19 +294,22 @@ define([
         page.appendFormatLine('<div class="{0} {1}" data-type="{2}">{3}</div>'
                             , VP_FE_MENU_ITEM, 'vp-fe-menu-drop-na', FRAME_EDIT_TYPE.DROP_NA, 'Drop NA');
         // menu 3-3. drop-duplicate
-        page.appendFormatLine('<div class="{0} {1}" data-type="{2}">{3}</div>'
-                            , VP_FE_MENU_ITEM, 'vp-fe-menu-drop-duplicate', FRAME_EDIT_TYPE.DROP_DUP, 'Drop Duplicate');
+        page.appendFormatLine('<div class="{0} {1}" data-type="{2}" data-axis="{3}">{4}</div>'
+                            , VP_FE_MENU_ITEM, 'vp-fe-menu-drop-duplicate', FRAME_EDIT_TYPE.DROP_DUP, 'col','Drop Duplicate');
         page.appendLine('</div>'); // end of sub-menu 1
         page.appendLine('</div>'); // end of menu 3
         // menu 4. rename
         page.appendFormatLine('<div class="{0} {1}" data-type="{2}">{3}</div>'
                                                 , VP_FE_MENU_ITEM, 'vp-fe-menu-rename', FRAME_EDIT_TYPE.RENAME, 'Rename');
         // menu 5. one-hot encoding
-        page.appendFormatLine('<div class="{0} {1}" data-type="{2}">{3}</div>'
-                            , VP_FE_MENU_ITEM, 'vp-fe-menu-ohe', FRAME_EDIT_TYPE.ONE_HOT_ENCODING, 'One-Hot Encoding');
-        // menu 6. set/reset index
-        page.appendFormatLine('<div class="{0} {1}" data-type="{2}">{3}</div>'
-                            , VP_FE_MENU_ITEM, 'vp-fe-menu-index', FRAME_EDIT_TYPE.SET_IDX, 'Set Index');
+        page.appendFormatLine('<div class="{0} {1}" data-type="{2}" data-axis="{3}">{4}</div>'
+                            , VP_FE_MENU_ITEM, 'vp-fe-menu-ohe', FRAME_EDIT_TYPE.ONE_HOT_ENCODING, 'col', 'One-Hot Encoding');
+        // menu 6. set index
+        page.appendFormatLine('<div class="{0} {1}" data-type="{2}" data-axis="{3}">{4}</div>'
+                            , VP_FE_MENU_ITEM, 'vp-fe-menu-set-index', FRAME_EDIT_TYPE.SET_IDX, 'col', 'Set Index');
+        // menu 6-2. reset index
+        page.appendFormatLine('<div class="{0} {1}" data-type="{2}" data-axis="{3}">{4}</div>'
+                            , VP_FE_MENU_ITEM, 'vp-fe-menu-reset-index', FRAME_EDIT_TYPE.RESET_IDX, 'row', 'Reset Index');
         // menu 7. replace
         page.appendFormatLine('<div class="{0} {1}" data-type="{2}">{3}</div>'
                             , VP_FE_MENU_ITEM, 'vp-fe-menu-replace', FRAME_EDIT_TYPE.REPLACE, 'Replace');
@@ -380,7 +384,7 @@ define([
     FrameEditor.prototype.renderTable = function(renderedText, isHtml=true) {
         var tag = new sb.StringBuilder();
         // Table
-        tag.appendFormatLine('<div class="{0} {1}">', VP_FE_TABLE, 'rendered_html');
+        tag.appendFormatLine('<div class="{0} {1} {2}">', VP_FE_TABLE, 'rendered_html', 'vp-apiblock-scrollbar');
         if (isHtml) {
             tag.appendFormatLine('<table class="dataframe">{0}</table>', renderedText);
             // More button
@@ -420,6 +424,17 @@ define([
         return content.toString();
     }
 
+    FrameEditor.prototype.renderReplacePage = function() {
+        var content = new sb.StringBuilder();
+        content.appendLine('<table>');
+        content.appendLine('<tr>');
+        content.appendFormatLine('<td><input type="text" class="{0}" placeholder="{1}"/></td>', 'vp-popup-input0', 'origin');
+        content.appendFormatLine('<td><input type="text" class="{0}" placeholder="{1}"/></td>', 'vp-popup-replace0', 'replace');
+        content.appendLine('</tr>');
+        content.appendLine('</table>');
+        return content.toString();
+    }
+
     FrameEditor.prototype.openInputPopup = function(type, width=0, height=0) {
         var title = '';
         var content = '';
@@ -437,6 +452,9 @@ define([
                 title = 'Rename';
                 content = this.renderRenamePage();
                 break;
+            case FRAME_EDIT_TYPE.REPLACE:
+                title = 'Replace';
+                content = this.renderReplacePage();
             default:
                 type = FRAME_EDIT_TYPE.NONE;
                 break;
@@ -479,6 +497,9 @@ define([
                         istext: istext
                     };
                 });
+                break;
+            case FRAME_EDIT_TYPE.REPLACE:
+                // TODO:
                 break;
             default:
                 break;
@@ -644,12 +665,9 @@ define([
                 code.appendFormat("{0}{1}.dropna(axis={2}, inplace=True)", tempObj, locObj, axis);
                 break;
             case FRAME_EDIT_TYPE.DROP_DUP:
-                if (axis == 0) {
-                    locObj = vpCommon.formatString('.loc[[{0}],:]', selectedName);
-                } else {
-                    locObj = vpCommon.formatString('.loc[:,[{0}]]', selectedName);
+                if (axis == 1) {
+                    code.appendFormat("{0}.drop_duplicates(subset=[{1}], inplace=True)", tempObj, selectedName);
                 }
-                code.appendFormat("{0}{1}.drop_duplicates(axis={2}, inplace=True)", tempObj, locObj, axis);
                 break;
             case FRAME_EDIT_TYPE.ONE_HOT_ENCODING:
                 if (axis == 1) {
@@ -657,6 +675,14 @@ define([
                 }
                 break;
             case FRAME_EDIT_TYPE.SET_IDX:
+                if (axis == 1) {
+                    code.appendFormat("{0}.set_index([{1}], inplace=True)", tempObj, selectedName);
+                }
+                break;
+            case FRAME_EDIT_TYPE.RESET_IDX:
+                if (axis == 0) {
+                    code.appendFormat("{0}.reset_index(inplace=True)", tempObj);
+                }
                 break;
             case FRAME_EDIT_TYPE.REPLACE:
                 code.appendFormat("{0}.replace({1}, inplace=True)", tempObj, JSON.stringify(content).replaceAll('"', "'"));
@@ -750,8 +776,10 @@ define([
                 // load info
                 that.loadInfo();
                 // add to stack
-                that.state.steps.push(codeStr);
-                that.setPreview(codeStr);
+                if (codeStr !== '') {
+                    that.state.steps.push(codeStr);
+                    that.setPreview(codeStr);
+                }
             } catch (err) {
                 console.log(err);
             }
@@ -764,6 +792,8 @@ define([
         $(document).off('click', this.wrapSelector('.' + VP_FE_CLOSE));
         $(document).off('change', this.wrapSelector('#vp_feVariable'));
         $(document).off('click', this.wrapSelector('.vp-fe-df-refresh'));
+        $(document).off('click', this.wrapSelector('.vp-fe-df-showinfo'));
+        $(document).off('click', this.wrapSelector('.' + VP_FE_INFO));
         $(document).off('contextmenu', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN));
         $(document).off('contextmenu', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW));
         $(document).off('click', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN));
@@ -930,6 +960,7 @@ define([
                 case FRAME_EDIT_TYPE.ADD_COL:
                 case FRAME_EDIT_TYPE.ADD_ROW:
                 case FRAME_EDIT_TYPE.RENAME:
+                case FRAME_EDIT_TYPE.REPLACE:
                     that.openInputPopup(editType);
                     break;
                 default:
@@ -941,7 +972,7 @@ define([
 
         // ok input popup
         $(document).on('click', this.wrapSelector('.' + VP_FE_POPUP_OK), function() {
-            // TODO: ok input popup
+            // ok input popup
             that.loadCode(that.getTypeCode(that.state.popup, that.getPopupContent()));
             that.closeInputPopup();
         });
@@ -984,10 +1015,12 @@ define([
     FrameEditor.prototype.showMenu = function(left, top) {
         if (this.state.axis == 0) {
             // row
-
+            $(this.wrapSelector(vpCommon.formatString('.{0}', VP_FE_MENU_BOX))).find('div[data-axis="col"]').hide();
+            $(this.wrapSelector(vpCommon.formatString('.{0}', VP_FE_MENU_BOX))).find('div[data-axis="row"]').show();
         } else if (this.state.axis == 1) {
             // column
-
+            $(this.wrapSelector(vpCommon.formatString('.{0}', VP_FE_MENU_BOX))).find('div[data-axis="row"]').hide();
+            $(this.wrapSelector(vpCommon.formatString('.{0}', VP_FE_MENU_BOX))).find('div[data-axis="col"]').show();
         }
         $(this.wrapSelector(vpCommon.formatString('.{0}', VP_FE_MENU_BOX))).css({ top: top, left: left })
         $(this.wrapSelector(vpCommon.formatString('.{0}', VP_FE_MENU_BOX))).show();
