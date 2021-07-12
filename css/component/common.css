@@ -60,3 +60,9 @@
 .vp-cursor {
     cursor: pointer;
 }
+
+.vp-vertical-line {
+    display: inline-block;
+    height: 15px;
+    border-right: 1px solid var(--font-primary);
+}

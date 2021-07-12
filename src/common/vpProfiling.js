@@ -25,6 +25,7 @@ define([
 
     const VP_PF_PREPARE_BOX = 'vp-pf-prepare-box';
     const VP_PF_INSTALL_BTN = 'vp-pf-install-btn';
+    const VP_PF_CHECK_BTN = 'vp-pf-check-btn';
     const VP_PF_IMPORT_BTN = 'vp-pf-import-btn';
 
     const VP_PF_SHOW_BOX = 'vp-pf-show-box';
@@ -90,13 +91,11 @@ define([
 
     Profiling.prototype.init = function() {
         // state
-        this.state = {
-
-        }
 
         vpCommon.loadCss(Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH + "common/profiling.css");
 
         this.render();
+        this.checkInstalled();
         this.bindEvent();
 
         this.loadVariableList();
@@ -125,7 +124,9 @@ define([
         page.appendFormatLine('<label>{0} <a href="{1}" target="_blank"><i class="{2} {3}" title="{4}"></i></a></label>'
                             , 'Prepare to use Pandas Profiling', 'https://github.com/pandas-profiling/pandas-profiling', 'fa fa-link', 'vp-pf-link', 'Go to pandas-profiling github page');
         page.appendLine('<div>');
-        page.appendFormatLine('<button class="{0} {1}">{2}</button>', 'vp-button', VP_PF_INSTALL_BTN, 'Install');
+        page.appendFormatLine('<button class="{0} {1}">{2}</button>', 'vp-button activated', VP_PF_INSTALL_BTN, 'Install');
+        page.appendFormatLine('<i class="{0} {1} {2}" title="{2}"></i>', 'fa fa-refresh', 'vp-cursor', VP_PF_CHECK_BTN, 'Check if installed');
+        // page.appendLine('<div class="vp-vertical-line"></div>');
         page.appendFormatLine('<button class="{0} {1}">{2}</button>', 'vp-button', VP_PF_IMPORT_BTN, 'Import');
         page.appendLine('</div>');
         page.appendLine('</div>');
@@ -221,6 +222,46 @@ define([
         return tag.toString();
     }
 
+    Profiling.prototype.checkInstalled = function() {
+        var that = this;
+        // set state as 'Checking'
+        $(this.wrapSelector('.' + VP_PF_INSTALL_BTN)).text('Checking...');
+        // set disabled
+        if (!$(that.wrapSelector('.' + VP_PF_INSTALL_BTN)).hasClass('disabled')) {
+            $(that.wrapSelector('.' + VP_PF_INSTALL_BTN)).addClass('disabled');
+        }
+        var checking = true;
+
+        // check installed
+        Jupyter.notebook.kernel.execute(
+            '!pip show pandas-profiling',
+            {
+                iopub: {
+                    output: function(msg) {
+                        if (!checking) {
+                            return;
+                        }
+                        if (msg.content['name'] == 'stderr') {
+                            if (msg.content['text'].includes('not found')) {
+                                $(that.wrapSelector('.' + VP_PF_INSTALL_BTN)).text('Install');
+                                // set enabled
+                                if ($(that.wrapSelector('.' + VP_PF_INSTALL_BTN)).hasClass('disabled')) {
+                                    $(that.wrapSelector('.' + VP_PF_INSTALL_BTN)).removeClass('disabled');
+                                }
+                            }
+                        } else {
+                            $(that.wrapSelector('.' + VP_PF_INSTALL_BTN)).text('Installed');
+                            // set disabled
+                            if (!$(that.wrapSelector('.' + VP_PF_INSTALL_BTN)).hasClass('disabled')) {
+                                $(that.wrapSelector('.' + VP_PF_INSTALL_BTN)).addClass('disabled');
+                            }
+                        }
+                    }
+                }
+            }
+        );
+    }
+
     Profiling.prototype.unbindEvent = function() {
         $(document).off(this.wrapSelector('*'));
 
@@ -244,6 +285,11 @@ define([
         // click install
         $(document).on('click', this.wrapSelector('.' + VP_PF_INSTALL_BTN), function(event) {
             vpCommon.cellExecute([{command: '!pip install pandas-profiling', exec:true, type:'code'}]);
+        });
+
+        // click check installed
+        $(document).on('click', this.wrapSelector('.' + VP_PF_CHECK_BTN), function() {
+            that.checkInstalled();
         });
 
         // click import
@@ -315,25 +361,6 @@ define([
         $(document).on('click', this.wrapSelector('.' + VP_PF_BUTTON_CANCEL), function() {
             that.close();
         });
-
-        // click apply
-        // $(document).on('click', this.wrapSelector('.' + VP_PF_BUTTON_APPLY), function() {
-        //     var code = 'test code'; //TODO:
-        //     if (that.pageThis) {
-        //         $(that.pageThis.wrapSelector('#' + that.targetId)).val(code);
-        //         $(that.pageThis.wrapSelector('#' + that.targetId)).trigger({
-        //             type: 'profiling_apply',
-        //             code: code
-        //         });
-        //     } else {
-        //         $(vpCommon.wrapSelector('#' + that.targetId)).val(code);
-        //         $(vpCommon.wrapSelector('#' + that.targetId)).trigger({
-        //             type: 'profiling_apply',
-        //             code: code
-        //         });
-        //     }
-        //     that.close();
-        // });
     };
 
     return Profiling;

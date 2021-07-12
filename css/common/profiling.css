@@ -19,7 +19,7 @@
     min-width: 400px;
     min-height: 400px;
     width: 50%;
-    height: 95%;
+    height: 60%;
 
     background-color: white;
 }
@@ -80,6 +80,9 @@
 }
 .vp-pf-link {
     color: var(--hightlight-color);
+}
+.vp-pf-import-btn {
+    margin-left: 10px;
 }
 
 .vp-pf-show-box {
