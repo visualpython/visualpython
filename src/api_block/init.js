@@ -306,6 +306,9 @@ define([
                         width: '600px'
                     });
                     break;
+                case 'profiling':
+                    blockContainer.createAppsPage('nbextensions/visualpython/src/common/vpProfiling');
+                    break;
                 case 'merge':
                     // TODO: Merge
                     break;
