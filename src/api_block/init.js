@@ -553,7 +553,7 @@ define([
             // });
         });
 
-        /** +node 블럭 생성 버튼 클릭 함수 바인딩 */
+        /** +code 블럭 생성 버튼 클릭 함수 바인딩 */
         $(document).on(STR_CLICK, VP_ID_PREFIX + VP_ID_APIBLOCK_NODE_BLOCK_PLUS_BUTTON, function() {
             // blockContainer.createNodeBlock(true);
             // +code 블럭 생성
@@ -729,14 +729,8 @@ define([
             if (e.file.substring(e.file.lastIndexOf(".") + 1) === vpConst.VP_NOTE_EXTENSION) {
                 var selectedPath = $(vpCommon.wrapSelector(vpCommon.formatString("#{0}", vpConst.VP_NOTE_REAL_FILE_PATH))).val();
                 var saveFileName = selectedPath.substring(selectedPath.lastIndexOf("/") + 1);
-                // FIXME: 여기부분 수정해야 함
+
                 saveNotePageAction_newVersion(saveFileName, selectedPath);
-                // apiBlockPackage.openMultiBtnModal_new('Save As', `Save changes to '${saveFileName}'`,['Yes','No', 'Cancel'], [() => {
-                // },() => {
-
-                // },() => {
-
-                // }]);
             }
         });
 
