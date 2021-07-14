@@ -19,6 +19,7 @@ define([
 
         , VP_ID_APIBLOCK_MENU_BOX 
         , VP_ID_APIBLOCK_MENU_RUN
+        , VP_ID_APIBLOCK_MENU_ADD
         , VP_ID_APIBLOCK_MENU_DUPLICATE
         , VP_ID_APIBLOCK_MENU_DELETE
 
@@ -51,6 +52,9 @@ define([
         // run button
         sbBlockMenu.appendFormatLine('<div id="{0}" class="{1}">{2}</div>'
                                     , VP_ID_APIBLOCK_MENU_RUN, VP_CLASS_APIBLOCK_MENU_ITEM, 'Run');
+        // add button
+        sbBlockMenu.appendFormatLine('<div id="{0}" class="{1}">{2}</div>'
+                                    , VP_ID_APIBLOCK_MENU_ADD, VP_CLASS_APIBLOCK_MENU_ITEM, 'Add');
         // duplicate button
         sbBlockMenu.appendFormatLine('<div id="{0}" class="{1}">{2}</div>'
                                     , VP_ID_APIBLOCK_MENU_DUPLICATE, VP_CLASS_APIBLOCK_MENU_ITEM, 'Duplicate');
@@ -92,11 +96,16 @@ define([
             that.block.runThisBlock();
             that.close();
         });
+        /** add block */
+        $(document).off(STR_CLICK, this.wrapSelector(VP_ID_PREFIX + VP_ID_APIBLOCK_MENU_ADD));
+        $(document).on(STR_CLICK, this.wrapSelector(VP_ID_PREFIX + VP_ID_APIBLOCK_MENU_ADD), function() {
+            that.block.runThisBlock(false);
+            that.close();
+        });
         /** duplicate block */
         $(document).off(STR_CLICK, this.wrapSelector(VP_ID_PREFIX + VP_ID_APIBLOCK_MENU_DUPLICATE));
         $(document).on(STR_CLICK, this.wrapSelector(VP_ID_PREFIX + VP_ID_APIBLOCK_MENU_DUPLICATE), function() {
-            // TODO: duplicate block
-
+            // duplicate block
             var blockContainer = that.block.getBlockContainerThis();
 
             // blockContainer.setCtrlSaveData();

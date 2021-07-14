@@ -2180,9 +2180,9 @@ define([
     /** importPackage의 generateCode 이전에 실행할 prefix code
      *  @param {boolean} isClicked true면 node 블럭 앞 run 버튼 클릭으로 코드 실행
      */
-    BlockContainer.prototype.generateCode = function(isClicked) {
+    BlockContainer.prototype.generateCode = function(isClicked, runCell=true) {
         var importPackageThis = this.getImportPackageThis();
-        importPackageThis.generateCode(true, true, isClicked);
+        importPackageThis.generateCode(true, runCell, isClicked);
     }
 
     /** 코드 생성 */

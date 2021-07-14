@@ -354,6 +354,7 @@ define([
 
     const VP_ID_APIBLOCK_MENU_BOX = 'vp_apiblock_menubox';
     const VP_ID_APIBLOCK_MENU_RUN = 'vp_apiblock_menu_run';
+    const VP_ID_APIBLOCK_MENU_ADD = 'vp_apiblock_menu_add';
     const VP_ID_APIBLOCK_MENU_DUPLICATE = 'vp_apiblock_menu_duplicate';
     const VP_ID_APIBLOCK_MENU_DELETE = 'vp_apiblock_menu_delete';
 
@@ -933,6 +934,7 @@ define([
 
         , VP_ID_APIBLOCK_MENU_BOX
         , VP_ID_APIBLOCK_MENU_RUN
+        , VP_ID_APIBLOCK_MENU_ADD
         , VP_ID_APIBLOCK_MENU_DUPLICATE
         , VP_ID_APIBLOCK_MENU_DELETE
 
