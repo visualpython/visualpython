@@ -163,7 +163,10 @@ define([
             axis: 0,
             lines: TABLE_LINES,
             steps: [],
-            popup: FRAME_EDIT_TYPE.NONE
+            popup: {
+                type: FRAME_EDIT_TYPE.NONE,
+                replace: { index: 0 }
+            }
         }
 
         this.codepreview = undefined;
@@ -311,8 +314,8 @@ define([
         page.appendFormatLine('<div class="{0} {1}" data-type="{2}" data-axis="{3}">{4}</div>'
                             , VP_FE_MENU_ITEM, 'vp-fe-menu-reset-index', FRAME_EDIT_TYPE.RESET_IDX, 'row', 'Reset Index');
         // menu 7. replace
-        page.appendFormatLine('<div class="{0} {1}" data-type="{2}">{3}</div>'
-                            , VP_FE_MENU_ITEM, 'vp-fe-menu-replace', FRAME_EDIT_TYPE.REPLACE, 'Replace');
+        page.appendFormatLine('<div class="{0} {1}" data-type="{2}" data-axis="{3}">{4}</div>'
+                            , VP_FE_MENU_ITEM, 'vp-fe-menu-replace', FRAME_EDIT_TYPE.REPLACE, 'col', 'Replace');
         page.appendLine('</div>'); // End of Menus
         return page.toString();
     }
@@ -426,12 +429,26 @@ define([
 
     FrameEditor.prototype.renderReplacePage = function() {
         var content = new sb.StringBuilder();
-        content.appendLine('<table>');
-        content.appendLine('<tr>');
-        content.appendFormatLine('<td><input type="text" class="{0}" placeholder="{1}"/></td>', 'vp-popup-input0', 'origin');
-        content.appendFormatLine('<td><input type="text" class="{0}" placeholder="{1}"/></td>', 'vp-popup-replace0', 'replace');
-        content.appendLine('</tr>');
+        content.appendFormatLine('<table class="{0}">', 'vp-popup-replace-table');
+        content.appendLine(this.renderReplaceInput(0));
+        content.appendFormatLine('<tr><td colspan="3"><button class="{0} {1}">{2}</button></td></tr>', 'vp-button', 'vp-popup-replace-add', '+ Add Key');
         content.appendLine('</table>');
+        return content.toString();
+    }
+
+    FrameEditor.prototype.renderReplaceInput = function(index) {
+        var content = new sb.StringBuilder();
+        content.appendLine('<tr>');
+        content.appendLine('<td>');
+        content.appendFormatLine('<input type="text" class="{0}" placeholder="{1}"/>', 'vp-popup-origin' + index, 'origin');
+        content.appendFormatLine('<label><input type="checkbox" class="{0}" checked/><span>{1}</span></label>', 'vp-popup-origin-istext' + index, 'Text');
+        content.appendLine('</td>');
+        content.appendLine('<td>');
+        content.appendFormatLine('<input type="text" class="{0}" placeholder="{1}"/>', 'vp-popup-replace' + index, 'replace');
+        content.appendFormatLine('<label><input type="checkbox" class="{0}" checked/><span>{1}</span></label>', 'vp-popup-replace-istext' + index, 'Text');
+        content.appendLine('</td>');
+        content.appendFormatLine('<td><i class="{0} {1} {2}"></i></td>', 'vp-popup-delete', 'fa fa-close', 'vp-cursor');
+        content.appendLine('</tr>');
         return content.toString();
     }
 
@@ -455,12 +472,13 @@ define([
             case FRAME_EDIT_TYPE.REPLACE:
                 title = 'Replace';
                 content = this.renderReplacePage();
+                break;
             default:
                 type = FRAME_EDIT_TYPE.NONE;
                 break;
         }
 
-        this.state.popup = type;
+        this.state.popup.type = type;
 
         // set title
         $(this.wrapSelector('.' + VP_FE_POPUP_BOX + ' .' + VP_FE_TITLE)).text(title);
@@ -472,7 +490,7 @@ define([
     }
 
     FrameEditor.prototype.getPopupContent = function() {
-        var type = this.state.popup;
+        var type = this.state.popup.type;
         var content = {};
         switch (parseInt(type)) {
             case FRAME_EDIT_TYPE.ADD_COL:
@@ -499,7 +517,21 @@ define([
                 });
                 break;
             case FRAME_EDIT_TYPE.REPLACE:
-                // TODO:
+                var idx = 0;
+                for (var i=0; i <= this.state.popup.replace.index; i++) {
+                    var origin = $(this.wrapSelector('.vp-popup-origin' + i)).val();
+                    var origintext = $(this.wrapSelector('.vp-popup-origin-istext'+idx)).prop('checked');
+                    var replace = $(this.wrapSelector('.vp-popup-replace' + i)).val();
+                    var replacetext = $(this.wrapSelector('.vp-popup-replace-istext'+idx)).prop('checked');
+                    if (origin && replace) {
+                        content[idx++] = {
+                            origin: origin,
+                            origintext: origintext,
+                            replace: replace,
+                            replacetext: replacetext
+                        }
+                    }
+                }
                 break;
             default:
                 break;
@@ -548,7 +580,7 @@ define([
         // get selected columns/indexes
         var selected = [];
         $(this.wrapSelector('.' + VP_FE_TABLE + ' th.selected')).each((idx, tag) => {
-            var name = $(tag).attr('data-label');
+            var name = $(tag).data('label');
             selected.push(name);
         });
         this.state.selected = selected;
@@ -685,14 +717,33 @@ define([
                 }
                 break;
             case FRAME_EDIT_TYPE.REPLACE:
-                code.appendFormat("{0}.replace({1}, inplace=True)", tempObj, JSON.stringify(content).replaceAll('"', "'"));
+                var replaceStr = new sb.StringBuilder();
+                Object.keys(content).forEach((key, idx) => {
+                    if (idx == 0) {
+                        replaceStr.appendFormat("{0}: {1}"
+                                                , convertToStr(content[key].origin, content[key].origintext)
+                                                , convertToStr(content[key].replace, content[key].replacetext));
+                    } else {
+                        replaceStr.appendFormat(", {0}: {1}"
+                                                , convertToStr(content[key].origin, content[key].origintext)
+                                                , convertToStr(content[key].replace, content[key].replacetext));
+                    }
+                });
+
+                // var locObj = '';
+                // if (axis == 0) {
+                //     locObj = vpCommon.formatString('.loc[[{0}],:]', selectedName);
+                // } else {
+                //     locObj = vpCommon.formatString('.loc[:,[{0}]]', selectedName);
+                // }
+                code.appendFormat("{0}[[{1}]] = {2}[[{3}]].replace({{4}})", tempObj, selectedName, tempObj, selectedName, replaceStr);
                 break;
             case FRAME_EDIT_TYPE.ADD_COL:
                 var name = convertToStr(content.name, content.nameastext);
                 var value = convertToStr(content.value, content.valueastext);
                 code.appendFormat("{0}[{1}] = {2}", tempObj, name, value);
                 break;
-            case FRAME_EDIT_TYPE.ADD_ROW:
+            case FRAME_EDIT_TYPE.ADD_ROW: 
                 var name = convertToStr(content.name, content.nameastext);
                 var value = convertToStr(content.value, content.valueastext);
                 code.appendFormat("{0}.loc[{1}] = {2}", tempObj, name, value);
@@ -858,7 +909,7 @@ define([
             // select col/idx
             if (!hasSelected) {
                 $(this).addClass('selected');
-                var newAxis = $(this).attr('data-axis');
+                var newAxis = $(this).data('axis');
                 that.state.axis = newAxis;
             }
 
@@ -878,7 +929,7 @@ define([
             // select col/idx
             if (!hasSelected) {
                 $(this).addClass('selected');
-                var newAxis = $(this).attr('data-axis');
+                var newAxis = $(this).data('axis');
                 that.state.axis = newAxis;
             }
 
@@ -910,7 +961,7 @@ define([
             $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW)).removeClass('selected');
             if (!hasSelected) {
                 $(this).addClass('selected');
-                var newAxis = $(this).attr('data-axis');
+                var newAxis = $(this).data('axis');
                 that.state.axis = newAxis;
             } else {
                 $(this).removeClass('selected');
@@ -925,7 +976,7 @@ define([
             $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN)).removeClass('selected');
             if (!hasSelected) {
                 $(this).addClass('selected');
-                var newAxis = $(this).attr('data-axis');
+                var newAxis = $(this).data('axis');
                 that.state.axis = newAxis;
             } else {
                 $(this).removeClass('selected');
@@ -955,7 +1006,7 @@ define([
         // click menu item
         $(document).on('click', this.wrapSelector('.' + VP_FE_MENU_ITEM), function(event) {
             event.stopPropagation();
-            var editType = $(this).attr('data-type');
+            var editType = $(this).data('type');
             switch (parseInt(editType)) {
                 case FRAME_EDIT_TYPE.ADD_COL:
                 case FRAME_EDIT_TYPE.ADD_ROW:
@@ -970,10 +1021,23 @@ define([
             that.hideMenu();
         });
 
+        // popup : replace - add button
+        $(document).on('click', this.wrapSelector('.vp-popup-replace-add'), function() {
+            var newInput = $(that.renderReplaceInput(++that.state.popup.replace.index));
+            newInput.insertBefore(
+                $(that.wrapSelector('.vp-popup-replace-table tr:last'))
+            );
+        });
+
+        // popup : replace - delete row
+        $(document).on('click', this.wrapSelector('.vp-popup-delete'), function() {
+            $(this).closest('tr').remove();
+        });
+
         // ok input popup
         $(document).on('click', this.wrapSelector('.' + VP_FE_POPUP_OK), function() {
             // ok input popup
-            that.loadCode(that.getTypeCode(that.state.popup, that.getPopupContent()));
+            that.loadCode(that.getTypeCode(that.state.popup.type, that.getPopupContent()));
             that.closeInputPopup();
         });
 
