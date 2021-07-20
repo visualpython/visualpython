@@ -144,7 +144,7 @@ define([
         page.appendFormatLine('<i class="{0} {1}" title="{2}"></i>', VP_PF_DF_REFRESH, 'fa fa-refresh', "Refresh variable list");
         page.appendLine('</div>');
 
-        page.appendFormatLine('<label for="{0}">{1}</label>', 'vp_pfReturn', 'Save as');
+        page.appendFormatLine('<label for="{0}">{1}</label>', 'vp_pfReturn', 'Allocate to');
         page.appendFormatLine('<input type="text" id="{0}" class="{1}" placeholder="{2}"/>', 'vp_pfReturn', 'vp-pf-input', 'variable name');
 
         page.appendFormatLine('<label for="{0}">{1}</label>', 'vp_pfTitle', 'Report Title');
