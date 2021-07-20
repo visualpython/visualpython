@@ -101,12 +101,12 @@ define([
 
     /** buttons */
     const VP_DS_BUTTON_BOX = 'vp-ds-btn-box';
-    const VP_DS_BUTTON_APPLY = 'vp-ds-btn-apply';
     const VP_DS_BUTTON_CANCEL = 'vp-ds-btn-cancel';
-    /** preview code */
-    const VP_DS_BUTTON_PREVIEW = 'vp-ds-btn-preview';
-
-    const STYLE_REQUIRED_LABEL = 'vp-orange-text';
+    const VP_DS_BUTTON_RUNADD = 'vp-ds-btn-runadd';
+    const VP_DS_BUTTON_RUN = 'vp-ds-btn-run';
+    const VP_DS_BUTTON_DETAIL = 'vp-ds-btn-detail';
+    const VP_DS_DETAIL_BOX = 'vp-ds-detail-box';
+    const VP_DS_DETAIL_ITEM = 'vp-ds-detail-item';
 
     /**
      * @class SubsetEditor
@@ -207,7 +207,7 @@ define([
                                     , VP_DS_CLOSE, 'fa fa-close');
 
         // body start
-        popupTag.appendFormatLine('<div class="{0}">', VP_DS_BODY);
+        popupTag.appendFormatLine('<div class="{0} {1}">', VP_DS_BODY, 'vp-apiblock-scrollbar');
 
         // table1 start
         popupTag.appendLine('<table>');
@@ -352,19 +352,32 @@ define([
         popupTag.appendLine('</div>');
 
         // apply button
-        popupTag.appendFormatLine('<div class="{0}">', VP_DS_BUTTON_BOX);
+        // popupTag.appendFormatLine('<div class="{0}">', VP_DS_BUTTON_BOX);
+        // // popupTag.appendFormatLine('<button type="button" class="{0}">{1}</button>'
+        // //                         , VP_DS_BUTTON_PREVIEW, 'Preview');
         // popupTag.appendFormatLine('<button type="button" class="{0}">{1}</button>'
-        //                         , VP_DS_BUTTON_PREVIEW, 'Preview');
-        popupTag.appendFormatLine('<button type="button" class="{0}">{1}</button>'
-                                , VP_DS_BUTTON_CANCEL, 'Cancel');
-        popupTag.appendFormatLine('<button type="button" class="{0}">{1}</button>'
-                                , VP_DS_BUTTON_APPLY, 'Apply');
-        popupTag.appendLine('</div>');
-
+        //                         , VP_DS_BUTTON_CANCEL, 'Cancel');
+        // popupTag.appendFormatLine('<button type="button" class="{0}">{1}</button>'
+        //                         , VP_DS_BUTTON_APPLY, 'Apply');
+        // popupTag.appendLine('</div>');
         // body end
         popupTag.appendLine('</div>');
+        // button box
+        popupTag.appendFormatLine('<div class="{0}">', VP_DS_BUTTON_BOX);
+        popupTag.appendFormatLine('<button type="button" class="{0} {1} {2}">{3}</button>'
+                                , 'vp-button cancel', 'vp-ds-btn', VP_DS_BUTTON_CANCEL, 'Cancel');
+        popupTag.appendFormatLine('<div class="{0}">', VP_DS_BUTTON_RUNADD);
+        popupTag.appendFormatLine('<button type="button" class="{0} {1}">{2}</button>'
+                                , 'vp-button activated', VP_DS_BUTTON_RUN, 'Run');
+        popupTag.appendFormatLine('<button type="button" class="{0} {1}"><i class="{2}"></i></button>'
+                                , 'vp-button activated', VP_DS_BUTTON_DETAIL, 'fa fa-sort-up');
+        popupTag.appendFormatLine('<div class="{0} {1}">', VP_DS_DETAIL_BOX, 'vp-cursor');
+        popupTag.appendFormatLine('<div class="{0}" data-type="{1}">{2}</div>', VP_DS_DETAIL_ITEM, 'add', 'Add');
+        popupTag.appendLine('</div>'); // VP_DS_DETAIL_BOX
+        popupTag.appendLine('</div>'); // VP_DS_BUTTON_RUNADD
+        popupTag.appendLine('</div>'); // VP_DS_BUTTON_BOX
 
-        popupTag.append('</div>');
+        popupTag.append('</div>'); // VP_DS_CONTAINER
         popupTag.append('</div>');
         // $(vpCommon.formatString("#{0}", vpConst.VP_CONTAINER_ID)).append(popupTag.toString());
         $('#vp-wrapper').append(popupTag.toString());
@@ -1036,7 +1049,29 @@ define([
 
         this.loadRowColumnSubsetType(this.state.subsetType, this.state.isTimestamp);
     }
-
+    
+    /**
+     * run/add cell
+     * @param {boolean} runCell 
+     */
+    SubsetEditor.prototype.apply = function(runCell=true) {
+        var code = this.generateCode();
+        if (this.pageThis) {
+            $(this.pageThis.wrapSelector('#' + this.targetId)).val(code);
+            $(this.pageThis.wrapSelector('#' + this.targetId)).trigger({
+                type: 'subset_run',
+                code: code,
+                runCell: runCell
+            });
+        } else {
+            $(vpCommon.wrapSelector('#' + this.targetId)).val(code);
+            $(vpCommon.wrapSelector('#' + this.targetId)).trigger({
+                type: 'subset_run',
+                code: code,
+                runCell: runCell
+            });
+        }
+    }
     ///////////////////////// load end ///////////////////////////////////////////////////////////
 
     /**
@@ -1143,8 +1178,11 @@ define([
         $(document).off('change', this.wrapSelector('.vp-ds-cond-tbl .vp-cond-use-text'));
         $(document).off('change', this.wrapSelector('.vp-ds-cond-tbl input[type="text"]'));
         $(document).off('change', this.wrapSelector('.vp-ds-cond-tbl select'));
-        $(document).off('click', this.wrapSelector('.' + VP_DS_BUTTON_APPLY));
+        $(document).off('click', this.wrapSelector('.' + VP_DS_BUTTON_RUN));
+        $(document).off('click', this.wrapSelector('.' + VP_DS_BUTTON_DETAIL));
+        $(document).off('click', this.wrapSelector('.' + VP_DS_DETAIL_ITEM));
         $(document).off('click', this.wrapSelector('.' + VP_DS_BUTTON_CANCEL));
+        $(document).off('click.' + this.uuid);
     }
 
     /**
@@ -1602,28 +1640,37 @@ define([
         //     var code = that.generateCode();
         // });
 
-        // apply
-        $(document).on('click', this.wrapSelector('.' + VP_DS_BUTTON_APPLY), function(event) {
-            var code = that.generateCode();
-            if (that.pageThis) {
-                $(that.pageThis.wrapSelector('#' + that.targetId)).val(code);
-                $(that.pageThis.wrapSelector('#' + that.targetId)).trigger({
-                    type: 'subset_apply',
-                    code: code
-                });
-            } else {
-                $(vpCommon.wrapSelector('#' + that.targetId)).val(code);
-                $(vpCommon.wrapSelector('#' + that.targetId)).trigger({
-                    type: 'subset_apply',
-                    code: code
-                });
-            }
+        // run
+        $(document).on('click', this.wrapSelector('.' + VP_DS_BUTTON_RUN), function(event) {
+            that.apply();
             that.close();
+        });
+
+        // click detail button
+        $(document).on('click', this.wrapSelector('.' + VP_DS_BUTTON_DETAIL), function(evt) {
+            evt.stopPropagation();
+            $(that.wrapSelector('.' + VP_DS_DETAIL_BOX)).show();
+        });
+
+        // click add
+        $(document).on('click', this.wrapSelector('.' + VP_DS_DETAIL_ITEM), function() {
+            var type = $(this).data('type');
+            if (type == 'add') {
+                that.apply(false);
+                that.close();
+            }
         });
 
         // cancel
         $(document).on('click', this.wrapSelector('.' + VP_DS_BUTTON_CANCEL), function(event) {
             that.close();
+        });
+
+        // click other
+        $(document).on('click.' + this.uuid, function(evt) {
+            if (!$(evt.target).hasClass('.' + VP_DS_BUTTON_DETAIL)) {
+                $(that.wrapSelector('.' + VP_DS_DETAIL_BOX)).hide();
+            }
         });
 
         ///////////////////////// FIXME: make it common //////////////////////////////////////

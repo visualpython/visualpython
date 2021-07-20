@@ -38,7 +38,7 @@ define([
 
         this.createBlockBtnDom = null;
         this.render();
-        this.bindBtnDragEvent();
+        // this.bindBtnDragEvent();
         this.bindApiClickEvent();
     }
 

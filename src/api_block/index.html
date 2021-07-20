@@ -6,166 +6,188 @@
 
             <div class='vp-apiblock-body'>
                 <div class="vp-apiblock-main">
-                    <div class='vp-apiblock-left vp-apiblock-scrollbar no-selection'>
-                        
-                        <!-- Search bar -->
-                        <div class="vp-apiblock-menu-search-container">
-                            <input id="vp_menuSearchBox" class="vp-menu-search-box" type="text" placeholder="Search"/>
-                            <i class="fa fa-search vp-menu-search-icon"></i>
+                    <div class="vp-apiblock-tab-container">
+                        <div id="vp_headerContainer">
+                            <!-- Full Logo as Image -->
+                            <img src="/nbextensions/visualpython/resource/VisualPython_Logo.svg" style="
+                                float: left; 
+                                width:138px; 
+                                height:30px;
+                                margin-left: 5px;
+                            "/>
+
+                            <div id='vp_headerExtraMenuBtn'>
+                                <div id='vp_headerExtraMenu'>
+                                    <ul class="vp-header-extra-menu-list">
+                                        <li id="vp_extraMenuVPNote">VP Note <i class="fa fa-external-link"></i></li>
+                                        <li id="vp_extraMenuAbout">About Visual Python <i class="fa fa-external-link"></i></li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
+                        <div class="vp-apiblock-tab-header">
+                            <div class="vp-cursor vp-apiblock-tab-button selected" data-type="menu">Menu</div>
+                            <div class="vp-cursor vp-apiblock-tab-button" data-type="board">Board</div>
+                        </div>
+                        <div class="vp-apiblock-tab-box">
+                            <div class='vp-apiblock-left vp-apiblock-scrollbar no-selection'>
+                                
+                                <!-- Search bar -->
+                                <div class="vp-apiblock-menu-search-container">
+                                    <input id="vp_menuSearchBox" class="vp-menu-search-box" type="text" placeholder="Search"/>
+                                    <i class="fa fa-search vp-menu-search-icon"></i>
+                                </div>
 
-                        <div class="vp-apiblock-tab-navigation-body 
-                                    vp-apiblock-tab-navigation-body-1">
-     
-                            <div class='vp-apiblock-tab-navigation-node-container'> 
-    
-                                <div class='vp-apiblock-tab-navigation-node-block'
-                                     style='padding-left: 0px;'>
+                                <div class="vp-apiblock-tab-navigation-body 
+                                            vp-apiblock-tab-navigation-body-1">
+            
+                                    <div class='vp-apiblock-tab-navigation-node-container'> 
+            
+                                        <div class='vp-apiblock-tab-navigation-node-block'
+                                            style='padding-left: 0px;'>
 
-                                     <div class='vp-block-blocktab-name-title
-                                                vp-apiblock-category vp-apiblock-blocktab-apps
-                                                vp-accordion-caption'
-                                            data-category="apps">Apps
-                                    </div>
-                                    <div class="vp-block-group-box vp-block-group-box-apps">
-                                        <input type="hidden" id="vp_appsCode"/>
-                                        <div class="vp-apiblock-menu-apps-grid">
-                                            <div class="vp-apiblock-menu-apps-item line1" data-menu="import">
-                                                <img src="/nbextensions/visualpython/resource/apps/apps_import.svg">
-                                                <div class="vp-apiblock-menu-apps-name">Import</div>
+                                            <div class='vp-block-blocktab-name-title
+                                                        vp-apiblock-category vp-apiblock-blocktab-apps
+                                                        vp-accordion-caption'
+                                                    data-category="apps">Apps
                                             </div>
-                                            <div class="vp-apiblock-menu-apps-item line1" data-menu="markdown">
-                                                <img src="/nbextensions/visualpython/resource/apps/apps_markdown.svg">
-                                                <div class="vp-apiblock-menu-apps-name">Markdown</div>
+                                            <div class="vp-block-group-box vp-block-group-box-apps">
+                                                <input type="hidden" id="vp_appsCode"/>
+                                                <div class="vp-apiblock-menu-apps-grid">
+                                                    <div class="vp-apiblock-menu-apps-item line1" data-menu="import" title="import">
+                                                        <img src="/nbextensions/visualpython/resource/apps/apps_import.svg">
+                                                        <div class="vp-apiblock-menu-apps-name">Import</div>
+                                                    </div>
+                                                    <div class="vp-apiblock-menu-apps-item line1" data-menu="markdown" title="Markdown">
+                                                        <img src="/nbextensions/visualpython/resource/apps/apps_markdown.svg">
+                                                        <div class="vp-apiblock-menu-apps-name">Markdown</div>
+                                                    </div>
+                                                    <div class="vp-apiblock-menu-apps-item line1" data-menu="variable" title="Variable">
+                                                        <img src="/nbextensions/visualpython/resource/apps/apps_variable.svg">
+                                                        <div class="vp-apiblock-menu-apps-name">Variable</div>
+                                                    </div>
+                                                    <div class="vp-apiblock-menu-apps-item line1" data-menu="snippets" title="Snippets">
+                                                        <img src="/nbextensions/visualpython/resource/apps/apps_snippets.svg">
+                                                        <div class="vp-apiblock-menu-apps-name">Snippets</div>
+                                                    </div>
+                                                    <div class="vp-apiblock-menu-apps-item line2" data-menu="file" title="File">
+                                                        <img src="/nbextensions/visualpython/resource/apps/apps_file.svg">
+                                                        <div class="vp-apiblock-menu-apps-name">File</div>
+                                                    </div>
+                                                    <div class="vp-apiblock-menu-apps-item line2" data-menu="instance" title="Instance">
+                                                        <img src="/nbextensions/visualpython/resource/apps/apps_instance.svg">
+                                                        <div class="vp-apiblock-menu-apps-name">Instance</div>
+                                                    </div>
+                                                    <div class="vp-apiblock-menu-apps-item line2" data-menu="subset" title="Subset">
+                                                        <img src="/nbextensions/visualpython/resource/apps/apps_subset.svg">
+                                                        <div class="vp-apiblock-menu-apps-name">Subset</div>
+                                                    </div>
+                                                    <div class="vp-apiblock-menu-apps-item line2" data-menu="frame" title="Frame">
+                                                        <img src="/nbextensions/visualpython/resource/apps/apps_frame.svg">
+                                                        <div class="vp-apiblock-menu-apps-name">Frame</div>
+                                                    </div>
+                                                    <div class="vp-apiblock-menu-apps-item line3" data-menu="chart" title="Chart">
+                                                        <img src="/nbextensions/visualpython/resource/apps/apps_chart.svg">
+                                                        <div class="vp-apiblock-menu-apps-name">Chart</div>
+                                                    </div>
+                                                    <div class="vp-apiblock-menu-apps-item line3" data-menu="profiling" title="Pandas Profiling">
+                                                        <img src="/nbextensions/visualpython/resource/apps/apps_white.svg">
+                                                        <div class="vp-apiblock-menu-apps-name">Profiling</div>
+                                                    </div>
+                                                    <div class="vp-apiblock-menu-apps-item preparing" data-menu="merge" title="Work In Progress">
+                                                        <img src="/nbextensions/visualpython/resource/apps/apps_merge.svg">
+                                                        <div class="vp-apiblock-menu-apps-name">Merge</div>
+                                                    </div>
+                                                    <div class="vp-apiblock-menu-apps-item preparing" data-menu="groupby" title="Work In Progress">
+                                                        <img src="/nbextensions/visualpython/resource/apps/apps_groupby.svg">
+                                                        <div class="vp-apiblock-menu-apps-name">Groupby</div>
+                                                    </div>
+                                                    <div class="vp-apiblock-menu-apps-item preparing" data-menu="reshape" title="Work In Progress">
+                                                        <img src="/nbextensions/visualpython/resource/apps/apps_reshape.svg">
+                                                        <div class="vp-apiblock-menu-apps-name">Reshape</div>
+                                                    </div>
+                                                    <div class="vp-apiblock-menu-apps-item preparing" data-menu="timeseries" title="Work In Progress">
+                                                        <img src="/nbextensions/visualpython/resource/apps/apps_timeseries.svg">
+                                                        <div class="vp-apiblock-menu-apps-name">TimeSeries</div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="vp-apiblock-menu-apps-item line1" data-menu="variable">
-                                                <img src="/nbextensions/visualpython/resource/apps/apps_variable.svg">
-                                                <div class="vp-apiblock-menu-apps-name">Variable</div>
+
+                                            <div class='vp-block-blocktab-name-title
+                                                        vp-apiblock-category vp-apiblock-blocktab-logic
+                                                        vp-accordion-caption'
+                                                    data-category="logic">Logic
                                             </div>
-                                            <div class="vp-apiblock-menu-apps-item line2" data-menu="snippets">
-                                                <img src="/nbextensions/visualpython/resource/apps/apps_snippets.svg">
-                                                <div class="vp-apiblock-menu-apps-name">Snippets</div>
-                                            </div>
-                                            <div class="vp-apiblock-menu-apps-item line2" data-menu="file">
-                                                <img src="/nbextensions/visualpython/resource/apps/apps_file.svg">
-                                                <div class="vp-apiblock-menu-apps-name">File</div>
-                                            </div>
-                                            <div class="vp-apiblock-menu-apps-item line2" data-menu="instance">
-                                                <img src="/nbextensions/visualpython/resource/apps/apps_instance.svg">
-                                                <div class="vp-apiblock-menu-apps-name">Instance</div>
-                                            </div>
-                                            <div class="vp-apiblock-menu-apps-item line3" data-menu="subset">
-                                                <img src="/nbextensions/visualpython/resource/apps/apps_subset.svg">
-                                                <div class="vp-apiblock-menu-apps-name">Subset</div>
-                                            </div>
-                                            <div class="vp-apiblock-menu-apps-item line3" data-menu="frame">
-                                                <img src="/nbextensions/visualpython/resource/apps/apps_frame.svg">
-                                                <div class="vp-apiblock-menu-apps-name">Frame</div>
-                                            </div>
-                                            <div class="vp-apiblock-menu-apps-item line3" data-menu="chart">
-                                                <img src="/nbextensions/visualpython/resource/apps/apps_chart.svg">
-                                                <div class="vp-apiblock-menu-apps-name">Chart</div>
-                                            </div>
-                                            <div class="vp-apiblock-menu-apps-item preparing" data-menu="merge">
-                                                <img src="/nbextensions/visualpython/resource/apps/apps_merge.svg">
-                                                <div class="vp-apiblock-menu-apps-name">Merge</div>
-                                            </div>
-                                            <div class="vp-apiblock-menu-apps-item preparing" data-menu="groupby">
-                                                <img src="/nbextensions/visualpython/resource/apps/apps_groupby.svg">
-                                                <div class="vp-apiblock-menu-apps-name">Groupby</div>
-                                            </div>
-                                            <div class="vp-apiblock-menu-apps-item preparing" data-menu="reshape">
-                                                <img src="/nbextensions/visualpython/resource/apps/apps_reshape.svg">
-                                                <div class="vp-apiblock-menu-apps-name">Reshape</div>
-                                            </div>
-                                            <div class="vp-apiblock-menu-apps-item preparing" data-menu="timeseries">
-                                                <img src="/nbextensions/visualpython/resource/apps/apps_timeseries.svg">
-                                                <div class="vp-apiblock-menu-apps-name">TimeSeries</div>
+                                            <div class="vp-block-group-box vp-block-group-box-logic" style="display:none;">
+
                                             </div>
                                             
+
+                                            <div class='vp-block-blocktab-name-title
+                                                        vp-apiblock-category vp-apiblock-blocktab-api
+                                                        vp-accordion-caption'
+                                                    data-category="api">Library
+                                            </div> 
+                                            <div class='vp-block-group-box vp-block-group-box-api' style="display:none;">
+
+                                            </div>
+
+                                            <div class='vp-block-blocktab-name-title
+                                                    vp-apiblock-category vp-apiblock-blocktab-da
+                                                    vp-accordion-caption'
+                                                    data-category="da">Data Analysis
+                                            </div>
+                                            <div class='vp-block-group-box vp-block-group-box-da' style="display:none;">
+
+                                            </div>
+
+                                            <div class='vp-block-blocktab-name-title
+                                                    vp-apiblock-category vp-apiblock-blocktab-ai
+                                                    vp-accordion-caption'
+                                                    data-category="ai">AI
+                                            </div>
+                                            <div class='vp-block-group-box vp-block-group-box-ai' style="display:none;">
+
+                                            </div>
                                         </div>
                                     </div>
-
-                                    <div class='vp-block-blocktab-name-title
-                                                  vp-apiblock-category vp-apiblock-blocktab-logic
-                                                  vp-accordion-caption'
-                                            data-category="logic">Logic
-                                    </div>
-                                    <div class="vp-block-group-box vp-block-group-box-logic" style="display:none;">
-
-                                    </div>
-                                    
-
-                                    <div class='vp-block-blocktab-name-title
-                                                 vp-apiblock-category vp-apiblock-blocktab-api
-                                                 vp-accordion-caption'
-                                            data-category="api">Library
-                                    </div> 
-                                    <div class='vp-block-group-box vp-block-group-box-api' style="display:none;">
-
-                                    </div>
-
-                                    <div class='vp-block-blocktab-name-title
-                                            vp-apiblock-category vp-apiblock-blocktab-da
-                                            vp-accordion-caption'
-                                            data-category="da">Data Analysis
-                                    </div>
-                                    <div class='vp-block-group-box vp-block-group-box-da' style="display:none;">
-
-                                    </div>
-
-                                    <div class='vp-block-blocktab-name-title
-                                            vp-apiblock-category vp-apiblock-blocktab-ai
-                                            vp-accordion-caption'
-                                            data-category="ai">AI
-                                    </div>
-                                    <div class='vp-block-group-box vp-block-group-box-ai' style="display:none;">
-
-                                    </div>
                                 </div>
                             </div>
-                        </div>
+                            <div class='vp-apiblock-right' style="display: none;">
+                                
+                                <div id="vp_apiblock_board_main_title">
+                                    <input id="vp_apiblock_board_makenode_input" 
+                                        type="text" 
+                                        placeholder="Untitled"></input>
+                                    <input id="vp_apiblock_board_makenode_path" type="hidden"/>
+                                    <div class="vp-apiblock-menu-button" >
 
-                        <div class="vp-apiblock-tab-navigation-body 
-                                    vp-apiblock-tab-navigation-body-2">
-                            <div class='vp-apiblock-tab-navigation-node-container'> 
+                                        <div class='vp-apiblock-menu-button-inner'>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class='vp-apiblock-board-body 
+                                            vp-apiblock-scrollbar'>
+                                </div>
+
+                                <!-- Code/Text 블럭 생성하는 플로팅 버튼 -->
+                                <div class="vp-apiblock-board-button-container">
+                                    <div id="vp_apiblock_board_node_plus_button_container" class="vp-apiblock-style-flex-row">
+                                        <div id="vp_apiblock_board_node_plus_button" class="vp-apiblock-option-plus-button">
+                                        + Code
+                                        </div>
+                                        <div id="vp_apiblock_board_text_plus_button" class="vp-apiblock-option-plus-button" style="margin-left: 10px">
+                                        + Text
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
-                    </div>
-
-                    <div class='vp-apiblock-right'>
                         
-                        <div id="vp_apiblock_board_main_title">
-                            <input id="vp_apiblock_board_makenode_input" 
-                                   type="text" 
-                                   placeholder="Untitled"></input>
-                            <input id="vp_apiblock_board_makenode_path" type="hidden"/>
-                            <div class="vp-apiblock-menu-button" >
-
-                                <div class='vp-apiblock-menu-button-inner'>
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class='vp-apiblock-board-body 
-                                    vp-apiblock-scrollbar'>
-                        </div>
-
-                        <!-- Code/Text 블럭 생성하는 플로팅 버튼 -->
-                        <div class="vp-apiblock-board-button-container">
-                            <div id="vp_apiblock_board_node_plus_button_container" class="vp-apiblock-style-flex-row">
-                                <div id="vp_apiblock_board_node_plus_button" class="vp-apiblock-option-plus-button">
-                                + Code
-                                </div>
-                                <div id="vp_apiblock_board_text_plus_button" class="vp-apiblock-option-plus-button" style="margin-left: 10px">
-                                + Text
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
-              
                     <div class="vp-apiblock-option-tab
                                 vp-apiblock-option-scrollbar"
                          id='vp_apiblock_option_page'>
@@ -181,12 +203,22 @@
                             <div class="vp-apiblock-option-container">
                                 <div class="vp-apiblock-option-tab-none">
                                     <!-- (N/A) -->
-                                    Welcome to <strong>Visual Python</strong> !
+                                    <strong>Welcome to Visual Python!</strong>
                                     <br/><br/>
                                     Visual Python is GUI based Python code generator, developed on Jupyter Notebook as an extension.
                                     <br/><br/>
-                                    For more up-to-date information, visit our website : 
-                                    <a href="https://www.visualpython.ai" target="_blank">www.visualpython.ai</a>
+                                    <ul>
+                                        <li>For more up-to-date information, visit our website : 
+                                            <a href="https://www.visualpython.ai" target="_blank">www.visualpython.ai</a>
+                                        </li>
+                                        <li>
+                                            <strong>GitHub</strong> is also available! <a href="https://github.com/visualpython/visualpython" target="_blank"><i class="fa fa-github"></i> visualpython</a>
+                                        </li>
+                                    </ul>
+                                    <br/>
+                                    Enjoy visual coding!
+                                    <br/>
+                                    Contact: <label class="vp-orange-text">hello@visualpython.ai</label>
                                 </div>
                                 <div class="vp-apiblock-option-tab-preview" style="display:none;">
                                     <!-- Overall Code Preview-->
@@ -206,9 +238,20 @@
                             <div id="vp_apiblock_board_option_cancel_button" class="vp-button cancel vp-apiblock-option-button vp-apiblock-option-cancel-button">
                             Cancel
                             </div>
-                            <div id="vp_apiblock_board_option_apply_button" class="vp-button activated vp-apiblock-option-button vp-apiblock-option-apply-button">
-                            Apply
+                            <div class="vp-apiblock-option-button vp-apiblock-option-addrun-button">
+                                <div id="vp_apiblock_board_option_run_button" class="vp-button activated vp-apiblock-option-run-button">
+                                    Run
+                                </div>
+                                <div id="vp_apiblock_board_option_detail_button" class="vp-button activated vp-apiblock-option-detail-button">
+                                    <i class="fa fa-sort-up" style="vertical-align: middle;"></i>
+                                </div>
+                                <div class="vp-apiblock-option-detail-box vp-cursor" style="display: none;">
+                                    <div class="vp-apiblock-option-detail-item" data-type="add">Add</div>
+                                </div>
                             </div>
+                            <!-- <div id="vp_apiblock_board_option_apply_button" class="vp-button activated vp-apiblock-option-button vp-apiblock-option-apply-button">
+                            Apply
+                            </div> -->
                         </div>
                     </div>
                 </div>

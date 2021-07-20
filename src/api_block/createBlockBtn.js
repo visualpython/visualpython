@@ -28,7 +28,7 @@ define([
         this.name = MapTypeToName(type)
         this.createBlockBtnDom = null;
         this.render();
-        this.bindBtnDragEvent();
+        // this.bindBtnDragEvent();
         this.bindBtnClickEvent();
     }
 
