@@ -80,8 +80,6 @@ define([
     var containerInit = function() {
         headerExtraMenuPopupInit();
 
-        headerExtraMenuInit();
-
         apiModeInit();
 
         noteModeInit();
@@ -129,42 +127,6 @@ define([
 
         $(vpCommon.formatString("#{0}", vpConst.VP_CONTAINER_ID)).append(sbPopupPage.toString());
         $(vpCommon.formatString("#{0}", vpConst.MENU_POPUP)).hide();
-    }
-
-    /**
-     * Header Extra Menu initialize
-     */
-    var headerExtraMenuInit = function() {
-        var sbHeaderMenuPage = new sb.StringBuilder();
-
-        sbHeaderMenuPage.appendFormatLine("<div id='{0}'>", vpConst.HEADER_EXTRA_MENU_BTN);
-
-        sbHeaderMenuPage.appendFormatLine("<div id='{0}'>", vpConst.HEADER_EXTRA_MENU_CONTAINER);
-
-        sbHeaderMenuPage.appendFormatLine('<ul class="{0}">', vpConst.HEADER_EXTRA_MENU_LIST);
-
-        /** TODO: 이진용 주임 2021 01 10 새버전에서 주석처리 */
-        // sbHeaderMenuPage.appendFormatLine('<li id="{0}">{1}</li>'
-        //                 , vpConst.HEADER_EXTRA_MENU_LOGIN, vpConst.HEADER_EXTRA_MENU_LOGIN_CAPTION);
-        // sbHeaderMenuPage.appendFormatLine('<hr class="{0}">', vpConst.HEADER_EXTRA_MENU_LINE);
-
-        /** TODO: 김민주 메뉴 주석처리 */
-        // sbHeaderMenuPage.appendFormatLine('<li id="{0}">{1}</li>'
-        //                 , vpConst.HEADER_EXTRA_MENU_PREFERENCES, vpConst.HEADER_EXTRA_MENU_PREFERENCES_CAPTION);
-        // sbHeaderMenuPage.appendFormatLine('<li id="{0}">{1}</li>'
-        //                 , vpConst.HEADER_EXTRA_MENU_PACKAGES, vpConst.HEADER_EXTRA_MENU_PACKAGES_CAPTION);
-        // sbHeaderMenuPage.appendFormatLine('<hr class="{0}">', vpConst.HEADER_EXTRA_MENU_LINE);
-
-        sbHeaderMenuPage.appendFormatLine('<li id="{0}">{1} <i class="{2}"></i></li>'
-                        , vpConst.HEADER_EXTRA_MENU_VPNOTE, vpConst.HEADER_EXTRA_MENU_VPNOTE_CAPTION, 'fa fa-external-link');
-        sbHeaderMenuPage.appendFormatLine('<li id="{0}">{1} <i class="{2}"></i></li>'
-                        , vpConst.HEADER_EXTRA_MENU_ABOUT, vpConst.HEADER_EXTRA_MENU_ABOUT_CAPTION, 'fa fa-external-link');
-
-        sbHeaderMenuPage.appendLine('</ul>');
-        sbHeaderMenuPage.appendLine('</div>');
-        sbHeaderMenuPage.appendLine('</div>');
-
-        $(vpCommon.wrapSelector(vpCommon.formatString("#{0}", vpConst.HEADER_CONTAINER))).append(sbHeaderMenuPage.toString());
     }
 
     /**

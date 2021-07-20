@@ -553,6 +553,20 @@ define([
             // });
         });
 
+        /** tab button click */
+        $(document).on(STR_CLICK, VP_CLASS_PREFIX + 'vp-apiblock-tab-button', function() {
+            var type = $(this).data('type');
+            $(VP_CLASS_PREFIX + 'vp-apiblock-tab-button').removeClass('selected');
+            $(this).addClass('selected');
+            if (type == 'menu') {
+                $(vpCommon.wrapSelector('.vp-apiblock-left')).show();
+                $(vpCommon.wrapSelector('.vp-apiblock-right')).hide();
+            } else if (type == 'board') {
+                $(vpCommon.wrapSelector('.vp-apiblock-left')).hide();
+                $(vpCommon.wrapSelector('.vp-apiblock-right')).show();
+            }
+        });
+
         /** +code 블럭 생성 버튼 클릭 함수 바인딩 */
         $(document).on(STR_CLICK, VP_ID_PREFIX + VP_ID_APIBLOCK_NODE_BLOCK_PLUS_BUTTON, function() {
             // blockContainer.createNodeBlock(true);
@@ -588,13 +602,40 @@ define([
             }
         });
 
-        /** option page - cancel 버튼 클릭 함수 바인딩 */
+        /** option page - cancel button click */
         $(document).on(STR_CLICK, VP_ID_PREFIX + VP_APIBLOCK_BOARD_OPTION_CANCEL_BUTTON, function() {
             blockContainer.cancelBlock();
         });
 
-        /** option page - apply 버튼 클릭 함수 바인딩 */
-        $(document).on(STR_CLICK, VP_ID_PREFIX + VP_APIBLOCK_BOARD_OPTION_APPLY_BUTTON, function() {
+        /** option page - run detail button click */
+        $(document).on(STR_CLICK, VP_ID_PREFIX + 'vp_apiblock_board_option_detail_button', function(evt) {
+            evt.stopPropagation();
+            $(VP_CLASS_PREFIX + 'vp-apiblock-option-detail-box').show();
+        });
+
+        $(document).on(STR_CLICK, VP_CLASS_PREFIX + 'vp-apiblock-option-detail-item', function(evt) {
+            var type = $(this).data('type');
+            if (type == 'add') {
+                // apply it and add cell
+                var appliedBlock = blockContainer.applyBlock();
+
+                if (appliedBlock) {
+                    // #11 applied! popup
+                    vpCommon.renderSuccessMessage('Applied!');
+
+                    // #10 scroll to selected/applied block
+                    var appliedBlockDom = appliedBlock.getBlockMainDom();
+                    $(VP_CLASS_PREFIX + VP_CLASS_APIBLOCK_BOARD).animate({scrollTop: $(appliedBlockDom).position().top}, "fast");
+
+                    // add and not run
+                    appliedBlock.runThisBlock(false);
+                }
+            }
+        });
+
+        /** option page - run button click */
+        // $(document).on(STR_CLICK, VP_ID_PREFIX + VP_APIBLOCK_BOARD_OPTION_APPLY_BUTTON, function() {
+        $(document).on(STR_CLICK, VP_ID_PREFIX + 'vp_apiblock_board_option_run_button', function() {
             var appliedBlock = blockContainer.applyBlock();
 
             if (appliedBlock) {
@@ -604,6 +645,8 @@ define([
                 // #10 scroll to selected/applied block
                 var appliedBlockDom = appliedBlock.getBlockMainDom();
                 $(VP_CLASS_PREFIX + VP_CLASS_APIBLOCK_BOARD).animate({scrollTop: $(appliedBlockDom).position().top}, "fast");
+
+                appliedBlock.runThisBlock();
             }
         });
 
@@ -672,13 +715,13 @@ define([
             var saveFilePath = $(VP_ID_PREFIX + VP_ID_APIBLOCK_BOARD_MAKE_NODE_PATH).val(); // path
 
             // TEST: File Navigation
-            var state = {
-                fileType: FileNavigation.SAVE_FILE
+            // var state = {
+            //     fileType: FileNavigation.SAVE_FILE
 
-            };
-            var fileNavigation = new FileNavigation(FileNavigation.FILE_TYPE.SAVE_VP_NOTE, state);
-            fileNavigation.open();
-            return;
+            // };
+            // var fileNavigation = new FileNavigation(FileNavigation.FILE_TYPE.SAVE_VP_NOTE, state);
+            // fileNavigation.open();
+            // return;
 
             /** 빈 string이거나 
              *  Untitled이면 File navigation을 open */
@@ -746,6 +789,9 @@ define([
             }
             if (!$(evt.target).hasClass('vp-temp-popup-menu')) {
                 $('.vp-temp-popup-menu').hide();
+            }
+            if (evt.target.id != 'vp_apiblock_board_option_detail_button') {
+                $(VP_CLASS_PREFIX + 'vp-apiblock-option-detail-box').hide();
             }
         });
 
