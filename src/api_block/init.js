@@ -180,23 +180,24 @@ define([
         var index = mainPageRectWidth.indexOf('px');
         var mainPageRectWidthNum = parseInt(mainPageRectWidth.slice(0,index));
 
+        var PADDING_BETWEEN_BOXES = 10; // left line padding 5 + between padding 5
+
         /** 왼쪽 Logic, API 블럭 생성 영역의 width*/
-        var buttonsPageRectWidth = NUM_APIBLOCK_LEFT_PAGE_WIDTH; 
         /** 가운데 board 영역의 width */
         var boardPageRectWidth = NUM_API_BOARD_CENTER_PAGE_WIDTH;
         /** 오른쪽 option 영역의 width 계산 */
-        var optionPageRectWidth = mainPageRectWidthNum - buttonsPageRectWidth - boardPageRectWidth - 68;
+        var optionPageRectWidth = mainPageRectWidthNum - boardPageRectWidth - PADDING_BETWEEN_BOXES;
 
         /** visual python 전체의 width 렌더링 */
         $(vpCommon.wrapSelector(VP_ID_PREFIX + VP_ID_WRAPPER)).css(STR_WIDTH, mainPageRectWidth);
         /** 가운데 board 영역의 width 렌더링 */
-        $(vpCommon.wrapSelector(VP_CLASS_PREFIX + VP_CLASS_APIBLOCK_BOARD_CONTAINER)).css(STR_WIDTH, boardPageRectWidth);
+        $(vpCommon.wrapSelector(VP_CLASS_PREFIX + 'vp-apiblock-tab-container')).css(STR_WIDTH, boardPageRectWidth);
         /** 오른쪽 option 영역의 width 렌더링*/
         $(vpCommon.wrapSelector(VP_CLASS_PREFIX + VP_CLASS_APIBLOCK_OPTION_TAB)).css(STR_WIDTH, optionPageRectWidth);
         
         /** 오른쪽 option 영역의 max-width 렌더링*/
         // var optionPageRectWidth_maxWidth = mainPageRectWidthNum - buttonsPageRectWidth - 290 - 103;
-        var optionPageRectWidth_maxWidth = mainPageRectWidthNum - buttonsPageRectWidth - boardPageRectWidth - 8 - 68;
+        var optionPageRectWidth_maxWidth = mainPageRectWidthNum - boardPageRectWidth - PADDING_BETWEEN_BOXES;
         $(vpCommon.wrapSelector(VP_CLASS_PREFIX + VP_CLASS_APIBLOCK_OPTION_TAB)).css(STR_MAX_WIDTH, optionPageRectWidth_maxWidth);
 
         /** 가운데 board 위 영역의 렌더링 */
