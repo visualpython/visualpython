@@ -56,7 +56,7 @@
 
 .vp-fe-body {
     width: 100%;
-    height: calc(100% - 30px);
+    height: calc(100% - 80px);
     padding: 10px;
     display: grid;
     grid-row-gap: 5px;
@@ -296,8 +296,78 @@
     padding: 7px;
 }
 
+.vp-fe-preview-box {
+    display: none;
+    width: 100%;
+    height: 100px;
+    position: absolute;
+    bottom: 50px;
+    
+    background: #F7F7F7;
+    border: 0.25px solid #E4E4E4;
+    padding: 10px;
+}
+
 /** buttons */
 .vp-fe-btn-box {
+    /* position: absolute;
+    bottom: 25px;
+    right: 25px; */
+    position: relative;
+    height: 50px;
+    border-top: 0.25px solid var(--border-gray-color);
+}
+.vp-fe-btn {
+    position: absolute;
+}
+.vp-fe-btn-preview {
+    left: 15px;
+    top: 11px;
+}
+.vp-fe-btn-cancel {
+    top: 11px;
+    right: 105px;
+}
+.vp-fe-btn-runadd {
+    position: absolute;
+    top: 11px;
+    right: 15px;
+    width: fit-content;
+    height: 30px;
+    background: #F38504;
+    border-radius: 2px;
+}
+.vp-fe-btn-run {
+    display: inline-block;
+    width: 60px;
+    border-radius: 2px 0px 0px 2px;
+    border-right: 0.25px solid white !important;
+}
+.vp-fe-btn-detail {
+    display: inline-block;
+    width: 20px;
+    border-radius: 0px 2px 2px 0px;
+}
+.vp-fe-detail-box {
+    display: none;
+    background: white;
+    border: 0.25px solid var(--border-gray-color);
+    position: absolute;
+    bottom: 35px;
+    right: 1px;
+    width: 84px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+}
+.vp-fe-detail-item {
+    color: var(--font-primary);
+}
+.vp-fe-detail-item:hover {
+    color: var(--font-hightlight);
+    background: var(--light-gray-color);
+}
+/* .vp-fe-btn-box {
     position: absolute;
     bottom: 10px;
     right: 10px;
@@ -331,4 +401,4 @@
 .vp-fe-btn-cancel:hover
 , .vp-fe-popup-cancel:hover {
     background: #ccc;
-}
+} */

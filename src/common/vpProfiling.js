@@ -171,14 +171,6 @@ define([
         page.appendLine('</div>'); // VP_PF_GRID_BOX
         page.appendLine('</div>'); // VP_PF_BODY
 
-        // apply button
-        page.appendFormatLine('<div class="{0}">', VP_PF_BUTTON_BOX);
-        page.appendFormatLine('<button type="button" class="{0}">{1}</button>'
-                                , VP_PF_BUTTON_CANCEL, 'Cancel');
-        // page.appendFormatLine('<button type="button" class="{0}">{1}</button>'
-        //                         , VP_PF_BUTTON_APPLY, 'Apply');
-        page.appendLine('</div>');
-
         page.appendLine('</div>'); // VP_PF_CONTAINER
         page.appendLine('</div>'); // VP_PF
 
@@ -355,11 +347,6 @@ define([
             var code = new sb.StringBuilder();
             code.appendFormat("{0}.to_file('{1}')", saveas, path);
             vpCommon.cellExecute([{command: code.toString(), exec:true, type:'code'}]);
-        });
-
-        // click cancel
-        $(document).on('click', this.wrapSelector('.' + VP_PF_BUTTON_CANCEL), function() {
-            that.close();
         });
     };
 

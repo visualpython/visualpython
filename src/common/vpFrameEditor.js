@@ -59,9 +59,18 @@ define([
     const VP_FE_INFO_ERROR_BOX = 'vp-fe-info-error-box';
     const VP_FE_INFO_ERROR_BOX_TITLE = 'vp-fe-info-error-box-title';
 
+    const VP_FE_PREVIEW_BOX = 'vp-fe-preview-box';
     const VP_FE_BUTTON_BOX = 'vp-fe-btn-box';
+    const VP_FE_BUTTON_PREVIEW = 'vp-fe-btn-preview';
     const VP_FE_BUTTON_CANCEL = 'vp-fe-btn-cancel';
-    const VP_FE_BUTTON_APPLY = 'vp-fe-btn-apply';
+    const VP_FE_BUTTON_RUNADD = 'vp-fe-btn-runadd';
+    const VP_FE_BUTTON_RUN = 'vp-fe-btn-run';
+    const VP_FE_BUTTON_DETAIL = 'vp-fe-btn-detail';
+    const VP_FE_DETAIL_BOX = 'vp-fe-detail-box';
+    const VP_FE_DETAIL_ITEM = 'vp-fe-detail-item';
+    // const VP_FE_BUTTON_BOX = 'vp-fe-btn-box';
+    // const VP_FE_BUTTON_CANCEL = 'vp-fe-btn-cancel';
+    // const VP_FE_BUTTON_APPLY = 'vp-fe-btn-apply';
 
     // search rows count at once
     const TABLE_LINES = 10;
@@ -147,6 +156,28 @@ define([
         } else {
             this.codepreview.refresh();
         }
+
+        if (!this.cmpreviewall) {
+            // codemirror setting
+            this.cmpreviewall = codemirror.fromTextArea($('#vp_codePreview')[0], {
+                mode: {
+                    name: 'python',
+                    version: 3,
+                    singleLineStringErrors: false
+                },  // text-cell(markdown cell) set to 'htmlmixed'
+                height: '100%',
+                width: '100%',
+                indentUnit: 4,
+                matchBrackets: true,
+                readOnly:true,
+                autoRefresh: true,
+                theme: "ipython",
+                extraKeys: {"Enter": "newlineAndIndentContinueMarkdownList"},
+                scrollbarStyle: "null"
+            });
+        } else {
+            this.cmpreviewall.refresh();
+        }
     }
 
     FrameEditor.prototype.close = function() {
@@ -170,6 +201,8 @@ define([
         }
 
         this.codepreview = undefined;
+        this.cmpreviewall = undefined;
+        this.previewOpened = false;
 
         vpCommon.loadCss(Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH + "common/frameEditor.css");
 
@@ -259,13 +292,34 @@ define([
         page.appendLine('</div>'); // End of VP_FE_INFO
 
 
-        // apply button
-        page.appendFormatLine('<div class="{0}">', VP_FE_BUTTON_BOX);
-        page.appendFormatLine('<button type="button" class="{0}">{1}</button>'
-                                , VP_FE_BUTTON_CANCEL, 'Cancel');
-        page.appendFormatLine('<button type="button" class="{0}">{1}</button>'
-                                , VP_FE_BUTTON_APPLY, 'Apply');
+        // preview box
+        page.appendFormatLine('<div class="{0} {1}">', VP_FE_PREVIEW_BOX, 'vp-apiblock-scrollbar');
+        page.appendFormatLine('<textarea id="{0}" name="code"></textarea>', 'vp_codePreview');
         page.appendLine('</div>');
+
+        // button box
+        page.appendFormatLine('<div class="{0}">', VP_FE_BUTTON_BOX);
+        page.appendFormatLine('<button type="button" class="{0} {1} {2}">{3}</button>'
+                                , 'vp-button', 'vp-fe-btn', VP_FE_BUTTON_PREVIEW, 'Preview');
+        page.appendFormatLine('<button type="button" class="{0} {1} {2}">{3}</button>'
+                                , 'vp-button cancel', 'vp-fe-btn', VP_FE_BUTTON_CANCEL, 'Cancel');
+        page.appendFormatLine('<div class="{0}">', VP_FE_BUTTON_RUNADD);
+        page.appendFormatLine('<button type="button" class="{0} {1}">{2}</button>'
+                                , 'vp-button activated', VP_FE_BUTTON_RUN, 'Run');
+        page.appendFormatLine('<button type="button" class="{0} {1}"><i class="{2}"></i></button>'
+                                , 'vp-button activated', VP_FE_BUTTON_DETAIL, 'fa fa-sort-up');
+        page.appendFormatLine('<div class="{0} {1}">', VP_FE_DETAIL_BOX, 'vp-cursor');
+        page.appendFormatLine('<div class="{0}" data-type="{1}">{2}</div>', VP_FE_DETAIL_ITEM, 'add', 'Add');
+        page.appendLine('</div>'); // VP_FE_DETAIL_BOX
+        page.appendLine('</div>'); // VP_FE_BUTTON_RUNADD
+        page.appendLine('</div>'); // VP_FE_BUTTON_BOX
+        // apply button
+        // page.appendFormatLine('<div class="{0}">', VP_FE_BUTTON_BOX);
+        // page.appendFormatLine('<button type="button" class="{0}">{1}</button>'
+        //                         , VP_FE_BUTTON_CANCEL, 'Cancel');
+        // page.appendFormatLine('<button type="button" class="{0}">{1}</button>'
+        //                         , VP_FE_BUTTON_APPLY, 'Apply');
+        // page.appendLine('</div>');
 
         page.appendLine('</div>'); // VP_FE_CONTAINER
         page.appendLine('</div>'); // VP_FE
@@ -338,10 +392,10 @@ define([
 
         // apply button
         page.appendFormatLine('<div class="{0}">', VP_FE_POPUP_BUTTON_BOX);
-        page.appendFormatLine('<button type="button" class="{0}">{1}</button>'
-                                , VP_FE_POPUP_CANCEL, 'Cancel');
-        page.appendFormatLine('<button type="button" class="{0}">{1}</button>'
-                                , VP_FE_POPUP_OK, 'OK');
+        page.appendFormatLine('<button type="button" class="{0} {1}">{2}</button>'
+                                , VP_FE_POPUP_CANCEL, 'vp-button cancel', 'Cancel');
+        page.appendFormatLine('<button type="button" class="{0} {1}">{2}</button>'
+                                , VP_FE_POPUP_OK, 'vp-button activated', 'OK');
         page.appendLine('</div>');
 
         page.appendLine('</div>'); // End of Popup
@@ -541,6 +595,28 @@ define([
 
     FrameEditor.prototype.closeInputPopup = function() {
         $(this.wrapSelector('.' + VP_FE_POPUP_BOX)).hide();
+    }
+
+    /** open preview box */
+    FrameEditor.prototype.openPreview = function() {
+        var code = this.state.steps.join('\n');
+        this.cmpreviewall.setValue(code);
+        this.cmpreviewall.save();
+        this.cmpreviewall.focus();
+
+        var that = this;
+        setTimeout(function() {
+            that.cmpreviewall.refresh();
+        },1);
+
+        this.previewOpened = true;
+        $(this.wrapSelector('.' + VP_FE_PREVIEW_BOX)).show();
+    }
+
+    /** close preview box */
+    FrameEditor.prototype.closePreview = function() {
+        this.previewOpened = false;
+        $(this.wrapSelector('.' + VP_FE_PREVIEW_BOX)).hide();
     }
 
     FrameEditor.prototype.setDraggableBox = function() {
@@ -837,6 +913,25 @@ define([
         });
     }
 
+    FrameEditor.prototype.apply = function(runCell = true) {
+        var code = this.state.steps.join('\n');
+        if (this.pageThis) {
+            $(this.pageThis.wrapSelector('#' + this.targetId)).val(code);
+            $(this.pageThis.wrapSelector('#' + this.targetId)).trigger({
+                type: 'frame_run',
+                code: code,
+                runCell: runCell
+            });
+        } else {
+            $(vpCommon.wrapSelector('#' + this.targetId)).val(code);
+            $(vpCommon.wrapSelector('#' + this.targetId)).trigger({
+                type: 'frame_run',
+                code: code,
+                runCell: runCell
+            });
+        }
+    }
+
     FrameEditor.prototype.unbindEvent = function() {
         $(document).off(this.wrapSelector('*'));
 
@@ -856,8 +951,12 @@ define([
         $(document).off('click', this.wrapSelector('.' + VP_FE_POPUP_OK));
         $(document).off('click', this.wrapSelector('.' + VP_FE_POPUP_CANCEL));
         $(document).off('click', this.wrapSelector('.' + VP_FE_POPUP_CLOSE));
+        $(document).off('click', this.wrapSelector('.' + VP_FE_BUTTON_PREVIEW));
         $(document).off('click', this.wrapSelector('.' + VP_FE_BUTTON_CANCEL));
-        $(document).off('click', this.wrapSelector('.' + VP_FE_BUTTON_APPLY));
+        $(document).off('click', this.wrapSelector('.' + VP_FE_BUTTON_RUN));
+        $(document).off('click', this.wrapSelector('.' + VP_FE_BUTTON_DETAIL));
+        $(document).off('click', this.wrapSelector('.' + VP_FE_DETAIL_ITEM));
+        $(document).off('click.' + this.uuid);
 
     }
 
@@ -1051,28 +1150,51 @@ define([
             that.closeInputPopup();
         });
 
+        // click preview
+        $(document).on('click', this.wrapSelector('.' + VP_FE_BUTTON_PREVIEW), function(evt) {
+            evt.stopPropagation();
+            if (that.previewOpened) {
+                that.closePreview();
+            } else {
+                that.openPreview();
+            }
+        });
+
         // click cancel
         $(document).on('click', this.wrapSelector('.' + VP_FE_BUTTON_CANCEL), function() {
             that.close();
         });
 
-        // click apply
-        $(document).on('click', this.wrapSelector('.' + VP_FE_BUTTON_APPLY), function() {
-            var code = that.state.steps.join('\n');
-            if (that.pageThis) {
-                $(that.pageThis.wrapSelector('#' + that.targetId)).val(code);
-                $(that.pageThis.wrapSelector('#' + that.targetId)).trigger({
-                    type: 'frame_apply',
-                    code: code
-                });
-            } else {
-                $(vpCommon.wrapSelector('#' + that.targetId)).val(code);
-                $(vpCommon.wrapSelector('#' + that.targetId)).trigger({
-                    type: 'frame_apply',
-                    code: code
-                });
-            }
+        // click run
+        $(document).on('click', this.wrapSelector('.' + VP_FE_BUTTON_RUN), function() {
+            that.apply();
             that.close();
+        });
+
+        // click detail button
+        $(document).on('click', this.wrapSelector('.' + VP_FE_BUTTON_DETAIL), function(evt) {
+            evt.stopPropagation();
+            $(that.wrapSelector('.' + VP_FE_DETAIL_BOX)).show();
+        });
+
+        // click add
+        $(document).on('click', this.wrapSelector('.' + VP_FE_DETAIL_ITEM), function() {
+            var type = $(this).data('type');
+            if (type == 'add') {
+                that.apply(false);
+                that.close();
+            }
+        });
+
+        // click other
+        $(document).on('click.' + this.uuid, function(evt) {
+            if (!$(evt.target).hasClass('.' + VP_FE_BUTTON_DETAIL)) {
+                $(that.wrapSelector('.' + VP_FE_DETAIL_BOX)).hide();
+            }
+            if (!$(evt.target).hasClass('.' + VP_FE_BUTTON_PREVIEW)
+                && $(that.wrapSelector('.' + VP_FE_PREVIEW_BOX)).has(evt.target).length === 0) {
+                that.closePreview();
+            }
         });
     }
 
