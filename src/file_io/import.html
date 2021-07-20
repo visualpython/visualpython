@@ -22,7 +22,7 @@
 
         /* empty required input */
         #vp-wrapper #vp_userOption input[type="text"]:invalid{
-            border: 1px solid #c22;
+            border: 1px solid var(--hightlight-color);
         }
         #vp-wrapper #vp_userOption input[type="text"]:valid,
         #vp-wrapper #vp_userOption input[type="text"]:focus {
@@ -30,9 +30,27 @@
         }
 
         /* import library table style */
+        #vp_tblImport {
+            width: 100%;
+            min-width: 250px; 
+            max-width: 450px;
+        }
+        #vp_tblImport tr {
+            height: 30px;
+            line-height: 30px;
+        }
+
         .vp-add-library,
         .vp-add-alias {
-            width: 98%;
+            /* width: 98%; */
+            width: 100%;
+            height: 30px;
+            line-height: 30px;
+        }
+
+        #vp_addLibrary {
+            width: 88px;
+            margin-top: 15px;
         }
     </style>
 
@@ -42,15 +60,15 @@
             <div class="vp-accordion-header"><span class="vp-accordion-indicator"></span><span class="vp-accordion-caption" data-caption-id="TODO:Variable">Required Input & Output</span></div>
             <div id="vp_userOption" class="vp-list-container vp-accordion-content">
                 <input type="hidden" id="vp_importMeta"/>
-                <table  id="vp_tblImport" class="vp-tbl-basic w90 vp-option-horizontal-table-layout" style="min-width: 250px; max-width: 450px;">
+                <table id="vp_tblImport" class="vp-tbl-basic w90">
                     <colgroup><col width="*"/><col width="120px"/><col width="30px"/></colgroup>
                     <tr>
-                        <th>Package Name</th>
+                        <th>Library Name</th>
                         <th>Alias</th>
                         <th></th>
                     </tr>
                     <tr>
-                        <td colspan="3"><input type="button" id="vp_addLibrary" value="Add Library" style="width:100%;"/></td>
+                        <td colspan="3"><input type="button" id="vp_addLibrary" value="+ Library" class="vp-button"/></td>
                     </tr>
                 </table>
             </div>

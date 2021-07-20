@@ -180,23 +180,24 @@ define([
         var index = mainPageRectWidth.indexOf('px');
         var mainPageRectWidthNum = parseInt(mainPageRectWidth.slice(0,index));
 
+        var PADDING_BETWEEN_BOXES = 10; // left line padding 5 + between padding 5
+
         /** 왼쪽 Logic, API 블럭 생성 영역의 width*/
-        var buttonsPageRectWidth = NUM_APIBLOCK_LEFT_PAGE_WIDTH; 
         /** 가운데 board 영역의 width */
         var boardPageRectWidth = NUM_API_BOARD_CENTER_PAGE_WIDTH;
         /** 오른쪽 option 영역의 width 계산 */
-        var optionPageRectWidth = mainPageRectWidthNum - buttonsPageRectWidth - boardPageRectWidth - 68;
+        var optionPageRectWidth = mainPageRectWidthNum - boardPageRectWidth - PADDING_BETWEEN_BOXES;
 
         /** visual python 전체의 width 렌더링 */
         $(vpCommon.wrapSelector(VP_ID_PREFIX + VP_ID_WRAPPER)).css(STR_WIDTH, mainPageRectWidth);
         /** 가운데 board 영역의 width 렌더링 */
-        $(vpCommon.wrapSelector(VP_CLASS_PREFIX + VP_CLASS_APIBLOCK_BOARD_CONTAINER)).css(STR_WIDTH, boardPageRectWidth);
+        $(vpCommon.wrapSelector(VP_CLASS_PREFIX + 'vp-apiblock-tab-container')).css(STR_WIDTH, boardPageRectWidth);
         /** 오른쪽 option 영역의 width 렌더링*/
         $(vpCommon.wrapSelector(VP_CLASS_PREFIX + VP_CLASS_APIBLOCK_OPTION_TAB)).css(STR_WIDTH, optionPageRectWidth);
         
         /** 오른쪽 option 영역의 max-width 렌더링*/
         // var optionPageRectWidth_maxWidth = mainPageRectWidthNum - buttonsPageRectWidth - 290 - 103;
-        var optionPageRectWidth_maxWidth = mainPageRectWidthNum - buttonsPageRectWidth - boardPageRectWidth - 8 - 68;
+        var optionPageRectWidth_maxWidth = mainPageRectWidthNum - boardPageRectWidth - PADDING_BETWEEN_BOXES;
         $(vpCommon.wrapSelector(VP_CLASS_PREFIX + VP_CLASS_APIBLOCK_OPTION_TAB)).css(STR_MAX_WIDTH, optionPageRectWidth_maxWidth);
 
         /** 가운데 board 위 영역의 렌더링 */
@@ -306,6 +307,9 @@ define([
                         width: '600px'
                     });
                     break;
+                case 'profiling':
+                    blockContainer.createAppsPage('nbextensions/visualpython/src/common/vpProfiling');
+                    break;
                 case 'merge':
                     // TODO: Merge
                     break;
@@ -322,9 +326,10 @@ define([
         });
 
         /** Apps Menu Apply event */
-        $(document).on('popup_apply subset_apply frame_apply', '#vp_appsCode', function(evt) {
+        $(document).on('popup_run subset_run frame_run', '#vp_appsCode', function(evt) {
             var code = evt.code;
             var title = evt.title;
+            var runCell = evt.runCell == true;
 
             var isFirstBlock = false;
             const blockList = blockContainer.getBlockList();
@@ -389,7 +394,7 @@ define([
             }
 
             // 2. add cell and run cell
-            createdBlock.runThisBlock();
+            createdBlock.runThisBlock(runCell);
         });
 
         /** Logic, API, Data Analysis 의 > 버튼 클릭 */
@@ -550,7 +555,21 @@ define([
             // });
         });
 
-        /** +node 블럭 생성 버튼 클릭 함수 바인딩 */
+        /** tab button click */
+        $(document).on(STR_CLICK, VP_CLASS_PREFIX + 'vp-apiblock-tab-button', function() {
+            var type = $(this).data('type');
+            $(VP_CLASS_PREFIX + 'vp-apiblock-tab-button').removeClass('selected');
+            $(this).addClass('selected');
+            if (type == 'menu') {
+                $(vpCommon.wrapSelector('.vp-apiblock-left')).show();
+                $(vpCommon.wrapSelector('.vp-apiblock-right')).hide();
+            } else if (type == 'board') {
+                $(vpCommon.wrapSelector('.vp-apiblock-left')).hide();
+                $(vpCommon.wrapSelector('.vp-apiblock-right')).show();
+            }
+        });
+
+        /** +code 블럭 생성 버튼 클릭 함수 바인딩 */
         $(document).on(STR_CLICK, VP_ID_PREFIX + VP_ID_APIBLOCK_NODE_BLOCK_PLUS_BUTTON, function() {
             // blockContainer.createNodeBlock(true);
             // +code 블럭 생성
@@ -585,13 +604,40 @@ define([
             }
         });
 
-        /** option page - cancel 버튼 클릭 함수 바인딩 */
+        /** option page - cancel button click */
         $(document).on(STR_CLICK, VP_ID_PREFIX + VP_APIBLOCK_BOARD_OPTION_CANCEL_BUTTON, function() {
             blockContainer.cancelBlock();
         });
 
-        /** option page - apply 버튼 클릭 함수 바인딩 */
-        $(document).on(STR_CLICK, VP_ID_PREFIX + VP_APIBLOCK_BOARD_OPTION_APPLY_BUTTON, function() {
+        /** option page - run detail button click */
+        $(document).on(STR_CLICK, VP_ID_PREFIX + 'vp_apiblock_board_option_detail_button', function(evt) {
+            evt.stopPropagation();
+            $(VP_CLASS_PREFIX + 'vp-apiblock-option-detail-box').show();
+        });
+
+        $(document).on(STR_CLICK, VP_CLASS_PREFIX + 'vp-apiblock-option-detail-item', function(evt) {
+            var type = $(this).data('type');
+            if (type == 'add') {
+                // apply it and add cell
+                var appliedBlock = blockContainer.applyBlock();
+
+                if (appliedBlock) {
+                    // #11 applied! popup
+                    vpCommon.renderSuccessMessage('Applied!');
+
+                    // #10 scroll to selected/applied block
+                    var appliedBlockDom = appliedBlock.getBlockMainDom();
+                    $(VP_CLASS_PREFIX + VP_CLASS_APIBLOCK_BOARD).animate({scrollTop: $(appliedBlockDom).position().top}, "fast");
+
+                    // add and not run
+                    appliedBlock.runThisBlock(false);
+                }
+            }
+        });
+
+        /** option page - run button click */
+        // $(document).on(STR_CLICK, VP_ID_PREFIX + VP_APIBLOCK_BOARD_OPTION_APPLY_BUTTON, function() {
+        $(document).on(STR_CLICK, VP_ID_PREFIX + 'vp_apiblock_board_option_run_button', function() {
             var appliedBlock = blockContainer.applyBlock();
 
             if (appliedBlock) {
@@ -601,6 +647,8 @@ define([
                 // #10 scroll to selected/applied block
                 var appliedBlockDom = appliedBlock.getBlockMainDom();
                 $(VP_CLASS_PREFIX + VP_CLASS_APIBLOCK_BOARD).animate({scrollTop: $(appliedBlockDom).position().top}, "fast");
+
+                appliedBlock.runThisBlock();
             }
         });
 
@@ -669,13 +717,13 @@ define([
             var saveFilePath = $(VP_ID_PREFIX + VP_ID_APIBLOCK_BOARD_MAKE_NODE_PATH).val(); // path
 
             // TEST: File Navigation
-            var state = {
-                fileType: FileNavigation.SAVE_FILE
+            // var state = {
+            //     fileType: FileNavigation.SAVE_FILE
 
-            };
-            var fileNavigation = new FileNavigation(FileNavigation.FILE_TYPE.SAVE_VP_NOTE, state);
-            fileNavigation.open();
-            return;
+            // };
+            // var fileNavigation = new FileNavigation(FileNavigation.FILE_TYPE.SAVE_VP_NOTE, state);
+            // fileNavigation.open();
+            // return;
 
             /** 빈 string이거나 
              *  Untitled이면 File navigation을 open */
@@ -726,14 +774,8 @@ define([
             if (e.file.substring(e.file.lastIndexOf(".") + 1) === vpConst.VP_NOTE_EXTENSION) {
                 var selectedPath = $(vpCommon.wrapSelector(vpCommon.formatString("#{0}", vpConst.VP_NOTE_REAL_FILE_PATH))).val();
                 var saveFileName = selectedPath.substring(selectedPath.lastIndexOf("/") + 1);
-                // FIXME: 여기부분 수정해야 함
+
                 saveNotePageAction_newVersion(saveFileName, selectedPath);
-                // apiBlockPackage.openMultiBtnModal_new('Save As', `Save changes to '${saveFileName}'`,['Yes','No', 'Cancel'], [() => {
-                // },() => {
-
-                // },() => {
-
-                // }]);
             }
         });
 
@@ -749,6 +791,9 @@ define([
             }
             if (!$(evt.target).hasClass('vp-temp-popup-menu')) {
                 $('.vp-temp-popup-menu').hide();
+            }
+            if (evt.target.id != 'vp_apiblock_board_option_detail_button') {
+                $(VP_CLASS_PREFIX + 'vp-apiblock-option-detail-box').hide();
             }
         });
 

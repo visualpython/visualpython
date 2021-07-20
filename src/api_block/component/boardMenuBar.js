@@ -32,7 +32,7 @@ define([
             , STR_OPACITY
             , STR_UNTITLED } = constData;
 
-    const { saveNotePageAction_newVersion } = vpContainer;
+    const { saveAsNotePage, saveNotePageAction_newVersion } = vpContainer;
 
     var apiBlockMenuInit = function(blockContainer) {
         var apiBlockMenuBarDom;
@@ -144,34 +144,40 @@ define([
             $(apiBlockMenuBarDom).remove(); 
 
             var blockList = blockContainer.getBlockList();
-            if (blockList.length == 0) {
-                return;
-            }
+            // if (blockList.length == 0) {
+            //     return;
+            // }
 
             /** 빈 string이거나 
              *  Untitled이면 File navigation을 open */
             var saveFileName = $(VP_ID_PREFIX + VP_ID_APIBLOCK_BOARD_MAKE_NODE_BLOCK_INPUT).val();
-            if ( saveFileName == STR_EMPTY
-                || saveFileName == STR_UNTITLED) {
+            if ( blockList.length == 0 
+                && (saveFileName == STR_EMPTY
+                || saveFileName == STR_UNTITLED)) {
                 blockContainer.deleteAllBlock();
                 blockContainer.setIsMenubarOpen(false);
                 return;
             }
 
-            var saveFilePath = vpCommon.formatString("./{0}.{1}", saveFileName, vpConst.VP_NOTE_EXTENSION);
+            var saveFilePath = $(vpCommon.wrapSelector(vpCommon.formatString("#{0}", vpConst.VP_NOTE_REAL_FILE_PATH))).val();
             var apiBlockPackage = blockContainer.getImportPackageThis();
             apiBlockPackage.openMultiBtnModal_new('Save As', `Save changes to '${saveFileName}.vp'`,['Yes', 'No', 'Cancel'], [() => {
-                saveNotePageAction_newVersion(vpCommon.formatString("{0}.{1}", saveFileName, vpConst.VP_NOTE_EXTENSION), saveFilePath);
+                if (saveFilePath == '') {
+                    saveAsNotePage();
+                } else {
+                    vpCommon.formatString("./{0}.{1}", saveFileName, vpConst.VP_NOTE_EXTENSION);
+                    saveNotePageAction_newVersion(vpCommon.formatString("{0}.{1}", saveFileName, vpConst.VP_NOTE_EXTENSION), saveFilePath);
+                }
 
                 blockContainer.deleteAllBlock();
                 // clear file and path
-                $('#vp_apiblock_board_makenode_input').val('Untitled');
+                $('#vp_apiblock_board_makenode_input').val(STR_UNTITLED);
                 $('#vp_apiblock_board_makenode_path').val('');
     
             },() => {
                 blockContainer.deleteAllBlock();
                 // clear file and path
-                $('#vp_apiblock_board_makenode_input').val('Untitled');
+                $('#vp_apiblock_board_makenode_input').val(STR_UNTITLED);
                 $('#vp_apiblock_board_makenode_path').val('');
     
             },() => {

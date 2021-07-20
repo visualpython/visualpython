@@ -2468,7 +2468,7 @@ define([
     
 
     /** this Block 부터 코드 실행 */
-    Block.prototype.runThisBlock = function() {
+    Block.prototype.runThisBlock = function(runCell=true) {
         var thisBlock = this;
         var blockContainerThis = thisBlock.getBlockContainerThis();
 
@@ -2493,7 +2493,7 @@ define([
             return;
         }
         blockContainerThis.setAPIBlockCode(code);
-        blockContainerThis.generateCode(true);
+        blockContainerThis.generateCode(true, runCell);
     }
 
 

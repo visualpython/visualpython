@@ -218,9 +218,10 @@ define([
     const NUM_BLOCK_MAX_WIDTH = 360;
     const NUM_APIBLOCK_MAIN_PAGE_WIDTH = 1000;
     const NUM_APIBLOCK_LEFT_PAGE_WIDTH = 140;
-    const NUM_OPTION_PAGE_WIDTH = 335;
+    const NUM_OPTION_PAGE_WIDTH = 550;
+    const NUM_OPTION_PAGE_MIN_WIDTH = 333;
 
-    const NUM_BUTTONS_PAGE_WIDTH = 200;
+    const NUM_BUTTONS_PAGE_WIDTH = 265;
     const NUM_API_BOARD_CENTER_PAGE_WIDTH = 265; //282;
     const NUM_API_BOARD_CENTER_PAGE_MIN_WIDTH = 265; //282;
     const NUM_TEXT_BLOCK_WIDTH = 900;
@@ -354,6 +355,7 @@ define([
 
     const VP_ID_APIBLOCK_MENU_BOX = 'vp_apiblock_menubox';
     const VP_ID_APIBLOCK_MENU_RUN = 'vp_apiblock_menu_run';
+    const VP_ID_APIBLOCK_MENU_ADD = 'vp_apiblock_menu_add';
     const VP_ID_APIBLOCK_MENU_DUPLICATE = 'vp_apiblock_menu_duplicate';
     const VP_ID_APIBLOCK_MENU_DELETE = 'vp_apiblock_menu_delete';
 
@@ -789,6 +791,7 @@ define([
         , NUM_APIBLOCK_MAIN_PAGE_WIDTH
         , NUM_APIBLOCK_LEFT_PAGE_WIDTH
         , NUM_OPTION_PAGE_WIDTH
+        , NUM_OPTION_PAGE_MIN_WIDTH
         , NUM_BUTTONS_PAGE_WIDTH
         , NUM_API_BOARD_CENTER_PAGE_WIDTH
         , NUM_API_BOARD_CENTER_PAGE_MIN_WIDTH
@@ -933,6 +936,7 @@ define([
 
         , VP_ID_APIBLOCK_MENU_BOX
         , VP_ID_APIBLOCK_MENU_RUN
+        , VP_ID_APIBLOCK_MENU_ADD
         , VP_ID_APIBLOCK_MENU_DUPLICATE
         , VP_ID_APIBLOCK_MENU_DELETE
 

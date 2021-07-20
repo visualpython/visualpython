@@ -28,6 +28,7 @@
 
 .vp-button.cancel {
     background: #E5E5E5;
+    border: 0px;
 }
 .vp-button.cancel:hover {
     background: #DEDEDE;
@@ -42,6 +43,7 @@
 
 .vp-button.activated {
     background: #F38504;
+    border: 0px;
     color: #FFFFFF;
 }
 .vp-button.activated:hover {
@@ -51,7 +53,19 @@
 .vp-button.disabled,
 .vp-button.disabled:hover {
     background: #E5E5E5;
+    border: 0px;
     border: 0.25px solid #E4E4E4;
     color: #696969;
     cursor: not-allowed;
+}
+
+/* cursor as pointer */
+.vp-cursor {
+    cursor: pointer;
+}
+
+.vp-vertical-line {
+    display: inline-block;
+    height: 15px;
+    border-right: 1px solid var(--font-primary);
 }

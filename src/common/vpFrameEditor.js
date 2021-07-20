@@ -32,6 +32,7 @@ define([
 
     const VP_FE_DF_BOX = 'vp-fe-df-box';
     const VP_FE_DF_REFRESH = 'vp-fe-df-refresh';
+    const VP_FE_DF_SHOWINFO = 'vp-fe-df-showinfo';
 
     const VP_FE_MENU_BOX = 'vp-fe-menu-box';
     const VP_FE_MENU_ITEM = 'vp-fe-menu-item';
@@ -55,9 +56,21 @@ define([
     const VP_FE_INFO_TITLE = 'vp-fe-info-title';
     const VP_FE_INFO_CONTENT = 'vp-fe-info-content';
 
+    const VP_FE_INFO_ERROR_BOX = 'vp-fe-info-error-box';
+    const VP_FE_INFO_ERROR_BOX_TITLE = 'vp-fe-info-error-box-title';
+
+    const VP_FE_PREVIEW_BOX = 'vp-fe-preview-box';
     const VP_FE_BUTTON_BOX = 'vp-fe-btn-box';
+    const VP_FE_BUTTON_PREVIEW = 'vp-fe-btn-preview';
     const VP_FE_BUTTON_CANCEL = 'vp-fe-btn-cancel';
-    const VP_FE_BUTTON_APPLY = 'vp-fe-btn-apply';
+    const VP_FE_BUTTON_RUNADD = 'vp-fe-btn-runadd';
+    const VP_FE_BUTTON_RUN = 'vp-fe-btn-run';
+    const VP_FE_BUTTON_DETAIL = 'vp-fe-btn-detail';
+    const VP_FE_DETAIL_BOX = 'vp-fe-detail-box';
+    const VP_FE_DETAIL_ITEM = 'vp-fe-detail-item';
+    // const VP_FE_BUTTON_BOX = 'vp-fe-btn-box';
+    // const VP_FE_BUTTON_CANCEL = 'vp-fe-btn-cancel';
+    // const VP_FE_BUTTON_APPLY = 'vp-fe-btn-apply';
 
     // search rows count at once
     const TABLE_LINES = 10;
@@ -72,11 +85,12 @@ define([
         DROP_DUP: 5,
         ONE_HOT_ENCODING: 6,
         SET_IDX: 7,
-        REPLACE: 8,
+        RESET_IDX: 8,
+        REPLACE: 9,
 
-        ADD_COL: 9,
-        ADD_ROW: 10,
-        SHOW: 11
+        ADD_COL: 97,
+        ADD_ROW: 98,
+        SHOW: 99
     }
 
     /**
@@ -142,6 +156,28 @@ define([
         } else {
             this.codepreview.refresh();
         }
+
+        if (!this.cmpreviewall) {
+            // codemirror setting
+            this.cmpreviewall = codemirror.fromTextArea($('#vp_codePreview')[0], {
+                mode: {
+                    name: 'python',
+                    version: 3,
+                    singleLineStringErrors: false
+                },  // text-cell(markdown cell) set to 'htmlmixed'
+                height: '100%',
+                width: '100%',
+                indentUnit: 4,
+                matchBrackets: true,
+                readOnly:true,
+                autoRefresh: true,
+                theme: "ipython",
+                extraKeys: {"Enter": "newlineAndIndentContinueMarkdownList"},
+                scrollbarStyle: "null"
+            });
+        } else {
+            this.cmpreviewall.refresh();
+        }
     }
 
     FrameEditor.prototype.close = function() {
@@ -158,10 +194,15 @@ define([
             axis: 0,
             lines: TABLE_LINES,
             steps: [],
-            popup: FRAME_EDIT_TYPE.NONE
+            popup: {
+                type: FRAME_EDIT_TYPE.NONE,
+                replace: { index: 0 }
+            }
         }
 
         this.codepreview = undefined;
+        this.cmpreviewall = undefined;
+        this.previewOpened = false;
 
         vpCommon.loadCss(Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH + "common/frameEditor.css");
 
@@ -234,6 +275,7 @@ define([
         page.appendFormatLine('<select id="{0}">', 'vp_feVariable');
         page.appendLine('</select>');
         page.appendFormatLine('<i class="{0} {1}"></i>', VP_FE_DF_REFRESH, 'fa fa-refresh');
+        page.appendFormatLine('<button class="{0} {1}"><i class="{2}"></i> View Info</button>', VP_FE_DF_SHOWINFO, 'vp-button', 'fa fa-columns');
         page.appendLine('</div>');
 
         // Table
@@ -241,21 +283,43 @@ define([
 
         page.appendLine('</div>'); // End of Table
 
+        page.appendLine('</div>'); // VP_FE_BODY
+        
         // Info Box
         page.appendFormatLine('<div class="{0}">', VP_FE_INFO);
         page.appendFormatLine('<div class="{0}">Info</div>', VP_FE_INFO_TITLE);
         page.appendFormatLine('<div class="{0}">content</div>', VP_FE_INFO_CONTENT);
         page.appendLine('</div>'); // End of VP_FE_INFO
 
-        page.appendLine('</div>'); // VP_FE_BODY
 
-        // apply button
-        page.appendFormatLine('<div class="{0}">', VP_FE_BUTTON_BOX);
-        page.appendFormatLine('<button type="button" class="{0}">{1}</button>'
-                                , VP_FE_BUTTON_CANCEL, 'Cancel');
-        page.appendFormatLine('<button type="button" class="{0}">{1}</button>'
-                                , VP_FE_BUTTON_APPLY, 'Apply');
+        // preview box
+        page.appendFormatLine('<div class="{0} {1}">', VP_FE_PREVIEW_BOX, 'vp-apiblock-scrollbar');
+        page.appendFormatLine('<textarea id="{0}" name="code"></textarea>', 'vp_codePreview');
         page.appendLine('</div>');
+
+        // button box
+        page.appendFormatLine('<div class="{0}">', VP_FE_BUTTON_BOX);
+        page.appendFormatLine('<button type="button" class="{0} {1} {2}">{3}</button>'
+                                , 'vp-button', 'vp-fe-btn', VP_FE_BUTTON_PREVIEW, 'Preview');
+        page.appendFormatLine('<button type="button" class="{0} {1} {2}">{3}</button>'
+                                , 'vp-button cancel', 'vp-fe-btn', VP_FE_BUTTON_CANCEL, 'Cancel');
+        page.appendFormatLine('<div class="{0}">', VP_FE_BUTTON_RUNADD);
+        page.appendFormatLine('<button type="button" class="{0} {1}">{2}</button>'
+                                , 'vp-button activated', VP_FE_BUTTON_RUN, 'Run');
+        page.appendFormatLine('<button type="button" class="{0} {1}"><i class="{2}"></i></button>'
+                                , 'vp-button activated', VP_FE_BUTTON_DETAIL, 'fa fa-sort-up');
+        page.appendFormatLine('<div class="{0} {1}">', VP_FE_DETAIL_BOX, 'vp-cursor');
+        page.appendFormatLine('<div class="{0}" data-type="{1}">{2}</div>', VP_FE_DETAIL_ITEM, 'add', 'Add');
+        page.appendLine('</div>'); // VP_FE_DETAIL_BOX
+        page.appendLine('</div>'); // VP_FE_BUTTON_RUNADD
+        page.appendLine('</div>'); // VP_FE_BUTTON_BOX
+        // apply button
+        // page.appendFormatLine('<div class="{0}">', VP_FE_BUTTON_BOX);
+        // page.appendFormatLine('<button type="button" class="{0}">{1}</button>'
+        //                         , VP_FE_BUTTON_CANCEL, 'Cancel');
+        // page.appendFormatLine('<button type="button" class="{0}">{1}</button>'
+        //                         , VP_FE_BUTTON_APPLY, 'Apply');
+        // page.appendLine('</div>');
 
         page.appendLine('</div>'); // VP_FE_CONTAINER
         page.appendLine('</div>'); // VP_FE
@@ -269,17 +333,17 @@ define([
         // Menus
         page.appendFormatLine('<div class="{0}" style="display:none; position: fixed;">', VP_FE_MENU_BOX);
         // menu 1. Add Column
-        page.appendFormatLine('<div class="{0} {1}" data-type="{2}">{3}</div>'
-                            , VP_FE_MENU_ITEM, 'vp-fe-menu-add-column', FRAME_EDIT_TYPE.ADD_COL, 'Add Column');
+        page.appendFormatLine('<div class="{0} {1}" data-type="{2}" data-axis="{3}">{4}</div>'
+                            , VP_FE_MENU_ITEM, 'vp-fe-menu-add-column', FRAME_EDIT_TYPE.ADD_COL, 'col', 'Add Column');
         // menu 2. Add Row
-        page.appendFormatLine('<div class="{0} {1}" data-type="{2}">{3}</div>'
-                            , VP_FE_MENU_ITEM, 'vp-fe-menu-add-row', FRAME_EDIT_TYPE.ADD_ROW, 'Add Row');
+        page.appendFormatLine('<div class="{0} {1}" data-type="{2}" data-axis="{3}">{4}</div>'
+                            , VP_FE_MENU_ITEM, 'vp-fe-menu-add-row', FRAME_EDIT_TYPE.ADD_ROW, 'row', 'Add Row');
         // menu 3. drop
         page.appendFormatLine('<div class="{0} {1}" data-type="{2}">{3}<i class="{4}" style="{5}"></i>'
                             , VP_FE_MENU_ITEM, 'vp-fe-menu-drop', FRAME_EDIT_TYPE.DROP, 'Drop'
                             , 'fa fa-caret-right', 'padding-left: 5px;'); //TODO: NA & Duplicate selection needed
         // sub-menu 1.
-        page.appendFormatLine('<div class="{0}" style="{1}">', VP_FE_MENU_SUB_BOX, 'top: 50px;');
+        page.appendFormatLine('<div class="{0}" style="{1}">', VP_FE_MENU_SUB_BOX, 'top: 25px;');
         // menu 3-1. drop
         page.appendFormatLine('<div class="{0} {1}" data-type="{2}">{3}</div>'
                             , VP_FE_MENU_ITEM, 'vp-fe-menu-drop', FRAME_EDIT_TYPE.DROP, 'Drop');
@@ -287,22 +351,25 @@ define([
         page.appendFormatLine('<div class="{0} {1}" data-type="{2}">{3}</div>'
                             , VP_FE_MENU_ITEM, 'vp-fe-menu-drop-na', FRAME_EDIT_TYPE.DROP_NA, 'Drop NA');
         // menu 3-3. drop-duplicate
-        page.appendFormatLine('<div class="{0} {1}" data-type="{2}">{3}</div>'
-                            , VP_FE_MENU_ITEM, 'vp-fe-menu-drop-duplicate', FRAME_EDIT_TYPE.DROP_DUP, 'Drop Duplicate');
+        page.appendFormatLine('<div class="{0} {1}" data-type="{2}" data-axis="{3}">{4}</div>'
+                            , VP_FE_MENU_ITEM, 'vp-fe-menu-drop-duplicate', FRAME_EDIT_TYPE.DROP_DUP, 'col','Drop Duplicate');
         page.appendLine('</div>'); // end of sub-menu 1
         page.appendLine('</div>'); // end of menu 3
         // menu 4. rename
         page.appendFormatLine('<div class="{0} {1}" data-type="{2}">{3}</div>'
                                                 , VP_FE_MENU_ITEM, 'vp-fe-menu-rename', FRAME_EDIT_TYPE.RENAME, 'Rename');
         // menu 5. one-hot encoding
-        page.appendFormatLine('<div class="{0} {1}" data-type="{2}">{3}</div>'
-                            , VP_FE_MENU_ITEM, 'vp-fe-menu-ohe', FRAME_EDIT_TYPE.ONE_HOT_ENCODING, 'One-Hot Encoding');
-        // menu 6. set/reset index
-        page.appendFormatLine('<div class="{0} {1}" data-type="{2}">{3}</div>'
-                            , VP_FE_MENU_ITEM, 'vp-fe-menu-index', FRAME_EDIT_TYPE.SET_IDX, 'Set Index');
+        page.appendFormatLine('<div class="{0} {1}" data-type="{2}" data-axis="{3}">{4}</div>'
+                            , VP_FE_MENU_ITEM, 'vp-fe-menu-ohe', FRAME_EDIT_TYPE.ONE_HOT_ENCODING, 'col', 'One-Hot Encoding');
+        // menu 6. set index
+        page.appendFormatLine('<div class="{0} {1}" data-type="{2}" data-axis="{3}">{4}</div>'
+                            , VP_FE_MENU_ITEM, 'vp-fe-menu-set-index', FRAME_EDIT_TYPE.SET_IDX, 'col', 'Set Index');
+        // menu 6-2. reset index
+        page.appendFormatLine('<div class="{0} {1}" data-type="{2}" data-axis="{3}">{4}</div>'
+                            , VP_FE_MENU_ITEM, 'vp-fe-menu-reset-index', FRAME_EDIT_TYPE.RESET_IDX, 'row', 'Reset Index');
         // menu 7. replace
-        page.appendFormatLine('<div class="{0} {1}" data-type="{2}">{3}</div>'
-                            , VP_FE_MENU_ITEM, 'vp-fe-menu-replace', FRAME_EDIT_TYPE.REPLACE, 'Replace');
+        page.appendFormatLine('<div class="{0} {1}" data-type="{2}" data-axis="{3}">{4}</div>'
+                            , VP_FE_MENU_ITEM, 'vp-fe-menu-replace', FRAME_EDIT_TYPE.REPLACE, 'col', 'Replace');
         page.appendLine('</div>'); // End of Menus
         return page.toString();
     }
@@ -325,10 +392,10 @@ define([
 
         // apply button
         page.appendFormatLine('<div class="{0}">', VP_FE_POPUP_BUTTON_BOX);
-        page.appendFormatLine('<button type="button" class="{0}">{1}</button>'
-                                , VP_FE_POPUP_CANCEL, 'Cancel');
-        page.appendFormatLine('<button type="button" class="{0}">{1}</button>'
-                                , VP_FE_POPUP_OK, 'OK');
+        page.appendFormatLine('<button type="button" class="{0} {1}">{2}</button>'
+                                , VP_FE_POPUP_CANCEL, 'vp-button cancel', 'Cancel');
+        page.appendFormatLine('<button type="button" class="{0} {1}">{2}</button>'
+                                , VP_FE_POPUP_OK, 'vp-button activated', 'OK');
         page.appendLine('</div>');
 
         page.appendLine('</div>'); // End of Popup
@@ -374,7 +441,7 @@ define([
     FrameEditor.prototype.renderTable = function(renderedText, isHtml=true) {
         var tag = new sb.StringBuilder();
         // Table
-        tag.appendFormatLine('<div class="{0} {1}">', VP_FE_TABLE, 'rendered_html');
+        tag.appendFormatLine('<div class="{0} {1} {2}">', VP_FE_TABLE, 'rendered_html', 'vp-apiblock-scrollbar');
         if (isHtml) {
             tag.appendFormatLine('<table class="dataframe">{0}</table>', renderedText);
             // More button
@@ -391,11 +458,11 @@ define([
         content.appendLine('<table><tr>');
         content.appendFormatLine('<th><label>New {0} name</label></th>', type);
         content.appendFormatLine('<td><input type="text" class="{0}"/>', 'vp-popup-input1');
-        content.appendFormatLine('<label><input type="checkbox" class="{0}"/><span>{1}</span></label>', 'vp-popup-istext1','Text');
+        content.appendFormatLine('<label><input type="checkbox" class="{0}" checked/><span>{1}</span></label>', 'vp-popup-istext1','Text');
         content.appendLine('</td></tr><tr>');
         content.appendLine('<th><label>Value</label></th>');
         content.appendFormatLine('<td><input type="text" class="{0}"/>', 'vp-popup-input2');
-        content.appendFormatLine('<label><input type="checkbox" class="{0}"/><span>{1}</span></label>', 'vp-popup-istext2','Text');
+        content.appendFormatLine('<label><input type="checkbox" class="{0}" checked/><span>{1}</span></label>', 'vp-popup-istext2','Text');
         content.appendLine('</td></tr></table>');
         return content.toString();
     }
@@ -411,6 +478,31 @@ define([
             content.appendLine('</tr>');
         });
         content.appendLine('</table>');
+        return content.toString();
+    }
+
+    FrameEditor.prototype.renderReplacePage = function() {
+        var content = new sb.StringBuilder();
+        content.appendFormatLine('<table class="{0}">', 'vp-popup-replace-table');
+        content.appendLine(this.renderReplaceInput(0));
+        content.appendFormatLine('<tr><td colspan="3"><button class="{0} {1}">{2}</button></td></tr>', 'vp-button', 'vp-popup-replace-add', '+ Add Key');
+        content.appendLine('</table>');
+        return content.toString();
+    }
+
+    FrameEditor.prototype.renderReplaceInput = function(index) {
+        var content = new sb.StringBuilder();
+        content.appendLine('<tr>');
+        content.appendLine('<td>');
+        content.appendFormatLine('<input type="text" class="{0}" placeholder="{1}"/>', 'vp-popup-origin' + index, 'origin');
+        content.appendFormatLine('<label><input type="checkbox" class="{0}" checked/><span>{1}</span></label>', 'vp-popup-origin-istext' + index, 'Text');
+        content.appendLine('</td>');
+        content.appendLine('<td>');
+        content.appendFormatLine('<input type="text" class="{0}" placeholder="{1}"/>', 'vp-popup-replace' + index, 'replace');
+        content.appendFormatLine('<label><input type="checkbox" class="{0}" checked/><span>{1}</span></label>', 'vp-popup-replace-istext' + index, 'Text');
+        content.appendLine('</td>');
+        content.appendFormatLine('<td><i class="{0} {1} {2}"></i></td>', 'vp-popup-delete', 'fa fa-close', 'vp-cursor');
+        content.appendLine('</tr>');
         return content.toString();
     }
 
@@ -431,12 +523,16 @@ define([
                 title = 'Rename';
                 content = this.renderRenamePage();
                 break;
+            case FRAME_EDIT_TYPE.REPLACE:
+                title = 'Replace';
+                content = this.renderReplacePage();
+                break;
             default:
                 type = FRAME_EDIT_TYPE.NONE;
                 break;
         }
 
-        this.state.popup = type;
+        this.state.popup.type = type;
 
         // set title
         $(this.wrapSelector('.' + VP_FE_POPUP_BOX + ' .' + VP_FE_TITLE)).text(title);
@@ -448,7 +544,7 @@ define([
     }
 
     FrameEditor.prototype.getPopupContent = function() {
-        var type = this.state.popup;
+        var type = this.state.popup.type;
         var content = {};
         switch (parseInt(type)) {
             case FRAME_EDIT_TYPE.ADD_COL:
@@ -474,6 +570,23 @@ define([
                     };
                 });
                 break;
+            case FRAME_EDIT_TYPE.REPLACE:
+                var idx = 0;
+                for (var i=0; i <= this.state.popup.replace.index; i++) {
+                    var origin = $(this.wrapSelector('.vp-popup-origin' + i)).val();
+                    var origintext = $(this.wrapSelector('.vp-popup-origin-istext'+idx)).prop('checked');
+                    var replace = $(this.wrapSelector('.vp-popup-replace' + i)).val();
+                    var replacetext = $(this.wrapSelector('.vp-popup-replace-istext'+idx)).prop('checked');
+                    if (origin && replace) {
+                        content[idx++] = {
+                            origin: origin,
+                            origintext: origintext,
+                            replace: replace,
+                            replacetext: replacetext
+                        }
+                    }
+                }
+                break;
             default:
                 break;
         }
@@ -482,6 +595,28 @@ define([
 
     FrameEditor.prototype.closeInputPopup = function() {
         $(this.wrapSelector('.' + VP_FE_POPUP_BOX)).hide();
+    }
+
+    /** open preview box */
+    FrameEditor.prototype.openPreview = function() {
+        var code = this.state.steps.join('\n');
+        this.cmpreviewall.setValue(code);
+        this.cmpreviewall.save();
+        this.cmpreviewall.focus();
+
+        var that = this;
+        setTimeout(function() {
+            that.cmpreviewall.refresh();
+        },1);
+
+        this.previewOpened = true;
+        $(this.wrapSelector('.' + VP_FE_PREVIEW_BOX)).show();
+    }
+
+    /** close preview box */
+    FrameEditor.prototype.closePreview = function() {
+        this.previewOpened = false;
+        $(this.wrapSelector('.' + VP_FE_PREVIEW_BOX)).hide();
     }
 
     FrameEditor.prototype.setDraggableBox = function() {
@@ -494,19 +629,41 @@ define([
         
     }
 
+    FrameEditor.prototype.showInfo = function() {
+        $(this.wrapSelector('.' + VP_FE_INFO)).show();
+    }
+
+    FrameEditor.prototype.hideInfo = function() {
+        $(this.wrapSelector('.' + VP_FE_INFO)).hide();
+    }
+
+    FrameEditor.prototype.renderInfoPage = function(renderedText, isHtml = true) {
+        var tag = new sb.StringBuilder();
+        tag.appendFormatLine('<div class="{0} {1}">', VP_FE_INFO_CONTENT
+                            , 'rendered_html'); // 'rendered_html' style from jupyter output area
+        if (isHtml) {
+            tag.appendLine(renderedText);
+        } else {
+            tag.appendFormatLine('<pre>{0}</pre>', renderedText);
+        }
+        tag.appendLine('</div>');
+        return tag.toString();
+    }
+
     FrameEditor.prototype.loadInfo = function() {
         var that = this;
 
         // get selected columns/indexes
         var selected = [];
         $(this.wrapSelector('.' + VP_FE_TABLE + ' th.selected')).each((idx, tag) => {
-            var name = $(tag).attr('data-label');
+            var name = $(tag).data('label');
             selected.push(name);
         });
         this.state.selected = selected;
 
         var code = new sb.StringBuilder();
-        code.appendFormat("{0}", this.state.tempObj);
+        var locObj = new sb.StringBuilder();
+        locObj.appendFormat("{0}", this.state.tempObj);
         if (this.state.selected != '') {
             var rowCode = ':';
             var colCode = ':';
@@ -516,15 +673,62 @@ define([
             if (this.state.axis == 1) {
                 colCode = '[' + this.state.selected.join(',') + ']';
             }
-            code.appendFormat(".loc[{0},{1}]", rowCode, colCode);
+            locObj.appendFormat(".loc[{0},{1}]", rowCode, colCode);
         }
-        code.append(".value_counts()");
-        kernelApi.executePython(code.toString(), function(result) {
-            $(that.wrapSelector('.' + VP_FE_INFO_CONTENT)).replaceWith(function() {
-                // return vpCommon.formatString('<div class="{0}"><pre>{1}</pre></div>', VP_FE_INFO_CONTENT, result);
-                return vpCommon.formatString('<div class="{0}">{1}</div>', VP_FE_INFO_CONTENT, result);
-            });
-        }); 
+        // code.append(".value_counts()");
+        code.appendFormat('_vp_display_dataframe_info({0})', locObj.toString());
+        
+        // kernelApi.executePython(code.toString(), function(result) {
+        //     $(that.wrapSelector('.' + VP_FE_INFO_CONTENT)).replaceWith(function() {
+        //         // return vpCommon.formatString('<div class="{0}"><pre>{1}</pre></div>', VP_FE_INFO_CONTENT, result);
+        //         return vpCommon.formatString('<div class="{0}">{1}</div>', VP_FE_INFO_CONTENT, result);
+        //     });
+        // }); 
+
+        Jupyter.notebook.kernel.execute(
+            code.toString(),
+            {
+                iopub: {
+                    output: function(msg) {
+                        if (msg.content.data) {
+                            var htmlText = String(msg.content.data["text/html"]);
+                            var codeText = String(msg.content.data["text/plain"]);
+                            if (htmlText != 'undefined') {
+                                $(that.wrapSelector('.' + VP_FE_INFO_CONTENT)).replaceWith(function() {
+                                    return that.renderInfoPage(htmlText);
+                                });
+                            } else if (codeText != 'undefined') {
+                                // plain text as code
+                                $(that.wrapSelector('.' + VP_FE_INFO_CONTENT)).replaceWith(function() {
+                                    return that.renderInfoPage(codeText, false);
+                                });
+                            } else {
+                                $(that.wrapSelector('.' + VP_FE_INFO_CONTENT)).replaceWith(function() {
+                                    return that.renderInfoPage('');
+                                });
+                            }
+                        } else {
+                            var errorContent = new sb.StringBuilder();
+                            if (msg.content.ename) {
+                                errorContent.appendFormatLine('<div class="{0}">', VP_FE_INFO_ERROR_BOX);
+                                errorContent.appendLine('<i class="fa fa-exclamation-triangle"></i>');
+                                errorContent.appendFormatLine('<label class="{0}">{1}</label>'
+                                                            , VP_FE_INFO_ERROR_BOX_TITLE, msg.content.ename);
+                                if (msg.content.evalue) {
+                                    // errorContent.appendLine('<br/>');
+                                    errorContent.appendFormatLine('<pre>{0}</pre>', msg.content.evalue.split('\\n').join('<br/>'));
+                                }
+                                errorContent.appendLine('</div>');
+                            }
+                            $(that.wrapSelector('.' + VP_FE_INFO_CONTENT)).replaceWith(function() {
+                                return that.renderInfoPage(errorContent);
+                            });
+                        }
+                    }
+                }
+            },
+            { silent: false, store_history: true, stop_on_error: true }
+        );
     }
 
     FrameEditor.prototype.getTypeCode = function(type, content={}) {
@@ -569,26 +773,53 @@ define([
                 code.appendFormat("{0}{1}.dropna(axis={2}, inplace=True)", tempObj, locObj, axis);
                 break;
             case FRAME_EDIT_TYPE.DROP_DUP:
-                if (axis == 0) {
-                    locObj = vpCommon.formatString('.loc[[{0}],:]', selectedName);
-                } else {
-                    locObj = vpCommon.formatString('.loc[:,[{0}]]', selectedName);
+                if (axis == 1) {
+                    code.appendFormat("{0}.drop_duplicates(subset=[{1}], inplace=True)", tempObj, selectedName);
                 }
-                code.appendFormat("{0}{1}.drop_duplicates(axis={2}, inplace=True)", tempObj, locObj, axis);
                 break;
             case FRAME_EDIT_TYPE.ONE_HOT_ENCODING:
+                if (axis == 1) {
+                    code.appendFormat("{0} = pd.get_dummies(data={1}, columns=[{2}])", tempObj, tempObj, selectedName);
+                }
                 break;
             case FRAME_EDIT_TYPE.SET_IDX:
+                if (axis == 1) {
+                    code.appendFormat("{0}.set_index([{1}], inplace=True)", tempObj, selectedName);
+                }
+                break;
+            case FRAME_EDIT_TYPE.RESET_IDX:
+                if (axis == 0) {
+                    code.appendFormat("{0}.reset_index(inplace=True)", tempObj);
+                }
                 break;
             case FRAME_EDIT_TYPE.REPLACE:
-                code.appendFormat("{0}.replace({1}, inplace=True)", tempObj, JSON.stringify(content).replaceAll('"', "'"));
+                var replaceStr = new sb.StringBuilder();
+                Object.keys(content).forEach((key, idx) => {
+                    if (idx == 0) {
+                        replaceStr.appendFormat("{0}: {1}"
+                                                , convertToStr(content[key].origin, content[key].origintext)
+                                                , convertToStr(content[key].replace, content[key].replacetext));
+                    } else {
+                        replaceStr.appendFormat(", {0}: {1}"
+                                                , convertToStr(content[key].origin, content[key].origintext)
+                                                , convertToStr(content[key].replace, content[key].replacetext));
+                    }
+                });
+
+                // var locObj = '';
+                // if (axis == 0) {
+                //     locObj = vpCommon.formatString('.loc[[{0}],:]', selectedName);
+                // } else {
+                //     locObj = vpCommon.formatString('.loc[:,[{0}]]', selectedName);
+                // }
+                code.appendFormat("{0}[[{1}]] = {2}[[{3}]].replace({{4}})", tempObj, selectedName, tempObj, selectedName, replaceStr);
                 break;
             case FRAME_EDIT_TYPE.ADD_COL:
                 var name = convertToStr(content.name, content.nameastext);
                 var value = convertToStr(content.value, content.valueastext);
                 code.appendFormat("{0}[{1}] = {2}", tempObj, name, value);
                 break;
-            case FRAME_EDIT_TYPE.ADD_ROW:
+            case FRAME_EDIT_TYPE.ADD_ROW: 
                 var name = convertToStr(content.name, content.nameastext);
                 var value = convertToStr(content.value, content.valueastext);
                 code.appendFormat("{0}.loc[{1}] = {2}", tempObj, name, value);
@@ -672,12 +903,33 @@ define([
                 // load info
                 that.loadInfo();
                 // add to stack
-                that.state.steps.push(codeStr);
-                that.setPreview(codeStr);
+                if (codeStr !== '') {
+                    that.state.steps.push(codeStr);
+                    that.setPreview(codeStr);
+                }
             } catch (err) {
                 console.log(err);
             }
         });
+    }
+
+    FrameEditor.prototype.apply = function(runCell = true) {
+        var code = this.state.steps.join('\n');
+        if (this.pageThis) {
+            $(this.pageThis.wrapSelector('#' + this.targetId)).val(code);
+            $(this.pageThis.wrapSelector('#' + this.targetId)).trigger({
+                type: 'frame_run',
+                code: code,
+                runCell: runCell
+            });
+        } else {
+            $(vpCommon.wrapSelector('#' + this.targetId)).val(code);
+            $(vpCommon.wrapSelector('#' + this.targetId)).trigger({
+                type: 'frame_run',
+                code: code,
+                runCell: runCell
+            });
+        }
     }
 
     FrameEditor.prototype.unbindEvent = function() {
@@ -686,6 +938,8 @@ define([
         $(document).off('click', this.wrapSelector('.' + VP_FE_CLOSE));
         $(document).off('change', this.wrapSelector('#vp_feVariable'));
         $(document).off('click', this.wrapSelector('.vp-fe-df-refresh'));
+        $(document).off('click', this.wrapSelector('.vp-fe-df-showinfo'));
+        $(document).off('click', this.wrapSelector('.' + VP_FE_INFO));
         $(document).off('contextmenu', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN));
         $(document).off('contextmenu', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW));
         $(document).off('click', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN));
@@ -697,8 +951,12 @@ define([
         $(document).off('click', this.wrapSelector('.' + VP_FE_POPUP_OK));
         $(document).off('click', this.wrapSelector('.' + VP_FE_POPUP_CANCEL));
         $(document).off('click', this.wrapSelector('.' + VP_FE_POPUP_CLOSE));
+        $(document).off('click', this.wrapSelector('.' + VP_FE_BUTTON_PREVIEW));
         $(document).off('click', this.wrapSelector('.' + VP_FE_BUTTON_CANCEL));
-        $(document).off('click', this.wrapSelector('.' + VP_FE_BUTTON_APPLY));
+        $(document).off('click', this.wrapSelector('.' + VP_FE_BUTTON_RUN));
+        $(document).off('click', this.wrapSelector('.' + VP_FE_BUTTON_DETAIL));
+        $(document).off('click', this.wrapSelector('.' + VP_FE_DETAIL_ITEM));
+        $(document).off('click.' + this.uuid);
 
     }
 
@@ -733,6 +991,15 @@ define([
             that.loadVariableList();
         });
 
+        // show info
+        $(document).on('click', this.wrapSelector('.vp-fe-df-showinfo'), function() {
+            that.showInfo();
+        });
+
+        $(document).on('click', this.wrapSelector('.' + VP_FE_INFO), function(evt) {
+            evt.stopPropagation();
+        });
+
         // menu on column
         $(document).on('contextmenu', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN), function(event) {
             event.preventDefault();
@@ -741,7 +1008,7 @@ define([
             // select col/idx
             if (!hasSelected) {
                 $(this).addClass('selected');
-                var newAxis = $(this).attr('data-axis');
+                var newAxis = $(this).data('axis');
                 that.state.axis = newAxis;
             }
 
@@ -761,7 +1028,7 @@ define([
             // select col/idx
             if (!hasSelected) {
                 $(this).addClass('selected');
-                var newAxis = $(this).attr('data-axis');
+                var newAxis = $(this).data('axis');
                 that.state.axis = newAxis;
             }
 
@@ -780,6 +1047,10 @@ define([
                 // close menu
                 that.hideMenu();
             }
+            if (!$(evt.target).hasClass(VP_FE_DF_SHOWINFO)) {
+                // close info
+                that.hideInfo();
+            }
         });
 
         // select column
@@ -789,7 +1060,7 @@ define([
             $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW)).removeClass('selected');
             if (!hasSelected) {
                 $(this).addClass('selected');
-                var newAxis = $(this).attr('data-axis');
+                var newAxis = $(this).data('axis');
                 that.state.axis = newAxis;
             } else {
                 $(this).removeClass('selected');
@@ -804,7 +1075,7 @@ define([
             $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN)).removeClass('selected');
             if (!hasSelected) {
                 $(this).addClass('selected');
-                var newAxis = $(this).attr('data-axis');
+                var newAxis = $(this).data('axis');
                 that.state.axis = newAxis;
             } else {
                 $(this).removeClass('selected');
@@ -834,21 +1105,38 @@ define([
         // click menu item
         $(document).on('click', this.wrapSelector('.' + VP_FE_MENU_ITEM), function(event) {
             event.stopPropagation();
-            var editType = $(this).attr('data-type');
+            var editType = $(this).data('type');
             switch (parseInt(editType)) {
                 case FRAME_EDIT_TYPE.ADD_COL:
                 case FRAME_EDIT_TYPE.ADD_ROW:
                 case FRAME_EDIT_TYPE.RENAME:
+                case FRAME_EDIT_TYPE.REPLACE:
                     that.openInputPopup(editType);
-                    return;
+                    break;
+                default:
+                    that.loadCode(that.getTypeCode(editType));
+                    break;
             }
-            that.loadCode(that.getTypeCode(editType));
+            that.hideMenu();
+        });
+
+        // popup : replace - add button
+        $(document).on('click', this.wrapSelector('.vp-popup-replace-add'), function() {
+            var newInput = $(that.renderReplaceInput(++that.state.popup.replace.index));
+            newInput.insertBefore(
+                $(that.wrapSelector('.vp-popup-replace-table tr:last'))
+            );
+        });
+
+        // popup : replace - delete row
+        $(document).on('click', this.wrapSelector('.vp-popup-delete'), function() {
+            $(this).closest('tr').remove();
         });
 
         // ok input popup
         $(document).on('click', this.wrapSelector('.' + VP_FE_POPUP_OK), function() {
-            // TODO: ok input popup
-            that.loadCode(that.getTypeCode(that.state.popup, that.getPopupContent()));
+            // ok input popup
+            that.loadCode(that.getTypeCode(that.state.popup.type, that.getPopupContent()));
             that.closeInputPopup();
         });
 
@@ -862,38 +1150,63 @@ define([
             that.closeInputPopup();
         });
 
+        // click preview
+        $(document).on('click', this.wrapSelector('.' + VP_FE_BUTTON_PREVIEW), function(evt) {
+            evt.stopPropagation();
+            if (that.previewOpened) {
+                that.closePreview();
+            } else {
+                that.openPreview();
+            }
+        });
+
         // click cancel
         $(document).on('click', this.wrapSelector('.' + VP_FE_BUTTON_CANCEL), function() {
             that.close();
         });
 
-        // click apply
-        $(document).on('click', this.wrapSelector('.' + VP_FE_BUTTON_APPLY), function() {
-            var code = that.state.steps.join('\n');
-            if (that.pageThis) {
-                $(that.pageThis.wrapSelector('#' + that.targetId)).val(code);
-                $(that.pageThis.wrapSelector('#' + that.targetId)).trigger({
-                    type: 'frame_apply',
-                    code: code
-                });
-            } else {
-                $(vpCommon.wrapSelector('#' + that.targetId)).val(code);
-                $(vpCommon.wrapSelector('#' + that.targetId)).trigger({
-                    type: 'frame_apply',
-                    code: code
-                });
-            }
+        // click run
+        $(document).on('click', this.wrapSelector('.' + VP_FE_BUTTON_RUN), function() {
+            that.apply();
             that.close();
+        });
+
+        // click detail button
+        $(document).on('click', this.wrapSelector('.' + VP_FE_BUTTON_DETAIL), function(evt) {
+            evt.stopPropagation();
+            $(that.wrapSelector('.' + VP_FE_DETAIL_BOX)).show();
+        });
+
+        // click add
+        $(document).on('click', this.wrapSelector('.' + VP_FE_DETAIL_ITEM), function() {
+            var type = $(this).data('type');
+            if (type == 'add') {
+                that.apply(false);
+                that.close();
+            }
+        });
+
+        // click other
+        $(document).on('click.' + this.uuid, function(evt) {
+            if (!$(evt.target).hasClass('.' + VP_FE_BUTTON_DETAIL)) {
+                $(that.wrapSelector('.' + VP_FE_DETAIL_BOX)).hide();
+            }
+            if (!$(evt.target).hasClass('.' + VP_FE_BUTTON_PREVIEW)
+                && $(that.wrapSelector('.' + VP_FE_PREVIEW_BOX)).has(evt.target).length === 0) {
+                that.closePreview();
+            }
         });
     }
 
     FrameEditor.prototype.showMenu = function(left, top) {
         if (this.state.axis == 0) {
             // row
-
+            $(this.wrapSelector(vpCommon.formatString('.{0}', VP_FE_MENU_BOX))).find('div[data-axis="col"]').hide();
+            $(this.wrapSelector(vpCommon.formatString('.{0}', VP_FE_MENU_BOX))).find('div[data-axis="row"]').show();
         } else if (this.state.axis == 1) {
             // column
-
+            $(this.wrapSelector(vpCommon.formatString('.{0}', VP_FE_MENU_BOX))).find('div[data-axis="row"]').hide();
+            $(this.wrapSelector(vpCommon.formatString('.{0}', VP_FE_MENU_BOX))).find('div[data-axis="col"]').show();
         }
         $(this.wrapSelector(vpCommon.formatString('.{0}', VP_FE_MENU_BOX))).css({ top: top, left: left })
         $(this.wrapSelector(vpCommon.formatString('.{0}', VP_FE_MENU_BOX))).show();

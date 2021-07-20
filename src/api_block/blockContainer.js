@@ -77,6 +77,7 @@ define([
             , NUM_BLOCK_MAX_WIDTH
             , NUM_TEXT_BLOCK_WIDTH
             , NUM_OPTION_PAGE_WIDTH
+            , NUM_OPTION_PAGE_MIN_WIDTH
             , NUM_BUTTONS_PAGE_WIDTH
             , NUM_API_BOARD_CENTER_PAGE_MIN_WIDTH
             
@@ -2180,9 +2181,9 @@ define([
     /** importPackage의 generateCode 이전에 실행할 prefix code
      *  @param {boolean} isClicked true면 node 블럭 앞 run 버튼 클릭으로 코드 실행
      */
-    BlockContainer.prototype.generateCode = function(isClicked) {
+    BlockContainer.prototype.generateCode = function(isClicked, runCell=true) {
         var importPackageThis = this.getImportPackageThis();
-        importPackageThis.generateCode(true, true, isClicked);
+        importPackageThis.generateCode(true, runCell, isClicked);
     }
 
     /** 코드 생성 */
@@ -2339,20 +2340,21 @@ define([
         var index = mainPageRectWidth.indexOf('px');
         var mainPageRectWidthNum = parseInt(mainPageRectWidth.slice(0,index));
 
-        var buttonsPageRectWidth = NUM_BUTTONS_PAGE_WIDTH; 
-        var boardPageRect =  $(vpCommon.wrapSelector(VP_CLASS_PREFIX + VP_CLASS_APIBLOCK_BOARD_CONTAINER))[0].getBoundingClientRect(); 
-        var boardPageRectWidth = boardPageRect.width;
-        var optionPageRectWidth = mainPageRectWidthNum - boardPageRectWidth - buttonsPageRectWidth - 18;
+        var PADDING_BETWEEN_BOXES = 10; // left line padding 5 + between padding 5
 
-        if (optionPageRectWidth < NUM_OPTION_PAGE_WIDTH) {
-            boardPageRectWidth = mainPageRectWidthNum - NUM_OPTION_PAGE_WIDTH - 18 - buttonsPageRectWidth;
-            optionPageRectWidth = NUM_OPTION_PAGE_WIDTH;
+        var boardPageRect =  $(vpCommon.wrapSelector(VP_CLASS_PREFIX + 'vp-apiblock-tab-container'))[0].getBoundingClientRect(); 
+        var boardPageRectWidth = boardPageRect.width;
+        var optionPageRectWidth = mainPageRectWidthNum - boardPageRectWidth - PADDING_BETWEEN_BOXES;
+
+        if (optionPageRectWidth < NUM_OPTION_PAGE_MIN_WIDTH) {
+            boardPageRectWidth = mainPageRectWidthNum - NUM_OPTION_PAGE_MIN_WIDTH - PADDING_BETWEEN_BOXES;
+            optionPageRectWidth = NUM_OPTION_PAGE_MIN_WIDTH;
         } 
         
-        var optionPageRectWidth_maxWidth = mainPageRectWidthNum - buttonsPageRectWidth - NUM_API_BOARD_CENTER_PAGE_MIN_WIDTH - 18;
+        var optionPageRectWidth_maxWidth = mainPageRectWidthNum - NUM_API_BOARD_CENTER_PAGE_MIN_WIDTH - PADDING_BETWEEN_BOXES;
 
         $(vpCommon.wrapSelector(VP_CLASS_PREFIX + VP_CLASS_APIBLOCK_OPTION_TAB)).css(STR_MAX_WIDTH, optionPageRectWidth_maxWidth);
-        $(vpCommon.wrapSelector(VP_CLASS_PREFIX + VP_CLASS_APIBLOCK_BOARD_CONTAINER)).css(STR_WIDTH, boardPageRectWidth );
+        $(vpCommon.wrapSelector(VP_CLASS_PREFIX + 'vp-apiblock-tab-container')).css(STR_WIDTH, boardPageRectWidth );
         $(vpCommon.wrapSelector(VP_CLASS_PREFIX + VP_CLASS_APIBLOCK_OPTION_TAB)).css(STR_WIDTH, optionPageRectWidth );
         $(VP_ID_PREFIX + VP_ID_WRAPPER).css(STR_MIN_WIDTH, 830);
 
@@ -2367,24 +2369,26 @@ define([
 
     /** option popup을 resize  할 때 */
     BlockContainer.prototype.resizeOptionPopup = function() {
-        // console.log('resizeOptionPopup');
-
         var optionPageRect = $(vpCommon.wrapSelector(VP_CLASS_PREFIX + VP_CLASS_APIBLOCK_OPTION_TAB))[0].getBoundingClientRect();
         var mainPageRect = $(vpCommon.wrapSelector(VP_CLASS_PREFIX + VP_CLASS_APIBLOCK_MAIN))[0].getBoundingClientRect();
-        var buttonsPageRect = $(vpCommon.wrapSelector(VP_CLASS_PREFIX + VP_CLASS_APIBLOCK_BUTTONS))[0].getBoundingClientRect();
+        
+        var PADDING_BETWEEN_BOXES = 4;
         
         var mainPageRectWidth = mainPageRect.width; 
-        var buttonsPageRectWidth = buttonsPageRect.width; 
         var optionPageRectWidth = optionPageRect.width;
-        var boardPageRectWidth = mainPageRectWidth - optionPageRectWidth - buttonsPageRectWidth - 10;
+        var boardPageRectWidth = mainPageRectWidth - optionPageRectWidth - PADDING_BETWEEN_BOXES;
+
+        var optionPageRectWidth_maxWidth = mainPageRectWidth - NUM_API_BOARD_CENTER_PAGE_MIN_WIDTH - PADDING_BETWEEN_BOXES;
 
         if (boardPageRectWidth > NUM_API_BOARD_CENTER_PAGE_MIN_WIDTH) {
             $(vpCommon.wrapSelector(VP_CLASS_PREFIX + VP_CLASS_APIBLOCK_OPTION_TAB)).css(STR_MAX_WIDTH, 'unset !important;');
         } else {
-            $(vpCommon.wrapSelector(VP_CLASS_PREFIX + VP_CLASS_APIBLOCK_OPTION_TAB)).css(STR_MAX_WIDTH, optionPageRectWidth);
+            boardPageRectWidth = NUM_API_BOARD_CENTER_PAGE_MIN_WIDTH;
+            optionPageRectWidth = optionPageRectWidth_maxWidth;
+            $(vpCommon.wrapSelector(VP_CLASS_PREFIX + VP_CLASS_APIBLOCK_OPTION_TAB)).css(STR_MAX_WIDTH, optionPageRectWidth_maxWidth);
         }
 
-        $(vpCommon.wrapSelector(VP_CLASS_PREFIX + VP_CLASS_APIBLOCK_BOARD_CONTAINER)).css(STR_WIDTH, boardPageRectWidth );
+        $(vpCommon.wrapSelector(VP_CLASS_PREFIX + 'vp-apiblock-tab-container')).css(STR_WIDTH, boardPageRectWidth );
         $(vpCommon.wrapSelector(VP_CLASS_PREFIX + VP_CLASS_APIBLOCK_OPTION_TAB)).css(STR_WIDTH, optionPageRectWidth);
     
         this.setBlockMaxWidth_blockList(boardPageRectWidth - 60);
@@ -2626,7 +2630,7 @@ define([
         this.hideOptionPreviewBox();
         $(VP_ID_PREFIX + VP_APIBLOCK_BOARD_OPTION_PREVIEW_BUTTON).removeClass('enabled');
 
-        this.setNavigator(BLOCK_CODELINE_TYPE.NONE, 'Visual Python 1.1.4');
+        this.setNavigator(BLOCK_CODELINE_TYPE.NONE, 'Visual Python 1.1.5');
         this.setFocusedPageType(FOCUSED_PAGE_TYPE.BOARD);
         $('.vp-apiblock-option-tab-none').css(STR_DISPLAY, STR_BLOCK);
     }

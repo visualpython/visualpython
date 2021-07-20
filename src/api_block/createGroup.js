@@ -42,11 +42,10 @@ define([
         sbCreateGroupBtn.appendFormatLine('<span class="{0}"', 'vp-block-blocktab-name vp-block-blocktab-name-title vp-accordion-caption');
         sbCreateGroupBtn.appendFormatLine(' style="font-size: 14px;" title="{0}">{1}</span>', this.getName(), this.getName());
         sbCreateGroupBtn.appendLine('</div>');
-        sbCreateGroupBtn.appendFormatLine('<div class="{0} {1} {2}">'
+        sbCreateGroupBtn.appendFormatLine('<div class="{0} {1} {2}"></div>'
                                     , 'vp-apiblock-group-list'
                                     , 'vp-apiblock-left-tab-' + this.getId()
                                     , 'vp-apiblock-style-column-row-wrap');
-        sbCreateGroupBtn.appendLine('</div>');
         sbCreateGroupBtn.appendLine('</div>');
 
         var createBlockContainer = $(this.container);

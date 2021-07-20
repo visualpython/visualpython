@@ -20,8 +20,45 @@
 .vp-apiblock-board-body {
     position: relative;
     overflow: hidden auto;
-    height: 100%;
+    height: calc(100% - 100px);
 }
+
+.vp-apiblock-tab-container {
+
+}
+
+.vp-apiblock-tab-header {
+    height: 40px;
+    line-height: 40px;
+    background: white;
+    /* padding: 0px 20px; */
+
+    display: grid;
+    grid-template-columns: repeat(2, 50%);
+}
+
+.vp-apiblock-tab-button {
+    display: inline-block;
+    height: 40px;
+    background: var(--light-gray-color);
+    border: 0.25px solid #E4E4E4;
+    text-align: center;
+    font-weight: bold;
+}
+.vp-apiblock-tab-button.selected {
+    color: var(--hightlight-color);
+    background: white;
+    border-bottom: 2px solid var(--hightlight-color);
+}
+.vp-apiblock-tab-button:hover {
+    background: var(--light-gray-color);
+}
+
+
+.vp-apiblock-tab-box {
+    height: calc(100% - 90px);
+}
+
 
 .vp-apiblock-left {
     /* padding: 1.5rem; */
@@ -29,7 +66,8 @@
     background-color: white;
     
     /* 수정 */
-    width: 200px;
+    /* width: 200px; */
+    width: 100%;
     height: 100%;
     overflow: hidden auto;
 
@@ -38,11 +76,13 @@
 
 .vp-apiblock-right {
     position: relative;
-    margin-left: 5px;
-    margin-right: 5px;
+    /* margin-left: 5px;
+    margin-right: 5px; */
 
     /* min-width: 282px; */
     min-width: 265px;
+
+    height: 100%;
 
     color: #000;
     background-size: 5px 5px;
@@ -63,6 +103,11 @@
 .vp-menu-search-box {
     width: 100%;
     height: 30px;
+
+    border: 0.25px solid #E4E4E4;
+    box-sizing: border-box;
+    box-shadow: 2px 2px 1px rgb(0 0 0 / 10%);
+    border-radius: 2px;
 }
 
 .vp-menu-search-icon {
@@ -108,8 +153,8 @@
 }
 .vp-apiblock-menu-apps-grid {
     display: grid;
-    grid-template-columns: repeat(3, 58px);
-    grid-template-rows: repeat(3, 58px);
+    grid-template-columns: repeat(auto-fill, 58px);
+    grid-template-rows: repeat(auto-fill, 58px);
     grid-column-gap: 5px;
     grid-row-gap: 5px;
 
@@ -119,7 +164,7 @@
     width: 58;
     height: 58px;
     text-align: center;
-    border: 0.25px solid #C4C4C4;
+    /* border: 0.25px solid #C4C4C4; */
     box-sizing: border-box;
     box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.1);
     border-radius: 2px;
@@ -184,6 +229,8 @@
     min-width: 335px;
     left: unset !important;
     z-index: 12;
+
+    margin-left: 5px;
 
     border: 0.25px solid var(--border-gray-color);
 }
@@ -259,7 +306,7 @@
 .vp-apiblock-option-buttons-container {
     position: sticky;
     bottom: 0;
-    height: 52px;
+    height: 50px;
     width: 100%;
     background: #FFFFFF;
     border-top: 0.25px solid #E4E4E4;
@@ -282,9 +329,46 @@
     right: 105px;
 }
 
-.vp-apiblock-option-apply-button {
+/* .vp-apiblock-option-apply-button {
     top: 11px;
     right: 15px;
+} */
+.vp-apiblock-option-addrun-button {
+    top: 11px;
+    right: 15px;
+    width: fit-content;
+    height: 30px;
+    background: #F38504;
+    border-radius: 2px;
+}
+.vp-apiblock-option-run-button {
+    display: inline-block;
+    width: 60px;
+    border-radius: 2px 0px 0px 2px;
+    border-right: 0.25px solid white !important;
+}
+.vp-apiblock-option-detail-button {
+    display: inline-block;
+    width: 20px;
+    border-radius: 0px 2px 2px 0px;
+}
+.vp-apiblock-option-detail-box {
+    background: white;
+    border: 0.25px solid var(--border-gray-color);
+    position: absolute;
+    bottom: 35px;
+    right: 1px;
+    width: 84px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+}
+.vp-apiblock-option-detail-item {
+    color: var(--font-primary);
+}
+.vp-apiblock-option-detail-item:hover {
+    color: var(--font-hightlight);
+    background: var(--light-gray-color);
 }
 
 .vp-block-container {
@@ -351,11 +435,11 @@
 }
 
 .vp-block-class-def {
-    background-color: rgba(47, 133, 90, 0.2);
+    /* background-color: rgba(47, 133, 90, 0.2); */
 }
 
 .vp-block-control {
-    background-color: rgba(246, 173, 85, 0.2);
+    /* background-color: rgba(246, 173, 85, 0.2); */
 }
 
 .vp-block-text div {
@@ -363,11 +447,11 @@
 }
 
 .vp-block-api {
-    background-color: rgba(255, 165, 112, 0.2);
+    /* background-color: rgba(255, 165, 112, 0.2); */
 }
 .vp-apiblock-tab-navigation-node-block-body-btn.api.vp-block-api {
-    width: 100% !important;
-    max-width: 130px !important;
+    /* width: 100% !important;
+    max-width: 130px !important; */
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -417,7 +501,7 @@
     background-color:rgb(253, 239, 221);
 }
 .vp-block-blockcodelinetype-code {
-    background-color: rgb(229, 229, 229);
+    /* background-color: rgb(229, 229, 229); */
 }
 
 .vp-block-name {
@@ -441,6 +525,7 @@
 .vp-apiblock-category {
     cursor: pointer;
     background: var(--light-gray-color);
+    border-radius: 2px;
     /* padding: 7px 0px 7px 0px !important; */
     padding: 7px 7px !important; /* 수정 */
     margin-top: 5px;
@@ -459,6 +544,11 @@
     padding: 0.3rem;
     font-weight: 700;
     font-size: 10px;
+}
+
+.vp-apiblock-group-list:empty::after {
+    content: 'Work In Progress...';
+    color: var(--gray-color);
 }
 
 
@@ -484,7 +574,7 @@
     padding-left: 15px;
 
     overflow: auto;
-    height: calc(100% - 102px);
+    height: calc(100% - 100px);
 }
 
 .vp-apiblock-tab-navigation-node-block-title {
@@ -501,9 +591,11 @@
 .vp-apiblock-tab-navigation-node-block-body-btn {
 
     position: relative;
-    text-align: center;
+    /* text-align: center; */
 
-    width: 130px;
+    /* width: 130px; */
+    width: 95%;
+
 
     padding: 0.25rem 0.5rem;
     z-index: 1000;
@@ -516,7 +608,7 @@
 
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    /* justify-content: space-around; */
 
     color: #777;
 }
@@ -547,7 +639,7 @@
     transition: mask-position 0.3s, -webkit-mask-position 0.3s; */
 
     overflow-y: auto;
-    -webkit-mask-position: left top;
+    --webkit-mask-position: left top;
 }
 
 /* .vp-apiblock-scrollbar:hover {
@@ -559,9 +651,9 @@
     width: 5px;
     height: 5px;
 } 
-.vp-apiblock-scrollbar::-webkit-scrollbar-track {
+/* .vp-apiblock-scrollbar::-webkit-scrollbar-track {
     box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
-}  
+}   */
 .vp-apiblock-scrollbar::-webkit-scrollbar-thumb {
     border: 0.3px solid #C4C4C4;
     background: #C4C4C4;
@@ -1290,8 +1382,8 @@
 
 .vp-apiblock-board-button-container {
     width: 100%;
-    height: 52px;
-    position: absolute;
+    height: 50px;
+    /* position: absolute; */
     bottom: 0;
     background: #FFFFFF;
     border-top: 0.25px solid #E4E4E4;

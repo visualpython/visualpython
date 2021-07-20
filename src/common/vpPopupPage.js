@@ -4,18 +4,29 @@ define([
     , 'nbextensions/visualpython/src/common/constant'
     , 'nbextensions/visualpython/src/common/StringBuilder'
     , 'nbextensions/visualpython/src/common/vpCommon'
-], function(requirejs, $, vpConst, sb, vpCommon) {
-
-    // TEST: testing popuppage as an interface of every popup modules
+    /** codemirror */
+    , 'codemirror/lib/codemirror'
+    , 'codemirror/mode/python/python'
+    , 'notebook/js/codemirror-ipython'
+    , 'codemirror/addon/display/placeholder'
+    , 'codemirror/addon/display/autorefresh'
+], function(requirejs, $, vpConst, sb, vpCommon, codemirror) {
 
     const VP_PP = 'vp-pp';
     const VP_PP_CONTAINER = 'vp-pp-container';
     const VP_PP_TITLE = 'vp-pp-title';
     const VP_PP_CLOSE = 'vp-pp-close';
     const VP_PP_BODY = 'vp-pp-body';
+
+    const VP_PP_PREVIEW_BOX = 'vp-pp-preview-box';
     const VP_PP_BUTTON_BOX = 'vp-pp-btn-box';
+    const VP_PP_BUTTON_PREVIEW = 'vp-pp-btn-preview';
     const VP_PP_BUTTON_CANCEL = 'vp-pp-btn-cancel';
-    const VP_PP_BUTTON_APPLY = 'vp-pp-btn-apply';
+    const VP_PP_BUTTON_RUNADD = 'vp-pp-btn-runadd';
+    const VP_PP_BUTTON_RUN = 'vp-pp-btn-run';
+    const VP_PP_BUTTON_DETAIL = 'vp-pp-btn-detail';
+    const VP_PP_DETAIL_BOX = 'vp-pp-detail-box';
+    const VP_PP_DETAIL_ITEM = 'vp-pp-detail-item';
 
     /**
      * @class PopupPage
@@ -34,6 +45,24 @@ define([
             height: '95%',
             pageDom: $('<div>Empty</div>')
         };
+
+        this.cmReadonlyConfig = {
+            mode: {
+                name: 'python',
+                version: 3,
+                singleLineStringErrors: false
+            },  // text-cell(markdown cell) set to 'htmlmixed'
+            height: '100%',
+            width: '100%',
+            indentUnit: 4,
+            matchBrackets: true,
+            readOnly:true,
+            autoRefresh: true,
+            theme: "ipython",
+            extraKeys: {"Enter": "newlineAndIndentContinueMarkdownList"},
+            scrollbarStyle: "null"
+        };
+        this.previewOpened = false;
     }
 
     PopupPage.prototype.wrapSelector = function(selector='') {
@@ -63,18 +92,33 @@ define([
                         , VP_PP_CLOSE, 'fa fa-close');
 
         // body start
-        page.appendFormatLine('<div class="{0}">', VP_PP_BODY);
+        page.appendFormatLine('<div class="{0} {1}">', VP_PP_BODY, 'vp-apiblock-scrollbar');
         page.appendLine('</div>');  // body end
 
-        // button box
         // Snippets menu don't use buttons
         if (title != 'Snippets') {
-            page.appendFormatLine('<div class="{0}">', VP_PP_BUTTON_BOX);
-            page.appendFormatLine('<button type="button" class="{0}">{1}</button>'
-                                    , VP_PP_BUTTON_CANCEL, 'Cancel');
-            page.appendFormatLine('<button type="button" class="{0}">{1}</button>'
-                                    , VP_PP_BUTTON_APPLY, 'Apply');
+            
+            // preview box
+            page.appendFormatLine('<div class="{0} {1}">', VP_PP_PREVIEW_BOX, 'vp-apiblock-scrollbar');
+            page.appendFormatLine('<textarea id="{0}" name="code"></textarea>', 'vp_codePreview');
             page.appendLine('</div>');
+
+            // button box
+            page.appendFormatLine('<div class="{0}">', VP_PP_BUTTON_BOX);
+            page.appendFormatLine('<button type="button" class="{0} {1} {2}">{3}</button>'
+                                    , 'vp-button', 'vp-pp-btn', VP_PP_BUTTON_PREVIEW, 'Preview');
+            page.appendFormatLine('<button type="button" class="{0} {1} {2}">{3}</button>'
+                                    , 'vp-button cancel', 'vp-pp-btn', VP_PP_BUTTON_CANCEL, 'Cancel');
+            page.appendFormatLine('<div class="{0}">', VP_PP_BUTTON_RUNADD);
+            page.appendFormatLine('<button type="button" class="{0} {1}">{2}</button>'
+                                    , 'vp-button activated', VP_PP_BUTTON_RUN, 'Run');
+            page.appendFormatLine('<button type="button" class="{0} {1}"><i class="{2}"></i></button>'
+                                    , 'vp-button activated', VP_PP_BUTTON_DETAIL, 'fa fa-sort-up');
+            page.appendFormatLine('<div class="{0} {1}">', VP_PP_DETAIL_BOX, 'vp-cursor');
+            page.appendFormatLine('<div class="{0}" data-type="{1}">{2}</div>', VP_PP_DETAIL_ITEM, 'add', 'Add');
+            page.appendLine('</div>'); // VP_PP_DETAIL_BOX
+            page.appendLine('</div>'); // VP_PP_BUTTON_RUNADD
+            page.appendLine('</div>'); // VP_PP_BUTTON_BOX
         }
 
         page.appendLine('</div>');  // container end
@@ -96,6 +140,13 @@ define([
 
         this.init();
         $(this.wrapSelector()).show();
+
+        if (!this.cmpreview) {
+            // codemirror setting
+            this.cmpreview = codemirror.fromTextArea($('#vp_codePreview')[0], this.cmReadonlyConfig);
+        } else {
+            this.cmpreview.refresh();
+        }
     }
 
     PopupPage.prototype.close = function() {
@@ -103,16 +154,39 @@ define([
         $(this.wrapSelector()).remove();
     }
 
-    PopupPage.prototype.apply = function() {
+    PopupPage.prototype.apply = function(runCell=true) {
         if (this.pageThis) {
             var code = this.pageThis.generateCode(false, false);
             $(vpCommon.wrapSelector('#' + this.targetId)).val(code);
             $(vpCommon.wrapSelector('#' + this.targetId)).trigger({
-                type: 'popup_apply',
+                type: 'popup_run',
                 title: this.config.title,
-                code: code 
+                code: code,
+                runCell: runCell
             });
         }
+    }
+
+    PopupPage.prototype.openPreview = function() {
+        if (this.pageThis) {
+            var code = this.pageThis.generateCode(false, false);
+            this.cmpreview.setValue(code);
+            this.cmpreview.save();
+            this.cmpreview.focus();
+
+            var that = this;
+            setTimeout(function() {
+                that.cmpreview.refresh();
+            },1);
+
+            this.previewOpened = true;
+            $(this.wrapSelector('.' + VP_PP_PREVIEW_BOX)).show();
+        }
+    }
+
+    PopupPage.prototype.closePreview = function() {
+        this.previewOpened = false;
+        $(this.wrapSelector('.' + VP_PP_PREVIEW_BOX)).hide();
     }
 
     PopupPage.prototype.bindEvent = function() {
@@ -123,20 +197,63 @@ define([
             that.close();
         });
 
+        // click preview
+        $(document).on('click', this.wrapSelector('.' + VP_PP_BUTTON_PREVIEW), function(evt) {
+            evt.stopPropagation();
+            if (that.previewOpened) {
+                that.closePreview();
+            } else {
+                that.openPreview();
+            }
+        });
+
         // click cancel
         $(document).on('click', this.wrapSelector('.' + VP_PP_BUTTON_CANCEL), function() {
             that.close();
         });
 
-        // click apply
-        $(document).on('click', this.wrapSelector('.' + VP_PP_BUTTON_APPLY), function() {
+        // click run
+        $(document).on('click', this.wrapSelector('.' + VP_PP_BUTTON_RUN), function() {
             that.apply();
             that.close();
+        });
+
+        // click detail button
+        $(document).on('click', this.wrapSelector('.' + VP_PP_BUTTON_DETAIL), function(evt) {
+            evt.stopPropagation();
+            $(that.wrapSelector('.' + VP_PP_DETAIL_BOX)).show();
+        });
+
+        // click add
+        $(document).on('click', this.wrapSelector('.' + VP_PP_DETAIL_ITEM), function() {
+            var type = $(this).data('type');
+            if (type == 'add') {
+                that.apply(false);
+                that.close();
+            }
+        });
+
+        // click other
+        $(document).on('click.' + this.uuid, function(evt) {
+            if (!$(evt.target).hasClass('.' + VP_PP_BUTTON_DETAIL)) {
+                $(that.wrapSelector('.' + VP_PP_DETAIL_BOX)).hide();
+            }
+            if (!$(evt.target).hasClass('.' + VP_PP_BUTTON_PREVIEW)
+                && $(that.wrapSelector('.' + VP_PP_PREVIEW_BOX)).has(evt.target).length === 0) {
+                that.closePreview();
+            }
         });
     }
 
     PopupPage.prototype.unbindEvent = function() {
         $(document).unbind(vpCommon.formatString(".{0} .{1}", this.uuid, VP_PP_BODY));
+        $(document).off('click', this.wrapSelector('.' + VP_PP_CLOSE));
+        $(document).off('click', this.wrapSelector('.' + VP_PP_BUTTON_PREVIEW));
+        $(document).off('click', this.wrapSelector('.' + VP_PP_BUTTON_CANCEL));
+        $(document).off('click', this.wrapSelector('.' + VP_PP_BUTTON_RUN));
+        $(document).off('click', this.wrapSelector('.' + VP_PP_BUTTON_DETAIL));
+        $(document).off('click', this.wrapSelector('.' + VP_PP_DETAIL_ITEM));
+        $(document).off('click.' + this.uuid);
     }
 
 
