@@ -36,9 +36,11 @@ define([
     const VP_DS_PANDAS_OBJECT_BOX = 'vp-ds-pandas-object-box';
     const VP_DS_PANDAS_OBJECT = 'vp-ds-pandas-object';
     const VP_DS_USE_COPY = 'vp-ds-use-copy';
-
+    
     const VP_DS_SUBSET_TYPE = 'vp-ds-subset-type';
     const VP_DS_TO_FRAME = 'vp-ds-to-frame';
+
+    const VP_DS_ALLOCATE_TO = 'vp-ds-allocate-to';
 
     /** tab selector */
     const VP_DS_TAB_SELECTOR_BOX = 'vp-ds-tab-selector-box';
@@ -150,6 +152,7 @@ define([
 
             // all variables list on opening popup
             dataList: [],
+            allocateTo: '',
             pandasObject: '',
             dataType: '',
             isTimestamp: false,     // is df.index timestampindex? true / false
@@ -254,8 +257,13 @@ define([
         
         // to frame
         popupTag.appendFormatLine('<label style="display:none;"><input type="checkbox" class="{0}"/><span>{1}</span></label>', VP_DS_TO_FRAME, 'To DataFrame');
-
         popupTag.appendLine('</td></tr>');
+
+        // allocate to
+        popupTag.appendLine('<tr>');
+        popupTag.appendFormatLine('<td><label class="{0}">{1}</label></td>', VP_DS_LABEL, 'Allocate to');
+        popupTag.appendFormatLine('<td><input type="text" class="{0} {1}" placeholder="{2}"/></td>', 'vp-input', VP_DS_ALLOCATE_TO, 'new variable name');
+        popupTag.appendLine('</tr>');
 
         // table1 end
         popupTag.appendLine('</tbody></table>');
@@ -813,7 +821,7 @@ define([
         // if view all is not checked, get current code
         if (!this.state.viewAll) {
             // get current code
-            code = this.generateCode();
+            code = this.generateCode(false, false);
         }
         // if not, get output of all data in selected pandasObject
 
@@ -1173,6 +1181,7 @@ define([
         $(document).off('change', this.wrapSelector('.' + VP_DS_USE_COPY));
         $(document).off('change', this.wrapSelector('.' + VP_DS_SUBSET_TYPE));
         $(document).off('change', this.wrapSelector('.' + VP_DS_TO_FRAME));
+        $(document).off('change', this.wrapSelector('.' + VP_DS_ALLOCATE_TO));
         $(document).off('click', this.wrapSelector('.' + VP_DS_TAB_SELECTOR_BTN));
         $(document).off('change', this.wrapSelector('.' + VP_DS_DATA_VIEW_ALL));
         $(document).off('change', this.wrapSelector('.' + VP_DS_ROWTYPE));
@@ -1346,6 +1355,18 @@ define([
                 that.generateCode();
             }
 
+        });
+
+        // allocate to
+        $(document).on('change', this.wrapSelector('.' + VP_DS_ALLOCATE_TO), function(evt) {
+            var allocateTo = $(this).val();
+            that.state.allocateTo = allocateTo;
+
+            if (that.state.tabPage == 'data') {
+                that.loadDataPage();
+            } else {
+                that.generateCode();
+            }
         });
 
         // tab page select
@@ -1896,7 +1917,7 @@ define([
      *  3) iloc - subset type 'iloc'
      * - consider use copy option
      */
-    SubsetEditor.prototype.generateCode = function() {
+    SubsetEditor.prototype.generateCode = function(allocation=true, applyPreview=true) {
         var code = new sb.StringBuilder();
 
         // dataframe
@@ -1905,6 +1926,13 @@ define([
             this.setPreview('# Code Preview');
             return '';
         }
+        
+        // allocate to
+        if (allocation && this.state.allocateTo != '') {
+            code.appendFormat('{0} = ', this.state.allocateTo);
+        }
+
+        // object
         code.append(this.state.pandasObject);
 
         // row
@@ -2059,9 +2087,9 @@ define([
             code.append('.copy()');
         }
 
-        // preview code
-        // $(this.wrapSelector('.' + VP_DS_PREVIEW)).text(code.toString());
-        this.setPreview(code.toString());
+        if (applyPreview) {
+            this.setPreview(code.toString());
+        }
 
         return code.toString();
     }
