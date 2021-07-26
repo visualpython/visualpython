@@ -126,7 +126,8 @@
 /* tab page */
 .vp-ds-tab-page {
     width: 100%;
-    height: 360px;
+    /* height: 360px; */
+    height: calc(100% - 140px);
 }
 .vp-ds-tab-page.subset {
     display: grid;
@@ -288,6 +289,17 @@
     background-image: url(../../resource/close_big.svg);
 }
 
+.vp-ds-preview-box {
+    display: none;
+    width: 100%;
+    height: 100px;
+    position: absolute;
+    bottom: 50px;
+    
+    background: #F7F7F7;
+    border: 0.25px solid #E4E4E4;
+    padding: 10px;
+}
 
 /** buttons */
 .vp-ds-btn-box {

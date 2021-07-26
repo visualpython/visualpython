@@ -156,28 +156,6 @@ define([
         } else {
             this.codepreview.refresh();
         }
-
-        if (!this.cmpreviewall) {
-            // codemirror setting
-            this.cmpreviewall = codemirror.fromTextArea($('#vp_codePreview')[0], {
-                mode: {
-                    name: 'python',
-                    version: 3,
-                    singleLineStringErrors: false
-                },  // text-cell(markdown cell) set to 'htmlmixed'
-                height: '100%',
-                width: '100%',
-                indentUnit: 4,
-                matchBrackets: true,
-                readOnly:true,
-                autoRefresh: true,
-                theme: "ipython",
-                extraKeys: {"Enter": "newlineAndIndentContinueMarkdownList"},
-                scrollbarStyle: "null"
-            });
-        } else {
-            this.cmpreviewall.refresh();
-        }
     }
 
     FrameEditor.prototype.close = function() {
@@ -599,10 +577,33 @@ define([
 
     /** open preview box */
     FrameEditor.prototype.openPreview = function() {
-        var code = this.state.steps.join('\n');
+        $(this.wrapSelector('.' + VP_FE_PREVIEW_BOX)).show();
+
+        if (!this.cmpreviewall) {
+            // codemirror setting
+            this.cmpreviewall = codemirror.fromTextArea($('#vp_codePreview')[0], {
+                mode: {
+                    name: 'python',
+                    version: 3,
+                    singleLineStringErrors: false
+                },  // text-cell(markdown cell) set to 'htmlmixed'
+                height: '100%',
+                width: '100%',
+                indentUnit: 4,
+                matchBrackets: true,
+                readOnly:true,
+                autoRefresh: true,
+                theme: "ipython",
+                extraKeys: {"Enter": "newlineAndIndentContinueMarkdownList"},
+                scrollbarStyle: "null"
+            });
+        } else {
+            this.cmpreviewall.refresh();
+        }
+
+        var code = this.generateCode();
         this.cmpreviewall.setValue(code);
         this.cmpreviewall.save();
-        this.cmpreviewall.focus();
 
         var that = this;
         setTimeout(function() {
@@ -610,7 +611,6 @@ define([
         },1);
 
         this.previewOpened = true;
-        $(this.wrapSelector('.' + VP_FE_PREVIEW_BOX)).show();
     }
 
     /** close preview box */
@@ -914,7 +914,7 @@ define([
     }
 
     FrameEditor.prototype.apply = function(runCell = true) {
-        var code = this.state.steps.join('\n');
+        var code = this.generateCode();
         if (this.pageThis) {
             $(this.pageThis.wrapSelector('#' + this.targetId)).val(code);
             $(this.pageThis.wrapSelector('#' + this.targetId)).trigger({
@@ -1220,6 +1220,11 @@ define([
         if (isText) {
             code = "'" + code + "'";
         }
+        return code;
+    }
+
+    FrameEditor.prototype.generateCode = function() {
+        var code = this.state.steps.join('\n');
         return code;
     }
 

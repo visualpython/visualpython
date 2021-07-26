@@ -100,7 +100,9 @@ define([
     const VP_DS_DATA_ERROR_BOX_TITLE = 'vp-ds-data-error-box-title';
 
     /** buttons */
+    const VP_DS_PREVIEW_BOX = 'vp-ds-preview-box';
     const VP_DS_BUTTON_BOX = 'vp-ds-btn-box';
+    const VP_DS_BUTTON_PREVIEW = 'vp-ds-btn-preview';
     const VP_DS_BUTTON_CANCEL = 'vp-ds-btn-cancel';
     const VP_DS_BUTTON_RUNADD = 'vp-ds-btn-runadd';
     const VP_DS_BUTTON_RUN = 'vp-ds-btn-run';
@@ -168,6 +170,8 @@ define([
         }
 
         this.codepreview = undefined;
+        this.cmpreviewall = undefined;
+        this.previewOpened = false;
         
         // render popup div
         this.render();
@@ -362,8 +366,16 @@ define([
         // popupTag.appendLine('</div>');
         // body end
         popupTag.appendLine('</div>');
+
+        // preview box
+        popupTag.appendFormatLine('<div class="{0} {1}">', VP_DS_PREVIEW_BOX, 'vp-apiblock-scrollbar');
+        popupTag.appendFormatLine('<textarea id="{0}" name="code"></textarea>', 'vp_codePreview');
+        popupTag.appendLine('</div>');
+
         // button box
         popupTag.appendFormatLine('<div class="{0}">', VP_DS_BUTTON_BOX);
+        popupTag.appendFormatLine('<button type="button" class="{0} {1} {2}">{3}</button>'
+                                , 'vp-button', 'vp-ds-btn', VP_DS_BUTTON_PREVIEW, 'Preview');
         popupTag.appendFormatLine('<button type="button" class="{0} {1} {2}">{3}</button>'
                                 , 'vp-button cancel', 'vp-ds-btn', VP_DS_BUTTON_CANCEL, 'Cancel');
         popupTag.appendFormatLine('<div class="{0}">', VP_DS_BUTTON_RUNADD);
@@ -379,6 +391,7 @@ define([
 
         popupTag.append('</div>'); // VP_DS_CONTAINER
         popupTag.append('</div>');
+
         // $(vpCommon.formatString("#{0}", vpConst.VP_CONTAINER_ID)).append(popupTag.toString());
         $('#vp-wrapper').append(popupTag.toString());
         $(vpCommon.formatString(".{0}.{1}", VP_DS, this.uuid)).hide();
@@ -1181,6 +1194,7 @@ define([
         $(document).off('click', this.wrapSelector('.' + VP_DS_BUTTON_RUN));
         $(document).off('click', this.wrapSelector('.' + VP_DS_BUTTON_DETAIL));
         $(document).off('click', this.wrapSelector('.' + VP_DS_DETAIL_ITEM));
+        $(document).off('click', this.wrapSelector('.' + VP_DS_BUTTON_PREVIEW));
         $(document).off('click', this.wrapSelector('.' + VP_DS_BUTTON_CANCEL));
         $(document).off('click.' + this.uuid);
     }
@@ -1661,7 +1675,17 @@ define([
             }
         });
 
-        // cancel
+        // click preview
+        $(document).on('click', this.wrapSelector('.' + VP_DS_BUTTON_PREVIEW), function(evt) {
+            evt.stopPropagation();
+            if (that.previewOpened) {
+                that.closePreview();
+            } else {
+                that.openPreview();
+            }
+        });
+
+        // click cancel
         $(document).on('click', this.wrapSelector('.' + VP_DS_BUTTON_CANCEL), function(event) {
             that.close();
         });
@@ -1670,6 +1694,10 @@ define([
         $(document).on('click.' + this.uuid, function(evt) {
             if (!$(evt.target).hasClass('.' + VP_DS_BUTTON_DETAIL)) {
                 $(that.wrapSelector('.' + VP_DS_DETAIL_BOX)).hide();
+            }
+            if (!$(evt.target).hasClass('.' + VP_DS_BUTTON_PREVIEW)
+                && $(that.wrapSelector('.' + VP_DS_PREVIEW_BOX)).has(evt.target).length === 0) {
+                that.closePreview();
             }
         });
 
@@ -1759,6 +1787,50 @@ define([
     SubsetEditor.prototype.close = function() {
         this.unbindEvent();
         $(this.wrapSelector()).hide();
+    }
+
+    /** open preview box */
+    SubsetEditor.prototype.openPreview = function() {
+        $(this.wrapSelector('.' + VP_DS_PREVIEW_BOX)).show();
+
+        if (!this.cmpreviewall) {
+            // codemirror setting
+            this.cmpreviewall = codemirror.fromTextArea($(this.wrapSelector('#vp_codePreview'))[0], {
+                mode: {
+                    name: 'python',
+                    version: 3,
+                    singleLineStringErrors: false
+                },  // text-cell(markdown cell) set to 'htmlmixed'
+                height: '100%',
+                width: '100%',
+                indentUnit: 4,
+                matchBrackets: true,
+                readOnly:true,
+                autoRefresh: true,
+                theme: "ipython",
+                extraKeys: {"Enter": "newlineAndIndentContinueMarkdownList"},
+                scrollbarStyle: "null"
+            });
+        } else {
+            this.cmpreviewall.refresh();
+        }
+
+        var code = this.generateCode();
+        this.cmpreviewall.setValue(code);
+        this.cmpreviewall.save();
+        
+        var that = this;
+        setTimeout(function() {
+            that.cmpreviewall.refresh();
+        },1);
+        
+        this.previewOpened = true;
+    }
+
+    /** close preview box */
+    SubsetEditor.prototype.closePreview = function() {
+        this.previewOpened = false;
+        $(this.wrapSelector('.' + VP_DS_PREVIEW_BOX)).hide();
     }
 
     SubsetEditor.prototype.hideButton = function() {
