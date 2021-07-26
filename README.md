@@ -1,36 +1,29 @@
-# Visual Python
+# Welcome to the Visual Python
 [![PyPI version shields.io](https://img.shields.io/pypi/v/visualpython)](https://pypi.python.org/pypi/visualpython/)
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-green)](https://www.gnu.org/licenses/gpl-3.0.html)
-[![Code of Conduct: Contributor Covenant](https://img.shields.io/badge/Code%20of%20Conduct-Contributor%20Covenant-blueviolet)](https://github.com/visualpython/visualpython/blob/main/CODE_OF_CONDUCT.md)
-<img alt="open collective badge" src="https://opencollective.com/visual_python/tiers/backer/badge.svg?label=backer&color=yellow"/>
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-yellowgreen)](https://www.gnu.org/licenses/gpl-3.0.html)
+[![Code of Conduct: Contributor Covenant](https://img.shields.io/badge/Code%20of%20Conduct-Contributor%20Covenant-pink)](https://github.com/visualpython/visualpython/blob/main/CODE_OF_CONDUCT.md)
+<img alt="open collective badge" src="https://opencollective.com/visualpython/tiers/backer/badge.svg?label=Backer&color=orange" />
+
 
 ## Introduction
-Visual Python is a GUI-based Python code generator, developed on the Jupyter Notebook environment as an extension. 
+Visual Python is a GUI-based Python code generator, developed on the Jupyter Notebook as an extension. <br>
+Visual Python is an open source project started for students who struggle with coding during a Python class for data science.
 
-<img src="https://i.esdrop.com/d/7o0dj05m8rnz/sgKUVlLpRx.png" width="85%">
+<br>
 
-1. Key Features 
-* Automatically generates Python code based on a graphic user interface <br>
-* Creates code blocks by tasks (such as data processing, visualization) <br>
-* You can save the analysis process and share it (as .vp file) with others <br>
+Try Visual Python if you would like: <br>
+* to manage big data with minimal coding skills. <br>
+* to help students / business analysts / researchers to overcome learning barriers for Python. <br>
+* to save & reuse repeatedly used codes(snippets). <br>
 
-2. Who and What is it for? <br>
-Visual Python is a data analytics solution for both Programmers & Non-programmers. <br>
-
-Programmers can use the tool : <br> 
-* to save & reuse user-defined (or repeatedly used) code <br>
-* to find Python packages and functions from the list <br>
-
-Non-programmers will be able to : <br>
-* learn the Python language more easily <br>
-* manage big data with minimal coding skills <br>
-
+<br>
+<img src="https://i.esdrop.com/d/7o0dj05m8rnz/ZPvkMGVeix.gif" width="85%">
 
 ## Getting Started
 
 ### 1. Requirements
 
-Visual Python is developed as an extension on Jupyter Notebook. <br>
+Visual Python is a Jupyter Notebook extension. <br>
 We recommend installing Anaconda (virtual environment).
 
 - Python version 3.x
