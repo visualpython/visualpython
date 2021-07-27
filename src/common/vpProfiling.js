@@ -34,6 +34,14 @@ define([
 
     const VP_PF_MENU_ITEM = 'vp-pf-menu-item';
 
+    const VP_PF_LIST_BOX = 'vp-pf-list-box';
+    const VP_PF_LIST_HEADER = 'vp-pf-list-header';
+    const VP_PF_LIST_HEADER_ITEM = 'vp-pf-list-header-item';
+    const VP_PF_LIST_BODY = 'vp-pf-list-body';
+    const VP_PF_LIST_ITEM = 'vp-pf-list-item';
+    const VP_PF_LIST_BUTTON_BOX = 'vp-pf-list-button-box';
+    const VP_PF_LIST_MENU_ITEM = 'vp-pf-list-menu-item';
+
     const VP_PF_FILEPATH = 'vp-pf-filepath';
     const VP_PF_FILENAME = 'vp-pf-filename';
 
@@ -144,29 +152,35 @@ define([
         page.appendFormatLine('<i class="{0} {1}" title="{2}"></i>', VP_PF_DF_REFRESH, 'fa fa-refresh', "Refresh variable list");
         page.appendLine('</div>');
 
-        page.appendFormatLine('<label for="{0}">{1}</label>', 'vp_pfReturn', 'Allocate to');
-        page.appendFormatLine('<input type="text" id="{0}" class="{1}" placeholder="{2}"/>', 'vp_pfReturn', 'vp-pf-input', 'variable name');
+        page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_pfReturn', 'vp-orange-text', 'Allocate to');
+        page.appendFormatLine('<input type="text" id="{0}" class="{1}" placeholder="{2}"/>', 'vp_pfReturn', 'vp-pf-input', 'New variable name');
 
         page.appendFormatLine('<label for="{0}">{1}</label>', 'vp_pfTitle', 'Report Title');
-        page.appendFormatLine('<input type="text" id="{0}" class="{1}" placeholder="{2}"/>', 'vp_pfTitle', 'vp-pf-input', 'title name');
-        page.appendLine('</div>');
-
-        // button box
         page.appendLine('<div>');
+        page.appendFormatLine('<input type="text" id="{0}" class="{1}" placeholder="{2}"/>', 'vp_pfTitle', 'vp-pf-input', 'Title name');
         // Generate Report
         page.appendFormatLine('<button class="{0} {1}" data-type="{2}">{3}</button>'
                                 , 'vp-button activated', VP_PF_MENU_ITEM, PROFILE_TYPE.GENERATE, 'Generate Report');
-        
-        // Show Report
-        page.appendFormatLine('<button class="{0} {1}" data-type="{2}">{3}</button>'
-                                , 'vp-button', VP_PF_MENU_ITEM, PROFILE_TYPE.SHOW, 'Show Report');
-        
-        // Save Report
-        page.appendFormatLine('<button class="{0} {1}" data-type="{2}">{3}</button>'
-                                , 'vp-button', VP_PF_MENU_ITEM, PROFILE_TYPE.SAVE, 'Save Report');         
-
         page.appendLine('</div>');
+        page.appendLine('</div>');
+
+        // // button box
+        // page.appendLine('<div>');
+        
+        
+        // // Show Report
+        // page.appendFormatLine('<button class="{0} {1}" data-type="{2}">{3}</button>'
+        //                         , 'vp-button', VP_PF_MENU_ITEM, PROFILE_TYPE.SHOW, 'Show Report');
+        
+        // // Save Report
+        // page.appendFormatLine('<button class="{0} {1}" data-type="{2}">{3}</button>'
+        //                         , 'vp-button', VP_PF_MENU_ITEM, PROFILE_TYPE.SAVE, 'Save Report');         
+
+        // page.appendLine('</div>');
         page.appendLine('</div>'); // VP_PF_SHOW_BOX
+
+        // list box
+        page.appendLine(this.renderReportList());
 
         page.appendLine('</div>'); // VP_PF_GRID_BOX
         page.appendLine('</div>'); // VP_PF_BODY
@@ -252,6 +266,38 @@ define([
                 }
             }
         );
+    }
+
+    Profiling.prototype.renderReportList = function(reportList=[{varName:'test1', title:'test1'}, {varName:'test2', title:'test2'}]) {
+        var page = new sb.StringBuilder();
+        page.appendFormatLine('<div class="{0}">', VP_PF_LIST_BOX);
+        page.appendFormatLine('<div class="{0}">', VP_PF_LIST_HEADER);
+        page.appendFormatLine('<div><label class="{0}">{1}</label></div>', VP_PF_LIST_HEADER_ITEM, 'Allocated to');
+        page.appendFormatLine('<div><label class="{0}">{1}</label></div>', VP_PF_LIST_HEADER_ITEM, 'Report Title');
+        page.appendFormatLine('<div><label class="{0}">{1}</label></div>', VP_PF_LIST_HEADER_ITEM, '');
+        page.appendLine('</div>');
+
+        page.appendFormatLine('<div class="{0}">', VP_PF_LIST_BODY);
+        reportList.forEach((report, idx) => {
+            var { varName, title } = report;
+            page.appendFormatLine('<div class="{0}">', VP_PF_LIST_ITEM);
+            page.appendFormatLine('<div>{0}</div>', varName);
+            page.appendFormatLine('<div>{0}</div>', title);
+            // button box
+            page.appendFormatLine('<div class="{0}">', VP_PF_LIST_BUTTON_BOX);
+            page.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}"><img src="{3}"/></div>'
+                                    , VP_PF_LIST_MENU_ITEM, 'show', 'Show report', '/nbextensions/visualpython/resource/snippets/run.svg');
+            page.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}"><img src="{3}"/></div>'
+                                    , VP_PF_LIST_MENU_ITEM, 'delete', 'Delete report', '/nbextensions/visualpython/resource/snippets/delete.svg');
+            page.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}"><img src="{3}"/></div>'
+                                    , VP_PF_LIST_MENU_ITEM, 'save', 'Save report', '/nbextensions/visualpython/resource/snippets/export.svg');
+            page.appendLine('</div>');
+            page.appendLine('</div>');
+        });
+        page.appendLine('</div>');
+
+        page.appendLine('</div>');
+        return page.toString();
     }
 
     Profiling.prototype.unbindEvent = function() {
