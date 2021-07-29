@@ -45,15 +45,15 @@ define([
     const VP_PF_FILEPATH = 'vp-pf-filepath';
     const VP_PF_FILENAME = 'vp-pf-filename';
 
-    const VP_PF_BUTTON_BOX = 'vp-pf-btn-box';
-    const VP_PF_BUTTON_CANCEL = 'vp-pf-btn-cancel';
-    const VP_PF_BUTTON_APPLY = 'vp-pf-btn-apply';
-
     const PROFILE_TYPE = {
         NONE: -1,
-        GENERATE: 1,
-        SHOW: 2,
-        SAVE: 3
+        GENERATE: 1
+    }
+
+    const LIST_MENU_ITEM = {
+        SHOW: 'show',
+        DELETE: 'delete',
+        SAVE: 'save'
     }
 
     /**
@@ -75,7 +75,8 @@ define([
             },
             returnVariable:"",
             isReturnVariable: false,
-            fileExtension: ["html"]
+            fileExtension: ["html"],
+            selectedReport: ''
         };
         this.fileResultState = {
             pathInputId : this.wrapSelector('.' + VP_PF_FILEPATH),
@@ -107,6 +108,7 @@ define([
         this.bindEvent();
 
         this.loadVariableList();
+        this.loadReportList();
     }
 
     Profiling.prototype.render = function() {
@@ -161,8 +163,11 @@ define([
         // Generate Report
         page.appendFormatLine('<button class="{0} {1}" data-type="{2}">{3}</button>'
                                 , 'vp-button activated', VP_PF_MENU_ITEM, PROFILE_TYPE.GENERATE, 'Generate Report');
-        page.appendLine('</div>');
-        page.appendLine('</div>');
+        page.appendLine('</div>'); 
+        // hidden inputs
+        page.appendFormatLine('<input type="hidden" class="{0}"/>', VP_PF_FILENAME);
+        page.appendFormatLine('<input type="hidden" class="{0}"/>', VP_PF_FILEPATH);
+        page.appendLine('</div>'); // VP_PF_DF_BOX
 
         // // button box
         // page.appendLine('<div>');
@@ -206,7 +211,7 @@ define([
                 });
                 $(that.wrapSelector('#vp_pfVariable')).trigger('change');
             } catch (ex) {
-                console.log('FrameEditor:', result);
+                console.log('Profiling:', result);
                 // console.log(ex);
             }
         });
@@ -268,7 +273,25 @@ define([
         );
     }
 
-    Profiling.prototype.renderReportList = function(reportList=[{varName:'test1', title:'test1'}, {varName:'test2', title:'test2'}]) {
+    Profiling.prototype.loadReportList = function() {
+        var that = this;
+        // load using kernel
+        kernelApi.getProfilingList(function(result) {
+            try {
+                var varList = JSON.parse(result);
+                // render variable list
+                // replace
+                $(that.wrapSelector('.' + VP_PF_LIST_BOX)).replaceWith(function() {
+                    return that.renderReportList(varList);
+                });
+            } catch (ex) {
+                console.log('Profiling:', result);
+                // console.log(ex);
+            }
+        });
+    }
+
+    Profiling.prototype.renderReportList = function(reportList=[]) {
         var page = new sb.StringBuilder();
         page.appendFormatLine('<div class="{0}">', VP_PF_LIST_BOX);
         page.appendFormatLine('<div class="{0}">', VP_PF_LIST_HEADER);
@@ -276,27 +299,27 @@ define([
         page.appendFormatLine('<div><label class="{0}">{1}</label></div>', VP_PF_LIST_HEADER_ITEM, 'Report Title');
         page.appendFormatLine('<div><label class="{0}">{1}</label></div>', VP_PF_LIST_HEADER_ITEM, '');
         page.appendLine('</div>');
-
-        page.appendFormatLine('<div class="{0}">', VP_PF_LIST_BODY);
+        page.appendFormatLine('<div class="{0}">', 'vp-apiblock-scrollbar');
+        page.appendFormatLine('<div class="{0} {1}">', VP_PF_LIST_BODY, 'vp-apiblock-scrollbar');
         reportList.forEach((report, idx) => {
             var { varName, title } = report;
-            page.appendFormatLine('<div class="{0}">', VP_PF_LIST_ITEM);
+            page.appendFormatLine('<div class="{0}" data-name="{1}" data-title="{2}">', VP_PF_LIST_ITEM, varName, title);
             page.appendFormatLine('<div>{0}</div>', varName);
             page.appendFormatLine('<div>{0}</div>', title);
             // button box
             page.appendFormatLine('<div class="{0}">', VP_PF_LIST_BUTTON_BOX);
             page.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}"><img src="{3}"/></div>'
-                                    , VP_PF_LIST_MENU_ITEM, 'show', 'Show report', '/nbextensions/visualpython/resource/snippets/run.svg');
+                                    , VP_PF_LIST_MENU_ITEM, LIST_MENU_ITEM.SHOW, 'Show report', '/nbextensions/visualpython/resource/snippets/run.svg');
             page.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}"><img src="{3}"/></div>'
-                                    , VP_PF_LIST_MENU_ITEM, 'delete', 'Delete report', '/nbextensions/visualpython/resource/snippets/delete.svg');
+                                    , VP_PF_LIST_MENU_ITEM, LIST_MENU_ITEM.DELETE, 'Delete report', '/nbextensions/visualpython/resource/snippets/delete.svg');
             page.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}"><img src="{3}"/></div>'
-                                    , VP_PF_LIST_MENU_ITEM, 'save', 'Save report', '/nbextensions/visualpython/resource/snippets/export.svg');
+                                    , VP_PF_LIST_MENU_ITEM, LIST_MENU_ITEM.SAVE, 'Save report', '/nbextensions/visualpython/resource/snippets/export.svg');
             page.appendLine('</div>');
             page.appendLine('</div>');
         });
+        page.appendLine('</div>'); // VP_PF_LIST_BODY
         page.appendLine('</div>');
-
-        page.appendLine('</div>');
+        page.appendLine('</div>'); // VP_PF_LIST_BOX
         return page.toString();
     }
 
@@ -304,10 +327,13 @@ define([
         $(document).off(this.wrapSelector('*'));
 
         $(document).off('click', this.wrapSelector('.' + VP_PF_CLOSE));
-        $(document).off('change', this.wrapSelector('#vp_pfVariable'));
+        $(document).off('click', this.wrapSelector('.' + VP_PF_INSTALL_BTN));
+        $(document).off('click', this.wrapSelector('.' + VP_PF_CHECK_BTN));
+        $(document).off('click', this.wrapSelector('.' + VP_PF_IMPORT_BTN));
         $(document).off('click', this.wrapSelector('.vp-pf-df-refresh'));
-        $(document).off('click', this.wrapSelector('.' + VP_PF_BUTTON_CANCEL));
-        $(document).off('click', this.wrapSelector('.' + VP_PF_BUTTON_APPLY));
+        $(document).off('click', this.wrapSelector('.' + VP_PF_MENU_ITEM));
+        $(document).off('click', this.wrapSelector('.' + VP_PF_LIST_MENU_ITEM));
+        $(document).off('snippetSaved.fileNavigation', this.wrapSelector('.' + VP_PF_FILEPATH));
     }
 
     Profiling.prototype.bindEvent = function() {
@@ -341,7 +367,7 @@ define([
         });
 
         // click menu
-        $(document).on('click', this.wrapSelector('.' + VP_PF_MENU_ITEM), async function() {
+        $(document).on('click', this.wrapSelector('.' + VP_PF_MENU_ITEM), function() {
             var type = $(this).data('type');
             var df = $(that.wrapSelector('#vp_pfVariable')).val();
             var saveas = $(that.wrapSelector('#vp_pfReturn')).val();
@@ -352,12 +378,31 @@ define([
             var code = new sb.StringBuilder();
             switch(parseInt(type)) {
                 case PROFILE_TYPE.GENERATE:
-                    code.appendFormat("{0} = ProfileReport({1}, title='{2}')", saveas, df, title);
+                    code.appendFormatLine("{0} = ProfileReport({1}, title='{2}')", saveas, df, title);
+                    code.append(saveas);
                     break;
-                case PROFILE_TYPE.SHOW:
-                    code.appendFormat("{0}.to_notebook_iframe()", saveas);
+            }
+            vpCommon.cellExecute([{command: code.toString(), exec:true, type:'code'}]);
+            that.loadReportList();
+        });
+
+        // click list item menu
+        $(document).on('click', this.wrapSelector('.' + VP_PF_LIST_MENU_ITEM), async function(evt) {
+            var menu = $(this).data('menu');
+            var itemTag = $(this).closest('.' + VP_PF_LIST_ITEM);
+            var varName = $(itemTag).data('name');
+            // var title = $(itemTag).data('title');
+            console.log(menu, itemTag, varName);
+
+            var code = new sb.StringBuilder();
+            switch(menu) {
+                case LIST_MENU_ITEM.SHOW:
+                    code.appendFormat("{0}.to_notebook_iframe()", varName);
                     break;
-                case PROFILE_TYPE.SAVE:
+                case LIST_MENU_ITEM.DELETE:
+                    code.appendFormat("del {0}", varName);
+                    break;
+                case LIST_MENU_ITEM.SAVE:
                     var loadURLstyle = Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH;
                     var loadURLhtml = Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.SOURCE_PATH + "component/fileNavigation/index.html";
                     
@@ -368,6 +413,8 @@ define([
         
                         $('#vp_fileNavigation').removeClass("hide");
                         $('#vp_fileNavigation').addClass("show");
+
+                        that.selectedReport = varName;
         
                         var { vp_init
                                 , vp_bindEventFunctions } = fileNavigation;
@@ -378,21 +425,26 @@ define([
                     })
                     .appendTo("#site");
                     return;
+                default:
+                    return;
             }
             vpCommon.cellExecute([{command: code.toString(), exec:true, type:'code'}]);
+            that.loadReportList();
         });
 
         // save file complete event
         $(document).on('snippetSaved.fileNavigation', this.wrapSelector('.' + VP_PF_FILEPATH), function(evt) {
             var fileName = evt.file;
             var path = evt.path;
-            var saveas = $(that.wrapSelector('#vp_pfReturn')).val();
-            if (saveas == '') {
-                saveas = '_vp_profile';
+            var varName = that.selectedReport;
+            if (varName == '') {
+                varName = '_vp_profile';
             }
             var code = new sb.StringBuilder();
-            code.appendFormat("{0}.to_file('{1}')", saveas, path);
+            code.appendFormat("{0}.to_file('{1}')", varName, path);
             vpCommon.cellExecute([{command: code.toString(), exec:true, type:'code'}]);
+
+            that.selectedReport = '';
         });
     };
 

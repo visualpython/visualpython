@@ -61,8 +61,15 @@ define([
         });
     }
 
+    var getProfilingList = function(callback) {
+        executePython('_vp_print(_vp_get_profiling_list())', function(result) {
+            callback(result);
+        });
+    }
+
     return {
         executePython: executePython,
-        searchVarList: searchVarList
+        searchVarList: searchVarList,
+        getProfilingList: getProfilingList
     }
 });

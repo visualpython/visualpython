@@ -63,7 +63,8 @@
     grid-row-gap: 5px;
     /* grid-template-rows: 60px calc(100% - 80px); */
     /* grid-template-rows: 80px calc(100% - 100px); */
-    grid-template-rows: 80px min-content;
+    /* grid-template-rows: 80px min-content; */
+    grid-template-rows: 80px 110px 150px;
 }
 
 .vp-pf-prepare-box {
@@ -117,7 +118,7 @@
 /** list box */
 .vp-pf-list-box {
     display: grid;
-    grid-template-rows: min-content min-content;
+    grid-template-rows: 20px calc(100% - 30px);
     grid-row-gap: 10px;
     border: 1px solid #E4E4E4;
     box-sizing: border-box;
@@ -135,6 +136,7 @@
 .vp-pf-list-body {
     display: grid;
     grid-template-rows: 30px;
+    overflow: auto;
 }
 .vp-pf-list-item {
     display: grid;
