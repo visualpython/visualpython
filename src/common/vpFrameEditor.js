@@ -168,6 +168,7 @@ define([
         this.state = {
             originObj: '',
             tempObj: '_vp',
+            returnObj: '_vp',
             selected: [],
             axis: 0,
             lines: TABLE_LINES,
@@ -210,6 +211,13 @@ define([
         }
     }
 
+    FrameEditor.prototype.getPreview = function() {
+        if (this.codepreview) {
+            return this.codepreview.getValue();
+        }
+        return '';
+    }
+
     FrameEditor.prototype.setPreview = function(previewCodeStr) {
         if (this.codepreview) {
             this.codepreview.setValue(previewCodeStr);
@@ -249,11 +257,17 @@ define([
 
         // Select DataFrame
         page.appendFormatLine('<div class="{0}">', VP_FE_DF_BOX);
+        page.appendLine('<div>');
         page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_feVariable', 'vp-orange-text', 'DataFrame');
         page.appendFormatLine('<select id="{0}">', 'vp_feVariable');
         page.appendLine('</select>');
         page.appendFormatLine('<i class="{0} {1}"></i>', VP_FE_DF_REFRESH, 'fa fa-refresh');
         page.appendFormatLine('<button class="{0} {1}"><i class="{2}"></i> View Info</button>', VP_FE_DF_SHOWINFO, 'vp-button', 'fa fa-columns');
+        page.appendLine('</div>');
+        page.appendLine('<div>');
+        page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_feReturn', 'vp-orange-text', 'Return to');
+        page.appendFormatLine('<input type="text" class="{0}" id="{1}" placeholder="{2}"/>', 'vp-input', 'vp_feReturn', 'Return variable name');
+        page.appendLine('</div>');
         page.appendLine('</div>');
 
         // Table
@@ -905,7 +919,8 @@ define([
                 // add to stack
                 if (codeStr !== '') {
                     that.state.steps.push(codeStr);
-                    that.setPreview(codeStr);
+                    var replacedCode = codeStr.replaceAll(that.state.tempObj, that.state.returnObj);
+                    that.setPreview(replacedCode);
                 }
             } catch (err) {
                 console.log(err);
@@ -998,6 +1013,18 @@ define([
 
         $(document).on('click', this.wrapSelector('.' + VP_FE_INFO), function(evt) {
             evt.stopPropagation();
+        });
+
+        // input return variable
+        $(document).on('change', this.wrapSelector('#vp_feReturn'), function() {
+            var returnVariable = $(this).val();
+            if (returnVariable == '') {
+                returnVariable = that.state.tempObj;
+            }
+            // show preview with new return variable
+            var newCode = that.state.steps[that.state.steps.length - 1];
+            that.setPreview(newCode.replaceAll(that.state.tempObj, returnVariable));
+            that.state.returnObj = returnVariable;
         });
 
         // menu on column
@@ -1225,6 +1252,10 @@ define([
 
     FrameEditor.prototype.generateCode = function() {
         var code = this.state.steps.join('\n');
+        var returnVariable = $(this.wrapSelector('#vp_feReturn')).val();
+        if (returnVariable != '') {
+            code = code.replaceAll('_vp', returnVariable);
+        }
         return code;
     }
 

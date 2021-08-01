@@ -60,8 +60,9 @@
     padding: 10px;
     display: grid;
     grid-row-gap: 5px;
-    grid-template-rows: 35px 30px calc(100% - 80px);
     /* grid-template-rows: 35px 30px 60% calc(40% - 80px); */
+    /* grid-template-rows: 35px 30px calc(100% - 80px); */
+    grid-template-rows: 35px 60px calc(100% - 110px);
 }
 
 /* preview code */
@@ -84,9 +85,17 @@
     background-color: rgba(246, 173, 85, 0.2);
 }
 
+.vp-df-box {
+    display: grid;
+    grid-template-rows: 30px;
+}
+.vp-fe-df-box label {
+    width: 70px;
+}
+
 .vp-fe #vp_feVariable { 
     width: 125px;
-    margin-left: 5px;
+    /* margin-left: 5px; */
 }
 
 .vp-fe-df-refresh {
