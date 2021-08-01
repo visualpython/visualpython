@@ -479,6 +479,8 @@ define([
         content.appendLine(this.renderReplaceInput(0));
         content.appendFormatLine('<tr><td colspan="3"><button class="{0} {1}">{2}</button></td></tr>', 'vp-button', 'vp-popup-replace-add', '+ Add Key');
         content.appendLine('</table>');
+        content.appendLine('<br/>');
+        content.appendFormatLine('<label><input type="checkbox" class="{0}"/><span>{1}</span></label>', 'vp-popup-use-regex', 'Use regex');
         return content.toString();
     }
 
@@ -563,19 +565,21 @@ define([
                 });
                 break;
             case FRAME_EDIT_TYPE.REPLACE:
-                var idx = 0;
+                var useregex = $(this.wrapSelector('.vp-popup-use-regex')).prop('checked');
+                content['useregex'] = useregex;
+                content['list'] = [];
                 for (var i=0; i <= this.state.popup.replace.index; i++) {
                     var origin = $(this.wrapSelector('.vp-popup-origin' + i)).val();
-                    var origintext = $(this.wrapSelector('.vp-popup-origin-istext'+idx)).prop('checked');
+                    var origintext = $(this.wrapSelector('.vp-popup-origin-istext'+i)).prop('checked');
                     var replace = $(this.wrapSelector('.vp-popup-replace' + i)).val();
-                    var replacetext = $(this.wrapSelector('.vp-popup-replace-istext'+idx)).prop('checked');
+                    var replacetext = $(this.wrapSelector('.vp-popup-replace-istext'+i)).prop('checked');
                     if (origin && replace) {
-                        content[idx++] = {
+                        content['list'].push({
                             origin: origin,
                             origintext: origintext,
                             replace: replace,
                             replacetext: replacetext
-                        }
+                        });
                     }
                 }
                 break;
@@ -808,15 +812,16 @@ define([
                 break;
             case FRAME_EDIT_TYPE.REPLACE:
                 var replaceStr = new sb.StringBuilder();
-                Object.keys(content).forEach((key, idx) => {
+                var useRegex = content['useregex'];
+                content['list'].forEach((obj, idx) => {
                     if (idx == 0) {
                         replaceStr.appendFormat("{0}: {1}"
-                                                , convertToStr(content[key].origin, content[key].origintext)
-                                                , convertToStr(content[key].replace, content[key].replacetext));
+                                                , convertToStr(obj.origin, obj.origintext, useRegex)
+                                                , convertToStr(obj.replace, obj.replacetext, useRegex));
                     } else {
                         replaceStr.appendFormat(", {0}: {1}"
-                                                , convertToStr(content[key].origin, content[key].origintext)
-                                                , convertToStr(content[key].replace, content[key].replacetext));
+                                                , convertToStr(obj.origin, obj.origintext, useRegex)
+                                                , convertToStr(obj.replace, obj.replacetext, useRegex));
                     }
                 });
 
@@ -826,7 +831,11 @@ define([
                 // } else {
                 //     locObj = vpCommon.formatString('.loc[:,[{0}]]', selectedName);
                 // }
-                code.appendFormat("{0}[[{1}]] = {2}[[{3}]].replace({{4}})", tempObj, selectedName, tempObj, selectedName, replaceStr);
+                code.appendFormat("{0}[[{1}]] = {2}[[{3}]].replace({{4}}", tempObj, selectedName, tempObj, selectedName, replaceStr);
+                if (useRegex) {
+                    code.append(', regex=True');
+                }
+                code.append(')');
                 break;
             case FRAME_EDIT_TYPE.ADD_COL:
                 var name = convertToStr(content.name, content.nameastext);
@@ -1243,11 +1252,15 @@ define([
         $(this.wrapSelector(vpCommon.formatString('.{0}', VP_FE_MENU_BOX))).hide();
     }
 
-    var convertToStr = function(code, isText) {
-        if (isText) {
-            code = "'" + code + "'";
+    var convertToStr = function(code, isText, useRegex=false) {
+        var newCode = "";
+        if (useRegex) {
+            newCode = "r";
         }
-        return code;
+        if (isText) {
+            newCode = newCode + "'" + code + "'";
+        }
+        return newCode;
     }
 
     FrameEditor.prototype.generateCode = function() {
