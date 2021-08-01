@@ -93,6 +93,12 @@ define([
         SHOW: 99
     }
 
+    const FRAME_AXIS = {
+        NONE: -1,
+        ROW: 0,
+        COLUMN: 1
+    }
+
     /**
      * @class FrameEditor
      * @param {object} pageThis
@@ -170,12 +176,16 @@ define([
             tempObj: '_vp',
             returnObj: '_vp',
             selected: [],
-            axis: 0,
+            axis: FRAME_AXIS.NONE,
             lines: TABLE_LINES,
             steps: [],
             popup: {
                 type: FRAME_EDIT_TYPE.NONE,
                 replace: { index: 0 }
+            },
+            selection: {
+                start: -1,
+                end: -1
             }
         }
 
@@ -196,7 +206,7 @@ define([
 
     FrameEditor.prototype.initState = function() {
         this.state.selected = [];
-        this.state.axis = -1;
+        this.state.axis = FRAME_AXIS.NONE;
         this.state.lines = TABLE_LINES;
         this.state.steps = [];
     }
@@ -271,7 +281,7 @@ define([
         page.appendLine('</div>');
 
         // Table
-        page.appendFormatLine('<div class="{0}">', VP_FE_TABLE);
+        page.appendFormatLine('<div class="{0} {1}">', VP_FE_TABLE, 'no-selection');
 
         page.appendLine('</div>'); // End of Table
 
@@ -685,10 +695,10 @@ define([
         if (this.state.selected != '') {
             var rowCode = ':';
             var colCode = ':';
-            if (this.state.axis == 0) {
+            if (this.state.axis == FRAME_AXIS.ROW) {
                 rowCode = '[' + this.state.selected.join(',') + ']';
             }
-            if (this.state.axis == 1) {
+            if (this.state.axis == FRAME_AXIS.COLUMN) {
                 colCode = '[' + this.state.selected.join(',') + ']';
             }
             locObj.appendFormat(".loc[{0},{1}]", rowCode, colCode);
@@ -779,11 +789,11 @@ define([
                         renameStr.appendFormat(", {0}: {1}", content[key].label, convertToStr(content[key].value, content[key].istext));
                     }
                 });
-                code.appendFormat("{0}.rename({1}={{2}}, inplace=True)", tempObj, axis==0?'index':'columns', renameStr.toString());
+                code.appendFormat("{0}.rename({1}={{2}}, inplace=True)", tempObj, axis==FRAME_AXIS.ROW?'index':'columns', renameStr.toString());
                 break;
             case FRAME_EDIT_TYPE.DROP_NA:
                 var locObj = '';
-                if (axis == 0) {
+                if (axis == FRAME_AXIS.ROW) {
                     locObj = vpCommon.formatString('.loc[[{0}],:]', selectedName);
                 } else {
                     locObj = vpCommon.formatString('.loc[:,[{0}]]', selectedName);
@@ -791,22 +801,22 @@ define([
                 code.appendFormat("{0}{1}.dropna(axis={2}, inplace=True)", tempObj, locObj, axis);
                 break;
             case FRAME_EDIT_TYPE.DROP_DUP:
-                if (axis == 1) {
+                if (axis == FRAME_AXIS.COLUMN) {
                     code.appendFormat("{0}.drop_duplicates(subset=[{1}], inplace=True)", tempObj, selectedName);
                 }
                 break;
             case FRAME_EDIT_TYPE.ONE_HOT_ENCODING:
-                if (axis == 1) {
+                if (axis == FRAME_AXIS.COLUMN) {
                     code.appendFormat("{0} = pd.get_dummies(data={1}, columns=[{2}])", tempObj, tempObj, selectedName);
                 }
                 break;
             case FRAME_EDIT_TYPE.SET_IDX:
-                if (axis == 1) {
+                if (axis == FRAME_AXIS.COLUMN) {
                     code.appendFormat("{0}.set_index([{1}], inplace=True)", tempObj, selectedName);
                 }
                 break;
             case FRAME_EDIT_TYPE.RESET_IDX:
-                if (axis == 0) {
+                if (axis == FRAME_AXIS.ROW) {
                     code.appendFormat("{0}.reset_index(inplace=True)", tempObj);
                 }
                 break;
@@ -884,7 +894,7 @@ define([
                 columnList && columnList.forEach(col => {
                     var colLabel = convertToStr(col, typeof col == 'string');
                     var colClass = '';
-                    if (that.state.axis == 1 && that.state.selected.includes(colLabel)) {
+                    if (that.state.axis == FRAME_AXIS.COLUMN && that.state.selected.includes(colLabel)) {
                         colClass = 'selected';
                     }
                     table.appendFormatLine('<th data-label="{0}" data-axis="{1}" class="{2} {3}">{4}</th>', colLabel, 1, VP_FE_TABLE_COLUMN, colClass, col);
@@ -901,7 +911,7 @@ define([
                     var idxName = indexList[idx];
                     var idxLabel = convertToStr(idxName, typeof idxName == 'string');
                     var idxClass = '';
-                    if (that.state.axis == 0 && that.state.selected.includes(idxLabel)) {
+                    if (that.state.axis == FRAME_AXIS.ROW && that.state.selected.includes(idxLabel)) {
                         idxClass = 'selected';
                     }
                     table.appendFormatLine('<th data-label="{0}" data-axis="{1}" class="{2} {3}">{4}</th>', idxLabel, 0, VP_FE_TABLE_ROW, idxClass, idxName);
@@ -983,6 +993,8 @@ define([
         $(document).off('click', this.wrapSelector('.' + VP_FE_DETAIL_ITEM));
         $(document).off('click.' + this.uuid);
 
+        $(document).off('keydown.' + this.uuid);
+        $(document).off('keyup.' + this.uuid);
     }
 
     FrameEditor.prototype.bindEvent = function() {
@@ -1093,31 +1105,116 @@ define([
         // select column
         $(document).on('click', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN), function(evt) {
             evt.stopPropagation();
+
+            var idx = $(that.wrapSelector('.' + VP_FE_TABLE_COLUMN)).index(this); // 1 ~ n
             var hasSelected = $(this).hasClass('selected');
+
             $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW)).removeClass('selected');
-            if (!hasSelected) {
-                $(this).addClass('selected');
-                var newAxis = $(this).data('axis');
-                that.state.axis = newAxis;
+
+            if (that.keyboardManager.keyCheck.ctrlKey) {
+                if (!hasSelected) {
+                    that.state.selection = { start: idx, end: -1 };
+                    $(this).addClass('selected');
+                    var newAxis = $(this).data('axis');
+                    that.state.axis = newAxis;
+                } else {
+                    $(this).removeClass('selected');
+                }
+                
+            } else if (that.keyboardManager.keyCheck.shiftKey) {
+                var axis = that.state.axis;
+                var startIdx = that.state.selection.start;
+                if (axis != FRAME_AXIS.COLUMN) {
+                    startIdx = -1;
+                }
+                
+                if (startIdx == -1) {
+                    // no selection
+                    that.state.selection = { start: idx, end: -1 };
+                } else if (startIdx > idx) {
+                    // add selection from idx to startIdx
+                    var tags = $(that.wrapSelector('.' + VP_FE_TABLE_COLUMN));
+                    for (var i = idx; i <= startIdx; i++) {
+                        $(tags[i]).addClass('selected');
+                    }
+                    that.state.selection = { start: startIdx, end: idx };
+                } else if (startIdx <= idx) {
+                    // add selection from startIdx to idx
+                    var tags = $(that.wrapSelector('.' + VP_FE_TABLE_COLUMN));
+                    for (var i = startIdx; i <= idx; i++) {
+                        $(tags[i]).addClass('selected');
+                    }
+                    that.state.selection = { start: startIdx, end: idx };
+                }
             } else {
-                $(this).removeClass('selected');
+                $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN)).removeClass('selected');
+                if (!hasSelected) {
+                    $(this).addClass('selected');
+                    that.state.selection = { start: idx, end: -1 };
+                    var newAxis = $(this).data('axis');
+                    that.state.axis = newAxis;
+                } else {
+                    $(this).removeClass('selected');
+                }
             }
-            
             that.loadInfo();
         });
 
         // select row
-        $(document).on('click', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW), function() {
+        $(document).on('click', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW), function(evt) {
+            evt.stopPropagation();
+
+            var idx = $(that.wrapSelector('.' + VP_FE_TABLE_ROW)).index(this); // 0 ~ n
             var hasSelected = $(this).hasClass('selected');
+
             $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN)).removeClass('selected');
-            if (!hasSelected) {
-                $(this).addClass('selected');
-                var newAxis = $(this).data('axis');
-                that.state.axis = newAxis;
-            } else {
-                $(this).removeClass('selected');
-            }
             
+            if (that.keyboardManager.keyCheck.ctrlKey) {
+                if (!hasSelected) {
+                    that.state.selection = { start: idx, end: -1 };
+                    $(this).addClass('selected');
+                    var newAxis = $(this).data('axis');
+                    that.state.axis = newAxis;
+                } else {
+                    $(this).removeClass('selected');
+                }
+                
+            } else if (that.keyboardManager.keyCheck.shiftKey) {
+                var axis = that.state.axis;
+                var startIdx = that.state.selection.start;
+                if (axis != FRAME_AXIS.ROW) {
+                    startIdx = -1;
+                }
+                
+                if (startIdx == -1) {
+                    // no selection
+                    that.state.selection = { start: idx, end: -1 };
+                } else if (startIdx > idx) {
+                    // add selection from idx to startIdx
+                    var tags = $(that.wrapSelector('.' + VP_FE_TABLE_ROW));
+                    for (var i = idx; i <= startIdx; i++) {
+                        $(tags[i]).addClass('selected');
+                    }
+                    that.state.selection = { start: startIdx, end: idx };
+                } else if (startIdx <= idx) {
+                    // add selection from startIdx to idx
+                    var tags = $(that.wrapSelector('.' + VP_FE_TABLE_ROW));
+                    for (var i = startIdx; i <= idx; i++) {
+                        $(tags[i]).addClass('selected');
+                    }
+                    that.state.selection = { start: startIdx, end: idx };
+                }
+            } else {
+                $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW)).removeClass('selected');
+                if (!hasSelected) {
+                    $(this).addClass('selected');
+                    that.state.selection = { start: idx, end: -1 };
+                    var newAxis = $(this).data('axis');
+                    that.state.axis = newAxis;
+                } else {
+                    $(this).removeClass('selected');
+                }
+            }
             that.loadInfo();
         });
 
@@ -1231,6 +1328,42 @@ define([
             if (!$(evt.target).hasClass('.' + VP_FE_BUTTON_PREVIEW)
                 && $(that.wrapSelector('.' + VP_FE_PREVIEW_BOX)).has(evt.target).length === 0) {
                 that.closePreview();
+            }
+        });
+
+        this.keyboardManager = {
+            keyCode : {
+                ctrlKey: 17,
+                cmdKey: 91,
+                shiftKey: 16,
+                altKey: 18,
+                enter: 13,
+                escKey: 27
+            },
+            keyCheck : {
+                ctrlKey: false,
+                shiftKey: false
+            }
+        }
+        $(document).on('keydown.' + this.uuid, function(e) {
+            var keyCode = that.keyboardManager.keyCode;
+            if (e.keyCode == keyCode.ctrlKey || e.keyCode == keyCode.cmdKey) {
+                that.keyboardManager.keyCheck.ctrlKey = true;
+            } 
+            if (e.keyCode == keyCode.shiftKey) {
+                that.keyboardManager.keyCheck.shiftKey = true;
+            }
+        }).on('keyup.' + this.uuid, function(e) {
+            var keyCode = that.keyboardManager.keyCode;
+            if (e.keyCode == keyCode.ctrlKey || e.keyCode == keyCode.cmdKey) {
+                that.keyboardManager.keyCheck.ctrlKey = false;
+            } 
+            if (e.keyCode == keyCode.shiftKey) {
+                that.keyboardManager.keyCheck.shiftKey = false;
+            }
+            if (e.keyCode == keyCode.escKey) {
+                // close on esc
+                that.close();
             }
         });
     }
