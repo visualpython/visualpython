@@ -964,6 +964,7 @@ define([
         $(document).off('click', this.wrapSelector('.vp-fe-df-refresh'));
         $(document).off('click', this.wrapSelector('.vp-fe-df-showinfo'));
         $(document).off('click', this.wrapSelector('.' + VP_FE_INFO));
+        $(document).off('change', this.wrapSelector('#vp_feReturn'));
         $(document).off('contextmenu', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN));
         $(document).off('contextmenu', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW));
         $(document).off('click', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN));
