@@ -275,8 +275,8 @@ define([
         page.appendFormatLine('<button class="{0} {1}"><i class="{2}"></i> View Info</button>', VP_FE_DF_SHOWINFO, 'vp-button', 'fa fa-columns');
         page.appendLine('</div>');
         page.appendLine('<div>');
-        page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_feReturn', 'vp-orange-text', 'Return to');
-        page.appendFormatLine('<input type="text" class="{0}" id="{1}" placeholder="{2}"/>', 'vp-input', 'vp_feReturn', 'Return variable name');
+        page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_feReturn', 'vp-orange-text', 'Allocate to');
+        page.appendFormatLine('<input type="text" class="{0}" id="{1}" placeholder="{2}"/>', 'vp-input', 'vp_feReturn', 'Variable name');
         page.appendLine('</div>');
         page.appendLine('</div>');
 
@@ -458,7 +458,7 @@ define([
     FrameEditor.prototype.renderAddPage = function(type) {
         var content = new sb.StringBuilder();
         content.appendLine('<table><tr>');
-        content.appendFormatLine('<th><label>New {0} name</label></th>', type);
+        content.appendFormatLine('<th><label>New {0}</label></th>', type);
         content.appendFormatLine('<td><input type="text" class="{0}"/>', 'vp-popup-input1');
         content.appendFormatLine('<label><input type="checkbox" class="{0}" checked/><span>{1}</span></label>', 'vp-popup-istext1','Text');
         content.appendLine('</td></tr><tr>');
