@@ -1,13 +1,12 @@
-/* udf editor - CodeMirror */
+/* UDF Editor - CodeMirror */
 #vp-wrapper .vp-udf-page  .CodeMirror { border: 1px solid silver; }
 #vp-wrapper .vp-udf-page  .CodeMirror.CodeMirror-focused { border: 1px solid var(--hightlight-color); }
 #vp-wrapper .vp-udf-page  .CodeMirror-empty { outline: 1px solid #c22; }
 #vp-wrapper .vp-udf-page  .CodeMirror-empty.CodeMirror-focused { outline: none; }
 #vp-wrapper .vp-udf-page  .CodeMirror pre.CodeMirror-placeholder { color: #999; }
-
 #vp-wrapper .vp-udf-page  .CodeMirror-scroll { min-height: 80px; max-height: 250px;}
 
-/* udf option header */
+/* UDF Option Header */
 /* .vp-option-header {
     padding-bottom: 3px;
 }
@@ -21,7 +20,7 @@
     width: 70px;
 } */
 
-/* udf list table */
+/* UDF List Table */
 /* #vp_udfList tr:not(:first-child):hover,
 #vp_udfList tr.selected {
     color:  var(--font-hightlight);
@@ -42,7 +41,7 @@
     overflow: hidden;
 } */
 
-/* code td 긴 문자열 생략 */
+/* Code td - Skip Long Stings */
 /* .vp-udf-code,
 .vp-udf-code pre {
     text-overflow: ellipsis; 
@@ -56,7 +55,7 @@
     border: 0px;
 } */
 
-/* 새로고침 버튼 */
+/* Refresh Button */
 /* #vp_udfRefresh {
     padding: 5px;
 }
@@ -64,7 +63,7 @@
     cursor: pointer;
 } */
 
-/* 삭제 버튼 */
+/* Delete */
 .vp-del-col {
     background-image: url(../../resource/close_big.svg);
     cursor: pointer;
@@ -76,7 +75,7 @@
     background-position: center;
 }
 
-/* 버튼 */
+/* Buttons */
 .vp-btn {
     background: #F5F5F5;
     border: 0.25px solid #C4C4C4;
@@ -97,7 +96,7 @@
     float: right;
 }
 
-/* code block add popup menu */
+/* Add Popup */
 .vp-cm-popup {
     display:none;
     position: absolute;
@@ -111,7 +110,7 @@
 }
 
 
-/** new */
+/** New */
 .vp-sn-body {
     padding: 10px;
 }
@@ -147,9 +146,7 @@
 .vp-sn-menu-item:hover {
     color: var(--font-hightlight);
 }
-
 .vp-sn-search-box {
-
 }
 .vp-sn-search {
     width: 100%;
@@ -192,7 +189,6 @@
 .vp-sn-sort-menu-item:hover {
     color: var(--font-hightlight);
 }
-
 .vp-sn-func-export-mode {
     display: none;
 }
@@ -203,7 +199,7 @@
     margin: 7px 7px !important;
 }
 
-/* export mode */
+/* Export Mode */
 .vp-sn-export-mode .vp-sn-menu {
     display: none;
 }
@@ -225,8 +221,7 @@
     margin: 0px 15px;
 }
 
-
-/* if snippets list empty */
+/* Empty List */
 .vp-sn-table:empty::after {
     content: '(No saved snippets)';
     color: #C4C4C4;
