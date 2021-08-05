@@ -9,20 +9,18 @@
 #vp_var_variableBox table tr td:first-child:hover {
     cursor: pointer;
 }
-
 #vp_varDetailTable table th, 
 #vp_varDetailTable table td {
-    padding: 3px;
+    padding: 5px;
 }
 #vp_varDetailTable table th {
     background-color: lightgray;
 }
-
 #vp_varRefresh:hover {
     cursor: pointer;
 }
 #vp_var_variableBox {
-    width: 95%;
+    width: 100%;
     height: 150px;
     overflow: hidden;
 }
@@ -30,7 +28,7 @@
     content: '(Nothing Selected)';
 }
 #vp_varDetailTable {
-    width: 95%;
+    width: 100%;
     height: 300px;
     overflow: auto;
 }

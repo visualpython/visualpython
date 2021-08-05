@@ -56,7 +56,7 @@
 /* input & select design */
 #vp-wrapper .vp-input {
     width: 176px;
-    height: 24px;
+    height: 30px;
     background-color: #FFFFFF;
     border: 0.25px solid #C4C4C4;
     box-sizing: border-box;
@@ -64,7 +64,7 @@
 }
 #vp-wrapper .vp-select {
     width: 176px;
-    height: 24px;
+    height: 30px;
     background-color: #F5F5F5;
     border: 0.25px solid #C4C4C4;
     box-sizing: border-box;
