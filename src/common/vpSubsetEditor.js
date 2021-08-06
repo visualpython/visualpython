@@ -759,6 +759,8 @@ define([
         // return vpColSuggest.toTagString();
         var tag = new sb.StringBuilder();
         tag.appendFormatLine('<select class="{0} {1}">', 'vp-select m', 'vp-col-list');
+        // .index
+        tag.appendFormatLine('<option data-code="{0}" value="{1}">{2}</option>', '.index', '.index', 'index');
         colList.forEach(col => {
             tag.appendFormatLine('<option data-code="{0}" value="{1}">{2}</option>'
                                 , col.code, col.value, col.label);
@@ -1979,7 +1981,13 @@ define([
 
                 if (varType == 'DataFrame') {
                     rowSelection.appendFormat('({0}', varName);
-                    colName && rowSelection.appendFormat('[{0}]', colName);
+                    if (colName && colName != '') {
+                        if (colName == '.index') {
+                            rowSelection.appendFormat('{0}', colName);
+                        } else {
+                            rowSelection.appendFormat('[{0}]', colName);
+                        }
+                    }
                     oper && rowSelection.appendFormat(' {0}', oper);
                     if (cond) {
                         // condition value as text
