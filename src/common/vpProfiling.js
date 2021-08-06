@@ -76,6 +76,7 @@ define([
             returnVariable:"",
             isReturnVariable: false,
             fileExtension: ["html"],
+            visualpythonFileName: 'report',
             selectedReport: ''
         };
         this.fileResultState = {
@@ -394,8 +395,7 @@ define([
             var menu = $(this).data('menu');
             var itemTag = $(this).closest('.' + VP_PF_LIST_ITEM);
             var varName = $(itemTag).data('name');
-            // var title = $(itemTag).data('title');
-            console.log(menu, itemTag, varName);
+            var title = $(itemTag).data('title');
 
             var code = new sb.StringBuilder();
             switch(menu) {
@@ -417,10 +417,12 @@ define([
                         $('#vp_fileNavigation').removeClass("hide");
                         $('#vp_fileNavigation').addClass("show");
 
-                        that.selectedReport = varName;
+                        that.state.selectedReport = varName;
         
                         var { vp_init
                                 , vp_bindEventFunctions } = fileNavigation;
+
+                        that.state.visualpythonFileName = title;
                             
                         fileNavigation.vp_init(that, "SAVE_SNIPPETS");
                         // fileNavigation.vp_init(that.getStateAll());
@@ -439,7 +441,7 @@ define([
         $(document).on('snippetSaved.fileNavigation', this.wrapSelector('.' + VP_PF_FILEPATH), function(evt) {
             var fileName = evt.file;
             var path = evt.path;
-            var varName = that.selectedReport;
+            var varName = that.state.selectedReport;
             if (varName == '') {
                 varName = '_vp_profile';
             }

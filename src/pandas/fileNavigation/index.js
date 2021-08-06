@@ -35,7 +35,7 @@ define([
         fileNavigationState.setImportPackageThis(importPackageThis);
         fileNavigationState.setFileNavigationtype(type);
         // if file type is vp note
-        if (importPackageThis.state.fileExtension == vpConst.VP_NOTE_EXTENSION) {
+        if (importPackageThis.state.visualpythonFileName || importPackageThis.state.fileExtension == vpConst.VP_NOTE_EXTENSION) {
             fileNavigationState.setVisualPythonFileName(importPackageThis.state.visualpythonFileName);
         }
         // FIXME: 마크다운 이미지 불러오기 일 경우, 완료 트리거 설정
