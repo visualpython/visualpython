@@ -334,6 +334,9 @@ define([
         $(document).off('click', this.wrapSelector('.' + VP_PF_MENU_ITEM));
         $(document).off('click', this.wrapSelector('.' + VP_PF_LIST_MENU_ITEM));
         $(document).off('snippetSaved.fileNavigation', this.wrapSelector('.' + VP_PF_FILEPATH));
+
+        $(document).off('keydown.' + this.uuid);
+        $(document).off('keyup.' + this.uuid);
     }
 
     Profiling.prototype.bindEvent = function() {
@@ -445,6 +448,42 @@ define([
             vpCommon.cellExecute([{command: code.toString(), exec:true, type:'code'}]);
 
             that.selectedReport = '';
+        });
+
+        this.keyboardManager = {
+            keyCode : {
+                ctrlKey: 17,
+                cmdKey: 91,
+                shiftKey: 16,
+                altKey: 18,
+                enter: 13,
+                escKey: 27
+            },
+            keyCheck : {
+                ctrlKey: false,
+                shiftKey: false
+            }
+        }
+        $(document).on('keydown.' + this.uuid, function(e) {
+            var keyCode = that.keyboardManager.keyCode;
+            if (e.keyCode == keyCode.ctrlKey || e.keyCode == keyCode.cmdKey) {
+                that.keyboardManager.keyCheck.ctrlKey = true;
+            } 
+            if (e.keyCode == keyCode.shiftKey) {
+                that.keyboardManager.keyCheck.shiftKey = true;
+            }
+        }).on('keyup.' + this.uuid, function(e) {
+            var keyCode = that.keyboardManager.keyCode;
+            if (e.keyCode == keyCode.ctrlKey || e.keyCode == keyCode.cmdKey) {
+                that.keyboardManager.keyCheck.ctrlKey = false;
+            } 
+            if (e.keyCode == keyCode.shiftKey) {
+                that.keyboardManager.keyCheck.shiftKey = false;
+            }
+            if (e.keyCode == keyCode.escKey) {
+                // close on esc
+                that.close();
+            }
         });
     };
 

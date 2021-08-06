@@ -1208,6 +1208,9 @@ define([
         $(document).off('click', this.wrapSelector('.' + VP_DS_BUTTON_PREVIEW));
         $(document).off('click', this.wrapSelector('.' + VP_DS_BUTTON_CANCEL));
         $(document).off('click.' + this.uuid);
+
+        $(document).off('keydown.' + this.uuid);
+        $(document).off('keyup.' + this.uuid);
     }
 
     /**
@@ -1739,7 +1742,7 @@ define([
                 shiftKey: false
             }
         }
-        $(document).keydown(function(e) {
+        $(document).on('keydown.' + this.uuid, function(e) {
             var keyCode = that.keyboardManager.keyCode;
             if (e.keyCode == keyCode.ctrlKey || e.keyCode == keyCode.cmdKey) {
                 that.keyboardManager.keyCheck.ctrlKey = true;
@@ -1747,7 +1750,7 @@ define([
             if (e.keyCode == keyCode.shiftKey) {
                 that.keyboardManager.keyCheck.shiftKey = true;
             }
-        }).keyup(function(e) {
+        }).on('keyup.' + this.uuid, function(e) {
             var keyCode = that.keyboardManager.keyCode;
             if (e.keyCode == keyCode.ctrlKey || e.keyCode == keyCode.cmdKey) {
                 that.keyboardManager.keyCheck.ctrlKey = false;
