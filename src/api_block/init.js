@@ -795,6 +795,11 @@ define([
             if (evt.target.id != 'vp_apiblock_board_option_detail_button') {
                 $(VP_CLASS_PREFIX + 'vp-apiblock-option-detail-box').hide();
             }
+            if (evt.target.id != 'vp_apiblock_board_option_preview_button'
+                && $(vpCommon.wrapSelector('.vp-apiblock-option-preview-container')).has(evt.target).length === 0) {
+                blockContainer.hideOptionPreviewBox();
+                $(VP_ID_PREFIX + VP_APIBLOCK_BOARD_OPTION_PREVIEW_BUTTON).removeClass('enabled');
+            }
         });
 
         ControlToggleInput();
