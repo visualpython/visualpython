@@ -333,7 +333,7 @@ define([
     FrameEditor.prototype.renderMenuBox = function() {
         var page = new sb.StringBuilder();
         // Menus
-        page.appendFormatLine('<div class="{0}" style="display:none; position: fixed;">', VP_FE_MENU_BOX);
+        page.appendFormatLine('<div class="{0}" style="display:none;">', VP_FE_MENU_BOX);
         // menu 1. Add Column
         page.appendFormatLine('<div class="{0} {1}" data-type="{2}" data-axis="{3}">{4}</div>'
                             , VP_FE_MENU_ITEM, 'vp-fe-menu-add-column', FRAME_EDIT_TYPE.ADD_COL, 'col', 'Add Column');
@@ -343,7 +343,7 @@ define([
         // menu 3. drop
         page.appendFormatLine('<div class="{0} {1}" data-type="{2}">{3}<i class="{4}" style="{5}"></i>'
                             , VP_FE_MENU_ITEM, 'vp-fe-menu-drop', FRAME_EDIT_TYPE.DROP, 'Drop'
-                            , 'fa fa-caret-right', 'padding-left: 5px;'); //TODO: NA & Duplicate selection needed
+                            , 'fa fa-caret-right', 'padding-left: 5px;');
         // sub-menu 1.
         page.appendFormatLine('<div class="{0}" style="{1}">', VP_FE_MENU_SUB_BOX, 'top: 25px;');
         // menu 3-1. drop
@@ -877,7 +877,7 @@ define([
         var code = new sb.StringBuilder();
         code.appendLine(codeStr);
         code.appendFormat("{0}.head({1}).to_json(orient='{2}')", tempObj, lines, 'split');
-        console.log(code.toString());
+        
         kernelApi.executePython(code.toString(), function(result) {
             try {
                 var data = JSON.parse(result.substr(1,result.length - 2).replaceAll('\\\\', '\\'));
@@ -1087,7 +1087,8 @@ define([
             var thisPos = $(this).position();
             var thisRect = $(this)[0].getBoundingClientRect();
             var tblPos = $(that.wrapSelector('.' + VP_FE_TABLE)).position();
-            that.showMenu(tblPos.left + thisRect.width, tblPos.top + thisPos.top);
+            var scrollTop = $(that.wrapSelector('.' + VP_FE_TABLE)).scrollTop();
+            that.showMenu(tblPos.left + thisRect.width, tblPos.top + thisPos.top - scrollTop);
         });
 
         // hide menu

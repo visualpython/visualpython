@@ -112,7 +112,8 @@
 
 
 .vp-fe-menu-box {
-    position: fixed;
+    /* position: fixed; */
+    position: absolute;
     top: 0;
     left: 0;
     background: #FFFFFF;
