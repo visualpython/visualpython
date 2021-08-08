@@ -61,6 +61,14 @@ define([
         });
     }
 
+    var getColumnList = function(dataframe, callback) {
+        executePython(
+            vpCommon.formatString('_vp_print(_vp_get_columns_list({0}))', dataframe)
+            , function(result) {
+                callback(result);
+        });
+    }
+
     var getProfilingList = function(callback) {
         executePython('_vp_print(_vp_get_profiling_list())', function(result) {
             callback(result);
@@ -70,6 +78,7 @@ define([
     return {
         executePython: executePython,
         searchVarList: searchVarList,
+        getColumnList: getColumnList,
         getProfilingList: getProfilingList
     }
 });
