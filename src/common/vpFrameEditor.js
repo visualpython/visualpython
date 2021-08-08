@@ -881,7 +881,7 @@ define([
         kernelApi.executePython(code.toString(), function(result) {
             try {
                 var data = JSON.parse(result.substr(1,result.length - 2).replaceAll('\\\\', '\\'));
-                console.log(data);
+                // console.l og(data);
                 var columnList = data.columns;
                 var indexList = data.index;
                 var dataList = data.data;
@@ -897,7 +897,7 @@ define([
                     if (that.state.axis == FRAME_AXIS.COLUMN && that.state.selected.includes(colLabel)) {
                         colClass = 'selected';
                     }
-                    table.appendFormatLine('<th data-label="{0}" data-axis="{1}" class="{2} {3}">{4}</th>', colLabel, 1, VP_FE_TABLE_COLUMN, colClass, col);
+                    table.appendFormatLine('<th data-label="{0}" data-axis="{1}" class="{2} {3}">{4}</th>', colLabel, FRAME_AXIS.COLUMN, VP_FE_TABLE_COLUMN, colClass, col);
                 });
                 // add column
                 table.appendFormatLine('<th class="{0}"><i class="{1}"></i></th>', VP_FE_ADD_COLUMN, 'fa fa-plus');
@@ -914,7 +914,7 @@ define([
                     if (that.state.axis == FRAME_AXIS.ROW && that.state.selected.includes(idxLabel)) {
                         idxClass = 'selected';
                     }
-                    table.appendFormatLine('<th data-label="{0}" data-axis="{1}" class="{2} {3}">{4}</th>', idxLabel, 0, VP_FE_TABLE_ROW, idxClass, idxName);
+                    table.appendFormatLine('<th data-label="{0}" data-axis="{1}" class="{2} {3}">{4}</th>', idxLabel, FRAME_AXIS.ROW, VP_FE_TABLE_ROW, idxClass, idxName);
                     row.forEach(cell => {
                         if (cell == null) {
                             cell = 'NaN';
