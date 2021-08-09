@@ -62,6 +62,7 @@ define([
     const VP_FE_PREVIEW_BOX = 'vp-fe-preview-box';
     const VP_FE_BUTTON_BOX = 'vp-fe-btn-box';
     const VP_FE_BUTTON_PREVIEW = 'vp-fe-btn-preview';
+    const VP_FE_BUTTON_DATAVIEW = 'vp-fe-btn-dataview';
     const VP_FE_BUTTON_CANCEL = 'vp-fe-btn-cancel';
     const VP_FE_BUTTON_RUNADD = 'vp-fe-btn-runadd';
     const VP_FE_BUTTON_RUN = 'vp-fe-btn-run';
@@ -192,6 +193,7 @@ define([
         this.codepreview = undefined;
         this.cmpreviewall = undefined;
         this.previewOpened = false;
+        this.dataviewOpened = false;
 
         vpCommon.loadCss(Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH + "common/frameEditor.css");
 
@@ -272,7 +274,6 @@ define([
         page.appendFormatLine('<select id="{0}">', 'vp_feVariable');
         page.appendLine('</select>');
         page.appendFormatLine('<i class="{0} {1}"></i>', VP_FE_DF_REFRESH, 'fa fa-refresh');
-        page.appendFormatLine('<button class="{0} {1}"><i class="{2}"></i> View Info</button>', VP_FE_DF_SHOWINFO, 'vp-button', 'fa fa-columns');
         page.appendLine('</div>');
         page.appendLine('<div>');
         page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_feReturn', 'vp-orange-text', 'Allocate to');
@@ -303,6 +304,8 @@ define([
         page.appendFormatLine('<div class="{0}">', VP_FE_BUTTON_BOX);
         page.appendFormatLine('<button type="button" class="{0} {1} {2}">{3}</button>'
                                 , 'vp-button', 'vp-fe-btn', VP_FE_BUTTON_PREVIEW, 'Code view');
+        page.appendFormatLine('<button class="{0} {1} {2}">{3}</button>'
+                                , 'vp-button', 'vp-fe-btn', VP_FE_BUTTON_DATAVIEW, 'Data view');
         page.appendFormatLine('<button type="button" class="{0} {1} {2}">{3}</button>'
                                 , 'vp-button cancel', 'vp-fe-btn', VP_FE_BUTTON_CANCEL, 'Cancel');
         page.appendFormatLine('<div class="{0}">', VP_FE_BUTTON_RUNADD);
@@ -794,10 +797,12 @@ define([
     }
 
     FrameEditor.prototype.showInfo = function() {
+        this.dataviewOpened = true;
         $(this.wrapSelector('.' + VP_FE_INFO)).show();
     }
 
     FrameEditor.prototype.hideInfo = function() {
+        this.dataviewOpened = false;
         $(this.wrapSelector('.' + VP_FE_INFO)).hide();
     }
 
@@ -1146,7 +1151,6 @@ define([
         $(document).off('click', this.wrapSelector('.' + VP_FE_CLOSE));
         $(document).off('change', this.wrapSelector('#vp_feVariable'));
         $(document).off('click', this.wrapSelector('.vp-fe-df-refresh'));
-        $(document).off('click', this.wrapSelector('.vp-fe-df-showinfo'));
         $(document).off('click', this.wrapSelector('.' + VP_FE_INFO));
         $(document).off('change', this.wrapSelector('#vp_feReturn'));
         $(document).off('contextmenu', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN));
@@ -1165,6 +1169,7 @@ define([
         $(document).off('click', this.wrapSelector('.' + VP_FE_POPUP_CANCEL));
         $(document).off('click', this.wrapSelector('.' + VP_FE_POPUP_CLOSE));
         $(document).off('click', this.wrapSelector('.' + VP_FE_BUTTON_PREVIEW));
+        $(document).off('click', this.wrapSelector('.' + VP_FE_BUTTON_DATAVIEW));
         $(document).off('click', this.wrapSelector('.' + VP_FE_BUTTON_CANCEL));
         $(document).off('click', this.wrapSelector('.' + VP_FE_BUTTON_RUN));
         $(document).off('click', this.wrapSelector('.' + VP_FE_BUTTON_DETAIL));
@@ -1204,11 +1209,6 @@ define([
         // refresh df
         $(document).on('click', this.wrapSelector('.vp-fe-df-refresh'), function() {
             that.loadVariableList();
-        });
-
-        // show info
-        $(document).on('click', this.wrapSelector('.vp-fe-df-showinfo'), function() {
-            that.showInfo();
         });
 
         $(document).on('click', this.wrapSelector('.' + VP_FE_INFO), function(evt) {
@@ -1275,7 +1275,7 @@ define([
                 // close menu
                 that.hideMenu();
             }
-            if (!$(evt.target).hasClass(VP_FE_DF_SHOWINFO)) {
+            if (!$(evt.target).hasClass('.' + VP_FE_BUTTON_DATAVIEW)) {
                 // close info
                 that.hideInfo();
             }
@@ -1515,6 +1515,16 @@ define([
                 that.closePreview();
             } else {
                 that.openPreview();
+            }
+        });
+
+        // click dataview
+        $(document).on('click', this.wrapSelector('.' + VP_FE_BUTTON_DATAVIEW), function(evt) {
+            evt.stopPropagation();
+            if (that.dataviewOpened) {
+                that.hideInfo();
+            } else {
+                that.showInfo();
             }
         });
 
