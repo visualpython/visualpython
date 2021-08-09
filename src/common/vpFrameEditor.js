@@ -302,7 +302,7 @@ define([
         // button box
         page.appendFormatLine('<div class="{0}">', VP_FE_BUTTON_BOX);
         page.appendFormatLine('<button type="button" class="{0} {1} {2}">{3}</button>'
-                                , 'vp-button', 'vp-fe-btn', VP_FE_BUTTON_PREVIEW, 'Preview');
+                                , 'vp-button', 'vp-fe-btn', VP_FE_BUTTON_PREVIEW, 'Code view');
         page.appendFormatLine('<button type="button" class="{0} {1} {2}">{3}</button>'
                                 , 'vp-button cancel', 'vp-fe-btn', VP_FE_BUTTON_CANCEL, 'Cancel');
         page.appendFormatLine('<div class="{0}">', VP_FE_BUTTON_RUNADD);

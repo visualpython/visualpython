@@ -106,7 +106,7 @@ define([
             // button box
             page.appendFormatLine('<div class="{0}">', VP_PP_BUTTON_BOX);
             page.appendFormatLine('<button type="button" class="{0} {1} {2}">{3}</button>'
-                                    , 'vp-button', 'vp-pp-btn', VP_PP_BUTTON_PREVIEW, 'Preview');
+                                    , 'vp-button', 'vp-pp-btn', VP_PP_BUTTON_PREVIEW, 'Code view');
             page.appendFormatLine('<button type="button" class="{0} {1} {2}">{3}</button>'
                                     , 'vp-button cancel', 'vp-pp-btn', VP_PP_BUTTON_CANCEL, 'Cancel');
             page.appendFormatLine('<div class="{0}">', VP_PP_BUTTON_RUNADD);

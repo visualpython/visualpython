@@ -383,7 +383,7 @@ define([
         // button box
         popupTag.appendFormatLine('<div class="{0}">', VP_DS_BUTTON_BOX);
         popupTag.appendFormatLine('<button type="button" class="{0} {1} {2}">{3}</button>'
-                                , 'vp-button', 'vp-ds-btn', VP_DS_BUTTON_PREVIEW, 'Preview');
+                                , 'vp-button', 'vp-ds-btn', VP_DS_BUTTON_PREVIEW, 'Code view');
         popupTag.appendFormatLine('<button type="button" class="{0} {1} {2}">{3}</button>'
                                 , 'vp-button cancel', 'vp-ds-btn', VP_DS_BUTTON_CANCEL, 'Cancel');
         popupTag.appendFormatLine('<div class="{0}">', VP_DS_BUTTON_RUNADD);
