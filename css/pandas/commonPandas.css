@@ -1,40 +1,15 @@
-/* TEST: FONT TEST */
-/* @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding:wght@400;700&family=Noto+Sans+KR&family=Staatliches&display=swap'); */
-/* @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&family=Staatliches&display=swap');
-#vp-wrapper {
-    font-family: 'Noto Sans KR', sans-serif;
-}
-
-#vp-wrapper .header {
-    font-family: 'Staatliches', cursive;
-}
-
-#vp-wrapper .vp-funcNavi {
-    font-family: 'Staatliches', 'Noto Sans KR', cursive;
-}
-@font-face {
-    font-family: 'Staatliches';
-    font-style: 'cursive';
-    src: url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&family=Staatliches&display=swap');
-    unicode-range: U+0041-005A, U+0061-007A, U+0030-0039;
-} */
-/* TEST: FONT TEST END */
-
 #vp-wrapper .vp-option-page table.vp-option-table {
     width: 95%;
-    /* margin-left: 23px;
-    margin-right: 23px; */
 }
 #vp-wrapper .vp-option-page table.vp-option-table td {
     padding-top: 3.5px;
     padding-bottom: 3.5px;
 }
-
 #vp-wrapper .vp-option-page .vp-option-table select.var-multi, select.option-multi {
     height: 60px;
 }
 
-/* 기능 버튼 */
+/* Function Button */
 #vp-wrapper #vp_functionList .vp_funcButton {
     background-color: white;
     padding: 3px 7px 3px 7px;
@@ -42,18 +17,16 @@
     margin-bottom: 5px;
     border: 1px solid #535353;
 }
-
 #vp-wrapper #vp_functionList .vp_funcButton:hover {
     background-color: lightgray;
 }
-
 #vp-wrapper #vp_functionList .vp_funcButton.active {
     color: white;
     background-color: #535353;
     cursor: default;
 }
 
-/* input & select design */
+/* Input & Select Design */
 #vp-wrapper .vp-input {
     width: 176px;
     height: 30px;
@@ -73,19 +46,15 @@
     -moz-appearance: none;
     appearance: none;
     padding: 0px 5px 0px 5px;
-    /* 공통에서 처리함 */
-    /* background-image: url("data:image/svg+xml;utf8,<svg fill='darkgray' height='14' viewBox='0 0 24 24' width='14' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
-    background-repeat: no-repeat;
-    background-position-x: 100%;
-    background-position-y: 5px; */
 }
-/* select option design */
+
+/* Select Option Design */
 #vp-wrapper .vp-select * {
     background-color: white;
     color: #696969;
 }
 
-/* input & select design - width m&s */
+/* Input & Select Design - width m&s */
 #vp-wrapper .vp-input.m,
 #vp-wrapper .vp-select.m {
     width: 116px;
@@ -94,12 +63,12 @@
 #vp-wrapper .vp-select.s {
     width: 55px;
 }
-/* range */
+
+/* Range */
 #vp-wrapper .vp-range {
     display: inline;
     width: 116px;
 }
-
 #vp-wrapper .vp-textarea {
     border: 0.25px solid var(--border-gray-color);
     width: 100%;
@@ -107,11 +76,11 @@
     margin: 0px;
 }
 
-/* 공통 스타일 */
+/* Common Style */
 .w100 { width: 100%; }
 .w90 { width: 90%; }
 
-/* 화살표 접이박스 */
+/* Arrow Accordions */
 #vp-wrapper .vp-option-page .vp-accordion-header {
     font-weight: bold;
 }
@@ -130,14 +99,13 @@
     border-bottom: 1px solid darkgray;
 }
 
-/* Prefix & Postfix TextArea */
+/* Prefix & Postfix Text Area */
 #vp-wrapper #vp_prefixBox textarea,
 #vp-wrapper #vp_postfixBox textarea {
     outline: none;
     resize: none;
     overflow: auto;
 }
-
 .no-selection {
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
