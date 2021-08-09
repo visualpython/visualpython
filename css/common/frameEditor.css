@@ -386,38 +386,12 @@
     color: var(--font-hightlight);
     background: var(--light-gray-color);
 }
-/* .vp-fe-btn-box {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
+
+/* popup page */
+/* add page */
+.vp-popup-addpage {
+    height: 300px;
 }
-.vp-fe-btn-apply
-, .vp-fe-popup-ok {
-    width: 80px;
-    height: 30px;
-    background: #F37704;
-    border: 0.25px solid #C4C4C4;
-    box-sizing: border-box;
-    border-radius: 2px;
-    text-align: center;
-    color: #FFFFFF; 
+.vp-popup-addpage .vp-popup-tab.replace {
+    height: calc(100% - 50px);
 }
-.vp-fe-btn-apply:hover
-, .vp-fe-popup-ok:hover {
-    background:  var(--hightlight-color);
-}
-.vp-fe-btn-cancel
-, .vp-fe-popup-cancel {
-    width: 80px;
-    height: 30px;
-    background: #E5E5E5;
-    border: 0.25px solid #C4C4C4;
-    box-sizing: border-box;
-    border-radius: 2px;
-    text-align: center;
-    color: #696969;
-}
-.vp-fe-btn-cancel:hover
-, .vp-fe-popup-cancel:hover {
-    background: #ccc;
-} */

@@ -457,9 +457,10 @@ define([
 
     FrameEditor.prototype.renderAddPage = function(type) {
         var content = new sb.StringBuilder();
+        content.appendFormatLine('<div class="{0}">', 'vp-popup-addpage');
         content.appendFormatLine('<div class="{0}">', 'vp-popup-header');
         content.appendLine('<table><colgroup><col width="80px"><col width="*"></colgroup>');
-        content.appendFormatLine('<tr><th><label>New {0}</label></th>', type);
+        content.appendFormatLine('<tr><th class="{0}">New {1}</th>', 'vp-orange-text', type);
         content.appendFormatLine('<td><input type="text" class="{0}"/>', 'vp-popup-input1');
         content.appendFormatLine('<label><input type="checkbox" class="{0}" checked/><span>{1}</span></label>', 'vp-popup-istext1','Text');
         content.appendLine('</td></tr><tr>');
@@ -471,7 +472,9 @@ define([
         content.appendFormatLine('<option value="{0}">{1}</option>', 'apply', 'Apply');
         content.appendLine('</select></td></tr>');
         content.appendLine('</table>');
-        content.appendLine('</div>'); // vp-popup-header
+        content.appendLine('</div>'); // end of vp-popup-header
+
+        content.appendLine('<hr style="margin: 5px 0px;"/>');
         
         // tab 1. value
         content.appendFormatLine('<div class="{0} {1}">', 'vp-popup-tab', 'value');
@@ -480,7 +483,7 @@ define([
         content.appendFormatLine('<td><input type="text" class="{0}"/>', 'vp-popup-input2');
         content.appendFormatLine('<label><input type="checkbox" class="{0}" checked/><span>{1}</span></label>', 'vp-popup-istext2','Text');
         content.appendLine('</td></tr></table>');
-        content.appendLine('</div>'); // vp-popup-tab value
+        content.appendLine('</div>'); // end of vp-popup-tab value
 
         // tab 2. calculation
         content.appendFormatLine('<div class="{0} {1}" style="display: none;">', 'vp-popup-tab', 'calculation');
@@ -515,12 +518,12 @@ define([
         content.appendFormatLine('<td><select class="{0}"></select></td>', 'vp-popup-var2col');
         content.appendLine('</tr>');
         content.appendLine('</table>');
-        content.appendLine('</div>'); // vp-popup-tab calculation
+        content.appendLine('</div>'); // end of vp-popup-tab calculation
 
         // tab 3. replace
-        content.appendFormatLine('<div class="{0} {1}" style="display: none;">', 'vp-popup-tab', 'replace');
+        content.appendFormatLine('<div class="{0} {1} {2}" style="display: none;">', 'vp-popup-tab', 'replace', 'vp-apiblock-scrollbar');
         content.appendLine(this.renderReplacePage());
-        content.appendLine('</div>'); // vp-popup-tab replace
+        content.appendLine('</div>'); // end of vp-popup-tab replace
         
         // tab 4. apply
         content.appendFormatLine('<div class="{0} {1}" style="display: none;">', 'vp-popup-tab', 'apply');
@@ -532,7 +535,8 @@ define([
         suggestInput.setValue('x');
         suggestInput.setNormalFilter(false);
         content.appendLine(suggestInput.toTagString());
-        content.appendLine('</div>'); // vp-popup-tab apply
+        content.appendLine('</div>'); // end of vp-popup-tab apply
+        content.appendLine('</div>'); // end of vp-popup-addpage
         return content.toString();
     }
 
@@ -582,12 +586,12 @@ define([
 
     FrameEditor.prototype.renderReplacePage = function() {
         var content = new sb.StringBuilder();
+        content.appendFormatLine('<label><input type="checkbox" class="{0}"/><span>{1}</span></label>', 'vp-popup-use-regex', 'Use regex');
+        content.appendLine('<br/><br/>');
         content.appendFormatLine('<table class="{0}">', 'vp-popup-replace-table');
         content.appendLine(this.renderReplaceInput(0));
         content.appendFormatLine('<tr><td colspan="3"><button class="{0} {1}">{2}</button></td></tr>', 'vp-button', 'vp-popup-replace-add', '+ Add Key');
         content.appendLine('</table>');
-        content.appendLine('<br/>');
-        content.appendFormatLine('<label><input type="checkbox" class="{0}"/><span>{1}</span></label>', 'vp-popup-use-regex', 'Use regex');
         return content.toString();
     }
 
