@@ -150,27 +150,6 @@ define([
             
         }, xmlLibraries);
 
-        /** 추가: FIXME: Data Analysis 메뉴 임시 추가 */
-        var TEMP_DA_MENUS = [
-            'Database',
-            'Crawling',
-            'Data Preprocessing',
-            'EDA',
-            'Visualization',
-            'Text Analysis'
-        ];
-        TEMP_DA_MENUS.forEach((menu, idx) => {
-            new CreateGroup(blockContainer, 'da_' + idx, menu, VP_CLASS_PREFIX + 'vp-block-group-box-da');
-        });
-        /** 추가: FIXME: AI 메뉴 임시 추가 */
-        var TEMP_AI_MENUS = [
-            'Machine Learning',
-            'Deep Learning'
-        ]
-        TEMP_AI_MENUS.forEach((menu, idx) => {
-            new CreateGroup(blockContainer, 'ai_' + idx, menu, VP_CLASS_PREFIX + 'vp-block-group-box-ai');
-        });
-
         /** API Block 햄버거 메뉴바 생성 */
         apiBlockMenuInit(blockContainer);
 
