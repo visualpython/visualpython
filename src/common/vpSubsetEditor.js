@@ -392,6 +392,7 @@ define([
         popupTag.appendFormatLine('<button type="button" class="{0} {1}"><i class="{2}"></i></button>'
                                 , 'vp-button activated', VP_DS_BUTTON_DETAIL, 'fa fa-sort-up');
         popupTag.appendFormatLine('<div class="{0} {1}">', VP_DS_DETAIL_BOX, 'vp-cursor');
+        popupTag.appendFormatLine('<div class="{0}" data-type="{1}">{2}</div>', VP_DS_DETAIL_ITEM, 'apply', 'Apply');
         popupTag.appendFormatLine('<div class="{0}" data-type="{1}">{2}</div>', VP_DS_DETAIL_ITEM, 'add', 'Add');
         popupTag.appendLine('</div>'); // VP_DS_DETAIL_BOX
         popupTag.appendLine('</div>'); // VP_DS_BUTTON_RUNADD
@@ -1077,13 +1078,14 @@ define([
      * run/add cell
      * @param {boolean} runCell 
      */
-    SubsetEditor.prototype.apply = function(runCell=true) {
+    SubsetEditor.prototype.apply = function(addCell=false, runCell=false) {
         var code = this.generateCode();
         if (this.pageThis) {
             $(this.pageThis.wrapSelector('#' + this.targetId)).val(code);
             $(this.pageThis.wrapSelector('#' + this.targetId)).trigger({
                 type: 'subset_run',
                 code: code,
+                addCell: addCell,
                 runCell: runCell
             });
         } else {
@@ -1091,6 +1093,7 @@ define([
             $(vpCommon.wrapSelector('#' + this.targetId)).trigger({
                 type: 'subset_run',
                 code: code,
+                addCell: addCell,
                 runCell: runCell
             });
         }
@@ -1682,7 +1685,7 @@ define([
 
         // run
         $(document).on('click', this.wrapSelector('.' + VP_DS_BUTTON_RUN), function(event) {
-            that.apply();
+            that.apply(true, true);
             that.close();
         });
 
@@ -1692,11 +1695,14 @@ define([
             $(that.wrapSelector('.' + VP_DS_DETAIL_BOX)).show();
         });
 
-        // click add
+        // click add / apply
         $(document).on('click', this.wrapSelector('.' + VP_DS_DETAIL_ITEM), function() {
             var type = $(this).data('type');
             if (type == 'add') {
-                that.apply(false);
+                that.apply(true);
+                that.close();
+            } else if (type == 'apply') {
+                that.apply();
                 that.close();
             }
         });

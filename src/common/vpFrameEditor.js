@@ -314,6 +314,7 @@ define([
         page.appendFormatLine('<button type="button" class="{0} {1}"><i class="{2}"></i></button>'
                                 , 'vp-button activated', VP_FE_BUTTON_DETAIL, 'fa fa-sort-up');
         page.appendFormatLine('<div class="{0} {1}">', VP_FE_DETAIL_BOX, 'vp-cursor');
+        page.appendFormatLine('<div class="{0}" data-type="{1}">{2}</div>', VP_FE_DETAIL_ITEM, 'apply', 'Apply');
         page.appendFormatLine('<div class="{0}" data-type="{1}">{2}</div>', VP_FE_DETAIL_ITEM, 'add', 'Add');
         page.appendLine('</div>'); // VP_FE_DETAIL_BOX
         page.appendLine('</div>'); // VP_FE_BUTTON_RUNADD

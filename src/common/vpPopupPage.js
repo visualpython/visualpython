@@ -115,6 +115,7 @@ define([
             page.appendFormatLine('<button type="button" class="{0} {1}"><i class="{2}"></i></button>'
                                     , 'vp-button activated', VP_PP_BUTTON_DETAIL, 'fa fa-sort-up');
             page.appendFormatLine('<div class="{0} {1}">', VP_PP_DETAIL_BOX, 'vp-cursor');
+            page.appendFormatLine('<div class="{0}" data-type="{1}">{2}</div>', VP_PP_DETAIL_ITEM, 'apply', 'Apply');
             page.appendFormatLine('<div class="{0}" data-type="{1}">{2}</div>', VP_PP_DETAIL_ITEM, 'add', 'Add');
             page.appendLine('</div>'); // VP_PP_DETAIL_BOX
             page.appendLine('</div>'); // VP_PP_BUTTON_RUNADD
@@ -154,7 +155,7 @@ define([
         $(this.wrapSelector()).remove();
     }
 
-    PopupPage.prototype.apply = function(runCell=true) {
+    PopupPage.prototype.apply = function(addCell=false, runCell=false) {
         if (this.pageThis) {
             var code = this.pageThis.generateCode(false, false);
             $(vpCommon.wrapSelector('#' + this.targetId)).val(code);
@@ -162,6 +163,7 @@ define([
                 type: 'popup_run',
                 title: this.config.title,
                 code: code,
+                addCell: addCell,
                 runCell: runCell
             });
         }
@@ -224,11 +226,14 @@ define([
             $(that.wrapSelector('.' + VP_PP_DETAIL_BOX)).show();
         });
 
-        // click add
+        // click add / apply
         $(document).on('click', this.wrapSelector('.' + VP_PP_DETAIL_ITEM), function() {
             var type = $(this).data('type');
             if (type == 'add') {
-                that.apply(false);
+                that.apply(true);
+                that.close();
+            } else if (type == 'apply') {
+                that.apply();
                 that.close();
             }
         });

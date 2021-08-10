@@ -308,6 +308,7 @@ define([
         $(document).on('popup_run subset_run frame_run', '#vp_appsCode', function(evt) {
             var code = evt.code;
             var title = evt.title;
+            var addCell = evt.addCell == true;
             var runCell = evt.runCell == true;
 
             var isFirstBlock = false;
@@ -369,11 +370,12 @@ define([
                 blockContainer.addNodeBlock(createdBlock);
                 blockContainer.reRenderAllBlock_asc();
                 blockContainer.resetBlockListAndRenderThisBlock(createdBlock);
-    
             }
 
             // 2. add cell and run cell
-            createdBlock.runThisBlock(runCell);
+            if (addCell) {
+                createdBlock.runThisBlock(runCell);
+            }
         });
 
         /** Logic, API, Data Analysis 의 > 버튼 클릭 */
