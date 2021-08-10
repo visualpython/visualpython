@@ -611,6 +611,18 @@ define([
                     // add and not run
                     appliedBlock.runThisBlock(false);
                 }
+            } else if (type == 'apply') {
+                // apply it
+                var appliedBlock = blockContainer.applyBlock();
+
+                if (appliedBlock) {
+                    // applied! popup
+                    vpCommon.renderSuccessMessage('Applied!');
+
+                    // scroll to applied block
+                    var appliedBlockDom = appliedBlock.getBlockMainDom();
+                    $(VP_CLASS_PREFIX + VP_CLASS_APIBLOCK_BOARD).animate({scrollTop: $(appliedBlockDom).position().top}, "fast");
+                }
             }
         });
 
