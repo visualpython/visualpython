@@ -797,12 +797,12 @@ define([
         
     }
 
-    FrameEditor.prototype.showInfo = function() {
+    FrameEditor.prototype.openDataview = function() {
         this.dataviewOpened = true;
         $(this.wrapSelector('.' + VP_FE_INFO)).show();
     }
 
-    FrameEditor.prototype.hideInfo = function() {
+    FrameEditor.prototype.closeDataview = function() {
         this.dataviewOpened = false;
         $(this.wrapSelector('.' + VP_FE_INFO)).hide();
     }
@@ -1278,7 +1278,7 @@ define([
             }
             if (!$(evt.target).hasClass('.' + VP_FE_BUTTON_DATAVIEW)) {
                 // close info
-                that.hideInfo();
+                that.closeDataview();
             }
         });
 
@@ -1523,9 +1523,9 @@ define([
         $(document).on('click', this.wrapSelector('.' + VP_FE_BUTTON_DATAVIEW), function(evt) {
             evt.stopPropagation();
             if (that.dataviewOpened) {
-                that.hideInfo();
+                that.closeDataview();
             } else {
-                that.showInfo();
+                that.openDataview();
             }
         });
 
@@ -1555,7 +1555,7 @@ define([
             }
         });
 
-        // click other
+        // click others
         $(document).on('click.' + this.uuid, function(evt) {
             if (!$(evt.target).hasClass('.' + VP_FE_BUTTON_DETAIL)) {
                 $(that.wrapSelector('.' + VP_FE_DETAIL_BOX)).hide();
@@ -1563,6 +1563,10 @@ define([
             if (!$(evt.target).hasClass('.' + VP_FE_BUTTON_PREVIEW)
                 && $(that.wrapSelector('.' + VP_FE_PREVIEW_BOX)).has(evt.target).length === 0) {
                 that.closePreview();
+            }
+            if (!$(evt.target).hasClass('.' + VP_FE_BUTTON_DATAVIEW)
+                && $(that.wrapSelector('.' + VP_FE_DATA)).has(evt.target).length === 0) {
+                that.closeDataview();
             }
         });
 

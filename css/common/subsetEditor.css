@@ -317,6 +317,10 @@
     left: 15px;
     top: 11px;
 }
+.vp-ds-btn-dataview {
+    left: 105px;
+    top: 11px;
+}
 .vp-ds-btn-cancel {
     top: 11px;
     right: 105px;
@@ -363,6 +367,31 @@
 
 
 /* data page */
+.vp-ds-data {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 300px;
+    bottom: 50px;
+    background: #F7F7F7;
+    border: 0.25px solid #E4E4E4;
+    padding: 10px;
+}
+
+.vp-ds-data-title {
+    width: 100%;
+    height: 20px;
+    line-height: 20px;
+    font-weight: bold;
+    background: #F5F5F5;
+    padding: 0px 10px;
+}
+
+.vp-ds-data-content {
+    width: 100%;
+    height: calc(100% - 20px);
+    overflow: auto;
+}
 .vp-ds-data-view-all-div {
     padding: 3px;
 }

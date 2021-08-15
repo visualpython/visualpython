@@ -95,6 +95,10 @@ define([
     const VP_DS_COL_SLICE_END = 'vp-ds-col-slice-end';
 
     /** data view */
+    const VP_DS_DATA = 'vp-ds-data';
+    const VP_DS_DATA_TITLE = 'vp-ds-data-title';
+    const VP_DS_DATA_CONTENT = 'vp-ds-data-content';
+
     const VP_DS_DATA_VIEW_ALL_DIV = 'vp-ds-data-view-all-div';
     const VP_DS_DATA_VIEW_ALL = 'vp-ds-data-view-all';
     const VP_DS_DATA_VIEW_BOX = 'vp-ds-data-view-box';
@@ -105,6 +109,7 @@ define([
     const VP_DS_PREVIEW_BOX = 'vp-ds-preview-box';
     const VP_DS_BUTTON_BOX = 'vp-ds-btn-box';
     const VP_DS_BUTTON_PREVIEW = 'vp-ds-btn-preview';
+    const VP_DS_BUTTON_DATAVIEW = 'vp-ds-btn-dataview';
     const VP_DS_BUTTON_CANCEL = 'vp-ds-btn-cancel';
     const VP_DS_BUTTON_RUNADD = 'vp-ds-btn-runadd';
     const VP_DS_BUTTON_RUN = 'vp-ds-btn-run';
@@ -272,10 +277,10 @@ define([
         popupTag.appendLine('<hr style="margin: 3px;"/>');
 
         // tab selector
-        popupTag.appendFormatLine('<div class="{0}">', VP_DS_TAB_SELECTOR_BOX);
-        popupTag.appendFormatLine('<div class="{0} selected" data-page="{1}">{2}</div>', VP_DS_TAB_SELECTOR_BTN, 'subset', 'Subset');
-        popupTag.appendFormatLine('<div class="{0}" data-page="{1}">{2}</div>', VP_DS_TAB_SELECTOR_BTN, 'data', 'Data');
-        popupTag.appendLine('</div>');
+        // popupTag.appendFormatLine('<div class="{0}">', VP_DS_TAB_SELECTOR_BOX);
+        // popupTag.appendFormatLine('<div class="{0} selected" data-page="{1}">{2}</div>', VP_DS_TAB_SELECTOR_BTN, 'subset', 'Subset');
+        // popupTag.appendFormatLine('<div class="{0}" data-page="{1}">{2}</div>', VP_DS_TAB_SELECTOR_BTN, 'data', 'Data');
+        // popupTag.appendLine('</div>');
 
         // tab page 1 start
         popupTag.appendFormatLine('<div class="{0} {1}">', VP_DS_TAB_PAGE, 'subset');
@@ -352,17 +357,7 @@ define([
 
         // tab page 1 end
         popupTag.appendLine('</div>');
-
-        // tab page 2 start
-        popupTag.appendFormatLine('<div class="{0} {1}" style="display:none;">', VP_DS_TAB_PAGE, 'data');
-        // data view type
-        popupTag.appendFormatLine('<div class="{0}"><label><input type="checkbox" class="{1}"/><span>{2}</span></label></div>'
-                                , VP_DS_DATA_VIEW_ALL_DIV, VP_DS_DATA_VIEW_ALL, "view all");
-        // data view
-        popupTag.appendLine(this.renderDataPage(''));
-        // tab page 2 end
-        popupTag.appendLine('</div>');
-
+  
         // apply button
         // popupTag.appendFormatLine('<div class="{0}">', VP_DS_BUTTON_BOX);
         // // popupTag.appendFormatLine('<button type="button" class="{0}">{1}</button>'
@@ -372,8 +367,19 @@ define([
         // popupTag.appendFormatLine('<button type="button" class="{0}">{1}</button>'
         //                         , VP_DS_BUTTON_APPLY, 'Apply');
         // popupTag.appendLine('</div>');
-        // body end
-        popupTag.appendLine('</div>');
+        popupTag.appendLine('</div>'); // end of body
+
+        // Info Box
+        popupTag.appendFormatLine('<div class="{0}">', VP_DS_DATA);
+        popupTag.appendFormatLine('<div class="{0}">Info</div>', VP_DS_DATA_TITLE);
+        popupTag.appendFormatLine('<div class="{0}">', VP_DS_DATA_CONTENT);
+        // data view type
+        popupTag.appendFormatLine('<div class="{0}"><label><input type="checkbox" class="{1}"/><span>{2}</span></label></div>'
+        , VP_DS_DATA_VIEW_ALL_DIV, VP_DS_DATA_VIEW_ALL, "view all");
+        // data view
+        popupTag.appendLine(this.renderDataPage(''));
+        popupTag.appendLine('</div>'); // end of VP_DS_INFO_CONTENT
+        popupTag.appendLine('</div>'); // end of VP_DS_INFO
 
         // preview box
         popupTag.appendFormatLine('<div class="{0} {1}">', VP_DS_PREVIEW_BOX, 'vp-apiblock-scrollbar');
@@ -384,6 +390,8 @@ define([
         popupTag.appendFormatLine('<div class="{0}">', VP_DS_BUTTON_BOX);
         popupTag.appendFormatLine('<button type="button" class="{0} {1} {2}">{3}</button>'
                                 , 'vp-button', 'vp-ds-btn', VP_DS_BUTTON_PREVIEW, 'Code view');
+        popupTag.appendFormatLine('<button type="button" class="{0} {1} {2}">{3}</button>'
+                                , 'vp-button', 'vp-ds-btn', VP_DS_BUTTON_DATAVIEW, 'Data view');
         popupTag.appendFormatLine('<button type="button" class="{0} {1} {2}">{3}</button>'
                                 , 'vp-button cancel', 'vp-ds-btn', VP_DS_BUTTON_CANCEL, 'Cancel');
         popupTag.appendFormatLine('<div class="{0}">', VP_DS_BUTTON_RUNADD);
@@ -900,6 +908,7 @@ define([
                                                         , 'vp-input', VP_DS_PANDAS_OBJECT, prevValue));
                     });
                     that.reloadSubsetData();
+                    that.loadDataPage();
                 } catch {
 
                 }
@@ -1209,6 +1218,7 @@ define([
         $(document).off('click', this.wrapSelector('.' + VP_DS_BUTTON_DETAIL));
         $(document).off('click', this.wrapSelector('.' + VP_DS_DETAIL_ITEM));
         $(document).off('click', this.wrapSelector('.' + VP_DS_BUTTON_PREVIEW));
+        $(document).off('click', this.wrapSelector('.' + VP_DS_BUTTON_DATAVIEW));
         $(document).off('click', this.wrapSelector('.' + VP_DS_BUTTON_CANCEL));
         $(document).off('click.' + this.uuid);
 
@@ -1717,12 +1727,22 @@ define([
             }
         });
 
+        // click dataview
+        $(document).on('click', this.wrapSelector('.' + VP_DS_BUTTON_DATAVIEW), function(evt) {
+            evt.stopPropagation();
+            if (that.dataviewOpened) {
+                that.closeDataview();
+            } else {
+                that.openDataview();
+            }
+        });
+
         // click cancel
         $(document).on('click', this.wrapSelector('.' + VP_DS_BUTTON_CANCEL), function(event) {
             that.close();
         });
 
-        // click other
+        // click others
         $(document).on('click.' + this.uuid, function(evt) {
             if (!$(evt.target).hasClass('.' + VP_DS_BUTTON_DETAIL)) {
                 $(that.wrapSelector('.' + VP_DS_DETAIL_BOX)).hide();
@@ -1730,6 +1750,10 @@ define([
             if (!$(evt.target).hasClass('.' + VP_DS_BUTTON_PREVIEW)
                 && $(that.wrapSelector('.' + VP_DS_PREVIEW_BOX)).has(evt.target).length === 0) {
                 that.closePreview();
+            }
+            if (!$(evt.target).hasClass('.' + VP_DS_BUTTON_DATAVIEW)
+                && $(that.wrapSelector('.' + VP_DS_DATA)).has(evt.target).length === 0) {
+                that.closeDataview();
             }
         });
 
@@ -1818,7 +1842,19 @@ define([
      */
     SubsetEditor.prototype.close = function() {
         this.unbindEvent();
-        $(this.wrapSelector()).hide();
+        // remove script file
+        vpCommon.removeHeadScript('subsetEditor');
+        $(this.wrapSelector()).remove();
+    }
+
+    SubsetEditor.prototype.openDataview = function() {
+        this.dataviewOpened = true;
+        $(this.wrapSelector('.' + VP_DS_DATA)).show();
+    }
+
+    SubsetEditor.prototype.closeDataview = function() {
+        this.dataviewOpened = false;
+        $(this.wrapSelector('.' + VP_DS_DATA)).hide();
     }
 
     /** open preview box */
