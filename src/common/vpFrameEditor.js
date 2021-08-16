@@ -660,8 +660,12 @@ define([
         var content = {};
         switch (parseInt(type)) {
             case FRAME_EDIT_TYPE.ADD_COL:
-                var tab = $(this.wrapSelector('.vp-popup-addtype')).val();
                 content['name'] = $(this.wrapSelector('.vp-popup-input1')).val();
+                if (content['name'] == '') {
+                    $(this.wrapSelector('.vp-popup-input1')).attr({'placeholder': 'Required input'});
+                    $(this.wrapSelector('.vp-popup-input1')).focus();
+                }
+                var tab = $(this.wrapSelector('.vp-popup-addtype')).val();
                 content['nameastext'] = $(this.wrapSelector('.vp-popup-istext1')).prop('checked');
                 content['addtype'] = tab;
                 if (tab == 'value') {
@@ -990,6 +994,10 @@ define([
                 code.append(')');
                 break;
             case FRAME_EDIT_TYPE.ADD_COL:
+                // if no name entered
+                if (content.name == '') {
+                    return '';
+                }
                 var name = convertToStr(content.name, content.nameastext);
                 var tab = content.addtype;
                 if (tab == 'value') {
@@ -1047,8 +1055,8 @@ define([
     FrameEditor.prototype.loadCode = function(codeStr) {
         var that = this;
 
-        if (code == '') {
-            return ;
+        if (codeStr == '') {
+            return '';
         }
 
         var tempObj = this.state.tempObj;
@@ -1125,6 +1133,8 @@ define([
                 console.log(err);
             }
         });
+
+        return code.toString();
     }
 
     FrameEditor.prototype.apply = function(runCell = true) {
@@ -1495,7 +1505,10 @@ define([
         // ok input popup
         $(document).on('click', this.wrapSelector('.' + VP_FE_POPUP_OK), function() {
             // ok input popup
-            that.loadCode(that.getTypeCode(that.state.popup.type, that.getPopupContent()));
+            var code = that.loadCode(that.getTypeCode(that.state.popup.type, that.getPopupContent()));
+            if (code == '') {
+                return;
+            }
             that.closeInputPopup();
         });
 
@@ -1565,7 +1578,7 @@ define([
                 that.closePreview();
             }
             if (!$(evt.target).hasClass('.' + VP_FE_BUTTON_DATAVIEW)
-                && $(that.wrapSelector('.' + VP_FE_DATA)).has(evt.target).length === 0) {
+                && $(that.wrapSelector('.' + VP_FE_INFO)).has(evt.target).length === 0) {
                 that.closeDataview();
             }
         });
