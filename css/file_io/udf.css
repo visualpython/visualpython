@@ -6,64 +6,7 @@
 #vp-wrapper .vp-udf-page  .CodeMirror pre.CodeMirror-placeholder { color: #999; }
 #vp-wrapper .vp-udf-page  .CodeMirror-scroll { min-height: 80px; max-height: 250px;}
 
-/* UDF Option Header */
-/* .vp-option-header {
-    padding-bottom: 3px;
-}
-.vp-option-header label {
-    width: 73px;
-}
-.vp-option-header input {
-    width: calc(100% - 160px);
-}
-.vp-option-header button {
-    width: 70px;
-} */
-
-/* UDF List Table */
-/* #vp_udfList tr:not(:first-child):hover,
-#vp_udfList tr.selected {
-    color:  var(--font-hightlight);
-    background-color: #F5F5F5;
-}
-#vp_udfList .vp-udf-check:checked + span {
-    color:  var(--font-hightlight);
-}
-.vp-udf-key {
-    cursor: pointer;
-}
-.vp-udf-key.selected {
-    color:  var(--font-hightlight);
-}
-.vp-udf-key span {
-    text-overflow: ellipsis;
-    width: 100%;
-    overflow: hidden;
-} */
-
-/* Code td - Skip Long Stings */
-/* .vp-udf-code,
-.vp-udf-code pre {
-    text-overflow: ellipsis; 
-    overflow: hidden;
-    white-space: nowrap;
-    max-width: 250px;
-    margin: 0px;
-    padding: 0px;
-
-    background: #ffffff00;
-    border: 0px;
-} */
-
-/* Refresh Button */
-/* #vp_udfRefresh {
-    padding: 5px;
-}
-#vp_udfRefresh:hover {
-    cursor: pointer;
-} */
-
-/* Delete */
+/* Option Deleting */
 .vp-del-col {
     background-image: url(../../resource/close_big.svg);
     cursor: pointer;
@@ -110,7 +53,7 @@
 }
 
 
-/** New */
+/** NEW */
 .vp-sn-body {
     padding: 10px;
 }

@@ -9,7 +9,6 @@
   grid-template-rows: repeat(2, 100px);
   grid-template-columns: repeat(4, 1fr);
   grid-auto-rows: 100px;
-
   grid-gap: 4.5px;
   margin-bottom: 20px;
 }
@@ -52,7 +51,6 @@
   -webkit-transition: all 0.5s;
   transition: all 0.5s;
 }
-
 .vp-plot-item:hover:after {
   opacity: 0.6;
 }
@@ -68,7 +66,6 @@
   font-size: 11px;
   line-height: 13px;
   text-align: center;
-
   margin-top: 3px;
 }
 .vp-plot-item.selected .vp-plot-thumb {
@@ -83,7 +80,6 @@
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center center;
-
   border: 0.25px solid #828282;
 }
 .vp-plot-item .vp-plot-thumb.line {
@@ -116,7 +112,6 @@
 .vp-plot-item .vp-plot-thumb.hexbin {
   background-image: url(../../resource/pandas/plot/hexbin.JPG);
 }
-
 .vp-plot-cmap {
   /* width: 200px; */
   width: 176px;
@@ -125,13 +120,10 @@
   /* box-shadow: 1px 1px 3px 1px var(--color);
   border-radius: 5px; */
   margin-top: 5px;
-
   position: relative;
   display: flex;
   z-index: 1500;
-
   cursor: pointer;
-
   padding: 0px 5px 0px 5px;
   background-image: url("data:image/svg+xml;utf8,<svg fill='darkgray' height='14' viewBox='0 0 24 24' width='14' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
   background-repeat: no-repeat;
@@ -148,7 +140,6 @@
   width: 176px;
   height: 150px;
   overflow: auto;
-
   position: absolute;
   /* display: none; */
   top: 100%;
@@ -170,7 +161,6 @@
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center center;
-
   border: 2px solid transparent;
   position: relative;
   display: block;
@@ -192,7 +182,6 @@
 .vp-plot-cmap-selector .vp-plot-cmap-item.selected{
   border-color: var(--color);
 }
-
 .vp-plot-cmap-wrapper {
   position: relative;
   display: flex;
@@ -205,7 +194,7 @@
   pointer-events: all;
 }
 
-/* 사용자 옵션 설정 input */
+/* User Option Input */
 #vp-wrapper .vp-option-page #vp_userOption input[type="text"] {
   width: 100%;
 }

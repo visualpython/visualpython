@@ -154,11 +154,13 @@
 }
 .vp-apiblock-menu-box {
     background: #FFFFFF;
+    width: 100px;
     border: 0.25px solid #E4E4E4;
     padding: 5px;
     z-index: 50;
 }
 .vp-apiblock-menu-item {
+    color: var(--font-primary);
     padding: 5px;
 }
 .vp-apiblock-menu-item:hover {
@@ -243,7 +245,7 @@
     padding: 10px;
 }
 .vp-apiblock-option-container {
-    padding: 1rem 0;
+    padding: 1rem 1rem 0 0;
 }
 .vp-apiblock-option-buttons-container {
     position: sticky;
@@ -580,7 +582,7 @@
 .vp-apiblock-blockoption-input {
     border: 1px solid #d4d4d4;
     color: #252525;
-    outline: 0px;
+    outline-color: var(--hightlight-color);
     width: 100%;
     padding: 5px 0rem;
     padding-left: 0.75rem;
@@ -834,7 +836,7 @@
     white-space:nowrap;
     word-wrap:normal;
     overflow:hidden;
-    font-size:12px;
+    font-size:13px;
 }
 
 /* API Block Font */
@@ -1032,7 +1034,7 @@
     background-position: center;
 }
 .vp-apiblock-body .vp-option-vertical-table-layout th {
-    padding: 0px;
+    padding: 2px 5px 2px 16px;
 }
 .vp-apiblock-body .vp-note-node-controls {
     display: none;

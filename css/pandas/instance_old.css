@@ -42,7 +42,6 @@
     background: transparent;
     background-image: url(../../resource/pandas/refresh.png);
 }
-
 .vp-icon-btn {
     cursor: pointer;
     width: 15px;
@@ -65,7 +64,7 @@
     float: right;
 }
 
-/* variable view style */
+/* Variable View Style */
 .vp-var-view-box {
     display: none;
     position: absolute;
