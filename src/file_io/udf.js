@@ -312,9 +312,9 @@ define([
                     var parent = $(thisHeader).parent();
                     var indicator = $(thisHeader).find('.vp-sn-indicator');
                     var hasOpen = $(indicator).hasClass('open');
-                    // hide all codebox
-                    $(that.wrapSelector('.vp-sn-indicator')).removeClass('open');
-                    $(that.wrapSelector('.vp-sn-item-code')).hide();
+                    // Deprecated: hide all codebox
+                    // $(that.wrapSelector('.vp-sn-indicator')).removeClass('open');
+                    // $(that.wrapSelector('.vp-sn-item-code')).hide();
                     
                     if (that.clicked > 1 || !hasOpen) {
                         // show code
@@ -322,6 +322,7 @@ define([
                         $(parent).find('.vp-sn-item-code').show();
                     } else {
                         // hide code
+                        $(indicator).removeClass('open');
                         $(parent).find('.vp-sn-item-code').hide();
                     }
                     that.clicked = 0;
@@ -378,11 +379,9 @@ define([
         // item menu click
         $(document).on('click', this.wrapSelector('.vp-sn-item-menu-item'), function(evt) {
             var menu = $(this).data('menu');
-            var title = $(this).closest('.vp-sn-item').data('title');
+            var item = $(this).closest('.vp-sn-item');
+            var title = $(item).data('title');
             if (menu == 'run') {
-                var item = $(this).closest('.vp-sn-item');
-                var title = $(item).data('title');
-
                 // get codemirror
                 that.codemirrorList[title].save();
                 var code = that.codemirrorList[title].getValue();
@@ -433,6 +432,18 @@ define([
                     that.loadUdfList();
                 }
                 
+            } else if (menu == 'save') {
+                var codemirror = that.codemirrorList[title];
+                codemirror.save();
+                var code = codemirror.getValue();
+                
+                // save changed code
+                var timestamp = new Date().getTime();
+                var updateSnippet = { [title]: { code: code, timestamp: timestamp } };
+                vpSetting.saveUserDefinedCode(updateSnippet);
+
+                // hide it
+                $(this).hide();
             }
         });
 
@@ -592,6 +603,10 @@ define([
         item.appendLine('</div>'); // end of vp-sn-item-header
         item.appendFormatLine('<div class="{0}">', 'vp-sn-item-code');
         item.appendFormatLine('<textarea>{0}</textarea>', code);
+        item.appendFormatLine('<div class="{0} {1}" data-menu="{2}" title="{3}">', 'vp-sn-item-menu-item', 'vp-sn-save', 'save', 'Save changes');
+        item.appendFormatLine('<img src="{0}"/>', '/nbextensions/visualpython/resource/snippets/save_orange.svg');
+        // item.appendFormatLine('<object class="{0}" type="image/svg+xml" data="{1}" width="20" height="20"></object>', 'vp-sn-saveimg', '/nbextensions/visualpython/resource/snippets/save_gray2.svg');
+        item.appendLine('</div>'); // vp-sn-save
         item.appendLine('</div>'); // end of vp-sn-item-code
         item.appendLine('</div>'); // end of vp-sn-item
         return item.toString();
@@ -656,14 +671,17 @@ define([
         // bind code change
         // item code save
         codemirror.on('change', function() {
-            var title = $(tag).closest('.vp-sn-item').data('title');
-            codemirror.save();
-            var code = codemirror.getValue();
+            // var title = $(tag).closest('.vp-sn-item').data('title');
+            // codemirror.save();
+            // var code = codemirror.getValue();
             
-            // save changed code
-            var timestamp = new Date().getTime();
-            var updateSnippet = { [title]: { code: code, timestamp: timestamp } };
-            vpSetting.saveUserDefinedCode(updateSnippet);
+            // // save changed code
+            // var timestamp = new Date().getTime();
+            // var updateSnippet = { [title]: { code: code, timestamp: timestamp } };
+            // vpSetting.saveUserDefinedCode(updateSnippet);
+
+            // show save button
+            $(tag).parent().find('.vp-sn-save').show();
         });
     }
 

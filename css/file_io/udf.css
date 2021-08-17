@@ -68,17 +68,20 @@
 .vp-sn-menu {
     float: right;
     cursor: pointer;
+    position: relative;
 }
 .vp-sn-menu-box {
     display: none;
     position: absolute;
+    width: 130px;
     top: 0px;
-    right: 40px;
+    right: 30px;
     /* width: 70px;
     height: 50px; */
     border: 0.25px solid var(--border-gray-color);
     background: #FFFFFF;
     padding: 5px;
+    z-index: 5;
 }
 .vp-sn-menu-item {
     height: 25px;
@@ -90,6 +93,7 @@
     color: var(--font-hightlight);
 }
 .vp-sn-search-box {
+    position: relative;
 }
 .vp-sn-search {
     width: 100%;
@@ -98,7 +102,7 @@
 .vp-sn-search-box i {
     position: absolute;
     color: #C4C4C4;
-    right: 20px;
+    right: 10px;
     padding-top: 8px;
 }
 .vp-sn-func-box {
@@ -107,6 +111,7 @@
 }
 .vp-sn-func-left {
     float: left;
+    position: relative;
 }
 .vp-sn-func-right {
     float: right;
@@ -117,11 +122,13 @@
 .vp-sn-sort-menu-box {
     display: none;
     position: absolute;
+    width: 90px;
     /* width: 80px;
     height: 50px; */
     border: 0.25px solid var(--border-gray-color);
     background: #FFFFFF;
     padding: 5px;
+    z-index: 5;
 }
 .vp-sn-sort-menu-item {
     height: 25px;
@@ -198,7 +205,7 @@
     background-image: url(../../resource/chevron_big_down.svg) !important;
 }
 #vp_udfPage .vp-sn-item-header input.vp-sn-item-title {
-    width: calc(100% - 80px);
+    width: calc(100% - 100px);
     outline: none;
     background: transparent;
     border: 0.5px solid transparent;
@@ -220,7 +227,17 @@
     display: inline-block;
     cursor: pointer;
 }
-.vp-sn-item-code {
+.vp-sn-item-code { 
     display: none;
+    position: relative;
     border: 0.25px solid var(--border-gray-color);
+}
+.vp-sn-save {
+    display: none;
+
+    width: 20px;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    cursor: pointer;
 }

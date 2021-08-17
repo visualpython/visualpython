@@ -36,9 +36,11 @@ define([
     const VP_DS_PANDAS_OBJECT_BOX = 'vp-ds-pandas-object-box';
     const VP_DS_PANDAS_OBJECT = 'vp-ds-pandas-object';
     const VP_DS_USE_COPY = 'vp-ds-use-copy';
-
+    
     const VP_DS_SUBSET_TYPE = 'vp-ds-subset-type';
     const VP_DS_TO_FRAME = 'vp-ds-to-frame';
+
+    const VP_DS_ALLOCATE_TO = 'vp-ds-allocate-to';
 
     /** tab selector */
     const VP_DS_TAB_SELECTOR_BOX = 'vp-ds-tab-selector-box';
@@ -93,6 +95,10 @@ define([
     const VP_DS_COL_SLICE_END = 'vp-ds-col-slice-end';
 
     /** data view */
+    const VP_DS_DATA = 'vp-ds-data';
+    const VP_DS_DATA_TITLE = 'vp-ds-data-title';
+    const VP_DS_DATA_CONTENT = 'vp-ds-data-content';
+
     const VP_DS_DATA_VIEW_ALL_DIV = 'vp-ds-data-view-all-div';
     const VP_DS_DATA_VIEW_ALL = 'vp-ds-data-view-all';
     const VP_DS_DATA_VIEW_BOX = 'vp-ds-data-view-box';
@@ -100,9 +106,13 @@ define([
     const VP_DS_DATA_ERROR_BOX_TITLE = 'vp-ds-data-error-box-title';
 
     /** buttons */
+    const VP_DS_PREVIEW_BOX = 'vp-ds-preview-box';
     const VP_DS_BUTTON_BOX = 'vp-ds-btn-box';
+    const VP_DS_BUTTON_PREVIEW = 'vp-ds-btn-preview';
+    const VP_DS_BUTTON_DATAVIEW = 'vp-ds-btn-dataview';
     const VP_DS_BUTTON_CANCEL = 'vp-ds-btn-cancel';
     const VP_DS_BUTTON_RUNADD = 'vp-ds-btn-runadd';
+    const VP_DS_BUTTON_APPLY = 'vp-ds-btn-apply';
     const VP_DS_BUTTON_RUN = 'vp-ds-btn-run';
     const VP_DS_BUTTON_DETAIL = 'vp-ds-btn-detail';
     const VP_DS_DETAIL_BOX = 'vp-ds-detail-box';
@@ -119,6 +129,8 @@ define([
         this.targetId = targetId;
         this.uuid = 'u' + vpCommon.getUUID();
         this.useInputVariable = useInputVariable;
+        // use Run/Add cell
+        this.useCell = true;
 
         // specify pandas object types
         this.pdObjTypes = ['DataFrame', 'Series'];
@@ -130,6 +142,7 @@ define([
         // open popup
         $(vpCommon.formatString('.{0}.{1}', VP_DS_BTN, this.uuid)).on('click', function(event) {
             if (!$(this).hasClass('disabled')) {
+                that.useCell = false; // show apply button only
                 that.open();
             }
         });
@@ -148,6 +161,7 @@ define([
 
             // all variables list on opening popup
             dataList: [],
+            allocateTo: '',
             pandasObject: '',
             dataType: '',
             isTimestamp: false,     // is df.index timestampindex? true / false
@@ -168,6 +182,8 @@ define([
         }
 
         this.codepreview = undefined;
+        this.cmpreviewall = undefined;
+        this.previewOpened = false;
         
         // render popup div
         this.render();
@@ -250,8 +266,13 @@ define([
         
         // to frame
         popupTag.appendFormatLine('<label style="display:none;"><input type="checkbox" class="{0}"/><span>{1}</span></label>', VP_DS_TO_FRAME, 'To DataFrame');
-
         popupTag.appendLine('</td></tr>');
+
+        // allocate to
+        popupTag.appendLine('<tr>');
+        popupTag.appendFormatLine('<td><label class="{0}">{1}</label></td>', VP_DS_LABEL, 'Allocate to');
+        popupTag.appendFormatLine('<td><input type="text" class="{0} {1}" placeholder="{2}"/></td>', 'vp-input', VP_DS_ALLOCATE_TO, 'new variable name');
+        popupTag.appendLine('</tr>');
 
         // table1 end
         popupTag.appendLine('</tbody></table>');
@@ -260,10 +281,10 @@ define([
         popupTag.appendLine('<hr style="margin: 3px;"/>');
 
         // tab selector
-        popupTag.appendFormatLine('<div class="{0}">', VP_DS_TAB_SELECTOR_BOX);
-        popupTag.appendFormatLine('<div class="{0} selected" data-page="{1}">{2}</div>', VP_DS_TAB_SELECTOR_BTN, 'subset', 'Subset');
-        popupTag.appendFormatLine('<div class="{0}" data-page="{1}">{2}</div>', VP_DS_TAB_SELECTOR_BTN, 'data', 'Data');
-        popupTag.appendLine('</div>');
+        // popupTag.appendFormatLine('<div class="{0}">', VP_DS_TAB_SELECTOR_BOX);
+        // popupTag.appendFormatLine('<div class="{0} selected" data-page="{1}">{2}</div>', VP_DS_TAB_SELECTOR_BTN, 'subset', 'Subset');
+        // popupTag.appendFormatLine('<div class="{0}" data-page="{1}">{2}</div>', VP_DS_TAB_SELECTOR_BTN, 'data', 'Data');
+        // popupTag.appendLine('</div>');
 
         // tab page 1 start
         popupTag.appendFormatLine('<div class="{0} {1}">', VP_DS_TAB_PAGE, 'subset');
@@ -295,7 +316,7 @@ define([
         popupTag.appendLine('</div>'); // VP_DS_ROWTYPE_BOX
 
         // condition box start
-        popupTag.appendFormatLine('<div class="{0} {1} {2}" style="display:none;">', VP_DS_ROWTYPE_BOX, 'condition', 'no-selection');
+        popupTag.appendFormatLine('<div class="{0} {1} {2} {3}" style="display:none;">', VP_DS_ROWTYPE_BOX, 'condition', 'vp-apiblock-scrollbar', 'no-selection');
         // row condition
         // popupTag.appendFormatLine('<label class="{0}">{1}</label>'
         //                         , '', 'Conditional Subset');
@@ -340,17 +361,7 @@ define([
 
         // tab page 1 end
         popupTag.appendLine('</div>');
-
-        // tab page 2 start
-        popupTag.appendFormatLine('<div class="{0} {1}" style="display:none;">', VP_DS_TAB_PAGE, 'data');
-        // data view type
-        popupTag.appendFormatLine('<div class="{0}"><label><input type="checkbox" class="{1}"/><span>{2}</span></label></div>'
-                                , VP_DS_DATA_VIEW_ALL_DIV, VP_DS_DATA_VIEW_ALL, "view all");
-        // data view
-        popupTag.appendLine(this.renderDataPage(''));
-        // tab page 2 end
-        popupTag.appendLine('</div>');
-
+  
         // apply button
         // popupTag.appendFormatLine('<div class="{0}">', VP_DS_BUTTON_BOX);
         // // popupTag.appendFormatLine('<button type="button" class="{0}">{1}</button>'
@@ -360,25 +371,53 @@ define([
         // popupTag.appendFormatLine('<button type="button" class="{0}">{1}</button>'
         //                         , VP_DS_BUTTON_APPLY, 'Apply');
         // popupTag.appendLine('</div>');
-        // body end
+        popupTag.appendLine('</div>'); // end of body
+
+        // Info Box
+        popupTag.appendFormatLine('<div class="{0}">', VP_DS_DATA);
+        popupTag.appendFormatLine('<div class="{0}">Info</div>', VP_DS_DATA_TITLE);
+        popupTag.appendFormatLine('<div class="{0}">', VP_DS_DATA_CONTENT);
+        // data view type
+        popupTag.appendFormatLine('<div class="{0}"><label><input type="checkbox" class="{1}"/><span>{2}</span></label></div>'
+        , VP_DS_DATA_VIEW_ALL_DIV, VP_DS_DATA_VIEW_ALL, "view all");
+        // data view
+        popupTag.appendLine(this.renderDataPage(''));
+        popupTag.appendLine('</div>'); // end of VP_DS_INFO_CONTENT
+        popupTag.appendLine('</div>'); // end of VP_DS_INFO
+
+        // preview box
+        popupTag.appendFormatLine('<div class="{0} {1}">', VP_DS_PREVIEW_BOX, 'vp-apiblock-scrollbar');
+        popupTag.appendFormatLine('<textarea id="{0}" name="code"></textarea>', 'vp_codePreview');
         popupTag.appendLine('</div>');
+
         // button box
         popupTag.appendFormatLine('<div class="{0}">', VP_DS_BUTTON_BOX);
         popupTag.appendFormatLine('<button type="button" class="{0} {1} {2}">{3}</button>'
+                                , 'vp-button', 'vp-ds-btn', VP_DS_BUTTON_PREVIEW, 'Code view');
+        popupTag.appendFormatLine('<button type="button" class="{0} {1} {2}">{3}</button>'
+                                , 'vp-button', 'vp-ds-btn', VP_DS_BUTTON_DATAVIEW, 'Data view');
+        popupTag.appendFormatLine('<button type="button" class="{0} {1} {2}">{3}</button>'
                                 , 'vp-button cancel', 'vp-ds-btn', VP_DS_BUTTON_CANCEL, 'Cancel');
-        popupTag.appendFormatLine('<div class="{0}">', VP_DS_BUTTON_RUNADD);
-        popupTag.appendFormatLine('<button type="button" class="{0} {1}">{2}</button>'
-                                , 'vp-button activated', VP_DS_BUTTON_RUN, 'Run');
-        popupTag.appendFormatLine('<button type="button" class="{0} {1}"><i class="{2}"></i></button>'
-                                , 'vp-button activated', VP_DS_BUTTON_DETAIL, 'fa fa-sort-up');
-        popupTag.appendFormatLine('<div class="{0} {1}">', VP_DS_DETAIL_BOX, 'vp-cursor');
-        popupTag.appendFormatLine('<div class="{0}" data-type="{1}">{2}</div>', VP_DS_DETAIL_ITEM, 'add', 'Add');
-        popupTag.appendLine('</div>'); // VP_DS_DETAIL_BOX
-        popupTag.appendLine('</div>'); // VP_DS_BUTTON_RUNADD
+        if (this.useCell) {
+            popupTag.appendFormatLine('<div class="{0}">', VP_DS_BUTTON_RUNADD);
+            popupTag.appendFormatLine('<button type="button" class="{0} {1}" title="{2}">{3}</button>'
+                                    , 'vp-button activated', VP_DS_BUTTON_RUN, 'Apply to Board & Run Cell', 'Run');
+            popupTag.appendFormatLine('<button type="button" class="{0} {1}"><i class="{2}"></i></button>'
+                                    , 'vp-button activated', VP_DS_BUTTON_DETAIL, 'fa fa-sort-up');
+            popupTag.appendFormatLine('<div class="{0} {1}">', VP_DS_DETAIL_BOX, 'vp-cursor');
+            popupTag.appendFormatLine('<div class="{0}" data-type="{1}" title="{2}">{3}</div>', VP_DS_DETAIL_ITEM, 'apply', 'Apply to Board', 'Apply');
+            popupTag.appendFormatLine('<div class="{0}" data-type="{1}" title="{2}">{3}</div>', VP_DS_DETAIL_ITEM, 'add', 'Apply to Board & Add Cell', 'Add');
+            popupTag.appendLine('</div>'); // VP_DS_DETAIL_BOX
+            popupTag.appendLine('</div>'); // VP_DS_BUTTON_RUNADD
+        } else {
+            popupTag.appendFormatLine('<button type="button" class="{0} {1} {2}" data-type="{3}" title="{4}">{5}</button>'
+                                    , 'vp-button', VP_DS_BUTTON_APPLY, VP_DS_DETAIL_ITEM, 'apply', 'Apply to Board', 'Apply');
+        }
         popupTag.appendLine('</div>'); // VP_DS_BUTTON_BOX
 
         popupTag.append('</div>'); // VP_DS_CONTAINER
         popupTag.append('</div>');
+
         // $(vpCommon.formatString("#{0}", vpConst.VP_CONTAINER_ID)).append(popupTag.toString());
         $('#vp-wrapper').append(popupTag.toString());
         $(vpCommon.formatString(".{0}.{1}", VP_DS, this.uuid)).hide();
@@ -611,8 +650,8 @@ define([
         var that = this;
         var tag = new sb.StringBuilder();
         tag.appendFormatLine('<div class="{0}">', VP_DS_SLICING_BOX);
-        tag.appendFormatLine('<label class="{0}">{1}</label>'
-                                , '', 'Slice');
+        // tag.appendFormatLine('<label class="{0}">{1}</label>'
+        //                         , '', 'Slice');
         // tag.appendFormatLine('<input type="text" class="{0} {1}" placeholder="{2}"/> : ', VP_DS_COL_SLICE_START, 'vp-input m', 'start');
         // tag.appendFormatLine('<input type="text" class="{0} {1}" placeholder="{2}"/>', VP_DS_COL_SLICE_END, 'vp-input m', 'end');
         var vpColStart = new vpSuggestInputText.vpSuggestInputText();
@@ -738,6 +777,8 @@ define([
         // return vpColSuggest.toTagString();
         var tag = new sb.StringBuilder();
         tag.appendFormatLine('<select class="{0} {1}">', 'vp-select m', 'vp-col-list');
+        // .index
+        tag.appendFormatLine('<option data-code="{0}" value="{1}">{2}</option>', '.index', '.index', 'index');
         colList.forEach(col => {
             tag.appendFormatLine('<option data-code="{0}" value="{1}">{2}</option>'
                                 , col.code, col.value, col.label);
@@ -800,7 +841,7 @@ define([
         // if view all is not checked, get current code
         if (!this.state.viewAll) {
             // get current code
-            code = this.generateCode();
+            code = this.generateCode(false, false);
         }
         // if not, get output of all data in selected pandasObject
 
@@ -876,6 +917,7 @@ define([
                                                         , 'vp-input', VP_DS_PANDAS_OBJECT, prevValue));
                     });
                     that.reloadSubsetData();
+                    that.loadDataPage();
                 } catch {
 
                 }
@@ -1054,13 +1096,14 @@ define([
      * run/add cell
      * @param {boolean} runCell 
      */
-    SubsetEditor.prototype.apply = function(runCell=true) {
+    SubsetEditor.prototype.apply = function(addCell=false, runCell=false) {
         var code = this.generateCode();
         if (this.pageThis) {
             $(this.pageThis.wrapSelector('#' + this.targetId)).val(code);
             $(this.pageThis.wrapSelector('#' + this.targetId)).trigger({
                 type: 'subset_run',
                 code: code,
+                addCell: addCell,
                 runCell: runCell
             });
         } else {
@@ -1068,6 +1111,7 @@ define([
             $(vpCommon.wrapSelector('#' + this.targetId)).trigger({
                 type: 'subset_run',
                 code: code,
+                addCell: addCell,
                 runCell: runCell
             });
         }
@@ -1160,6 +1204,7 @@ define([
         $(document).off('change', this.wrapSelector('.' + VP_DS_USE_COPY));
         $(document).off('change', this.wrapSelector('.' + VP_DS_SUBSET_TYPE));
         $(document).off('change', this.wrapSelector('.' + VP_DS_TO_FRAME));
+        $(document).off('change', this.wrapSelector('.' + VP_DS_ALLOCATE_TO));
         $(document).off('click', this.wrapSelector('.' + VP_DS_TAB_SELECTOR_BTN));
         $(document).off('change', this.wrapSelector('.' + VP_DS_DATA_VIEW_ALL));
         $(document).off('change', this.wrapSelector('.' + VP_DS_ROWTYPE));
@@ -1181,8 +1226,13 @@ define([
         $(document).off('click', this.wrapSelector('.' + VP_DS_BUTTON_RUN));
         $(document).off('click', this.wrapSelector('.' + VP_DS_BUTTON_DETAIL));
         $(document).off('click', this.wrapSelector('.' + VP_DS_DETAIL_ITEM));
+        $(document).off('click', this.wrapSelector('.' + VP_DS_BUTTON_PREVIEW));
+        $(document).off('click', this.wrapSelector('.' + VP_DS_BUTTON_DATAVIEW));
         $(document).off('click', this.wrapSelector('.' + VP_DS_BUTTON_CANCEL));
         $(document).off('click.' + this.uuid);
+
+        $(document).off('keydown.' + this.uuid);
+        $(document).off('keyup.' + this.uuid);
     }
 
     /**
@@ -1332,6 +1382,18 @@ define([
                 that.generateCode();
             }
 
+        });
+
+        // allocate to
+        $(document).on('change', this.wrapSelector('.' + VP_DS_ALLOCATE_TO), function(evt) {
+            var allocateTo = $(this).val();
+            that.state.allocateTo = allocateTo;
+
+            if (that.state.tabPage == 'data') {
+                that.loadDataPage();
+            } else {
+                that.generateCode();
+            }
         });
 
         // tab page select
@@ -1642,7 +1704,7 @@ define([
 
         // run
         $(document).on('click', this.wrapSelector('.' + VP_DS_BUTTON_RUN), function(event) {
-            that.apply();
+            that.apply(true, true);
             that.close();
         });
 
@@ -1652,24 +1714,55 @@ define([
             $(that.wrapSelector('.' + VP_DS_DETAIL_BOX)).show();
         });
 
-        // click add
+        // click add / apply
         $(document).on('click', this.wrapSelector('.' + VP_DS_DETAIL_ITEM), function() {
             var type = $(this).data('type');
             if (type == 'add') {
-                that.apply(false);
+                that.apply(true);
+                that.close();
+            } else if (type == 'apply') {
+                that.apply();
                 that.close();
             }
         });
 
-        // cancel
+        // click preview
+        $(document).on('click', this.wrapSelector('.' + VP_DS_BUTTON_PREVIEW), function(evt) {
+            evt.stopPropagation();
+            if (that.previewOpened) {
+                that.closePreview();
+            } else {
+                that.openPreview();
+            }
+        });
+
+        // click dataview
+        $(document).on('click', this.wrapSelector('.' + VP_DS_BUTTON_DATAVIEW), function(evt) {
+            evt.stopPropagation();
+            if (that.dataviewOpened) {
+                that.closeDataview();
+            } else {
+                that.openDataview();
+            }
+        });
+
+        // click cancel
         $(document).on('click', this.wrapSelector('.' + VP_DS_BUTTON_CANCEL), function(event) {
             that.close();
         });
 
-        // click other
+        // click others
         $(document).on('click.' + this.uuid, function(evt) {
             if (!$(evt.target).hasClass('.' + VP_DS_BUTTON_DETAIL)) {
                 $(that.wrapSelector('.' + VP_DS_DETAIL_BOX)).hide();
+            }
+            if (!$(evt.target).hasClass('.' + VP_DS_BUTTON_PREVIEW)
+                && $(that.wrapSelector('.' + VP_DS_PREVIEW_BOX)).has(evt.target).length === 0) {
+                that.closePreview();
+            }
+            if (!$(evt.target).hasClass('.' + VP_DS_BUTTON_DATAVIEW)
+                && $(that.wrapSelector('.' + VP_DS_DATA)).has(evt.target).length === 0) {
+                that.closeDataview();
             }
         });
 
@@ -1688,7 +1781,7 @@ define([
                 shiftKey: false
             }
         }
-        $(document).keydown(function(e) {
+        $(document).on('keydown.' + this.uuid, function(e) {
             var keyCode = that.keyboardManager.keyCode;
             if (e.keyCode == keyCode.ctrlKey || e.keyCode == keyCode.cmdKey) {
                 that.keyboardManager.keyCheck.ctrlKey = true;
@@ -1696,7 +1789,7 @@ define([
             if (e.keyCode == keyCode.shiftKey) {
                 that.keyboardManager.keyCheck.shiftKey = true;
             }
-        }).keyup(function(e) {
+        }).on('keyup.' + this.uuid, function(e) {
             var keyCode = that.keyboardManager.keyCode;
             if (e.keyCode == keyCode.ctrlKey || e.keyCode == keyCode.cmdKey) {
                 that.keyboardManager.keyCheck.ctrlKey = false;
@@ -1758,7 +1851,63 @@ define([
      */
     SubsetEditor.prototype.close = function() {
         this.unbindEvent();
-        $(this.wrapSelector()).hide();
+        // remove script file
+        vpCommon.removeHeadScript('subsetEditor');
+        $(this.wrapSelector()).remove();
+    }
+
+    SubsetEditor.prototype.openDataview = function() {
+        this.dataviewOpened = true;
+        $(this.wrapSelector('.' + VP_DS_DATA)).show();
+    }
+
+    SubsetEditor.prototype.closeDataview = function() {
+        this.dataviewOpened = false;
+        $(this.wrapSelector('.' + VP_DS_DATA)).hide();
+    }
+
+    /** open preview box */
+    SubsetEditor.prototype.openPreview = function() {
+        $(this.wrapSelector('.' + VP_DS_PREVIEW_BOX)).show();
+
+        if (!this.cmpreviewall) {
+            // codemirror setting
+            this.cmpreviewall = codemirror.fromTextArea($(this.wrapSelector('#vp_codePreview'))[0], {
+                mode: {
+                    name: 'python',
+                    version: 3,
+                    singleLineStringErrors: false
+                },  // text-cell(markdown cell) set to 'htmlmixed'
+                height: '100%',
+                width: '100%',
+                indentUnit: 4,
+                matchBrackets: true,
+                readOnly:true,
+                autoRefresh: true,
+                theme: "ipython",
+                extraKeys: {"Enter": "newlineAndIndentContinueMarkdownList"},
+                scrollbarStyle: "null"
+            });
+        } else {
+            this.cmpreviewall.refresh();
+        }
+
+        var code = this.generateCode();
+        this.cmpreviewall.setValue(code);
+        this.cmpreviewall.save();
+        
+        var that = this;
+        setTimeout(function() {
+            that.cmpreviewall.refresh();
+        },1);
+        
+        this.previewOpened = true;
+    }
+
+    /** close preview box */
+    SubsetEditor.prototype.closePreview = function() {
+        this.previewOpened = false;
+        $(this.wrapSelector('.' + VP_DS_PREVIEW_BOX)).hide();
     }
 
     SubsetEditor.prototype.hideButton = function() {
@@ -1824,7 +1973,7 @@ define([
      *  3) iloc - subset type 'iloc'
      * - consider use copy option
      */
-    SubsetEditor.prototype.generateCode = function() {
+    SubsetEditor.prototype.generateCode = function(allocation=true, applyPreview=true) {
         var code = new sb.StringBuilder();
 
         // dataframe
@@ -1833,6 +1982,13 @@ define([
             this.setPreview('# Code Preview');
             return '';
         }
+        
+        // allocate to
+        if (allocation && this.state.allocateTo != '') {
+            code.appendFormat('{0} = ', this.state.allocateTo);
+        }
+
+        // object
         code.append(this.state.pandasObject);
 
         // row
@@ -1879,7 +2035,13 @@ define([
 
                 if (varType == 'DataFrame') {
                     rowSelection.appendFormat('({0}', varName);
-                    colName && rowSelection.appendFormat('[{0}]', colName);
+                    if (colName && colName != '') {
+                        if (colName == '.index') {
+                            rowSelection.appendFormat('{0}', colName);
+                        } else {
+                            rowSelection.appendFormat('[{0}]', colName);
+                        }
+                    }
                     oper && rowSelection.appendFormat(' {0}', oper);
                     if (cond) {
                         // condition value as text
@@ -1987,9 +2149,9 @@ define([
             code.append('.copy()');
         }
 
-        // preview code
-        // $(this.wrapSelector('.' + VP_DS_PREVIEW)).text(code.toString());
-        this.setPreview(code.toString());
+        if (applyPreview) {
+            this.setPreview(code.toString());
+        }
 
         return code.toString();
     }

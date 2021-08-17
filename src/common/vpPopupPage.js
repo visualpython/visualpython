@@ -106,16 +106,17 @@ define([
             // button box
             page.appendFormatLine('<div class="{0}">', VP_PP_BUTTON_BOX);
             page.appendFormatLine('<button type="button" class="{0} {1} {2}">{3}</button>'
-                                    , 'vp-button', 'vp-pp-btn', VP_PP_BUTTON_PREVIEW, 'Preview');
+                                    , 'vp-button', 'vp-pp-btn', VP_PP_BUTTON_PREVIEW, 'Code view');
             page.appendFormatLine('<button type="button" class="{0} {1} {2}">{3}</button>'
                                     , 'vp-button cancel', 'vp-pp-btn', VP_PP_BUTTON_CANCEL, 'Cancel');
             page.appendFormatLine('<div class="{0}">', VP_PP_BUTTON_RUNADD);
-            page.appendFormatLine('<button type="button" class="{0} {1}">{2}</button>'
-                                    , 'vp-button activated', VP_PP_BUTTON_RUN, 'Run');
+            page.appendFormatLine('<button type="button" class="{0} {1}" title="{2}">{3}</button>'
+                                    , 'vp-button activated', VP_PP_BUTTON_RUN, 'Apply to Board & Run Cell', 'Run');
             page.appendFormatLine('<button type="button" class="{0} {1}"><i class="{2}"></i></button>'
                                     , 'vp-button activated', VP_PP_BUTTON_DETAIL, 'fa fa-sort-up');
             page.appendFormatLine('<div class="{0} {1}">', VP_PP_DETAIL_BOX, 'vp-cursor');
-            page.appendFormatLine('<div class="{0}" data-type="{1}">{2}</div>', VP_PP_DETAIL_ITEM, 'add', 'Add');
+            page.appendFormatLine('<div class="{0}" data-type="{1}" title="{2}">{3}</div>', VP_PP_DETAIL_ITEM, 'apply', 'Apply to Board', 'Apply');
+            page.appendFormatLine('<div class="{0}" data-type="{1}" title="{2}">{3}</div>', VP_PP_DETAIL_ITEM, 'add', 'Apply to Board & Add Cell', 'Add');
             page.appendLine('</div>'); // VP_PP_DETAIL_BOX
             page.appendLine('</div>'); // VP_PP_BUTTON_RUNADD
             page.appendLine('</div>'); // VP_PP_BUTTON_BOX
@@ -154,7 +155,7 @@ define([
         $(this.wrapSelector()).remove();
     }
 
-    PopupPage.prototype.apply = function(runCell=true) {
+    PopupPage.prototype.apply = function(addCell=false, runCell=false) {
         if (this.pageThis) {
             var code = this.pageThis.generateCode(false, false);
             $(vpCommon.wrapSelector('#' + this.targetId)).val(code);
@@ -162,6 +163,7 @@ define([
                 type: 'popup_run',
                 title: this.config.title,
                 code: code,
+                addCell: addCell,
                 runCell: runCell
             });
         }
@@ -224,11 +226,14 @@ define([
             $(that.wrapSelector('.' + VP_PP_DETAIL_BOX)).show();
         });
 
-        // click add
+        // click add / apply
         $(document).on('click', this.wrapSelector('.' + VP_PP_DETAIL_ITEM), function() {
             var type = $(this).data('type');
             if (type == 'add') {
-                that.apply(false);
+                that.apply(true);
+                that.close();
+            } else if (type == 'apply') {
+                that.apply();
                 that.close();
             }
         });
@@ -243,6 +248,42 @@ define([
                 that.closePreview();
             }
         });
+
+        this.keyboardManager = {
+            keyCode : {
+                ctrlKey: 17,
+                cmdKey: 91,
+                shiftKey: 16,
+                altKey: 18,
+                enter: 13,
+                escKey: 27
+            },
+            keyCheck : {
+                ctrlKey: false,
+                shiftKey: false
+            }
+        }
+        $(document).on('keydown.' + this.uuid, function(e) {
+            var keyCode = that.keyboardManager.keyCode;
+            if (e.keyCode == keyCode.ctrlKey || e.keyCode == keyCode.cmdKey) {
+                that.keyboardManager.keyCheck.ctrlKey = true;
+            } 
+            if (e.keyCode == keyCode.shiftKey) {
+                that.keyboardManager.keyCheck.shiftKey = true;
+            }
+        }).on('keyup.' + this.uuid, function(e) {
+            var keyCode = that.keyboardManager.keyCode;
+            if (e.keyCode == keyCode.ctrlKey || e.keyCode == keyCode.cmdKey) {
+                that.keyboardManager.keyCheck.ctrlKey = false;
+            } 
+            if (e.keyCode == keyCode.shiftKey) {
+                that.keyboardManager.keyCheck.shiftKey = false;
+            }
+            if (e.keyCode == keyCode.escKey) {
+                // close on esc
+                that.close();
+            }
+        });
     }
 
     PopupPage.prototype.unbindEvent = function() {
@@ -254,6 +295,9 @@ define([
         $(document).off('click', this.wrapSelector('.' + VP_PP_BUTTON_DETAIL));
         $(document).off('click', this.wrapSelector('.' + VP_PP_DETAIL_ITEM));
         $(document).off('click.' + this.uuid);
+
+        $(document).off('keydown.' + this.uuid);
+        $(document).off('keyup.' + this.uuid);
     }
 
 

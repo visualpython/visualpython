@@ -150,27 +150,6 @@ define([
             
         }, xmlLibraries);
 
-        /** 추가: FIXME: Data Analysis 메뉴 임시 추가 */
-        var TEMP_DA_MENUS = [
-            'Database',
-            'Crawling',
-            'Data Preprocessing',
-            'EDA',
-            'Visualization',
-            'Text Analysis'
-        ];
-        TEMP_DA_MENUS.forEach((menu, idx) => {
-            new CreateGroup(blockContainer, 'da_' + idx, menu, VP_CLASS_PREFIX + 'vp-block-group-box-da');
-        });
-        /** 추가: FIXME: AI 메뉴 임시 추가 */
-        var TEMP_AI_MENUS = [
-            'Machine Learning',
-            'Deep Learning'
-        ]
-        TEMP_AI_MENUS.forEach((menu, idx) => {
-            new CreateGroup(blockContainer, 'ai_' + idx, menu, VP_CLASS_PREFIX + 'vp-block-group-box-ai');
-        });
-
         /** API Block 햄버거 메뉴바 생성 */
         apiBlockMenuInit(blockContainer);
 
@@ -329,6 +308,7 @@ define([
         $(document).on('popup_run subset_run frame_run', '#vp_appsCode', function(evt) {
             var code = evt.code;
             var title = evt.title;
+            var addCell = evt.addCell == true;
             var runCell = evt.runCell == true;
 
             var isFirstBlock = false;
@@ -390,11 +370,12 @@ define([
                 blockContainer.addNodeBlock(createdBlock);
                 blockContainer.reRenderAllBlock_asc();
                 blockContainer.resetBlockListAndRenderThisBlock(createdBlock);
-    
             }
 
             // 2. add cell and run cell
-            createdBlock.runThisBlock(runCell);
+            if (addCell) {
+                createdBlock.runThisBlock(runCell);
+            }
         });
 
         /** Logic, API, Data Analysis 의 > 버튼 클릭 */
@@ -632,6 +613,18 @@ define([
                     // add and not run
                     appliedBlock.runThisBlock(false);
                 }
+            } else if (type == 'apply') {
+                // apply it
+                var appliedBlock = blockContainer.applyBlock();
+
+                if (appliedBlock) {
+                    // applied! popup
+                    vpCommon.renderSuccessMessage('Applied!');
+
+                    // scroll to applied block
+                    var appliedBlockDom = appliedBlock.getBlockMainDom();
+                    $(VP_CLASS_PREFIX + VP_CLASS_APIBLOCK_BOARD).animate({scrollTop: $(appliedBlockDom).position().top}, "fast");
+                }
             }
         });
 
@@ -794,6 +787,11 @@ define([
             }
             if (evt.target.id != 'vp_apiblock_board_option_detail_button') {
                 $(VP_CLASS_PREFIX + 'vp-apiblock-option-detail-box').hide();
+            }
+            if (evt.target.id != 'vp_apiblock_board_option_preview_button'
+                && $(vpCommon.wrapSelector('.vp-apiblock-option-preview-container')).has(evt.target).length === 0) {
+                blockContainer.hideOptionPreviewBox();
+                $(VP_ID_PREFIX + VP_APIBLOCK_BOARD_OPTION_PREVIEW_BUTTON).removeClass('enabled');
             }
         });
 
