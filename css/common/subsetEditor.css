@@ -144,7 +144,7 @@
     grid-template-rows: 30px calc(100% - 30px);
 
     border: 0.25px solid #C4C4C4;
-    border-top: 0.25px solid transparent;
+    /* border-top: 0.25px solid transparent; */
     padding: 5px;
     /* overflow: auto; */
 }
