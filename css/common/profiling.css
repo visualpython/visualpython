@@ -4,58 +4,49 @@
     left: 0;
     width: 100%; 
     height: 100%; 
-
     z-index: 1200;
-
     background-color: rgba(0,0,0,.4);
 }
-
 .vp-pf-container {
     position: relative;
     left: 50%;
     top: 50%;
     transform:translate(-50%, -50%);
-    
-    min-width: 440px;
+    min-width: 400px;
     min-height: 400px;
-    width: 60%;
+    width: 50%;
     height: 60%;
-
     background-color: white;
 }
-
 .vp-pf-title {
-    height: 30px;
+    height: 40px;
     padding: 5px 0px 5px 10px;
-
     background-color: #EEE;
     border:  1px solid #ddd;;
     display: flex; 
     flex-direction: row;
     position: relative;
-
+    align-items: center;
+    font-size: 16px;
     font-weight: 700;
 }
-
 .vp-pf-close,
 .vp-pf-popup-close {
     position: fixed;
     z-index: 3;
     right: 5px;
-    width: 20px;
+    width: 30px;
     height: 20px;
     line-height: 20px;
-    top: 5px;
+    top: 10px;
     text-align: center;
     cursor: pointer;
 }
-
 .vp-pf-body {
     width: 100%;
     height: calc(100% - 30px);
     padding: 10px;
 }
-
 .vp-pf-grid-box {
     display: grid;
     width: 100%;
@@ -64,9 +55,8 @@
     /* grid-template-rows: 60px calc(100% - 80px); */
     /* grid-template-rows: 80px calc(100% - 100px); */
     /* grid-template-rows: 80px min-content; */
-    grid-template-rows: 80px 110px 150px;
+    grid-template-rows: 80px 120px 130px;
 }
-
 .vp-pf-prepare-box {
     display: grid;
     /* grid-column-gap: 10px; */
@@ -76,7 +66,7 @@
     grid-template-rows: 20px 35px;
     border: 1px solid #E4E4E4;
     box-sizing: border-box;
-    box-shadow: 0px 2px 4px rgb(0 0 0 / 25%);
+    box-shadow: 1px 1px 2px rgb(0 0 0 / 10%);
     padding: 10px;
 }
 .vp-pf-link {
@@ -85,24 +75,24 @@
 .vp-pf-import-btn {
     margin-left: 10px;
 }
-
 .vp-pf-show-box {
     display: grid;
     grid-template-rows: min-content min-content;
     grid-row-gap: 10px;
     border: 1px solid #E4E4E4;
     box-sizing: border-box;
-    box-shadow: 0px 2px 4px rgb(0 0 0 / 25%);
+    box-shadow: 1px 1px 2px rgb(0 0 0 / 10%);
     padding: 10px;
 }
-
 .vp-pf-df-box {
     display: grid;
     grid-template-columns: 100px auto;
     grid-row-gap: 5px;
+    align-items: baseline;
 }
 .vp-pf #vp_pfVariable { 
-    width: 125px;
+    width: 152px;
+    height: 30px;
 }
 .vp-pf-df-refresh {
     cursor: pointer;
@@ -110,12 +100,11 @@
 .vp-pf-input {
     width: max-content;
 }
-
 .vp-pf-menu-item {
     width: 120px !important;
 }
 
-/** list box */
+/** List box */
 .vp-pf-list-box {
     display: grid;
     grid-template-rows: 20px calc(100% - 30px);
@@ -156,7 +145,7 @@
     display: inline-block;
 }
 
-/** buttons */
+/** Buttons */
 .vp-pf-btn-box {
     position: absolute;
     bottom: 10px;

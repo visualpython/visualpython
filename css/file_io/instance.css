@@ -20,13 +20,11 @@
     box-sizing: border-box;
     border-radius: 2px;
 }
-
 .vp-instance-label {
     grid-column: 1/2;
     font-weight: 700;
     margin: 0px;
 }
-
 .vp-instance-box {
     grid-column-start: 1;
     grid-column-end: 3;
@@ -37,7 +35,6 @@
     display: block !important;
     grid-column: 1/3;
 }
-
 .vp-ins-container.variable {
     grid-column: 1/3;
 }
@@ -46,7 +43,7 @@
     grid-column: 1/3;
 }
 
-/* udf editor - CodeMirror */
+/* UDF Editor - CodeMirror */
 #vp-wrapper .vp-option-page .vp-instance-box .CodeMirror { 
     display: inline-block;
     width: calc(100% - 55px);
@@ -60,31 +57,28 @@
 #vp-wrapper .vp-option-page .vp-instance-box .CodeMirror-empty { outline: none; }
 #vp-wrapper .vp-option-page .vp-instance-box .CodeMirror-empty.CodeMirror-focused { outline: none; }
 #vp-wrapper .vp-option-page .vp-instance-box .CodeMirror pre.CodeMirror-placeholder { color: #999; }
-/* Hide cursor in readonly fields */
+
+/* Hide cursor in read only fields */
 #vp-wrapper .vp-option-page .vp-instance-box .CodeMirror-readonly .CodeMirror-cursor {
     display: none !important
-  }
+}
 /* #vp-wrapper .vp-option-page .CodeMirror-scroll { min-height: 80px; max-height: 80px;} */
-
 #vp-wrapper .vp-option-page .vp-instance-box .CodeMirror-code .cm-variable {
     background-color: rgba(47, 133, 90, 0.2);
 }
-
 #vp-wrapper .vp-option-page .vp-instance-box .CodeMirror-code .cm-property {
     background-color: rgba(246, 173, 85, 0.2);
 }
 
-/* scroll bar */
+/* Scroll Bar */
 .vp-instance-box::-webkit-scrollbar-track {
     border-radius: 0;
     background: #eeeeee;
 }
-
 .vp-instance-box::-webkit-scrollbar-thumb {
     border-radius: 0;
     background: #b0b0b0;
 }
-
 .vp-ds-button {
     width: 45px;
 }

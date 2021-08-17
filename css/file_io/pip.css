@@ -15,7 +15,6 @@
     background-position: 8px 50%;
     background-image: url('../../resource/play-mini-fill(dark grey).svg');
 }
-
 .vp-pip-loading-box {
     min-height: 300px;
     margin-top: 10px;
@@ -38,8 +37,7 @@
     color:  var(--font-hightlight);
 }
 
-
-/* pip command line */
+/* Pip Command Line */
 .vp-pip-add-btn {
     width: 464px;
 }

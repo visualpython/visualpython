@@ -1,39 +1,28 @@
 :root {
     --base_color :#696969;
-    --link_color : #296eaa;
 }
-
     #vp_fileNavigation {
         position: fixed;
         top: 0; 
         left: 0;
         width: 100%; 
-        height: 106%; 
-    
+        height: 100%; 
         z-index: 100;
-    
         background-color: rgba(0,0,0,.4);
     }
-
     .fileNavigationPage-container {
         position: relative;
         left: 50%;
-        top: 50%;
+        top: 53%;
         transform:translate(-50%, -50%);
-        
-        min-width: 400px;
+        min-width: 600px;
         min-height: 400px;
         width: 50%;
         height: 70%;
-        /* width: 750px;
-        height: 600px; */
-        /* border-radius: 30px;
-        padding: 3rem; */
-
         background-color: white;
     }
 
-    /* sidebar menu */
+    /* Sidebar Menu */
     .fileNavigationPage-sidebar {
         float: left;
         width: 20%;
@@ -41,22 +30,20 @@
         background: #F5F5F5;
         padding-top: 10px;
     }
-
     .fnp-sidebar-menu.selected {
-      background: white;
+      color: var(--font-hightlight)
     }
     .fnp-sidebar-menu {
         padding: 10px 0px 10px 14px;
-        font-family: Apple SD Gothic Neo;
+        font-family: AppleSDGothicNeo;
         font-style: normal;
         font-weight: bold;
-        font-size: 14px;
+        font-size: 16px;
         line-height: 17px;
         color: #696969;
         cursor: pointer;
         margin-top: 10px;
     }
-
     .fileNavigationPage-inner {
         float: right;
         display: grid;
@@ -64,42 +51,31 @@
         width: 80%;
         height: 100%; 
     }
-
-
   .fileNavigationPage-directory-container {
-    /* position: relative;
-    height: 88%; */
-  
     overflow-y: auto;
-
     display: flex;
     flex-direction: row;
   }
-
   .fileNavigationPage-body {
     width: 100%;
     height: 100%;
     overflow-y: auto;
     border: 1px solid #ddd;
   }
-
   .fileNavigationPage-ul {
     list-style: none;
     line-height: 2em;
     font-family: Arial;
-
     padding:0px;
   }
   .fileNavigationPage-ul .fileNavigationPage-li {
-    font-size: 16px;
+    font-size: 14px;
     position: relative;
-
     padding-top: 4px;
     padding-bottom: 4px;
     padding-left: 7px;
     padding-right: 7px;
     line-height: 22px;
-
     border-bottom: 1px solid #ddd;
   }
   .fileNavigationPage-ul .fileNavigationPage-li:before {
@@ -121,53 +97,41 @@
     display: block;
     height: 100%;
   }
-
   .fileNavigationPage-ul .fileNavigationPage-li:hover {
     cursor: pointer;
     transition: 0.7s;
     background-color: #EEE;
   }
-
   .fileNavigationPage-ul .fileNavigationPage-li:last-child:after {
     display: none;
   }
-
   .fileNavigationPage-menu {
     min-height: 30px;
     height: 6%;
     padding-left: 10px;
-
     background-color: #EEE;
     border:  1px solid #ddd;;
     display: flex; 
     flex-direction: row;
     position: relative;
   }
-
   .fileNavigationPage-menu-inner {
     display: flex;
     flex-direction: row;
     justify-content: center; 
-
     margin-left: 10px;
   }
-
   .fileNavigationPage-menu-inner i {
     display: flex;
     flex-direction: column;
     justify-content: center; 
   }
-  
-
-  
   .fileNavigationPage-menu-block {
     margin-left: 10px;
     display: flex;
     flex-direction: column;
     justify-content: center;
   }
-
-
   .fileNavigationPage-btn-move-to-folder {
     position: absolute;
     top: 2.5px;
@@ -175,120 +139,96 @@
     padding: 2.5px;
     color: #ecf0f1;
     background-color: var(--base_color);
-
     box-shadow: 0 0 1px rgba(0,0,0,.2), 0 2px 4px rgba(0,0,0,.1);
     border-radius: 50px;
-
     width: 85px;
     font-size: 15px;
     text-align: center;
   }
-
   .fileNavigationPage-btn-move-to-folder:hover {
     cursor: pointer;
     transition: 0.7s;
-
     color: var(--base_color);
     border: 1px solid var(--base_color);
     background-color: #ecf0f1;
   }
-
   .fileNavigationPage-btn-select-file {
     position: absolute;
     top: 2.5px;
     margin-left: 10px;
     padding: 2.5px;
-
     color: #ecf0f1;
     background-color: var(--base_color);
     box-shadow: 0 0 1px rgba(0,0,0,.2), 0 2px 4px rgba(0,0,0,.1);
     border-radius: 50px;
-
     width: 85px;
     font-size: 15px;
   }
-
   .fileNavigationPage-btn-select-file:hover {
     cursor: pointer;
     transition: 0.7s;
-
     color: var(--base_color);
     border: 1px solid var(--base_color);
     background-color: #ecf0f1;
   }
-
   .fileNavigationPage-dir-text {
     position: relative;
     padding: 5px;
     padding-left: 0px;
     margin-left:5px;
     white-space: nowrap;
-    color: var(--link_color);
+    color: var(--font-primary);
   }
-
   .fileNavigationPage-dir-text:hover {
     transition: 0.7s;
     cursor: pointer;
   }
-
   .fileNavigationPage-dir-text::after {
     color: black;
   }
-  
   .fileNavigationPage-dir-text::before {
     color: black;
     }
-
   .fileNavigationPage-closedBtn {
     position: fixed;
     z-index: 3;
-
     right: 5px;
     width: 20px;
     height: 20px;
     line-height: 20px;
     top: 5px;
     text-align: center;
-
   }
-  
   .fileNavigationPage-closedBtn:hover {
     cursor: pointer;
     transition: 0.7s;
   }
-
   .fileNavigationPage-btn-saveVisualPython
   , .fileNavigationPage-btn-cabcelVisualPython {
     padding: 2.5px 20px;
     margin-left: 10px;
-
     font-size: 12px;
     -webkit-transition-property: background,color;
     transition-property: background,color;
     -webkit-transition-duration: .2s;
     transition-duration: .2s;
-
     border: 1px solid transparent;
     border-color: #ccc;
     outline: 0px;
   }
-  
   .fileNavigationPage-btn-saveVisualPython:hover
   , .fileNavigationPage-btn-cabcelVisualPython:hover {
     cursor: pointer;
     transition: 0.7s;
-
     border:1px solid var(--base_color);
     color: var(--base_color);
   }
-
   .fileNavigationPage-directory-nowLocation {
-    color: var(--link_color);
+    color: var(--font-primary);
   }
   .fileNavigationPage-directory-nowLocation:hover {
     cursor: pointer;
   }
-
   .fileNavigationPage-button {
     padding: 5px;
     /* height: fit-content;
@@ -306,7 +246,6 @@
     justify-content: center;
   }
   
-
 @font-face {
     font-family: 'octicons';
     src: url("data:application/x-font-ttf;charset=utf-8;base64,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") format('truetype');
@@ -324,7 +263,6 @@
     line-height: 1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-
 }
 .icon-squirrel:before {
     content: "\e900";
@@ -348,32 +286,25 @@
 .icon-diff:before {
     content: "\e905";
 }
-
 .icon-tree-down {
     padding: 5px;
 }
-
 .icon-tree-down:before {
     content: "\e907";
 }
-
 .icon-tree-right {
     padding: 5px;
 }
-
 .icon-tree-down:hover,
 .icon-tree-right:hover {
     transition: 0.7s;
     cursor: pointer;
-  
     background-color: black;
     color: white;
 }
-
 .icon-tree-right:before {
     content: "\e908";
 }
-
 .icon-tree:before {
     font-family: 'octicons' !important;
     position: absolute;

@@ -1,70 +1,12 @@
-/* udf editor - CodeMirror */
+/* UDF Editor - CodeMirror */
 #vp-wrapper .vp-udf-page  .CodeMirror { border: 1px solid silver; }
 #vp-wrapper .vp-udf-page  .CodeMirror.CodeMirror-focused { border: 1px solid var(--hightlight-color); }
 #vp-wrapper .vp-udf-page  .CodeMirror-empty { outline: 1px solid #c22; }
 #vp-wrapper .vp-udf-page  .CodeMirror-empty.CodeMirror-focused { outline: none; }
 #vp-wrapper .vp-udf-page  .CodeMirror pre.CodeMirror-placeholder { color: #999; }
-
 #vp-wrapper .vp-udf-page  .CodeMirror-scroll { min-height: 80px; max-height: 250px;}
 
-/* udf option header */
-/* .vp-option-header {
-    padding-bottom: 3px;
-}
-.vp-option-header label {
-    width: 73px;
-}
-.vp-option-header input {
-    width: calc(100% - 160px);
-}
-.vp-option-header button {
-    width: 70px;
-} */
-
-/* udf list table */
-/* #vp_udfList tr:not(:first-child):hover,
-#vp_udfList tr.selected {
-    color:  var(--font-hightlight);
-    background-color: #F5F5F5;
-}
-#vp_udfList .vp-udf-check:checked + span {
-    color:  var(--font-hightlight);
-}
-.vp-udf-key {
-    cursor: pointer;
-}
-.vp-udf-key.selected {
-    color:  var(--font-hightlight);
-}
-.vp-udf-key span {
-    text-overflow: ellipsis;
-    width: 100%;
-    overflow: hidden;
-} */
-
-/* code td 긴 문자열 생략 */
-/* .vp-udf-code,
-.vp-udf-code pre {
-    text-overflow: ellipsis; 
-    overflow: hidden;
-    white-space: nowrap;
-    max-width: 250px;
-    margin: 0px;
-    padding: 0px;
-
-    background: #ffffff00;
-    border: 0px;
-} */
-
-/* 새로고침 버튼 */
-/* #vp_udfRefresh {
-    padding: 5px;
-}
-#vp_udfRefresh:hover {
-    cursor: pointer;
-} */
-
-/* 삭제 버튼 */
+/* Option Deleting */
 .vp-del-col {
     background-image: url(../../resource/close_big.svg);
     cursor: pointer;
@@ -76,7 +18,7 @@
     background-position: center;
 }
 
-/* 버튼 */
+/* Buttons */
 .vp-btn {
     background: #F5F5F5;
     border: 0.25px solid #C4C4C4;
@@ -97,7 +39,7 @@
     float: right;
 }
 
-/* code block add popup menu */
+/* Add Popup */
 .vp-cm-popup {
     display:none;
     position: absolute;
@@ -111,7 +53,7 @@
 }
 
 
-/** new */
+/** NEW */
 .vp-sn-body {
     padding: 10px;
 }
@@ -126,18 +68,20 @@
 .vp-sn-menu {
     float: right;
     cursor: pointer;
+    position: relative;
 }
 .vp-sn-menu-box {
     display: none;
     position: absolute;
+    width: 130px;
     top: 0px;
-    right: 40px;
+    right: 30px;
     /* width: 70px;
     height: 50px; */
     border: 0.25px solid var(--border-gray-color);
     background: #FFFFFF;
     padding: 5px;
-    z-index: 2;
+    z-index: 5;
 }
 .vp-sn-menu-item {
     height: 25px;
@@ -148,7 +92,6 @@
 .vp-sn-menu-item:hover {
     color: var(--font-hightlight);
 }
-
 .vp-sn-search-box {
     position: relative;
 }
@@ -168,6 +111,7 @@
 }
 .vp-sn-func-left {
     float: left;
+    position: relative;
 }
 .vp-sn-func-right {
     float: right;
@@ -178,11 +122,13 @@
 .vp-sn-sort-menu-box {
     display: none;
     position: absolute;
+    width: 90px;
     /* width: 80px;
     height: 50px; */
     border: 0.25px solid var(--border-gray-color);
     background: #FFFFFF;
     padding: 5px;
+    z-index: 5;
 }
 .vp-sn-sort-menu-item {
     height: 25px;
@@ -193,7 +139,6 @@
 .vp-sn-sort-menu-item:hover {
     color: var(--font-hightlight);
 }
-
 .vp-sn-func-export-mode {
     display: none;
 }
@@ -204,7 +149,7 @@
     margin: 7px 7px !important;
 }
 
-/* export mode */
+/* Export Mode */
 .vp-sn-export-mode .vp-sn-menu {
     display: none;
 }
@@ -226,8 +171,7 @@
     margin: 0px 15px;
 }
 
-
-/* if snippets list empty */
+/* Empty List */
 .vp-sn-table:empty::after {
     content: '(No saved snippets)';
     color: #C4C4C4;
@@ -261,7 +205,6 @@
     background-image: url(../../resource/chevron_big_down.svg) !important;
 }
 #vp_udfPage .vp-sn-item-header input.vp-sn-item-title {
-    /* width: calc(100% - 80px); */
     width: calc(100% - 100px);
     outline: none;
     background: transparent;
