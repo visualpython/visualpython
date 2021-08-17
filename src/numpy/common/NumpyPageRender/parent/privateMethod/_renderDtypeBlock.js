@@ -23,7 +23,7 @@ define ([
         var sbTagString = new sb.StringBuilder();
 
         sbTagString.appendLine( `<tr>`);
-        sbTagString.appendLine(`<th>Select Dtype</th>`)
+        sbTagString.appendLine(`<th>Select Data Type</th>`)
         sbTagString.appendLine( `<td>`);
         sbTagString.appendFormatLine("<select id='{0}'>", `vp_numpyDtype-${uuid}` );
         sbTagString.appendLine("</select>" );

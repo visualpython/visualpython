@@ -2,8 +2,8 @@
     width: 95%;
 }
 #vp-wrapper .vp-option-page table.vp-option-table td {
-    padding-top: 3.5px;
-    padding-bottom: 3.5px;
+    padding-top: 4.5px;
+    padding-bottom: 2.5px;
 }
 #vp-wrapper .vp-option-page .vp-option-table select.var-multi, select.option-multi {
     height: 60px;
@@ -46,6 +46,7 @@
     -moz-appearance: none;
     appearance: none;
     padding: 0px 5px 0px 5px;
+    cursor: pointer;
 }
 
 /* Select Option Design */

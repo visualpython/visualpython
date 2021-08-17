@@ -10,7 +10,7 @@
 }
 .vp-ins-select-title {
     font-weight: 700;
-    color: var(--hightlight-color);
+    color: var(--font-hightlight);
     padding: 5px 5px 5px 0px;
 }
 #vp-wrapper .vp-ins-select-container input.vp-ins-search {
@@ -54,7 +54,7 @@
     border-bottom: 0.25px solid var(--light-gray-color);
 }
 .vp-ins-select-item.selected {
-    color : var(--hightlight-color);
+    color : var(--font-hightlight);
     background: var(--light-gray-color);
 }
 .vp-ins-select-item span {

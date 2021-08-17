@@ -1123,16 +1123,16 @@ define([
         if (prevSelectedBlock && prevSelectedBlock.isModified) {
             // Ask to save
             var apiBlockPackage = this.getImportPackageThis();
-            apiBlockPackage.openMultiBtnModal_new('Save Changes', `Save changes before cancel?'`,['Save', 'Cancel'], [() => {
-                // apply
-                // $(VP_ID_PREFIX + VP_APIBLOCK_BOARD_OPTION_APPLY_BUTTON).trigger(STR_CLICK);
-                blockContainerThis.applyBlock();
-                callback(true);
-            },() => {
+            apiBlockPackage.openMultiBtnModal_new('Unsaved Changes', 'Save changes before leave?',['Don&rsquo;t save', 'Save'], [() => {
                 // cancel
                 // $(VP_ID_PREFIX + VP_APIBLOCK_BOARD_OPTION_CANCEL_BUTTON).trigger(STR_CLICK);
                 blockContainerThis.cancelBlock();
                 callback(false);
+            },() => {
+                // apply
+                // $(VP_ID_PREFIX + VP_APIBLOCK_BOARD_OPTION_APPLY_BUTTON).trigger(STR_CLICK);
+                blockContainerThis.applyBlock();
+                callback(true);
             }]);
         } else {
             callback(false);
