@@ -316,7 +316,7 @@ define([
         popupTag.appendLine('</div>'); // VP_DS_ROWTYPE_BOX
 
         // condition box start
-        popupTag.appendFormatLine('<div class="{0} {1} {2}" style="display:none;">', VP_DS_ROWTYPE_BOX, 'condition', 'no-selection');
+        popupTag.appendFormatLine('<div class="{0} {1} {2} {3}" style="display:none;">', VP_DS_ROWTYPE_BOX, 'condition', 'vp-apiblock-scrollbar', 'no-selection');
         // row condition
         // popupTag.appendFormatLine('<label class="{0}">{1}</label>'
         //                         , '', 'Conditional Subset');
@@ -650,8 +650,8 @@ define([
         var that = this;
         var tag = new sb.StringBuilder();
         tag.appendFormatLine('<div class="{0}">', VP_DS_SLICING_BOX);
-        tag.appendFormatLine('<label class="{0}">{1}</label>'
-                                , '', 'Slice');
+        // tag.appendFormatLine('<label class="{0}">{1}</label>'
+        //                         , '', 'Slice');
         // tag.appendFormatLine('<input type="text" class="{0} {1}" placeholder="{2}"/> : ', VP_DS_COL_SLICE_START, 'vp-input m', 'start');
         // tag.appendFormatLine('<input type="text" class="{0} {1}" placeholder="{2}"/>', VP_DS_COL_SLICE_END, 'vp-input m', 'end');
         var vpColStart = new vpSuggestInputText.vpSuggestInputText();

@@ -1647,6 +1647,8 @@ define([
         }
         if (isText) {
             newCode = newCode + "'" + code + "'";
+        } else {
+            newCode = code;
         }
         return newCode;
     }
