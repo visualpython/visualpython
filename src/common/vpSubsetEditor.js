@@ -112,6 +112,7 @@ define([
     const VP_DS_BUTTON_DATAVIEW = 'vp-ds-btn-dataview';
     const VP_DS_BUTTON_CANCEL = 'vp-ds-btn-cancel';
     const VP_DS_BUTTON_RUNADD = 'vp-ds-btn-runadd';
+    const VP_DS_BUTTON_APPLY = 'vp-ds-btn-apply';
     const VP_DS_BUTTON_RUN = 'vp-ds-btn-run';
     const VP_DS_BUTTON_DETAIL = 'vp-ds-btn-detail';
     const VP_DS_DETAIL_BOX = 'vp-ds-detail-box';
@@ -128,6 +129,8 @@ define([
         this.targetId = targetId;
         this.uuid = 'u' + vpCommon.getUUID();
         this.useInputVariable = useInputVariable;
+        // use Run/Add cell
+        this.useCell = true;
 
         // specify pandas object types
         this.pdObjTypes = ['DataFrame', 'Series'];
@@ -139,6 +142,7 @@ define([
         // open popup
         $(vpCommon.formatString('.{0}.{1}', VP_DS_BTN, this.uuid)).on('click', function(event) {
             if (!$(this).hasClass('disabled')) {
+                that.useCell = false; // show apply button only
                 that.open();
             }
         });
@@ -394,16 +398,21 @@ define([
                                 , 'vp-button', 'vp-ds-btn', VP_DS_BUTTON_DATAVIEW, 'Data view');
         popupTag.appendFormatLine('<button type="button" class="{0} {1} {2}">{3}</button>'
                                 , 'vp-button cancel', 'vp-ds-btn', VP_DS_BUTTON_CANCEL, 'Cancel');
-        popupTag.appendFormatLine('<div class="{0}">', VP_DS_BUTTON_RUNADD);
-        popupTag.appendFormatLine('<button type="button" class="{0} {1}" title="{2}">{3}</button>'
-                                , 'vp-button activated', VP_DS_BUTTON_RUN, 'Apply to Board & Run Cell', 'Run');
-        popupTag.appendFormatLine('<button type="button" class="{0} {1}"><i class="{2}"></i></button>'
-                                , 'vp-button activated', VP_DS_BUTTON_DETAIL, 'fa fa-sort-up');
-        popupTag.appendFormatLine('<div class="{0} {1}">', VP_DS_DETAIL_BOX, 'vp-cursor');
-        popupTag.appendFormatLine('<div class="{0}" data-type="{1}" title="{2}">{3}</div>', VP_DS_DETAIL_ITEM, 'apply', 'Apply to Board', 'Apply');
-        popupTag.appendFormatLine('<div class="{0}" data-type="{1}" title="{2}">{3}</div>', VP_DS_DETAIL_ITEM, 'add', 'Apply to Board & Add Cell', 'Add');
-        popupTag.appendLine('</div>'); // VP_DS_DETAIL_BOX
-        popupTag.appendLine('</div>'); // VP_DS_BUTTON_RUNADD
+        if (this.useCell) {
+            popupTag.appendFormatLine('<div class="{0}">', VP_DS_BUTTON_RUNADD);
+            popupTag.appendFormatLine('<button type="button" class="{0} {1}" title="{2}">{3}</button>'
+                                    , 'vp-button activated', VP_DS_BUTTON_RUN, 'Apply to Board & Run Cell', 'Run');
+            popupTag.appendFormatLine('<button type="button" class="{0} {1}"><i class="{2}"></i></button>'
+                                    , 'vp-button activated', VP_DS_BUTTON_DETAIL, 'fa fa-sort-up');
+            popupTag.appendFormatLine('<div class="{0} {1}">', VP_DS_DETAIL_BOX, 'vp-cursor');
+            popupTag.appendFormatLine('<div class="{0}" data-type="{1}" title="{2}">{3}</div>', VP_DS_DETAIL_ITEM, 'apply', 'Apply to Board', 'Apply');
+            popupTag.appendFormatLine('<div class="{0}" data-type="{1}" title="{2}">{3}</div>', VP_DS_DETAIL_ITEM, 'add', 'Apply to Board & Add Cell', 'Add');
+            popupTag.appendLine('</div>'); // VP_DS_DETAIL_BOX
+            popupTag.appendLine('</div>'); // VP_DS_BUTTON_RUNADD
+        } else {
+            popupTag.appendFormatLine('<button type="button" class="{0} {1} {2}" data-type="{3}" title="{4}">{5}</button>'
+                                    , 'vp-button', VP_DS_BUTTON_APPLY, VP_DS_DETAIL_ITEM, 'apply', 'Apply to Board', 'Apply');
+        }
         popupTag.appendLine('</div>'); // VP_DS_BUTTON_BOX
 
         popupTag.append('</div>'); // VP_DS_CONTAINER

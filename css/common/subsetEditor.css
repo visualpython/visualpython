@@ -334,6 +334,11 @@
     background: #F38504;
     border-radius: 2px;
 }
+.vp-ds-btn-apply {
+    position: absolute;
+    top: 11px;
+    right: 15px;
+}
 .vp-ds-btn-run {
     display: inline-block;
     width: 60px;
