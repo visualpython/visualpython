@@ -54,6 +54,7 @@
     /* grid-template-rows: 35px 30px 60% calc(40% - 80px); */
     /* grid-template-rows: 35px 30px calc(100% - 80px); */
     grid-template-rows: 35px 65px calc(100% - 110px);
+    grid-template-columns: 100%;
 }
 
 /* Code Preview */
@@ -156,7 +157,7 @@
 .vp-fe-table {
     height: 100%;
     background: var(--border-gray-color);
-    padding: 5px;
+    border: 5px solid var(--border-gray-color);
     overflow: auto;
 }
 .vp-fe-table table {
