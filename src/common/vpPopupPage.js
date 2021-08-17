@@ -110,13 +110,13 @@ define([
             page.appendFormatLine('<button type="button" class="{0} {1} {2}">{3}</button>'
                                     , 'vp-button cancel', 'vp-pp-btn', VP_PP_BUTTON_CANCEL, 'Cancel');
             page.appendFormatLine('<div class="{0}">', VP_PP_BUTTON_RUNADD);
-            page.appendFormatLine('<button type="button" class="{0} {1}">{2}</button>'
-                                    , 'vp-button activated', VP_PP_BUTTON_RUN, 'Run');
+            page.appendFormatLine('<button type="button" class="{0} {1}" title="{2}">{3}</button>'
+                                    , 'vp-button activated', VP_PP_BUTTON_RUN, 'Apply to Board & Run Cell', 'Run');
             page.appendFormatLine('<button type="button" class="{0} {1}"><i class="{2}"></i></button>'
                                     , 'vp-button activated', VP_PP_BUTTON_DETAIL, 'fa fa-sort-up');
             page.appendFormatLine('<div class="{0} {1}">', VP_PP_DETAIL_BOX, 'vp-cursor');
-            page.appendFormatLine('<div class="{0}" data-type="{1}">{2}</div>', VP_PP_DETAIL_ITEM, 'apply', 'Apply');
-            page.appendFormatLine('<div class="{0}" data-type="{1}">{2}</div>', VP_PP_DETAIL_ITEM, 'add', 'Add');
+            page.appendFormatLine('<div class="{0}" data-type="{1}" title="{2}">{3}</div>', VP_PP_DETAIL_ITEM, 'apply', 'Apply to Board', 'Apply');
+            page.appendFormatLine('<div class="{0}" data-type="{1}" title="{2}">{3}</div>', VP_PP_DETAIL_ITEM, 'add', 'Apply to Board & Add Cell', 'Add');
             page.appendLine('</div>'); // VP_PP_DETAIL_BOX
             page.appendLine('</div>'); // VP_PP_BUTTON_RUNADD
             page.appendLine('</div>'); // VP_PP_BUTTON_BOX

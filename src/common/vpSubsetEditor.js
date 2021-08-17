@@ -395,13 +395,13 @@ define([
         popupTag.appendFormatLine('<button type="button" class="{0} {1} {2}">{3}</button>'
                                 , 'vp-button cancel', 'vp-ds-btn', VP_DS_BUTTON_CANCEL, 'Cancel');
         popupTag.appendFormatLine('<div class="{0}">', VP_DS_BUTTON_RUNADD);
-        popupTag.appendFormatLine('<button type="button" class="{0} {1}">{2}</button>'
-                                , 'vp-button activated', VP_DS_BUTTON_RUN, 'Run');
+        popupTag.appendFormatLine('<button type="button" class="{0} {1}" title="{2}">{3}</button>'
+                                , 'vp-button activated', VP_DS_BUTTON_RUN, 'Apply to Board & Run Cell', 'Run');
         popupTag.appendFormatLine('<button type="button" class="{0} {1}"><i class="{2}"></i></button>'
                                 , 'vp-button activated', VP_DS_BUTTON_DETAIL, 'fa fa-sort-up');
         popupTag.appendFormatLine('<div class="{0} {1}">', VP_DS_DETAIL_BOX, 'vp-cursor');
-        popupTag.appendFormatLine('<div class="{0}" data-type="{1}">{2}</div>', VP_DS_DETAIL_ITEM, 'apply', 'Apply');
-        popupTag.appendFormatLine('<div class="{0}" data-type="{1}">{2}</div>', VP_DS_DETAIL_ITEM, 'add', 'Add');
+        popupTag.appendFormatLine('<div class="{0}" data-type="{1}" title="{2}">{3}</div>', VP_DS_DETAIL_ITEM, 'apply', 'Apply to Board', 'Apply');
+        popupTag.appendFormatLine('<div class="{0}" data-type="{1}" title="{2}">{3}</div>', VP_DS_DETAIL_ITEM, 'add', 'Apply to Board & Add Cell', 'Add');
         popupTag.appendLine('</div>'); // VP_DS_DETAIL_BOX
         popupTag.appendLine('</div>'); // VP_DS_BUTTON_RUNADD
         popupTag.appendLine('</div>'); // VP_DS_BUTTON_BOX

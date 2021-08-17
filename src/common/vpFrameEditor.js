@@ -309,13 +309,13 @@ define([
         page.appendFormatLine('<button type="button" class="{0} {1} {2}">{3}</button>'
                                 , 'vp-button cancel', 'vp-fe-btn', VP_FE_BUTTON_CANCEL, 'Cancel');
         page.appendFormatLine('<div class="{0}">', VP_FE_BUTTON_RUNADD);
-        page.appendFormatLine('<button type="button" class="{0} {1}">{2}</button>'
-                                , 'vp-button activated', VP_FE_BUTTON_RUN, 'Run');
+        page.appendFormatLine('<button type="button" class="{0} {1}" title="{2}">{3}</button>'
+                                , 'vp-button activated', VP_FE_BUTTON_RUN, 'Apply to Board & Run Cell', 'Run');
         page.appendFormatLine('<button type="button" class="{0} {1}"><i class="{2}"></i></button>'
                                 , 'vp-button activated', VP_FE_BUTTON_DETAIL, 'fa fa-sort-up');
         page.appendFormatLine('<div class="{0} {1}">', VP_FE_DETAIL_BOX, 'vp-cursor');
-        page.appendFormatLine('<div class="{0}" data-type="{1}">{2}</div>', VP_FE_DETAIL_ITEM, 'apply', 'Apply');
-        page.appendFormatLine('<div class="{0}" data-type="{1}">{2}</div>', VP_FE_DETAIL_ITEM, 'add', 'Add');
+        page.appendFormatLine('<div class="{0}" data-type="{1}" title="{2}">{3}</div>', VP_FE_DETAIL_ITEM, 'apply', 'Apply to Board', 'Apply');
+        page.appendFormatLine('<div class="{0}" data-type="{1}" title="{2}">{3}</div>', VP_FE_DETAIL_ITEM, 'add', 'Apply to Board & Add Cell', 'Add');
         page.appendLine('</div>'); // VP_FE_DETAIL_BOX
         page.appendLine('</div>'); // VP_FE_BUTTON_RUNADD
         page.appendLine('</div>'); // VP_FE_BUTTON_BOX
@@ -655,10 +655,9 @@ define([
         $(this.wrapSelector('.' + VP_FE_POPUP_BOX)).show();
     }
 
-    FrameEditor.prototype.getPopupContent = function() {
-        var type = this.state.popup.type;
+    FrameEditor.prototype.getPopupContent = function(type) {
         var content = {};
-        switch (parseInt(type)) {
+        switch (type) {
             case FRAME_EDIT_TYPE.ADD_COL:
                 content['name'] = $(this.wrapSelector('.vp-popup-input1')).val();
                 if (content['name'] == '') {
@@ -1054,11 +1053,6 @@ define([
     
     FrameEditor.prototype.loadCode = function(codeStr) {
         var that = this;
-
-        if (codeStr == '') {
-            return '';
-        }
-
         var tempObj = this.state.tempObj;
         var lines = this.state.lines;
 
@@ -1505,7 +1499,15 @@ define([
         // ok input popup
         $(document).on('click', this.wrapSelector('.' + VP_FE_POPUP_OK), function() {
             // ok input popup
-            var code = that.loadCode(that.getTypeCode(that.state.popup.type, that.getPopupContent()));
+            var type = parseInt(that.state.popup.type);
+            var content = that.getPopupContent(type);
+            // required data check
+            if (type == FRAME_EDIT_TYPE.ADD_COL) {
+                if (content.name === '') {
+                    return;
+                }
+            }
+            var code = that.loadCode(that.getTypeCode(that.state.popup.type, content));
             if (code == '') {
                 return;
             }
