@@ -1131,13 +1131,14 @@ define([
         return code.toString();
     }
 
-    FrameEditor.prototype.apply = function(runCell = true) {
+    FrameEditor.prototype.apply = function(addCell=false, runCell=false) {
         var code = this.generateCode();
         if (this.pageThis) {
             $(this.pageThis.wrapSelector('#' + this.targetId)).val(code);
             $(this.pageThis.wrapSelector('#' + this.targetId)).trigger({
                 type: 'frame_run',
                 code: code,
+                addCell: addCell,
                 runCell: runCell
             });
         } else {
@@ -1145,6 +1146,7 @@ define([
             $(vpCommon.wrapSelector('#' + this.targetId)).trigger({
                 type: 'frame_run',
                 code: code,
+                addCell: addCell,
                 runCell: runCell
             });
         }
@@ -1551,7 +1553,7 @@ define([
 
         // click run
         $(document).on('click', this.wrapSelector('.' + VP_FE_BUTTON_RUN), function() {
-            that.apply();
+            that.apply(true, true);
             that.close();
         });
 
@@ -1561,11 +1563,14 @@ define([
             $(that.wrapSelector('.' + VP_FE_DETAIL_BOX)).show();
         });
 
-        // click add
+        // click add / apply
         $(document).on('click', this.wrapSelector('.' + VP_FE_DETAIL_ITEM), function() {
             var type = $(this).data('type');
             if (type == 'add') {
-                that.apply(false);
+                that.apply(true);
+                that.close();
+            } else if (type == 'apply') {
+                that.apply();
                 that.close();
             }
         });
