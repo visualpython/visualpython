@@ -183,7 +183,9 @@ define([
 
             , ERROR_AB0002_INFINITE_LOOP
         
-            , IMPORT_DEFAULT_DATA_LIST } = constData;
+            , IMPORT_DEFAULT_DATA_LIST
+        
+            , APPS_CONFIG } = constData;
 
             
     var Block = function(blockContainerThis, type , blockData, isGroupBlock=false) {
@@ -301,6 +303,13 @@ define([
 
             , metadata: null
             , funcID: STR_EMPTY
+
+            /** -------- apps menu data ---------- */
+            , apps: {
+                menu: '',
+                code: '',
+                state: {}
+            }
         }
         this.state_backup = { ...this.state };
 
@@ -1180,6 +1189,7 @@ define([
                     || blockType == BLOCK_CODELINE_TYPE.PROPERTY
                     || blockType == BLOCK_CODELINE_TYPE.TEXT
                     || blockType == BLOCK_CODELINE_TYPE.API
+                    || blockType == BLOCK_CODELINE_TYPE.APPS
                     || blockType == BLOCK_CODELINE_TYPE.NODE ) {
             codeLineStr = this.getState(STATE_codeLine);
         } 
@@ -1211,9 +1221,7 @@ define([
 
                 /** API List Pakage가 없을 때 */
                 if (!thisBlock.getImportPakage()) {
-                    // console.log('no api list package');
-                    // return 'BREAK_RUN';
-                    // TODO: 없으면 기존 metadata의 code로 처리
+                    // 없으면 기존 metadata의 code로 처리
                     codeLine += GenerateApiCode(thisBlock);
                 } else {
                     var apiListPackage = thisBlock.getImportPakage();
@@ -1238,6 +1246,10 @@ define([
                     }
                 }
 
+                break;
+            }
+            case BLOCK_CODELINE_TYPE.APPS: {
+                codeLine += thisBlock.getState(STATE_codeLine);
                 break;
             }
             //class
@@ -1522,7 +1534,8 @@ define([
             } else {
                 $(blockMainDom).css(STR_BACKGROUND_COLOR, COLOR_CONTROL);
             }
-        } else if (blockType == BLOCK_CODELINE_TYPE.API) {
+        } else if (blockType == BLOCK_CODELINE_TYPE.API
+                || blockType == BLOCK_CODELINE_TYPE.APPS) {
             if (isReset == true) {
                 $(blockMainDom).css(STR_BACKGROUND_COLOR, COLOR_API_STRONG);
             } else {
@@ -1771,6 +1784,23 @@ define([
             /** Text block */
             case BLOCK_CODELINE_TYPE.TEXT: {
                 blockOptionPageDom = InitTextBlockOption(thisBlock, optionPageSelector);
+                break;
+            }
+
+            case BLOCK_CODELINE_TYPE.APPS: {
+                var menu = thisBlock.state.apps.menu;
+                var { file, config } = APPS_CONFIG[menu];
+                if (config == undefined) {
+                    config = {}
+                }
+                config = { 
+                    ...config, 
+                    state: {
+                        ...thisBlock.state.apps.state
+                    } 
+                };
+
+                blockContainerThis.createAppsPage(menu, file, config);
                 break;
             }
         }

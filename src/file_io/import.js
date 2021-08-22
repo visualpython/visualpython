@@ -118,7 +118,7 @@ define([
      * html 내부 binding 처리
      */
     ImportPackage.prototype.initHtml = function() {
-        this.bindImportPackageGrid();
+        this.bindEvent();
 
         // if need additional css
         // this.loadCss(Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.SOURCE_PATH + "file_io/test.css");
@@ -127,7 +127,7 @@ define([
     /**
      * Import 기본 패키지 바인딩
      */
-    ImportPackage.prototype.bindImportPackageGrid = function() {
+    ImportPackage.prototype.bindEvent = function() {
         var that = this;
 
 
