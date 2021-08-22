@@ -266,6 +266,7 @@ define([
                 case 'frame':
                 case 'chart':
                 case 'profiling':
+                    blockContainer.setSelectBlock(null);
                     blockContainer.createAppsPage(menu, file, config);
                     break;
                 case 'merge':
@@ -290,8 +291,6 @@ define([
             var addCell = evt.addCell == true;
             var runCell = evt.runCell == true;
 
-            console.log('popup_run', { code: code, title: title, state: state});
-
             var isFirstBlock = false;
             const blockList = blockContainer.getBlockList();
 
@@ -302,33 +301,9 @@ define([
                 isFirstBlock = true;
             }
 
-            var createdBlock = undefined;
-
-            if (title === 'Snippets') {
-                // 1. add code block
-                // create block as group block
-                createdBlock = blockContainer.createBlock(BLOCK_CODELINE_TYPE.CODE, null, null, true);
-                // set code
-                createdBlock.setState({
-                    [STATE_codeLine]: code
-                });
-                createdBlock.writeCode(code);
-                createdBlock.apply();
-                if (isFirstBlock == true) {
-                    // if it is first block, set as ROOT
-                    createdBlock.setDirection(BLOCK_DIRECTION.ROOT);
-                } else {
-                    var lastBottomBlock = blockContainer.getRootToLastBottomBlock();
-                    lastBottomBlock.appendBlock(createdBlock, BLOCK_DIRECTION.DOWN);
-                }
-                blockContainer.addNodeBlock(createdBlock);
-                blockContainer.resetBlockList();
-                blockContainer.reRenderAllBlock_asc();
-                blockContainer.resetBlockListAndRenderThisBlock(createdBlock);
-            } else if (title === 'Import' || title === 'Variables' || title === 'File' 
-                    || title === 'Instance' || title === 'Chart') {
-                // add apps block
-                createdBlock = blockContainer.createBlock(BLOCK_CODELINE_TYPE.APPS, null, null, true, true);
+            var createdBlock = blockContainer.getSelectBlock();
+            if (createdBlock) {
+                // apply to original block
                 createdBlock.setState({
                     apps: {
                         menu: blockContainer.apps,
@@ -336,22 +311,58 @@ define([
                         state: state
                     }
                 });
-                // set code
-                createdBlock.setState({
-                    [STATE_codeLine]: 'Apps > ' + title
-                });
-                createdBlock.writeCode(code);
-                createdBlock.apply();
-                if (isFirstBlock == true) {
-                    // if it is first block, set as ROOT
-                    createdBlock.setDirection(BLOCK_DIRECTION.ROOT);
-                } else {
-                    var lastBottomBlock = blockContainer.getRootToLastBottomBlock();
-                    lastBottomBlock.appendBlock(createdBlock, BLOCK_DIRECTION.DOWN);
-                }
-                blockContainer.addNodeBlock(createdBlock);
-                blockContainer.reRenderAllBlock_asc();
-            } 
+                createdBlock.saveState();
+            } else {
+                if (title === 'Snippets') {
+                    // 1. add code block
+                    // create block as group block
+                    createdBlock = blockContainer.createBlock(BLOCK_CODELINE_TYPE.CODE, null, null, true);
+                    // set code
+                    createdBlock.setState({
+                        [STATE_codeLine]: code
+                    });
+                    createdBlock.writeCode(code);
+                    createdBlock.apply();
+                    if (isFirstBlock == true) {
+                        // if it is first block, set as ROOT
+                        createdBlock.setDirection(BLOCK_DIRECTION.ROOT);
+                    } else {
+                        var lastBottomBlock = blockContainer.getRootToLastBottomBlock();
+                        lastBottomBlock.appendBlock(createdBlock, BLOCK_DIRECTION.DOWN);
+                    }
+                    blockContainer.addNodeBlock(createdBlock);
+                    blockContainer.resetBlockList();
+                    blockContainer.reRenderAllBlock_asc();
+                    blockContainer.resetBlockListAndRenderThisBlock(createdBlock);
+                } else if (title === 'Import' || title === 'Variables' || title === 'File' 
+                        || title === 'Instance' || title === 'Chart') {
+                    // add apps block
+                    createdBlock = blockContainer.createBlock(BLOCK_CODELINE_TYPE.APPS, null, null, true, true);
+                    createdBlock.setState({
+                        apps: {
+                            menu: blockContainer.apps,
+                            code: code,
+                            state: state
+                        }
+                    });
+                    // set code
+                    createdBlock.setState({
+                        [STATE_codeLine]: 'Apps > ' + title
+                    });
+                    // createdBlock.writeCode(code);
+                    createdBlock.apply();
+                    if (isFirstBlock == true) {
+                        // if it is first block, set as ROOT
+                        createdBlock.setDirection(BLOCK_DIRECTION.ROOT);
+                    } else {
+                        var lastBottomBlock = blockContainer.getRootToLastBottomBlock();
+                        lastBottomBlock.appendBlock(createdBlock, BLOCK_DIRECTION.DOWN);
+                    }
+                    blockContainer.addNodeBlock(createdBlock);
+                    blockContainer.resetBlockList();
+                    blockContainer.reRenderAllBlock_asc();
+                } 
+            }
 
             // 2. add cell and run cell
             if (addCell) {
@@ -367,8 +378,6 @@ define([
             var addCell = evt.addCell == true;
             var runCell = evt.runCell == true;
 
-            console.log('apps_run', { code: code, title: title, state: state});
-
             var isFirstBlock = false;
             const blockList = blockContainer.getBlockList();
             /** board에 블럭이 0개 일때
@@ -378,39 +387,9 @@ define([
                 isFirstBlock = true;
             }
 
-            var createdBlock = undefined;
-            if (title === 'Markdown') {
-
-                createdBlock = blockContainer.createTextBlock(code);
-
-                // createdBlock = blockContainer.createBlock(BLOCK_CODELINE_TYPE.TEXT);
-                // createdBlock.apply();
-                // createdBlock.setFuncID(STR_TEXT_BLOCK_MARKDOWN_FUNCID);
-                // createdBlock.setOptionPageLoadCallback(optionPageLoadCallback_block);
-                // createdBlock.setLoadOption(loadOption_block);
-                // createdBlock.setState({
-                //     [STATE_codeLine]: code
-                // });
-
-                // /** board에 블럭이 0개일 경우 */
-                // if (isFirstBlock == true) {
-                //     createdBlock.setDirection(BLOCK_DIRECTION.ROOT);
-                //     blockContainer.reNewContainerDom();
-                // /** board에 블럭이 1개 이상 일 경우 */         
-                // } else {
-                //     /** board의 가장 아래 블럭을 가져옴 */
-                //     var lastBottomBlock = blockContainer.getRootToLastBottomBlock();
-                //     lastBottomBlock.appendBlock(createdBlock, BLOCK_DIRECTION.DOWN);
-                // }
-                // blockContainer.reRenderAllBlock_asc(); 
-                // blockContainer.resetBlockList();
-                // blockContainer.setSelectBlock(createdBlock);
-
-                // createdBlock.writeCode(`<p>${code}</p>`);
-                // createdBlock.renderSelectedBlockBorderColor(true);
-            } else {
-                // add apps block
-                createdBlock = blockContainer.createBlock(BLOCK_CODELINE_TYPE.APPS, null, null, true, true);
+            var createdBlock = blockContainer.getSelectBlock();
+            if (createdBlock) {
+                // apply to original block
                 createdBlock.setState({
                     apps: {
                         menu: blockContainer.apps,
@@ -418,21 +397,66 @@ define([
                         state: state
                     }
                 });
-                // set code
-                createdBlock.setState({
-                    [STATE_codeLine]: 'Apps > ' + title
-                });
-                createdBlock.writeCode(code);
-                createdBlock.apply();
-                if (isFirstBlock == true) {
-                    // if it is first block, set as ROOT
-                    createdBlock.setDirection(BLOCK_DIRECTION.ROOT);
+                createdBlock.saveState();
+            } else {
+                // new block
+                if (title === 'Markdown') {
+    
+                    createdBlock = blockContainer.createTextBlock(code);
+    
+                    // createdBlock = blockContainer.createBlock(BLOCK_CODELINE_TYPE.TEXT);
+                    // createdBlock.apply();
+                    // createdBlock.setFuncID(STR_TEXT_BLOCK_MARKDOWN_FUNCID);
+                    // createdBlock.setOptionPageLoadCallback(optionPageLoadCallback_block);
+                    // createdBlock.setLoadOption(loadOption_block);
+                    // createdBlock.setState({
+                    //     [STATE_codeLine]: code
+                    // });
+    
+                    // /** board에 블럭이 0개일 경우 */
+                    // if (isFirstBlock == true) {
+                    //     createdBlock.setDirection(BLOCK_DIRECTION.ROOT);
+                    //     blockContainer.reNewContainerDom();
+                    // /** board에 블럭이 1개 이상 일 경우 */         
+                    // } else {
+                    //     /** board의 가장 아래 블럭을 가져옴 */
+                    //     var lastBottomBlock = blockContainer.getRootToLastBottomBlock();
+                    //     lastBottomBlock.appendBlock(createdBlock, BLOCK_DIRECTION.DOWN);
+                    // }
+                    // blockContainer.reRenderAllBlock_asc(); 
+                    // blockContainer.resetBlockList();
+                    // blockContainer.setSelectBlock(createdBlock);
+    
+                    // createdBlock.writeCode(`<p>${code}</p>`);
+                    // createdBlock.renderSelectedBlockBorderColor(true);
                 } else {
-                    var lastBottomBlock = blockContainer.getRootToLastBottomBlock();
-                    lastBottomBlock.appendBlock(createdBlock, BLOCK_DIRECTION.DOWN);
+                    // add apps block
+                    createdBlock = blockContainer.createBlock(BLOCK_CODELINE_TYPE.APPS, null, null, true, true);
+                    createdBlock.setState({
+                        apps: {
+                            menu: blockContainer.apps,
+                            code: code,
+                            state: state
+                        }
+                    });
+                    // set code
+                    createdBlock.setState({
+                        [STATE_codeLine]: 'Apps > ' + title
+                    });
+                    // createdBlock.writeCode(code);
+                    createdBlock.apply();
+                    if (isFirstBlock == true) {
+                        // if it is first block, set as ROOT
+                        createdBlock.setDirection(BLOCK_DIRECTION.ROOT);
+                    } else {
+                        var lastBottomBlock = blockContainer.getRootToLastBottomBlock();
+                        lastBottomBlock.appendBlock(createdBlock, BLOCK_DIRECTION.DOWN);
+                    }
+                    blockContainer.addNodeBlock(createdBlock);
+                    blockContainer.resetBlockList();
+                    blockContainer.reRenderAllBlock_asc();
                 }
-                blockContainer.addNodeBlock(createdBlock);
-                blockContainer.reRenderAllBlock_asc();
+    
             }
 
             // 2. add cell and run cell
