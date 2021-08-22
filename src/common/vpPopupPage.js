@@ -228,7 +228,7 @@ define([
 
         // click run
         $(document).on('click', this.wrapSelector('.' + VP_PP_BUTTON_RUN), function() {
-            that.apply();
+            that.apply(true, true);
             that.close();
         });
 
