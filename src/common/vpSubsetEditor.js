@@ -2189,6 +2189,10 @@ define([
                 }
                 useCondition = true;
             }
+
+            if (rowSelection.toString() == '') {
+                rowSelection.append(':');
+            }
         } else if (this.state.rowType == 'timestamp') {
             var tsIndexing = $(this.wrapSelector('.' + VP_DS_INDEXING_TIMESTAMP)).val();
             if (tsIndexing != '') {
