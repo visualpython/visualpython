@@ -263,7 +263,7 @@
     width: 100%;
     height: 100px;
     position: absolute;
-    bottom: 50px;
+    bottom: 40px;
     
     background: #F7F7F7;
     border: 0.25px solid #E4E4E4;
@@ -276,7 +276,7 @@
     bottom: 25px;
     right: 25px; */
     position: relative;
-    height: 50px;
+    height: 40px;
     border-top: 0.25px solid var(--border-gray-color);
 }
 .vp-ds-btn {
@@ -346,7 +346,7 @@
     position: absolute;
     width: 100%;
     height: 300px;
-    bottom: 50px;
+    bottom: 40px;
     background: #F7F7F7;
     border: 0.25px solid #E4E4E4;
     padding: 10px;
