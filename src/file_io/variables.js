@@ -168,7 +168,7 @@ define([
                     $(tagTr).append(tagTdType);
 
                     $(tagTdName).attr({
-                        'title': 'click to copy'
+                        'title': 'Click to copy'
                     });
                     // 변수이름 클릭 시 클립보드에 복사
                     $(tagTdName).click(function() {
@@ -214,7 +214,7 @@ define([
                                             $(preTag).text(textResult);
                                             $(tagDetailTable).html(preTag);
                                         } else {
-                                            $(tagDetailTable).append('(Nothing Selected)');
+                                            $(tagDetailTable).append('(Select variables to preview the data.)');
                                         }
                                     }
                                 }

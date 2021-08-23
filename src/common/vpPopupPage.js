@@ -88,8 +88,8 @@ define([
          , title);
 
         // close button
-        page.appendFormatLine('<div class="{0}"><i class="{1}"></i></div>'
-                        , VP_PP_CLOSE, 'fa fa-close');
+        page.appendFormatLine('<div class="{0}"><img src="{1}"/></div>'
+                        , VP_PP_CLOSE, '/nbextensions/visualpython/resource/close_big.svg');
 
         // body start
         page.appendFormatLine('<div class="{0} {1}">', VP_PP_BODY, 'vp-apiblock-scrollbar');
@@ -112,8 +112,8 @@ define([
             page.appendFormatLine('<div class="{0}">', VP_PP_BUTTON_RUNADD);
             page.appendFormatLine('<button type="button" class="{0} {1}" title="{2}">{3}</button>'
                                     , 'vp-button activated', VP_PP_BUTTON_RUN, 'Apply to Board & Run Cell', 'Run');
-            page.appendFormatLine('<button type="button" class="{0} {1}"><i class="{2}"></i></button>'
-                                    , 'vp-button activated', VP_PP_BUTTON_DETAIL, 'fa fa-sort-up');
+            page.appendFormatLine('<button type="button" class="{0} {1}"><img src="{2}"/></button>'
+                                    , 'vp-button activated', VP_PP_BUTTON_DETAIL, '/nbextensions/visualpython/resource/arrow_short_up.svg');
             page.appendFormatLine('<div class="{0} {1}">', VP_PP_DETAIL_BOX, 'vp-cursor');
             page.appendFormatLine('<div class="{0}" data-type="{1}" title="{2}">{3}</div>', VP_PP_DETAIL_ITEM, 'apply', 'Apply to Board', 'Apply');
             page.appendFormatLine('<div class="{0}" data-type="{1}" title="{2}">{3}</div>', VP_PP_DETAIL_ITEM, 'add', 'Apply to Board & Add Cell', 'Add');

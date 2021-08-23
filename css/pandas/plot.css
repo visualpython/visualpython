@@ -69,7 +69,7 @@
   margin-top: 3px;
 }
 .vp-plot-item.selected .vp-plot-thumb {
-  border: 0.25px solid  var(--hightlight-color);
+  border: 0.25px solid  var(--highlight-color);
 }
 .vp-plot-item.selected .vp-plot-name {
   color:  var(--font-hightlight) !important;

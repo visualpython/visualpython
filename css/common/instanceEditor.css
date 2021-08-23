@@ -67,7 +67,7 @@
     background: var(--light-gray-color);
 }
 .vp-ins-select-item:hover span {
-    background: var(--hightlight-color);
+    background: var(--highlight-color);
     color: #FFFFFF;
 }
 .vp-ins-option-box.api {
@@ -89,7 +89,7 @@
 #vp-wrapper .vp-ins-select-container .vp-create-var-btn {
     position: absolute;
     color: #C4C4C4;
-    right: 5px;
-    top: 5px;
+    right: 9px;
+    top: 9px;
     cursor: pointer;
 }

@@ -1471,7 +1471,7 @@ define([
 
     /**
      * block 클릭시 block border 주황색으로 변경
-     * @param {boolean} isColor true면 #F37704, false면 transparent
+     * @param {boolean} isColor true면 주황색, false면 transparent
      */
     Block.prototype.renderSelectedBlockBorderColor = function(isColor) {
         var blockContainerThis = this.getBlockContainerThis();
@@ -1487,9 +1487,9 @@ define([
 
         if (isColor == true) {
             if (this.getBlockType() == BLOCK_CODELINE_TYPE.TEXT) {
-                $(this.getBlockMainDom()).css(STR_BORDER_LEFT, '1px solid #F37704');
+                $(this.getBlockMainDom()).css(STR_BORDER_LEFT, '2px solid var(--highlight-color');
             } else {
-                $(this.getBlockMainDom()).css(STR_BORDER, '1px solid #F37704');
+                $(this.getBlockMainDom()).css(STR_BORDER, '2px solid var(--highlight-color');
             }
         }
     }

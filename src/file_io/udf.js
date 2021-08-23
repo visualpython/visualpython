@@ -600,7 +600,7 @@ define([
         item.appendLine('</div>');
         item.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}">'
                             , 'vp-sn-item-menu-item', 'delete', 'Delete');
-        item.appendFormatLine('<img src="{0}"/>', '/nbextensions/visualpython/resource/snippets/delete.svg');
+        item.appendFormatLine('<img src="{0}"/>', '/nbextensions/visualpython/resource/delete.svg');
         item.appendLine('</div>'); 
         item.appendLine('</div>'); // end of vp-sn-item-menu
         // export mode checkbox

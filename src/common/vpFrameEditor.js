@@ -284,8 +284,8 @@ define([
                             , 'Frame Editor');
 
         // close button
-        page.appendFormatLine('<div class="{0}"><i class="{1}"></i></div>'
-                                    , VP_FE_CLOSE, 'fa fa-close');
+        page.appendFormatLine('<div class="{0}"><img src="{1}"/></div>'
+                                    , VP_FE_CLOSE, '/nbextensions/visualpython/resource/close_big.svg');
 
         // body start
         page.appendFormatLine('<div class="{0}">', VP_FE_BODY);
@@ -300,7 +300,7 @@ define([
         page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_feVariable', 'vp-orange-text', 'DataFrame');
         page.appendFormatLine('<select id="{0}">', 'vp_feVariable');
         page.appendLine('</select>');
-        page.appendFormatLine('<i class="{0} {1}"></i>', VP_FE_DF_REFRESH, 'fa fa-refresh');
+        page.appendFormatLine('<div class="{0}"><img src="{1}"/></div>', VP_FE_DF_REFRESH, '/nbextensions/visualpython/resource/refresh.svg');
         page.appendLine('</div>');
         page.appendLine('<div>');
         page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_feReturn', 'vp-orange-text', 'Allocate to');
@@ -338,8 +338,8 @@ define([
         page.appendFormatLine('<div class="{0}">', VP_FE_BUTTON_RUNADD);
         page.appendFormatLine('<button type="button" class="{0} {1}" title="{2}">{3}</button>'
                                 , 'vp-button activated', VP_FE_BUTTON_RUN, 'Apply to Board & Run Cell', 'Run');
-        page.appendFormatLine('<button type="button" class="{0} {1}"><i class="{2}"></i></button>'
-                                , 'vp-button activated', VP_FE_BUTTON_DETAIL, 'fa fa-sort-up');
+        page.appendFormatLine('<button type="button" class="{0} {1}"><img src="{2}"/></button>'
+                                , 'vp-button activated', VP_FE_BUTTON_DETAIL, '/nbextensions/visualpython/resource/arrow_short_up.svg');
         page.appendFormatLine('<div class="{0} {1}">', VP_FE_DETAIL_BOX, 'vp-cursor');
         page.appendFormatLine('<div class="{0}" data-type="{1}" title="{2}">{3}</div>', VP_FE_DETAIL_ITEM, 'apply', 'Apply to Board', 'Apply');
         page.appendFormatLine('<div class="{0}" data-type="{1}" title="{2}">{3}</div>', VP_FE_DETAIL_ITEM, 'add', 'Apply to Board & Add Cell', 'Add');
@@ -411,16 +411,10 @@ define([
         var page = new sb.StringBuilder();
         page.appendFormatLine('<div class="{0}" style="display: none;">', VP_FE_POPUP_BOX);
         // popup title
-        page.appendFormat('<div class="{0}">{1}</div>'
-                            , VP_FE_TITLE
-                            , 'Input');
+        page.appendFormat('<div class="{0}">{1}</div>', VP_FE_TITLE, 'Input');
         // close button
-        page.appendFormatLine('<div class="{0}"><i class="{1}"></i></div>'
-                                    , VP_FE_POPUP_CLOSE, 'fa fa-close');
+        page.appendFormatLine('<div class="{0}"><img src="{1}"/></div>', VP_FE_POPUP_CLOSE, '/nbextensions/visualpython/resource/close_big.svg');
         page.appendFormatLine('<div class="{0}">', VP_FE_POPUP_BODY);
-
-
-
         page.appendLine('</div>'); // End of Body
 
         // apply button
@@ -618,7 +612,7 @@ define([
 
     FrameEditor.prototype.renderReplacePage = function() {
         var content = new sb.StringBuilder();
-        content.appendFormatLine('<label><input type="checkbox" class="{0}"/><span>{1}</span></label>', 'vp-popup-use-regex', 'Use regex');
+        content.appendFormatLine('<label><input type="checkbox" class="{0}"/><span>{1}</span></label>', 'vp-popup-use-regex', 'Use Regular Expression');
         content.appendLine('<br/><br/>');
         content.appendFormatLine('<table class="{0}">', 'vp-popup-replace-table');
         content.appendLine(this.renderReplaceInput(0));
@@ -631,14 +625,14 @@ define([
         var content = new sb.StringBuilder();
         content.appendLine('<tr>');
         content.appendLine('<td>');
-        content.appendFormatLine('<input type="text" class="{0}" placeholder="{1}"/>', 'vp-popup-origin' + index, 'origin');
+        content.appendFormatLine('<input type="text" class="{0}" placeholder="{1}"/>', 'vp-popup-origin' + index, 'Origin');
         content.appendFormatLine('<label><input type="checkbox" class="{0}" checked/><span>{1}</span></label>', 'vp-popup-origin-istext' + index, 'Text');
         content.appendLine('</td>');
         content.appendLine('<td>');
-        content.appendFormatLine('<input type="text" class="{0}" placeholder="{1}"/>', 'vp-popup-replace' + index, 'replace');
+        content.appendFormatLine('<input type="text" class="{0}" placeholder="{1}"/>', 'vp-popup-replace' + index, 'Replace');
         content.appendFormatLine('<label><input type="checkbox" class="{0}" checked/><span>{1}</span></label>', 'vp-popup-replace-istext' + index, 'Text');
         content.appendLine('</td>');
-        content.appendFormatLine('<td><i class="{0} {1} {2}"></i></td>', 'vp-popup-delete', 'fa fa-close', 'vp-cursor');
+        content.appendFormatLine('<td><div class="{0} {1}"><img src="{2}"/></div></td>', 'vp-popup-delete', 'vp-cursor', '/nbextensions/visualpython/resource/close_small.svg');
         content.appendLine('</tr>');
         return content.toString();
     }
@@ -1115,7 +1109,7 @@ define([
                     table.appendFormatLine('<th data-label="{0}" data-axis="{1}" class="{2} {3}">{4}</th>', colLabel, FRAME_AXIS.COLUMN, VP_FE_TABLE_COLUMN, colClass, col);
                 });
                 // add column
-                table.appendFormatLine('<th class="{0}"><i class="{1}"></i></th>', VP_FE_ADD_COLUMN, 'fa fa-plus');
+                table.appendFormatLine('<th class="{0}"><img src="{1}"/></th>', VP_FE_ADD_COLUMN, '/nbextensions/visualpython/resource/plus.svg');
 
                 table.appendLine('</tr>');
                 table.appendLine('</thead>');
@@ -1142,7 +1136,7 @@ define([
                 });
                 // add row
                 table.appendLine('<tr>');
-                table.appendFormatLine('<th class="{0}"><i class="{1}"></i></th>', VP_FE_ADD_ROW, 'fa fa-plus');
+                table.appendFormatLine('<th class="{0}"><img src="{1}"/></th>', VP_FE_ADD_ROW, '/nbextensions/visualpython/resource/plus.svg');
                 table.appendLine('</tbody>');
                 table.appendLine('</tr>');
                 $(that.wrapSelector('.' + VP_FE_TABLE)).replaceWith(function() {

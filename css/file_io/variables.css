@@ -3,7 +3,7 @@
 }
 #vp_var_variableBox table tr:not(:first-child):hover,
 #vp_var_variableBox table tr.selected {
-    color:  var(--font-hightlight);
+    color: var(--font-hightlight);
     background-color: #F5F5F5;
 }
 #vp_var_variableBox table tr td:first-child:hover {
@@ -16,6 +16,9 @@
 #vp_varDetailTable table th {
     background-color: lightgray;
 }
+#vp_varRefresh{
+    margin-left: 7px;
+}
 #vp_varRefresh:hover {
     cursor: pointer;
 }
@@ -25,7 +28,9 @@
     overflow: hidden;
 }
 #vp_varDetailTable:empty::after {
-    content: '(Nothing Selected)';
+    content: '(Select variables to preview the data.)';
+    color: var(--highlight-color);
+    font-style: italic;
 }
 #vp_varDetailTable {
     width: 100%;

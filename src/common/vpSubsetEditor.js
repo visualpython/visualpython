@@ -230,8 +230,8 @@ define([
                             , 'Subset Editor');
 
         // close button
-        popupTag.appendFormatLine('<div class="{0}"><i class="{1}"></i></div>'
-                                    , VP_DS_CLOSE, 'fa fa-close');
+        popupTag.appendFormatLine('<div class="{0}"><img src="{1}"/></div>'
+                                    , VP_DS_CLOSE, '/nbextensions/visualpython/resource/close_big.svg');
 
         // body start
         popupTag.appendFormatLine('<div class="{0} {1}">', VP_DS_BODY, 'vp-apiblock-scrollbar');
@@ -282,14 +282,11 @@ define([
         // allocate to
         popupTag.appendLine('<tr>');
         popupTag.appendFormatLine('<td><label class="{0}">{1}</label></td>', VP_DS_LABEL, 'Allocate to');
-        popupTag.appendFormatLine('<td><input type="text" class="{0} {1}" placeholder="{2}"/></td>', 'vp-input', VP_DS_ALLOCATE_TO, 'new variable name');
+        popupTag.appendFormatLine('<td><input type="text" class="{0} {1}" placeholder="{2}"/></td>', 'vp-input', VP_DS_ALLOCATE_TO, 'New variable name');
         popupTag.appendLine('</tr>');
 
         // table1 end
         popupTag.appendLine('</tbody></table>');
-
-        // divider
-        popupTag.appendLine('<hr style="margin: 3px;"/>');
 
         // tab selector
         // popupTag.appendFormatLine('<div class="{0}">', VP_DS_TAB_SELECTOR_BOX);
@@ -413,8 +410,8 @@ define([
             popupTag.appendFormatLine('<div class="{0}">', VP_DS_BUTTON_RUNADD);
             popupTag.appendFormatLine('<button type="button" class="{0} {1}" title="{2}">{3}</button>'
                                     , 'vp-button activated', VP_DS_BUTTON_RUN, 'Apply to Board & Run Cell', 'Run');
-            popupTag.appendFormatLine('<button type="button" class="{0} {1}"><i class="{2}"></i></button>'
-                                    , 'vp-button activated', VP_DS_BUTTON_DETAIL, 'fa fa-sort-up');
+            popupTag.appendFormatLine('<button type="button" class="{0} {1}"><img src="{2}"/></button>'
+                                    , 'vp-button activated', VP_DS_BUTTON_DETAIL, '/nbextensions/visualpython/resource/arrow_short_up.svg');
             popupTag.appendFormatLine('<div class="{0} {1}">', VP_DS_DETAIL_BOX, 'vp-cursor');
             popupTag.appendFormatLine('<div class="{0}" data-type="{1}" title="{2}">{3}</div>', VP_DS_DETAIL_ITEM, 'apply', 'Apply to Board', 'Apply');
             popupTag.appendFormatLine('<div class="{0}" data-type="{1}" title="{2}">{3}</div>', VP_DS_DETAIL_ITEM, 'add', 'Apply to Board & Add Cell', 'Add');
@@ -521,8 +518,8 @@ define([
         tag.appendLine('</div>');  // VP_DS_SELECT_LEFT
         // row select - buttons
         tag.appendFormatLine('<div class="{0}">', VP_DS_SELECT_BTN_BOX);
-        tag.appendFormatLine('<button type="button" class="{0} {1}">{2}</button>', VP_DS_SELECT_ADD_BTN, 'select-row', '<i class="fa fa-arrow-right"></i>');
-        tag.appendFormatLine('<button type="button" class="{0} {1}">{2}</button>', VP_DS_SELECT_DEL_BTN, 'select-row', '<i class="fa fa-arrow-left"></i>');
+        tag.appendFormatLine('<button type="button" class="{0} {1}">{2}</button>', VP_DS_SELECT_ADD_BTN, 'select-row', '<img src="/nbextensions/visualpython/resource/arrow_right.svg"/>');
+        tag.appendFormatLine('<button type="button" class="{0} {1}">{2}</button>', VP_DS_SELECT_DEL_BTN, 'select-row', '<img src="/nbextensions/visualpython/resource/arrow_left.svg"/>');
         tag.appendLine('</div>');  // VP_DS_SELECT_BTNS
         // row select - right
         tag.appendFormatLine('<div class="{0}">', VP_DS_SELECT_RIGHT);
@@ -624,8 +621,8 @@ define([
         tag.appendLine('</div>');  // VP_DS_SELECT_LEFT
         // col select - buttons
         tag.appendFormatLine('<div class="{0}">', VP_DS_SELECT_BTN_BOX);
-        tag.appendFormatLine('<button type="button" class="{0} {1}">{2}</button>', VP_DS_SELECT_ADD_BTN, 'select-col', '<i class="fa fa-arrow-right"></i>');
-        tag.appendFormatLine('<button type="button" class="{0} {1}">{2}</button>', VP_DS_SELECT_DEL_BTN, 'select-col', '<i class="fa fa-arrow-left"></i>');
+        tag.appendFormatLine('<button type="button" class="{0} {1}">{2}</button>', VP_DS_SELECT_ADD_BTN, 'select-col', '<img src="/nbextensions/visualpython/resource/arrow_right.svg"/></i>');
+        tag.appendFormatLine('<button type="button" class="{0} {1}">{2}</button>', VP_DS_SELECT_DEL_BTN, 'select-col', '<img src="/nbextensions/visualpython/resource/arrow_left.svg"/>');
         tag.appendLine('</div>');  // VP_DS_SELECT_BTNS
         // col select - right
         tag.appendFormatLine('<div class="{0}">', VP_DS_SELECT_RIGHT);

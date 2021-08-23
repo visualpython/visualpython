@@ -1,6 +1,6 @@
 Type: Jupyter Notebook Extension
-Name: VisualPython
-Description: VisualPython(비주얼 파이썬)
+Name: Visual Python
+Description: GUI-based Python code generator
 Link: README.md
 Icon: resource/logo.png
 Main: src/main.js

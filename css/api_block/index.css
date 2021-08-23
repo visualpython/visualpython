@@ -38,7 +38,7 @@
 .vp-apiblock-tab-button.selected {
     color: var(--font-hightlight);
     background: white;
-    border-bottom: 2px solid var(--hightlight-color);
+    border-bottom: 2px solid var(--highlight-color);
 }
 .vp-apiblock-tab-button:hover {
     background: var(--light-gray-color);
@@ -168,7 +168,7 @@
     cursor: pointer;
 }
 #vp_apiblock_menu_delete:hover {    
-    background: var(--hightlight-color);
+    background: var(--highlight-color);
     color: white;
 }
 .vp-apiblock-tab-navigation-body {
@@ -193,7 +193,6 @@
     top: 0px; 
     width: 20px;
     cursor: col-resize;
-    /* background: url(/nbextensions/visualpython/resource/api_block/vp-api-block-resize.png) center center no-repeat transparent; */
 }
 .vp-apiblock-option-tab  .ui-icon {
     background-image: none;
@@ -581,8 +580,8 @@
 }
 .vp-apiblock-blockoption-input {
     border: 1px solid #d4d4d4;
-    color: #252525;
-    outline-color: var(--hightlight-color);
+    color: var(--font-primary);
+    outline-color: var(--highlight-color);
     width: 100%;
     padding: 5px 0rem;
     padding-left: 0.75rem;
@@ -620,7 +619,8 @@
 .vp-apiblock-style-flex-row-between {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-around;
+    margin-left: 5px;
 }
 .vp-apiblock-style-flex-column {
     display: flex;
@@ -654,7 +654,7 @@
 .vp-apiblock-style-flex-row-between-wrap {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-around;
     flex-wrap: wrap;
 }
 .vp-apiblock-style-column-row-wrap {
@@ -772,7 +772,7 @@
 }
 #vp_apiblock_board_main_title input:focus {
     transition: 0.7s;
-    border: 0.5px solid var(--hightlight-color) !important;
+    border: 0.5px solid var(--highlight-color) !important;
     color: var(--font-hightlight);
 }
 #vp_apiblock_board_main_title input::selection {
@@ -847,8 +847,8 @@
 }
 .vp-block-header-name {
     text-indent: 5px;
-    font-size:12px; 
-    color:#252525;
+    font-size:14px; 
+    color: var(--font-primary);
     font-weight: 700;
     display: flex;
     flex-direction: column;
@@ -1003,12 +1003,12 @@
     margin: 10px 0px;
 }
 .vp-apiblock-option-plus-button {
-    min-width: 80px;
+    min-width: 95px;
     height: 30px;
     font-family: AppleSDGothicNeo;
     font-style: normal;
     font-weight: normal;
-    font-size: 13px;
+    font-size: 14px;
     line-height: 30px;
     text-align: center;
     color: var(--font-primary);

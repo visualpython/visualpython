@@ -44,8 +44,8 @@ define([
 
             , VP_CLASS_STYLE_WIDTH_5PERCENT
             , VP_CLASS_STYLE_WIDTH_10PERCENT
-            , VP_CLASS_STYLE_WIDTH_15PERCENT
             , VP_CLASS_STYLE_WIDTH_20PERCENT
+            , VP_CLASS_STYLE_WIDTH_25PERCENT
             , VP_CLASS_STYLE_WIDTH_100PERCENT
 
             , VP_CLASS_STYLE_BGCOLOR_C4C4C4
@@ -440,7 +440,7 @@ define([
                                 sbIfArg2 = MakeVpSuggestInputText_apiblock(VP_ID_APIBLOCK_OPTION_IF_ARG_2 + index + uuid
                                                 , arg2
                                                 , COMPARISON_OPERATOR_IF_ARG2
-                                                , VP_CLASS_STYLE_WIDTH_15PERCENT
+                                                , VP_CLASS_STYLE_WIDTH_25PERCENT
                                                 , STR_OPERATOR
                                                 , function(selectedValue) {
                                                 bindSelectValueEventFunc_if(selectedValue, 
@@ -463,7 +463,7 @@ define([
                             sbIfArg4 =  MakeVpSuggestInputText_apiblock(VP_ID_APIBLOCK_OPTION_IF_ARG_4 + index + uuid
                                     , arg4
                                     , COMPARISON_OPERATOR_IF_ARG4
-                                    , VP_CLASS_STYLE_WIDTH_15PERCENT
+                                    , VP_CLASS_STYLE_WIDTH_25PERCENT
                                     , STR_OPERATOR
                                     , function(selectedValue) {
                                         bindSelectValueEventFunc_if(selectedValue, 

@@ -20,7 +20,7 @@
 /* Jupyter Toolbar Icon */
 /* vpConst.TOOLBAR_BTN_INFO.ID */
 #vpBtnToggle i {
-	background-image: url(/nbextensions/visualpython/resource/icon.png);
+	background-image: url(/nbextensions/visualpython/resource/symbol.png);
     background-size: contain;
     display: inline-block;
     width: 10px;
@@ -81,7 +81,6 @@ body {
     width: 15px;
     height: 100%;
     cursor: col-resize;
-    /* background: url(/nbextensions/visualpython/resource/api_block/vp-api-block-resize.png) center center no-repeat transparent; */
 }
 
 .sidebar-wrapper .hide-btn {
@@ -90,13 +89,13 @@ body {
 
 /* Common Input Styles */
 #vp-wrapper input[type=text] {
-	font-size: 13px;
+	font-size: 14px;
 	line-height: 16px;
 	height: 30px;
 	padding: 3px 7px;
 	color: var(--font-primary);
 	background: #FFFFFF;
-	outline-color: var(--hightlight-color);
+	outline-color: var(--highlight-color);
 	border: 0.25px solid var(--border-gray-color);
 	box-sizing: border-box;
 }
@@ -104,7 +103,7 @@ body {
 	color: #C4C4C4;
 }
 #vp-wrapper input[type=number] {
-	font-size: 13px;
+	font-size: 14px;
 	line-height: 16px;
 	padding: 3px 7px;
 	color: var(--font-primary);
@@ -171,7 +170,7 @@ input[type=number]::-webkit-inner-spin-button { margin-left: 5px; }
 	color: #C4C4C4;
 	font-style: normal;
 	font-weight: normal;
-	font-size: 13px;
+	font-size: 14px;
 	line-height: 16px;
 	background-color: #F5F5F5;
 }
@@ -191,7 +190,7 @@ input[type=number]::-webkit-inner-spin-button { margin-left: 5px; }
 	height: 30px;
 	font-style: normal;
 	font-weight: normal;
-	font-size: 13px;
+	font-size: 14px;
 	line-height: 16px;
 	padding: 5px 16px 3px 9px;
 	background: url(../resource/unfold_more.svg), #F5F5F5;
@@ -289,7 +288,7 @@ input[type=number]::-webkit-inner-spin-button { margin-left: 5px; }
 	width:25px; 
 	height:25px; 
 	margin-left: 5px;
-	background: url('/nbextensions/visualpython/resource/icon.png');
+	background: url('/nbextensions/visualpython/resource/symbol.png');
 	background-size: contain;
 }
 .vp-palette-selector {
@@ -313,7 +312,7 @@ input[type=number]::-webkit-inner-spin-button { margin-left: 5px; }
 }
 #vp_headerContainer #vp_headerExtraMenuBtn {
 	cursor: pointer;
-	background-image: url(../resource/more-2-line.png);
+	background-image: url(../resource/dot_menu.svg);
 	width: 16px;
 	height: 16px;
 	margin: 7px 4px 0px 0px;
@@ -457,7 +456,7 @@ input[type=number]::-webkit-inner-spin-button { margin-left: 5px; }
 	width: calc(100% - 30px);
 	border-style: none;
 	outline: none;
-	color: rgba(232, 84, 1, 1)
+	color: var(--highlight-color)
 }
 #vp-wrapper .vp-icon-input-text input[type=text]::placeholder {
 	font-size: 12px;
@@ -708,7 +707,7 @@ input[type=number]::-webkit-inner-spin-button { margin-left: 5px; }
 	padding: 1px 2px 1px 7px;
 }
 #vp_noteFileInfo #vp_noteFilePath:focus {
-	border: 0.25px solid var(--hightlight-color);
+	border: 0.25px solid var(--highlight-color);
 }
 
 #vp_noteFileInfo #vp_noteFilePath::placeholder {
@@ -984,7 +983,7 @@ input[type=number]::-webkit-inner-spin-button { margin-left: 5px; }
 	border-radius: 2px;
 	margin: 2px 4px;
 	padding: 5px 2px 0px 2px;
-	font-size: 13px;
+	font-size: 14px;
 	line-height: 16px;
 	display: inline-block;
 	overflow: hidden;
@@ -993,7 +992,7 @@ input[type=number]::-webkit-inner-spin-button { margin-left: 5px; }
 }
 .vp-cbtn-white-orange {
 	background: #FFFFFF;
-	border: 1px solid var(--hightlight-color);
+	border: 1px solid var(--highlight-color);
 	color: var(--font-hightlight);
 }
 .vp-cbtn-orange-white {
@@ -1008,7 +1007,7 @@ input[type=number]::-webkit-inner-spin-button { margin-left: 5px; }
 /* Autocomplete */
 .vp-search-autocomplete {
 	font-family: AppleSDGothicNeo;
-	font-size: 13px;
+	font-size: 14px;
 	font-style: normal;
 	font-weight: 400;
 	line-height: 16px;
@@ -1199,7 +1198,7 @@ input[type=number]::-webkit-inner-spin-button { margin-left: 5px; }
 	max-width: 300px;
 	vertical-align: middle;
 	text-align: left;
-	height: 28px;
+	height: 30px;
 	padding: 2px 5px 2px 16px;
 }
 .vp-option-vertical-table-layout.vp-th-highlight th {
@@ -1209,7 +1208,7 @@ input[type=number]::-webkit-inner-spin-button { margin-left: 5px; }
 	min-width: 200px;
 	vertical-align: middle;
 	text-align: left;
-	height: 28px;
+	height: 30px;
 	padding: 2px 5px;
 }
 .vp-option-vertical-table-layout .vp-center-align {
@@ -1226,7 +1225,7 @@ input[type=number]::-webkit-inner-spin-button { margin-left: 5px; }
 	max-width: 300px;
 	vertical-align: middle;
 	text-align: left;
-	height: 28px;
+	height: 30px;
 	padding: 2px 5px 2px 5px;
 }
 .vp-option-horizontal-table-layout.vp-th-highlight th {
@@ -1236,7 +1235,7 @@ input[type=number]::-webkit-inner-spin-button { margin-left: 5px; }
 	min-width: 200px;
 	vertical-align: middle;
 	text-align: left;
-	height: 28px;
+	height: 30px;
 	padding: 2px 5px;
 }
 .vp-option-horizontal-table-layout .vp-center-align {
