@@ -84,5 +84,8 @@ To create an environment where everyone can learn and use big data analytics ski
 If you are interested in contributing to the Visual Python, please see [`CONTRIBUTING.md`](CONTRIBUTING.md). <br>
 All skills from programmers, non-programmers, designers are welcomed.
 
+* Programming Guide: [Developer Documentation](https://bird-energy-733.notion.site/visualpython-docs-85c0274ff7564747bb8e8d77909fc8b7)
+* GUI Design Guide: [Visual Python GUI Kit 1.0](https://www.figma.com/community/file/976035035360380841)
+
 ## License
 GNU GPLv3 (See LICENSE file).
