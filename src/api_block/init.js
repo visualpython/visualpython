@@ -261,26 +261,10 @@ define([
                 case 'snippets':
                 case 'variable':
                 case 'file':
-<<<<<<< HEAD
-=======
-                    blockContainer.createAppsPage('/nbextensions/visualpython/src/file_io/fileio.js', {
-                        title: 'Read File',
-                        width: '500px'
-                    });
-                    break;
->>>>>>> dd1605b (Small design changes)
                 case 'instance':
                 case 'subset':
                 case 'frame':
                 case 'chart':
-<<<<<<< HEAD
-=======
-                    blockContainer.createAppsPage('/nbextensions/visualpython/src/matplotlib/plot.js', {
-                        title: 'Chart',
-                        width: '530px'
-                    });
-                    break;
->>>>>>> dd1605b (Small design changes)
                 case 'profiling':
                     blockContainer.setSelectBlock(null);
                     blockContainer.createAppsPage(menu, file, config);
