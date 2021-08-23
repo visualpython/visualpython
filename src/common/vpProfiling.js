@@ -34,18 +34,26 @@ define([
 
     const VP_PF_MENU_ITEM = 'vp-pf-menu-item';
 
+    const VP_PF_LIST_BOX = 'vp-pf-list-box';
+    const VP_PF_LIST_HEADER = 'vp-pf-list-header';
+    const VP_PF_LIST_HEADER_ITEM = 'vp-pf-list-header-item';
+    const VP_PF_LIST_BODY = 'vp-pf-list-body';
+    const VP_PF_LIST_ITEM = 'vp-pf-list-item';
+    const VP_PF_LIST_BUTTON_BOX = 'vp-pf-list-button-box';
+    const VP_PF_LIST_MENU_ITEM = 'vp-pf-list-menu-item';
+
     const VP_PF_FILEPATH = 'vp-pf-filepath';
     const VP_PF_FILENAME = 'vp-pf-filename';
 
-    const VP_PF_BUTTON_BOX = 'vp-pf-btn-box';
-    const VP_PF_BUTTON_CANCEL = 'vp-pf-btn-cancel';
-    const VP_PF_BUTTON_APPLY = 'vp-pf-btn-apply';
-
     const PROFILE_TYPE = {
         NONE: -1,
-        GENERATE: 1,
-        SHOW: 2,
-        SAVE: 3
+        GENERATE: 1
+    }
+
+    const LIST_MENU_ITEM = {
+        SHOW: 'show',
+        DELETE: 'delete',
+        SAVE: 'save'
     }
 
     /**
@@ -67,7 +75,9 @@ define([
             },
             returnVariable:"",
             isReturnVariable: false,
-            fileExtension: ["html"]
+            fileExtension: ["html"],
+            visualpythonFileName: 'report',
+            selectedReport: ''
         };
         this.fileResultState = {
             pathInputId : this.wrapSelector('.' + VP_PF_FILEPATH),
@@ -99,6 +109,7 @@ define([
         this.bindEvent();
 
         this.loadVariableList();
+        this.loadReportList();
     }
 
     Profiling.prototype.render = function() {
@@ -112,8 +123,8 @@ define([
                             , 'Pandas Profiling');
 
         // close button
-        page.appendFormatLine('<div class="{0}"><i class="{1}"></i></div>'
-                                    , VP_PF_CLOSE, 'fa fa-close');
+        page.appendFormatLine('<div class="{0}"><img src="{1}"/></div>'
+                                    , VP_PF_CLOSE, '/nbextensions/visualpython/resource/close_big.svg');
 
         // body start
         page.appendFormatLine('<div class="{0}">', VP_PF_BODY);
@@ -125,7 +136,7 @@ define([
                             , 'Prepare to use Pandas Profiling', 'https://github.com/pandas-profiling/pandas-profiling', 'fa fa-link', 'vp-pf-link', 'Go to pandas-profiling github page');
         page.appendLine('<div>');
         page.appendFormatLine('<button class="{0} {1}">{2}</button>', 'vp-button activated', VP_PF_INSTALL_BTN, 'Install');
-        page.appendFormatLine('<i class="{0} {1} {2}" title="{2}"></i>', 'fa fa-refresh', 'vp-cursor', VP_PF_CHECK_BTN, 'Check if installed');
+        page.appendFormatLine('<div class="{0} {1}" title="{2}"><img src="{3}"/></div>', 'vp-cursor', VP_PF_CHECK_BTN, 'Check if installed', '/nbextensions/visualpython/resource/refresh.svg');
         // page.appendLine('<div class="vp-vertical-line"></div>');
         page.appendFormatLine('<button class="{0} {1}">{2}</button>', 'vp-button', VP_PF_IMPORT_BTN, 'Import');
         page.appendLine('</div>');
@@ -141,32 +152,41 @@ define([
         page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_pfVariable', 'vp-orange-text', 'DataFrame');
         page.appendLine('<div>');
         page.appendFormatLine('<select id="{0}"></select>', 'vp_pfVariable');
-        page.appendFormatLine('<i class="{0} {1}" title="{2}"></i>', VP_PF_DF_REFRESH, 'fa fa-refresh', "Refresh variable list");
+        page.appendFormatLine('<div class="{0}" title="{1}"><img src="{2}"/></div>', VP_PF_DF_REFRESH, "Refresh variable list", '/nbextensions/visualpython/resource/refresh.svg');
         page.appendLine('</div>');
 
-        page.appendFormatLine('<label for="{0}">{1}</label>', 'vp_pfReturn', 'Allocate to');
-        page.appendFormatLine('<input type="text" id="{0}" class="{1}" placeholder="{2}"/>', 'vp_pfReturn', 'vp-pf-input', 'variable name');
+        page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_pfReturn', 'vp-orange-text', 'Allocate to');
+        page.appendFormatLine('<input type="text" id="{0}" class="{1}" placeholder="{2}"/>', 'vp_pfReturn', 'vp-pf-input', 'New variable name');
 
         page.appendFormatLine('<label for="{0}">{1}</label>', 'vp_pfTitle', 'Report Title');
-        page.appendFormatLine('<input type="text" id="{0}" class="{1}" placeholder="{2}"/>', 'vp_pfTitle', 'vp-pf-input', 'title name');
-        page.appendLine('</div>');
-
-        // button box
         page.appendLine('<div>');
+        page.appendFormatLine('<input type="text" id="{0}" class="{1}" placeholder="{2}"/>', 'vp_pfTitle', 'vp-pf-input', 'Title name');
         // Generate Report
         page.appendFormatLine('<button class="{0} {1}" data-type="{2}">{3}</button>'
                                 , 'vp-button activated', VP_PF_MENU_ITEM, PROFILE_TYPE.GENERATE, 'Generate Report');
-        
-        // Show Report
-        page.appendFormatLine('<button class="{0} {1}" data-type="{2}">{3}</button>'
-                                , 'vp-button', VP_PF_MENU_ITEM, PROFILE_TYPE.SHOW, 'Show Report');
-        
-        // Save Report
-        page.appendFormatLine('<button class="{0} {1}" data-type="{2}">{3}</button>'
-                                , 'vp-button', VP_PF_MENU_ITEM, PROFILE_TYPE.SAVE, 'Save Report');         
+        page.appendLine('</div>'); 
+        // hidden inputs
+        page.appendFormatLine('<input type="hidden" class="{0}"/>', VP_PF_FILENAME);
+        page.appendFormatLine('<input type="hidden" class="{0}"/>', VP_PF_FILEPATH);
+        page.appendLine('</div>'); // VP_PF_DF_BOX
 
-        page.appendLine('</div>');
+        // // button box
+        // page.appendLine('<div>');
+        
+        
+        // // Show Report
+        // page.appendFormatLine('<button class="{0} {1}" data-type="{2}">{3}</button>'
+        //                         , 'vp-button', VP_PF_MENU_ITEM, PROFILE_TYPE.SHOW, 'Show Report');
+        
+        // // Save Report
+        // page.appendFormatLine('<button class="{0} {1}" data-type="{2}">{3}</button>'
+        //                         , 'vp-button', VP_PF_MENU_ITEM, PROFILE_TYPE.SAVE, 'Save Report');         
+
+        // page.appendLine('</div>');
         page.appendLine('</div>'); // VP_PF_SHOW_BOX
+
+        // list box
+        page.appendLine(this.renderReportList());
 
         page.appendLine('</div>'); // VP_PF_GRID_BOX
         page.appendLine('</div>'); // VP_PF_BODY
@@ -192,7 +212,7 @@ define([
                 });
                 $(that.wrapSelector('#vp_pfVariable')).trigger('change');
             } catch (ex) {
-                console.log('FrameEditor:', result);
+                console.log('Profiling:', result);
                 // console.log(ex);
             }
         });
@@ -254,14 +274,70 @@ define([
         );
     }
 
+    Profiling.prototype.loadReportList = function() {
+        var that = this;
+        // load using kernel
+        kernelApi.getProfilingList(function(result) {
+            try {
+                var varList = JSON.parse(result);
+                // render variable list
+                // replace
+                $(that.wrapSelector('.' + VP_PF_LIST_BOX)).replaceWith(function() {
+                    return that.renderReportList(varList);
+                });
+            } catch (ex) {
+                console.log('Profiling:', result);
+                // console.log(ex);
+            }
+        });
+    }
+
+    Profiling.prototype.renderReportList = function(reportList=[]) {
+        var page = new sb.StringBuilder();
+        page.appendFormatLine('<div class="{0}">', VP_PF_LIST_BOX);
+        page.appendFormatLine('<div class="{0}">', VP_PF_LIST_HEADER);
+        page.appendFormatLine('<div><label class="{0}">{1}</label></div>', VP_PF_LIST_HEADER_ITEM, 'Allocated to');
+        page.appendFormatLine('<div><label class="{0}">{1}</label></div>', VP_PF_LIST_HEADER_ITEM, 'Report Title');
+        page.appendFormatLine('<div><label class="{0}">{1}</label></div>', VP_PF_LIST_HEADER_ITEM, '');
+        page.appendLine('</div>');
+        page.appendFormatLine('<div class="{0}">', 'vp-apiblock-scrollbar');
+        page.appendFormatLine('<div class="{0} {1}">', VP_PF_LIST_BODY, 'vp-apiblock-scrollbar');
+        reportList.forEach((report, idx) => {
+            var { varName, title } = report;
+            page.appendFormatLine('<div class="{0}" data-name="{1}" data-title="{2}">', VP_PF_LIST_ITEM, varName, title);
+            page.appendFormatLine('<div>{0}</div>', varName);
+            page.appendFormatLine('<div>{0}</div>', title);
+            // button box
+            page.appendFormatLine('<div class="{0}">', VP_PF_LIST_BUTTON_BOX);
+            page.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}"><img src="{3}"/></div>'
+                                    , VP_PF_LIST_MENU_ITEM, LIST_MENU_ITEM.SHOW, 'Show report', '/nbextensions/visualpython/resource/snippets/run.svg');
+            page.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}"><img src="{3}"/></div>'
+                                    , VP_PF_LIST_MENU_ITEM, LIST_MENU_ITEM.DELETE, 'Delete report', '/nbextensions/visualpython/resource/delete.svg');
+            page.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}"><img src="{3}"/></div>'
+                                    , VP_PF_LIST_MENU_ITEM, LIST_MENU_ITEM.SAVE, 'Save report', '/nbextensions/visualpython/resource/snippets/export.svg');
+            page.appendLine('</div>');
+            page.appendLine('</div>');
+        });
+        page.appendLine('</div>'); // VP_PF_LIST_BODY
+        page.appendLine('</div>');
+        page.appendLine('</div>'); // VP_PF_LIST_BOX
+        return page.toString();
+    }
+
     Profiling.prototype.unbindEvent = function() {
         $(document).off(this.wrapSelector('*'));
 
         $(document).off('click', this.wrapSelector('.' + VP_PF_CLOSE));
-        $(document).off('change', this.wrapSelector('#vp_pfVariable'));
+        $(document).off('click', this.wrapSelector('.' + VP_PF_INSTALL_BTN));
+        $(document).off('click', this.wrapSelector('.' + VP_PF_CHECK_BTN));
+        $(document).off('click', this.wrapSelector('.' + VP_PF_IMPORT_BTN));
         $(document).off('click', this.wrapSelector('.vp-pf-df-refresh'));
-        $(document).off('click', this.wrapSelector('.' + VP_PF_BUTTON_CANCEL));
-        $(document).off('click', this.wrapSelector('.' + VP_PF_BUTTON_APPLY));
+        $(document).off('click', this.wrapSelector('.' + VP_PF_MENU_ITEM));
+        $(document).off('click', this.wrapSelector('.' + VP_PF_LIST_MENU_ITEM));
+        $(document).off('snippetSaved.fileNavigation', this.wrapSelector('.' + VP_PF_FILEPATH));
+
+        $(document).off('keydown.' + this.uuid);
+        $(document).off('keyup.' + this.uuid);
     }
 
     Profiling.prototype.bindEvent = function() {
@@ -295,7 +371,7 @@ define([
         });
 
         // click menu
-        $(document).on('click', this.wrapSelector('.' + VP_PF_MENU_ITEM), async function() {
+        $(document).on('click', this.wrapSelector('.' + VP_PF_MENU_ITEM), function() {
             var type = $(this).data('type');
             var df = $(that.wrapSelector('#vp_pfVariable')).val();
             var saveas = $(that.wrapSelector('#vp_pfReturn')).val();
@@ -306,12 +382,30 @@ define([
             var code = new sb.StringBuilder();
             switch(parseInt(type)) {
                 case PROFILE_TYPE.GENERATE:
-                    code.appendFormat("{0} = ProfileReport({1}, title='{2}')", saveas, df, title);
+                    code.appendFormatLine("{0} = ProfileReport({1}, title='{2}')", saveas, df, title);
+                    code.append(saveas);
                     break;
-                case PROFILE_TYPE.SHOW:
-                    code.appendFormat("{0}.to_notebook_iframe()", saveas);
+            }
+            vpCommon.cellExecute([{command: code.toString(), exec:true, type:'code'}]);
+            that.loadReportList();
+        });
+
+        // click list item menu
+        $(document).on('click', this.wrapSelector('.' + VP_PF_LIST_MENU_ITEM), async function(evt) {
+            var menu = $(this).data('menu');
+            var itemTag = $(this).closest('.' + VP_PF_LIST_ITEM);
+            var varName = $(itemTag).data('name');
+            var title = $(itemTag).data('title');
+
+            var code = new sb.StringBuilder();
+            switch(menu) {
+                case LIST_MENU_ITEM.SHOW:
+                    code.appendFormat("{0}.to_notebook_iframe()", varName);
                     break;
-                case PROFILE_TYPE.SAVE:
+                case LIST_MENU_ITEM.DELETE:
+                    code.appendFormat("del {0}", varName);
+                    break;
+                case LIST_MENU_ITEM.SAVE:
                     var loadURLstyle = Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH;
                     var loadURLhtml = Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.SOURCE_PATH + "component/fileNavigation/index.html";
                     
@@ -322,9 +416,13 @@ define([
         
                         $('#vp_fileNavigation').removeClass("hide");
                         $('#vp_fileNavigation').addClass("show");
+
+                        that.state.selectedReport = varName;
         
                         var { vp_init
                                 , vp_bindEventFunctions } = fileNavigation;
+
+                        that.state.visualpythonFileName = title;
                             
                         fileNavigation.vp_init(that, "SAVE_SNIPPETS");
                         // fileNavigation.vp_init(that.getStateAll());
@@ -332,21 +430,62 @@ define([
                     })
                     .appendTo("#site");
                     return;
+                default:
+                    return;
             }
             vpCommon.cellExecute([{command: code.toString(), exec:true, type:'code'}]);
+            that.loadReportList();
         });
 
         // save file complete event
         $(document).on('snippetSaved.fileNavigation', this.wrapSelector('.' + VP_PF_FILEPATH), function(evt) {
             var fileName = evt.file;
             var path = evt.path;
-            var saveas = $(that.wrapSelector('#vp_pfReturn')).val();
-            if (saveas == '') {
-                saveas = '_vp_profile';
+            var varName = that.state.selectedReport;
+            if (varName == '') {
+                varName = '_vp_profile';
             }
             var code = new sb.StringBuilder();
-            code.appendFormat("{0}.to_file('{1}')", saveas, path);
+            code.appendFormat("{0}.to_file('{1}')", varName, path);
             vpCommon.cellExecute([{command: code.toString(), exec:true, type:'code'}]);
+
+            that.selectedReport = '';
+        });
+
+        this.keyboardManager = {
+            keyCode : {
+                ctrlKey: 17,
+                cmdKey: 91,
+                shiftKey: 16,
+                altKey: 18,
+                enter: 13,
+                escKey: 27
+            },
+            keyCheck : {
+                ctrlKey: false,
+                shiftKey: false
+            }
+        }
+        $(document).on('keydown.' + this.uuid, function(e) {
+            var keyCode = that.keyboardManager.keyCode;
+            if (e.keyCode == keyCode.ctrlKey || e.keyCode == keyCode.cmdKey) {
+                that.keyboardManager.keyCheck.ctrlKey = true;
+            } 
+            if (e.keyCode == keyCode.shiftKey) {
+                that.keyboardManager.keyCheck.shiftKey = true;
+            }
+        }).on('keyup.' + this.uuid, function(e) {
+            var keyCode = that.keyboardManager.keyCode;
+            if (e.keyCode == keyCode.ctrlKey || e.keyCode == keyCode.cmdKey) {
+                that.keyboardManager.keyCheck.ctrlKey = false;
+            } 
+            if (e.keyCode == keyCode.shiftKey) {
+                that.keyboardManager.keyCheck.shiftKey = false;
+            }
+            if (e.keyCode == keyCode.escKey) {
+                // close on esc
+                that.close();
+            }
         });
     };
 

@@ -4,74 +4,64 @@
     left: 0;
     width: 100%; 
     height: 100%; 
-
     z-index: 1200;
-
     background-color: rgba(0,0,0,.4);
 }
-
 .vp-pp-container {
     position: relative;
     left: 50%;
     top: 50%;
     transform:translate(-50%, -50%);
-    
     min-width: 400px;
     min-height: 400px;
     width: 95%;
     height: 95%;
-
     background-color: white;
 }
-
 .vp-pp-title {
-    height: 30px;
+    height: 40px;
     padding: 5px 0px 5px 10px;
-
-    background-color: #EEE;
+    background-color: #eee;
     border:  1px solid #ddd;;
     display: flex; 
     flex-direction: row;
     position: relative;
-
+    align-items: center;
+    font-size: 16px;
     font-weight: 700;
 }
-
 .vp-pp-close {
     position: fixed;
     z-index: 3;
     right: 5px;
-    width: 20px;
+    width: 30px;
     height: 20px;
     line-height: 20px;
-    top: 5px;
+    top: 10px;
     text-align: center;
     cursor: pointer;
 }
-
 .vp-pp-body {
     width: 100%;
-    height: calc(100% - 80px);
-    padding: 10px;
+    height: calc(98% - 80px);
+    padding: 20px;
     display: grid;
     grid-row-gap: 5px;
-    grid-template-rows: 35px 30px 60% calc(40% - 80px);
+    grid-template-rows: 30px 30px 60% calc(40% - 80px);
     overflow: auto;
 }
-
 .vp-pp-preview-box {
     display: none;
     width: 100%;
     height: 100px;
     position: absolute;
     bottom: 50px;
-    
     background: #F7F7F7;
     border: 0.25px solid #E4E4E4;
     padding: 10px;
 }
 
-/** buttons */
+/** Buttons */
 .vp-pp-btn-box {
     /* position: absolute;
     bottom: 25px;
@@ -85,15 +75,15 @@
 }
 .vp-pp-btn-preview {
     left: 15px;
-    top: 11px;
+    top: 9px;
 }
 .vp-pp-btn-cancel {
-    top: 11px;
-    right: 105px;
+    top: 9px;
+    right: 106px;
 }
 .vp-pp-btn-runadd {
     position: absolute;
-    top: 11px;
+    top: 9px;
     right: 15px;
     width: fit-content;
     height: 30px;
@@ -109,7 +99,9 @@
 .vp-pp-btn-detail {
     display: inline-block;
     width: 20px;
+    height: 28px;
     border-radius: 0px 2px 2px 0px;
+    padding: 0;
 }
 .vp-pp-detail-box {
     display: none;
@@ -117,9 +109,7 @@
     border: 0.25px solid var(--border-gray-color);
     position: absolute;
     bottom: 35px;
-    right: 1px;
     width: 84px;
-    height: 30px;
     text-align: center;
     line-height: 30px;
 }

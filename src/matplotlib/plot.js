@@ -128,13 +128,13 @@ define([
         // Popup Box. variable view box
         sbTagString.clear();
         sbTagString.appendLine('<div id="vp_varViewBox" class="vp-var-view-box">');
-        sbTagString.appendLine('<div class="vp-icon-btn vp-close-view"><i class="fa fa-close"></i></div>');
+        sbTagString.appendLine('<div class="vp-icon-btn vp-close-view"><img src="/nbextensions/visualpython/resource/close_big.svg"/></div>');
         // variable list
         sbTagString.appendLine('<div class="vp-var-view-div">');
         sbTagString.appendLine('<table id="vp_varViewList" class="vp-option-table vp-var-view-list no-selection">');
         sbTagString.appendLine('<colgroup><col width="40%"/><col width="*"/></colgroup>');
         sbTagString.appendLine('<thead>');
-        sbTagString.appendLine('<tr><th>Variable</th><th>DataType</th></tr>');
+        sbTagString.appendLine('<tr><th>Variable</th><th>Data Type</th></tr>');
         sbTagString.appendLine('<tr><th colspan="2"><hr style="margin: 0px;"/></th></tr>');
         sbTagString.appendLine('</thead>');
         sbTagString.appendLine('<tbody>');
@@ -146,7 +146,7 @@ define([
         sbTagString.appendLine('<div id="vp_varViewDetail">');
         sbTagString.appendLine('<table class="vp-option-table vp-var-view-detail no-selection">');
         sbTagString.appendLine('<colgroup><col width="40%"/><col width="*"/></colgroup>');
-        sbTagString.appendLine('<thead><tr><th>columns</th><th>methods</th></tr></thead>');
+        sbTagString.appendLine('<thead><tr><th>Column</th><th>Method</th></tr></thead>');
         sbTagString.appendLine('<tbody>');
         sbTagString.appendLine('<tr><td><div id="vp_varDetailColList" class="vp-column-select"></div></td>');
         sbTagString.appendLine('<td><div id="vp_varDetailArray" class="vp-method-select"></div></td></tr>');
@@ -1673,16 +1673,16 @@ define([
         ];
         this.plotKindLang = {
             'plot': 'Line',
-            'bar': 'Bar',
-            'barh': 'Bar(horizon)',
+            'bar': 'Bar 1',
+            'barh': 'Bar 2',
             'hist': 'Histogram',
-            'boxplot': 'Box Plot',
-            'stackplot': 'Stack Plot',
-            'pie': 'Pie Chart',
-            'scatter': 'Scatter Plot',
-            'hexbin': 'Hexbin Plot',
-            'contour': 'Contour Plot',
-            'imshow': 'Image Plot',
+            'boxplot': 'Box',
+            'stackplot': 'Stack',
+            'pie': 'Pie',
+            'scatter': 'Scatter',
+            'hexbin': 'Hexbin',
+            'contour': 'Contour',
+            'imshow': 'Image',
             'errorbar': 'Error Bar'
         };
         // cmap 종류
@@ -1692,7 +1692,7 @@ define([
         ];
         // marker 종류
         this.marker = {
-            'custom': { label: 'Custom', value: 'marker' },
+            // 'custom': { label: 'Custom', value: 'marker' },
             'point' : { label: '.', value: '.', img: 'm00.png' }, 
             'pixel' : { label: ',', value: ',', img: 'm01.png' }, 
             'circle' : { label: 'o', value: 'o', img: 'm02.png' }, 

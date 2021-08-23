@@ -27,6 +27,7 @@ define([
             , STR_WHILE
             , STR_IMPORT
             , STR_API
+            , STR_APPS
             , STR_TRY
             , STR_EXCEPT
             , STR_FINALLY
@@ -213,6 +214,10 @@ define([
             }
             case BLOCK_CODELINE_TYPE.API: {
                 name = STR_API;
+                break;
+            }
+            case BLOCK_CODELINE_TYPE.APPS: {
+                name = STR_APPS;
                 break;
             }
             case BLOCK_CODELINE_TYPE.TRY: {

@@ -1,18 +1,16 @@
-/* select boxes */
+/* Select Boxes */
 .vp-ins-box {
     width: 100%;
     display: grid;
     grid-template-columns: 50% 50%;
     grid-gap: 10px;
-    /* padding: 5px 14px 0px 14px; */
-    padding-right: 14px;
+    padding-right: 15px;
 }
 .vp-ins-select-container {
-    
 }
 .vp-ins-select-title {
     font-weight: 700;
-    color: var(--hightlight-color);
+    color: var(--font-hightlight);
     padding: 5px 5px 5px 0px;
 }
 #vp-wrapper .vp-ins-select-container input.vp-ins-search {
@@ -31,12 +29,10 @@
 .vp-ins-select-list {
     height: 145px;
     width: 100%;
-
     list-style: none;
     margin: 0px;
     padding: 0px 5px 0px 5px;
     color: #696969;
-
     overflow: auto;
 }
 .vp-ins-select-list::-webkit-scrollbar {
@@ -47,7 +43,6 @@
     border-radius: 0;
     background: #eeeeee;
 }
-
 .vp-ins-select-list::-webkit-scrollbar-thumb {
     border-radius: 0;
     background: #b0b0b0;
@@ -59,7 +54,7 @@
     border-bottom: 0.25px solid var(--light-gray-color);
 }
 .vp-ins-select-item.selected {
-    color : var(--hightlight-color);
+    color : var(--font-hightlight);
     background: var(--light-gray-color);
 }
 .vp-ins-select-item span {
@@ -72,20 +67,18 @@
     background: var(--light-gray-color);
 }
 .vp-ins-select-item:hover span {
-    background: var(--hightlight-color);
+    background: var(--highlight-color);
     color: #FFFFFF;
 }
 .vp-ins-option-box.api {
     width: 95%;
 }
-
 .vp-ins-parameter-box {
     grid-column: 1/3;
 }
 .vp-ins-parameter {
     width: 100% !important;
 }
-
 .vp-create-var-box {
     position: relative;
     margin-top: 5px;
@@ -96,7 +89,7 @@
 #vp-wrapper .vp-ins-select-container .vp-create-var-btn {
     position: absolute;
     color: #C4C4C4;
-    right: 5px;
-    top: 5px;
+    right: 9px;
+    top: 9px;
     cursor: pointer;
 }

@@ -62,6 +62,7 @@ define([
     const VP_FE_PREVIEW_BOX = 'vp-fe-preview-box';
     const VP_FE_BUTTON_BOX = 'vp-fe-btn-box';
     const VP_FE_BUTTON_PREVIEW = 'vp-fe-btn-preview';
+    const VP_FE_BUTTON_DATAVIEW = 'vp-fe-btn-dataview';
     const VP_FE_BUTTON_CANCEL = 'vp-fe-btn-cancel';
     const VP_FE_BUTTON_RUNADD = 'vp-fe-btn-runadd';
     const VP_FE_BUTTON_RUN = 'vp-fe-btn-run';
@@ -93,6 +94,12 @@ define([
         SHOW: 99
     }
 
+    const FRAME_AXIS = {
+        NONE: -1,
+        ROW: 0,
+        COLUMN: 1
+    }
+
     /**
      * @class FrameEditor
      * @param {object} pageThis
@@ -119,8 +126,17 @@ define([
         return vpCommon.formatString('.{0}.{1} {2}', VP_FE, this.uuid, query);
     }
 
-    FrameEditor.prototype.open = function() {
-        this.init();
+    FrameEditor.prototype.open = function(config={}) {
+        this.config = {
+            ...this.config,
+            ...config
+        }
+
+        if (this.config.state) {
+            this.init(this.config.state);
+        } else {
+            this.init();
+        }
         $(this.wrapSelector()).show();
 
         if (!this.codepreview) {
@@ -157,26 +173,9 @@ define([
             this.codepreview.refresh();
         }
 
-        if (!this.cmpreviewall) {
-            // codemirror setting
-            this.cmpreviewall = codemirror.fromTextArea($('#vp_codePreview')[0], {
-                mode: {
-                    name: 'python',
-                    version: 3,
-                    singleLineStringErrors: false
-                },  // text-cell(markdown cell) set to 'htmlmixed'
-                height: '100%',
-                width: '100%',
-                indentUnit: 4,
-                matchBrackets: true,
-                readOnly:true,
-                autoRefresh: true,
-                theme: "ipython",
-                extraKeys: {"Enter": "newlineAndIndentContinueMarkdownList"},
-                scrollbarStyle: "null"
-            });
-        } else {
-            this.cmpreviewall.refresh();
+        // load state
+        if (this.config.state) {
+            this.loadState(this.config.state);
         }
     }
 
@@ -185,24 +184,38 @@ define([
         $(this.wrapSelector()).remove();
     }
 
-    FrameEditor.prototype.init = function() {
+    FrameEditor.prototype.init = function(state = undefined) {
         // state
         this.state = {
             originObj: '',
             tempObj: '_vp',
+            returnObj: '_vp',
             selected: [],
-            axis: 0,
+            axis: FRAME_AXIS.NONE,
             lines: TABLE_LINES,
             steps: [],
             popup: {
                 type: FRAME_EDIT_TYPE.NONE,
                 replace: { index: 0 }
+            },
+            selection: {
+                start: -1,
+                end: -1
             }
+        }
+        if (state) {
+            this.state = { 
+                ...this.state,
+                ...state
+            };
         }
 
         this.codepreview = undefined;
         this.cmpreviewall = undefined;
         this.previewOpened = false;
+        this.dataviewOpened = false;
+
+        this.loading = false;
 
         vpCommon.loadCss(Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH + "common/frameEditor.css");
 
@@ -217,7 +230,7 @@ define([
 
     FrameEditor.prototype.initState = function() {
         this.state.selected = [];
-        this.state.axis = -1;
+        this.state.axis = FRAME_AXIS.NONE;
         this.state.lines = TABLE_LINES;
         this.state.steps = [];
     }
@@ -232,9 +245,21 @@ define([
         }
     }
 
+    FrameEditor.prototype.getPreview = function() {
+        if (this.codepreview) {
+            return this.codepreview.getValue();
+        }
+        return '';
+    }
+
     FrameEditor.prototype.setPreview = function(previewCodeStr) {
         if (this.codepreview) {
-            this.codepreview.setValue(previewCodeStr);
+            // get only last line of code
+            var previewCodeLines = previewCodeStr.split('\n');
+            var previewCode = previewCodeLines.pop();
+
+            // set code as preview
+            this.codepreview.setValue(previewCode);
             this.codepreview.save();
             var that = this;
             setTimeout(function() {
@@ -259,8 +284,8 @@ define([
                             , 'Frame Editor');
 
         // close button
-        page.appendFormatLine('<div class="{0}"><i class="{1}"></i></div>'
-                                    , VP_FE_CLOSE, 'fa fa-close');
+        page.appendFormatLine('<div class="{0}"><img src="{1}"/></div>'
+                                    , VP_FE_CLOSE, '/nbextensions/visualpython/resource/close_big.svg');
 
         // body start
         page.appendFormatLine('<div class="{0}">', VP_FE_BODY);
@@ -271,15 +296,20 @@ define([
 
         // Select DataFrame
         page.appendFormatLine('<div class="{0}">', VP_FE_DF_BOX);
+        page.appendLine('<div>');
         page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_feVariable', 'vp-orange-text', 'DataFrame');
         page.appendFormatLine('<select id="{0}">', 'vp_feVariable');
         page.appendLine('</select>');
-        page.appendFormatLine('<i class="{0} {1}"></i>', VP_FE_DF_REFRESH, 'fa fa-refresh');
-        page.appendFormatLine('<button class="{0} {1}"><i class="{2}"></i> View Info</button>', VP_FE_DF_SHOWINFO, 'vp-button', 'fa fa-columns');
+        page.appendFormatLine('<div class="{0}"><img src="{1}"/></div>', VP_FE_DF_REFRESH, '/nbextensions/visualpython/resource/refresh.svg');
+        page.appendLine('</div>');
+        page.appendLine('<div>');
+        page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_feReturn', 'vp-orange-text', 'Allocate to');
+        page.appendFormatLine('<input type="text" class="{0}" id="{1}" placeholder="{2}"/>', 'vp-input', 'vp_feReturn', 'Variable name');
+        page.appendLine('</div>');
         page.appendLine('</div>');
 
         // Table
-        page.appendFormatLine('<div class="{0}">', VP_FE_TABLE);
+        page.appendFormatLine('<div class="{0} {1}">', VP_FE_TABLE, 'no-selection');
 
         page.appendLine('</div>'); // End of Table
 
@@ -300,16 +330,19 @@ define([
         // button box
         page.appendFormatLine('<div class="{0}">', VP_FE_BUTTON_BOX);
         page.appendFormatLine('<button type="button" class="{0} {1} {2}">{3}</button>'
-                                , 'vp-button', 'vp-fe-btn', VP_FE_BUTTON_PREVIEW, 'Preview');
+                                , 'vp-button', 'vp-fe-btn', VP_FE_BUTTON_PREVIEW, 'Code view');
+        page.appendFormatLine('<button class="{0} {1} {2}">{3}</button>'
+                                , 'vp-button', 'vp-fe-btn', VP_FE_BUTTON_DATAVIEW, 'Data view');
         page.appendFormatLine('<button type="button" class="{0} {1} {2}">{3}</button>'
                                 , 'vp-button cancel', 'vp-fe-btn', VP_FE_BUTTON_CANCEL, 'Cancel');
         page.appendFormatLine('<div class="{0}">', VP_FE_BUTTON_RUNADD);
-        page.appendFormatLine('<button type="button" class="{0} {1}">{2}</button>'
-                                , 'vp-button activated', VP_FE_BUTTON_RUN, 'Run');
-        page.appendFormatLine('<button type="button" class="{0} {1}"><i class="{2}"></i></button>'
-                                , 'vp-button activated', VP_FE_BUTTON_DETAIL, 'fa fa-sort-up');
+        page.appendFormatLine('<button type="button" class="{0} {1}" title="{2}">{3}</button>'
+                                , 'vp-button activated', VP_FE_BUTTON_RUN, 'Apply to Board & Run Cell', 'Run');
+        page.appendFormatLine('<button type="button" class="{0} {1}"><img src="{2}"/></button>'
+                                , 'vp-button activated', VP_FE_BUTTON_DETAIL, '/nbextensions/visualpython/resource/arrow_short_up.svg');
         page.appendFormatLine('<div class="{0} {1}">', VP_FE_DETAIL_BOX, 'vp-cursor');
-        page.appendFormatLine('<div class="{0}" data-type="{1}">{2}</div>', VP_FE_DETAIL_ITEM, 'add', 'Add');
+        page.appendFormatLine('<div class="{0}" data-type="{1}" title="{2}">{3}</div>', VP_FE_DETAIL_ITEM, 'apply', 'Apply to Board', 'Apply');
+        page.appendFormatLine('<div class="{0}" data-type="{1}" title="{2}">{3}</div>', VP_FE_DETAIL_ITEM, 'add', 'Apply to Board & Add Cell', 'Add');
         page.appendLine('</div>'); // VP_FE_DETAIL_BOX
         page.appendLine('</div>'); // VP_FE_BUTTON_RUNADD
         page.appendLine('</div>'); // VP_FE_BUTTON_BOX
@@ -331,7 +364,7 @@ define([
     FrameEditor.prototype.renderMenuBox = function() {
         var page = new sb.StringBuilder();
         // Menus
-        page.appendFormatLine('<div class="{0}" style="display:none; position: fixed;">', VP_FE_MENU_BOX);
+        page.appendFormatLine('<div class="{0}" style="display:none;">', VP_FE_MENU_BOX);
         // menu 1. Add Column
         page.appendFormatLine('<div class="{0} {1}" data-type="{2}" data-axis="{3}">{4}</div>'
                             , VP_FE_MENU_ITEM, 'vp-fe-menu-add-column', FRAME_EDIT_TYPE.ADD_COL, 'col', 'Add Column');
@@ -341,7 +374,7 @@ define([
         // menu 3. drop
         page.appendFormatLine('<div class="{0} {1}" data-type="{2}">{3}<i class="{4}" style="{5}"></i>'
                             , VP_FE_MENU_ITEM, 'vp-fe-menu-drop', FRAME_EDIT_TYPE.DROP, 'Drop'
-                            , 'fa fa-caret-right', 'padding-left: 5px;'); //TODO: NA & Duplicate selection needed
+                            , 'fa fa-caret-right', 'padding-left: 5px;');
         // sub-menu 1.
         page.appendFormatLine('<div class="{0}" style="{1}">', VP_FE_MENU_SUB_BOX, 'top: 25px;');
         // menu 3-1. drop
@@ -378,16 +411,10 @@ define([
         var page = new sb.StringBuilder();
         page.appendFormatLine('<div class="{0}" style="display: none;">', VP_FE_POPUP_BOX);
         // popup title
-        page.appendFormat('<div class="{0}">{1}</div>'
-                            , VP_FE_TITLE
-                            , 'Input');
+        page.appendFormat('<div class="{0}">{1}</div>', VP_FE_TITLE, 'Input');
         // close button
-        page.appendFormatLine('<div class="{0}"><i class="{1}"></i></div>'
-                                    , VP_FE_POPUP_CLOSE, 'fa fa-close');
+        page.appendFormatLine('<div class="{0}"><img src="{1}"/></div>', VP_FE_POPUP_CLOSE, '/nbextensions/visualpython/resource/close_big.svg');
         page.appendFormatLine('<div class="{0}">', VP_FE_POPUP_BODY);
-
-
-
         page.appendLine('</div>'); // End of Body
 
         // apply button
@@ -410,9 +437,11 @@ define([
             try {
                 var varList = JSON.parse(result);
                 // render variable list
+                // get prevvalue
+                var prevValue = that.state.originObj;
                 // replace
                 $(that.wrapSelector('#vp_feVariable')).replaceWith(function() {
-                    return that.renderVariableList(varList);
+                    return that.renderVariableList(varList, prevValue);
                 });
                 $(that.wrapSelector('#vp_feVariable')).trigger('change');
             } catch (ex) {
@@ -422,16 +451,15 @@ define([
         });
     }
 
-    FrameEditor.prototype.renderVariableList = function(varList) {
+    FrameEditor.prototype.renderVariableList = function(varList, defaultValue='') {
         var tag = new sb.StringBuilder();
-        var beforeValue = $(this.wrapSelector('#vp_feVariable')).val();
         tag.appendFormatLine('<select id="{0}">', 'vp_feVariable');
         varList.forEach(vObj => {
             // varName, varType
             var label = vObj.varName;
             tag.appendFormatLine('<option value="{0}" data-type="{1}" {2}>{3}</option>'
                                 , vObj.varName, vObj.varType
-                                , beforeValue == vObj.varName?'selected':''
+                                , defaultValue == vObj.varName?'selected':''
                                 , label);
         });
         tag.appendLine('</select>'); // VP_VS_VARIABLES
@@ -455,16 +483,117 @@ define([
 
     FrameEditor.prototype.renderAddPage = function(type) {
         var content = new sb.StringBuilder();
-        content.appendLine('<table><tr>');
-        content.appendFormatLine('<th><label>New {0} name</label></th>', type);
+        content.appendFormatLine('<div class="{0}">', 'vp-popup-addpage');
+        content.appendFormatLine('<div class="{0}">', 'vp-popup-header');
+        content.appendLine('<table><colgroup><col width="80px"><col width="*"></colgroup>');
+        content.appendFormatLine('<tr><th class="{0}">New {1}</th>', 'vp-orange-text', type);
         content.appendFormatLine('<td><input type="text" class="{0}"/>', 'vp-popup-input1');
         content.appendFormatLine('<label><input type="checkbox" class="{0}" checked/><span>{1}</span></label>', 'vp-popup-istext1','Text');
         content.appendLine('</td></tr><tr>');
+        content.appendLine('<th><label>Add Type</label></th>');
+        content.appendFormatLine('<td><select class="{0}">', 'vp-popup-addtype');
+        content.appendFormatLine('<option value="{0}">{1}</option>', 'value', 'Value');
+        content.appendFormatLine('<option value="{0}">{1}</option>', 'calculation', 'Calculation');
+        content.appendFormatLine('<option value="{0}">{1}</option>', 'replace', 'Replace');
+        content.appendFormatLine('<option value="{0}">{1}</option>', 'apply', 'Apply');
+        content.appendLine('</select></td></tr>');
+        content.appendLine('</table>');
+        content.appendLine('</div>'); // end of vp-popup-header
+
+        content.appendLine('<hr style="margin: 5px 0px;"/>');
+        
+        // tab 1. value
+        content.appendFormatLine('<div class="{0} {1}">', 'vp-popup-tab', 'value');
+        content.appendLine('<table><colgroup><col width="80px"><col width="*"></colgroup><tr>');
         content.appendLine('<th><label>Value</label></th>');
         content.appendFormatLine('<td><input type="text" class="{0}"/>', 'vp-popup-input2');
         content.appendFormatLine('<label><input type="checkbox" class="{0}" checked/><span>{1}</span></label>', 'vp-popup-istext2','Text');
         content.appendLine('</td></tr></table>');
+        content.appendLine('</div>'); // end of vp-popup-tab value
+
+        // tab 2. calculation
+        content.appendFormatLine('<div class="{0} {1}" style="display: none;">', 'vp-popup-tab', 'calculation');
+        content.appendLine('<table><colgroup><col width="80px"><col width="*"></colgroup>');
+        // calc - variable 1
+        content.appendLine('<tr>');
+        content.appendLine('<th><label>Variable 1</label></th>');
+        var dataTypes = ['DataFrame', 'Series', 'nparray', 'list', 'str'];
+        var varSelector1 = new vpVarSelector(dataTypes, 'DataFrame', true, true);
+        varSelector1.addBoxClass('vp-popup-var1box');
+        varSelector1.addClass('vp-popup-var1');
+        content.appendFormatLine('<td>{0}</td>', varSelector1.render());
+        content.appendFormatLine('<td><select class="{0}"></select></td>', 'vp-popup-var1col');
+        content.appendLine('</tr>');
+        // calc -operator
+        content.appendLine('<tr>');
+        content.appendLine('<th><label>Operator</label></th>');
+        content.appendFormatLine('<td><select class="{0}">', 'vp-popup-oper');
+        var operList = ['+', '-', '*', '/', '%', '//', '==', '!=', '>=', '>', '<=', '<', 'and', 'or'];
+        operList.forEach(oper => {
+            content.appendFormatLine('<option value="{0}">{1}</option>', oper, oper);
+        });
+        content.appendFormatLine('</select></td>');
+        content.appendLine('</tr>');
+        // calc - variable 2
+        content.appendLine('<tr>');
+        content.appendLine('<th><label>Variable 2</label></th>');
+        var varSelector2 = new vpVarSelector(dataTypes, 'DataFrame', true, true);
+        varSelector2.addBoxClass('vp-popup-var2box');
+        varSelector2.addClass('vp-popup-var2');
+        content.appendFormatLine('<td>{0}</td>', varSelector2.render());
+        content.appendFormatLine('<td><select class="{0}"></select></td>', 'vp-popup-var2col');
+        content.appendLine('</tr>');
+        content.appendLine('</table>');
+        content.appendLine('</div>'); // end of vp-popup-tab calculation
+
+        // tab 3. replace
+        content.appendFormatLine('<div class="{0} {1} {2}" style="display: none;">', 'vp-popup-tab', 'replace', 'vp-apiblock-scrollbar');
+        content.appendLine(this.renderReplacePage());
+        content.appendLine('</div>'); // end of vp-popup-tab replace
+        
+        // tab 4. apply
+        content.appendFormatLine('<div class="{0} {1}" style="display: none;">', 'vp-popup-tab', 'apply');
+        content.appendLine('<label>lambda x:</label>');
+        var suggestInput = new vpSuggestInputText.vpSuggestInputText();
+        suggestInput.setComponentID('vp_popupAddApply');
+        suggestInput.addClass('vp-input vp-popup-apply');
+        suggestInput.setSuggestList(function() { return ['x', 'min(x)', 'max(x)', 'sum(x)', 'mean(x)']; });
+        suggestInput.setValue('x');
+        suggestInput.setNormalFilter(false);
+        content.appendLine(suggestInput.toTagString());
+        content.appendLine('</div>'); // end of vp-popup-tab apply
+        content.appendLine('</div>'); // end of vp-popup-addpage
         return content.toString();
+    }
+
+    FrameEditor.prototype.bindEventForPopupPage = function() {
+        var that = this;
+        ///// add page
+        // 1. add type
+        $(this.wrapSelector('.vp-popup-addtype')).on('change', function() {
+            var tab = $(this).val();
+            $(that.wrapSelector('.vp-popup-tab')).hide();
+            $(that.wrapSelector('.vp-popup-tab.' + tab)).show();
+        });
+
+        // 2-1. hide column selection box
+        $(this.wrapSelector('.vp-popup-var1box .vp-vs-data-type')).on('change', function() {
+            var type = $(this).val();
+            if (type == 'DataFrame') {
+                $(that.wrapSelector('.vp-popup-var1col')).show();
+            } else {
+                $(that.wrapSelector('.vp-popup-var1col')).hide();
+            }
+        });
+
+        $(this.wrapSelector('.vp-popup-var2box .vp-vs-data-type')).on('change', function() {
+            var type = $(this).val();
+            if (type == 'DataFrame') {
+                $(that.wrapSelector('.vp-popup-var2col')).show();
+            } else {
+                $(that.wrapSelector('.vp-popup-var2col')).hide();
+            }
+        });
     }
 
     FrameEditor.prototype.renderRenamePage = function() {
@@ -483,6 +612,8 @@ define([
 
     FrameEditor.prototype.renderReplacePage = function() {
         var content = new sb.StringBuilder();
+        content.appendFormatLine('<label><input type="checkbox" class="{0}"/><span>{1}</span></label>', 'vp-popup-use-regex', 'Use Regular Expression');
+        content.appendLine('<br/><br/>');
         content.appendFormatLine('<table class="{0}">', 'vp-popup-replace-table');
         content.appendLine(this.renderReplaceInput(0));
         content.appendFormatLine('<tr><td colspan="3"><button class="{0} {1}">{2}</button></td></tr>', 'vp-button', 'vp-popup-replace-add', '+ Add Key');
@@ -494,14 +625,14 @@ define([
         var content = new sb.StringBuilder();
         content.appendLine('<tr>');
         content.appendLine('<td>');
-        content.appendFormatLine('<input type="text" class="{0}" placeholder="{1}"/>', 'vp-popup-origin' + index, 'origin');
+        content.appendFormatLine('<input type="text" class="{0}" placeholder="{1}"/>', 'vp-popup-origin' + index, 'Origin');
         content.appendFormatLine('<label><input type="checkbox" class="{0}" checked/><span>{1}</span></label>', 'vp-popup-origin-istext' + index, 'Text');
         content.appendLine('</td>');
         content.appendLine('<td>');
-        content.appendFormatLine('<input type="text" class="{0}" placeholder="{1}"/>', 'vp-popup-replace' + index, 'replace');
+        content.appendFormatLine('<input type="text" class="{0}" placeholder="{1}"/>', 'vp-popup-replace' + index, 'Replace');
         content.appendFormatLine('<label><input type="checkbox" class="{0}" checked/><span>{1}</span></label>', 'vp-popup-replace-istext' + index, 'Text');
         content.appendLine('</td>');
-        content.appendFormatLine('<td><i class="{0} {1} {2}"></i></td>', 'vp-popup-delete', 'fa fa-close', 'vp-cursor');
+        content.appendFormatLine('<td><div class="{0} {1}"><img src="{2}"/></div></td>', 'vp-popup-delete', 'vp-cursor', '/nbextensions/visualpython/resource/close_small.svg');
         content.appendLine('</tr>');
         return content.toString();
     }
@@ -538,20 +669,58 @@ define([
         $(this.wrapSelector('.' + VP_FE_POPUP_BOX + ' .' + VP_FE_TITLE)).text(title);
         // set content
         $(this.wrapSelector('.' + VP_FE_POPUP_BODY)).html(content);
+        
+        // bindEventForAddPage
+        this.bindEventForPopupPage();
 
         // show popup box
         $(this.wrapSelector('.' + VP_FE_POPUP_BOX)).show();
     }
 
-    FrameEditor.prototype.getPopupContent = function() {
-        var type = this.state.popup.type;
+    FrameEditor.prototype.getPopupContent = function(type) {
         var content = {};
-        switch (parseInt(type)) {
+        switch (type) {
             case FRAME_EDIT_TYPE.ADD_COL:
                 content['name'] = $(this.wrapSelector('.vp-popup-input1')).val();
+                if (content['name'] == '') {
+                    $(this.wrapSelector('.vp-popup-input1')).attr({'placeholder': 'Required input'});
+                    $(this.wrapSelector('.vp-popup-input1')).focus();
+                }
+                var tab = $(this.wrapSelector('.vp-popup-addtype')).val();
                 content['nameastext'] = $(this.wrapSelector('.vp-popup-istext1')).prop('checked');
-                content['value'] = $(this.wrapSelector('.vp-popup-input2')).val();
-                content['valueastext'] = $(this.wrapSelector('.vp-popup-istext2')).prop('checked');
+                content['addtype'] = tab;
+                if (tab == 'value') {
+                    content['value'] = $(this.wrapSelector('.vp-popup-input2')).val();
+                    content['valueastext'] = $(this.wrapSelector('.vp-popup-istext2')).prop('checked');
+                } else if (tab == 'calculation') {
+                    content['var1type'] = $(this.wrapSelector('.vp-popup-var1box .vp-vs-data-type')).val();
+                    content['var1'] = $(this.wrapSelector('.vp-popup-var1')).val();
+                    content['var1col'] = $(this.wrapSelector('.vp-popup-var1col')).val();
+                    content['oper'] = $(this.wrapSelector('.vp-popup-oper')).val();
+                    content['var2type'] = $(this.wrapSelector('.vp-popup-var2box .vp-vs-data-type')).val();
+                    content['var2'] = $(this.wrapSelector('.vp-popup-var2')).val();
+                    content['var2col'] = $(this.wrapSelector('.vp-popup-var2col')).val();
+                } else if (tab == 'replace') {
+                    var useregex = $(this.wrapSelector('.vp-popup-use-regex')).prop('checked');
+                    content['useregex'] = useregex;
+                    content['list'] = [];
+                    for (var i=0; i <= this.state.popup.replace.index; i++) {
+                        var origin = $(this.wrapSelector('.vp-popup-origin' + i)).val();
+                        var origintext = $(this.wrapSelector('.vp-popup-origin-istext'+i)).prop('checked');
+                        var replace = $(this.wrapSelector('.vp-popup-replace' + i)).val();
+                        var replacetext = $(this.wrapSelector('.vp-popup-replace-istext'+i)).prop('checked');
+                        if (origin && replace) {
+                            content['list'].push({
+                                origin: origin,
+                                origintext: origintext,
+                                replace: replace,
+                                replacetext: replacetext
+                            });
+                        }
+                    }
+                } else if (tab == 'apply') {
+                    content['apply'] = $(this.wrapSelector('.vp-popup-apply')).val();
+                }
                 break;
             case FRAME_EDIT_TYPE.ADD_ROW:
                 content['name'] = $(this.wrapSelector('.vp-popup-input1')).val();
@@ -571,19 +740,21 @@ define([
                 });
                 break;
             case FRAME_EDIT_TYPE.REPLACE:
-                var idx = 0;
+                var useregex = $(this.wrapSelector('.vp-popup-use-regex')).prop('checked');
+                content['useregex'] = useregex;
+                content['list'] = [];
                 for (var i=0; i <= this.state.popup.replace.index; i++) {
                     var origin = $(this.wrapSelector('.vp-popup-origin' + i)).val();
-                    var origintext = $(this.wrapSelector('.vp-popup-origin-istext'+idx)).prop('checked');
+                    var origintext = $(this.wrapSelector('.vp-popup-origin-istext'+i)).prop('checked');
                     var replace = $(this.wrapSelector('.vp-popup-replace' + i)).val();
-                    var replacetext = $(this.wrapSelector('.vp-popup-replace-istext'+idx)).prop('checked');
+                    var replacetext = $(this.wrapSelector('.vp-popup-replace-istext'+i)).prop('checked');
                     if (origin && replace) {
-                        content[idx++] = {
+                        content['list'].push({
                             origin: origin,
                             origintext: origintext,
                             replace: replace,
                             replacetext: replacetext
-                        }
+                        });
                     }
                 }
                 break;
@@ -599,10 +770,33 @@ define([
 
     /** open preview box */
     FrameEditor.prototype.openPreview = function() {
-        var code = this.state.steps.join('\n');
+        $(this.wrapSelector('.' + VP_FE_PREVIEW_BOX)).show();
+
+        if (!this.cmpreviewall) {
+            // codemirror setting
+            this.cmpreviewall = codemirror.fromTextArea($('#vp_codePreview')[0], {
+                mode: {
+                    name: 'python',
+                    version: 3,
+                    singleLineStringErrors: false
+                },  // text-cell(markdown cell) set to 'htmlmixed'
+                height: '100%',
+                width: '100%',
+                indentUnit: 4,
+                matchBrackets: true,
+                readOnly:true,
+                autoRefresh: true,
+                theme: "ipython",
+                extraKeys: {"Enter": "newlineAndIndentContinueMarkdownList"},
+                scrollbarStyle: "null"
+            });
+        } else {
+            this.cmpreviewall.refresh();
+        }
+
+        var code = this.generateCode();
         this.cmpreviewall.setValue(code);
         this.cmpreviewall.save();
-        this.cmpreviewall.focus();
 
         var that = this;
         setTimeout(function() {
@@ -610,7 +804,6 @@ define([
         },1);
 
         this.previewOpened = true;
-        $(this.wrapSelector('.' + VP_FE_PREVIEW_BOX)).show();
     }
 
     /** close preview box */
@@ -629,11 +822,13 @@ define([
         
     }
 
-    FrameEditor.prototype.showInfo = function() {
+    FrameEditor.prototype.openDataview = function() {
+        this.dataviewOpened = true;
         $(this.wrapSelector('.' + VP_FE_INFO)).show();
     }
 
-    FrameEditor.prototype.hideInfo = function() {
+    FrameEditor.prototype.closeDataview = function() {
+        this.dataviewOpened = false;
         $(this.wrapSelector('.' + VP_FE_INFO)).hide();
     }
 
@@ -667,10 +862,10 @@ define([
         if (this.state.selected != '') {
             var rowCode = ':';
             var colCode = ':';
-            if (this.state.axis == 0) {
+            if (this.state.axis == FRAME_AXIS.ROW) {
                 rowCode = '[' + this.state.selected.join(',') + ']';
             }
-            if (this.state.axis == 1) {
+            if (this.state.axis == FRAME_AXIS.COLUMN) {
                 colCode = '[' + this.state.selected.join(',') + ']';
             }
             locObj.appendFormat(".loc[{0},{1}]", rowCode, colCode);
@@ -761,11 +956,11 @@ define([
                         renameStr.appendFormat(", {0}: {1}", content[key].label, convertToStr(content[key].value, content[key].istext));
                     }
                 });
-                code.appendFormat("{0}.rename({1}={{2}}, inplace=True)", tempObj, axis==0?'index':'columns', renameStr.toString());
+                code.appendFormat("{0}.rename({1}={{2}}, inplace=True)", tempObj, axis==FRAME_AXIS.ROW?'index':'columns', renameStr.toString());
                 break;
             case FRAME_EDIT_TYPE.DROP_NA:
                 var locObj = '';
-                if (axis == 0) {
+                if (axis == FRAME_AXIS.ROW) {
                     locObj = vpCommon.formatString('.loc[[{0}],:]', selectedName);
                 } else {
                     locObj = vpCommon.formatString('.loc[:,[{0}]]', selectedName);
@@ -773,36 +968,37 @@ define([
                 code.appendFormat("{0}{1}.dropna(axis={2}, inplace=True)", tempObj, locObj, axis);
                 break;
             case FRAME_EDIT_TYPE.DROP_DUP:
-                if (axis == 1) {
+                if (axis == FRAME_AXIS.COLUMN) {
                     code.appendFormat("{0}.drop_duplicates(subset=[{1}], inplace=True)", tempObj, selectedName);
                 }
                 break;
             case FRAME_EDIT_TYPE.ONE_HOT_ENCODING:
-                if (axis == 1) {
+                if (axis == FRAME_AXIS.COLUMN) {
                     code.appendFormat("{0} = pd.get_dummies(data={1}, columns=[{2}])", tempObj, tempObj, selectedName);
                 }
                 break;
             case FRAME_EDIT_TYPE.SET_IDX:
-                if (axis == 1) {
+                if (axis == FRAME_AXIS.COLUMN) {
                     code.appendFormat("{0}.set_index([{1}], inplace=True)", tempObj, selectedName);
                 }
                 break;
             case FRAME_EDIT_TYPE.RESET_IDX:
-                if (axis == 0) {
+                if (axis == FRAME_AXIS.ROW) {
                     code.appendFormat("{0}.reset_index(inplace=True)", tempObj);
                 }
                 break;
             case FRAME_EDIT_TYPE.REPLACE:
                 var replaceStr = new sb.StringBuilder();
-                Object.keys(content).forEach((key, idx) => {
+                var useRegex = content['useregex'];
+                content['list'].forEach((obj, idx) => {
                     if (idx == 0) {
                         replaceStr.appendFormat("{0}: {1}"
-                                                , convertToStr(content[key].origin, content[key].origintext)
-                                                , convertToStr(content[key].replace, content[key].replacetext));
+                                                , convertToStr(obj.origin, obj.origintext, useRegex)
+                                                , convertToStr(obj.replace, obj.replacetext, useRegex));
                     } else {
                         replaceStr.appendFormat(", {0}: {1}"
-                                                , convertToStr(content[key].origin, content[key].origintext)
-                                                , convertToStr(content[key].replace, content[key].replacetext));
+                                                , convertToStr(obj.origin, obj.origintext, useRegex)
+                                                , convertToStr(obj.replace, obj.replacetext, useRegex));
                     }
                 });
 
@@ -812,12 +1008,58 @@ define([
                 // } else {
                 //     locObj = vpCommon.formatString('.loc[:,[{0}]]', selectedName);
                 // }
-                code.appendFormat("{0}[[{1}]] = {2}[[{3}]].replace({{4}})", tempObj, selectedName, tempObj, selectedName, replaceStr);
+                code.appendFormat("{0}[[{1}]] = {2}[[{3}]].replace({{4}}", tempObj, selectedName, tempObj, selectedName, replaceStr);
+                if (useRegex) {
+                    code.append(', regex=True');
+                }
+                code.append(')');
                 break;
             case FRAME_EDIT_TYPE.ADD_COL:
+                // if no name entered
+                if (content.name == '') {
+                    return '';
+                }
                 var name = convertToStr(content.name, content.nameastext);
-                var value = convertToStr(content.value, content.valueastext);
-                code.appendFormat("{0}[{1}] = {2}", tempObj, name, value);
+                var tab = content.addtype;
+                if (tab == 'value') {
+                    var value = convertToStr(content.value, content.valueastext);
+                    code.appendFormat("{0}[{1}] = {2}", tempObj, name, value);
+                } else if (tab == 'calculation') {
+                    var { var1type, var1, var1col, oper, var2type, var2, var2col } = content;
+                    var var1code = var1;
+                    if (var1type == 'DataFrame') {
+                        var1code += "['" + var1col + "']";
+                    }
+                    var var2code = var2;
+                    if (var2type == 'DataFrame') {
+                        var2code += "['" + var2col + "']";
+                    }
+                    code.appendFormat('{0}[{1}] = {2} {3} {4}', tempObj, name, var1code, oper, var2code);
+                } else if (tab == 'replace') {
+                    var replaceStr = new sb.StringBuilder();
+                    var useRegex = content['useregex'];
+                    content['list'].forEach((obj, idx) => {
+                        if (idx == 0) {
+                            replaceStr.appendFormat("{0}: {1}"
+                                                    , convertToStr(obj.origin, obj.origintext, useRegex)
+                                                    , convertToStr(obj.replace, obj.replacetext, useRegex));
+                        } else {
+                            replaceStr.appendFormat(", {0}: {1}"
+                                                    , convertToStr(obj.origin, obj.origintext, useRegex)
+                                                    , convertToStr(obj.replace, obj.replacetext, useRegex));
+                        }
+                    });
+                    if (selectedName && selectedName != '') {
+                        selectedName = '[[' + selectedName + ']]';
+                    }
+                    code.appendFormat("{0}[[{1}]] = {2}{3}.replace({{4}}", tempObj, name, tempObj, selectedName, replaceStr);
+                    if (useRegex) {
+                        code.append(', regex=True');
+                    }
+                    code.append(')');
+                } else if (tab == 'apply') {
+                    code.appendFormat("{0}[{1}] = {2}.apply(lambda x: {3})", tempObj, name, tempObj, content.apply);
+                }
                 break;
             case FRAME_EDIT_TYPE.ADD_ROW: 
                 var name = convertToStr(content.name, content.nameastext);
@@ -832,23 +1074,23 @@ define([
     }
     
     FrameEditor.prototype.loadCode = function(codeStr) {
-        var that = this;
-
-        if (code == '') {
-            return ;
+        if (this.loading) {
+            return;
         }
 
+        var that = this;
         var tempObj = this.state.tempObj;
         var lines = this.state.lines;
 
         var code = new sb.StringBuilder();
         code.appendLine(codeStr);
         code.appendFormat("{0}.head({1}).to_json(orient='{2}')", tempObj, lines, 'split');
-        console.log(code.toString());
+        
+        this.loading = true;
         kernelApi.executePython(code.toString(), function(result) {
             try {
                 var data = JSON.parse(result.substr(1,result.length - 2).replaceAll('\\\\', '\\'));
-                console.log(data);
+                // console.l og(data);
                 var columnList = data.columns;
                 var indexList = data.index;
                 var dataList = data.data;
@@ -861,13 +1103,13 @@ define([
                 columnList && columnList.forEach(col => {
                     var colLabel = convertToStr(col, typeof col == 'string');
                     var colClass = '';
-                    if (that.state.axis == 1 && that.state.selected.includes(colLabel)) {
+                    if (that.state.axis == FRAME_AXIS.COLUMN && that.state.selected.includes(colLabel)) {
                         colClass = 'selected';
                     }
-                    table.appendFormatLine('<th data-label="{0}" data-axis="{1}" class="{2} {3}">{4}</th>', colLabel, 1, VP_FE_TABLE_COLUMN, colClass, col);
+                    table.appendFormatLine('<th data-label="{0}" data-axis="{1}" class="{2} {3}">{4}</th>', colLabel, FRAME_AXIS.COLUMN, VP_FE_TABLE_COLUMN, colClass, col);
                 });
                 // add column
-                table.appendFormatLine('<th class="{0}"><i class="{1}"></i></th>', VP_FE_ADD_COLUMN, 'fa fa-plus');
+                table.appendFormatLine('<th class="{0}"><img src="{1}"/></th>', VP_FE_ADD_COLUMN, '/nbextensions/visualpython/resource/plus.svg');
 
                 table.appendLine('</tr>');
                 table.appendLine('</thead>');
@@ -878,10 +1120,10 @@ define([
                     var idxName = indexList[idx];
                     var idxLabel = convertToStr(idxName, typeof idxName == 'string');
                     var idxClass = '';
-                    if (that.state.axis == 0 && that.state.selected.includes(idxLabel)) {
+                    if (that.state.axis == FRAME_AXIS.ROW && that.state.selected.includes(idxLabel)) {
                         idxClass = 'selected';
                     }
-                    table.appendFormatLine('<th data-label="{0}" data-axis="{1}" class="{2} {3}">{4}</th>', idxLabel, 0, VP_FE_TABLE_ROW, idxClass, idxName);
+                    table.appendFormatLine('<th data-label="{0}" data-axis="{1}" class="{2} {3}">{4}</th>', idxLabel, FRAME_AXIS.ROW, VP_FE_TABLE_ROW, idxClass, idxName);
                     row.forEach(cell => {
                         if (cell == null) {
                             cell = 'NaN';
@@ -894,7 +1136,7 @@ define([
                 });
                 // add row
                 table.appendLine('<tr>');
-                table.appendFormatLine('<th class="{0}"><i class="{1}"></i></th>', VP_FE_ADD_ROW, 'fa fa-plus');
+                table.appendFormatLine('<th class="{0}"><img src="{1}"/></th>', VP_FE_ADD_ROW, '/nbextensions/visualpython/resource/plus.svg');
                 table.appendLine('</tbody>');
                 table.appendLine('</tr>');
                 $(that.wrapSelector('.' + VP_FE_TABLE)).replaceWith(function() {
@@ -905,31 +1147,70 @@ define([
                 // add to stack
                 if (codeStr !== '') {
                     that.state.steps.push(codeStr);
-                    that.setPreview(codeStr);
+                    var replacedCode = codeStr.replaceAll(that.state.tempObj, that.state.returnObj);
+                    that.setPreview(replacedCode);
                 }
+
+                that.loading = false;
             } catch (err) {
                 console.log(err);
+                that.loading = false;
             }
         });
+
+        return code.toString();
     }
 
-    FrameEditor.prototype.apply = function(runCell = true) {
-        var code = this.state.steps.join('\n');
+    FrameEditor.prototype.apply = function(addCell=false, runCell=false) {
+        var code = this.generateCode();
+
+        this.saveState();
+
         if (this.pageThis) {
             $(this.pageThis.wrapSelector('#' + this.targetId)).val(code);
             $(this.pageThis.wrapSelector('#' + this.targetId)).trigger({
                 type: 'frame_run',
+                title: 'Frame',
                 code: code,
+                state: this.state,
+                addCell: addCell,
                 runCell: runCell
             });
         } else {
             $(vpCommon.wrapSelector('#' + this.targetId)).val(code);
             $(vpCommon.wrapSelector('#' + this.targetId)).trigger({
                 type: 'frame_run',
+                title: 'Frame',
                 code: code,
+                state: this.state,
+                addCell: addCell,
                 runCell: runCell
             });
         }
+    }
+
+    FrameEditor.prototype.saveState = function() {
+        // if there's anything to save, you can properly save it here.
+        console.log('frame', 'saveState', this.state);
+    }
+
+    FrameEditor.prototype.loadState = function(state) {
+        console.log('frame', 'loadState', state);
+        var {
+            originObj,
+            returnObj,
+            steps
+        } = state;
+
+        $(this.wrapSelector('#vp_feVariable')).val(originObj);
+
+        $(this.wrapSelector('#vp_feReturn')).val(returnObj);
+
+        // execute all steps
+        var code = steps.join('\n');
+        this.loadCode(code);
+
+
     }
 
     FrameEditor.prototype.unbindEvent = function() {
@@ -938,8 +1219,8 @@ define([
         $(document).off('click', this.wrapSelector('.' + VP_FE_CLOSE));
         $(document).off('change', this.wrapSelector('#vp_feVariable'));
         $(document).off('click', this.wrapSelector('.vp-fe-df-refresh'));
-        $(document).off('click', this.wrapSelector('.vp-fe-df-showinfo'));
         $(document).off('click', this.wrapSelector('.' + VP_FE_INFO));
+        $(document).off('change', this.wrapSelector('#vp_feReturn'));
         $(document).off('contextmenu', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN));
         $(document).off('contextmenu', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW));
         $(document).off('click', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN));
@@ -948,16 +1229,23 @@ define([
         $(document).off('click', this.wrapSelector('.' + VP_FE_ADD_ROW));
         $(document).off('click', this.wrapSelector('.' + VP_FE_TABLE_MORE));
         $(document).off('click', this.wrapSelector('.' + VP_FE_MENU_ITEM));
+        $(document).off('click', this.wrapSelector('.vp-popup-replace-add'));
+        $(document).off('click', this.wrapSelector('.vp-popup-delete'));
+        $(document).off('change', this.wrapSelector('.vp-popup-var1'));
+        $(document).off('change', this.wrapSelector('.vp-popup-var2'));
         $(document).off('click', this.wrapSelector('.' + VP_FE_POPUP_OK));
         $(document).off('click', this.wrapSelector('.' + VP_FE_POPUP_CANCEL));
         $(document).off('click', this.wrapSelector('.' + VP_FE_POPUP_CLOSE));
         $(document).off('click', this.wrapSelector('.' + VP_FE_BUTTON_PREVIEW));
+        $(document).off('click', this.wrapSelector('.' + VP_FE_BUTTON_DATAVIEW));
         $(document).off('click', this.wrapSelector('.' + VP_FE_BUTTON_CANCEL));
         $(document).off('click', this.wrapSelector('.' + VP_FE_BUTTON_RUN));
         $(document).off('click', this.wrapSelector('.' + VP_FE_BUTTON_DETAIL));
         $(document).off('click', this.wrapSelector('.' + VP_FE_DETAIL_ITEM));
         $(document).off('click.' + this.uuid);
 
+        $(document).off('keydown.' + this.uuid);
+        $(document).off('keyup.' + this.uuid);
     }
 
     FrameEditor.prototype.bindEvent = function() {
@@ -991,13 +1279,20 @@ define([
             that.loadVariableList();
         });
 
-        // show info
-        $(document).on('click', this.wrapSelector('.vp-fe-df-showinfo'), function() {
-            that.showInfo();
-        });
-
         $(document).on('click', this.wrapSelector('.' + VP_FE_INFO), function(evt) {
             evt.stopPropagation();
+        });
+
+        // input return variable
+        $(document).on('change', this.wrapSelector('#vp_feReturn'), function() {
+            var returnVariable = $(this).val();
+            if (returnVariable == '') {
+                returnVariable = that.state.tempObj;
+            }
+            // show preview with new return variable
+            var newCode = that.state.steps[that.state.steps.length - 1];
+            that.setPreview(newCode.replaceAll(that.state.tempObj, returnVariable));
+            that.state.returnObj = returnVariable;
         });
 
         // menu on column
@@ -1038,7 +1333,8 @@ define([
             var thisPos = $(this).position();
             var thisRect = $(this)[0].getBoundingClientRect();
             var tblPos = $(that.wrapSelector('.' + VP_FE_TABLE)).position();
-            that.showMenu(tblPos.left + thisRect.width, tblPos.top + thisPos.top);
+            var scrollTop = $(that.wrapSelector('.' + VP_FE_TABLE)).scrollTop();
+            that.showMenu(tblPos.left + thisRect.width, tblPos.top + thisPos.top - scrollTop);
         });
 
         // hide menu
@@ -1047,40 +1343,125 @@ define([
                 // close menu
                 that.hideMenu();
             }
-            if (!$(evt.target).hasClass(VP_FE_DF_SHOWINFO)) {
+            if (!$(evt.target).hasClass('.' + VP_FE_BUTTON_DATAVIEW)) {
                 // close info
-                that.hideInfo();
+                that.closeDataview();
             }
         });
 
         // select column
         $(document).on('click', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN), function(evt) {
             evt.stopPropagation();
+
+            var idx = $(that.wrapSelector('.' + VP_FE_TABLE_COLUMN)).index(this); // 1 ~ n
             var hasSelected = $(this).hasClass('selected');
+
             $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW)).removeClass('selected');
-            if (!hasSelected) {
-                $(this).addClass('selected');
-                var newAxis = $(this).data('axis');
-                that.state.axis = newAxis;
+
+            if (that.keyboardManager.keyCheck.ctrlKey) {
+                if (!hasSelected) {
+                    that.state.selection = { start: idx, end: -1 };
+                    $(this).addClass('selected');
+                    var newAxis = $(this).data('axis');
+                    that.state.axis = newAxis;
+                } else {
+                    $(this).removeClass('selected');
+                }
+                
+            } else if (that.keyboardManager.keyCheck.shiftKey) {
+                var axis = that.state.axis;
+                var startIdx = that.state.selection.start;
+                if (axis != FRAME_AXIS.COLUMN) {
+                    startIdx = -1;
+                }
+                
+                if (startIdx == -1) {
+                    // no selection
+                    that.state.selection = { start: idx, end: -1 };
+                } else if (startIdx > idx) {
+                    // add selection from idx to startIdx
+                    var tags = $(that.wrapSelector('.' + VP_FE_TABLE_COLUMN));
+                    for (var i = idx; i <= startIdx; i++) {
+                        $(tags[i]).addClass('selected');
+                    }
+                    that.state.selection = { start: startIdx, end: idx };
+                } else if (startIdx <= idx) {
+                    // add selection from startIdx to idx
+                    var tags = $(that.wrapSelector('.' + VP_FE_TABLE_COLUMN));
+                    for (var i = startIdx; i <= idx; i++) {
+                        $(tags[i]).addClass('selected');
+                    }
+                    that.state.selection = { start: startIdx, end: idx };
+                }
             } else {
-                $(this).removeClass('selected');
+                $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN)).removeClass('selected');
+                if (!hasSelected) {
+                    $(this).addClass('selected');
+                    that.state.selection = { start: idx, end: -1 };
+                    var newAxis = $(this).data('axis');
+                    that.state.axis = newAxis;
+                } else {
+                    $(this).removeClass('selected');
+                }
             }
-            
             that.loadInfo();
         });
 
         // select row
-        $(document).on('click', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW), function() {
+        $(document).on('click', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW), function(evt) {
+            evt.stopPropagation();
+
+            var idx = $(that.wrapSelector('.' + VP_FE_TABLE_ROW)).index(this); // 0 ~ n
             var hasSelected = $(this).hasClass('selected');
+
             $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN)).removeClass('selected');
-            if (!hasSelected) {
-                $(this).addClass('selected');
-                var newAxis = $(this).data('axis');
-                that.state.axis = newAxis;
-            } else {
-                $(this).removeClass('selected');
-            }
             
+            if (that.keyboardManager.keyCheck.ctrlKey) {
+                if (!hasSelected) {
+                    that.state.selection = { start: idx, end: -1 };
+                    $(this).addClass('selected');
+                    var newAxis = $(this).data('axis');
+                    that.state.axis = newAxis;
+                } else {
+                    $(this).removeClass('selected');
+                }
+                
+            } else if (that.keyboardManager.keyCheck.shiftKey) {
+                var axis = that.state.axis;
+                var startIdx = that.state.selection.start;
+                if (axis != FRAME_AXIS.ROW) {
+                    startIdx = -1;
+                }
+                
+                if (startIdx == -1) {
+                    // no selection
+                    that.state.selection = { start: idx, end: -1 };
+                } else if (startIdx > idx) {
+                    // add selection from idx to startIdx
+                    var tags = $(that.wrapSelector('.' + VP_FE_TABLE_ROW));
+                    for (var i = idx; i <= startIdx; i++) {
+                        $(tags[i]).addClass('selected');
+                    }
+                    that.state.selection = { start: startIdx, end: idx };
+                } else if (startIdx <= idx) {
+                    // add selection from startIdx to idx
+                    var tags = $(that.wrapSelector('.' + VP_FE_TABLE_ROW));
+                    for (var i = startIdx; i <= idx; i++) {
+                        $(tags[i]).addClass('selected');
+                    }
+                    that.state.selection = { start: startIdx, end: idx };
+                }
+            } else {
+                $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW)).removeClass('selected');
+                if (!hasSelected) {
+                    $(this).addClass('selected');
+                    that.state.selection = { start: idx, end: -1 };
+                    var newAxis = $(this).data('axis');
+                    that.state.axis = newAxis;
+                } else {
+                    $(this).removeClass('selected');
+                }
+            }
             that.loadInfo();
         });
 
@@ -1133,10 +1514,66 @@ define([
             $(this).closest('tr').remove();
         });
 
+        
+        // popup : add column - dataframe selection 1
+        $(document).on('var_changed change', this.wrapSelector('.vp-popup-var1'), function() {
+            var type = $(that.wrapSelector('.vp-popup-var1box .vp-vs-data-type')).val();
+            if (type == 'DataFrame') {
+                var df = $(this).val();
+                kernelApi.getColumnList(df, function(result) {
+                    var colList = JSON.parse(result);
+                    var tag = new sb.StringBuilder();
+                    tag.appendFormatLine('<select class="{0}">', 'vp-popup-var1col');
+                    colList && colList.forEach(col => {
+                        tag.appendFormatLine('<option data-code="{0}" value="{1}">{2}</option>'
+                                , col.value, col.label, col.label);
+                    });
+                    tag.appendLine('</select>');
+                    // replace column list
+                    $(that.wrapSelector('.vp-popup-var1col')).replaceWith(function() {
+                        return tag.toString();
+                    });
+                });
+            }
+        });
+
+        // popup : add column - dataframe selection 2
+        $(document).on('var_changed change', this.wrapSelector('.vp-popup-var2'), function() {
+            var type = $(that.wrapSelector('.vp-popup-var2box .vp-vs-data-type')).val();
+            if (type == 'DataFrame') {
+                var df = $(this).val();
+                kernelApi.getColumnList(df, function(result) {
+                    var colList = JSON.parse(result);
+                    var tag = new sb.StringBuilder();
+                    tag.appendFormatLine('<select class="{0}">', 'vp-popup-var2col');
+                    colList && colList.forEach(col => {
+                        tag.appendFormatLine('<option data-code="{0}" value="{1}">{2}</option>'
+                                , col.value, col.label, col.label);
+                    });
+                    tag.appendLine('</select>');
+                    // replace column list
+                    $(that.wrapSelector('.vp-popup-var2col')).replaceWith(function() {
+                        return tag.toString();
+                    });
+                });
+            }
+        });
+
         // ok input popup
         $(document).on('click', this.wrapSelector('.' + VP_FE_POPUP_OK), function() {
             // ok input popup
-            that.loadCode(that.getTypeCode(that.state.popup.type, that.getPopupContent()));
+            var type = parseInt(that.state.popup.type);
+            var content = that.getPopupContent(type);
+            // required data check
+            if (type == FRAME_EDIT_TYPE.ADD_COL) {
+                if (content.name === '') {
+                    return;
+                }
+            }
+            var code = that.loadCode(that.getTypeCode(that.state.popup.type, content));
+            if (code == '') {
+                return;
+            }
             that.closeInputPopup();
         });
 
@@ -1160,6 +1597,16 @@ define([
             }
         });
 
+        // click dataview
+        $(document).on('click', this.wrapSelector('.' + VP_FE_BUTTON_DATAVIEW), function(evt) {
+            evt.stopPropagation();
+            if (that.dataviewOpened) {
+                that.closeDataview();
+            } else {
+                that.openDataview();
+            }
+        });
+
         // click cancel
         $(document).on('click', this.wrapSelector('.' + VP_FE_BUTTON_CANCEL), function() {
             that.close();
@@ -1167,7 +1614,7 @@ define([
 
         // click run
         $(document).on('click', this.wrapSelector('.' + VP_FE_BUTTON_RUN), function() {
-            that.apply();
+            that.apply(true, true);
             that.close();
         });
 
@@ -1177,16 +1624,19 @@ define([
             $(that.wrapSelector('.' + VP_FE_DETAIL_BOX)).show();
         });
 
-        // click add
+        // click add / apply
         $(document).on('click', this.wrapSelector('.' + VP_FE_DETAIL_ITEM), function() {
             var type = $(this).data('type');
             if (type == 'add') {
-                that.apply(false);
+                that.apply(true);
+                that.close();
+            } else if (type == 'apply') {
+                that.apply();
                 that.close();
             }
         });
 
-        // click other
+        // click others
         $(document).on('click.' + this.uuid, function(evt) {
             if (!$(evt.target).hasClass('.' + VP_FE_BUTTON_DETAIL)) {
                 $(that.wrapSelector('.' + VP_FE_DETAIL_BOX)).hide();
@@ -1194,6 +1644,46 @@ define([
             if (!$(evt.target).hasClass('.' + VP_FE_BUTTON_PREVIEW)
                 && $(that.wrapSelector('.' + VP_FE_PREVIEW_BOX)).has(evt.target).length === 0) {
                 that.closePreview();
+            }
+            if (!$(evt.target).hasClass('.' + VP_FE_BUTTON_DATAVIEW)
+                && $(that.wrapSelector('.' + VP_FE_INFO)).has(evt.target).length === 0) {
+                that.closeDataview();
+            }
+        });
+
+        this.keyboardManager = {
+            keyCode : {
+                ctrlKey: 17,
+                cmdKey: 91,
+                shiftKey: 16,
+                altKey: 18,
+                enter: 13,
+                escKey: 27
+            },
+            keyCheck : {
+                ctrlKey: false,
+                shiftKey: false
+            }
+        }
+        $(document).on('keydown.' + this.uuid, function(e) {
+            var keyCode = that.keyboardManager.keyCode;
+            if (e.keyCode == keyCode.ctrlKey || e.keyCode == keyCode.cmdKey) {
+                that.keyboardManager.keyCheck.ctrlKey = true;
+            } 
+            if (e.keyCode == keyCode.shiftKey) {
+                that.keyboardManager.keyCheck.shiftKey = true;
+            }
+        }).on('keyup.' + this.uuid, function(e) {
+            var keyCode = that.keyboardManager.keyCode;
+            if (e.keyCode == keyCode.ctrlKey || e.keyCode == keyCode.cmdKey) {
+                that.keyboardManager.keyCheck.ctrlKey = false;
+            } 
+            if (e.keyCode == keyCode.shiftKey) {
+                that.keyboardManager.keyCheck.shiftKey = false;
+            }
+            if (e.keyCode == keyCode.escKey) {
+                // close on esc
+                that.close();
             }
         });
     }
@@ -1216,9 +1706,24 @@ define([
         $(this.wrapSelector(vpCommon.formatString('.{0}', VP_FE_MENU_BOX))).hide();
     }
 
-    var convertToStr = function(code, isText) {
+    var convertToStr = function(code, isText, useRegex=false) {
+        var newCode = "";
+        if (useRegex) {
+            newCode = "r";
+        }
         if (isText) {
-            code = "'" + code + "'";
+            newCode = newCode + "'" + code + "'";
+        } else {
+            newCode = code;
+        }
+        return newCode;
+    }
+
+    FrameEditor.prototype.generateCode = function() {
+        var code = this.state.steps.join('\n');
+        var returnVariable = $(this.wrapSelector('#vp_feReturn')).val();
+        if (returnVariable != '') {
+            code = code.replaceAll('_vp', returnVariable);
         }
         return code;
     }

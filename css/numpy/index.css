@@ -2,22 +2,18 @@
     outline: none;
     resize: none;
 }
-
 .vp-numpy-selected {
     display: none;
 }
-
 .vp-numpy-func_btn {
     outline: 0;
     border: 0.25px solid #C4C4C4;
 }
-
 .vp-numpy-input {
     padding: 3px;
     border: 1px solid #cfcfcf;
     outline: 0;
 }
-
 .vp-numpy-select {
     border-radius: 10px;
     border: 1px solid #cfcfcf;
@@ -25,7 +21,6 @@
 
     outline: 0;
 }
-
 .vp-numpy-arrayEditor-row-block {
     border: 1px solid #828282;
     padding: 0 1rem;
@@ -34,58 +29,47 @@
     margin-bottom: 5px;
 }
 
-/** 
- *numpy style
- */
-
+/* Numpy Style */
 .vp-numpy-style-margin-right-5px {
     margin-right: 5px;
 }
-
 .vp-numpy-style-font-weight-700 {
     font-weight: 700;
 }
 .vp-numpy-style-text-center {
     text-align: center;
 }
-
 .vp-numpy-style-flex-row {
     display: flex;
     flex-direction: row;
 }
-
 .vp-numpy-style-flex-row-wrap {
     display: flex;
     flex-direction: row;
     flex-flow: wrap;
 }
-
 .vp-numpy-style-flex-row-center {
     display: flex;
     flex-direction: row;
     justify-content: center;
 }
-
 .vp-numpy-style-flex-row-center-wrap {
     display: flex;
     flex-direction: row;
     justify-content: center;
     flex-flow: wrap;
 }
-
 .vp-numpy-style-flex-row-start {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
 }
-
 .vp-numpy-style-flex-row-start-wrap {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     flex-flow: wrap;
 }
-
 .vp-numpy-style-flex-row-evenly {
     display: flex;
     flex-direction: row;
@@ -102,13 +86,11 @@
     justify-content: space-evenly;
     flex-flow: wrap;
 }
-
 .vp-numpy-style-flex-row-end {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
 }
-
 .vp-numpy-style-flex-row-end-wrap {
     display: flex;
     flex-direction: row;
@@ -130,13 +112,11 @@
     display: flex;
     flex-direction: column;
 }
-
 .vp-numpy-style-flex-column-wrap {
     display: flex;
     flex-direction: column;
     flex-flow: wrap;
 }
-
 .vp-numpy-style-flex-column-center {
     display: flex;
     flex-direction: column;
@@ -148,7 +128,6 @@
     justify-content: center;
     flex-flow: wrap;
 }
-
 .vp-numpy-tab {
     margin-top: 10px;
 }

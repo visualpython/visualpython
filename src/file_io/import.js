@@ -118,7 +118,7 @@ define([
      * html 내부 binding 처리
      */
     ImportPackage.prototype.initHtml = function() {
-        this.bindImportPackageGrid();
+        this.bindEvent();
 
         // if need additional css
         // this.loadCss(Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.SOURCE_PATH + "file_io/test.css");
@@ -127,7 +127,7 @@ define([
     /**
      * Import 기본 패키지 바인딩
      */
-    ImportPackage.prototype.bindImportPackageGrid = function() {
+    ImportPackage.prototype.bindEvent = function() {
         var that = this;
 
 
@@ -164,7 +164,7 @@ define([
 
         // 라이브러리 삭제
         $(document).on("click", this.wrapSelector('.vp-remove-option'), function() {
-             // X 버튼과 동일한 행 삭제
+             // X 아이콘과 동일한 행 삭제
              $(this).closest('tr').remove();
         });
 
@@ -212,8 +212,7 @@ define([
                         , 'vp_library' + idx, 'vp-input m vp-add-library', 'Type library name', libraryName);
         tag.appendFormat('<td><input id="{0}" type="text" class="{1}" placeholder="{2}" value="{3}"/></td>'
                         , 'vp_alias' + idx, 'vp-input m vp-add-alias', 'Type alias', aliasName);
-        // tag.appendFormat('<td><input type="button" class="{0}" style="width:100%;" value="{1}"></td>', 'vp-remove-option w100', 'x');
-        tag.appendFormat('<td><i class="{0} {1}"></i></td>', 'fa fa-close', 'vp-remove-option w100 vp-cursor');
+        tag.appendFormat('<td class="{0}"><img src="{1}"/></td>', 'vp-remove-option w100 vp-cursor', '/nbextensions/visualpython/resource/close_small.svg');
         tag.append('</tr>');
         return tag.toString();
     }

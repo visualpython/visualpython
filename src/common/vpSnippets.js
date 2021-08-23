@@ -78,8 +78,8 @@ define([
          , 'Snippets');
 
         // close button
-        page.appendFormatLine('<div class="{0}"><i class="{1}"></i></div>'
-                        , VP_SN_CLOSE, 'fa fa-close');
+        page.appendFormatLine('<div class="{0}"><img src="{1}"/></div>'
+                        , VP_SN_CLOSE, '/nbextensions/visualpython/resource/close_big.svg');
 
         // body start
         page.appendFormatLine('<div class="{0}">', VP_SN_BODY);

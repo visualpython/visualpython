@@ -87,8 +87,6 @@ define([
      * html 내부 binding 처리
      */
     VariablePackage.prototype.initHtml = function() {
-        var that = this;
-
         this.showFunctionTitle();
 
         this.loadVariables();
@@ -96,11 +94,7 @@ define([
         this.loadCss(Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH + "pandas/commonPandas.css");
         this.loadCss(Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH + "file_io/variables.css");
 
-        // load variables on refresh
-        $(this.wrapSelector('#vp_varRefresh')).click(function(event) {
-            event.stopPropagation();
-            that.loadVariables();
-        });
+        this.bindEvent();
     }
 
     /**
@@ -108,6 +102,16 @@ define([
      */
     VariablePackage.prototype.showFunctionTitle = function() {
         $(this.wrapSelector('.vp_functionName')).text(funcOptProp.funcName);
+    }
+
+    VariablePackage.prototype.bindEvent = function() {
+        var that = this;
+
+        // load variables on refresh
+        $(this.wrapSelector('#vp_varRefresh')).click(function(event) {
+            event.stopPropagation();
+            that.loadVariables();
+        });
     }
 
     /**
@@ -164,7 +168,7 @@ define([
                     $(tagTr).append(tagTdType);
 
                     $(tagTdName).attr({
-                        'title': 'click to copy'
+                        'title': 'Click to copy'
                     });
                     // 변수이름 클릭 시 클립보드에 복사
                     $(tagTdName).click(function() {
@@ -210,7 +214,7 @@ define([
                                             $(preTag).text(textResult);
                                             $(tagDetailTable).html(preTag);
                                         } else {
-                                            $(tagDetailTable).append('(Nothing Selected)');
+                                            $(tagDetailTable).append('(Select variables to preview the data.)');
                                         }
                                     }
                                 }

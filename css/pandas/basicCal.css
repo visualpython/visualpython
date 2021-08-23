@@ -4,7 +4,6 @@
 #vp-wrapper #vp_calcBox input[type="text"]{
     width: 100px;
 }
-
 #vp-wrapper #vp_calcPage .vp-calc-overlay {
     display: grid;
     width: 350px;
@@ -16,12 +15,10 @@
     border-radius: 5px;
     margin-top: 3px;
 }
-
 #vp-wrapper #vp_calcPage input[type="button"] {
     border-radius: 3px;
     border: 0px;
     margin: 1px;
-    /* box-shadow: 1px 1px 1px 1px var(--color); */
     background-color: white;
     color: var(--color);
     font-size: 15px;

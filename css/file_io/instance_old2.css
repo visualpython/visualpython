@@ -1,5 +1,4 @@
-
-/* instance toolbar */
+/* Instance Toolbar */
 .vp-instance-toolbar {
     padding: 5px 14px 0px 14px;
 }
@@ -13,18 +12,17 @@
     border-radius: 2px;
 }
 
-/* instance board - without equality */
+/* Instance Board - without equality */
 .vp-instance-base .vp-instance-toggle-box,
 .vp-instance-base .vp-instance-box.right {
     display: none;
 }
 
-/* instance board - with equality */
+/* Instance Board - with equality */
 .vp-instance-base.equality {
     display: grid;
     grid-template-columns: calc(100% - 25px) 25px;
 }
-
 .vp-instance-base.equality > .vp-instance-toggle-box {
     display: block;
     grid-row: span 2;
@@ -37,17 +35,16 @@
     background: #F5F5F5;
     border: 0.25px solid #C4C4C4;
 }
-
 .vp-instance-base.equality > .vp-instance-box.right {
     display: block;
 }
 
-/* vpBoard selected */
+/* VP Board Selected */
 .vp-instance-base.equality > .vp-instance-box.selected .vp-ab-container {
     border: 1px solid #F37704;
 }
 
-/* instance status */
+/* Instance Status */
 .vp-instance-status {
     padding: 5px 14px 5px 14px;
 }
@@ -56,7 +53,7 @@
     margin-right: 0px;
 }
 
-/* select boxes */
+/* Select Boxes */
 .vp-instance-select-base {
     width: 100%;
     display: grid;
@@ -65,7 +62,6 @@
     padding: 5px 14px 0px 14px;
 }
 .vp-instance-select-container {
-    
 }
 .vp-select-title {
     font-weight: bold;
@@ -123,6 +119,7 @@
 .vp-instance-option-box.api {
     width: 95%;
 }
+
 /* .vp-instance-option-box.object {
     display: none;
 } */
@@ -172,7 +169,6 @@
     background: transparent;
     background-image: url(../../resource/pandas/refresh.png);
 }
-
 .vp-icon-btn {
     cursor: pointer;
     width: 15px;
@@ -195,7 +191,7 @@
     float: right;
 }
 
-/* variable view style */
+/* Variable View Style */
 .vp-var-view-box {
     display: none;
     position: absolute;

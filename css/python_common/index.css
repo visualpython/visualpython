@@ -1,4 +1,4 @@
-/* input & select design - width m&s */
+/* Input & Select Design - width m&s */
 #vp-wrapper .vp-input,
 #vp-wrapper .vp-select {
     width: 176px;
@@ -12,7 +12,7 @@
 #vp-wrapper .vp-select.s {
     width: 55px;
 }
-/* range */
+/* Range */
 #vp-wrapper .vp-range {
     display: inline;
     width: 116px;

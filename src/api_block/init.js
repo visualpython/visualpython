@@ -70,7 +70,11 @@ define([
             , STR_HEADER
             , STR_CELL
             , STR_CODEMIRROR_LINES
-            , STR_UNTITLED } = constData;
+            , STR_UNTITLED
+
+            , STATE_codeLine
+        
+            , APPS_CONFIG } = constData;
 
     const BlockContainer = blockContainer;
     const CreateBlockBtn = createBlockBtn;
@@ -149,27 +153,6 @@ define([
             apiLibariesToBtn(blockContainer, xmlLibraries.library);
             
         }, xmlLibraries);
-
-        /** 추가: FIXME: Data Analysis 메뉴 임시 추가 */
-        var TEMP_DA_MENUS = [
-            'Database',
-            'Crawling',
-            'Data Preprocessing',
-            'EDA',
-            'Visualization',
-            'Text Analysis'
-        ];
-        TEMP_DA_MENUS.forEach((menu, idx) => {
-            new CreateGroup(blockContainer, 'da_' + idx, menu, VP_CLASS_PREFIX + 'vp-block-group-box-da');
-        });
-        /** 추가: FIXME: AI 메뉴 임시 추가 */
-        var TEMP_AI_MENUS = [
-            'Machine Learning',
-            'Deep Learning'
-        ]
-        TEMP_AI_MENUS.forEach((menu, idx) => {
-            new CreateGroup(blockContainer, 'ai_' + idx, menu, VP_CLASS_PREFIX + 'vp-block-group-box-ai');
-        });
 
         /** API Block 햄버거 메뉴바 생성 */
         apiBlockMenuInit(blockContainer);
@@ -258,14 +241,14 @@ define([
         /** Apps Menu item click */
         $(document).on(STR_CLICK,'.vp-apiblock-menu-apps-item', function() {
             var menu = $(this).attr('data-menu');
+
+            var { file, config } = APPS_CONFIG[menu];
+            if (config == undefined) {
+                config = {}
+            }
+
             switch (menu)
             {
-                case 'import':
-                    blockContainer.createAppsPage('/nbextensions/visualpython/src/file_io/import.js', {
-                        title: 'Import',
-                        width: '500px'
-                    });
-                    break;
                 case 'markdown':
                     // blockContainer.createAppsPage('/nbextensions/visualpython/src/markdown/markdown.js', {
                     //     title: 'Markdown'
@@ -274,41 +257,17 @@ define([
                     // });
                     blockContainer.createTextBlock();
                     break;
+                case 'import':
                 case 'snippets':
-                    blockContainer.createAppsPage('/nbextensions/visualpython/src/file_io/udf.js', {
-                        title: 'Snippets'
-                    });
-                    break;
                 case 'variable':
-                    blockContainer.createAppsPage('/nbextensions/visualpython/src/file_io/variables.js', {
-                        title: 'Variables'
-                    });
-                    break;
                 case 'file':
-                    blockContainer.createAppsPage('/nbextensions/visualpython/src/file_io/fileio.js', {
-                        title: 'File',
-                        width: '500px'
-                    });
-                    break;
                 case 'instance':
-                    blockContainer.createAppsPage('/nbextensions/visualpython/src/file_io/instance.js', {
-                        title: 'Instance'
-                    });
-                    break;
                 case 'subset':
-                    blockContainer.createAppsPage('nbextensions/visualpython/src/common/vpSubsetEditor');
-                    break;
                 case 'frame':
-                    blockContainer.createAppsPage('nbextensions/visualpython/src/common/vpFrameEditor');
-                    break;
                 case 'chart':
-                    blockContainer.createAppsPage('/nbextensions/visualpython/src/matplotlib/plot.js', {
-                        title: 'Chart',
-                        width: '600px'
-                    });
-                    break;
                 case 'profiling':
-                    blockContainer.createAppsPage('nbextensions/visualpython/src/common/vpProfiling');
+                    blockContainer.setSelectBlock(null);
+                    blockContainer.createAppsPage(menu, file, config);
                     break;
                 case 'merge':
                     // TODO: Merge
@@ -325,10 +284,98 @@ define([
             }
         });
 
-        /** Apps Menu Apply event */
-        $(document).on('popup_run subset_run frame_run', '#vp_appsCode', function(evt) {
+        $(document).on('popup_run', '#vp_appsCode', function(evt) {
             var code = evt.code;
             var title = evt.title;
+            var state = evt.state;
+            var addCell = evt.addCell == true;
+            var runCell = evt.runCell == true;
+
+            var isFirstBlock = false;
+            const blockList = blockContainer.getBlockList();
+
+            /** board에 블럭이 0개 일때
+             *  즉 블럭이 처음으로 생성되는 경우
+             */
+             if (blockList.length == 0) {
+                isFirstBlock = true;
+            }
+
+            var createdBlock = blockContainer.getSelectBlock();
+            if (createdBlock) {
+                // apply to original block
+                createdBlock.setState({
+                    apps: {
+                        menu: blockContainer.apps,
+                        code: code,
+                        state: state
+                    }
+                });
+                createdBlock.saveState();
+            } else {
+                if (title === 'Snippets') {
+                    // 1. add code block
+                    // create block as group block
+                    createdBlock = blockContainer.createBlock(BLOCK_CODELINE_TYPE.CODE, null, null, true);
+                    // set code
+                    createdBlock.setState({
+                        [STATE_codeLine]: code
+                    });
+                    createdBlock.writeCode(code);
+                    createdBlock.apply();
+                    if (isFirstBlock == true) {
+                        // if it is first block, set as ROOT
+                        createdBlock.setDirection(BLOCK_DIRECTION.ROOT);
+                    } else {
+                        var lastBottomBlock = blockContainer.getRootToLastBottomBlock();
+                        lastBottomBlock.appendBlock(createdBlock, BLOCK_DIRECTION.DOWN);
+                    }
+                    blockContainer.addNodeBlock(createdBlock);
+                    blockContainer.resetBlockList();
+                    blockContainer.reRenderAllBlock_asc();
+                    blockContainer.resetBlockListAndRenderThisBlock(createdBlock);
+                } else if (title === 'Import' || title === 'Variables' || title === 'File' 
+                        || title === 'Instance' || title === 'Chart') {
+                    // add apps block
+                    createdBlock = blockContainer.createBlock(BLOCK_CODELINE_TYPE.APPS, null, null, true, true);
+                    createdBlock.setState({
+                        apps: {
+                            menu: blockContainer.apps,
+                            code: code,
+                            state: state
+                        }
+                    });
+                    // set code
+                    createdBlock.setState({
+                        [STATE_codeLine]: 'Apps > ' + title
+                    });
+                    // createdBlock.writeCode(code);
+                    createdBlock.apply();
+                    if (isFirstBlock == true) {
+                        // if it is first block, set as ROOT
+                        createdBlock.setDirection(BLOCK_DIRECTION.ROOT);
+                    } else {
+                        var lastBottomBlock = blockContainer.getRootToLastBottomBlock();
+                        lastBottomBlock.appendBlock(createdBlock, BLOCK_DIRECTION.DOWN);
+                    }
+                    blockContainer.addNodeBlock(createdBlock);
+                    blockContainer.resetBlockList();
+                    blockContainer.reRenderAllBlock_asc();
+                } 
+            }
+
+            // 2. add cell and run cell
+            if (addCell) {
+                createdBlock.runThisBlock(runCell);
+            }
+        });
+
+        /** Apps Menu Apply event */
+        $(document).on('subset_run frame_run', '#vp_appsCode', function(evt) {
+            var code = evt.code;
+            var title = evt.title;
+            var state = evt.state;
+            var addCell = evt.addCell == true;
             var runCell = evt.runCell == true;
 
             var isFirstBlock = false;
@@ -340,61 +387,82 @@ define([
                 isFirstBlock = true;
             }
 
-            var createdBlock = undefined;
-            if (title == 'Markdown') {
-
-                createdBlock = blockContainer.createTextBlock(code);
-
-                // createdBlock = blockContainer.createBlock(BLOCK_CODELINE_TYPE.TEXT);
-                // createdBlock.apply();
-                // createdBlock.setFuncID(STR_TEXT_BLOCK_MARKDOWN_FUNCID);
-                // createdBlock.setOptionPageLoadCallback(optionPageLoadCallback_block);
-                // createdBlock.setLoadOption(loadOption_block);
-                // createdBlock.setState({
-                //     [STATE_codeLine]: code
-                // });
-
-                // /** board에 블럭이 0개일 경우 */
-                // if (isFirstBlock == true) {
-                //     createdBlock.setDirection(BLOCK_DIRECTION.ROOT);
-                //     blockContainer.reNewContainerDom();
-                // /** board에 블럭이 1개 이상 일 경우 */         
-                // } else {
-                //     /** board의 가장 아래 블럭을 가져옴 */
-                //     var lastBottomBlock = blockContainer.getRootToLastBottomBlock();
-                //     lastBottomBlock.appendBlock(createdBlock, BLOCK_DIRECTION.DOWN);
-                // }
-                // blockContainer.reRenderAllBlock_asc(); 
-                // blockContainer.resetBlockList();
-                // blockContainer.setSelectBlock(createdBlock);
-
-                // createdBlock.writeCode(`<p>${code}</p>`);
-                // createdBlock.renderSelectedBlockBorderColor(true);
-            } else {
-                // 1. add code block
-                // create block as group block
-                createdBlock = blockContainer.createBlock(BLOCK_CODELINE_TYPE.CODE, null, null, true);
-                // set code
+            var createdBlock = blockContainer.getSelectBlock();
+            if (createdBlock) {
+                // apply to original block
                 createdBlock.setState({
-                    customCodeLine: code
+                    apps: {
+                        menu: blockContainer.apps,
+                        code: code,
+                        state: state
+                    }
                 });
-                createdBlock.writeCode(code);
-                createdBlock.apply();
-                if (isFirstBlock == true) {
-                    // if it is first block, set as ROOT
-                    createdBlock.setDirection(BLOCK_DIRECTION.ROOT);
+                createdBlock.saveState();
+            } else {
+                // new block
+                if (title === 'Markdown') {
+    
+                    createdBlock = blockContainer.createTextBlock(code);
+    
+                    // createdBlock = blockContainer.createBlock(BLOCK_CODELINE_TYPE.TEXT);
+                    // createdBlock.apply();
+                    // createdBlock.setFuncID(STR_TEXT_BLOCK_MARKDOWN_FUNCID);
+                    // createdBlock.setOptionPageLoadCallback(optionPageLoadCallback_block);
+                    // createdBlock.setLoadOption(loadOption_block);
+                    // createdBlock.setState({
+                    //     [STATE_codeLine]: code
+                    // });
+    
+                    // /** board에 블럭이 0개일 경우 */
+                    // if (isFirstBlock == true) {
+                    //     createdBlock.setDirection(BLOCK_DIRECTION.ROOT);
+                    //     blockContainer.reNewContainerDom();
+                    // /** board에 블럭이 1개 이상 일 경우 */         
+                    // } else {
+                    //     /** board의 가장 아래 블럭을 가져옴 */
+                    //     var lastBottomBlock = blockContainer.getRootToLastBottomBlock();
+                    //     lastBottomBlock.appendBlock(createdBlock, BLOCK_DIRECTION.DOWN);
+                    // }
+                    // blockContainer.reRenderAllBlock_asc(); 
+                    // blockContainer.resetBlockList();
+                    // blockContainer.setSelectBlock(createdBlock);
+    
+                    // createdBlock.writeCode(`<p>${code}</p>`);
+                    // createdBlock.renderSelectedBlockBorderColor(true);
                 } else {
-                    var lastBottomBlock = blockContainer.getRootToLastBottomBlock();
-                    lastBottomBlock.appendBlock(createdBlock, BLOCK_DIRECTION.DOWN);
+                    // add apps block
+                    createdBlock = blockContainer.createBlock(BLOCK_CODELINE_TYPE.APPS, null, null, true, true);
+                    createdBlock.setState({
+                        apps: {
+                            menu: blockContainer.apps,
+                            code: code,
+                            state: state
+                        }
+                    });
+                    // set code
+                    createdBlock.setState({
+                        [STATE_codeLine]: 'Apps > ' + title
+                    });
+                    // createdBlock.writeCode(code);
+                    createdBlock.apply();
+                    if (isFirstBlock == true) {
+                        // if it is first block, set as ROOT
+                        createdBlock.setDirection(BLOCK_DIRECTION.ROOT);
+                    } else {
+                        var lastBottomBlock = blockContainer.getRootToLastBottomBlock();
+                        lastBottomBlock.appendBlock(createdBlock, BLOCK_DIRECTION.DOWN);
+                    }
+                    blockContainer.addNodeBlock(createdBlock);
+                    blockContainer.resetBlockList();
+                    blockContainer.reRenderAllBlock_asc();
                 }
-                blockContainer.addNodeBlock(createdBlock);
-                blockContainer.reRenderAllBlock_asc();
-                blockContainer.resetBlockListAndRenderThisBlock(createdBlock);
     
             }
 
             // 2. add cell and run cell
-            createdBlock.runThisBlock(runCell);
+            if (addCell) {
+                createdBlock.runThisBlock(runCell);
+            }
         });
 
         /** Logic, API, Data Analysis 의 > 버튼 클릭 */
@@ -632,6 +700,18 @@ define([
                     // add and not run
                     appliedBlock.runThisBlock(false);
                 }
+            } else if (type == 'apply') {
+                // apply it
+                var appliedBlock = blockContainer.applyBlock();
+
+                if (appliedBlock) {
+                    // applied! popup
+                    vpCommon.renderSuccessMessage('Applied!');
+
+                    // scroll to applied block
+                    var appliedBlockDom = appliedBlock.getBlockMainDom();
+                    $(VP_CLASS_PREFIX + VP_CLASS_APIBLOCK_BOARD).animate({scrollTop: $(appliedBlockDom).position().top}, "fast");
+                }
             }
         });
 
@@ -794,6 +874,11 @@ define([
             }
             if (evt.target.id != 'vp_apiblock_board_option_detail_button') {
                 $(VP_CLASS_PREFIX + 'vp-apiblock-option-detail-box').hide();
+            }
+            if (evt.target.id != 'vp_apiblock_board_option_preview_button'
+                && $(vpCommon.wrapSelector('.vp-apiblock-option-preview-container')).has(evt.target).length === 0) {
+                blockContainer.hideOptionPreviewBox();
+                $(VP_ID_PREFIX + VP_APIBLOCK_BOARD_OPTION_PREVIEW_BUTTON).removeClass('enabled');
             }
         });
 

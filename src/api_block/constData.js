@@ -52,6 +52,8 @@ define([
 
         , COMMENT: 16
         , PRINT: 17
+
+        , APPS: 20
         
         , ELIF: 100
         , ELSE: 200
@@ -274,6 +276,7 @@ define([
     const STR_WHILE = 'while';
     const STR_IMPORT = 'import';
     const STR_API = 'api';
+    const STR_APPS = 'apps';
     const STR_TRY = 'try';
     const STR_EXCEPT = 'except';
     const STR_FINALLY = 'finally';
@@ -736,6 +739,46 @@ define([
     // const WHILE_OPERATOR_ARG4 = ['none', '==' ,'!=', '<', '>', '>=', '<=', 'and', 'or', 'in','not in'];
     // const WHILE_OPERATOR_ARG6 = ['==' ,'!=', '<', '>', '>=', '<=', 'and', 'or', 'in','not in'];
 
+    const APPS_CONFIG = {
+        'import': {
+            file: '/nbextensions/visualpython/src/file_io/import.js',
+            config: { title: 'Import', width: '500px'}
+        },
+        'markdown': {
+            file: '/nbextensions/visualpython/src/markdown/markdown.js',
+            config: { title: 'Markdown' }
+        },
+        'snippets': {
+            file: '/nbextensions/visualpython/src/file_io/udf.js',
+            config: { title: 'Snippets' }
+        },
+        'variable': {
+            file: '/nbextensions/visualpython/src/file_io/variables.js',
+            config: { title: 'Variables' }
+        },
+        'file': {
+            file: '/nbextensions/visualpython/src/file_io/fileio.js',
+            config: { title: 'File', width: '500px' }
+        },
+        'instance': {
+            file: '/nbextensions/visualpython/src/file_io/instance.js',
+            config: { title: 'Instance' }
+        },
+        'subset': {
+            file: 'nbextensions/visualpython/src/common/vpSubsetEditor',
+        },
+        'frame': {
+            file: 'nbextensions/visualpython/src/common/vpFrameEditor'
+        },
+        'chart': {
+            file: '/nbextensions/visualpython/src/matplotlib/plot.js',
+            config: { title: 'Chart', width: '600px' }
+        },
+        'profiling': {
+            file: 'nbextensions/visualpython/src/common/vpProfiling'
+        }
+    }
+
     return {
         BLOCK_GROUP_TYPE
         , BLOCK_CODELINE_BTN_TYPE
@@ -848,6 +891,7 @@ define([
         , STR_WHILE
         , STR_IMPORT
         , STR_API
+        , STR_APPS
         , STR_TRY
         , STR_EXCEPT
         , STR_FINALLY
@@ -1212,5 +1256,7 @@ define([
         , DEF_PARAM_TYPE_LIST
 
         , IMPORT_DEFAULT_DATA_LIST
+
+        , APPS_CONFIG
     }
 });

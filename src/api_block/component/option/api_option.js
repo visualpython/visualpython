@@ -45,6 +45,7 @@ define([
             }
          
             funcJS.loadMeta(funcJS, generatedMetaData);
+            console.log('metadata', generatedMetaData); 
             blockContainerThis.removeOptionDom(blockUUID);
             var blockOptionPageDom = makeUpGreenRoomHTML();
             thisBlock.setBlockOptionPageDom(blockOptionPageDom);

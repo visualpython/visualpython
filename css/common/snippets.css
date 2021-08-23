@@ -4,39 +4,30 @@
     left: 0;
     width: 100%; 
     height: 100%; 
-
     z-index: 1200;
-
     background-color: rgba(0,0,0,.4);
 }
-
 .vp-sn-container {
     position: relative;
     left: 50%;
     top: 50%;
     transform:translate(-50%, -50%);
-    
     min-width: 400px;
     min-height: 400px;
     width: 95%;
     height: 95%;
-
     background-color: white;
 }
-
 .vp-sn-title {
     height: 30px;
     padding: 5px 0px 5px 10px;
-
     background-color: #EEE;
     border:  1px solid #ddd;;
     display: flex; 
     flex-direction: row;
     position: relative;
-
     font-weight: 700;
 }
-
 .vp-sn-close {
     position: fixed;
     z-index: 3;
@@ -48,7 +39,6 @@
     text-align: center;
     cursor: pointer;
 }
-
 .vp-sn-body {
     width: 100%;
     height: calc(100% - 30px);

@@ -1,18 +1,18 @@
-/* visual python - buttons */
+/* Buttons */
 .vp-button {
     width: 80px;
     height: 30px;
     background: #FFFFFF;
     border: 0.25px solid #E4E4E4;
     box-sizing: border-box;
-    box-shadow: 1px 1px 2px rgb(0 0 0 / 10%);
+    box-shadow: 0.5px 0.5px 0.5px rgb(0 0 0 / 10%);
     border-radius: 2px;
     line-height: 30px;
-    font-size: 13px;
+    font-size: 14px;
     text-align: center;
     color: #696969;
     cursor: pointer;
-    /* no-selection allowed for button */
+    /* No-selection allowed for buttons */
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
     -khtml-user-select: none; /* Konqueror HTML */
@@ -21,11 +21,9 @@
     user-select: none; /* Non-prefixed version, currently
                                 supported by Chrome, Edge, Opera and Firefox */
 }
-
 .vp-button:hover {
     background: #F8F8F8;
 }
-
 .vp-button.cancel {
     background: #E5E5E5;
     border: 0px;
@@ -33,14 +31,12 @@
 .vp-button.cancel:hover {
     background: #DEDEDE;
 }
-
 .vp-button.add {
     background: #FFFFFF;
 }
 .vp-button.add:hover {
     background: #F8F8F8;
 }
-
 .vp-button.activated {
     background: #F38504;
     border: 0px;
@@ -49,7 +45,6 @@
 .vp-button.activated:hover {
     background: #EF6B10;
 }
-
 .vp-button.disabled,
 .vp-button.disabled:hover {
     background: #E5E5E5;
@@ -59,11 +54,10 @@
     cursor: not-allowed;
 }
 
-/* cursor as pointer */
+/* Cursor Pointer */
 .vp-cursor {
     cursor: pointer;
 }
-
 .vp-vertical-line {
     display: inline-block;
     height: 15px;
