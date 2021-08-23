@@ -227,6 +227,7 @@ define([
         this.blockMenu = new BlockMenu(this);
 
         // loadedAppsMenu
+        this.apps = undefined;
         this.appsMenu = null;
     }
 
@@ -802,7 +803,7 @@ define([
             createdBlock.state = {
                 ...createdBlock.state
                 , blockOptionState
-            }
+            };
             createdBlock.setChildBlockUUIDList(childBlockUUIDList || nextBlockUUIDList);
             
             createdBlockList.push(createdBlock);
@@ -1826,7 +1827,7 @@ define([
         this.resetBlockListAndRenderThisBlock(createdBlock_api);
     }
 
-    BlockContainer.prototype.createAppsPage = function(moduleFile, config={}, callback=undefined) {
+    BlockContainer.prototype.createAppsPage = function(appsKey, moduleFile, config={}, callback=undefined) {
         var that = this;
 
         // var loadUrl = 'markdown/markdown.js';
@@ -1835,8 +1836,11 @@ define([
         requirejs([loadUrl], function (loaded) {
             if (Object.keys(loaded).includes('initOption')) {
                 loaded.initOption(function(funcJS) {
+                    // optionPage load callback
+                    that.apps = appsKey;
                     that.appsMenu = new popupPage(funcJS, 'vp_appsCode');
                     funcJS.wrapSelector = that.appsMenu.wrapSelector;
+                    funcJS.loadMeta(funcJS, config.state);
                     // library page
                     $(vpCommon.wrapSelector(vpCommon.formatString("#{0}", vpConst.OPTION_GREEN_ROOM), vpCommon.formatString(".{0}", vpConst.API_OPTION_PAGE))).each(function() {
                         that.appsMenu.open({
@@ -1847,11 +1851,17 @@ define([
                     if (callback) {
                         callback(funcJS);
                     }
-                }, undefined);
+                }, config.state);
             } else {
                 // save appsMenu object
+                that.apps = appsKey;
                 that.appsMenu = new loaded(null, 'vp_appsCode');
-                that.appsMenu.open();
+                that.appsMenu.open({ 
+                    ...config 
+                });
+                if (callback) {
+                    callback(that.appsMenu);
+                }
             }
 
 
@@ -1932,7 +1942,8 @@ define([
             || blockType == BLOCK_CODELINE_TYPE.LAMBDA
             || blockType == BLOCK_CODELINE_TYPE.NODE
             || blockType == BLOCK_CODELINE_TYPE.TEXT
-            || blockType == BLOCK_CODELINE_TYPE.API ) {
+            || blockType == BLOCK_CODELINE_TYPE.API
+            || blockType == BLOCK_CODELINE_TYPE.APPS ) {
             blockName = '';
         } else if (blockType == BLOCK_CODELINE_TYPE.PROPERTY) {
             blockName = '@';
@@ -2017,6 +2028,7 @@ define([
                     || blockType == BLOCK_CODELINE_TYPE.LAMBDA 
                     || blockType == BLOCK_CODELINE_TYPE.IMPORT 
                     || blockType == BLOCK_CODELINE_TYPE.API
+                    || blockType == BLOCK_CODELINE_TYPE.APPS
 
                     || blockType == BLOCK_CODELINE_TYPE.ELSE
                     || blockType == BLOCK_CODELINE_TYPE.FINALLY
@@ -2040,6 +2052,7 @@ define([
                 || blockType == BLOCK_CODELINE_TYPE.COMMENT
                 || blockType == BLOCK_CODELINE_TYPE.PROPERTY
                 || blockType == BLOCK_CODELINE_TYPE.API
+                || blockType == BLOCK_CODELINE_TYPE.APPS
                 || blockType == BLOCK_CODELINE_TYPE.LAMBDA ) {
                 sbMainHeader.appendFormatLine("<strong class='{0}'>",'vp-block-header-name');
                 sbMainHeader.appendFormatLine("{0}", blockName);
@@ -2206,6 +2219,9 @@ define([
                 } else {
                     codeList.push(apiCodeLine);
                 }
+            } else if (blockType == BLOCK_CODELINE_TYPE.APPS) {
+                var { code } = block.getState('apps');
+                codeList.push(code);
             } else {
                 var tmpCodeLine = block.setCodeLineAndGet(indentString, false)
                 if (asPreview && blockType == BLOCK_CODELINE_TYPE.TEXT && tmpCodeLine.length > 0) {
@@ -2250,7 +2266,7 @@ define([
             var codeLine = STR_EMPTY;
             var blockType = block.getBlockType();
 
-            if ( blockType == BLOCK_CODELINE_TYPE.API ) {
+            if ( blockType == BLOCK_CODELINE_TYPE.API) {
                 var apiCodeLine = block.setCodeLineAndGet(indentString, true);
                 if (apiCodeLine.indexOf('BREAK_RUN') != -1) {
                     // codeLineStr += 'BREAK_RUN';
@@ -2258,6 +2274,9 @@ define([
                 } else {
                     codeLine += apiCodeLine;
                 }
+            } else if (blockType == BLOCK_CODELINE_TYPE.APPS) {
+                var { code } = block.getState('apps');
+                codeLine += code;
             } else {
                 codeLine += block.setCodeLineAndGet(indentString, false);
             }

@@ -56,7 +56,7 @@ define([
             width: '100%',
             indentUnit: 4,
             matchBrackets: true,
-            readOnly:true,
+            readOnly: true,
             autoRefresh: true,
             theme: "ipython",
             extraKeys: {"Enter": "newlineAndIndentContinueMarkdownList"},
@@ -140,6 +140,12 @@ define([
         };
 
         this.init();
+
+        // load state
+        if (this.config.state) {
+            this.loadState(this.config.state);
+        }
+
         $(this.wrapSelector()).show();
 
         if (!this.cmpreview) {
@@ -158,11 +164,13 @@ define([
     PopupPage.prototype.apply = function(addCell=false, runCell=false) {
         if (this.pageThis) {
             var code = this.pageThis.generateCode(false, false);
+            this.pageThis.metaGenerate();
             $(vpCommon.wrapSelector('#' + this.targetId)).val(code);
             $(vpCommon.wrapSelector('#' + this.targetId)).trigger({
                 type: 'popup_run',
                 title: this.config.title,
                 code: code,
+                state: this.pageThis.metadata,
                 addCell: addCell,
                 runCell: runCell
             });
@@ -189,6 +197,10 @@ define([
     PopupPage.prototype.closePreview = function() {
         this.previewOpened = false;
         $(this.wrapSelector('.' + VP_PP_PREVIEW_BOX)).hide();
+    }
+
+    PopupPage.prototype.loadState = function() {
+
     }
 
     PopupPage.prototype.bindEvent = function() {
@@ -298,6 +310,10 @@ define([
 
         $(document).off('keydown.' + this.uuid);
         $(document).off('keyup.' + this.uuid);
+    }
+
+    PopupPage.prototype.generateCode = function() {
+        return this.pageThis.generateCode(false, false);
     }
 
 

@@ -126,8 +126,17 @@ define([
         return vpCommon.formatString('.{0}.{1} {2}', VP_FE, this.uuid, query);
     }
 
-    FrameEditor.prototype.open = function() {
-        this.init();
+    FrameEditor.prototype.open = function(config={}) {
+        this.config = {
+            ...this.config,
+            ...config
+        }
+
+        if (this.config.state) {
+            this.init(this.config.state);
+        } else {
+            this.init();
+        }
         $(this.wrapSelector()).show();
 
         if (!this.codepreview) {
@@ -163,6 +172,11 @@ define([
         } else {
             this.codepreview.refresh();
         }
+
+        // load state
+        if (this.config.state) {
+            this.loadState(this.config.state);
+        }
     }
 
     FrameEditor.prototype.close = function() {
@@ -170,7 +184,7 @@ define([
         $(this.wrapSelector()).remove();
     }
 
-    FrameEditor.prototype.init = function() {
+    FrameEditor.prototype.init = function(state = undefined) {
         // state
         this.state = {
             originObj: '',
@@ -189,11 +203,19 @@ define([
                 end: -1
             }
         }
+        if (state) {
+            this.state = { 
+                ...this.state,
+                ...state
+            };
+        }
 
         this.codepreview = undefined;
         this.cmpreviewall = undefined;
         this.previewOpened = false;
         this.dataviewOpened = false;
+
+        this.loading = false;
 
         vpCommon.loadCss(Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH + "common/frameEditor.css");
 
@@ -232,7 +254,12 @@ define([
 
     FrameEditor.prototype.setPreview = function(previewCodeStr) {
         if (this.codepreview) {
-            this.codepreview.setValue(previewCodeStr);
+            // get only last line of code
+            var previewCodeLines = previewCodeStr.split('\n');
+            var previewCode = previewCodeLines.pop();
+
+            // set code as preview
+            this.codepreview.setValue(previewCode);
             this.codepreview.save();
             var that = this;
             setTimeout(function() {
@@ -416,9 +443,11 @@ define([
             try {
                 var varList = JSON.parse(result);
                 // render variable list
+                // get prevvalue
+                var prevValue = that.state.originObj;
                 // replace
                 $(that.wrapSelector('#vp_feVariable')).replaceWith(function() {
-                    return that.renderVariableList(varList);
+                    return that.renderVariableList(varList, prevValue);
                 });
                 $(that.wrapSelector('#vp_feVariable')).trigger('change');
             } catch (ex) {
@@ -428,16 +457,15 @@ define([
         });
     }
 
-    FrameEditor.prototype.renderVariableList = function(varList) {
+    FrameEditor.prototype.renderVariableList = function(varList, defaultValue='') {
         var tag = new sb.StringBuilder();
-        var beforeValue = $(this.wrapSelector('#vp_feVariable')).val();
         tag.appendFormatLine('<select id="{0}">', 'vp_feVariable');
         varList.forEach(vObj => {
             // varName, varType
             var label = vObj.varName;
             tag.appendFormatLine('<option value="{0}" data-type="{1}" {2}>{3}</option>'
                                 , vObj.varName, vObj.varType
-                                , beforeValue == vObj.varName?'selected':''
+                                , defaultValue == vObj.varName?'selected':''
                                 , label);
         });
         tag.appendLine('</select>'); // VP_VS_VARIABLES
@@ -1052,6 +1080,10 @@ define([
     }
     
     FrameEditor.prototype.loadCode = function(codeStr) {
+        if (this.loading) {
+            return;
+        }
+
         var that = this;
         var tempObj = this.state.tempObj;
         var lines = this.state.lines;
@@ -1060,6 +1092,7 @@ define([
         code.appendLine(codeStr);
         code.appendFormat("{0}.head({1}).to_json(orient='{2}')", tempObj, lines, 'split');
         
+        this.loading = true;
         kernelApi.executePython(code.toString(), function(result) {
             try {
                 var data = JSON.parse(result.substr(1,result.length - 2).replaceAll('\\\\', '\\'));
@@ -1123,8 +1156,11 @@ define([
                     var replacedCode = codeStr.replaceAll(that.state.tempObj, that.state.returnObj);
                     that.setPreview(replacedCode);
                 }
+
+                that.loading = false;
             } catch (err) {
                 console.log(err);
+                that.loading = false;
             }
         });
 
@@ -1133,11 +1169,16 @@ define([
 
     FrameEditor.prototype.apply = function(addCell=false, runCell=false) {
         var code = this.generateCode();
+
+        this.saveState();
+
         if (this.pageThis) {
             $(this.pageThis.wrapSelector('#' + this.targetId)).val(code);
             $(this.pageThis.wrapSelector('#' + this.targetId)).trigger({
                 type: 'frame_run',
+                title: 'Frame',
                 code: code,
+                state: this.state,
                 addCell: addCell,
                 runCell: runCell
             });
@@ -1145,11 +1186,37 @@ define([
             $(vpCommon.wrapSelector('#' + this.targetId)).val(code);
             $(vpCommon.wrapSelector('#' + this.targetId)).trigger({
                 type: 'frame_run',
+                title: 'Frame',
                 code: code,
+                state: this.state,
                 addCell: addCell,
                 runCell: runCell
             });
         }
+    }
+
+    FrameEditor.prototype.saveState = function() {
+        // if there's anything to save, you can properly save it here.
+        console.log('frame', 'saveState', this.state);
+    }
+
+    FrameEditor.prototype.loadState = function(state) {
+        console.log('frame', 'loadState', state);
+        var {
+            originObj,
+            returnObj,
+            steps
+        } = state;
+
+        $(this.wrapSelector('#vp_feVariable')).val(originObj);
+
+        $(this.wrapSelector('#vp_feReturn')).val(returnObj);
+
+        // execute all steps
+        var code = steps.join('\n');
+        this.loadCode(code);
+
+
     }
 
     FrameEditor.prototype.unbindEvent = function() {

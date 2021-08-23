@@ -229,6 +229,7 @@ define([
 
                 vpCommon.renderSuccessMessage('Default snippets imported');
             }
+            evt.stopPropagation();
         });
 
         // search item 
@@ -290,6 +291,7 @@ define([
 
         // item header click (toggle & select item) &  double click (edit title)
         $(document).on('click', this.wrapSelector('.vp-sn-item-header'), function(evt) {
+            console.log('header click ' + that.clicked);
             var thisHeader = this;
             that.clicked++;
             if (that.clicked == 1) {
@@ -387,9 +389,11 @@ define([
                 var code = that.codemirrorList[title].getValue();
                 $(vpCommon.wrapSelector('#vp_appsCode')).val(code);
                 $(vpCommon.wrapSelector('#vp_appsCode')).trigger({
-                    type: 'popup_apply',
+                    type: 'popup_run',
                     title: 'Snippets',
-                    code: code 
+                    code: code,
+                    addCell: true,
+                    runCell: true
                 });
             } else if (menu == 'duplicate') {
                 var dupNo = 1;
@@ -445,6 +449,7 @@ define([
                 // hide it
                 $(this).hide();
             }
+            evt.stopPropagation();
         });
 
         //////////////// export mode ///////////////////////

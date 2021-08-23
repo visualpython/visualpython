@@ -64,11 +64,19 @@ define([
         
         this.dataPath = window.location.origin + vpConst.PATH_SEPARATOR + vpConst.BASE_PATH + vpConst.DATA_PATH + "sample_csv/";
 
+        
         this.fileExtensions = {
             'csv': 'csv',
             'excel': 'xls',
             'json': 'json',
             'pickle': 'pickle'
+        }
+        
+        this.package = {
+            input: [
+                { name: 'vp_fileioType' },
+                { name: 'vp_pageDom'}
+            ]
         }
 
         this.fileState = {
@@ -176,6 +184,10 @@ define([
         this.loadCss(Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH + "file_io/fileio.css");
 
         this.bindOptions();
+
+        if (this.metadata) {
+            this.loadState(this.metadata);
+        }
     }
 
     /**
@@ -183,6 +195,56 @@ define([
      */
     PandasPackage.prototype.showFunctionTitle = function() {
         $(this.wrapSelector('.vp_functionName')).text('File');
+    }
+
+    PandasPackage.prototype.saveState = function() {
+        var pageType = $(this.wrapSelector('#vp_fileioType')).val();
+
+        // save input state
+        $(this.wrapSelector('#vp_file' + pageType + ' input')).each(function () {
+            this.defaultValue = this.value;
+        });
+
+        // save checkbox state
+        $(this.wrapSelector('#vp_file' + pageType + ' input[type="checkbox"]')).each(function () {
+            if (this.checked) {
+                this.setAttribute("checked", true);
+            } else {
+                this.removeAttribute("checked");
+            }
+        });
+
+        // save select state
+        $(this.wrapSelector('#vp_file' + pageType + ' select > option')).each(function () {
+            if (this.selected) {
+                this.setAttribute("selected", true);
+            } else {
+                this.removeAttribute("selected");
+            }
+        });
+
+        var pageDom = $(this.wrapSelector('#vp_file' + pageType)).html();
+        $(this.wrapSelector('#vp_pageDom')).val(pageDom);
+    }
+
+    PandasPackage.prototype.loadState = function(state) {
+        var pageType = this.getMetadata('vp_fileioType');
+        var pageDom = this.getMetadata('vp_pageDom');
+
+        // load pageDom
+        $(this.wrapSelector('#vp_file' + pageType)).html(pageDom);
+
+        // show loaded page
+        $(this.wrapSelector('.vp-fileio-box')).hide();
+        $(this.wrapSelector('#vp_file' + pageType)).show();
+
+        //set fileResultState
+        this.fileResultState = {
+            ...this.fileState[pageType].fileResultState
+        };
+
+        // bind event by page type
+        this.bindEventByType(pageType);
     }
 
     /**
@@ -194,17 +256,24 @@ define([
         this.renderPage('Read');
         this.renderPage('Write');
 
-        $(that.wrapSelector('#vp_fileioType')).on('change', function() {
-            var pageType = $(this).val();
-            $(that.wrapSelector('.vp-fileio-box')).hide();
-            $(that.wrapSelector('#vp_file' + pageType)).show();
-
-            //set fileResultState
-            that.fileResultState = {
-                ...that.fileState[pageType].fileResultState
-            };
-        });
+        this.bindEvent();
     };
+
+    /**
+     * get metadata
+     * @param {String} id id
+     */
+     PandasPackage.prototype.getMetadata = function(id) {
+        if (this.metadata == undefined)
+            return "";
+        var len = this.metadata.options.length;
+        for (var i = 0; i < len; i++) {
+            var obj = this.metadata.options[i];
+            if (obj.id == id)
+                return obj.value;
+        }
+        return "";
+    }
 
     PandasPackage.prototype.renderPage = function(pageType) {
         var that = this;
@@ -247,18 +316,9 @@ define([
             );
         });
 
-        $(this.wrapSelector(prefix + '#fileType')).val(selectedType);  
+        $(this.wrapSelector(prefix + '#fileType')).val(selectedType);
 
-        // 파일 유형 선택 이벤트
-        $(this.wrapSelector(prefix + '#fileType')).change(function() {
-            var value = $(this).val();
-            that.fileState[pageType].selectedType = value;
-
-            // reload
-            that.renderPage(pageType);
-        });
-
-        // 파일 네비게이션 버튼 추가
+        // add file navigation button
         if (pageType == 'Write') {
             if (selectedType == 'json') {
                 $(prefix + '#path_or_buf').parent().html(
@@ -285,14 +345,49 @@ define([
             );
         }
 
-        // 파일 네비게이션 오픈
+        
+    }
+
+    PandasPackage.prototype.bindEvent = function() {
+        var that = this;
+
+        $(this.wrapSelector('#vp_fileioType')).on('change', function() {
+            var pageType = $(this).val();
+            $(that.wrapSelector('.vp-fileio-box')).hide();
+            $(that.wrapSelector('#vp_file' + pageType)).show();
+
+            //set fileResultState
+            that.fileResultState = {
+                ...that.fileState[pageType].fileResultState
+            };
+        });
+
+        this.bindEventByType('Read');
+        this.bindEventByType('Write');
+    }
+
+    PandasPackage.prototype.bindEventByType = function(pageType) {
+        var that = this;
+        var prefix = '#vp_file' + pageType + ' ';
+
+        // select file type 
+        $(this.wrapSelector(prefix + '#fileType')).change(function() {
+            var value = $(this).val();
+            that.fileState[pageType].selectedType = value;
+
+            // reload
+            that.renderPage(pageType);
+            that.bindEventByType(pageType);
+        });
+
+        // open file navigation
         $(this.wrapSelector(prefix + '#vp_openFileNavigationBtn')).click(async function() {
-            
+                    
             var loadURLstyle = Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH;
             var loadURLhtml = Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.SOURCE_PATH + "component/fileNavigation/index.html";
             
             that.loadCss( loadURLstyle + "component/fileNavigation.css");
-    
+
             await $(`<div id="vp_fileNavigation"></div>`)
                     .load(loadURLhtml, () => {
 
@@ -300,7 +395,7 @@ define([
                         $('#vp_fileNavigation').addClass("show");
 
                         var { vp_init
-                              , vp_bindEventFunctions } = fileNavigation;
+                            , vp_bindEventFunctions } = fileNavigation;
                     
                         if (pageType == 'Read') {
                             fileNavigation.vp_init(that);
@@ -320,6 +415,8 @@ define([
     PandasPackage.prototype.generateCode = function(addCell, exec) {
         var pageType = $(this.wrapSelector('#vp_fileioType')).val();
         var sbCode = new sb.StringBuilder();
+
+        this.saveState();
 
         if (pageType == 'Sample') {
             // sample csv code
@@ -342,7 +439,6 @@ define([
             var result = pdGen.vp_codeGenerator(this.uuid + ' #vp_fileWrite', package);
             sbCode.append(result);
         }
-        
 
         if (addCell) this.cellExecute(sbCode.toString(), exec);
 
