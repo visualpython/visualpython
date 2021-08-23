@@ -5,10 +5,10 @@
     background: #FFFFFF;
     border: 0.25px solid #E4E4E4;
     box-sizing: border-box;
-    box-shadow: 1px 1px 2px rgb(0 0 0 / 10%);
+    box-shadow: 0.5px 0.5px 0.5px rgb(0 0 0 / 10%);
     border-radius: 2px;
     line-height: 30px;
-    font-size: 13px;
+    font-size: 14px;
     text-align: center;
     color: #696969;
     cursor: pointer;

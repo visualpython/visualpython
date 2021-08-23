@@ -128,7 +128,7 @@ define([
         // Popup Box. variable view box
         sbTagString.clear();
         sbTagString.appendLine('<div id="vp_varViewBox" class="vp-var-view-box">');
-        sbTagString.appendLine('<div class="vp-icon-btn vp-close-view"><i class="fa fa-close"></i></div>');
+        sbTagString.appendLine('<div class="vp-icon-btn vp-close-view"><img src="/nbextensions/visualpython/resource/close_big.svg"/></div>');
         // variable list
         sbTagString.appendLine('<div class="vp-var-view-div">');
         sbTagString.appendLine('<table id="vp_varViewList" class="vp-option-table vp-var-view-list no-selection">');

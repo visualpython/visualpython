@@ -175,7 +175,7 @@
     margin-top: 5px;
 }
 .vp-plot-item.selected .vp-plot-thumb {
-    border: 2px solid  var(--hightlight-color);
+    border: 2px solid  var(--highlight-color);
 }
 .vp-plot-item.selected .vp-plot-name {
     color:  var(--font-hightlight) !important;

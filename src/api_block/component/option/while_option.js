@@ -32,7 +32,7 @@ define([
             , VP_CLASS_STYLE_FLEX_ROW_CENTER    
             , VP_CLASS_STYLE_FLEX_ROW_BETWEEN
 
-            , VP_CLASS_STYLE_WIDTH_15PERCENT
+            , VP_CLASS_STYLE_WIDTH_25PERCENT
             , VP_CLASS_STYLE_WIDTH_35PERCENT
             , VP_CLASS_STYLE_WIDTH_100PERCENT
 
@@ -281,7 +281,7 @@ define([
                         var sbIfArg2 = MakeVpSuggestInputText_apiblock(VP_ID_APIBLOCK_OPTION_WHILE_ARG_2 + index + uuid
                                             , arg2
                                             , WHILE_OPERATOR_ARG2
-                                            , VP_CLASS_STYLE_WIDTH_15PERCENT
+                                            , VP_CLASS_STYLE_WIDTH_25PERCENT
                                             , STR_OPERATOR
                                             , function(selectedValue) {
                                             bindSelectValueEventFunc_while(selectedValue, 
@@ -312,7 +312,7 @@ define([
                         //                                                                     WHILE_BLOCK_SELECT_VALUE_ARG_TYPE.ARG4);
                         //                                                         });      
                         var operArg4 = MakeOptionSelectBox(VP_ID_APIBLOCK_OPTION_WHILE_ARG_4 + index + uuid
-                                                    , VP_CLASS_STYLE_WIDTH_15PERCENT
+                                                    , VP_CLASS_STYLE_WIDTH_25PERCENT
                                                     , arg4
                                                     // , COMPARISON_OPERATOR_IF_ARG4);
                                                     , ['and', 'or']);

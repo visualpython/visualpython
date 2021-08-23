@@ -123,8 +123,8 @@ define([
                             , 'Pandas Profiling');
 
         // close button
-        page.appendFormatLine('<div class="{0}"><i class="{1}"></i></div>'
-                                    , VP_PF_CLOSE, 'fa fa-close');
+        page.appendFormatLine('<div class="{0}"><img src="{1}"/></div>'
+                                    , VP_PF_CLOSE, '/nbextensions/visualpython/resource/close_big.svg');
 
         // body start
         page.appendFormatLine('<div class="{0}">', VP_PF_BODY);
@@ -136,7 +136,7 @@ define([
                             , 'Prepare to use Pandas Profiling', 'https://github.com/pandas-profiling/pandas-profiling', 'fa fa-link', 'vp-pf-link', 'Go to pandas-profiling github page');
         page.appendLine('<div>');
         page.appendFormatLine('<button class="{0} {1}">{2}</button>', 'vp-button activated', VP_PF_INSTALL_BTN, 'Install');
-        page.appendFormatLine('<i class="{0} {1} {2}" title="{2}"></i>', 'fa fa-refresh', 'vp-cursor', VP_PF_CHECK_BTN, 'Check if installed');
+        page.appendFormatLine('<div class="{0} {1}" title="{2}"><img src="{3}"/></div>', 'vp-cursor', VP_PF_CHECK_BTN, 'Check if installed', '/nbextensions/visualpython/resource/refresh.svg');
         // page.appendLine('<div class="vp-vertical-line"></div>');
         page.appendFormatLine('<button class="{0} {1}">{2}</button>', 'vp-button', VP_PF_IMPORT_BTN, 'Import');
         page.appendLine('</div>');
@@ -152,7 +152,7 @@ define([
         page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_pfVariable', 'vp-orange-text', 'DataFrame');
         page.appendLine('<div>');
         page.appendFormatLine('<select id="{0}"></select>', 'vp_pfVariable');
-        page.appendFormatLine('<i class="{0} {1}" title="{2}"></i>', VP_PF_DF_REFRESH, 'fa fa-refresh', "Refresh variable list");
+        page.appendFormatLine('<div class="{0}" title="{1}"><img src="{2}"/></div>', VP_PF_DF_REFRESH, "Refresh variable list", '/nbextensions/visualpython/resource/refresh.svg');
         page.appendLine('</div>');
 
         page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_pfReturn', 'vp-orange-text', 'Allocate to');
@@ -312,7 +312,7 @@ define([
             page.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}"><img src="{3}"/></div>'
                                     , VP_PF_LIST_MENU_ITEM, LIST_MENU_ITEM.SHOW, 'Show report', '/nbextensions/visualpython/resource/snippets/run.svg');
             page.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}"><img src="{3}"/></div>'
-                                    , VP_PF_LIST_MENU_ITEM, LIST_MENU_ITEM.DELETE, 'Delete report', '/nbextensions/visualpython/resource/snippets/delete.svg');
+                                    , VP_PF_LIST_MENU_ITEM, LIST_MENU_ITEM.DELETE, 'Delete report', '/nbextensions/visualpython/resource/delete.svg');
             page.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}"><img src="{3}"/></div>'
                                     , VP_PF_LIST_MENU_ITEM, LIST_MENU_ITEM.SAVE, 'Save report', '/nbextensions/visualpython/resource/snippets/export.svg');
             page.appendLine('</div>');

@@ -1,6 +1,6 @@
 /* UDF Editor - CodeMirror */
 #vp-wrapper .vp-udf-page  .CodeMirror { border: 1px solid silver; }
-#vp-wrapper .vp-udf-page  .CodeMirror.CodeMirror-focused { border: 1px solid var(--hightlight-color); }
+#vp-wrapper .vp-udf-page  .CodeMirror.CodeMirror-focused { border: 1px solid var(--highlight-color); }
 #vp-wrapper .vp-udf-page  .CodeMirror-empty { outline: 1px solid #c22; }
 #vp-wrapper .vp-udf-page  .CodeMirror-empty.CodeMirror-focused { outline: none; }
 #vp-wrapper .vp-udf-page  .CodeMirror pre.CodeMirror-placeholder { color: #999; }
@@ -215,10 +215,10 @@
 }
 #vp_udfPage .vp-sn-item-header input.vp-sn-item-title:focus {
     transition: 0.7s;
-    border: 0.5px solid var(--hightlight-color) !important;
+    border: 0.5px solid var(--highlight-color) !important;
 }
 .vp-sn-imported-item {
-    color: var(--hightlight-color);
+    color: var(--highlight-color);
 }
 .vp-sn-item-menu {
     float: right;
@@ -226,6 +226,7 @@
 .vp-sn-item-menu-item {
     display: inline-block;
     cursor: pointer;
+    margin-left: 5px;
 }
 .vp-sn-item-code { 
     display: none;

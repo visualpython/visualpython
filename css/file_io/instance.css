@@ -52,7 +52,7 @@
     overflow: hidden;
 }
 #vp-wrapper .vp-option-page .vp-instance-box .CodeMirror.selected {
-    border: 1px solid var(--hightlight-color);
+    border: 1px solid var(--highlight-color);
 }
 #vp-wrapper .vp-option-page .vp-instance-box .CodeMirror-empty { outline: none; }
 #vp-wrapper .vp-option-page .vp-instance-box .CodeMirror-empty.CodeMirror-focused { outline: none; }

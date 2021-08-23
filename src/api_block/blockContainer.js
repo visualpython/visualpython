@@ -2001,7 +2001,7 @@ define([
 
             sbMainHeader.appendFormatLine("<div class='{0} {1}' style='{2}'>", `vp-block-header-class-name-${blockUUID}`, 
                                                                                `vp-block-header-def-name-${blockUUID}`,
-                                                                               'font-size:12px');
+                                                                               'font-size:14px');
             sbMainHeader.appendFormatLine("{0}", classOrDefName);
             sbMainHeader.appendLine("</div>");
 
@@ -2121,8 +2121,8 @@ define([
         sbBlockMainDom.appendFormatLine("<div class='{0}'>",'vp-block-inner');
         sbBlockMainDom.appendFormatLine("<div class='{0}'>",'vp-block-header');
         sbBlockMainDom.appendFormatLine("<strong class='{0}' style='{1}'>",'vp-apiblock-style-flex-column-center',`margin-right:10px; 
-                                                                                                    font-size:12px; 
-                                                                                                    color: #252525;`);
+                                                                                                    font-size:13px; 
+                                                                                                    color: var(--font-primary);`);
         sbBlockMainDom.appendFormatLine("{0}",thisBlock.getBlockName());
         sbBlockMainDom.appendLine("</strong>");
         sbBlockMainDom.appendLine("</div>");

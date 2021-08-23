@@ -101,7 +101,7 @@
     height: 13px;
     cursor: pointer;
     vertical-align: middle;
-    background-image: url(../../resource/arrow_up.png);
+    background-image: url(../../resource/arrow_short_filled_up.png);
 }
 .vp-arrow-down {
     display: inline-block;
@@ -109,7 +109,7 @@
     height: 13px;
     cursor: pointer;
     vertical-align: middle;
-    background-image: url(../../resource/arrow_down.png);
+    background-image: url(../../resource/arrow_short_down.png);
 }
 .vp-arrow-right {
     display: inline-block;
@@ -117,7 +117,7 @@
     height: 15px;
     cursor: pointer;
     vertical-align: middle;
-    background-image: url(../../resource/arrow_right.png);
+    background-image: url(../../resource/arrow_short_right.png);
 }
 .vp-arrow-left {
     display: inline-block;
@@ -125,7 +125,7 @@
     height: 15px;
     cursor: pointer;
     vertical-align: middle;
-    background-image: url(../../resource/arrow_left.png);
+    background-image: url(../../resource/arrow_short_filled_left.png);
 }
 #vp_APIBrowser .vp-api-group {
     /* border-style: solid;
