@@ -98,4 +98,4 @@ To create an environment where everyone can learn and use big data analytics ski
 Love Visual Python? Caffeine keeps us awake and do the work ☕
 THANK YOU for your support! 👍
 
-<a href="https://www.buymeacoffee.com/visualpython"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=visualpython&button_colour=ffa238&font_colour=000000&font_family=Comic&outline_colour=000000&coffee_colour=FFDD00"></a>
+<a href="https://www.buymeacoffee.com/visualpython" target="_blank"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=visualpython&button_colour=ffa238&font_colour=000000&font_family=Comic&outline_colour=000000&coffee_colour=FFDD00"></a>
