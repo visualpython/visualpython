@@ -1,8 +1,13 @@
-# Welcome to the Visual Python
+
+![Visual Python](https://i.esdrop.com/d/7o0dj05m8rnz/JNGCMedl18.png)
+
+
 [![PyPI version shields.io](https://img.shields.io/pypi/v/visualpython)](https://pypi.python.org/pypi/visualpython/)
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-yellowgreen)](https://www.gnu.org/licenses/gpl-3.0.html)
+![Python: 3.x](https://img.shields.io/badge/Python-3.x-yellowgreen)
+[![License: GPLv3](https://img.shields.io/badge/License-GPLv3-brightgreen)](https://www.gnu.org/licenses/gpl-3.0.html)
 [![Code of Conduct: Contributor Covenant](https://img.shields.io/badge/Code%20of%20Conduct-Contributor%20Covenant-pink)](https://github.com/visualpython/visualpython/blob/main/CODE_OF_CONDUCT.md)
-<img alt="open collective badge" src="https://opencollective.com/visualpython/tiers/backer/badge.svg?label=Backer&color=orange" />
+[![Downloads: ](https://img.shields.io/pypi/dm/visualpython?color=orange)](https://pypistats.org/packages/visualpython)
+[![Release: ](https://img.shields.io/github/v/release/visualpython/visualpython?color=%23FF6347)](https://pypistats.org/packages/visualpython)
 
 
 ## Introduction
@@ -72,14 +77,6 @@ upgrade    - version upgrade
 version    - version check
 ```
 
-
-## Mission & Vision
-**Mission** <br>
-To support technology and education so that anyone can leverage big data analytics to create a variety of social values.
-
-**Vision** <br>
-To create an environment where everyone can learn and use big data analytics skills easily.
-
 ## Contributing
 If you are interested in contributing to the Visual Python, please see [`CONTRIBUTING.md`](CONTRIBUTING.md). <br>
 All skills from programmers, non-programmers, designers are welcomed.
@@ -88,4 +85,17 @@ All skills from programmers, non-programmers, designers are welcomed.
 * GUI Design Guide: [Visual Python GUI Kit 1.0](https://www.figma.com/community/file/976035035360380841)
 
 ## License
-GNU GPLv3 (See LICENSE file).
+GNU GPLv3 with Visual Python special exception (See LICENSE file).
+
+## Mission & Vision
+**Mission** <br>
+To support technology and education so that anyone can leverage big data analytics to create a variety of social values.
+
+**Vision** <br>
+To create an environment where everyone can learn and use big data analytics skills easily.
+
+## Support Visual Python
+Love Visual Python? Caffeine keeps us awake and do the work ☕
+THANK YOU for your support! 👍
+
+<a href="https://www.buymeacoffee.com/visualpython"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=visualpython&button_colour=ffa238&font_colour=000000&font_family=Comic&outline_colour=000000&coffee_colour=FFDD00"></a>
