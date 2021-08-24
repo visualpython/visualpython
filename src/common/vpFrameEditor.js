@@ -303,7 +303,7 @@ define([
         page.appendFormatLine('<div class="{0}"><img src="{1}"/></div>', VP_FE_DF_REFRESH, '/nbextensions/visualpython/resource/refresh.svg');
         page.appendLine('</div>');
         page.appendLine('<div>');
-        page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_feReturn', 'vp-orange-text', 'Allocate to');
+        page.appendFormatLine('<label for="{0}">{1}</label>', 'vp_feReturn', 'Allocate to');
         page.appendFormatLine('<input type="text" class="{0}" id="{1}" placeholder="{2}"/>', 'vp-input', 'vp_feReturn', 'Variable name');
         page.appendLine('</div>');
         page.appendLine('</div>');

@@ -248,19 +248,10 @@ define([
         
         // pandasObject
         popupTag.appendLine('<tr>');
-        popupTag.appendFormatLine('<td><label class="{0}">{1}</label></td>'
-                                , VP_DS_LABEL, 'Variable');
+        popupTag.appendFormatLine('<td><label class="{0} {1}">{2}</label></td>'
+                                , VP_DS_LABEL, 'vp-orange-text', 'Variable');
 
         popupTag.appendLine('<td>');
-        // pandasObject - suggestInputText
-        // var vpDfSuggest = new vpSuggestInputText.vpSuggestInputText();
-        // vpDfSuggest.addClass(VP_DS_PANDAS_OBJECT);
-        // vpDfSuggest.addClass('vp-input');
-        // vpDfSuggest.setPlaceholder('Select Object');
-        // vpDfSuggest.setSuggestList(function() { return [] });
-        // vpDfSuggest.setNormalFilter(false);
-        // vpDfSuggest.setValue($(this.pageThis.wrapSelector('#' + this.targetId)).val());
-        // popupTag.appendFormatLine('<td>{0}', vpDfSuggest.toTagString());
         popupTag.appendFormatLine('<div style="display:inline-block" class="{0}"><input class="{1} {2}"/></div>'
                             , VP_DS_PANDAS_OBJECT_BOX, 'vp-input', VP_DS_PANDAS_OBJECT);
         
@@ -270,8 +261,8 @@ define([
 
         // subset type
         popupTag.appendLine('<tr>');
-        popupTag.appendFormatLine('<td><label class="{0}">{1}</label></td>'
-                                , VP_DS_LABEL, 'Method');
+        popupTag.appendFormatLine('<td><label class="{0} {1}">{2}</label></td>'
+                                , VP_DS_LABEL, 'vp-orange-text', 'Method');
         popupTag.appendLine('<td>');
         popupTag.appendLine(this.renderSubsetType(this.state.dataType));
         
