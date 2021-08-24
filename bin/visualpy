@@ -1,38 +1,61 @@
-#============================================================================
-#!/bin/sh
-#============================================================================
-# Filename : visualpy
-# function : control visualpython for Mac/Linux
-# Creator  : BlackLogic  - LJ
-# version  : 2.2
-# License  :
-# Date     : 2020 07.27
-# Mdate    : 2021 07.20
-#============================================================================
+#
+#    Project Name    : Visual Python
+#    Description     : GUI-based Python code generator
+#    File Name       : visualpy
+#    Author          : Black Logic - LJ
+#    Note            : Control Visual Python for Mac/Linux
+#    License         : GPLv3 (GNU General Public License v3.0)
+#    Date            : 2021. 08. 14
+#    Change Date     :
+#
 
-v_pip=pip
-which pip3 > /dev/null 2>&1 && v_pip=pip3
+#=============================================================================
+# Set variable
+#=============================================================================
+PIP=pip
+JP_NB='jupyter nbextension'
 
-v_path1=`${v_pip} show visualpython | grep Location | awk -F': ' '{print $2}'`
-v_prod='visualpython'
-v_str1='jupyter nbextension'
-v_str2='visualpython/src/main'
-v_unst=${v_pip}' uninstall '${v_prod}
-v_upgr=${v_pip}' install '${v_prod}' --upgrade'
-#v_srch=${v_pip}' search '${v_prod}
-v_str3=${v_pip}' list -o '
-v_str4=${v_pip}' show '${v_prod}
-#v_list=`${v_str3} | grep -i ${v_prod}`
-v_curt=`${v_str4} | grep 'Version' | cut -d ' ' -f 2`
-v_option=$1
+VP_NAME='visualpython'
+VP_BIND='visualpython/src/main'
 
+PIP_UNINST=${PIP}' uninstall '${VP_NAME}
+PIP_UPGRAD=${PIP}' install '${VP_NAME}' --upgrade'
 
-#echo ${v_list}
-#exit
+VP_VERSION=`${PIP} show ${VP_NAME} | grep Version | awk -F':' '{print $2}' | tr -d ' '`
+PATH_SRC=`${PIP} show ${VP_NAME} | grep Location | awk -F':' '{print $2}' | tr -d ' '`
 
+# Set PATH_DST: nbextensions
+if which conda-env > /dev/null 2>&1; then
+    PATH_DST=`conda-env list | grep "*" | awk '{print $NF}'|tr -d ' '`/share/jupyter/nbextensions
+else
+    PATH_DST=`jupyter --data-dir`/nbextensions
+fi
+
+#=============================================================================
+# Check Arguments
+#=============================================================================
+if [ $# -eq 1 ]; then
+    VP_OPTION=$1
+elif [ $# -eq 2 ]; then
+    ARG1=$(echo $1 | cut -c1-2)
+    if [ ${ARG1} = "--" ]; then
+        VP_OPTION=$2
+        PIP_T=$(echo $1 | cut -c3-)
+    else
+        VP_OPTION=$1
+        PIP_T=$(echo $2 | cut -c3-)
+    fi  
+else
+    VP_OPTION=''
+fi
+
+which ${PIP_T}> /dev/null 2>&1 && PIP=${PIP_T}
+
+#=============================================================================
 # main function
+#=============================================================================
 f_main() {
-    case ${v_option} in
+    case ${VP_OPTION} in
         enable | -E | -e)
             f_enable ;;
         disable | -D | -d)
@@ -52,229 +75,121 @@ f_main() {
     esac
 }
 
-f_check_conda() {
-    if hash conda-env 2>/dev/null; then
-        echo 1
-    else
-        echo 0
-    fi
-}
-
-f_setting_path() {
-    v_return=$( f_check_conda )
-    # 0 == not a conda env
-    # 1 == conda env
-    if [ $v_return -eq 0 ]; then
-        v_path2=`jupyter --data-dir`/nbextensions
-    else
-        v_path2=`conda-env list | grep "*" | awk '{print $NF}'`/share/jupyter/nbextensions/
-    fi
-    echo ${v_path2}
-}
-
-# install visualpython function
+#=============================================================================
+# Install Visual Python
+#=============================================================================
 f_install() {
-    v_return=$( f_check_extension )
-    # 1 == extension not active
-    # 2 == visualpython not exists
-    # 3 == visualpython exists
-    mkdir -p ${v_path2}${v_prod}
+    V_RES=$(f_check_extension)
+    # 1 = Jupyterr Extension is not actived
+    # 2 = visualpython does not exist
+    # 3 = visualpython exists
 
-    if [ ${v_return} -eq 1 ]; then
-        f_prt_extensiondir
-    elif [ ${v_return} -eq 3 ]; then
-      # overwrite
-        f_prt_visualpythondir
-        f_disable
-        f_remove_files
+    mkdir -p ${PATH_DST}/${VP_NAME}
+
+    if [ ${V_RES} -eq 1 ]; then
+        f_print_not_extension
+    elif [ ${V_RES} -eq 2 ]; then
         f_copy_files
         f_enable
-    else
+    elif [ ${V_RES} -eq 3 ]; then
+        # overwrite
+        f_print_line1
+        echo "Already exists Visual Python."
+        f_print_line1
+
+        f_disable
+        f_remove_files
         f_copy_files
         f_enable
     fi
 }
 
-# uninstall visualpython function
+#=============================================================================
+# Uninstall Visual Python
+#=============================================================================
 f_uninstall() {
-    v_return=$( f_check_extension )
-    # 1 == extension not active
-    # 2 == visualpython not exists
-    # 3 == visualpython exists
+    V_RES=$( f_check_extension )
+    # 1 = Jupyterr Extension is not actived
+    # 2 = visualpython does not exist
+    # 3 = visualpython exists
 
-    if [ ${v_return} -eq 3 ]; then
-        f_prt_line1
+    if [ ${V_RES} -eq 2 ]; then
+        f_print_line2
+        ${PIP_UNINST}
+        f_print_line2
+    elif [ ${V_RES} -eq 3 ]; then
+        f_print_line1
         f_disable
-        f_prt_line2
+        f_print_line2
         f_remove_files
-        f_prt_line2
-        ${v_unst}
-        f_prt_line1
-    elif [ ${v_return} -eq 2 ]; then
-        f_prt_line2
-        ${v_unst}
-        f_prt_line2
+        f_print_line2
+        ${PIP_UNINST}
+        f_print_line1
     fi
 }
 
-# upgrade visualpython package
+#=============================================================================
+# Upgrade Visual Python
+#=============================================================================
 f_upgrade() {
+    f_print_line1
+    echo "Running upgrade"
+    f_print_line2
+    ${PIP_UPGRAD}
 
-#    v_return=$( f_version_cmp )
-#    0 == upgrade
-#    1 == pass
+    # Get Visual Python new version
+    VP_VERSION_NEW=`${PIP} show ${VP_NAME} | grep Version | awk -F':' '{print $2}' | tr -d ' '`
 
-  # setting current version 
-  # v_curt=`${v_str4} | grep 'Version' | cut -d ' ' -f 2`
-    
-    f_prt_line1
-    echo "running upgrade"
-    f_prt_line2
-    ${v_upgr}
-
-  # setting last version
-    v_last=`${v_str4} | grep 'Version' | cut -d ' ' -f 2`
-
-    if [ ${v_curt} = ${v_last} ]; then
-	f_prt_line2
-	echo "Already installed last Visual Python version."
-	f_prt_line2
-	echo "Installed version    : "${v_curt}
-	echo "Last Release version : "${v_last}
-	f_prt_line1
+    if [ ${VP_VERSION} = ${VP_VERSION_NEW} ]; then
+        f_print_line2
+        echo "Already installed last Visual Python version."
+        f_print_line2
+        echo "Installed version    : "${VP_VERSION}
+        echo "Last Release version : "${VP_VERSION_NEW}
+        f_print_line1
     else
-        f_prt_line2
-        f_disable
-        f_copy_files
-        f_enable
-        f_prt_line1
-    fi
-}
-
-# enable visualpython function
-f_enable() {
-    v_return=$( f_check_extension )
-    if  [ ${v_return} -eq 3 ]; then
-        ${v_str1} enable ${v_str2}
-    fi
-}
-
-# disable visualpython function
-f_disable() {
-    v_return=$( f_check_extension )
-    if  [ ${v_return} -eq 3 ]; then
-        ${v_str1} disable ${v_str2}
-    fi
-}
-
-
-# check visualpython files function
-f_check_extension() {
-    if [ ! -e ${v_path2} ]; then
-        echo 1
-    elif [ ! -e ${v_path2}/${v_prod} ]; then
-        echo 2
-    else
-        echo 3
-    fi
-}
-
-# current visualpython version, last release version
-f_version() {
-    v_result=${v_list}
-    f_prt_line1
-    echo "Check visualpython version"
-    f_prt_line2
-
-    if [ 0 -eq ${#v_result} ]; then
-        echo "Already installed last version"
-        f_prt_line2
-        v_ver=`${v_str4} | grep Version | awk '{print $2}'`
-	echo "Installed version    : "${v_ver}
-	echo "Last Release version : "${v_ver}
-    else
-        v_idx=1
-        for v_info in ${v_result}
-        do
-            if [ ${v_idx} -eq 2 ]; then
-                echo "Installed version    : "${v_info}
-            elif [ ${v_idx} -eq 3 ]; then
-                echo "Last Release version : "${v_info}
-            fi
-            v_idx=`expr $v_idx + 1`
-        done
-    fi
-    f_prt_line1
-}
-
-## version compare
-f_version_cmp() {
-    v_result=${v_list}
-    if [ 0 -ne ${#v_result} ]; then
-       ## upgrade
-        echo 0
-    else
-        echo 1
-    fi
-}
-
-# copy visualpython function
-f_copy_files() {
-    f_prt_line1
-    echo "Copy visualpyhthon extension files ..."
-    f_prt_line2
-    echo "Source Dir : "  ${v_path1}/${v_prod}
-    echo "Target Dir : "  ${v_path2}${v_prod}
-    f_prt_line1
-    cp -Rp ${v_path1}/${v_prod} ${v_path2}/.
-}
-
-f_prt_line1() {
-    echo "============================================================================================"
-
-}
-
-f_prt_line2() {
-    echo "--------------------------------------------------------------------------------------------"
-
-}
-
-# remove visualpython function
-f_remove_files() {
-    f_prt_line1
-    if [ -e ${v_path2}/${v_prod} ]; then
-	echo "Remove Visual Python Directories."
-        echo "Target Dir : "  ${v_path2}
-        \rm -rf ${v_path2}/${v_prod}
-    else
-        echo "not exists visualpython dir"
-    fi
-}
-
-# overwrite visualpython function
-f_overwrite() {
-    v_return=$( f_check_extension )
-    # 1 == extension not active
-    # 2 == visualpython not exists
-    # 3 == visualpython exists
-    echo ${v_return}
-    echo ${v_path2}
-    if [ ${v_return} -eq 1 ]; then
-        f_prt_extensiondir
-    elif [ ${v_return} -eq 3 ]; then
+        f_print_line2
         f_disable
         f_remove_files
         f_copy_files
         f_enable
-    else
-        f_install
+        f_print_line1
     fi
 }
 
-# help options
+#=============================================================================
+# Enable Visual Python
+#=============================================================================
+f_enable() {
+    V_RES=$(f_check_extension)
+    if  [ ${V_RES} -eq 3 ]; then
+        ${JP_NB} enable ${VP_BIND}
+    fi
+}
+
+#=============================================================================
+# Disable Visual Python
+#=============================================================================
+f_disable() {
+    V_RES=$(f_check_extension)
+    if  [ ${V_RES} -eq 3 ]; then
+        ${JP_NB} disable ${VP_BIND}
+    fi
+}
+
+#=============================================================================
+# Visual Python version
+#=============================================================================
+f_version() {
+    echo "Visual Python "${VP_VERSION}
+}
+
+#=============================================================================
+# Help messages               
+#=============================================================================
 f_help() {
     echo ""
-    echo "usage: visualpy [option]"
+    echo "usage: visualpy [option] | --pip3"
     echo ""
     echo "optional arguments:"
     echo " help, -h, -H,        show this help message and exit"
@@ -285,44 +200,86 @@ f_help() {
     echo " upgrade, -up, -UP    upgrade Visual Python Package"
     echo " version, -V, -v      show Visual Python release & current version"
     echo ""
+    echo " --pip3               use pip3 [default: pip]"
+    echo ""
 }
 
-# print extension not installed
-f_prt_extensiondir() {
-    echo "Nbextension not activated"
-    echo "Plz install nbextension"
-    f_prt_line1
+#=============================================================================
+# Copy Visual Python files
+#=============================================================================
+f_copy_files() {
+    f_print_line1
+    echo "Copy visualpyhthon extension files ..."
+    f_print_line2
+    echo "Source Dir : "  ${PATH_SRC}/${VP_NAME}
+    echo "Target Dir : "  ${PATH_DST}/${VP_NAME}
+    f_print_line1
+    cp -Rp ${PATH_SRC}/${VP_NAME} ${PATH_DST}/.
+}
+
+#=============================================================================
+# Remove Visual Python files
+#=============================================================================
+f_remove_files() {
+    f_print_line1
+    if [ -e ${PATH_DST}/${VP_NAME} ]; then
+        echo "Remove Visual Python Directories."
+        echo "Target Dir : "  ${PATH_DST}
+        \rm -rf ${PATH_DST}/${VP_NAME}
+    else
+        echo "not exists visualpython dir"
+    fi
+}
+
+#=============================================================================
+# Check Visual Python files
+#     1 = Jupyterr Extension is not actived
+#     2 = visualpython does not exist
+#     3 = visualpython exists
+#=============================================================================
+f_check_extension() {
+    if [ ! -e ${PATH_DST} ]; then
+        echo 1
+    elif [ ! -e ${PATH_DST}/${VP_NAME} ]; then
+        echo 2
+    else
+        echo 3
+    fi
+}
+
+#=============================================================================
+# Print extension is not installed
+#=============================================================================
+f_print_not_extension() {
+    echo "Jupyter nbextension is not activated"
+    echo "Please install Jupyter nbextension"
+    f_print_line1
     echo "for conda env"
     echo "conda install -c conda-forge jupyter_contrib_nbextensions"
     echo "jupyter contrib nbextension install --user"
-    f_prt_line2
+    f_print_line2
     echo "for pip"
-    echo ${v_pip}" install -e jupyter_contrib_nbextensions"
+    echo ${PIP}" install -e jupyter_contrib_nbextensions"
     echo "jupyter contrib nbextension install --user"
-    f_prt_line1
+    f_print_line1
 }
 
-# print visualpython exists
-f_prt_visualpythondir() {
-    f_prt_line1
-    echo "Already exists Visual Python."
-    f_prt_line1
+#=============================================================================
+# Print line
+#=============================================================================
+f_print_line1() {
+    echo "============================================================================================"
 }
 
-# print other messages
-f_prt_other_massages() {
-    echo "invalid option : " ${v_option}
-    echo "Please check Visual Python option cmd"
-    echo "cmd : visualpy -h "
-
+f_print_line2() {
+    echo "--------------------------------------------------------------------------------------------"
 }
 
-# execute main
-v_path2=$( f_setting_path )
+#=============================================================================
+# Execute main function
+#=============================================================================
 f_main
 
-exit
+exit 0
 
-#============================================================================
-#End of File
-#============================================================================
+# End of file
