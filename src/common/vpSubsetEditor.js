@@ -920,7 +920,7 @@ define([
                     if (!that.stateLoaded) {
                         that.reloadSubsetData();
                     }
-                    that.loadDataPage();
+                    // that.loadDataPage();
                 } catch {
 
                 }
@@ -1970,6 +1970,7 @@ define([
     SubsetEditor.prototype.openDataview = function() {
         this.closePreview();
         this.dataviewOpened = true;
+        this.loadDataPage();
         $(this.wrapSelector('.' + VP_DS_DATA)).show();
     }
 
