@@ -1848,14 +1848,15 @@ define([
 
         // click others
         $(document).on('click.' + this.uuid, function(evt) {
-            if (!$(evt.target).hasClass('.' + VP_DS_BUTTON_DETAIL)) {
+            if (!$(evt.target).hasClass(VP_DS_BUTTON_DETAIL)) {
                 $(that.wrapSelector('.' + VP_DS_DETAIL_BOX)).hide();
             }
-            if (!$(evt.target).hasClass('.' + VP_DS_BUTTON_PREVIEW)
+            if (!$(evt.target).hasClass(VP_DS_BUTTON_PREVIEW)
+                && !$(evt.target).hasClass(VP_DS_PREVIEW_BOX)
                 && $(that.wrapSelector('.' + VP_DS_PREVIEW_BOX)).has(evt.target).length === 0) {
                 that.closePreview();
             }
-            if (!$(evt.target).hasClass('.' + VP_DS_BUTTON_DATAVIEW)
+            if (!$(evt.target).hasClass(VP_DS_BUTTON_DATAVIEW)
                 && $(that.wrapSelector('.' + VP_DS_DATA)).has(evt.target).length === 0) {
                 that.closeDataview();
             }
@@ -1967,6 +1968,7 @@ define([
     }
 
     SubsetEditor.prototype.openDataview = function() {
+        this.closePreview();
         this.dataviewOpened = true;
         $(this.wrapSelector('.' + VP_DS_DATA)).show();
     }
@@ -1978,6 +1980,7 @@ define([
 
     /** open preview box */
     SubsetEditor.prototype.openPreview = function() {
+        this.closeDataview();
         $(this.wrapSelector('.' + VP_DS_PREVIEW_BOX)).show();
 
         if (!this.cmpreviewall) {
