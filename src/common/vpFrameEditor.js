@@ -1219,11 +1219,11 @@ define([
 
     FrameEditor.prototype.saveState = function() {
         // if there's anything to save, you can properly save it here.
-        console.log('frame', 'saveState', this.state);
+        // console.log('frame', 'saveState', this.state);
     }
 
     FrameEditor.prototype.loadState = function(state) {
-        console.log('frame', 'loadState', state);
+        // console.log('frame', 'loadState', state);
         var {
             originObj,
             returnObj,

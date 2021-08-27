@@ -1163,7 +1163,7 @@ define([
     }
 
     SubsetEditor.prototype.loadState = function(state) {
-        console.log('subset', 'loadState', state)
+        // console.log('subset', 'loadState', state)
         var {
             dataType, pandasObject, useCopy, toFrame
             , subsetType
