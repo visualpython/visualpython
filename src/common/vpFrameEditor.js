@@ -190,6 +190,8 @@ define([
             originObj: '',
             tempObj: '_vp',
             returnObj: '_vp',
+            columnList: [],
+            indexList: [],
             selected: [],
             axis: FRAME_AXIS.NONE,
             lines: TABLE_LINES,
@@ -553,17 +555,37 @@ define([
         
         // tab 4. apply
         content.appendFormatLine('<div class="{0} {1}" style="display: none;">', 'vp-popup-tab', 'apply');
-        content.appendLine('<label>lambda x:</label>');
+        content.appendLine('<table><colgroup><col width="80px"><col width="*"></colgroup>');
+        content.appendLine('<tr><th><label>column</label></th>');
+        content.appendFormatLine('<td>{0}</td></tr>', this.renderColumnList(this.state.columnList));
+        content.appendLine('<tr><th><label>lambda x:</label></th>');
         var suggestInput = new vpSuggestInputText.vpSuggestInputText();
         suggestInput.setComponentID('vp_popupAddApply');
-        suggestInput.addClass('vp-input vp-popup-apply');
+        suggestInput.addClass('vp-input vp-popup-apply-lambda');
         suggestInput.setSuggestList(function() { return ['x', 'min(x)', 'max(x)', 'sum(x)', 'mean(x)']; });
         suggestInput.setValue('x');
         suggestInput.setNormalFilter(false);
-        content.appendLine(suggestInput.toTagString());
+        content.appendFormatLine('<td>{0}</td>', suggestInput.toTagString());
+        content.appendLine('</tr></table>');
         content.appendLine('</div>'); // end of vp-popup-tab apply
         content.appendLine('</div>'); // end of vp-popup-addpage
         return content.toString();
+    }
+
+    /**
+     * Render column list for [add column > apply]
+     * @param {Array} columnList 
+     * @returns 
+     */
+    FrameEditor.prototype.renderColumnList = function(columnList) {
+        var selectTag = new sb.StringBuilder();
+        selectTag.appendFormatLine('<select class="{0}">', 'vp-popup-apply-column');
+        columnList && columnList.forEach((col, idx) => {
+            var colLabel = convertToStr(col, typeof col == 'string');
+            selectTag.appendFormatLine('<option value="{0}">{1}</option>', colLabel, col);
+        }); 
+        selectTag.appendLine('</select>');
+        return selectTag.toString();
     }
 
     FrameEditor.prototype.bindEventForPopupPage = function() {
@@ -719,7 +741,8 @@ define([
                         }
                     }
                 } else if (tab == 'apply') {
-                    content['apply'] = $(this.wrapSelector('.vp-popup-apply')).val();
+                    content['column'] = $(this.wrapSelector('.vp-popup-apply-column')).val();
+                    content['apply'] = $(this.wrapSelector('.vp-popup-apply-lambda')).val();
                 }
                 break;
             case FRAME_EDIT_TYPE.ADD_ROW:
@@ -1060,7 +1083,7 @@ define([
                     }
                     code.append(')');
                 } else if (tab == 'apply') {
-                    code.appendFormat("{0}[{1}] = {2}.apply(lambda x: {3})", tempObj, name, tempObj, content.apply);
+                    code.appendFormat("{0}[{1}] = {2}[{3}].apply(lambda x: {4})", tempObj, name, tempObj, content.column, content.apply);
                 }
                 break;
             case FRAME_EDIT_TYPE.ADD_ROW: 
@@ -1092,10 +1115,13 @@ define([
         kernelApi.executePython(code.toString(), function(result) {
             try {
                 var data = JSON.parse(result.substr(1,result.length - 2).replaceAll('\\\\', '\\'));
-                // console.l og(data);
+                // console.log(data);
                 var columnList = data.columns;
                 var indexList = data.index;
                 var dataList = data.data;
+
+                that.state.columnList = columnList;
+                that.state.indexList = indexList;
 
                 // table
                 var table = new sb.StringBuilder();
