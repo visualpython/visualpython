@@ -266,7 +266,7 @@ f_get_string_pipshow() {
 f_get_extension_path() {
     RESULT="EMPTY"
     if which conda-env > /dev/null 2>&1; then
-        RESULT=`conda-env list | grep "*" | awk '{print $NF}'|tr -d ' '`/share/jupyter/nbextensions
+        RESULT=`conda-env list | grep "*" | awk -F'*' '{print $2}'|tr -d ' '`/share/jupyter/nbextension
     else
         RESULT=`jupyter --data-dir`/nbextensions
     fi
