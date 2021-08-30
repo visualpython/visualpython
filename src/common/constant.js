@@ -199,7 +199,7 @@ define ([
     /**
      * faq page link
      */
-    const VPNOTE_PAGE_LINK = 'https://visualpython.ai/vpnote';
+    const VPNOTE_PAGE_LINK = 'https://visualpython.ai/vpnotes';
 
     /**
      * header extra menu faq caption
