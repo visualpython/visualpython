@@ -519,6 +519,8 @@ define([
             // blockContainer.resetOptionPage();
             blockContainer.setFocusedPageType(FOCUSED_PAGE_TYPE.NULL);
         });
+
+        $(vpCommon.wrapSelector(''))
         
         /** Create block buttons page를 클릭했을 때 */
         $(vpCommon.wrapSelector(VP_CLASS_PREFIX + VP_CLASS_APIBLOCK_BUTTONS)).click(function(event) {
@@ -574,7 +576,8 @@ define([
                 ctrlKey = 17,
                 cmdKey = 91,
                 vKey = 86,
-                cKey = 67;
+                cKey = 67,
+                escKey = 27;
         
             $(document).keydown(function(e) {
                 if (e.keyCode == ctrlKey || e.keyCode == cmdKey) {
@@ -583,10 +586,41 @@ define([
             }).keyup(function(e) {
                 if (e.keyCode == ctrlKey || e.keyCode == cmdKey) {
                     ctrlDown = false;
+                    console.log(blockContainer.getFocusedPageType());
+                }
+                if (e.keyCode == escKey) {
+                    // close popup on esc
+                    if (blockContainer.getFocusedPageType() != FOCUSED_PAGE_TYPE.NULL) {
+                        blockContainer.appsMenu.close();
+                    }
                 }
             }).click(function(e) {
+                // click event on jupyter side
+                if ($('#notebook').has(e.target).length > 0) {
+                    blockContainer.setFocusedPageType(FOCUSED_PAGE_TYPE.NULL);
+                }
+                // click event on visual python menu tab & button box
+                if ($(vpCommon.wrapSelector('.vp-apiblock-tab-header')).has(e.target).length > 0
+                    || $(vpCommon.wrapSelector('.vp-apiblock-board-button-container')).has(e.target).length > 0) {
+                    blockContainer.setFocusedPageType(FOCUSED_PAGE_TYPE.BUTTONS);
+                }
+                // click event on popup menu
+                if ($(vpCommon.wrapSelector('.vp-ds')).has(e.target).length > 0
+                || $(vpCommon.wrapSelector('.vp-fe')).has(e.target).length > 0
+                || $(vpCommon.wrapSelector('.vp-pp')).has(e.target).length > 0
+                || $(vpCommon.wrapSelector('.vp-ds-btn-box')).has(e.target).length > 0
+                || $(vpCommon.wrapSelector('.vp-fe-btn-box')).has(e.target).length > 0
+                || $(vpCommon.wrapSelector('.vp-pp-btn-box')).has(e.target).length > 0) {
+                    blockContainer.setFocusedPageType(FOCUSED_PAGE_TYPE.OPTION);
+                }
+
                 // check modified
                 blockContainer.checkModified();
+            });
+
+            // focus event on codemirror of jupyter side
+            $(document).on('focus', '#notebook .CodeMirror', function(e){
+                blockContainer.setFocusedPageType(FOCUSED_PAGE_TYPE.NULL);
             });
 
             $(document).change($(vpCommon.wrapSelector('.vp-apiblock-option input')), function() {

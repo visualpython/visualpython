@@ -1823,7 +1823,7 @@ define([
 
         // click preview
         $(document).on('click', this.wrapSelector('.' + VP_DS_BUTTON_PREVIEW), function(evt) {
-            evt.stopPropagation();
+            // evt.stopPropagation();
             if (that.previewOpened) {
                 that.closePreview();
             } else {
@@ -1833,7 +1833,7 @@ define([
 
         // click dataview
         $(document).on('click', this.wrapSelector('.' + VP_DS_BUTTON_DATAVIEW), function(evt) {
-            evt.stopPropagation();
+            // evt.stopPropagation();
             if (that.dataviewOpened) {
                 that.closeDataview();
             } else {
@@ -1893,10 +1893,10 @@ define([
             if (e.keyCode == keyCode.shiftKey) {
                 that.keyboardManager.keyCheck.shiftKey = false;
             }
-            if (e.keyCode == keyCode.escKey) {
-                // close on esc
-                that.close();
-            }
+            // if (e.keyCode == keyCode.escKey) {
+            //     // close on esc
+            //     that.close();
+            // }
         });
     }
 

@@ -182,6 +182,7 @@ define([
     FrameEditor.prototype.close = function() {
         this.unbindEvent();
         $(this.wrapSelector()).remove();
+        $(vpCommon.formatString('.{0}.{1}', VP_FE_BTN, this.uuid)).remove();
     }
 
     FrameEditor.prototype.init = function(state = undefined) {
@@ -1282,8 +1283,6 @@ define([
         // close popup
         $(document).on('click', this.wrapSelector('.' + VP_FE_CLOSE), function(event) {
             that.close();
-
-            $(vpCommon.formatString('.{0}.{1}', VP_FE_BTN, this.uuid)).remove();
             // vpCommon.removeHeadScript("vpSubsetEditor");
         });
 
@@ -1622,7 +1621,7 @@ define([
 
         // click preview
         $(document).on('click', this.wrapSelector('.' + VP_FE_BUTTON_PREVIEW), function(evt) {
-            evt.stopPropagation();
+            // evt.stopPropagation();
             if (that.previewOpened) {
                 that.closePreview();
             } else {
@@ -1632,7 +1631,7 @@ define([
 
         // click dataview
         $(document).on('click', this.wrapSelector('.' + VP_FE_BUTTON_DATAVIEW), function(evt) {
-            evt.stopPropagation();
+            // evt.stopPropagation();
             if (that.dataviewOpened) {
                 that.closeDataview();
             } else {
@@ -1714,10 +1713,10 @@ define([
             if (e.keyCode == keyCode.shiftKey) {
                 that.keyboardManager.keyCheck.shiftKey = false;
             }
-            if (e.keyCode == keyCode.escKey) {
-                // close on esc
-                that.close();
-            }
+            // if (e.keyCode == keyCode.escKey) {
+            //     // close on esc
+            //     that.close();
+            // }
         });
     }
 
