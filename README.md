@@ -58,8 +58,7 @@ conda install -c conda-forge jupyter_contrib_nbextensions
 ```
 visualpy install
 ```
-NOTE : If you need to use a specific version of the pip, specify the version like the following. <br>
-For example, for pip3:
+NOTE : If you are using multiple versions of Python, specify the pip version as 3 like the following. <br>
 ```
 visualpy install --pip3 
 ```
