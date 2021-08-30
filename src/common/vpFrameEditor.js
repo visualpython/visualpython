@@ -563,7 +563,7 @@ define([
         var suggestInput = new vpSuggestInputText.vpSuggestInputText();
         suggestInput.setComponentID('vp_popupAddApply');
         suggestInput.addClass('vp-input vp-popup-apply-lambda');
-        suggestInput.setSuggestList(function() { return ['x', 'min(x)', 'max(x)', 'sum(x)', 'mean(x)']; });
+        suggestInput.setSuggestList(function() { return ['x']; });
         suggestInput.setValue('x');
         suggestInput.setNormalFilter(false);
         content.appendFormatLine('<td>{0}</td>', suggestInput.toTagString());

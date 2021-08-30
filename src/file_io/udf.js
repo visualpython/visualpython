@@ -220,7 +220,7 @@ define([
                         '        return 0.0',
                         '    else:',
                         '        try:',
-                        '        result = float(x)',
+                        '            result = float(x)',
                         '            return result',
                         '        except ValueError:',
                         '            return 0.0'

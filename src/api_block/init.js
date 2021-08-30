@@ -303,14 +303,22 @@ define([
 
             var createdBlock = blockContainer.getSelectBlock();
             if (createdBlock) {
-                // apply to original block
-                createdBlock.setState({
-                    apps: {
-                        menu: blockContainer.apps,
-                        code: code,
-                        state: state
-                    }
-                });
+                if (title === 'Snippets') {
+                    // set code
+                    createdBlock.setState({
+                        [STATE_codeLine]: code
+                    });
+                } else if (title === 'Import' || title === 'Variables' || title === 'File' 
+                || title === 'Instance' || title === 'Chart') {
+                    // apply to original block
+                    createdBlock.setState({
+                        apps: {
+                            menu: blockContainer.apps,
+                            code: code,
+                            state: state
+                        }
+                    });
+                }
                 createdBlock.saveState();
             } else {
                 if (title === 'Snippets') {
