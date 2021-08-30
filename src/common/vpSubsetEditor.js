@@ -1760,6 +1760,7 @@ define([
         });
 
         $(document).on('change', this.wrapSelector('.vp-ds-cond-tbl .vp-col-list'), function() {
+            var thisTag = $(this);
             var varName = $(this).closest('td').find('.vp-cond-var').val();
             var colName = $(this).find('option:selected').attr('data-code');
 
@@ -1769,6 +1770,12 @@ define([
             // get result and load column list
             kernelApi.executePython(code, function(result) {
                 var category = JSON.parse(result);
+                if (category && category.length > 0) {
+                    // if it's categorical column, check 'Text' as default
+                    $(thisTag).closest('td').find('.vp-cond-use-text').prop('checked', true);
+                } else {
+                    $(thisTag).closest('td').find('.vp-cond-use-text').prop('checked', false);
+                }
                 $(condTag).replaceWith(function() {
                     return that.renderConditionCondInput(category);
                 });

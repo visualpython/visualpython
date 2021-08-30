@@ -812,7 +812,7 @@ define([
              /** File navigation을 open하지 않고 alert창 띄움*/    
             } else {
                 var saveFilePath = vpCommon.formatString("./{0}.{1}", saveFileName, vpConst.VP_NOTE_EXTENSION);
-                apiBlockPackage.openMultiBtnModal_new('Save As', `Save changes to '${saveFileName}.vp'`,['Yes','No', 'Cancel'], [() => {
+                apiBlockPackage.openMultiBtnModal_new('Save As', `Save changes to '${saveFileName}.vp'`,['Yes', 'No', 'Cancel'], 3, [() => {
                     saveNotePageAction_newVersion(saveFileName, saveFilePath);
                     openNotePage();
 

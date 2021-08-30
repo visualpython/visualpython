@@ -664,7 +664,7 @@ define([
 
             this.resetOptionPage();
     
-            this.setFocusedPageType(FOCUSED_PAGE_TYPE.EDITOR);
+            this.setFocusedPageType(FOCUSED_PAGE_TYPE.BOARD);
             this.reNewContainerDom();
             this.reRenderAllBlock_asc();
         }
@@ -1124,7 +1124,7 @@ define([
         if (prevSelectedBlock && prevSelectedBlock.isModified) {
             // Ask to save
             var apiBlockPackage = this.getImportPackageThis();
-            apiBlockPackage.openMultiBtnModal_new('Unsaved Changes', 'Save changes before leave?',['Don&rsquo;t save', 'Save'], [() => {
+            apiBlockPackage.openMultiBtnModal_new('Unsaved Changes', 'Save changes before leave?',['Don&rsquo;t save', 'Save'], 2, [() => {
                 // cancel
                 // $(VP_ID_PREFIX + VP_APIBLOCK_BOARD_OPTION_CANCEL_BUTTON).trigger(STR_CLICK);
                 blockContainerThis.cancelBlock();
