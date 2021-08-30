@@ -248,19 +248,10 @@ define([
         
         // pandasObject
         popupTag.appendLine('<tr>');
-        popupTag.appendFormatLine('<td><label class="{0}">{1}</label></td>'
-                                , VP_DS_LABEL, 'Variable');
+        popupTag.appendFormatLine('<td><label class="{0} {1}">{2}</label></td>'
+                                , VP_DS_LABEL, 'vp-orange-text', 'Variable');
 
         popupTag.appendLine('<td>');
-        // pandasObject - suggestInputText
-        // var vpDfSuggest = new vpSuggestInputText.vpSuggestInputText();
-        // vpDfSuggest.addClass(VP_DS_PANDAS_OBJECT);
-        // vpDfSuggest.addClass('vp-input');
-        // vpDfSuggest.setPlaceholder('Select Object');
-        // vpDfSuggest.setSuggestList(function() { return [] });
-        // vpDfSuggest.setNormalFilter(false);
-        // vpDfSuggest.setValue($(this.pageThis.wrapSelector('#' + this.targetId)).val());
-        // popupTag.appendFormatLine('<td>{0}', vpDfSuggest.toTagString());
         popupTag.appendFormatLine('<div style="display:inline-block" class="{0}"><input class="{1} {2}"/></div>'
                             , VP_DS_PANDAS_OBJECT_BOX, 'vp-input', VP_DS_PANDAS_OBJECT);
         
@@ -270,8 +261,8 @@ define([
 
         // subset type
         popupTag.appendLine('<tr>');
-        popupTag.appendFormatLine('<td><label class="{0}">{1}</label></td>'
-                                , VP_DS_LABEL, 'Method');
+        popupTag.appendFormatLine('<td><label class="{0} {1}">{2}</label></td>'
+                                , VP_DS_LABEL, 'vp-orange-text', 'Method');
         popupTag.appendLine('<td>');
         popupTag.appendLine(this.renderSubsetType(this.state.dataType));
         
@@ -929,7 +920,7 @@ define([
                     if (!that.stateLoaded) {
                         that.reloadSubsetData();
                     }
-                    that.loadDataPage();
+                    // that.loadDataPage();
                 } catch {
 
                 }
@@ -1172,7 +1163,7 @@ define([
     }
 
     SubsetEditor.prototype.loadState = function(state) {
-        console.log('subset', 'loadState', state)
+        // console.log('subset', 'loadState', state)
         var {
             dataType, pandasObject, useCopy, toFrame
             , subsetType
@@ -1832,7 +1823,7 @@ define([
 
         // click preview
         $(document).on('click', this.wrapSelector('.' + VP_DS_BUTTON_PREVIEW), function(evt) {
-            evt.stopPropagation();
+            // evt.stopPropagation();
             if (that.previewOpened) {
                 that.closePreview();
             } else {
@@ -1842,7 +1833,7 @@ define([
 
         // click dataview
         $(document).on('click', this.wrapSelector('.' + VP_DS_BUTTON_DATAVIEW), function(evt) {
-            evt.stopPropagation();
+            // evt.stopPropagation();
             if (that.dataviewOpened) {
                 that.closeDataview();
             } else {
@@ -1857,14 +1848,15 @@ define([
 
         // click others
         $(document).on('click.' + this.uuid, function(evt) {
-            if (!$(evt.target).hasClass('.' + VP_DS_BUTTON_DETAIL)) {
+            if (!$(evt.target).hasClass(VP_DS_BUTTON_DETAIL)) {
                 $(that.wrapSelector('.' + VP_DS_DETAIL_BOX)).hide();
             }
-            if (!$(evt.target).hasClass('.' + VP_DS_BUTTON_PREVIEW)
+            if (!$(evt.target).hasClass(VP_DS_BUTTON_PREVIEW)
+                && !$(evt.target).hasClass(VP_DS_PREVIEW_BOX)
                 && $(that.wrapSelector('.' + VP_DS_PREVIEW_BOX)).has(evt.target).length === 0) {
                 that.closePreview();
             }
-            if (!$(evt.target).hasClass('.' + VP_DS_BUTTON_DATAVIEW)
+            if (!$(evt.target).hasClass(VP_DS_BUTTON_DATAVIEW)
                 && $(that.wrapSelector('.' + VP_DS_DATA)).has(evt.target).length === 0) {
                 that.closeDataview();
             }
@@ -1901,10 +1893,10 @@ define([
             if (e.keyCode == keyCode.shiftKey) {
                 that.keyboardManager.keyCheck.shiftKey = false;
             }
-            if (e.keyCode == keyCode.escKey) {
-                // close on esc
-                that.close();
-            }
+            // if (e.keyCode == keyCode.escKey) {
+            //     // close on esc
+            //     that.close();
+            // }
         });
     }
 
@@ -1976,7 +1968,9 @@ define([
     }
 
     SubsetEditor.prototype.openDataview = function() {
+        this.closePreview();
         this.dataviewOpened = true;
+        this.loadDataPage();
         $(this.wrapSelector('.' + VP_DS_DATA)).show();
     }
 
@@ -1987,6 +1981,7 @@ define([
 
     /** open preview box */
     SubsetEditor.prototype.openPreview = function() {
+        this.closeDataview();
         $(this.wrapSelector('.' + VP_DS_PREVIEW_BOX)).show();
 
         if (!this.cmpreviewall) {

@@ -291,7 +291,6 @@ define([
 
         // item header click (toggle & select item) &  double click (edit title)
         $(document).on('click', this.wrapSelector('.vp-sn-item-header'), function(evt) {
-            console.log('header click ' + that.clicked);
             var thisHeader = this;
             that.clicked++;
             if (that.clicked == 1) {

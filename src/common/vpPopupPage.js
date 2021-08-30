@@ -213,7 +213,7 @@ define([
 
         // click preview
         $(document).on('click', this.wrapSelector('.' + VP_PP_BUTTON_PREVIEW), function(evt) {
-            evt.stopPropagation();
+            // evt.stopPropagation();
             if (that.previewOpened) {
                 that.closePreview();
             } else {
@@ -291,10 +291,10 @@ define([
             if (e.keyCode == keyCode.shiftKey) {
                 that.keyboardManager.keyCheck.shiftKey = false;
             }
-            if (e.keyCode == keyCode.escKey) {
-                // close on esc
-                that.close();
-            }
+            // if (e.keyCode == keyCode.escKey) {
+            //     // close on esc
+            //     that.close();
+            // }
         });
     }
 

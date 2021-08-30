@@ -377,7 +377,7 @@ define([
         if (this.pointer.stack.length > MAX_STACK_SIZE) {
             this.pointer.stack.splice(0, 1);
         }
-        console.log('add stack', currentValue, this.pointer.stack);
+        // console.log('add stack', currentValue, this.pointer.stack);
     }
 
     VariablePackage.prototype.popStack = function(replace=true) {
@@ -388,7 +388,7 @@ define([
         if (replace) {
             this.updateValue('', lastValue);
         }
-        console.log('pop stack', lastValue, this.pointer.stack);
+        // console.log('pop stack', lastValue, this.pointer.stack);
         return lastValue;
     }
 

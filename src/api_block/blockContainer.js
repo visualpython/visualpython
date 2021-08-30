@@ -621,11 +621,11 @@ define([
      */
     BlockContainer.prototype.setFocusedPageType = function(focusedPageType) {
         // 추가: FOCUSED_PAGE_TYPE = NULL일 경우 주피터 단축키 활성화 / 아닐 경우 비활성화
-        if (focusedPageType == FOCUSED_PAGE_TYPE.NULL) {
-            // Jupyter.notebook.keyboard_manager.enable();
-        } else {
-            // Jupyter.notebook.keyboard_manager.disable();
-        }
+        // if (focusedPageType == FOCUSED_PAGE_TYPE.NULL) {
+        //     Jupyter.notebook.keyboard_manager.enable();
+        // } else {
+        //     Jupyter.notebook.keyboard_manager.disable();
+        // }
         this.focusedPageType = focusedPageType;
     }
     BlockContainer.prototype.getFocusedPageType = function() {

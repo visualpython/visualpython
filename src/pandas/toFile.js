@@ -125,7 +125,6 @@ define([
         if (this.metadata) {
             var fileType = this.getMetadata('fileType');
             if (fileType) {
-                console.log('fileType : '+fileType);
                 this.selectedFileType = fileType;
                 this.package = { ...libPandas._PANDAS_FUNCTION[this.fileTypeId[fileType]] };
                 this.state.fileExtension = this.fileExtensions[fileType];

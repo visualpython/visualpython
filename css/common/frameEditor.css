@@ -74,6 +74,8 @@
 .vp-fe-preview .CodeMirror-code .cm-string {
     background-color: rgba(246, 173, 85, 0.2);
 }
+
+
 .vp-fe-df-box {
     display: grid;
     grid-template-rows: 30px;
@@ -81,6 +83,7 @@
 }
 .vp-fe-df-box label {
     width: 80px;
+    font-weight: bold;
 }
 .vp-fe #vp_feVariable { 
     width: 153px;
