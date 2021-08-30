@@ -664,7 +664,7 @@ define([
 
             this.resetOptionPage();
     
-            this.setFocusedPageType(FOCUSED_PAGE_TYPE.EDITOR);
+            this.setFocusedPageType(FOCUSED_PAGE_TYPE.BOARD);
             this.reNewContainerDom();
             this.reRenderAllBlock_asc();
         }
