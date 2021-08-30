@@ -7,8 +7,7 @@
 [![License: GPLv3](https://img.shields.io/badge/License-GPLv3-brightgreen)](https://www.gnu.org/licenses/gpl-3.0.html)
 [![Code of Conduct: Contributor Covenant](https://img.shields.io/badge/Code%20of%20Conduct-Contributor%20Covenant-pink)](https://github.com/visualpython/visualpython/blob/main/CODE_OF_CONDUCT.md)
 [![Downloads: ](https://img.shields.io/pypi/dm/visualpython?color=orange)](https://pypistats.org/packages/visualpython)
-[![Release: ](https://img.shields.io/github/v/release/visualpython/visualpython?color=%23FF6347)](https://pypistats.org/packages/visualpython)
-
+[![Issues: ](https://img.shields.io/github/issues/visualpython/visualpython?color=%23FF6347)](https://pypistats.org/packages/visualpython)
 
 ## Introduction
 Visual Python is a GUI-based Python code generator, developed on the Jupyter Notebook as an extension. <br>
@@ -32,7 +31,7 @@ Visual Python is a Jupyter Notebook extension. <br>
 We recommend installing Anaconda (virtual environment).
 
 - Python version 3.x
-- Jupyter notebook or Anaconda env <br>
+- Jupyter notebook or Anaconda env 
 
 ### 2. How to Install
 
@@ -45,9 +44,7 @@ We recommend installing Anaconda (virtual environment).
 ```
 pip install visualpython
 ```
-<br>
-
-Depending on your virtual environment settings, you may need to install Jupyter Extensions.<br>
+NOTE : Depending on your virtual environment settings, you may need to install Jupyter Extensions.<br>
 To install Jupyter Extension, use commands either:
 ```
 pip install jupyter_contrib_nbextensions
@@ -61,10 +58,15 @@ conda install -c conda-forge jupyter_contrib_nbextensions
 ```
 visualpy install
 ```
+NOTE : If you need to use a specific version of the pip, specify the version like the following. <br>
+For example, for pip3:
+```
+visualpy install --pip3 
+```
 
 **4)  Activate Visual Python on Jupyter Notebook**
 
-Click orange square button on the right side of the Jupyter Notebook menu. <br>
+Click orange square button on the right side of the Jupyter Notebook menu. 
 
 ### 3. Package Control Info
 * Usage: visualpy **[option]** <br>
@@ -72,6 +74,7 @@ Click orange square button on the right side of the Jupyter Notebook menu. <br>
 
 ```
 help       - show help menu
+install    - install packages
 uninstall  - uninstall packages
 upgrade    - version upgrade
 version    - version check
