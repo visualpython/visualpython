@@ -48,7 +48,7 @@ define ([
      * toolbar btn properties
      */
     const TOOLBAR_BTN_INFO = {
-        HELP: "Visual Python 1.1.7"
+        HELP: "Visual Python 1.1.8"
         // , ICON: "fa-angellist"
         , ICON: "vp-main-icon"
         , ID: "vpBtnToggle"
@@ -199,7 +199,7 @@ define ([
     /**
      * faq page link
      */
-    const VPNOTE_PAGE_LINK = 'https://visualpython.ai/vpnote';
+    const VPNOTE_PAGE_LINK = 'https://visualpython.ai/vpnotes';
 
     /**
      * header extra menu faq caption

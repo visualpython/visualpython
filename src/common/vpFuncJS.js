@@ -415,8 +415,8 @@ define([
      * @param {Array<string>} buttons 버튼 캡션
      * @param {Array<function>} callback 선택 콜백 함수
      */
-    VpFuncJS.prototype.openMultiBtnModal_new = function(message = "", submessage, buttons = new Array(), callbackList) {
-        var mbmModal = new vpMultiButtonModal_new.vpMultiButtonModal(message, submessage, buttons);
+    VpFuncJS.prototype.openMultiBtnModal_new = function(message = "", submessage, buttons = new Array(), defaultButtonIdx, callbackList) {
+        var mbmModal = new vpMultiButtonModal_new.vpMultiButtonModal(message, submessage, buttons, defaultButtonIdx);
         mbmModal.openModal(callbackList);
     }
     return {'VpFuncJS': VpFuncJS};

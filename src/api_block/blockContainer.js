@@ -621,11 +621,11 @@ define([
      */
     BlockContainer.prototype.setFocusedPageType = function(focusedPageType) {
         // 추가: FOCUSED_PAGE_TYPE = NULL일 경우 주피터 단축키 활성화 / 아닐 경우 비활성화
-        if (focusedPageType == FOCUSED_PAGE_TYPE.NULL) {
-            // Jupyter.notebook.keyboard_manager.enable();
-        } else {
-            // Jupyter.notebook.keyboard_manager.disable();
-        }
+        // if (focusedPageType == FOCUSED_PAGE_TYPE.NULL) {
+        //     Jupyter.notebook.keyboard_manager.enable();
+        // } else {
+        //     Jupyter.notebook.keyboard_manager.disable();
+        // }
         this.focusedPageType = focusedPageType;
     }
     BlockContainer.prototype.getFocusedPageType = function() {
@@ -664,7 +664,7 @@ define([
 
             this.resetOptionPage();
     
-            this.setFocusedPageType(FOCUSED_PAGE_TYPE.EDITOR);
+            this.setFocusedPageType(FOCUSED_PAGE_TYPE.BOARD);
             this.reNewContainerDom();
             this.reRenderAllBlock_asc();
         }
@@ -1124,7 +1124,7 @@ define([
         if (prevSelectedBlock && prevSelectedBlock.isModified) {
             // Ask to save
             var apiBlockPackage = this.getImportPackageThis();
-            apiBlockPackage.openMultiBtnModal_new('Unsaved Changes', 'Save changes before leave?',['Don&rsquo;t save', 'Save'], [() => {
+            apiBlockPackage.openMultiBtnModal_new('Unsaved Changes', 'Save changes before leave?',['Don&rsquo;t save', 'Save'], 2, [() => {
                 // cancel
                 // $(VP_ID_PREFIX + VP_APIBLOCK_BOARD_OPTION_CANCEL_BUTTON).trigger(STR_CLICK);
                 blockContainerThis.cancelBlock();
@@ -2649,7 +2649,7 @@ define([
         this.hideOptionPreviewBox();
         $(VP_ID_PREFIX + VP_APIBLOCK_BOARD_OPTION_PREVIEW_BUTTON).removeClass('enabled');
 
-        this.setNavigator(BLOCK_CODELINE_TYPE.NONE, 'Visual Python 1.1.7');
+        this.setNavigator(BLOCK_CODELINE_TYPE.NONE, 'Visual Python 1.1.8');
         this.setFocusedPageType(FOCUSED_PAGE_TYPE.BOARD);
         $('.vp-apiblock-option-tab-none').css(STR_DISPLAY, STR_BLOCK);
     }

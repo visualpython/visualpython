@@ -67,22 +67,23 @@ define([
         this.uuid = uuid;   // Load html 영역의 uuid.
         // Import 기본 패키지 목록
         this.packageList = [
-            { library:'numpy',     alias:'np'}
-            , { library:'pandas',  alias:'pd'}
+            { library: 'numpy',     alias:'np'}
+            , { library: 'pandas',  alias:'pd'}
             , { 
-                library:'matplotlib.pyplot', alias:'plt' 
+                library: 'matplotlib.pyplot', alias:'plt' 
                 , include: [
                     '%matplotlib inline'
                 ]
             }
-            , { library:'seaborn', alias:'sns'}
+            , { library: 'seaborn', alias:'sns'}
+            , { library: 'plotly.express', alias: 'px'}
         ];
         
         this.package = {
             id: 'import',
             name: 'import package',
             library: 'common',
-            description: '공통 패키지 임포트',
+            description: 'import basic packages',
             code: '',
             input: [
                 {

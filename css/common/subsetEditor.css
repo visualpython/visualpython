@@ -75,7 +75,6 @@
     background-color: rgba(246, 173, 85, 0.2);
 }
 .vp-ds-label {
-    color: #F37704;
     font-weight: bold;
     margin-left: 20px;
 }
@@ -319,7 +318,7 @@
 }
 .vp-ds-btn-apply {
     position: absolute;
-    top: 4px;
+    top: 9px;
     right: 15px;
 }
 .vp-ds-btn-run {

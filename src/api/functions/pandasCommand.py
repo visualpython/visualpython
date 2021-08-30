@@ -33,7 +33,7 @@ def _vp_get_columns_list(df):
         # value
         if type(c).__name__ == 'str':
             cInfo['value'] = "'{}'".format(c)
-        elif type(r).__name__ == 'Timestamp':
+        elif type(c).__name__ == 'Timestamp':
             cInfo['value'] = str(c)
         # category - iopub data rate limit issue...
         if str(df[c].dtype) == 'object':

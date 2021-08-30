@@ -182,6 +182,7 @@ define([
     FrameEditor.prototype.close = function() {
         this.unbindEvent();
         $(this.wrapSelector()).remove();
+        $(vpCommon.formatString('.{0}.{1}', VP_FE_BTN, this.uuid)).remove();
     }
 
     FrameEditor.prototype.init = function(state = undefined) {
@@ -190,6 +191,8 @@ define([
             originObj: '',
             tempObj: '_vp',
             returnObj: '_vp',
+            columnList: [],
+            indexList: [],
             selected: [],
             axis: FRAME_AXIS.NONE,
             lines: TABLE_LINES,
@@ -303,7 +306,7 @@ define([
         page.appendFormatLine('<div class="{0}"><img src="{1}"/></div>', VP_FE_DF_REFRESH, '/nbextensions/visualpython/resource/refresh.svg');
         page.appendLine('</div>');
         page.appendLine('<div>');
-        page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_feReturn', 'vp-orange-text', 'Allocate to');
+        page.appendFormatLine('<label for="{0}">{1}</label>', 'vp_feReturn', 'Allocate to');
         page.appendFormatLine('<input type="text" class="{0}" id="{1}" placeholder="{2}"/>', 'vp-input', 'vp_feReturn', 'Variable name');
         page.appendLine('</div>');
         page.appendLine('</div>');
@@ -553,17 +556,37 @@ define([
         
         // tab 4. apply
         content.appendFormatLine('<div class="{0} {1}" style="display: none;">', 'vp-popup-tab', 'apply');
-        content.appendLine('<label>lambda x:</label>');
+        content.appendLine('<table><colgroup><col width="80px"><col width="*"></colgroup>');
+        content.appendLine('<tr><th><label>column</label></th>');
+        content.appendFormatLine('<td>{0}</td></tr>', this.renderColumnList(this.state.columnList));
+        content.appendLine('<tr><th><label>lambda x:</label></th>');
         var suggestInput = new vpSuggestInputText.vpSuggestInputText();
         suggestInput.setComponentID('vp_popupAddApply');
-        suggestInput.addClass('vp-input vp-popup-apply');
+        suggestInput.addClass('vp-input vp-popup-apply-lambda');
         suggestInput.setSuggestList(function() { return ['x', 'min(x)', 'max(x)', 'sum(x)', 'mean(x)']; });
         suggestInput.setValue('x');
         suggestInput.setNormalFilter(false);
-        content.appendLine(suggestInput.toTagString());
+        content.appendFormatLine('<td>{0}</td>', suggestInput.toTagString());
+        content.appendLine('</tr></table>');
         content.appendLine('</div>'); // end of vp-popup-tab apply
         content.appendLine('</div>'); // end of vp-popup-addpage
         return content.toString();
+    }
+
+    /**
+     * Render column list for [add column > apply]
+     * @param {Array} columnList 
+     * @returns 
+     */
+    FrameEditor.prototype.renderColumnList = function(columnList) {
+        var selectTag = new sb.StringBuilder();
+        selectTag.appendFormatLine('<select class="{0}">', 'vp-popup-apply-column');
+        columnList && columnList.forEach((col, idx) => {
+            var colLabel = convertToStr(col, typeof col == 'string');
+            selectTag.appendFormatLine('<option value="{0}">{1}</option>', colLabel, col);
+        }); 
+        selectTag.appendLine('</select>');
+        return selectTag.toString();
     }
 
     FrameEditor.prototype.bindEventForPopupPage = function() {
@@ -719,7 +742,8 @@ define([
                         }
                     }
                 } else if (tab == 'apply') {
-                    content['apply'] = $(this.wrapSelector('.vp-popup-apply')).val();
+                    content['column'] = $(this.wrapSelector('.vp-popup-apply-column')).val();
+                    content['apply'] = $(this.wrapSelector('.vp-popup-apply-lambda')).val();
                 }
                 break;
             case FRAME_EDIT_TYPE.ADD_ROW:
@@ -770,6 +794,7 @@ define([
 
     /** open preview box */
     FrameEditor.prototype.openPreview = function() {
+        this.closeDataview();
         $(this.wrapSelector('.' + VP_FE_PREVIEW_BOX)).show();
 
         if (!this.cmpreviewall) {
@@ -823,6 +848,7 @@ define([
     }
 
     FrameEditor.prototype.openDataview = function() {
+        this.closePreview();
         this.dataviewOpened = true;
         $(this.wrapSelector('.' + VP_FE_INFO)).show();
     }
@@ -1058,7 +1084,7 @@ define([
                     }
                     code.append(')');
                 } else if (tab == 'apply') {
-                    code.appendFormat("{0}[{1}] = {2}.apply(lambda x: {3})", tempObj, name, tempObj, content.apply);
+                    code.appendFormat("{0}[{1}] = {2}[{3}].apply(lambda x: {4})", tempObj, name, tempObj, content.column, content.apply);
                 }
                 break;
             case FRAME_EDIT_TYPE.ADD_ROW: 
@@ -1090,10 +1116,13 @@ define([
         kernelApi.executePython(code.toString(), function(result) {
             try {
                 var data = JSON.parse(result.substr(1,result.length - 2).replaceAll('\\\\', '\\'));
-                // console.l og(data);
+                // console.log(data);
                 var columnList = data.columns;
                 var indexList = data.index;
                 var dataList = data.data;
+
+                that.state.columnList = columnList;
+                that.state.indexList = indexList;
 
                 // table
                 var table = new sb.StringBuilder();
@@ -1191,11 +1220,11 @@ define([
 
     FrameEditor.prototype.saveState = function() {
         // if there's anything to save, you can properly save it here.
-        console.log('frame', 'saveState', this.state);
+        // console.log('frame', 'saveState', this.state);
     }
 
     FrameEditor.prototype.loadState = function(state) {
-        console.log('frame', 'loadState', state);
+        // console.log('frame', 'loadState', state);
         var {
             originObj,
             returnObj,
@@ -1254,8 +1283,6 @@ define([
         // close popup
         $(document).on('click', this.wrapSelector('.' + VP_FE_CLOSE), function(event) {
             that.close();
-
-            $(vpCommon.formatString('.{0}.{1}', VP_FE_BTN, this.uuid)).remove();
             // vpCommon.removeHeadScript("vpSubsetEditor");
         });
 
@@ -1343,8 +1370,13 @@ define([
                 // close menu
                 that.hideMenu();
             }
-            if (!$(evt.target).hasClass('.' + VP_FE_BUTTON_DATAVIEW)) {
-                // close info
+            if (!$(evt.target).hasClass(VP_FE_BUTTON_PREVIEW)
+                && !$(evt.target).hasClass(VP_FE_PREVIEW_BOX)
+                && $(that.wrapSelector('.' + VP_FE_PREVIEW_BOX)).has(evt.target).length === 0) {
+                that.closePreview();
+            }
+            if (!$(evt.target).hasClass(VP_FE_BUTTON_DATAVIEW)
+                && $(that.wrapSelector('.' + VP_FE_INFO)).has(evt.target).length === 0) {
                 that.closeDataview();
             }
         });
@@ -1589,7 +1621,7 @@ define([
 
         // click preview
         $(document).on('click', this.wrapSelector('.' + VP_FE_BUTTON_PREVIEW), function(evt) {
-            evt.stopPropagation();
+            // evt.stopPropagation();
             if (that.previewOpened) {
                 that.closePreview();
             } else {
@@ -1599,7 +1631,7 @@ define([
 
         // click dataview
         $(document).on('click', this.wrapSelector('.' + VP_FE_BUTTON_DATAVIEW), function(evt) {
-            evt.stopPropagation();
+            // evt.stopPropagation();
             if (that.dataviewOpened) {
                 that.closeDataview();
             } else {
@@ -1638,14 +1670,14 @@ define([
 
         // click others
         $(document).on('click.' + this.uuid, function(evt) {
-            if (!$(evt.target).hasClass('.' + VP_FE_BUTTON_DETAIL)) {
+            if (!$(evt.target).hasClass(VP_FE_BUTTON_DETAIL)) {
                 $(that.wrapSelector('.' + VP_FE_DETAIL_BOX)).hide();
             }
-            if (!$(evt.target).hasClass('.' + VP_FE_BUTTON_PREVIEW)
+            if (!$(evt.target).hasClass(VP_FE_BUTTON_PREVIEW)
                 && $(that.wrapSelector('.' + VP_FE_PREVIEW_BOX)).has(evt.target).length === 0) {
                 that.closePreview();
             }
-            if (!$(evt.target).hasClass('.' + VP_FE_BUTTON_DATAVIEW)
+            if (!$(evt.target).hasClass(VP_FE_BUTTON_DATAVIEW)
                 && $(that.wrapSelector('.' + VP_FE_INFO)).has(evt.target).length === 0) {
                 that.closeDataview();
             }
@@ -1681,10 +1713,10 @@ define([
             if (e.keyCode == keyCode.shiftKey) {
                 that.keyboardManager.keyCheck.shiftKey = false;
             }
-            if (e.keyCode == keyCode.escKey) {
-                // close on esc
-                that.close();
-            }
+            // if (e.keyCode == keyCode.escKey) {
+            //     // close on esc
+            //     that.close();
+            // }
         });
     }
 

@@ -111,7 +111,7 @@ define([
 
             var saveFilePath = vpCommon.formatString("./{0}.{1}", saveFileName, vpConst.VP_NOTE_EXTENSION);
             var apiBlockPackage = blockContainer.getImportPackageThis();
-            apiBlockPackage.openMultiBtnModal_new('Save As', `Save changes to '${saveFileName}.vp'`,['Yes', 'No', 'Cancel'], [() => {
+            apiBlockPackage.openMultiBtnModal_new('Save As', `Save changes to '${saveFileName}.vp'`,['Yes', 'No', 'Cancel'], 3, [() => {
                 saveNotePageAction_newVersion(vpCommon.formatString("{0}.{1}", saveFileName, vpConst.VP_NOTE_EXTENSION), saveFilePath);
 
                 blockContainer.deleteAllBlock();
@@ -161,7 +161,7 @@ define([
 
             var saveFilePath = $(vpCommon.wrapSelector(vpCommon.formatString("#{0}", vpConst.VP_NOTE_REAL_FILE_PATH))).val();
             var apiBlockPackage = blockContainer.getImportPackageThis();
-            apiBlockPackage.openMultiBtnModal_new('Save As', `Save changes to '${saveFileName}.vp'`,['Yes', 'No', 'Cancel'], [() => {
+            apiBlockPackage.openMultiBtnModal_new('Save As', `Save changes to '${saveFileName}.vp'`,['Yes', 'No', 'Cancel'], 3, [() => {
                 if (saveFilePath == '') {
                     saveAsNotePage();
                 } else {
