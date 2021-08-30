@@ -358,16 +358,19 @@
 .vp-popup-addpage .vp-popup-tab.replace {
     height: calc(100% - 50px);
 }
-.vp-popup-addtype{
+.vp-popup-addtype {
     width: 153px;
     margin-top: 5px;
 }
-.vp-popup-delete{
+.vp-popup-delete {
     padding-bottom: 20px;
 }
-.vp-popup-replace-add{
+.vp-popup-replace-add {
     margin-top: 30px
 }
-.vp_popup-apply{
-    margin-left: 30px;
+.vp-popup-apply-column {
+    width: 153px;
+}
+.vp-popup-apply-lambda{
+    margin-top: 5px;
 }
