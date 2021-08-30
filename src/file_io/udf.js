@@ -203,8 +203,44 @@ define([
             } else if (menu == 'default-snippets') {
                 // import default snippets
                 var defaultSnippets = {
-                    'default import': 'import numpy as np\nimport pandas as pd\nimport matplotlib.pyplot as plt\n%matplotlib inline\nimport seaborn as sns'
+                    'default import': [
+                        'import numpy as np',
+                        'import pandas as pd',
+                        'import matplotlib.pyplot as plt',
+                        '%matplotlib inline',
+                        'import seaborn as sns',
+                        'import plotly.express as px'
+                    ],
+                    'as_float': [
+                        'def as_float(x):',
+                        '    """',
+                        "    usage: df['col'] = df['col'].apply(as_float)",
+                        '    """',
+                        '    if not isinstance(x, str):',
+                        '        return 0.0',
+                        '    else:',
+                        '        try:',
+                        '        result = float(x)',
+                        '            return result',
+                        '        except ValueError:',
+                        '            return 0.0'
+                    ],
+                    'as_int': [
+                        'def as_int(x):',
+                        '    """',
+                        "    usage: df['col'] = df['col'].apply(as_int)",
+                        '    """',
+                        '    if not isinstance(x, str):',
+                        '        return 0',
+                        '    else:',
+                        '        try:',
+                        '            result = int(x)',
+                        '            return result',
+                        '        except ValueError:',
+                        '            return 0.0'
+                    ]
                 }
+
                 var timestamp = new Date().getTime();
 
                 var keys = Object.keys(defaultSnippets);
@@ -218,7 +254,8 @@ define([
                         importKey = key + '_imported' + importNo;
                         importNo += 1;
                     }
-                    var newSnippet = { [importKey]: { code: defaultSnippets[key], timestamp: timestamp } };
+                    var code = defaultSnippets[key].join('\n');
+                    var newSnippet = { [importKey]: { code: code, timestamp: timestamp } };
                     vpSetting.saveUserDefinedCode(newSnippet);
 
                     importKeys.push(importKey);
