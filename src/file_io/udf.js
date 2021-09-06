@@ -339,6 +339,11 @@ define([
 
         // item header click (toggle & select item) &  double click (edit title)
         $(document).on('click', this.wrapSelector('.vp-sn-item-header'), function(evt) {
+            // stop propagation on checkbox
+            if ($(evt.target).hasClass('vp-sn-item-check')) {
+                return;
+            }
+
             var thisHeader = this;
             that.clicked++;
             if (that.clicked == 1) {
@@ -620,7 +625,7 @@ define([
 
                     that.loadUdfList();
 
-                    vpCommon.renderSuccessMessage(fileName + ' imported ');
+                    vpCommon.renderSuccessMessage(evt.file + ' imported ');
                 });
             });
         });
