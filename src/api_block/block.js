@@ -1801,7 +1801,8 @@ define([
                 };
 
                 blockContainerThis.createAppsPage(menu, file, config);
-                break;
+                return;
+                // break;
             }
         }
         
@@ -2029,7 +2030,7 @@ define([
                 $(blockLineNumberInfoDom).find('.vp-apiblock-circle-play').css(STR_OPACITY, 1);
             }
 
-            
+            blockContainerThis.setFocusedPageType(FOCUSED_PAGE_TYPE.BOARD);
             blockContainerThis.resetBlockListAndRenderThisBlock(thisBlock);
   
             event.stopPropagation();
