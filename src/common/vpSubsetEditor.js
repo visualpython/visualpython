@@ -2278,12 +2278,14 @@ define([
             this.setPreview(code.toString());
         }
 
-        code.appendLine();
         // display
-        if (allocation && this.state.allocateTo != '') {
-            code.append(this.state.allocateTo);
-        } else {
-            code.append(this.state.pandasObject);
+        if (this.useCell) {
+            code.appendLine();
+            if (allocation && this.state.allocateTo != '') {
+                code.append(this.state.allocateTo);
+            } else {
+                code.append(this.state.pandasObject);
+            }
         }
         return code.toString();
     }
