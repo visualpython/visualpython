@@ -67,7 +67,7 @@ define([
         
         this.fileExtensions = {
             'csv': 'csv',
-            'excel': 'xls',
+            'excel': 'xlsx',
             'json': 'json',
             'pickle': 'pickle'
         }
