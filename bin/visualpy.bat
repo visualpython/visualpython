@@ -82,7 +82,7 @@ rem # Install Visual Python
 rem #=========================================================================
 :f_install
     call :f_check_extension RES
-    rem # 1 = Jupyterr Extension is not actived
+    rem # 1 = Jupyter Extension is not actived
     rem # 2 = visualpython does not exist
     rem # 3 = visualpython exists
 
@@ -110,7 +110,7 @@ rem # Uninstall Visual Python
 rem #=========================================================================
 :f_uninstall
     call :f_check_extension RES
-    rem # 1 = Jupyterr Extension is not actived
+    rem # 1 = Jupyter Extension is not actived
     rem # 2 = visualpython does not exist
     rem # 3 = visualpython exists
 
@@ -241,7 +241,7 @@ rem #=========================================================================
 
 rem #=========================================================================
 rem # Check Visual Python files
-rem #   1 = Jupyterr Extension is not actived
+rem #   1 = Jupyter Extension is not actived
 rem #   2 = visualpython does not exist
 rem #   3 = visualpython exists
 rem #=========================================================================
