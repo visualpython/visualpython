@@ -205,7 +205,7 @@
     background-image: url(../../resource/chevron_big_down.svg) !important;
 }
 #vp_udfPage .vp-sn-item-header input.vp-sn-item-title {
-    width: calc(100% - 100px);
+    width: calc(100% - 110px);
     outline: none;
     background: transparent;
     border: 0.5px solid transparent;

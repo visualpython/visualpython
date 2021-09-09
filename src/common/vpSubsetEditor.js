@@ -2278,6 +2278,15 @@ define([
             this.setPreview(code.toString());
         }
 
+        // display
+        if (this.useCell) {
+            code.appendLine();
+            if (allocation && this.state.allocateTo != '') {
+                code.append(this.state.allocateTo);
+            } else {
+                code.append(this.state.pandasObject);
+            }
+        }
         return code.toString();
     }
 

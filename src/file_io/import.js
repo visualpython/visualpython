@@ -76,7 +76,6 @@ define([
                 ]
             }
             , { library: 'seaborn', alias:'sns'}
-            , { library: 'plotly.express', alias: 'px'}
         ];
         
         this.package = {
