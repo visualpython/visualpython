@@ -75,7 +75,7 @@ f_main() {
 #=============================================================================
 f_install() {
     RES=`f_check_extension`
-    # 1 = Jupyterr Extension is not actived
+    # 1 = Jupyter Extension is not actived
     # 2 = visualpython does not exist
     # 3 = visualpython exists
 
@@ -104,7 +104,7 @@ f_install() {
 #=============================================================================
 f_uninstall() {
     RES=`f_check_extension`
-    # 1 = Jupyterr Extension is not actived
+    # 1 = Jupyter Extension is not actived
     # 2 = visualpython does not exist
     # 3 = visualpython exists
 
@@ -234,7 +234,7 @@ f_remove_files() {
 
 #=============================================================================
 # Check Visual Python files
-#   1 = Jupyterr Extension is not actived
+#   1 = Jupyter Extension is not actived
 #   2 = visualpython does not exist
 #   3 = visualpython exists
 #=============================================================================
@@ -266,7 +266,7 @@ f_get_string_pipshow() {
 f_get_extension_path() {
     RESULT="EMPTY"
     if which conda-env > /dev/null 2>&1; then
-        RESULT=`conda-env list | grep "*" | awk -F'*' '{print $2}'|tr -d ' '`/share/jupyter/nbextension
+        RESULT=`conda-env list | grep "*" | awk -F'*' '{print $2}'|tr -d ' '`/share/jupyter/nbextensions
     else
         RESULT=`jupyter --data-dir`/nbextensions
     fi

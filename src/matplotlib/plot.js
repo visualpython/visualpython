@@ -272,6 +272,7 @@ define([
         // Box 2. Additional Options
         var tblAdditional = this.createVERSimpleLayout("15%");
         var accBoxAdditional = this.createOptionContainer('Additional Options');
+        accBoxAdditional.setOpenBox(true);
         sbTagString.clear();
         sbTagString.appendFormatLine('<input type="text" class="vp-input" id="{0}"/>', 'title');
         tblAdditional.addRow('Title', sbTagString.toString());

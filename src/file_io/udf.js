@@ -211,6 +211,17 @@ define([
                         'import seaborn as sns',
                         'import plotly.express as px'
                     ],
+                    'matplotlib customizing': [
+                        'import matplotlib.pyplot as plt',
+                        '%matplotlib inline',
+                        '',
+                        "plt.rc('figure', figsize=(12, 8))",
+                        '',
+                        'from matplotlib import rcParams',
+                        "rcParams['font.family'] = 'New Gulim'",
+                        "rcParams['font.size'] = 10",
+                        "rcParams['axes.unicode_minus'] = False"
+                    ],
                     'as_float': [
                         'def as_float(x):',
                         '    """',
@@ -328,6 +339,11 @@ define([
 
         // item header click (toggle & select item) &  double click (edit title)
         $(document).on('click', this.wrapSelector('.vp-sn-item-header'), function(evt) {
+            // stop propagation on checkbox
+            if ($(evt.target).hasClass('vp-sn-item-check')) {
+                return;
+            }
+
             var thisHeader = this;
             that.clicked++;
             if (that.clicked == 1) {
@@ -609,7 +625,7 @@ define([
 
                     that.loadUdfList();
 
-                    vpCommon.renderSuccessMessage(fileName + ' imported ');
+                    vpCommon.renderSuccessMessage(evt.file + ' imported ');
                 });
             });
         });

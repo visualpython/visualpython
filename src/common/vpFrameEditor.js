@@ -1755,7 +1755,11 @@ define([
         var code = this.state.steps.join('\n');
         var returnVariable = $(this.wrapSelector('#vp_feReturn')).val();
         if (returnVariable != '') {
-            code = code.replaceAll('_vp', returnVariable);
+            code = code.replaceAll(this.state.tempObj, returnVariable);
+
+            code += '\n' + returnVariable;
+        } else {
+            code += '\n' + this.state.tempObj;
         }
         return code;
     }
