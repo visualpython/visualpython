@@ -80,6 +80,34 @@ define([
         }
 
         this.fileState = {
+            'Read': {
+                fileTypeId: {
+                    'csv': 'pd004',
+                    'excel': 'pd123',
+                    'json': 'pd076',
+                    'pickle': 'pd079'
+                },
+                selectedType: 'csv',
+                package: null,
+                fileResultState: {
+                    pathInputId : this.wrapSelector('#vp_fileRead #i0'),
+                    fileInputId : this.wrapSelector('#vp_fileRead #fileName')
+                }
+            },
+            'Write': {
+                fileTypeId: {
+                    'csv': 'pd005',
+                    'excel': 'pd124',
+                    'json': 'pd077',
+                    'pickle': 'pd078'
+                },
+                selectedType: 'csv',
+                package: null,
+                fileResultState: {
+                    pathInputId : this.wrapSelector('#vp_fileWrite #i1'),
+                    fileInputId : this.wrapSelector('#vp_fileWrite #fileName')
+                }
+            },
             'Sample': {
                 library: 'pandas',
                 code: "${vp_sampleReturn} = pd.read_csv('" + this.dataPath  + "${vp_sampleFile}'${v})",
@@ -110,34 +138,6 @@ define([
                         required: true
                     }
                 ]
-            },
-            'Read': {
-                fileTypeId: {
-                    'csv': 'pd004',
-                    'excel': 'pd123',
-                    'json': 'pd076',
-                    'pickle': 'pd079'
-                },
-                selectedType: 'csv',
-                package: null,
-                fileResultState: {
-                    pathInputId : this.wrapSelector('#vp_fileRead #i0'),
-                    fileInputId : this.wrapSelector('#vp_fileRead #fileName')
-                }
-            },
-            'Write': {
-                fileTypeId: {
-                    'csv': 'pd005',
-                    'excel': 'pd124',
-                    'json': 'pd077',
-                    'pickle': 'pd078'
-                },
-                selectedType: 'csv',
-                package: null,
-                fileResultState: {
-                    pathInputId : this.wrapSelector('#vp_fileWrite #i1'),
-                    fileInputId : this.wrapSelector('#vp_fileWrite #fileName')
-                }
             }
         }
 
