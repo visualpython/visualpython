@@ -178,20 +178,20 @@ define([
     }
 
     PopupPage.prototype.openPreview = function() {
+        $(this.wrapSelector('.' + VP_PP_PREVIEW_BOX)).show();
+        
         if (this.pageThis) {
             var code = this.pageThis.generateCode(false, false);
             this.cmpreview.setValue(code);
             this.cmpreview.save();
-            this.cmpreview.focus();
-
+            
             var that = this;
             setTimeout(function() {
                 that.cmpreview.refresh();
-            },1);
-
-            this.previewOpened = true;
-            $(this.wrapSelector('.' + VP_PP_PREVIEW_BOX)).show();
+            }, 1);
         }
+
+        this.previewOpened = true;
     }
 
     PopupPage.prototype.closePreview = function() {
@@ -213,7 +213,7 @@ define([
 
         // click preview
         $(document).on('click', this.wrapSelector('.' + VP_PP_BUTTON_PREVIEW), function(evt) {
-            // evt.stopPropagation();
+            evt.stopPropagation();
             if (that.previewOpened) {
                 that.closePreview();
             } else {
