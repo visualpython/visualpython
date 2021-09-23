@@ -2033,7 +2033,7 @@ define([
                     type: 'var',
                     label: 'Target Variable',
                     component: 'var_select',
-                    var_type: ['Series', 'Index']
+                    var_type: ['DataFrame', 'Series', 'Index']
                 }
             ],
             variable: [],
