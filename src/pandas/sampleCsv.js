@@ -90,7 +90,7 @@ define([
                 {
                     name:'o0',
                     type:'var',
-                    label:'Return to',
+                    label:'Allocate to',
                     required: true
                 }
             ]

@@ -109,7 +109,7 @@ define([
         
         sbTagString.clear();
         sbTagString.appendFormat('<input type="text" id="{0}" class="{1}" />', 'vp_pyReturn', 'vp-input l');
-        tblLayoutRequire.addRow("Return to", sbTagString.toString());
+        tblLayoutRequire.addRow("Allocate toto", sbTagString.toString());
         
 
         // 필수 옵션 영역 (아코디언 박스)

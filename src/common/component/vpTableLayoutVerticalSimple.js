@@ -62,7 +62,7 @@ define([
      * @param {number} lineIndex 추가될 라인 index (미지정시 마지막 라인에 추가)
      */
     vpTableLayoutVerticalSimple.prototype.addReqRow = function(caption = "", content = "", lineIndex) {
-        var rowString = vpCommon.formatString("<tr><th class='{0}'>{1}</th><td>{2}</td></tr>", vpConst.COLOR_FONT_ORANGE, caption, content);
+        var rowString = vpCommon.formatString('<tr><th class="{0}">{1}</th><td>{2}</td></tr>', vpConst.COLOR_FONT_ORANGE, caption, content);
         if (lineIndex === undefined) {
             this._tbodyContent.push(rowString);
         } else if (typeof lineIndex == "number") {

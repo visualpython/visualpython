@@ -185,7 +185,7 @@ define([
         // return value
         sbTagString.clear();
         sbTagString.appendFormat('<input type="text" id="{0}" class="{1}" />', 'vp_pyReturn', 'vp-input');
-        tblLayoutRequire.addRow("Return to", sbTagString.toString());
+        tblLayoutRequire.addRow("Allocate to", sbTagString.toString());
         
         // 필수 옵션 영역 (아코디언 박스)
         var accBoxRequire = this.createOptionContainer(vpConst.API_REQUIRE_OPTION_BOX_CAPTION);

@@ -17,7 +17,7 @@ define ([
         var numpyStateGenerator = numpyPageRendererThis.getStateGenerator();
         var returnVariableState = numpyStateGenerator.getState('returnVariable');
         sbTagString.appendLine( `<tr class='vp-numpy-option-block'>`);
-        sbTagString.appendLine(`<th>Input Return to</th>`)
+        sbTagString.appendLine(`<th>Input Allocate to</th>`)
         sbTagString.appendLine( `<td>`);
       
         sbTagString.appendFormatLine("<input type='text' class='{0} {1}' id='{2}' placeholder='{3}' value='{4}'/>", 

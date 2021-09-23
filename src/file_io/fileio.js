@@ -134,7 +134,7 @@ define([
                     {
                         name:'vp_sampleReturn',
                         type:'var',
-                        label:'Return to',
+                        label:'Allocate to',
                         required: true
                     }
                 ]
