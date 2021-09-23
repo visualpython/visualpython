@@ -6,15 +6,14 @@ define([
     , 'nbextensions/visualpython/src/common/StringBuilder'
     , 'nbextensions/visualpython/src/common/vpFuncJS'
     , 'nbextensions/visualpython/src/pandas/common/commonPandas'
-    , 'nbextensions/visualpython/src/common/component/vpSuggestInputText'
     , 'nbextensions/visualpython/src/pandas/common/pandasGenerator'
-], function (requirejs, $, vpCommon, vpConst, sb, vpFuncJS, libPandas, vpSuggestInputText, pdGen) {
+], function (requirejs, $, vpCommon, vpConst, sb, vpFuncJS, libPandas, pdGen) {
     // 옵션 속성
     const funcOptProp = {
         stepCount : 1
-        , funcName : "Agg"
-        , funcID : "pdGrp_agg"
-        , libID : "pd097"
+        , funcName : "Size"
+        , funcID : "pdIdt_size"  // TODO: ID 규칙 생성 필요
+        , libID : "pd127"
     }
 
     /**
@@ -89,9 +88,10 @@ define([
      */
     PandasPackage.prototype.initHtml = function() {
         this.showFunctionTitle();
-        this.loadCss(Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH + "pandas/commonPandas.css");
 
         this.bindOptions();
+
+        this.loadCss(Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH + "pandas/commonPandas.css");
     }
 
     /**
@@ -111,19 +111,6 @@ define([
         if (this.package.variable == undefined || this.package.variable.length <= 0) {
             $(this.wrapSelector('#vp_optionBox')).closest('div.vp-accordion-container').remove();
         }
-
-        // aggregation types suggest input tag
-        var aggTypesTag = new vpSuggestInputText.vpSuggestInputText();
-        aggTypesTag.setComponentID('i1');
-        aggTypesTag.addClass('vp-input');
-        aggTypesTag.setSuggestList(function() { 
-            return ["'sum'", "'max'", "'min'", "'mean'", "'median'", "'std'", "'size'", "'count'", "'quantile'"]; 
-        });
-        aggTypesTag.setNormalFilter(false);
-        aggTypesTag.setValue($(this.wrapSelector('#i1')).val());
-        $(this.wrapSelector('#i1')).replaceWith(function() {
-            return aggTypesTag.toTagString();
-        });
     };
 
     /**
@@ -131,8 +118,10 @@ define([
      * @param {boolean} exec 실행여부
      */
     PandasPackage.prototype.generateCode = function(addCell, exec) {
+        
         var sbCode = new sb.StringBuilder();
         
+
         // 코드 생성
         var result = pdGen.vp_codeGenerator(this.uuid, this.package);
         if (result == null) return "BREAK_RUN"; // 코드 생성 중 오류 발생
@@ -140,6 +129,7 @@ define([
 
         // cell metadata 작성하기
         // pdGen.vp_setCellMetadata(_VP_CODEMD);
+
 
         if (addCell) this.cellExecute(sbCode.toString(), exec);
 

@@ -1381,6 +1381,11 @@
                 <desc>데이터프레임 고유값 조회</desc>
                 <file>pandas/getUnique.js</file>
             </item>
+            <item id="pdIdt_size" type="function" level="2" name="size" tag="데이터 크기 조회, GET SIZE, SIZE">
+                <path>visualpython - pandas - data info - get size</path>
+                <desc>판다스 객체 크기 조회</desc>
+                <file>pandas/getSize.js</file>
+            </item>
         </item>
         <!-- General functions -->
         <item id="pd_generalFunc" type="package" level="1" name="General functions" tag="일반 함수, GENERAL FUNCTIONS">
@@ -1537,37 +1542,42 @@
                 <desc>데이터의 합 연산</desc>
                 <file>pandas/agg_sum.js</file>
             </item>
-            <item id="pdGrp_mean" type="function" level="2" name="mean" tag="집계 연산, 평균, MEAN, MEAN">
+            <item id="pdGrp_mean" type="function" level="2" name="mean" tag="집계 연산, 평균, MEAN">
                 <path>visualpython - pandas - groupby - mean</path>
                 <desc>데이터의 평균값</desc>
                 <file>pandas/agg_mean.js</file>
             </item>
-            <item id="pdGrp_count" type="function" level="2" name="count" tag="집계 연산, 개수, COUNT, COUNT">
+            <item id="pdGrp_count" type="function" level="2" name="count" tag="집계 연산, 개수, COUNT">
                 <path>visualpython - pandas - groupby - count</path>
                 <desc>데이터 개수</desc>
                 <file>pandas/agg_count.js</file>
             </item>
-            <item id="pdGrp_max" type="function" level="2" name="max" tag="집계 연산, 최댓값, MAX, MAX">
+            <item id="pdGrp_max" type="function" level="2" name="max" tag="집계 연산, 최댓값, MAX">
                 <path>visualpython - pandas - groupby - max</path>
                 <desc>데이터의 최댓값</desc>
                 <file>pandas/agg_max.js</file>
             </item>
-            <item id="pdGrp_min" type="function" level="2" name="min" tag="집계 연산, 최솟값, MIN, MIN">
+            <item id="pdGrp_min" type="function" level="2" name="min" tag="집계 연산, 최솟값, MIN">
                 <path>visualpython - pandas - groupby - min</path>
                 <desc>데이터의 최솟값</desc>
                 <file>pandas/agg_min.js</file>
             </item>
-            <item id="pdGrp_median" type="function" level="2" name="median" tag="집계 연산, 중앙값, MEDIAN, MEDIAN">
+            <item id="pdGrp_median" type="function" level="2" name="median" tag="집계 연산, 중앙값, MEDIAN">
                 <path>visualpython - pandas - groupby - median</path>
                 <desc>데이터의 중앙값</desc>
                 <file>pandas/agg_median.js</file>
             </item>
-            <item id="pdGrp_std" type="function" level="2" name="std" tag="집계 연산, 표준 편차, STD, STANDARD DEVIATION, STD">
+            <item id="pdGrp_std" type="function" level="2" name="std" tag="집계 연산, 표준 편차, STD, STANDARD DEVIATION">
                 <path>visualpython - pandas - groupby - std</path>
                 <desc>데이터의 표준편차</desc>
                 <file>pandas/agg_std.js</file>
             </item>
-            <item id="pdGrp_quantile" type="function" level="2" name="quantile" tag="집계 연산, 백분위 수, QUANTILE, QUANTILE">
+            <item id="pdGrp_size" type="function" level="2" name="size" tag="집계 연산, 개수, SIZE">
+                <path>visualpython - pandas - groupby - size</path>
+                <desc>데이터의 크기/개수</desc>
+                <file>pandas/agg_size.js</file>
+            </item>
+            <item id="pdGrp_quantile" type="function" level="2" name="quantile" tag="집계 연산, 백분위 수, QUANTILE">
                 <path>visualpython - pandas - groupby - quantile</path>
                 <desc>데이터의 백분위 수</desc>
                 <file>pandas/agg_quantile.js</file>

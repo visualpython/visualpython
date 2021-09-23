@@ -5279,17 +5279,17 @@ define([
             code: '${o0} = pd.read_excel(${i0}${v})',
             input: [
                 {
-                    name:'i0',
-                    type:'text',
+                    name: 'i0',
+                    type: 'text',
                     label: 'File Path',
                     component: 'file'
                 }
             ],
             output: [
                 {
-                    name:'o0',
-                    type:'var',
-                    label:'Allocate to'
+                    name: 'o0',
+                    type: 'var',
+                    label: 'Allocate to'
                 }
             ],
             variable: [
@@ -5308,15 +5308,15 @@ define([
             code: '${i0}.to_excel(${i1}${v})',
             input: [
                 {
-                    name:'i0',
-                    type:'var',
-                    label: 'Pandas Object',
+                    name: 'i0',
+                    type: 'var',
+                    label: 'Target Variable',
                     component: 'var_select',
                     var_type: ['DataFrame', 'Series']
                 },
                 {
-                    name:'i1',
-                    type:'text',
+                    name: 'i1',
+                    type: 'text',
                     label: 'File Path',
                     component: 'file'
                 }
@@ -5339,8 +5339,8 @@ define([
             code: '${o0} = ${i0}',
             input: [
                 {
-                    name:'i0',
-                    type:'var',
+                    name: 'i0',
+                    type: 'var',
                     label: 'Subset Code',
                     component: 'var_select',
                     var_type: ['DataFrame']
@@ -5348,8 +5348,8 @@ define([
             ],
             output: [
                 {
-                    name:'o0',
-                    type:'var',
+                    name: 'o0',
+                    type: 'var',
                     label: 'Allocate to'
                 }
             ]
@@ -5362,8 +5362,8 @@ define([
             code: '${o0} = ${i0}',
             input: [
                 {
-                    name:'i0',
-                    type:'var',
+                    name: 'i0',
+                    type: 'var',
                     label: 'Code',
                     component: 'textarea',
                     var_type: ['DataFrame']
@@ -5371,8 +5371,54 @@ define([
             ],
             output: [
                 {
-                    name:'o0',
-                    type:'var',
+                    name: 'o0',
+                    type: 'var',
+                    label: 'Allocate to'
+                }
+            ]
+        },
+        'pd127': {
+            id: 'size',
+            name: 'Size', 
+            library: 'pandas',
+            description: 'pandas object size info',
+            code: '${o0} = ${i0}.size',
+            input: [
+                {
+                    name: 'i0',
+                    type: 'var',
+                    label: 'Target Variable',
+                    component: 'var_select',
+                    var_type: ['DataFrame', 'Series', 'Index']
+                }
+            ],
+            output: [
+                {
+                    name: 'o0',
+                    type: 'var',
+                    label: 'Allocate to'
+                }
+            ]
+        },
+        'pd128': {
+            id: 'groupby_size',
+            name: 'Size',
+            library: 'pandas',
+            description: 'groupby size info',
+            code: '${o0} = ${i0}.size()',
+            input: [
+                {
+                    name: 'i0',
+                    type: 'var',
+                    label: 'Target Variable',
+                    component: 'var_select',
+                    var_type: ['GroupBy']
+                }
+            ],
+            output: [
+                {
+                    name: 'o0',
+                    type: 'var',
                     label: 'Allocate to'
                 }
             ]
