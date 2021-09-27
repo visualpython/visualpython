@@ -776,6 +776,9 @@ define([
         },
         'profiling': {
             file: 'nbextensions/visualpython/src/common/vpProfiling'
+        },
+        'pdf': {
+            file: 'nbextensions/visualpython/src/common/vpPDF'
         }
     }
 
