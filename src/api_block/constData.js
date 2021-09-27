@@ -287,7 +287,7 @@ define([
     const STR_CODE = 'code';
     const STR_COMMENT = 'comment';
     const STR_NODE = 'node';
-    const STR_TEXT = 'text';
+    const STR_TEXT = 'Markdown';
     const STR_PRINT = 'print';
     const STR_ELIF = 'elif';
     const STR_ELSE = 'else';
