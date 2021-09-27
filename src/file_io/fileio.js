@@ -80,37 +80,6 @@ define([
         }
 
         this.fileState = {
-            'Sample': {
-                library: 'pandas',
-                code: "${vp_sampleReturn} = pd.read_csv('" + this.dataPath  + "${vp_sampleFile}'${v})",
-                input: [
-                    {
-                        name:'vp_sampleFile',
-                        label: 'Sample File',
-                        component: 'option_select',
-                        options: [
-                            'iris.csv', 'Titanic_train.csv', 'Titanic_test.csv', 'cancer.csv',
-                            'fish.csv', 'accidentData.csv', 'campusRecruitment.csv', 'houseData_500.csv',
-                            'lolRankedData_500.csv', 'weatherData_500.csv', 'welfareCenter.csv',
-                            'mnist_train_1000.csv'
-                        ],
-                        options_label: [
-                            'iris', 'Titanic_train', 'Titanic_test', 'cancer',
-                            'fish', 'accidentData', 'campusRecruitment', 'houseData_500',
-                            'lolRankedData_500', 'weatherData_500', 'welfareCenter',
-                            'mnist_train_1000'
-                        ]
-                    }
-                ],
-                output: [
-                    {
-                        name:'vp_sampleReturn',
-                        type:'var',
-                        label:'Return to',
-                        required: true
-                    }
-                ]
-            },
             'Read': {
                 fileTypeId: {
                     'csv': 'pd004',
@@ -138,6 +107,37 @@ define([
                     pathInputId : this.wrapSelector('#vp_fileWrite #i1'),
                     fileInputId : this.wrapSelector('#vp_fileWrite #fileName')
                 }
+            },
+            'Sample': {
+                library: 'pandas',
+                code: "${vp_sampleReturn} = pd.read_csv('" + this.dataPath  + "${vp_sampleFile}'${v})",
+                input: [
+                    {
+                        name:'vp_sampleFile',
+                        label: 'Sample File',
+                        component: 'option_select',
+                        options: [
+                            'iris.csv', 'Titanic_train.csv', 'Titanic_test.csv', 'cancer.csv',
+                            'fish.csv', 'accidentData.csv', 'campusRecruitment.csv', 'houseData_500.csv',
+                            'lolRankedData_500.csv', 'weatherData_500.csv', 'welfareCenter.csv',
+                            'mnist_train_1000.csv'
+                        ],
+                        options_label: [
+                            'iris', 'Titanic_train', 'Titanic_test', 'cancer',
+                            'fish', 'accidentData', 'campusRecruitment', 'houseData_500',
+                            'lolRankedData_500', 'weatherData_500', 'welfareCenter',
+                            'mnist_train_1000'
+                        ]
+                    }
+                ],
+                output: [
+                    {
+                        name:'vp_sampleReturn',
+                        type:'var',
+                        label:'Allocate to',
+                        required: true
+                    }
+                ]
             }
         }
 

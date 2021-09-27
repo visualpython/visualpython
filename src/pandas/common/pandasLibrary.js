@@ -48,7 +48,7 @@ define([], function() {
                 {
                     type: ['var'],
                     var_type: ['Series'],
-                    label: 'Return to'
+                    label: 'Allocate to'
                 }
             ]
         },
@@ -82,7 +82,7 @@ define([], function() {
                 {
                     type: ['var'],
                     var_type: ['DataFrame'],
-                    label:'Return to'
+                    label:'Allocate to'
                 }
             ]
         },
@@ -131,7 +131,7 @@ define([], function() {
                 {
                     type: ['var'],
                     var_type: ['Index'],
-                    label:'Return to'
+                    label:'Allocate to'
                 }
             ]
         },

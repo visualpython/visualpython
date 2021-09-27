@@ -1,44 +1,12 @@
 <div class="vp-option-page" id="vp_fileioPage">
     <select id="vp_fileioType" class="vp-fileio-type">
-        <option value="Sample">Sample File</option>
         <option value="Read">Read File</option>
         <option value="Write">Write File</option>
+        <option value="Sample">Sample File</option>
     </select>
     <input id="vp_pageDom" type="hidden"/>
     <div class="vp-fileio-body">
-        <div id="vp_fileSample" class="vp-fileio-box">
-            <table class="vp-option-table">
-                <thead>
-                    <colgroup><col width="30%"><col width="*"></colgroup>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><label for="vp_sampleFile" class="vp-orange-text">Sample File</label></td>
-                        <td>
-                            <select class="vp-select option-select" id="vp_sampleFile">
-                                <option name="vp_sampleFile" value="iris.csv">iris</option>
-                                <option name="vp_sampleFile" value="Titanic_train.csv">Titanic_train</option>
-                                <option name="vp_sampleFile" value="Titanic_test.csv">Titanic_test</option>
-                                <option name="vp_sampleFile" value="cancer.csv">cancer</option>
-                                <option name="vp_sampleFile" value="fish.csv">fish</option>
-                                <option name="vp_sampleFile" value="accidentData.csv">accidentData</option>
-                                <option name="vp_sampleFile" value="campusRecruitment.csv">campusRecruitment</option>
-                                <option name="vp_sampleFile" value="houseData_500.csv">houseData_500</option>
-                                <option name="vp_sampleFile" value="lolRankedData_500.csv">lolRankedData_500</option>
-                                <option name="vp_sampleFile" value="weatherData_500.csv">weatherData_500</option>
-                                <option name="vp_sampleFile" value="welfareCenter.csv">welfareCenter</option>
-                                <option name="vp_sampleFile" value="mnist_train_1000.csv">mnist_train_1000</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><label for="vp_sampleReturn" class="vp-orange-text">Return to</label></td>
-                        <td><input type="text" class="vp-input input-single" id="vp_sampleReturn" placeholder="" value="" title=""></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div id="vp_fileRead" class="vp-fileio-box" style="display:none;">
+        <div id="vp_fileRead" class="vp-fileio-box">
             <form id="vp_optionForm">
         
                 <div class="vp-accordion-container vp-accordion-open">
@@ -83,6 +51,38 @@
                 </div>
                 
             </form>
+        </div>
+        <div id="vp_fileSample" class="vp-fileio-box" style="display:none;">
+            <table class="vp-option-table">
+                <thead>
+                    <colgroup><col width="30%"><col width="*"></colgroup>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><label for="vp_sampleFile" class="vp-orange-text">Sample File</label></td>
+                        <td>
+                            <select class="vp-select option-select" id="vp_sampleFile">
+                                <option name="vp_sampleFile" value="iris.csv">iris</option>
+                                <option name="vp_sampleFile" value="Titanic_train.csv">Titanic_train</option>
+                                <option name="vp_sampleFile" value="Titanic_test.csv">Titanic_test</option>
+                                <option name="vp_sampleFile" value="cancer.csv">cancer</option>
+                                <option name="vp_sampleFile" value="fish.csv">fish</option>
+                                <option name="vp_sampleFile" value="accidentData.csv">accidentData</option>
+                                <option name="vp_sampleFile" value="campusRecruitment.csv">campusRecruitment</option>
+                                <option name="vp_sampleFile" value="houseData_500.csv">houseData_500</option>
+                                <option name="vp_sampleFile" value="lolRankedData_500.csv">lolRankedData_500</option>
+                                <option name="vp_sampleFile" value="weatherData_500.csv">weatherData_500</option>
+                                <option name="vp_sampleFile" value="welfareCenter.csv">welfareCenter</option>
+                                <option name="vp_sampleFile" value="mnist_train_1000.csv">mnist_train_1000</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="vp_sampleReturn" class="vp-orange-text">Allocate to</label></td>
+                        <td><input type="text" class="vp-input input-single" id="vp_sampleReturn" placeholder="" value="" title=""></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
