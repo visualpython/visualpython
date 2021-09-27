@@ -5,7 +5,8 @@ define([
     , 'nbextensions/visualpython/src/common/constant'
     , 'nbextensions/visualpython/src/common/StringBuilder'
     , 'nbextensions/visualpython/src/common/vpFuncJS'
-], function (requirejs, $, vpCommon, vpConst, sb, vpFuncJS) {
+    , 'nbextensions/visualpython/src/common/vpSetting'
+], function (requirejs, $, vpCommon, vpConst, sb, vpFuncJS, vpSetting) {
     // 옵션 속성
     const funcOptProp = {
         stepCount : 1
@@ -144,22 +145,34 @@ define([
                 });
             } catch {}
         } else {
-            this.packageList.forEach((package, i) => {
-                // <select class="vp-add-type">
-                //         <option value="as">as</option>
-                //         <option value="import">import</option>
-                //     </select>
-                // var tagTr = $(`<tr><td><input id="vp_library${i}" type="text" class="vp-input m vp-add-library" placeholder="library name" required value="${package.library.toLowerCase()}"/></td>
-                // <td><input id="vp_alias${i}" type="text" class="vp-input m vp-add-alias" placeholder="as" value="${package.alias}"/></td>
-                // <td><input type="button" class="vp-remove-option w100" style="width:100%;" value="x"></td></tr>`);
-                var tagTr = $(that.renderLibraryRow(i, package.library.toLowerCase(), package.alias));
 
-                $(this.wrapSelector("#vp_tblImport tr:last")).before(tagTr);
+            var that = this;
+            // load package list
+            vpSetting.loadUserDefinedCode(function(data) {
+                if (data && Array.isArray(data)) {
+                    // set package list with data
+                    that.packageList = data;
+                }
+                // render default package list
+                that.packageList.forEach((package, i) => {
+                    // <select class="vp-add-type">
+                    //         <option value="as">as</option>
+                    //         <option value="import">import</option>
+                    //     </select>
+                    // var tagTr = $(`<tr><td><input id="vp_library${i}" type="text" class="vp-input m vp-add-library" placeholder="library name" required value="${package.library.toLowerCase()}"/></td>
+                    // <td><input id="vp_alias${i}" type="text" class="vp-input m vp-add-alias" placeholder="as" value="${package.alias}"/></td>
+                    // <td><input type="button" class="vp-remove-option w100" style="width:100%;" value="x"></td></tr>`);
+                    var tagTr = $(that.renderLibraryRow(i, package.library.toLowerCase(), package.alias));
     
-                // add to package input
-                // that.package.input.push({ name: `vp_library${i}`});
-                // that.package.input.push({ name: `vp_alias${i}`});
-            });
+                    $(that.wrapSelector("#vp_tblImport tr:last")).before(tagTr);
+        
+                    // add to package input
+                    // that.package.input.push({ name: `vp_library${i}`});
+                    // that.package.input.push({ name: `vp_alias${i}`});
+                });
+            }, 'vpimport');
+
+            
         }
 
         // 라이브러리 삭제
@@ -261,6 +274,9 @@ define([
         if (addCell) {
             this.cellExecute(sbCode.toString(), exec);
         }
+
+        // save import packages
+        vpSetting.saveUserDefinedCode(importMeta, 'vpimport');
 
         // TODO: 전체에게 해당 함수 리턴 요청
         this.generatedCode = sbCode.toString();

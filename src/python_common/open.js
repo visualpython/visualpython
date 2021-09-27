@@ -140,7 +140,7 @@ define([
 
         sbTagString.clear();
         sbTagString.appendFormat('<input type="text" id="{0}" class="{1}" />', 'vp_pyReturn', 'vp-input');
-        tblLayoutRequire.addRow("Return to", sbTagString.toString());
+        tblLayoutRequire.addRow("Allocate toto", sbTagString.toString());
         
         sbTagString.clear();
         sbTagString.appendFormat('<select id="{0}" class="{1}">', 'vp_pyModeSelector', 'vp-select');

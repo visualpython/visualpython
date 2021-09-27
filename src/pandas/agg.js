@@ -116,7 +116,9 @@ define([
         var aggTypesTag = new vpSuggestInputText.vpSuggestInputText();
         aggTypesTag.setComponentID('i1');
         aggTypesTag.addClass('vp-input');
-        aggTypesTag.setSuggestList(function() { return [ "'sum'", "'max'", "'min'", "'mean'", "'median'", "'std'", "'count'", "'quantile'" ]; });
+        aggTypesTag.setSuggestList(function() { 
+            return ["'sum'", "'max'", "'min'", "'mean'", "'median'", "'std'", "'size'", "'count'", "'quantile'"]; 
+        });
         aggTypesTag.setNormalFilter(false);
         aggTypesTag.setValue($(this.wrapSelector('#i1')).val());
         $(this.wrapSelector('#i1')).replaceWith(function() {
