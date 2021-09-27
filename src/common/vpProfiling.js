@@ -253,13 +253,11 @@ define([
                         if (!checking) {
                             return;
                         }
-                        if (msg.content['name'] == 'stderr') {
-                            if (msg.content['text'].includes('not found')) {
-                                $(that.wrapSelector('.' + VP_PF_INSTALL_BTN)).text('Install');
-                                // set enabled
-                                if ($(that.wrapSelector('.' + VP_PF_INSTALL_BTN)).hasClass('disabled')) {
-                                    $(that.wrapSelector('.' + VP_PF_INSTALL_BTN)).removeClass('disabled');
-                                }
+                        if (msg.content['name'] == 'stderr' || msg.content['text'].includes('not found')) {
+                            $(that.wrapSelector('.' + VP_PF_INSTALL_BTN)).text('Install');
+                            // set enabled
+                            if ($(that.wrapSelector('.' + VP_PF_INSTALL_BTN)).hasClass('disabled')) {
+                                $(that.wrapSelector('.' + VP_PF_INSTALL_BTN)).removeClass('disabled');
                             }
                         } else {
                             $(that.wrapSelector('.' + VP_PF_INSTALL_BTN)).text('Installed');
@@ -351,7 +349,7 @@ define([
         });
 
         // click install
-        $(document).on('click', this.wrapSelector('.' + VP_PF_INSTALL_BTN), function(event) {
+        $(document).on('click', this.wrapSelector('.' + VP_PF_INSTALL_BTN + ':not(.disabled)'), function(event) {
             vpCommon.cellExecute([{command: '!pip install pandas-profiling', exec:true, type:'code'}]);
         });
 
