@@ -151,8 +151,8 @@ define([
             fileExtension: "csv" // 확장자
         };
         this.fileResultState = {
-            pathInputId : this.wrapSelector('#i1'),
-            fileInputId : this.wrapSelector('#fileName')
+            pathInputId : this.wrapSelector('#vp_fileRead #i0'),
+            fileInputId : this.wrapSelector('#vp_fileRead #fileName')
         };
     }
 
@@ -255,6 +255,11 @@ define([
 
         this.renderPage('Read');
         this.renderPage('Write');
+
+        // initialize fileResultState
+        this.fileResultState = {
+            ...this.fileState['Read'].fileResultState
+        };
 
         this.bindEvent();
     };
