@@ -762,7 +762,7 @@ define([
         },
         'instance': {
             file: '/nbextensions/visualpython/src/file_io/instance.js',
-            config: { title: 'Instance' }
+            config: { title: 'Instance', width: '500px', height: '500px' }
         },
         'subset': {
             file: 'nbextensions/visualpython/src/common/vpSubsetEditor',

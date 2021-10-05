@@ -1,3 +1,14 @@
+/*
+ *    Project Name    : Visual Python
+ *    Description     : GUI-based Python code generator
+ *    File Name       : instance.js
+ *    Author          : Black Logic
+ *    Note            : Instance app
+ *    License         : GNU GPLv3 with Visual Python special exception
+ *    Date            : 2021. 10. 05
+ *    Change Date     :
+ */
+
 define([
     'require'
     , 'jquery'
@@ -80,22 +91,6 @@ define([
 
             // 옵션 속성 할당.
             varPackage.setOptionProp(funcOptProp);
-            
-            // load metadata
-            // if (meta != undefined && meta.options != undefined) {
-            //     try {
-            //         var leftMeta = decodeURIComponent(meta.options[0].value);
-            //         var rightMeta = decodeURIComponent(meta.options[1].value);
-                    
-            //         var leftBlocks = JSON.parse(leftMeta);
-            //         var rightBlocks = JSON.parse(rightMeta);
-                    
-            //         varPackage.state.left.board.loadBoard(leftBlocks);
-            //         varPackage.state.right.board.loadBoard(rightBlocks);
-            //     } catch {
-            //         ;
-            //     }
-            // }
 
             // html 설정.
             varPackage.initHtml();
@@ -126,11 +121,6 @@ define([
 
         this.state = {
             variable: {
-                subsetEditor: undefined,
-                codeEditor: undefined,
-                stack: []
-            }
-            , allocate: {
                 subsetEditor: undefined,
                 codeEditor: undefined,
                 stack: []
@@ -189,20 +179,21 @@ define([
         $('.vp-instance-box.variable .CodeMirror').addClass('selected');
 
         // allocate - codemirror
-        this.state.allocate.codeEditor = CodeMirror.fromTextArea($(this.wrapSelector('#vp_instanceAllocate'))[0], this.cmconfig);
-        this.updateValue('allocate', '');
+        // this.state.allocate.codeEditor = CodeMirror.fromTextArea($(this.wrapSelector('#vp_instanceAllocate'))[0], this.cmconfig);
+        // this.updateValue('allocate', '');
 
         // load metadata
         var variable = this.getMetadata('vp_instanceVariable');
         var allocate = this.getMetadata('vp_instanceAllocate');
         this.updateValue('variable', variable);
-        this.updateValue('allocate', allocate);
+        $(this.wrapSelector('#vp_instanceAllocate')).val(allocate);
+        // this.updateValue('allocate', allocate);
 
         // vpSubsetEditor
         this.state.variable.subsetEditor = new vpSubsetEditor(this, "vp_instanceVariable", true);
-        this.state.allocate.subsetEditor = new vpSubsetEditor(this, "vp_instanceAllocate", true);
+        // this.state.allocate.subsetEditor = new vpSubsetEditor(this, "vp_instanceAllocate", true);
         this.state.variable.subsetEditor.disableButton();
-        this.state.allocate.subsetEditor.disableButton();
+        // this.state.allocate.subsetEditor.disableButton();
 
         this.ALLOW_SUBSET_TYPES = that.pointer.subsetEditor.getAllowSubsetTypes();
 
@@ -210,10 +201,10 @@ define([
         this.state.variable.insEditor = new vpInstanceEditor(this, "vp_instanceVariable", 'vp_variableInsEditContainer');
 
         // vpInstanceEditor
-        this.state.allocate.insEditor = new vpInstanceEditor(this, "vp_instanceAllocate", 'vp_allocateInsEditContainer');
+        // this.state.allocate.insEditor = new vpInstanceEditor(this, "vp_instanceAllocate", 'vp_allocateInsEditContainer');
 
         that.state.variable.insEditor.show();
-        that.state.allocate.insEditor.show();
+        // that.state.allocate.insEditor.show();
 
         // variable load
         that.reloadInsEditor();
@@ -253,14 +244,10 @@ define([
             $(that.wrapSelector('.CodeMirror')).removeClass('selected');
             if (insEditorType == 'variable') {
                 // variable
-                // that.state.variable.insEditor.show();
-                // that.state.allocate.insEditor.hide();
                 that.pointer = that.state.variable;
                 $(that.wrapSelector('.variable .CodeMirror')).addClass('selected');
             } else if (insEditorType == 'allocate'){
                 // allocate
-                // that.state.variable.insEditor.hide();
-                // that.state.allocate.insEditor.show();
                 that.pointer = that.state.allocate;
                 $(that.wrapSelector('.allocate .CodeMirror')).addClass('selected');
             } else {
@@ -293,20 +280,14 @@ define([
 
             if (insEditorType == 'variable') {
                 // variable
-                // that.state.variable.insEditor.show();
-                // that.state.allocate.insEditor.hide();
                 that.state.selectedBox = 'variable';
                 that.pointer = that.state.variable;
             } else if (insEditorType == 'allocate'){
                 // allocate
-                // that.state.variable.insEditor.hide();
-                // that.state.allocate.insEditor.show();
                 that.state.selectedBox = 'allocate';
                 that.pointer = that.state.allocate;
             } else {
                 that.state.selectedBox = '';
-                // that.state.variable.insEditor.hide();
-                // that.state.allocate.insEditor.hide();
             }
         });
 
@@ -327,19 +308,6 @@ define([
             that.reloadInsEditor('variable');
         });
 
-        // instance_editor_selected - allocate
-        $(document).on('instance_editor_selected', this.wrapSelector('#vp_instanceAllocate'), function(event) {
-            that.addStack();
-            
-            var nowCode = that.state.allocate.codeEditor.getValue();
-            if (nowCode != '') {
-                nowCode += '.'
-            }
-            var selectedVariable = event.varName;
-            that.updateValue('allocate', nowCode + selectedVariable);
-            that.reloadInsEditor('allocate');
-        });
-
         // instance_editor_replaced - variable
         $(document).on('instance_editor_replaced', this.wrapSelector('#vp_instanceVariable'), function(event) {
             that.addStack();
@@ -347,15 +315,6 @@ define([
             var newCode = event.newCode;
             that.updateValue('variable', newCode);
             that.reloadInsEditor('variable');
-        });
-
-        // instance_editor_replaced - allocate
-        $(document).on('instance_editor_replaced', this.wrapSelector('#vp_instanceAllocate'), function(event) {
-            that.addStack();
-
-            var newCode = event.newCode;
-            that.updateValue('allocate', newCode);
-            that.reloadInsEditor('allocate');
         });
     }
 
@@ -421,7 +380,8 @@ define([
         var sbCode = new sb.StringBuilder();
 
         // 변수 내용 조회
-        var leftCode = this.state.allocate.codeEditor.getValue();
+        // var leftCode = this.state.allocate.codeEditor.getValue();
+        var leftCode = $(this.wrapSelector('#vp_instanceAllocate')).val();
         var rightCode = this.state.variable.codeEditor.getValue();
         if (leftCode && leftCode != '') {
             sbCode.appendFormat('{0} = {1}', leftCode, rightCode);

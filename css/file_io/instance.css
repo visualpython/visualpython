@@ -24,6 +24,9 @@
     grid-column: 1/2;
     font-weight: 700;
     margin: 0px;
+
+    line-height: 30px;
+    vertical-align: middle;
 }
 .vp-instance-box {
     grid-column-start: 1;
@@ -37,10 +40,7 @@
 }
 .vp-ins-container.variable {
     grid-column: 1/3;
-}
-
-.vp-ins-container.allocate {
-    grid-column: 1/3;
+    height: 250px;
 }
 
 /* UDF Editor - CodeMirror */
