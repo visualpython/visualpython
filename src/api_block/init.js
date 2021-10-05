@@ -279,9 +279,6 @@ define([
                 case 'reshape':
                     // TODO: Reshape
                     break;
-                case 'timeseries':
-                    // TODO: TimeSeries
-                    break;
             }
         });
 
