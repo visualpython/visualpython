@@ -206,14 +206,14 @@ define([
             // groupby column
             page.appendLine('<div>');
             page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_gbBy', 'vp-orange-text wp80', 'Groupby');
-            page.appendFormatLine('<input type="text" id="{0}"/>', 'vp_gbBy');
+            page.appendFormatLine('<input type="text" id="{0}" disabled/>', 'vp_gbBy');
             page.appendFormatLine('<button id="{0}" class="{1}">{2}</button>', 'vp_gbBySelect', 'vp-button wp50', 'Edit');
             page.appendLine('</div>');
             page.appendLine('<hr style="margin: 10px 0;"/>');
             // display column
             page.appendLine('<div>');
             page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_gbColumn', 'wp80', 'Columns');
-            page.appendFormatLine('<input type="text" id="{0}">', 'vp_gbColumn');
+            page.appendFormatLine('<input type="text" id="{0}" disabled>', 'vp_gbColumn');
             page.appendFormatLine('<button id="{0}" class="{1}">{2}</button>', 'vp_gbColumnSelect', 'vp-button wp50', 'Edit');
             page.appendLine('</div>');
             // method
