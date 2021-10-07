@@ -62,8 +62,6 @@ define([
 
             this.previewOpened = false;
             this.codepreview = undefined;
-
-            this.state = {};
         }
 
         //====================================================================
@@ -116,17 +114,29 @@ define([
             $(this._wrapSelector()).remove();
         }
 
-        init() {
-            vpCommon.loadCss(Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH + 'common/popupPage.css');
+        init(state = undefined) {
+            this.state = {
 
-            this.render();
+            }
+
+            // load state
+            if (state) {
+                this.state = { 
+                    ...this.state,
+                    ...state
+                };
+            }
+            
             this.bindEvent();
+            this.render();
+            vpCommon.loadCssForDiv(this._wrapSelector(), Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH + 'common/popupPage.css');
+            vpCommon.loadCssForDiv(this._wrapSelector(), Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH + 'common/merge.css');
         }
 
         render() {
             var page = new sb.StringBuilder();
             page.appendFormatLine('<div class="{0} {1}">', APP_PREFIX, this.uuid);
-            page.appendFormatLine('<div class="{0}">', APP_CONTAINER);
+            page.appendFormatLine('<div class="{0} {1}">', APP_CONTAINER, 'vp-mg-container');
 
             // title
             page.appendFormat('<div class="{0}">{1}</div>',
