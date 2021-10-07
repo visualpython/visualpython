@@ -90,14 +90,10 @@ define([
                     case 'profiling':
                     case 'pdf':
                     case 'groupby':
+                    case 'merge':
+                    case 'reshape':
                         blockContainer.setSelectBlock(null);
                         blockContainer.createAppsPage(menu, file, config);
-                        break;
-                    case 'merge':
-                        // TODO: Merge
-                        break;
-                    case 'reshape':
-                        // TODO: Reshape
                         break;
                 }
             });

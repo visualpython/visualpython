@@ -128,8 +128,6 @@ define([
         blockContainer.setImportPackageThis(apiBlockPackage);
 
         /** Apps menu 생성 */
-        // TODO: 
-        // vp-apiblock-menu-apps-grid
         var appsList = [
             'import', 'file', 'variable', 'snippets', 'frame', 'subset', 'instance', 'groupby',
             'merge', 'reshape', 'chart', 'markdown', 'pdf', 'profiling'

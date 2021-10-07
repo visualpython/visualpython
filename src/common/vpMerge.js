@@ -1,9 +1,9 @@
 /*
  *    Project Name    : Visual Python
  *    Description     : GUI-based Python code generator
- *    File Name       : vpGroupby.js
+ *    File Name       : vpMerge.js
  *    Author          : Black Logic
- *    Note            : Groupby app
+ *    Note            : Merge app
  *    License         : GNU GPLv3 with Visual Python special exception
  *    Date            : 2021. 10. 05
  *    Change Date     :
@@ -47,9 +47,9 @@ define([
 
 
     //========================================================================
-    // [CLASS] Groupby
+    // [CLASS] Merge
     //========================================================================
-    class Groupby {
+    class Merge {
         /**
          * constructor
          * @param {object} pageThis
@@ -130,7 +130,7 @@ define([
 
             // title
             page.appendFormat('<div class="{0}">{1}</div>',
-                APP_TITLE, 'Groupby');
+                APP_TITLE, 'Merge');
 
             // close button
             page.appendFormatLine('<div class="{0}"><img src="{1}"/></div>',
@@ -256,7 +256,7 @@ define([
                 $(this.pagethis._wrapSelector('#' + this.targetId)).val(code);
                 $(this.pagethis._wrapSelector('#' + this.targetId)).trigger({
                     type: 'apps_run',
-                    title: 'Groupby',
+                    title: 'Merge',
                     code: code,
                     state: this.state,
                     addCell: addCell,
@@ -266,7 +266,7 @@ define([
                 $(vpCommon.wrapSelector('#' + this.targetId)).val(code);
                 $(vpCommon.wrapSelector('#' + this.targetId)).trigger({
                     type: 'apps_run',
-                    title: 'Groupby',
+                    title: 'Merge',
                     code: code,
                     state: this.state,
                     addCell: addCell,
@@ -336,7 +336,7 @@ define([
         }
     }
 
-    return Groupby
+    return Merge
 }); /* function, define */
 
 /* End of file */
