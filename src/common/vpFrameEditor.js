@@ -1198,7 +1198,7 @@ define([
         if (this.pageThis) {
             $(this.pageThis.wrapSelector('#' + this.targetId)).val(code);
             $(this.pageThis.wrapSelector('#' + this.targetId)).trigger({
-                type: 'frame_run',
+                type: 'apps_run',
                 title: 'Frame',
                 code: code,
                 state: this.state,
@@ -1208,7 +1208,7 @@ define([
         } else {
             $(vpCommon.wrapSelector('#' + this.targetId)).val(code);
             $(vpCommon.wrapSelector('#' + this.targetId)).trigger({
-                type: 'frame_run',
+                type: 'apps_run',
                 title: 'Frame',
                 code: code,
                 state: this.state,

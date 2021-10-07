@@ -377,7 +377,7 @@ define([
         });
 
         /** Apps Menu Apply event */
-        $(document).on('subset_run frame_run pdf_run', '#vp_appsCode', function(evt) {
+        $(document).on('apps_run', '#vp_appsCode', function(evt) {
             var code = evt.code;
             var title = evt.title;
             var state = evt.state;

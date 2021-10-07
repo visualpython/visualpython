@@ -257,17 +257,10 @@ define([
         });
 
         // subset applied - variable
-        $(document).on('change subset_run subset_apply', this.wrapSelector('#vp_instanceVariable'), function(event) {
+        $(document).on('change apps_run', this.wrapSelector('#vp_instanceVariable'), function(event) {
             var val = $(this).val();
             that.addStack();
             that.updateValue('variable', val);
-        });
-
-        // subset applied - allocate
-        $(document).on('change subset_run subset_apply', this.wrapSelector('#vp_instanceAllocate'), function(event) {
-            var val = $(this).val();
-            that.addStack();
-            that.updateValue('allocate', val);
         });
 
         // codemirror clicked
