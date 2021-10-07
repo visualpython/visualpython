@@ -633,6 +633,11 @@ define([
             // display columns
             code.appendFormat('{0}.{1}', colStr, methodStr);
 
+            if (allocateTo && allocateTo != '') {
+                code.appendLine();
+                code.append(allocateTo);
+            }
+
             return code.toString();
         }
 
