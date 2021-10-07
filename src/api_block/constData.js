@@ -809,6 +809,7 @@ define([
             file: 'nbextensions/visualpython/src/common/vpGroupby',
             icon: '/nbextensions/visualpython/resource/apps/apps_groupby.svg',
             color: 2,
+            config: { width: '700px', height: '550px' }
         },
         'merge': {
             label: 'Merge',
