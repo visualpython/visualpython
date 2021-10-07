@@ -587,23 +587,41 @@ define([
             blockContainer.setFocusedPageType(FOCUSED_PAGE_TYPE.OPTION);
         });
         
+        /** GLOBAL keyBoardManager */
+        window.vpKeyManager = {
+            keyCode : {
+                ctrlKey: 17,
+                cmdKey: 91,
+                shiftKey: 16,
+                altKey: 18,
+                enter: 13,
+                escKey: 27,
+                vKey: 86,
+                cKey: 67
+            },
+            keyCheck : {
+                ctrlKey: false,
+                shiftKey: false
+            }
+        };
+
         /** 블럭 복사하고 붙여넣는 기능 이벤트 바인딩 */
         $(document).ready(function() {
-            var ctrlDown = false,
-                ctrlKey = 17,
-                cmdKey = 91,
-                vKey = 86,
-                cKey = 67,
-                escKey = 27;
+            var { ctrlKey, shiftKey, cmdKey, vKey, cKey, escKey } = vpKeyManager.keyCode;
         
             $(document).keydown(function(e) {
                 if (e.keyCode == ctrlKey || e.keyCode == cmdKey) {
-                    ctrlDown = true;
+                    vpKeyManager.keyCheck.ctrlKey = true;
+                }
+                if (e.keyCode == shiftKey) {
+                    vpKeyManager.keyCheck.shiftKey = true;
                 }
             }).keyup(function(e) {
                 if (e.keyCode == ctrlKey || e.keyCode == cmdKey) {
-                    ctrlDown = false;
-                    console.log(blockContainer.getFocusedPageType());
+                    vpKeyManager.keyCheck.ctrlKey = false;
+                }
+                if (e.keyCode == shiftKey) {
+                    vpKeyManager.keyCheck.shiftKey = false;
                 }
                 if (e.keyCode == escKey) {
                     // close popup on esc
