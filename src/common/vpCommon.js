@@ -70,6 +70,21 @@ define([
     }
 
     /**
+     * append css for div
+     * @param {string} divSelector 
+     * @param {string} url 
+     */
+    var loadCssForDiv = function(divSelector, url) {
+        $('<link>')
+        .appendTo(divSelector)
+        .attr({
+            type: 'text/css', 
+            rel: 'stylesheet',
+            href: requirejs.toUrl(url)
+        });
+    }
+
+    /**
      * VisualPython container selector (jquery selector)
      * @returns vp top container selector
      */
@@ -347,6 +362,7 @@ define([
         loadHtml: loadHtml
         , getUUID: getUUID
         , loadCss: loadCss
+        , loadCssForDiv: loadCssForDiv
         , getVPContainer: getVPContainer
         , wrapSelector: wrapSelector
         , addVariable: addVariable
