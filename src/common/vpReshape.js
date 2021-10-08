@@ -239,7 +239,8 @@ define([
             if (!$(evt.target).hasClass('.' + APP_BUTTON_DETAIL)) {
                 $(that._wrapSelector('.' + APP_DETAIL_BOX)).hide();
             }
-            if (!$(evt.target).hasClass('.' + APP_BUTTON_PREVIEW)
+            if (!$(evt.target).hasClass(APP_BUTTON_PREVIEW)
+                && !$(evt.target).hasClass(APP_PREVIEW_BOX)
                 && $(that._wrapSelector('.' + APP_PREVIEW_BOX)).has(evt.target).length === 0) {
                 that.closePreview();
             }
