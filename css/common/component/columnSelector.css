@@ -10,7 +10,7 @@
 }
 .vp-cs-select-search::after {
     content: '';
-    background-image: url(../../resource/close_big.svg);
+    background-image: url(../../../resource/close_big.svg);
 }
 .vp-cs-select-box {
     width: 100%;
@@ -55,14 +55,14 @@
     margin: auto;
     display: inherit;
 }
-.vp-cs-select-add-btn {
+.vp-cs-select-btn-box button {
     height: 24px;
     background: #FFFFFF;
     border: 0.25px solid #E4E4E4;
 }
-.vp-cs-select-del-btn {
-    height: 24px;
-    background: #FFFFFF;
-    border: 0.25px solid #E4E4E4;
+.vp-cs-select-btn-box button:not(:nth-child(1)) {
     margin-top: 5px;
+}
+.vp-cs-select-btn-box button:hover {
+    background: #F8F8F8;
 }

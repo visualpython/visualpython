@@ -35,8 +35,10 @@ define([
     const APP_DRAGGABLE = APP_PREFIX + '-draggable';
 
     /** select btns */
+    const APP_SELECT_ADD_ALL_BTN = APP_PREFIX + '-select-add-all-btn';
     const APP_SELECT_ADD_BTN = APP_PREFIX + '-select-add-btn';
     const APP_SELECT_DEL_BTN = APP_PREFIX + '-select-del-btn';
+    const APP_SELECT_DEL_ALL_BTN = APP_PREFIX + '-select-del-all-btn';
 
 
     //========================================================================
@@ -44,11 +46,19 @@ define([
     //========================================================================
     class ColumnSelector {
 
-        constructor(frameSelector, dataframe, selectedList=[]) {
+        /**
+         * 
+         * @param {string} frameSelector        query for parent component
+         * @param {string} dataframe            dataframe variable name
+         * @param {Array<string>} selectedList  
+         * @param {Array<string>} includeList   
+         */
+        constructor(frameSelector, dataframe, selectedList=[], includeList=[]) {
             this.uuid = 'u' + vpCommon.getUUID();
             this.frameSelector = frameSelector;
             this.dataframe = dataframe;
             this.selectedList = selectedList;
+            this.includeList = includeList;
             this.columnList = [];
             this.pointer = { start: -1, end: -1 };
 
@@ -62,8 +72,12 @@ define([
                         code: x.value
                     };
                 });
-                that.columnList = colList;
-                that.load(colList);
+                if (includeList && includeList.length > 0) {
+                    that.columnList = colList.filter(col => includeList.includes(col.code));
+                } else {
+                    that.columnList = colList;
+                }
+                that.load();
                 that.bindEvent();
                 that.bindDraggable();
             });
@@ -118,8 +132,14 @@ define([
             tag.appendLine('</div>');  // APP_SELECT_LEFT
             // col select - buttons
             tag.appendFormatLine('<div class="{0}">', APP_SELECT_BTN_BOX);
-            tag.appendFormatLine('<button type="button" class="{0}">{1}</button>', APP_SELECT_ADD_BTN, '<img src="/nbextensions/visualpython/resource/arrow_right.svg"/></i>');
-            tag.appendFormatLine('<button type="button" class="{0}">{1}</button>', APP_SELECT_DEL_BTN, '<img src="/nbextensions/visualpython/resource/arrow_left.svg"/>');
+            tag.appendFormatLine('<button type="button" class="{0}" title="{1}">{2}</button>'
+                                , APP_SELECT_ADD_ALL_BTN, 'Add all columns', '<img src="/nbextensions/visualpython/resource/arrow_right_double.svg"/></i>');
+            tag.appendFormatLine('<button type="button" class="{0}" title="{1}">{2}</button>'
+                                ,  APP_SELECT_ADD_BTN, 'Add selected columns', '<img src="/nbextensions/visualpython/resource/arrow_right.svg"/></i>');
+            tag.appendFormatLine('<button type="button" class="{0}" title="{1}">{2}</button>'
+                                , APP_SELECT_DEL_BTN, 'Remove selected columns', '<img src="/nbextensions/visualpython/resource/arrow_left.svg"/>');
+            tag.appendFormatLine('<button type="button" class="{0}" title="{1}">{2}</button>'
+                                , APP_SELECT_DEL_ALL_BTN, 'Remove all columns', '<img src="/nbextensions/visualpython/resource/arrow_left_double.svg"/>');
             tag.appendLine('</div>');  // APP_SELECT_BTNS
             // col select - right
             tag.appendFormatLine('<div class="{0}">', APP_SELECT_RIGHT);
@@ -240,6 +260,16 @@ define([
                 }
             });
 
+            // item indexing - add all
+            $(this._wrapSelector('.' + APP_SELECT_ADD_ALL_BTN)).on('click', function(event) {
+                $(that._wrapSelector('.' + APP_SELECT_BOX + '.left .' + APP_SELECT_ITEM)).appendTo(
+                    $(that._wrapSelector('.' + APP_SELECT_BOX + '.right'))
+                );
+                $(that._wrapSelector('.' + APP_SELECT_ITEM)).addClass('added');
+                $(that._wrapSelector('.' + APP_SELECT_ITEM + '.selected')).removeClass('selected');
+                that.pointer = { start: -1, end: -1 };
+            });
+
             // item indexing - add
             $(this._wrapSelector('.' + APP_SELECT_ADD_BTN)).on('click', function(event) {
                 var selector = '.selected';
@@ -269,6 +299,23 @@ define([
                 );
                 selectedTag.removeClass('added');
                 selectedTag.removeClass('selected');
+                that.pointer = { start: -1, end: -1 };
+            });
+
+            // item indexing - delete all
+            $(this._wrapSelector('.' + APP_SELECT_DEL_ALL_BTN)).on('click', function(event) {
+                var targetBoxQuery = that._wrapSelector('.' + APP_SELECT_BOX + '.left');
+                $(that._wrapSelector('.' + APP_SELECT_BOX + '.right .' + APP_SELECT_ITEM)).appendTo(
+                    $(targetBoxQuery)
+                );
+                // sort
+                $(targetBoxQuery + ' .' + APP_SELECT_ITEM).sort(function(a, b) {
+                    return ($(b).data('idx')) < ($(a).data('idx')) ? 1 : -1;
+                }).appendTo(
+                    $(targetBoxQuery)
+                );
+                $(that._wrapSelector('.' + APP_SELECT_ITEM)).removeClass('added');
+                $(that._wrapSelector('.' + APP_SELECT_ITEM + '.selected')).removeClass('selected');
                 that.pointer = { start: -1, end: -1 };
             });
         }
