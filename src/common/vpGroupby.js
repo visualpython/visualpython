@@ -586,6 +586,8 @@ define([
             $(document).off('change', this._wrapSelector('#vp_gbBy'));
             $(document).off('click', this._wrapSelector('#vp_gbBySelect'));
             $(document).off('change', this._wrapSelector('#vp_gbByGrouper'));
+            $(document).off('change', this._wrapSelector('#vp_gbByGrouperNumber'));
+            $(document).off('change', this._wrapSelector('#vp_gbByGrouperPeriod'));
             $(document).off('change', this._wrapSelector('#vp_gbDisplay'));
             $(document).off('click', this._wrapSelector('#vp_gbDisplaySelect'));
             $(document).off('change', this._wrapSelector('#vp_gbMethodSelect'));
