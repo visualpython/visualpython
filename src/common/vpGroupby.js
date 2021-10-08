@@ -97,14 +97,15 @@ define([
 
         _loadState(state) {
             var {
-                variable, groupby, columns, method, advanced, allocateTo, resetIndex
+                variable, groupby, display, method, advanced, allocateTo, resetIndex,
+                advPageDom, advColList, advNamingDict
             } = state;
-
-            console.log(state);
 
             $(this._wrapSelector('#vp_gbVariable')).val(variable);
             $(this._wrapSelector('#vp_gbBy')).val(groupby.join(','));
-            $(this._wrapSelector('#vp_gbColumn')).val(columns.join(','));
+            $(this._wrapSelector('#vp_gbBy')).data('list', groupby);
+            $(this._wrapSelector('#vp_gbDisplay')).val(display.join(','));
+            $(this._wrapSelector('#vp_gbDisplay')).data('list', display);
             $(this._wrapSelector('#vp_gbMethod')).val(method);
             $(this._wrapSelector('#vp_gbMethodSelector')).val(method);
             $(this._wrapSelector('#vp_gbAdvanced')).prop('checked', advanced);
@@ -113,10 +114,39 @@ define([
             }
             $(this._wrapSelector('#vp_gbAllocateTo')).val(allocateTo);
             $(this._wrapSelector('#vp_gbResetIndex')).prop('checked', resetIndex);
+
+            $(this._wrapSelector('.vp-gb-adv-box')).html(advPageDom);
+            
+            advColList.forEach((arr, idx) => {
+                $($(this._wrapSelector('.vp-gb-adv-col'))[idx]).data('list', arr);
+            });
+            advNamingDict.forEach((dict, idx) => {
+                $($(this._wrapSelector('.vp-gb-adv-naming'))[idx]).data('dict', dict);
+            });
         }
 
         _saveState() {
+            // save input state
+            $(this._wrapSelector('.vp-gb-adv-box input')).each(function () {
+                this.defaultValue = this.value;
+            });
 
+            // save checkbox state
+            $(this._wrapSelector('.vp-gb-adv-box input[type="checkbox"]')).each(function () {
+                this.defaultValue = this.value;
+            });
+
+            // save select state
+            $(this._wrapSelector('.vp-gb-adv-box select > option')).each(function () {
+                if (this.selected) {
+                    this.setAttribute("selected", true);
+                } else {
+                    this.removeAttribute("selected");
+                }
+            });
+            
+            // save advanced box
+            this.state.advPageDom = $(this._wrapSelector('.vp-gb-adv-box')).html();
         }
 
         //====================================================================
@@ -147,14 +177,19 @@ define([
             this.state = {
                 variable: '',
                 groupby: [],
-                columns: [],
+                display: [],
                 method: 'sum',
                 advanced: false,
                 allocateTo: '',
-                resetIndex: false
+                resetIndex: false,
+
+                advPageDom: '',
+                advColList: [],
+                advNamingDict: []
             };
             this.popup = {
                 type: '',
+                targetSelector: '',
                 ColSelector: undefined
             }
 
@@ -212,25 +247,27 @@ define([
             page.appendLine('<hr style="margin: 10px 0;"/>');
             // display column
             page.appendLine('<div>');
-            page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_gbColumn', 'wp80', 'Columns');
-            page.appendFormatLine('<input type="text" id="{0}" disabled>', 'vp_gbColumn');
-            page.appendFormatLine('<button id="{0}" class="{1}">{2}</button>', 'vp_gbColumnSelect', 'vp-button wp50', 'Edit');
+            page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_gbDisplay', 'wp80', 'Columns');
+            page.appendFormatLine('<input type="text" id="{0}" disabled>', 'vp_gbDisplay');
+            page.appendFormatLine('<button id="{0}" class="{1}">{2}</button>', 'vp_gbDisplaySelect', 'vp-button wp50', 'Edit');
             page.appendLine('</div>');
             // method
             page.appendLine('<div>');
             page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_gbMethodSelect', 'wp80', 'Method');
             page.appendFormatLine('<select id="{0}">', 'vp_gbMethodSelect');
+            var savedMethod = this.state.method;
             this.methodList.forEach(method => {
-                page.appendFormatLine('<option value="{0}">{1}</option>', method.value, method.label);
+                page.appendFormatLine('<option value="{0}"{1}>{2}</option>', method.value, savedMethod==method.value?' selected':'',method.label);
             });
             page.appendLine('</select>');
-            page.appendFormatLine('<input type="text" id="{0}" class="{1}" disabled style="display: none;"/>', 'vp_gbMethod', 'vp-gb-method');
+            page.appendFormatLine('<input type="text" id="{0}" class="{1}" disabled style="display: none;" value="{2}"/>', 'vp_gbMethod', 'vp-gb-method', this.methodList[0].value);
             page.appendFormatLine('<label><input type="checkbox" id="{0}"/><span>{1}</span></label>', 'vp_gbAdvanced', 'Advanced');
             page.appendLine('</div>');
             
             // Advanced box
             page.appendFormatLine('<div class="{0}" style="display: none;">', 'vp-gb-adv-box');
-
+            page.appendLine(this.renderAdvancedItem());
+            page.appendFormatLine('<button id="{0}" class="{1}">{2}</button>', 'vp_gbAdvAdd', 'vp-button', '+ Add');
             page.appendLine('</div>'); // end of adv-box
 
             page.appendLine('<hr style="margin: 10px 0;"/>');
@@ -278,6 +315,34 @@ define([
             $(this._wrapSelector()).hide();
         }
 
+        renderAdvancedItem() {
+            var page = new sb.StringBuilder();
+            page.appendFormatLine('<div class="{0}">', 'vp-gb-adv-item');
+            // target columns
+            page.appendFormatLine('<input type="text" class="{0}" placeholder="{1}" disabled/>', 'vp-gb-adv-col', 'Column list');
+            page.appendFormatLine('<button class="{0} {1}">{2}</button>', 'vp-gb-adv-col-selector', 'vp-button wp50', 'Edit');
+            // method select
+            page.appendFormatLine('<select class="{0}">', 'vp-gb-adv-method-selector');
+            this.methodList.forEach(method => {
+                page.appendFormatLine('<option value="{0}">{1}</option>', method.value, method.label);
+            });
+            page.appendFormatLine('<option value="{0}">{1}</option>', 'typing', 'Typing');
+            page.appendLine('</select>');
+            page.appendFormatLine('<div class="{0}" style="display: none;">', 'vp-gb-adv-method-box');
+            page.appendFormatLine('<input type="text" class="{0}" placeholder="{1}" value="{2}"/>', 'vp-gb-adv-method', 'Type function name', "'" + this.methodList[0].value + "'");
+            // page.appendFormatLine('<i class="fa fa-search {0}"></i>', 'vp-gb-adv-method-return');
+            page.appendFormatLine('<img src="{0}" class="{1}" title="{2}">'
+                                , '/nbextensions/visualpython/resource/arrow_left.svg', 'vp-gb-adv-method-return', 'Return to select method');
+            page.appendLine('</div>');
+            // naming
+            page.appendFormatLine('<input type="text" class="{0}" placeholder="{1}" data-dict={} disabled/>', 'vp-gb-adv-naming', 'Display name');
+            page.appendFormatLine('<button class="{0} {1}">{2}</button>', 'vp-gb-adv-naming-selector', 'vp-button wp50', 'Edit');
+            // delete button
+            page.appendFormatLine('<div class="{0} {1}"><img src="{2}"/></div>', 'vp-gb-adv-item-delete', 'vp-cursor', '/nbextensions/visualpython/resource/close_small.svg');
+            page.appendLine('</div>');
+            return page.toString();
+        }
+
         renderInnerPopup() {
             var page = new sb.StringBuilder();
             page.appendFormatLine('<div class="{0}" style="display: none; width: 400px; height: 300px;">', APP_POPUP_BOX);
@@ -300,8 +365,8 @@ define([
             return page.toString();
         }
 
-        renderColumnSelector(previousList) {
-            this.popup.ColSelector = new vpColumnSelector(this._wrapSelector('.' + APP_POPUP_BODY), this.state.variable, previousList);
+        renderColumnSelector(previousList, includeList) {
+            this.popup.ColSelector = new vpColumnSelector(this._wrapSelector('.' + APP_POPUP_BODY), this.state.variable, previousList, includeList);
         }
         
         renderVariableList(varList, defaultValue='') {
@@ -319,20 +384,9 @@ define([
             return tag.toString();
         }
 
-        openInnerPopup(type) {
-            var title = '';
-            this.popup.type = type;
-    
-            switch (type) {
-                case 'groupby':
-                    title = 'Select columns to group';
-                    this.renderColumnSelector(this.state.groupby);
-                    break;
-                case 'column':
-                    title = 'Select columns to display';
-                    this.renderColumnSelector(this.state.columns);
-                    break;
-            }
+        openInnerPopup(targetSelector, title='Select columns', includeList=[]) {
+            this.popup.targetSelector = targetSelector;
+            this.renderColumnSelector(this.popup.targetSelector.data('list'), includeList);
     
             // set title
             $(this._wrapSelector('.' + APP_POPUP_BOX + ' .' + APP_TITLE)).text(title);
@@ -372,7 +426,7 @@ define([
             // user operation event
             $(document).off('change', this._wrapSelector('#vp_gbVariable'));
             $(document).off('click', this._wrapSelector('#vp_gbBySelect'));
-            $(document).off('click', this._wrapSelector('#vp_gbColumnSelect'));
+            $(document).off('click', this._wrapSelector('#vp_gbDisplaySelect'));
             $(document).off('change', this._wrapSelector('#vp_gbMethodSelect'));
             $(document).off('change', this._wrapSelector('#vp_gbAdvanced'));
             $(document).off('change', this._wrapSelector('#vp_gbAllocateTo'));
@@ -402,11 +456,11 @@ define([
             //====================================================================
             // variable change event
             $(document).on('change', this._wrapSelector('#vp_gbVariable'), function() {
-                // if variable changed, clear groupby, columns
+                // if variable changed, clear groupby, display
                 var newVal = $(this).val();
                 if (newVal != that.state.variable) {
                     $(that._wrapSelector('#vp_gbBy')).val('');
-                    $(that._wrapSelector('#vp_gbColumn')).val('');
+                    $(that._wrapSelector('#vp_gbDisplay')).val('');
                     that.state.variable = newVal;
                 }
             });
@@ -416,16 +470,28 @@ define([
                 that.loadVariableList();
             });
 
-            // groupby select button event
-            $(document).on('click', this._wrapSelector('#vp_gbBySelect'), function() {
-                // TODO: open popup
-                that.openInnerPopup('groupby');
+            // groupby change event
+            $(document).on('change', this._wrapSelector('#vp_gbBy'), function(event) {
+                var colList = event.colList;
+                that.state.groupby = colList;
+                console.log('groupby', colList);
             });
 
-            // columns select button event
-            $(document).on('click', this._wrapSelector('#vp_gbColumnSelect'), function() {
-                // TODO: open popup
-                that.openInnerPopup('column');
+            // groupby select button event
+            $(document).on('click', this._wrapSelector('#vp_gbBySelect'), function() {
+                that.openInnerPopup($(that._wrapSelector('#vp_gbBy')), 'Select columns to group');
+            });
+
+            // display change event
+            $(document).on('change', this._wrapSelector('#vp_gbDisplay'), function(event) {
+                var colList = event.colList;
+                that.state.display = colList;
+                console.log('display', colList);
+            });
+
+            // display select button event
+            $(document).on('click', this._wrapSelector('#vp_gbDisplaySelect'), function() {
+                that.openInnerPopup($(that._wrapSelector('#vp_gbDisplay')), 'Select columns to display');
             });
 
             // method select event
@@ -456,17 +522,76 @@ define([
                 }
             });
 
+            
             // allocateTo event
             $(document).on('change', this._wrapSelector('#vp_gbAllocateTo'), function() {
                 that.state.allocateTo = $(this).val();
             });
-
+            
             // reset index checkbox event
             $(document).on('change', this._wrapSelector('#vp_gbResetIndex'), function() {
                 that.state.resetIndex = $(this).prop('checked');
             });
+            
+            //====================================================================
+            // Advanced box Events
+            //====================================================================
+            // advanced item - column change event
+            $(document).on('change', this._wrapSelector('.vp-gb-adv-col'), function(event) {
+                var colList = event.colList;
+                var idx = $(that._wrapSelector('.vp-gb-adv-col')).index(this);
+                that.state.advColList[idx] = colList;
+            });
 
+            // advanced item - naming change event
+            $(document).on('change', this._wrapSelector('.vp-gb-adv-naming'), function(event) {
+                var result = event.result;
+                var idx = $(that._wrapSelector('.vp-gb-adv-naming')).index(this);
+                that.state.advNamingDict[idx] = result;
+            });
 
+            // add advanced item
+            $(document).on('click', this._wrapSelector('#vp_gbAdvAdd'), function() {
+                $(that.renderAdvancedItem()).insertBefore($(that._wrapSelector('#vp_gbAdvAdd')));
+            });
+
+            // edit target columns
+            $(document).on('click', this._wrapSelector('.vp-gb-adv-col-selector'), function() {
+                that.openInnerPopup($(this).parent().find('.vp-gb-adv-col'), 'Select columns', that.state.display);
+            });
+
+            // select method
+            $(document).on('change', this._wrapSelector('.vp-gb-adv-method-selector'), function() {
+                var method = $(this).val();
+                var parentDiv = $(this).parent();
+                if (method == 'typing') {
+                    // change it to typing input
+                    $(parentDiv).find('.vp-gb-adv-method-selector').hide();
+                    $(parentDiv).find('.vp-gb-adv-method-box').show();
+                } else {
+                    $(parentDiv).find('.vp-gb-adv-method').val(vpCommon.formatString("'{0}'", method));
+                }
+            });
+
+            // return to selecting method
+            $(document).on('click', this._wrapSelector('.vp-gb-adv-method-return'), function() {
+                var defaultValue = vpCommon.formatString("'{0}'", that.methodList[0].value);
+                var parentDiv = $(this).parent().parent();
+                $(parentDiv).find('.vp-gb-adv-method-selector').val(defaultValue);
+                $(parentDiv).find('.vp-gb-adv-method').val(defaultValue);
+                // show and hide
+                $(parentDiv).find('.vp-gb-adv-method-selector').show();
+                $(parentDiv).find('.vp-gb-adv-method-box').hide();
+            });
+
+            // edit columns naming // TODO:
+
+            // delete advanced item
+            $(document).on('click', this._wrapSelector('.vp-gb-adv-item-delete'), function() {
+                if ($(that._wrapSelector('.vp-gb-adv-item')).length > 1) {
+                    $(this).closest('.vp-gb-adv-item').remove();
+                }
+            });
 
             //====================================================================
             // Page operation Events
@@ -517,10 +642,11 @@ define([
 
             // click other
             $(document).on('click.' + this.uuid, function(evt) {
-                if (!$(evt.target).hasClass('.' + APP_BUTTON_DETAIL)) {
+                if (!$(evt.target).hasClass(APP_BUTTON_DETAIL)) {
                     $(that._wrapSelector('.' + APP_DETAIL_BOX)).hide();
                 }
-                if (!$(evt.target).hasClass('.' + APP_BUTTON_PREVIEW)
+                if (!$(evt.target).hasClass(APP_BUTTON_PREVIEW)
+                    && !$(evt.target).hasClass(APP_PREVIEW_BOX)
                     && $(that._wrapSelector('.' + APP_PREVIEW_BOX)).has(evt.target).length === 0) {
                     that.closePreview();
                 }
@@ -532,17 +658,11 @@ define([
             // ok input popup
             $(document).on('click', this._wrapSelector('.' + APP_POPUP_OK), function() {
                 // ok input popup
-                var type = that.popup.type;
                 var colList = that.popup.ColSelector.getColumnList();
-                switch (type) {
-                    case 'groupby':
-                        that.state.groupby = colList;
-                        $(that._wrapSelector('#vp_gbBy')).val(colList.join(','));
-                        break;
-                    case 'column':
-                        that.state.columns = colList;
-                        $(that._wrapSelector('#vp_gbColumn')).val(colList.join(','));
-                }
+
+                $(that.popup.targetSelector).val(colList.join(','));
+                $(that.popup.targetSelector).data('list', colList);
+                $(that.popup.targetSelector).trigger({ type: 'change', colList: colList });
                 that.closeInnerPopup();
             });
 
@@ -593,7 +713,7 @@ define([
         generateCode() {
             var code = new sb.StringBuilder();
             var { 
-                variable, groupby, columns, method, advanced, allocateTo, resetIndex 
+                variable, groupby, display, method, advanced, allocateTo, resetIndex 
             } = this.state;
             if (allocateTo && allocateTo != '') {
                 code.appendFormat('{0} = ', allocateTo);
@@ -613,25 +733,110 @@ define([
             code.appendFormat('{0}.groupby({1}{2})', variable, byStr, optStr);
 
             var colStr = '';
-            if (columns.length == 1) {
-                // for 1 column
-                colStr = '[' + columns.join('') + ']';
-            } else if (columns.length > 1) {
-                // over 2 columns
-                colStr = '[[' + columns.join(',') + ']]';
+            if (display) {
+                if (display.length == 1) {
+                    // for 1 column
+                    colStr = '[' + display.join('') + ']';
+                } else if (display.length > 1) {
+                    // over 2 columns
+                    colStr = '[[' + display.join(',') + ']]';
+                }
             }
 
-            var methodStr = '';
+            var methodStr = new sb.StringBuilder();
             if (advanced) {
                 // aggregation
-                methodStr = 'agg(';
+                methodStr.append('agg(');
+                // prepare variables for aggregation
+                var advItemTags = $(this._wrapSelector('.vp-gb-adv-item'));
+                if (advItemTags && advItemTags.length > 0) {
+                    var advColumnDict = {
+                        'nothing': []
+                    }
+                    for (var i = 0; i < advItemTags.length; i++) {
+                        var advColumns = $(advItemTags[i]).find('.vp-gb-adv-col').data('list');
+                        var advMethod = $(advItemTags[i]).find('.vp-gb-adv-method').val();
+                        var advNaming = $(advItemTags[i]).find('.vp-gb-adv-naming').data('dict');
+                        if (advColumns && advColumns.length > 0) {
+                            advColumns.forEach(col => {
+                                var naming = advNaming[col];
+                                if (Object.keys(advColumnDict).includes(col)) {
+                                    advColumnDict[col].push({ method: advMethod, naming: naming})
+                                } else {
+                                    advColumnDict[col] = [{ method: advMethod, naming: naming}];
+                                }
+                            });
 
-                methodStr += ')';
+                        } else {
+                            advColumnDict['nothing'].push({ method: advMethod, naming: advNaming[advMethod]});
+                        }
+                    }
+
+                    // if target columns not selected
+                    if (Object.keys(advColumnDict).length == 1) {
+                        var noColList = advColumnDict['nothing'];
+                        if (noColList.length == 1) {
+                            // 1 method
+                            if (noColList[0].naming && noColList[0].naming != undefined) {
+                                methodStr.appendFormat("[({0}, {1})]", noColList[0].naming, noColList[0].method);
+                            } else {
+                                methodStr.appendFormat("{0}", noColList[0].method);
+                            }
+                        } else {
+                            // more than 1 method
+                            var tmpList = [];
+                            noColList.forEach(obj => {
+                                if (obj.naming && obj.naming != undefined) {
+                                    tmpList.push(vpCommon.formatString("({0}, {1})", obj.naming, obj.method));
+                                } else {
+                                    tmpList.push(obj.method);
+                                }
+                            });
+                            methodStr.appendFormat("[{0}]", tmpList.join(', '));
+                        }
+                    } else {
+                        // apply method with empty column to all columns(display)
+                        var noColList = advColumnDict['nothing'];
+                        delete advColumnDict['nothing'];
+                        noColList.forEach(obj => {
+                            display.forEach(col => {
+                                if (Object.keys(advColumnDict).includes(col)) {
+                                    if (advColumnDict[col].filter(x => x.method == obj.method).length == 0) {
+                                        advColumnDict[col].push({ method: obj.method, naming: obj.naming})
+                                    }
+                                } else {
+                                    advColumnDict[col] = [{ method: obj.method, naming: obj.naming}];
+                                }
+                            });
+                        });
+
+                        // with target columns
+                        var tmpList1 = [];
+                        Object.keys(advColumnDict).forEach(key => {
+                            var colList = advColumnDict[key];
+                            var tmpList2 = [];
+                            colList.forEach(obj => {
+                                if (obj.naming && obj.naming != undefined) {
+                                    tmpList2.push(vpCommon.formatString("({0}, {1})", obj.naming, obj.method));
+                                } else {
+                                    tmpList2.push(obj.method);
+                                }
+                            });
+                            var tmpStr = tmpList2.join(',');
+                            if (tmpList2.length > 1) {
+                                tmpStr = '[' + tmpStr + ']';
+                            }
+                            tmpList1.push(vpCommon.formatString("{0}: {1}", key, tmpStr));
+                        });
+                        methodStr.appendFormat('{{0}}', tmpList1.join(', '));
+                    }
+                }
+                methodStr.append(')');
             } else {
-                methodStr = method + '()';
+                methodStr.appendFormat('{0}()', method);
             }
             // display columns
-            code.appendFormat('{0}.{1}', colStr, methodStr);
+            code.appendFormat('{0}.{1}', colStr, methodStr.toString());
 
             if (allocateTo && allocateTo != '') {
                 code.appendLine();
