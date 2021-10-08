@@ -91,10 +91,10 @@ define([
             return vpCommon.formatString('.{0}.{1} {2}', APP_PREFIX, this.uuid, query);
         }
 
-        _setPreview() {
-            
-        }
-
+        /**
+         * Load state and set values on components
+         * @param {object} state 
+         */
         _loadState(state) {
             var {
                 variable, groupby, display, method, advanced, allocateTo, resetIndex,
@@ -125,6 +125,9 @@ define([
             });
         }
 
+        /**
+         * Save now state of components
+         */
         _saveState() {
             // save input state
             $(this._wrapSelector('.vp-gb-adv-box input')).each(function () {
@@ -152,6 +155,10 @@ define([
         //====================================================================
         // External call function
         //====================================================================
+        /**
+         * Open this page with initializing
+         * @param {object} config 
+         */
         open(config={}) {
             this.config = {
                 ...this.config,
@@ -167,11 +174,18 @@ define([
             }
         }
 
+        /**
+         * Close this page
+         */
         close() {
             this.unbindEvent();
             $(this._wrapSelector()).remove();
         }
 
+        /**
+         * Initialize state, Render and Bind events
+         * @param {object} state 
+         */
         init(state = undefined) {
             
             this.state = {
@@ -210,6 +224,9 @@ define([
             this.loadVariableList();
         }
 
+        /**
+         * Render main page & frame
+         */
         render() {
             var page = new sb.StringBuilder();
             page.appendFormatLine('<div class="{0} {1}">', APP_PREFIX, this.uuid);
@@ -315,6 +332,11 @@ define([
             $(this._wrapSelector()).hide();
         }
 
+        /**
+         * Render variable list (for dataframe)
+         * @param {Array<object>} varList
+         * @param {string} defaultValue previous value
+         */
         renderVariableList(varList, defaultValue='') {
             var tag = new sb.StringBuilder();
             tag.appendFormatLine('<select id="{0}">', 'vp_gbVariable');
@@ -330,6 +352,10 @@ define([
             return tag.toString();
         }
 
+        /**
+         * Render advanced item and return it
+         * @returns Advanced box's item
+         */
         renderAdvancedItem() {
             var page = new sb.StringBuilder();
             page.appendFormatLine('<div class="{0}">', 'vp-gb-adv-item');
@@ -358,6 +384,10 @@ define([
             return page.toString();
         }
 
+        /**
+         * Render inner popup for selecting columns
+         * @returns Inner popup page dom
+         */
         renderInnerPopup() {
             var page = new sb.StringBuilder();
             page.appendFormatLine('<div class="{0}" style="display: none; width: 400px; height: 300px;">', APP_POPUP_BOX);
@@ -380,10 +410,22 @@ define([
             return page.toString();
         }
 
+        /**
+         * Render column selector using ColumnSelector module
+         * @param {Array<string>} previousList previous selected columns
+         * @param {Array<string>} includeList columns to include 
+         */
         renderColumnSelector(previousList, includeList) {
             this.popup.ColSelector = new vpColumnSelector(this._wrapSelector('.' + APP_POPUP_BODY), this.state.variable, previousList, includeList);
         }
 
+        /**
+         * Render naming box
+         * @param {Array<string>} columns 
+         * @param {string} method 
+         * @param {Object} previousDict 
+         * @returns 
+         */
         renderNamingBox(columns, method, previousDict) {
             var page = new sb.StringBuilder();
             page.appendFormatLine('<div class="{0}">', 'vp-gb-naming-box');
@@ -415,8 +457,12 @@ define([
             return page.toString();
         }
         
-        
-
+        /**
+         * Open Inner popup page for column selection
+         * @param {Object} targetSelector 
+         * @param {string} title 
+         * @param {Array<string>} includeList 
+         */
         openInnerPopup(targetSelector, title='Select columns', includeList=[]) {
             this.popup.type = 'column';
             this.popup.targetSelector = targetSelector;
@@ -429,10 +475,19 @@ define([
             $(this._wrapSelector('.' + APP_POPUP_BOX)).show();
         }
 
+        /**
+         * Close Inner popup page
+         */
         closeInnerPopup() {
             $(this._wrapSelector('.' + APP_POPUP_BOX)).hide();
         }
 
+        /**
+         * Open Naming popup page
+         * @param {Object} targetSelector 
+         * @param {Array<string>} columns 
+         * @param {string} method 
+         */
         openNamingPopup(targetSelector, columns, method) {
             this.popup.type = 'naming';
             this.popup.targetSelector = targetSelector;
@@ -445,6 +500,9 @@ define([
             $(this._wrapSelector('.' + APP_POPUP_BOX)).show();
         }
 
+        /**
+         * Load variable list (dataframe)
+         */
         loadVariableList() {
             var that = this;
             // load using kernel
@@ -466,17 +524,32 @@ define([
             });
         }
 
+        /**
+         * Unbind events
+         */
         unbindEvent() {
             $(document).unbind(vpCommon.formatString(".{0} .{1}", this.uuid, APP_BODY));
 
             // user operation event
             $(document).off('change', this._wrapSelector('#vp_gbVariable'));
+            $(document).off('click', this._wrapSelector('.vp-gb-df-refresh'));
+            $(document).off('change', this._wrapSelector('#vp_gbBy'));
             $(document).off('click', this._wrapSelector('#vp_gbBySelect'));
+            $(document).off('change', this._wrapSelector('#vp_gbDisplay'));
             $(document).off('click', this._wrapSelector('#vp_gbDisplaySelect'));
             $(document).off('change', this._wrapSelector('#vp_gbMethodSelect'));
             $(document).off('change', this._wrapSelector('#vp_gbAdvanced'));
             $(document).off('change', this._wrapSelector('#vp_gbAllocateTo'));
             $(document).off('change', this._wrapSelector('#vp_gbResetIndex'));
+
+            $(document).off('click', this._wrapSelector('#vp_gbAdvAdd'));
+            $(document).off('change', this._wrapSelector('.vp-gb-adv-col'));
+            $(document).off('click', this._wrapSelector('.vp-gb-adv-col-selector'));
+            $(document).off('change', this._wrapSelector('.vp-gb-adv-method-selector'));
+            $(document).off('click', this._wrapSelector('.vp-gb-adv-method-return'));
+            $(document).off('change', this._wrapSelector('.vp-gb-adv-naming'));
+            $(document).off('click', this._wrapSelector('.vp-gb-adv-naming-selector'));
+            $(document).off('click', this._wrapSelector('.vp-gb-adv-item-delete'));
 
             $(document).off('click', this._wrapSelector('.' + APP_CLOSE));
             $(document).off('click', this._wrapSelector('.' + APP_BUTTON_PREVIEW));
@@ -495,6 +568,9 @@ define([
             $(document).off('click', this._wrapSelector('.' + APP_POPUP_CLOSE));
         }
 
+        /**
+         * Bind events
+         */
         bindEvent() {
             var that = this;
             //====================================================================
@@ -758,6 +834,11 @@ define([
             });
         }
 
+        /**
+         * Apply code to jupyter cell or as a block
+         * @param {boolean} addCell 
+         * @param {boolean} runCell 
+         */
         apply(addCell=false, runCell=false) {
             var code = this.generateCode();
 
@@ -796,9 +877,17 @@ define([
             var { 
                 variable, groupby, display, method, advanced, allocateTo, resetIndex 
             } = this.state;
+
+            //====================================================================
+            // Allocation
+            //====================================================================
             if (allocateTo && allocateTo != '') {
                 code.appendFormat('{0} = ', allocateTo);
             }
+
+            //====================================================================
+            // Dataframe variable & Groupby columns
+            //====================================================================
             var byStr = '';
             if (groupby.length <= 1) {
                 byStr = groupby.join('');
@@ -813,6 +902,9 @@ define([
             // variable & groupby columns & option
             code.appendFormat('{0}.groupby({1}{2})', variable, byStr, optStr);
 
+            //====================================================================
+            // Display columns
+            //====================================================================
             var colStr = '';
             if (display) {
                 if (display.length == 1) {
@@ -824,9 +916,14 @@ define([
                 }
             }
 
+            //====================================================================
+            // Aggregation/Method code generation
+            //====================================================================
             var methodStr = new sb.StringBuilder();
             if (advanced) {
-                // aggregation
+                //================================================================
+                // Aggregation code generation
+                //================================================================
                 methodStr.append('agg(');
                 // prepare variables for aggregation
                 var advItemTags = $(this._wrapSelector('.vp-gb-adv-item'));
@@ -853,10 +950,9 @@ define([
                         }
                     }
 
-                    console.log('advColumnDict', advColumnDict);
-
                     // if target columns not selected
                     if (Object.keys(advColumnDict).length == 1) {
+                        // EX) .agg([('average', 'mean'), ('maximum value', max')])
                         var noColList = advColumnDict['nothing'];
                         if (noColList.length == 1) {
                             // 1 method
@@ -878,6 +974,7 @@ define([
                             methodStr.appendFormat("[{0}]", tmpList.join(', '));
                         }
                     } else {
+                        // EX) .agg({'col1':[('average', 'mean')], 'col2': 'max')})
                         // apply method with empty column to all columns(display)
                         var noColList = advColumnDict['nothing'];
                         delete advColumnDict['nothing'];
@@ -918,6 +1015,9 @@ define([
                 }
                 methodStr.append(')');
             } else {
+                //================================================================
+                // Method code generation
+                //================================================================
                 methodStr.appendFormat('{0}()', method);
             }
             // display columns
