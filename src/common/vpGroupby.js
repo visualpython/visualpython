@@ -71,12 +71,45 @@ define([
             this.previewOpened = false;
             this.codepreview = undefined;
 
+            this.periodList = [
+                { label: 'business day', value: 'B'},
+                { label: 'custom business day', value: 'C'},
+                { label: 'calendar day', value: 'D'},
+                { label: 'weekly', value: 'W'},
+                { label: 'month end', value: 'M'},
+                { label: 'semi-month end', value: 'SM'},
+                { label: 'business month end', value: 'BM'},
+                { label: 'custom business month end', value: 'CBM'},
+                { label: 'month start', value: 'MS'},
+                { label: 'semi-month start', value: 'SMS'},
+                { label: 'business month start', value: 'BMS'},
+                { label: 'custom business month start', value: 'CBMS'},
+                { label: 'quarter end', value: 'Q'},
+                { label: 'business quarter end', value: 'BQ'},
+                { label: 'quarter start', value: 'QS'},
+                { label: 'business quarter start', value: 'BQS'},
+                { label: 'year end', value: 'Y'},
+                { label: 'business year end', value: 'BY'},
+                { label: 'year start', value: 'YS'},
+                { label: 'business year start', value: 'BYS'},
+                { label: 'business hour', value: 'BH'},
+                { label: 'hourly', value: 'H'},
+                { label: 'minutely', value: 'min'},
+                { label: 'secondly', value: 'S'},
+                { label: 'milliseconds', value: 'ms'},
+                { label: 'microseconds', value: 'us'},
+                { label: 'nanoseconds', value: 'N'}
+            ]
+
             this.methodList = [
-                { label: 'sum', value: 'sum'},
-                { label: 'mean', value: 'mean'},
-                { label: 'min', value: 'min'},
-                { label: 'max', value: 'max'},
+                { label: 'count', value: 'count'},
+                { label: 'size', value: 'size'},
                 { label: 'std', value: 'std'},
+                { label: 'sum', value: 'sum'},
+                { label: 'max', value: 'max'},
+                { label: 'mean', value: 'mean'},
+                { label: 'median', value: 'median'},
+                { label: 'min', value: 'min'},
             ]
         }
 
@@ -97,13 +130,17 @@ define([
          */
         _loadState(state) {
             var {
-                variable, groupby, display, method, advanced, allocateTo, resetIndex,
+                variable, groupby, useGrouper, grouperNumber, grouperPeriod, 
+                display, method, advanced, allocateTo, resetIndex,
                 advPageDom, advColList, advNamingList
             } = state;
 
             $(this._wrapSelector('#vp_gbVariable')).val(variable);
             $(this._wrapSelector('#vp_gbBy')).val(groupby.join(','));
             $(this._wrapSelector('#vp_gbBy')).data('list', groupby);
+            $(this._wrapSelector('#vp_gbByGrouper')).prop('checked', useGrouper);
+            $(this._wrapSelector('#vp_gbByGrouperNumber')).val(grouperNumber);
+            $(this._wrapSelector('#vp_gbByGrouperPeriod')).val(grouperPeriod);
             $(this._wrapSelector('#vp_gbDisplay')).val(display.join(','));
             $(this._wrapSelector('#vp_gbDisplay')).data('list', display);
             $(this._wrapSelector('#vp_gbMethod')).val(method);
@@ -191,8 +228,11 @@ define([
             this.state = {
                 variable: '',
                 groupby: [],
+                useGrouper: false,
+                grouperNumber: 0,
+                grouperPeriod: this.periodList[0].value,
                 display: [],
-                method: 'sum',
+                method: this.methodList[0].value,
                 advanced: false,
                 allocateTo: '',
                 resetIndex: false,
@@ -260,6 +300,16 @@ define([
             page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_gbBy', 'vp-orange-text wp80', 'Groupby');
             page.appendFormatLine('<input type="text" id="{0}" disabled/>', 'vp_gbBy');
             page.appendFormatLine('<button id="{0}" class="{1}">{2}</button>', 'vp_gbBySelect', 'vp-button wp50', 'Edit');
+            page.appendFormatLine('<label style="display: none;"><input type="checkbox" id="{0}"/><span>{1}</span></label>', 'vp_gbByGrouper', 'Grouper');
+            page.appendFormatLine('<div class="{0}" style="display:none;">', 'vp-gb-by-grouper-box');
+            page.appendFormatLine('<input type="number" id="{0}" class="{1}"/>', 'vp_gbByGrouperNumber', 'vp-gb-by-number');
+            page.appendFormatLine('<select id="{0}">', 'vp_gbByGrouperPeriod');
+            var savedPeriod = this.state.period;
+            this.periodList.forEach(period => {
+                page.appendFormatLine('<option value="{0}"{1}>{2}</option>', period.value, savedPeriod==period.value?' selected':'',period.label);
+            });
+            page.appendLine('</select>');
+            page.appendLine('</div>'); // by-grouper-box
             page.appendLine('</div>');
             page.appendLine('<hr style="margin: 10px 0;"/>');
             // display column
@@ -535,6 +585,7 @@ define([
             $(document).off('click', this._wrapSelector('.vp-gb-df-refresh'));
             $(document).off('change', this._wrapSelector('#vp_gbBy'));
             $(document).off('click', this._wrapSelector('#vp_gbBySelect'));
+            $(document).off('change', this._wrapSelector('#vp_gbByGrouper'));
             $(document).off('change', this._wrapSelector('#vp_gbDisplay'));
             $(document).off('click', this._wrapSelector('#vp_gbDisplaySelect'));
             $(document).off('change', this._wrapSelector('#vp_gbMethodSelect'));
@@ -596,12 +647,39 @@ define([
             $(document).on('change', this._wrapSelector('#vp_gbBy'), function(event) {
                 var colList = event.colList;
                 that.state.groupby = colList;
-                console.log('groupby', colList);
+
+                if (colList && colList.length == 1) {
+                    $(that._wrapSelector('#vp_gbByGrouper')).parent().show();
+                } else {
+                    $(that._wrapSelector('#vp_gbByGrouper')).parent().hide();
+                }
             });
 
             // groupby select button event
             $(document).on('click', this._wrapSelector('#vp_gbBySelect'), function() {
                 that.openInnerPopup($(that._wrapSelector('#vp_gbBy')), 'Select columns to group');
+            });
+
+            // groupby grouper event
+            $(document).on('change', this._wrapSelector('#vp_gbByGrouper'), function() {
+                var useGrouper = $(this).prop('checked');
+                that.state.useGrouper = useGrouper;
+
+                if (useGrouper == true) {
+                    $(that._wrapSelector('.vp-gb-by-grouper-box')).show();
+                } else {
+                    $(that._wrapSelector('.vp-gb-by-grouper-box')).hide();
+                }
+            });
+
+            // grouper number change event
+            $(document).on('change', this._wrapSelector('#vp_gbByGrouperNumber'), function() {
+                that.state.grouperNumber = $(this).val();
+            });
+
+            // grouper period change event
+            $(document).on('change', this._wrapSelector('#vp_gbByGrouperPeriod'), function() {
+                that.state.grouperPeriod = $(this).val();
             });
 
             // display change event
@@ -875,7 +953,8 @@ define([
         generateCode() {
             var code = new sb.StringBuilder();
             var { 
-                variable, groupby, display, method, advanced, allocateTo, resetIndex 
+                variable, groupby, useGrouper, grouperNumber, grouperPeriod, 
+                display, method, advanced, allocateTo, resetIndex 
             } = this.state;
 
             //====================================================================
@@ -886,7 +965,7 @@ define([
             }
 
             //====================================================================
-            // Dataframe variable & Groupby columns
+            // Dataframe variable & Groupby(with Grouper) columns
             //====================================================================
             var byStr = '';
             if (groupby.length <= 1) {
@@ -895,12 +974,16 @@ define([
                 byStr = '[' + groupby.join(',') + ']';
             }
 
-            var optStr = '';
+            // Grouper
+            if (useGrouper) {
+                byStr = vpCommon.formatString("pd.Grouper(key={0}, freq='{1}')", byStr, grouperNumber + grouperPeriod);
+            }
+
             if (resetIndex == true) {
-                optStr = ', as_index=False';
+                byStr += ', as_index=False';
             }
             // variable & groupby columns & option
-            code.appendFormat('{0}.groupby({1}{2})', variable, byStr, optStr);
+            code.appendFormat('{0}.groupby({1})', variable, byStr);
 
             //====================================================================
             // Display columns

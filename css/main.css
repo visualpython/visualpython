@@ -104,14 +104,15 @@ body {
 }
 #vp-wrapper input[type=number] {
 	font-size: 14px;
-	line-height: 16px;
-	padding: 3px 7px;
-	color: var(--font-primary);
-	background: #FFFFFF;
-	outline: none;
-	border: 0.25px solid var(--border-gray-color);
-	box-sizing: border-box;
-	text-align: right;
+    line-height: 30px;
+    height: 30px;
+    padding: 3px 3px;
+    color: var(--font-primary);
+    background: #FFFFFF;
+    outline: var(--highlight-color);
+    border: 0.25px solid var(--border-gray-color);
+    box-sizing: border-box;
+    text-align: right;
 }
 #vp-wrapper input[type=number]::placeholder {
 	text-align: left;
