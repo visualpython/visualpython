@@ -625,7 +625,8 @@ define([
                 }
                 if (e.keyCode == escKey) {
                     // close popup on esc
-                    if (blockContainer.getFocusedPageType() != FOCUSED_PAGE_TYPE.NULL) {
+                    if (blockContainer.getFocusedPageType() != FOCUSED_PAGE_TYPE.NULL
+                        && blockContainer.appsMenu) {
                         blockContainer.appsMenu.close();
                     }
                 }
