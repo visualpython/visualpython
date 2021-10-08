@@ -26,11 +26,10 @@
     padding: 10px;
     margin-top: 5px;
     height: 180px;
-
-    display: grid;
-    grid-template-rows: 30px;
-    grid-row-gap: 5px;
     overflow: auto;
+}
+.vp-gb-adv-item {
+    margin-bottom: 5px;
 }
 .vp-gb-adv-method-box {
     position: relative;
@@ -50,4 +49,22 @@
 .vp-gb-adv-item-delete {
     display: inline-block;
     padding-left: 5px;
+}
+.vp-gb-naming-box label {
+    height: 30px;
+    line-height: 30px;
+    vertical-align: middle;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+.vp-gb-naming-item label {
+    width: 100px;
+    height: 30px;
+    line-height: 30px;
+    vertical-align: middle;
+    margin-bottom: 5px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    font-weight: bold;
 }

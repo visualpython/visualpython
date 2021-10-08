@@ -98,7 +98,7 @@ define([
         _loadState(state) {
             var {
                 variable, groupby, display, method, advanced, allocateTo, resetIndex,
-                advPageDom, advColList, advNamingDict
+                advPageDom, advColList, advNamingList
             } = state;
 
             $(this._wrapSelector('#vp_gbVariable')).val(variable);
@@ -120,8 +120,8 @@ define([
             advColList.forEach((arr, idx) => {
                 $($(this._wrapSelector('.vp-gb-adv-col'))[idx]).data('list', arr);
             });
-            advNamingDict.forEach((dict, idx) => {
-                $($(this._wrapSelector('.vp-gb-adv-naming'))[idx]).data('dict', dict);
+            advNamingList.forEach((obj, idx) => {
+                $($(this._wrapSelector('.vp-gb-adv-naming'))[idx]).data('dict', obj);
             });
         }
 
@@ -185,7 +185,7 @@ define([
 
                 advPageDom: '',
                 advColList: [],
-                advNamingDict: []
+                advNamingList: []
             };
             this.popup = {
                 type: '',
@@ -265,7 +265,7 @@ define([
             page.appendLine('</div>');
             
             // Advanced box
-            page.appendFormatLine('<div class="{0}" style="display: none;">', 'vp-gb-adv-box');
+            page.appendFormatLine('<div class="{0} {1}" style="display: none;">', 'vp-gb-adv-box', 'vp-apiblock-scrollbar');
             page.appendLine(this.renderAdvancedItem());
             page.appendFormatLine('<button id="{0}" class="{1}">{2}</button>', 'vp_gbAdvAdd', 'vp-button', '+ Add');
             page.appendLine('</div>'); // end of adv-box
@@ -313,6 +313,21 @@ define([
 
             $('#vp-wrapper').append(page.toString());
             $(this._wrapSelector()).hide();
+        }
+
+        renderVariableList(varList, defaultValue='') {
+            var tag = new sb.StringBuilder();
+            tag.appendFormatLine('<select id="{0}">', 'vp_gbVariable');
+            varList.forEach(vObj => {
+                // varName, varType
+                var label = vObj.varName;
+                tag.appendFormatLine('<option value="{0}" data-type="{1}" {2}>{3}</option>'
+                                    , vObj.varName, vObj.varType
+                                    , defaultValue == vObj.varName?'selected':''
+                                    , label);
+            });
+            tag.appendLine('</select>'); // VP_VS_VARIABLES
+            return tag.toString();
         }
 
         renderAdvancedItem() {
@@ -368,23 +383,42 @@ define([
         renderColumnSelector(previousList, includeList) {
             this.popup.ColSelector = new vpColumnSelector(this._wrapSelector('.' + APP_POPUP_BODY), this.state.variable, previousList, includeList);
         }
-        
-        renderVariableList(varList, defaultValue='') {
-            var tag = new sb.StringBuilder();
-            tag.appendFormatLine('<select id="{0}">', 'vp_gbVariable');
-            varList.forEach(vObj => {
-                // varName, varType
-                var label = vObj.varName;
-                tag.appendFormatLine('<option value="{0}" data-type="{1}" {2}>{3}</option>'
-                                    , vObj.varName, vObj.varType
-                                    , defaultValue == vObj.varName?'selected':''
-                                    , label);
-            });
-            tag.appendLine('</select>'); // VP_VS_VARIABLES
-            return tag.toString();
+
+        renderNamingBox(columns, method, previousDict) {
+            var page = new sb.StringBuilder();
+            page.appendFormatLine('<div class="{0}">', 'vp-gb-naming-box');
+            if (columns && columns.length > 0) {
+                page.appendFormatLine('<label>Replace {0} as ...</label>', method);
+                columns.forEach(col => {
+                    page.appendFormatLine('<div class="{0}">', 'vp-gb-naming-item');
+                    page.appendFormatLine('<label>{0}</label>', col);
+                    var previousValue = '';
+                    if (previousDict[col]) {
+                        previousValue = previousDict[col];
+                    }
+                    page.appendFormatLine('<input type="text" class="{0}" placeholder="{1}" value="{2}" data-code="{3}"/>'
+                                        , 'vp-gb-naming-text', 'Name to replace ' + method, previousValue, col);
+                    page.appendLine('</div>');
+                });
+            } else {
+                var previousValue = '';
+                if (previousDict[method]) {
+                    previousValue = previousDict[method];
+                }
+                page.appendFormatLine('<div class="{0}">', 'vp-gb-naming-item');
+                page.appendFormatLine('<label>{0}</label>', method);
+                page.appendFormatLine('<input type="text" class="{0}" placeholder="{1}" value="{2}" data-code="{3}"/>'
+                                    , 'vp-gb-naming-text', 'Name to replace ' + method, previousValue, method);
+                page.appendLine('</div>');
+            }
+            page.appendLine('</div>');
+            return page.toString();
         }
+        
+        
 
         openInnerPopup(targetSelector, title='Select columns', includeList=[]) {
+            this.popup.type = 'column';
             this.popup.targetSelector = targetSelector;
             this.renderColumnSelector(this.popup.targetSelector.data('list'), includeList);
     
@@ -397,6 +431,18 @@ define([
 
         closeInnerPopup() {
             $(this._wrapSelector('.' + APP_POPUP_BOX)).hide();
+        }
+
+        openNamingPopup(targetSelector, columns, method) {
+            this.popup.type = 'naming';
+            this.popup.targetSelector = targetSelector;
+            $(this._wrapSelector('.' + APP_POPUP_BODY)).html(this.renderNamingBox(columns, method, $(this.popup.targetSelector).data('dict')));
+
+            // set title
+            $(this._wrapSelector('.' + APP_POPUP_BOX + ' .' + APP_TITLE)).text('Replace naming');
+    
+            // show popup box
+            $(this._wrapSelector('.' + APP_POPUP_BOX)).show();
         }
 
         loadVariableList() {
@@ -536,23 +582,26 @@ define([
             //====================================================================
             // Advanced box Events
             //====================================================================
+            // add advanced item
+            $(document).on('click', this._wrapSelector('#vp_gbAdvAdd'), function() {
+                $(that.renderAdvancedItem()).insertBefore($(that._wrapSelector('#vp_gbAdvAdd')));
+            });
+
             // advanced item - column change event
             $(document).on('change', this._wrapSelector('.vp-gb-adv-col'), function(event) {
                 var colList = event.colList;
                 var idx = $(that._wrapSelector('.vp-gb-adv-col')).index(this);
+                
+                // if there's change, reset display namings
+                var previousList = that.state.advColList[idx];
+                if (!previousList || colList.length !== previousList.length 
+                    || !colList.slice().sort().every((val, idx) => { return val === previousList.slice().sort()[idx]})) {
+                    that.state.advNamingList = []
+                    $(that._wrapSelector('.vp-gb-adv-naming')).val('');
+                    $(that._wrapSelector('.vp-gb-adv-naming')).data('dict', {});
+                }
+
                 that.state.advColList[idx] = colList;
-            });
-
-            // advanced item - naming change event
-            $(document).on('change', this._wrapSelector('.vp-gb-adv-naming'), function(event) {
-                var result = event.result;
-                var idx = $(that._wrapSelector('.vp-gb-adv-naming')).index(this);
-                that.state.advNamingDict[idx] = result;
-            });
-
-            // add advanced item
-            $(document).on('click', this._wrapSelector('#vp_gbAdvAdd'), function() {
-                $(that.renderAdvancedItem()).insertBefore($(that._wrapSelector('#vp_gbAdvAdd')));
             });
 
             // edit target columns
@@ -584,7 +633,19 @@ define([
                 $(parentDiv).find('.vp-gb-adv-method-box').hide();
             });
 
-            // edit columns naming // TODO:
+            // advanced item - naming change event
+            $(document).on('change', this._wrapSelector('.vp-gb-adv-naming'), function(event) {
+                var namingDict = event.namingDict;
+                var idx = $(that._wrapSelector('.vp-gb-adv-naming')).index(this);
+                that.state.advNamingList[idx] = namingDict;
+            });
+
+            // edit columns naming
+            $(document).on('click', this._wrapSelector('.vp-gb-adv-naming-selector'), function() {
+                var columns = $(this).parent().find('.vp-gb-adv-col').data('list');
+                var method = $(this).parent().find('.vp-gb-adv-method').val();
+                that.openNamingPopup($(this).parent().find('.vp-gb-adv-naming'), columns, method);
+            });
 
             // delete advanced item
             $(document).on('click', this._wrapSelector('.vp-gb-adv-item-delete'), function() {
@@ -658,12 +719,32 @@ define([
             // ok input popup
             $(document).on('click', this._wrapSelector('.' + APP_POPUP_OK), function() {
                 // ok input popup
-                var colList = that.popup.ColSelector.getColumnList();
+                if (that.popup.type == 'column') {
+                    var colList = that.popup.ColSelector.getColumnList();
+    
+                    $(that.popup.targetSelector).val(colList.join(','));
+                    $(that.popup.targetSelector).data('list', colList);
+                    $(that.popup.targetSelector).trigger({ type: 'change', colList: colList });
+                    that.closeInnerPopup();
+                } else {
+                    var dict = {};
+                    // get dict
+                    var tags = $(that._wrapSelector('.vp-gb-naming-text'));
+                    for (var i = 0; i < tags.length; i++) {
+                        var key = $(tags[i]).data('code');
+                        var val = $(tags[i]).val();
+                        if (val && val != '') {
+                            dict[key] = "'" + val + "'";
+                        }
+                    }
 
-                $(that.popup.targetSelector).val(colList.join(','));
-                $(that.popup.targetSelector).data('list', colList);
-                $(that.popup.targetSelector).trigger({ type: 'change', colList: colList });
-                that.closeInnerPopup();
+                    console.log(dict);
+
+                    $(that.popup.targetSelector).val(Object.values(dict).join(','));
+                    $(that.popup.targetSelector).data('dict', dict);
+                    $(that.popup.targetSelector).trigger({ type: 'change', namingDict: dict });
+                    that.closeInnerPopup();
+                }
             });
 
             // cancel input popup
@@ -772,6 +853,8 @@ define([
                         }
                     }
 
+                    console.log('advColumnDict', advColumnDict);
+
                     // if target columns not selected
                     if (Object.keys(advColumnDict).length == 1) {
                         var noColList = advColumnDict['nothing'];
@@ -815,15 +898,17 @@ define([
                         Object.keys(advColumnDict).forEach(key => {
                             var colList = advColumnDict[key];
                             var tmpList2 = [];
+                            var useTuple = false;
                             colList.forEach(obj => {
                                 if (obj.naming && obj.naming != undefined) {
                                     tmpList2.push(vpCommon.formatString("({0}, {1})", obj.naming, obj.method));
+                                    useTuple = true;
                                 } else {
                                     tmpList2.push(obj.method);
                                 }
                             });
                             var tmpStr = tmpList2.join(',');
-                            if (tmpList2.length > 1) {
+                            if (tmpList2.length > 1 || useTuple) {
                                 tmpStr = '[' + tmpStr + ']';
                             }
                             tmpList1.push(vpCommon.formatString("{0}: {1}", key, tmpStr));
