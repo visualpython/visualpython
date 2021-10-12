@@ -3,6 +3,10 @@
     height: 550px;
 }
 
+.vp-gb-container .vp-pp-body {
+    overflow: hidden;
+}
+
 .vp-gb-df-box {
     display: grid;
     grid-template-rows: 30px;
@@ -33,7 +37,7 @@
     border: 1px solid var(--border-gray-color);
     padding: 10px;
     margin-top: 5px;
-    height: 180px;
+    height: 170px;
     overflow: auto;
 }
 .vp-gb-adv-item {

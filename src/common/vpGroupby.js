@@ -102,14 +102,17 @@ define([
             ]
 
             this.methodList = [
-                { label: 'count', value: 'count'},
-                { label: 'size', value: 'size'},
-                { label: 'std', value: 'std'},
-                { label: 'sum', value: 'sum'},
-                { label: 'max', value: 'max'},
-                { label: 'mean', value: 'mean'},
-                { label: 'median', value: 'median'},
-                { label: 'min', value: 'min'},
+                { label: 'count', value: 'count' },
+                { label: 'first', value: 'first' },
+                { label: 'last', value: 'last' },
+                { label: 'size', value: 'size' },
+                { label: 'std', value: 'std' },
+                { label: 'sum', value: 'sum' },
+                { label: 'max', value: 'max' },
+                { label: 'mean', value: 'mean' },
+                { label: 'median', value: 'median' },
+                { label: 'min', value: 'min' },
+                { label: 'quantile', value: 'quantile' },
             ]
         }
 
@@ -150,7 +153,7 @@ define([
                 $(this._wrapSelector('#vp_gbAdvanced')).trigger('change');
             }
             $(this._wrapSelector('#vp_gbAllocateTo')).val(allocateTo);
-            $(this._wrapSelector('#vp_gbResetIndex')).prop('checked', resetIndex);
+            $(this._wrapSelector('#vp_gbResetIndex')).val(resetIndex?'yes':'no');
 
             $(this._wrapSelector('.vp-gb-adv-box')).html(advPageDom);
             
@@ -298,7 +301,7 @@ define([
             // groupby column
             page.appendLine('<div>');
             page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_gbBy', 'vp-orange-text wp80', 'Groupby');
-            page.appendFormatLine('<input type="text" id="{0}" disabled/>', 'vp_gbBy');
+            page.appendFormatLine('<input type="text" id="{0}" placeholder="{1}" disabled/>', 'vp_gbBy', 'Groupby coluns');
             page.appendFormatLine('<button id="{0}" class="{1}">{2}</button>', 'vp_gbBySelect', 'vp-button wp50', 'Edit');
             page.appendFormatLine('<label style="display: none;"><input type="checkbox" id="{0}"/><span>{1}</span></label>', 'vp_gbByGrouper', 'Grouper');
             page.appendFormatLine('<div class="{0}" style="display:none;">', 'vp-gb-by-grouper-box');
@@ -311,11 +314,20 @@ define([
             page.appendLine('</select>');
             page.appendLine('</div>'); // by-grouper-box
             page.appendLine('</div>');
-            page.appendLine('<hr style="margin: 10px 0;"/>');
+            // Reset index
+            // page.appendFormatLine('<label><input type="checkbox" id="{0}"/><span>{1}</span></label>', 'vp_gbResetIndex', 'Reset index');
+            page.appendLine('<div>');
+            page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_gbResetIndex', 'wp80', 'Reset Index');
+            page.appendFormatLine('<select id="{0}">', 'vp_gbResetIndex');
+            page.appendFormatLine('<option value="{0}">{1}</option>', 'no', 'No');
+            page.appendFormatLine('<option value="{0}">{1}</option>', 'yes', 'Yes');
+            page.appendLine('</select>');
+            page.appendLine('</div>');
+            page.appendLine('<hr style="margin: 5px 0;"/>');
             // display column
             page.appendLine('<div>');
             page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_gbDisplay', 'wp80', 'Columns');
-            page.appendFormatLine('<input type="text" id="{0}" disabled>', 'vp_gbDisplay');
+            page.appendFormatLine('<input type="text" id="{0}" placeholder="{1}" disabled>', 'vp_gbDisplay', 'Display columns');
             page.appendFormatLine('<button id="{0}" class="{1}">{2}</button>', 'vp_gbDisplaySelect', 'vp-button wp50', 'Edit');
             page.appendLine('</div>');
             // method
@@ -337,12 +349,12 @@ define([
             page.appendFormatLine('<button id="{0}" class="{1}">{2}</button>', 'vp_gbAdvAdd', 'vp-button', '+ Add');
             page.appendLine('</div>'); // end of adv-box
 
-            page.appendLine('<hr style="margin: 10px 0;"/>');
+            page.appendLine('<hr style="margin: 5px 0;"/>');
             // Allocate to
             page.appendLine('<div>');
             page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_gbAllocateTo', 'wp80', 'Allocate to');
             page.appendFormatLine('<input type="text" id="{0}" placeholder="{1}"/>', 'vp_gbAllocateTo', 'New variable name');
-            page.appendFormatLine('<label><input type="checkbox" id="{0}"/><span>{1}</span></label>', 'vp_gbResetIndex', 'Reset index');
+            
             page.appendLine('</div>');
             
             page.appendLine('</div>'); // end of df-box
@@ -410,17 +422,20 @@ define([
             var page = new sb.StringBuilder();
             page.appendFormatLine('<div class="{0}">', 'vp-gb-adv-item');
             // target columns
-            page.appendFormatLine('<input type="text" class="{0}" placeholder="{1}" disabled/>', 'vp-gb-adv-col', 'Column list');
+            page.appendFormatLine('<input type="text" class="{0}" placeholder="{1}" title="{2}" disabled/>'
+                                , 'vp-gb-adv-col', 'Column list', 'Apply All columns, if not selected');
             page.appendFormatLine('<button class="{0} {1}">{2}</button>', 'vp-gb-adv-col-selector', 'vp-button wp50', 'Edit');
             // method select
             page.appendFormatLine('<select class="{0}">', 'vp-gb-adv-method-selector');
+            var defaultMethod = '';
+            page.appendFormatLine('<option value="{0}">{1}</option>', '', 'Select method type');
+            page.appendFormatLine('<option value="{0}">{1}</option>', 'typing', 'Typing');
             this.methodList.forEach(method => {
                 page.appendFormatLine('<option value="{0}">{1}</option>', method.value, method.label);
             });
-            page.appendFormatLine('<option value="{0}">{1}</option>', 'typing', 'Typing');
             page.appendLine('</select>');
             page.appendFormatLine('<div class="{0}" style="display: none;">', 'vp-gb-adv-method-box');
-            page.appendFormatLine('<input type="text" class="{0}" placeholder="{1}" value="{2}"/>', 'vp-gb-adv-method', 'Type function name', "'" + this.methodList[0].value + "'");
+            page.appendFormatLine('<input type="text" class="{0}" placeholder="{1}" value="{2}"/>', 'vp-gb-adv-method', 'Type function name', "'" + defaultMethod + "'");
             // page.appendFormatLine('<i class="fa fa-search {0}"></i>', 'vp-gb-adv-method-return');
             page.appendFormatLine('<img src="{0}" class="{1}" title="{2}">'
                                 , '/nbextensions/visualpython/resource/arrow_left.svg', 'vp-gb-adv-method-return', 'Return to select method');
@@ -688,7 +703,6 @@ define([
             $(document).on('change', this._wrapSelector('#vp_gbDisplay'), function(event) {
                 var colList = event.colList;
                 that.state.display = colList;
-                console.log('display', colList);
             });
 
             // display select button event
@@ -732,7 +746,7 @@ define([
             
             // reset index checkbox event
             $(document).on('change', this._wrapSelector('#vp_gbResetIndex'), function() {
-                that.state.resetIndex = $(this).prop('checked');
+                that.state.resetIndex = $(this).val() == 'yes';
             });
             
             //====================================================================
@@ -772,6 +786,7 @@ define([
                 if (method == 'typing') {
                     // change it to typing input
                     $(parentDiv).find('.vp-gb-adv-method-selector').hide();
+                    $(parentDiv).find('.vp-gb-adv-method').val('');
                     $(parentDiv).find('.vp-gb-adv-method-box').show();
                 } else {
                     $(parentDiv).find('.vp-gb-adv-method').val(vpCommon.formatString("'{0}'", method));
@@ -780,7 +795,7 @@ define([
 
             // return to selecting method
             $(document).on('click', this._wrapSelector('.vp-gb-adv-method-return'), function() {
-                var defaultValue = vpCommon.formatString("'{0}'", that.methodList[0].value);
+                var defaultValue = '';
                 var parentDiv = $(this).parent().parent();
                 $(parentDiv).find('.vp-gb-adv-method-selector').val(defaultValue);
                 $(parentDiv).find('.vp-gb-adv-method').val(defaultValue);
@@ -798,9 +813,15 @@ define([
 
             // edit columns naming
             $(document).on('click', this._wrapSelector('.vp-gb-adv-naming-selector'), function() {
-                var columns = $(this).parent().find('.vp-gb-adv-col').data('list');
-                var method = $(this).parent().find('.vp-gb-adv-method').val();
-                that.openNamingPopup($(this).parent().find('.vp-gb-adv-naming'), columns, method);
+                var parentDiv = $(this).parent();
+                var columns = $(parentDiv).find('.vp-gb-adv-col').data('list');
+                var method = $(parentDiv).find('.vp-gb-adv-method').val();
+                if (!method || method == '' || method == "''") {
+                    // set focus on selecting method tag
+                    $(parentDiv).find('.vp-gb-adv-method-selector').focus();
+                    return;
+                }
+                that.openNamingPopup($(parentDiv).find('.vp-gb-adv-naming'), columns, method);
             });
 
             // delete advanced item
@@ -1020,6 +1041,9 @@ define([
                         var advColumns = $(advItemTags[i]).find('.vp-gb-adv-col').data('list');
                         var advMethod = $(advItemTags[i]).find('.vp-gb-adv-method').val();
                         var advNaming = $(advItemTags[i]).find('.vp-gb-adv-naming').data('dict');
+                        if (!advMethod || advMethod == '' || advMethod == "''") {
+                            continue;
+                        }
                         if (advColumns && advColumns.length > 0) {
                             advColumns.forEach(col => {
                                 var naming = advNaming[col];
