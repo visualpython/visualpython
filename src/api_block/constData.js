@@ -345,7 +345,7 @@ define([
 
     const STR_UNTITLED = 'Untitled';
     const STR_TEXT_BLOCK_MARKDOWN_FUNCID = 'com_markdown';
-    const STR_SAMPLE_TEXT = 'Sample Text';
+    const STR_SAMPLE_TEXT = ''; //'Sample Text';
 
     /** ---------------------------------------- const CSS id String ------------------------------------------ */
     const VP_ID_PREFIX = '#';
@@ -739,46 +739,117 @@ define([
     // const WHILE_OPERATOR_ARG4 = ['none', '==' ,'!=', '<', '>', '>=', '<=', 'and', 'or', 'in','not in'];
     // const WHILE_OPERATOR_ARG6 = ['==' ,'!=', '<', '>', '>=', '<=', 'and', 'or', 'in','not in'];
 
+    /**
+     * APPS menu configurations
+     * 
+     * key: {
+     *  label:  displayed name
+     *  tooltip:   used as tooltip (optional; default is same as label)
+     *  file:   file/module path
+     *  icon:   icon path
+     *  color:  1~4 / 0 as preparing(WIP)(optional; default is 0)
+     *  config: (optional)
+     *  {
+     *      title: popup title
+     *      width: popup size width(px, %)
+     *      height: popup size height(px, %)
+     *  }
+     * }
+     */
     const APPS_CONFIG = {
         'import': {
+            label: 'Import',
             file: '/nbextensions/visualpython/src/file_io/import.js',
+            icon: '/nbextensions/visualpython/resource/apps/apps_import.svg',
+            color: 1,
             config: { title: 'Import', width: '500px'}
         },
-        'markdown': {
-            file: '/nbextensions/visualpython/src/markdown/markdown.js',
-            config: { title: 'Markdown' }
-        },
-        'snippets': {
-            file: '/nbextensions/visualpython/src/file_io/udf.js',
-            config: { title: 'Snippets' }
-        },
-        'variable': {
-            file: '/nbextensions/visualpython/src/file_io/variables.js',
-            config: { title: 'Variables' }
-        },
         'file': {
+            label: 'File',
             file: '/nbextensions/visualpython/src/file_io/fileio.js',
+            icon: '/nbextensions/visualpython/resource/apps/apps_file.svg',
+            color: 1,
             config: { title: 'File', width: '500px' }
         },
-        'instance': {
-            file: '/nbextensions/visualpython/src/file_io/instance.js',
-            config: { title: 'Instance' }
+        'variable': {
+            label: 'Variable',
+            file: '/nbextensions/visualpython/src/file_io/variables.js',
+            icon: '/nbextensions/visualpython/resource/apps/apps_variable.svg',
+            color: 1,
+            config: { title: 'Variables' }
         },
-        'subset': {
-            file: 'nbextensions/visualpython/src/common/vpSubsetEditor',
+        'snippets': {
+            label: 'Snippets',
+            file: '/nbextensions/visualpython/src/file_io/udf.js',
+            icon: '/nbextensions/visualpython/resource/apps/apps_snippets.svg',
+            color: 1,
+            config: { title: 'Snippets' }
         },
         'frame': {
-            file: 'nbextensions/visualpython/src/common/vpFrameEditor'
+            label: 'Frame',
+            file: 'nbextensions/visualpython/src/common/vpFrameEditor',
+            icon: '/nbextensions/visualpython/resource/apps/apps_frame.svg',
+            color: 2,
+        },
+        'subset': {
+            label: 'Subset',
+            file: 'nbextensions/visualpython/src/common/vpSubsetEditor',
+            icon: '/nbextensions/visualpython/resource/apps/apps_subset.svg',
+            color: 2,
+        },
+        'instance': {
+            label: 'Instance',
+            file: '/nbextensions/visualpython/src/file_io/instance.js',
+            icon: '/nbextensions/visualpython/resource/apps/apps_instance.svg',
+            color: 2,
+            config: { title: 'Instance', width: '500px', height: '500px' }
+        },
+        'groupby': {
+            label: 'Groupby',
+            file: 'nbextensions/visualpython/src/common/vpGroupby',
+            icon: '/nbextensions/visualpython/resource/apps/apps_groupby.svg',
+            color: 2,
+            config: { width: '700px', height: '550px' }
+        },
+        'merge': {
+            label: 'Merge',
+            file: 'nbextensions/visualpython/src/common/vpMerge',
+            icon: '/nbextensions/visualpython/resource/apps/apps_merge.svg',
+            color: 3,
+        },
+        'reshape': {
+            label: 'Reshape',
+            tooltip: 'Pivot & Melt',
+            file: 'nbextensions/visualpython/src/common/vpReshape',
+            icon: '/nbextensions/visualpython/resource/apps/apps_reshape.svg',
+            color: 3,
         },
         'chart': {
+            label: 'Chart',
             file: '/nbextensions/visualpython/src/matplotlib/plot.js',
+            icon: '/nbextensions/visualpython/resource/apps/apps_chart.svg',
+            color: 3,
             config: { title: 'Chart', width: '600px' }
         },
-        'profiling': {
-            file: 'nbextensions/visualpython/src/common/vpProfiling'
+        'markdown': {
+            label: 'Markdown',
+            file: '/nbextensions/visualpython/src/markdown/markdown.js',
+            icon: '/nbextensions/visualpython/resource/apps/apps_markdown.svg',
+            color: 3,
+            config: { title: 'Markdown' }
         },
         'pdf': {
-            file: 'nbextensions/visualpython/src/common/vpPDF'
+            label: 'PDF',
+            file: 'nbextensions/visualpython/src/common/vpPDF',
+            icon: '/nbextensions/visualpython/resource/apps/apps_pymupdf.svg',
+            color: 4,
+        },
+        'profiling': {
+            label: 'Profiling',
+            tooltip: 'Pandas Profiling',
+            file: 'nbextensions/visualpython/src/common/vpProfiling',
+            icon: '/nbextensions/visualpython/resource/apps/apps_profiling.svg',
+            color: 4,
         }
     }
 

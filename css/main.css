@@ -104,14 +104,15 @@ body {
 }
 #vp-wrapper input[type=number] {
 	font-size: 14px;
-	line-height: 16px;
-	padding: 3px 7px;
-	color: var(--font-primary);
-	background: #FFFFFF;
-	outline: none;
-	border: 0.25px solid var(--border-gray-color);
-	box-sizing: border-box;
-	text-align: right;
+    line-height: 30px;
+    height: 30px;
+    padding: 3px 3px;
+    color: var(--font-primary);
+    background: #FFFFFF;
+    outline: var(--highlight-color);
+    border: 0.25px solid var(--border-gray-color);
+    box-sizing: border-box;
+    text-align: right;
 }
 #vp-wrapper input[type=number]::placeholder {
 	text-align: left;
@@ -137,6 +138,10 @@ input[type=number]::-webkit-inner-spin-button { margin-left: 5px; }
 	padding-left: 18px;
 	cursor: pointer;
 }
+#vp-wrapper input[type=checkbox]:disabled + label,
+#vp-wrapper label input[type=checkbox]:disabled + span {
+	color: var(--gray-color);
+}
 #vp-wrapper input[type=checkbox] + label::before,
 #vp-wrapper label input[type=checkbox] + span::before {
 	content: '';
@@ -161,6 +166,20 @@ input[type=number]::-webkit-inner-spin-button { margin-left: 5px; }
 	width: 15px;
 	height: 15px;
 	background: url(../resource/checkbox_square.svg);
+	background-size: 15px 15px;
+	background-repeat: no-repeat;
+	border: none;
+	box-sizing: border-box;
+}
+#vp-wrapper input[type=checkbox]:disabled + label::before,
+#vp-wrapper label input[type=checkbox]:disabled + span::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 15px;
+	height: 15px;
+	background: url(../resource/checkbox_gray.svg);
 	background-size: 15px 15px;
 	background-repeat: no-repeat;
 	border: none;

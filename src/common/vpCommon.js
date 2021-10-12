@@ -70,6 +70,21 @@ define([
     }
 
     /**
+     * append css for div
+     * @param {string} divSelector 
+     * @param {string} url 
+     */
+    var loadCssForDiv = function(divSelector, url) {
+        $('<link>')
+        .appendTo(divSelector)
+        .attr({
+            type: 'text/css', 
+            rel: 'stylesheet',
+            href: requirejs.toUrl(url)
+        });
+    }
+
+    /**
      * VisualPython container selector (jquery selector)
      * @returns vp top container selector
      */
@@ -144,6 +159,16 @@ define([
         }
         return code;
     }
+
+    /**
+     * Convert string(include html text) to safe string to display
+     * @param {String} text 
+     * @returns 
+     */
+    var safeString = function(text) {
+        return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
 
     /**
      * check duplicate variable name
@@ -337,6 +362,7 @@ define([
         loadHtml: loadHtml
         , getUUID: getUUID
         , loadCss: loadCss
+        , loadCssForDiv: loadCssForDiv
         , getVPContainer: getVPContainer
         , wrapSelector: wrapSelector
         , addVariable: addVariable
@@ -355,5 +381,6 @@ define([
         , kernelExecute: kernelExecute
         , cellExecute: cellExecute
         , convertToStr: convertToStr
+        , safeString: safeString
     };
 });

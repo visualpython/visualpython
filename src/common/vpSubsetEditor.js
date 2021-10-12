@@ -170,7 +170,7 @@ define([
 
             useCopy: false,
             toFrame: false,
-            subsetType: 'subset',   // subset / loc / iloc
+            subsetType: 'loc',   // subset / loc / iloc
 
             tabPage: 'subset',      // subset / data
 
@@ -633,8 +633,11 @@ define([
         tag.appendFormatLine('<div class="{0} {1} {2} {3}">', VP_DS_SELECT_BOX, 'left', VP_DS_DROPPABLE, 'no-selection');
         // get col data and make draggable items
         colList.forEach((col, idx) => {
+            // col.array parsing
+            var colInfo = vpCommon.safeString(col.array);
+            // render column box
             tag.appendFormatLine('<div class="{0} {1} {2}" data-idx="{3}" data-colname="{4}" data-dtype="{5}" data-code="{6}" title="{7}"><span>{8}</span></div>'
-                                , VP_DS_SELECT_ITEM, 'select-col', VP_DS_DRAGGABLE, col.location, col.value, col.dtype, col.code, col.label + ': \n' + col.array, col.label);
+                                , VP_DS_SELECT_ITEM, 'select-col', VP_DS_DRAGGABLE, col.location, col.value, col.dtype, col.code, col.label + ': \n' + colInfo, col.label);
         });
         tag.appendLine('</div>');  // VP_DS_SELECT_BOX
         return tag.toString();
@@ -1093,7 +1096,7 @@ define([
         if (this.pageThis) {
             $(this.pageThis.wrapSelector('#' + this.targetId)).val(code);
             $(this.pageThis.wrapSelector('#' + this.targetId)).trigger({
-                type: 'subset_run',
+                type: 'apps_run',
                 title: 'Subset',
                 code: code,
                 state: this.state,
@@ -1103,7 +1106,7 @@ define([
         } else {
             $(vpCommon.wrapSelector('#' + this.targetId)).val(code);
             $(vpCommon.wrapSelector('#' + this.targetId)).trigger({
-                type: 'subset_run',
+                type: 'apps_run',
                 title: 'Subset',
                 code: code,
                 state: this.state,
@@ -1394,9 +1397,8 @@ define([
             // that.loadSubsetType(that.state.dataType);
             
             if (that.state.dataType == 'DataFrame') {
-                var colCode = vpCommon.formatString('_vp_print(_vp_get_columns_list({0}))', varName);
                 // get result and load column list
-                kernelApi.executePython(colCode, function(result) {
+                kernelApi.getColumnList(varName, function(result) {
                     var colList = JSON.parse(result);
                     colList = colList.map(function(x) {
                         return {
@@ -1410,9 +1412,8 @@ define([
                     that.generateCode();
                 });
                 
-                var rowCode = vpCommon.formatString('_vp_print(_vp_get_rows_list({0}))', varName);
                 // get result and load column list
-                kernelApi.executePython(rowCode, function(result) {
+                kernelApi.getRowList(varName, function(result) {
                     var rowList = JSON.parse(result);
                     rowList = rowList.map(function(x) {
                         return {

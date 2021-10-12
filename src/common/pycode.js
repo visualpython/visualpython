@@ -25,7 +25,8 @@ define ([
 
     const PDF_IMPORT   = `import pandas as pd
 import fitz
-from nltk.tokenize import sent_tokenize`;
+import nltk
+nltk.download('punkt')`;
 
     const PDF_FUNC = `def vp_pdf_get_sentence(fname_lst):
     '''
@@ -43,14 +44,15 @@ from nltk.tokenize import sent_tokenize`;
                 text_lst = [block[4] for block in block_lst if block[6] == 0]
                 text = '\\n'.join(text_lst)
         
-                sentence_lst.extend([sentence for sentence in sent_tokenize(text)])
+                sentence_lst.extend([sentence for sentence in nltk.sent_tokenize(text)])
                 
             doc.close()
-        except:
+        except Exception as e:
+            print(e)
             continue
             
         df_doc = pd.DataFrame({
-            'fname': fname,
+            'fname': fname.split('/')[-1],
             'sentence': sentence_lst
         })
         df = pd.concat([df,df_doc])
