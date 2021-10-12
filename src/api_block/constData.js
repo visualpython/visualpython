@@ -345,7 +345,7 @@ define([
 
     const STR_UNTITLED = 'Untitled';
     const STR_TEXT_BLOCK_MARKDOWN_FUNCID = 'com_markdown';
-    const STR_SAMPLE_TEXT = 'Sample Text';
+    const STR_SAMPLE_TEXT = ''; //'Sample Text';
 
     /** ---------------------------------------- const CSS id String ------------------------------------------ */
     const VP_ID_PREFIX = '#';
