@@ -97,9 +97,11 @@ define([
             var colList = [];
             if (colTags.length > 0) {
                 for (var i = 0; i < colTags.length; i++) {
-                    var colValue = $(colTags[i]).data('code');
-                    if (colValue) {
-                        colList.push(colValue);
+                    var colName = $(colTags[i]).data('colname');
+                    var colDtype = $(colTags[i]).data('dtype');
+                    var colCode = $(colTags[i]).data('code');
+                    if (colCode) {
+                        colList.push({ name: colName, dtype: colDtype, code: colCode});                   
                     }
                 }
             }

@@ -139,12 +139,16 @@ define([
             } = state;
 
             $(this._wrapSelector('#vp_gbVariable')).val(variable);
-            $(this._wrapSelector('#vp_gbBy')).val(groupby.join(','));
+            $(this._wrapSelector('#vp_gbBy')).val(groupby.map(col=>col.code).join(','));
             $(this._wrapSelector('#vp_gbBy')).data('list', groupby);
-            $(this._wrapSelector('#vp_gbByGrouper')).prop('checked', useGrouper);
-            $(this._wrapSelector('#vp_gbByGrouperNumber')).val(grouperNumber);
-            $(this._wrapSelector('#vp_gbByGrouperPeriod')).val(grouperPeriod);
-            $(this._wrapSelector('#vp_gbDisplay')).val(display.join(','));
+            if (useGrouper) {
+                $(this._wrapSelector('#vp_gbByGrouper')).removeAttr('disabled');
+                $(this._wrapSelector('#vp_gbByGrouper')).prop('checked', useGrouper);
+                $(this._wrapSelector('#vp_gbByGrouperNumber')).val(grouperNumber);
+                $(this._wrapSelector('#vp_gbByGrouperPeriod')).val(grouperPeriod);
+                $(this._wrapSelector('.vp-gb-by-grouper-box')).show();
+            }
+            $(this._wrapSelector('#vp_gbDisplay')).val(display.map(col=>col.code).join(','));
             $(this._wrapSelector('#vp_gbDisplay')).data('list', display);
             $(this._wrapSelector('#vp_gbMethod')).val(method);
             $(this._wrapSelector('#vp_gbMethodSelector')).val(method);
@@ -303,7 +307,7 @@ define([
             page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_gbBy', 'vp-orange-text wp80', 'Groupby');
             page.appendFormatLine('<input type="text" id="{0}" placeholder="{1}" disabled/>', 'vp_gbBy', 'Groupby coluns');
             page.appendFormatLine('<button id="{0}" class="{1}">{2}</button>', 'vp_gbBySelect', 'vp-button wp50', 'Edit');
-            page.appendFormatLine('<label style="display: none;"><input type="checkbox" id="{0}"/><span>{1}</span></label>', 'vp_gbByGrouper', 'Grouper');
+            page.appendFormatLine('<label><input type="checkbox" id="{0}" disabled/><span>{1}</span></label>', 'vp_gbByGrouper', 'Grouper');
             page.appendFormatLine('<div class="{0}" style="display:none;">', 'vp-gb-by-grouper-box');
             page.appendFormatLine('<input type="number" id="{0}" class="{1}"/>', 'vp_gbByGrouperNumber', 'vp-gb-by-number');
             page.appendFormatLine('<select id="{0}">', 'vp_gbByGrouperPeriod');
@@ -531,7 +535,11 @@ define([
         openInnerPopup(targetSelector, title='Select columns', includeList=[]) {
             this.popup.type = 'column';
             this.popup.targetSelector = targetSelector;
-            this.renderColumnSelector(this.popup.targetSelector.data('list'), includeList);
+            var previousList = this.popup.targetSelector.data('list');
+            if (previousList) {
+                previousList = previousList.map(col => col.code)
+            }
+            this.renderColumnSelector(previousList, includeList);
     
             // set title
             $(this._wrapSelector('.' + APP_POPUP_BOX + ' .' + APP_TITLE)).text(title);
@@ -664,11 +672,12 @@ define([
             $(document).on('change', this._wrapSelector('#vp_gbBy'), function(event) {
                 var colList = event.colList;
                 that.state.groupby = colList;
-
-                if (colList && colList.length == 1) {
-                    $(that._wrapSelector('#vp_gbByGrouper')).parent().show();
+                
+                if (colList && colList.length == 1
+                    && colList[0].dtype.includes('datetime')) {
+                    $(that._wrapSelector('#vp_gbByGrouper')).removeAttr('disabled');
                 } else {
-                    $(that._wrapSelector('#vp_gbByGrouper')).parent().hide();
+                    $(that._wrapSelector('#vp_gbByGrouper')).attr('disabled', true);
                 }
             });
 
@@ -763,12 +772,26 @@ define([
                 var idx = $(that._wrapSelector('.vp-gb-adv-col')).index(this);
                 
                 // if there's change, reset display namings
-                var previousList = that.state.advColList[idx];
-                if (!previousList || colList.length !== previousList.length 
-                    || !colList.slice().sort().every((val, idx) => { return val === previousList.slice().sort()[idx]})) {
-                    that.state.advNamingList = []
-                    $(that._wrapSelector('.vp-gb-adv-naming')).val('');
-                    $(that._wrapSelector('.vp-gb-adv-naming')).data('dict', {});
+                // var previousList = that.state.advColList[idx];
+                // if (!previousList || colList.length !== previousList.length 
+                //     || !colList.map(col=>col.code).slice().sort().every((val, idx) => { 
+                //         return val === previousList.map(col=>col.code).slice().sort()[idx]
+                //     })) {
+                //     that.state.advNamingList = []
+                //     $(this).parent().find('.vp-gb-adv-naming').val('');
+                //     $(this).parent().find('.vp-gb-adv-naming').data('dict', {});
+                // }
+                var namingDict = that.state.advNamingList[idx];
+                if (namingDict) {
+                    // namingDict = namingDict.filter(key => colList.map(col=>col.code).includes(key));
+                    Object.keys(namingDict).forEach(key => {
+                        if (!colList.map(col=>col.code).includes(key)) {
+                            delete namingDict[key];
+                        }
+                    });
+                    that.state.advNamingList[idx] = namingDict;
+                    $(this).parent().find('.vp-gb-adv-naming').val(Object.values(namingDict).map(val => "'" + val +"'").join(','));
+                    $(this).parent().find('.vp-gb-adv-naming').data('dict', namingDict);
                 }
 
                 that.state.advColList[idx] = colList;
@@ -776,7 +799,11 @@ define([
 
             // edit target columns
             $(document).on('click', this._wrapSelector('.vp-gb-adv-col-selector'), function() {
-                that.openInnerPopup($(this).parent().find('.vp-gb-adv-col'), 'Select columns', that.state.display);
+                var includeList = that.state.display;
+                if (includeList && includeList.length > 0) {
+                    includeList = includeList.map(col => col.code);
+                }
+                that.openInnerPopup($(this).parent().find('.vp-gb-adv-col'), 'Select columns', includeList);
             });
 
             // select method
@@ -815,6 +842,9 @@ define([
             $(document).on('click', this._wrapSelector('.vp-gb-adv-naming-selector'), function() {
                 var parentDiv = $(this).parent();
                 var columns = $(parentDiv).find('.vp-gb-adv-col').data('list');
+                if (columns && columns.length > 0) {
+                    columns = columns.map(col => col.code);
+                }
                 var method = $(parentDiv).find('.vp-gb-adv-method').val();
                 if (!method || method == '' || method == "''") {
                     // set focus on selecting method tag
@@ -899,7 +929,7 @@ define([
                 if (that.popup.type == 'column') {
                     var colList = that.popup.ColSelector.getColumnList();
     
-                    $(that.popup.targetSelector).val(colList.join(','));
+                    $(that.popup.targetSelector).val(colList.map(col => { return col.code }).join(','));
                     $(that.popup.targetSelector).data('list', colList);
                     $(that.popup.targetSelector).trigger({ type: 'change', colList: colList });
                     that.closeInnerPopup();
@@ -911,13 +941,11 @@ define([
                         var key = $(tags[i]).data('code');
                         var val = $(tags[i]).val();
                         if (val && val != '') {
-                            dict[key] = "'" + val + "'";
+                            dict[key] = val;
                         }
                     }
 
-                    console.log(dict);
-
-                    $(that.popup.targetSelector).val(Object.values(dict).join(','));
+                    $(that.popup.targetSelector).val(Object.values(dict).map(val => "'" + val +"'").join(','));
                     $(that.popup.targetSelector).data('dict', dict);
                     $(that.popup.targetSelector).trigger({ type: 'change', namingDict: dict });
                     that.closeInnerPopup();
@@ -980,6 +1008,10 @@ define([
                 display, method, advanced, allocateTo, resetIndex 
             } = this.state;
 
+            // mapping colList states
+            groupby = groupby.map(col => col.code);
+            display = display.map(col => col.code);
+
             //====================================================================
             // Allocation
             //====================================================================
@@ -1000,9 +1032,8 @@ define([
             // Grouper
             if (useGrouper) {
                 byStr = vpCommon.formatString("pd.Grouper(key={0}, freq='{1}')", byStr, grouperNumber + grouperPeriod);
-            }
-
-            if (resetIndex == true) {
+            } else if (resetIndex == true) {
+                // as_index option cannot use with Grouper -> use .reset_index() at the end
                 byStr += ', as_index=False';
             }
             // variable & groupby columns & option
@@ -1039,6 +1070,9 @@ define([
                     }
                     for (var i = 0; i < advItemTags.length; i++) {
                         var advColumns = $(advItemTags[i]).find('.vp-gb-adv-col').data('list');
+                        if (advColumns && advColumns.length > 0) {
+                            advColumns = advColumns.map(col => col.code);
+                        }
                         var advMethod = $(advItemTags[i]).find('.vp-gb-adv-method').val();
                         var advNaming = $(advItemTags[i]).find('.vp-gb-adv-naming').data('dict');
                         if (!advMethod || advMethod == '' || advMethod == "''") {
@@ -1047,6 +1081,9 @@ define([
                         if (advColumns && advColumns.length > 0) {
                             advColumns.forEach(col => {
                                 var naming = advNaming[col];
+                                if (naming && naming != '') {
+                                    naming = "'" + naming + "'";
+                                }
                                 if (Object.keys(advColumnDict).includes(col)) {
                                     advColumnDict[col].push({ method: advMethod, naming: naming})
                                 } else {
@@ -1055,7 +1092,11 @@ define([
                             });
 
                         } else {
-                            advColumnDict['nothing'].push({ method: advMethod, naming: advNaming[advMethod]});
+                            var naming = advNaming[advMethod];
+                            if (naming && naming != '') {
+                                naming = "'" + naming + "'";
+                            }
+                            advColumnDict['nothing'].push({ method: advMethod, naming: naming});
                         }
                     }
 
@@ -1065,7 +1106,7 @@ define([
                         var noColList = advColumnDict['nothing'];
                         if (noColList.length == 1) {
                             // 1 method
-                            if (noColList[0].naming && noColList[0].naming != undefined) {
+                            if (noColList[0].naming && noColList[0].naming != '') {
                                 methodStr.appendFormat("[({0}, {1})]", noColList[0].naming, noColList[0].method);
                             } else {
                                 methodStr.appendFormat("{0}", noColList[0].method);
@@ -1074,7 +1115,7 @@ define([
                             // more than 1 method
                             var tmpList = [];
                             noColList.forEach(obj => {
-                                if (obj.naming && obj.naming != undefined) {
+                                if (obj.naming && obj.naming != '') {
                                     tmpList.push(vpCommon.formatString("({0}, {1})", obj.naming, obj.method));
                                 } else {
                                     tmpList.push(obj.method);
@@ -1106,7 +1147,7 @@ define([
                             var tmpList2 = [];
                             var useTuple = false;
                             colList.forEach(obj => {
-                                if (obj.naming && obj.naming != undefined) {
+                                if (obj.naming && obj.naming != '') {
                                     tmpList2.push(vpCommon.formatString("({0}, {1})", obj.naming, obj.method));
                                     useTuple = true;
                                 } else {
@@ -1128,6 +1169,11 @@ define([
                 // Method code generation
                 //================================================================
                 methodStr.appendFormat('{0}()', method);
+            }
+
+            // when using as_index option with Grouper, use .reset_index()
+            if (useGrouper && resetIndex) {
+                methodStr.append('.reset_index()');
             }
             // display columns
             code.appendFormat('{0}.{1}', colStr, methodStr.toString());
