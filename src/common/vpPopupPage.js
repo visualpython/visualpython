@@ -252,10 +252,11 @@ define([
 
         // click other
         $(document).on('click.' + this.uuid, function(evt) {
-            if (!$(evt.target).hasClass('.' + VP_PP_BUTTON_DETAIL)) {
+            if (!$(evt.target).hasClass(VP_PP_BUTTON_DETAIL)) {
                 $(that.wrapSelector('.' + VP_PP_DETAIL_BOX)).hide();
             }
-            if (!$(evt.target).hasClass('.' + VP_PP_BUTTON_PREVIEW)
+            if (!$(evt.target).hasClass(VP_PP_BUTTON_PREVIEW)
+                && !$(evt.target).hasClass(VP_PP_PREVIEW_BOX)
                 && $(that.wrapSelector('.' + VP_PP_PREVIEW_BOX)).has(evt.target).length === 0) {
                 that.closePreview();
             }

@@ -8,6 +8,7 @@ define([
 
     , './constData.js'
     , './blockContainer.js'
+    , './createAppsBtn.js'
     , './createBlockBtn.js'
     , './createApiBtn.js'
     , './createGroup.js'
@@ -17,7 +18,7 @@ define([
     // TEST: File Navigation
     , 'nbextensions/visualpython/src/common/vpFileNavigation'
 ], function ( $, vpCommon, vpConst, vpContainer, 
-              api, constData, blockContainer, createBlockBtn, createApiBtn, createGroup, api_list,
+              api, constData, blockContainer, createAppsBtn, createBlockBtn, createApiBtn, createGroup, api_list,
               apiBlockMenuInit
               // TEST: File Navigation
               , FileNavigation
@@ -77,6 +78,7 @@ define([
             , APPS_CONFIG } = constData;
 
     const BlockContainer = blockContainer;
+    const CreateAppsBtn = createAppsBtn;
     const CreateBlockBtn = createBlockBtn;
     const CreateApiBtn = createApiBtn;
     const CreateGroup = createGroup;
@@ -124,6 +126,17 @@ define([
          */
         var blockContainer = new BlockContainer();
         blockContainer.setImportPackageThis(apiBlockPackage);
+
+        /** Apps menu 생성 */
+        var appsList = [
+            'import', 'file', 'variable', 'snippets', 'frame', 'subset', 'instance', 'groupby',
+            'merge', 'reshape', 'chart', 'markdown', 'pdf', 'profiling'
+        ];
+        appsList.forEach(menu => {
+            var app = new CreateAppsBtn(blockContainer, menu);
+            $(vpCommon.wrapSelector('.vp-apiblock-menu-apps-grid')).append(app.render());
+            app.bindEvent();
+        });
 
         /** Logic에 블럭 그룹 생성 */
         var createLogicGroupArray = Object.values(BLOCK_GROUP_TYPE);
@@ -239,51 +252,46 @@ define([
 
         /** Apps Menu item click */
         /** Apps Menu item click */
-        $(document).on(STR_CLICK,'.vp-apiblock-menu-apps-item', function() {
-            var menu = $(this).attr('data-menu');
+        // $(document).on(STR_CLICK,'.vp-apiblock-menu-apps-item', function() {
+        //     var menu = $(this).attr('data-menu');
 
-            var { file, config } = APPS_CONFIG[menu];
-            if (config == undefined) {
-                config = {}
-            }
+        //     var { file, config } = APPS_CONFIG[menu];
+        //     if (config == undefined) {
+        //         config = {}
+        //     }
 
-            switch (menu)
-            {
-                case 'markdown':
-                    // blockContainer.createAppsPage('/nbextensions/visualpython/src/markdown/markdown.js', {
-                    //     title: 'Markdown'
-                    // }, function(funcJS) {
-                    //     funcJS.bindOptionEventForPopup();
-                    // });
-                    blockContainer.createTextBlock();
-                    break;
-                case 'import':
-                case 'snippets':
-                case 'variable':
-                case 'file':
-                case 'instance':
-                case 'subset':
-                case 'frame':
-                case 'chart':
-                case 'profiling':
-                case 'pdf':
-                    blockContainer.setSelectBlock(null);
-                    blockContainer.createAppsPage(menu, file, config);
-                    break;
-                case 'merge':
-                    // TODO: Merge
-                    break;
-                case 'groupby':
-                    // TODO: Groupby
-                    break;
-                case 'reshape':
-                    // TODO: Reshape
-                    break;
-                case 'timeseries':
-                    // TODO: TimeSeries
-                    break;
-            }
-        });
+        //     switch (menu)
+        //     {
+        //         case 'markdown':
+        //             // blockContainer.createAppsPage('/nbextensions/visualpython/src/markdown/markdown.js', {
+        //             //     title: 'Markdown'
+        //             // }, function(funcJS) {
+        //             //     funcJS.bindOptionEventForPopup();
+        //             // });
+        //             blockContainer.createTextBlock();
+        //             break;
+        //         case 'import':
+        //         case 'snippets':
+        //         case 'variable':
+        //         case 'file':
+        //         case 'instance':
+        //         case 'subset':
+        //         case 'frame':
+        //         case 'chart':
+        //         case 'profiling':
+        //         case 'pdf':
+        //         case 'groupby':
+        //             blockContainer.setSelectBlock(null);
+        //             blockContainer.createAppsPage(menu, file, config);
+        //             break;
+        //         case 'merge':
+        //             // TODO: Merge
+        //             break;
+        //         case 'reshape':
+        //             // TODO: Reshape
+        //             break;
+        //     }
+        // });
 
         $(document).on('popup_run', '#vp_appsCode', function(evt) {
             var code = evt.code;
@@ -380,7 +388,7 @@ define([
         });
 
         /** Apps Menu Apply event */
-        $(document).on('subset_run frame_run pdf_run', '#vp_appsCode', function(evt) {
+        $(document).on('apps_run', '#vp_appsCode', function(evt) {
             var code = evt.code;
             var title = evt.title;
             var state = evt.state;
@@ -579,27 +587,46 @@ define([
             blockContainer.setFocusedPageType(FOCUSED_PAGE_TYPE.OPTION);
         });
         
+        /** GLOBAL keyBoardManager */
+        window.vpKeyManager = {
+            keyCode : {
+                ctrlKey: 17,
+                cmdKey: 91,
+                shiftKey: 16,
+                altKey: 18,
+                enter: 13,
+                escKey: 27,
+                vKey: 86,
+                cKey: 67
+            },
+            keyCheck : {
+                ctrlKey: false,
+                shiftKey: false
+            }
+        };
+
         /** 블럭 복사하고 붙여넣는 기능 이벤트 바인딩 */
         $(document).ready(function() {
-            var ctrlDown = false,
-                ctrlKey = 17,
-                cmdKey = 91,
-                vKey = 86,
-                cKey = 67,
-                escKey = 27;
+            var { ctrlKey, shiftKey, cmdKey, vKey, cKey, escKey } = vpKeyManager.keyCode;
         
             $(document).keydown(function(e) {
                 if (e.keyCode == ctrlKey || e.keyCode == cmdKey) {
-                    ctrlDown = true;
+                    vpKeyManager.keyCheck.ctrlKey = true;
+                }
+                if (e.keyCode == shiftKey) {
+                    vpKeyManager.keyCheck.shiftKey = true;
                 }
             }).keyup(function(e) {
                 if (e.keyCode == ctrlKey || e.keyCode == cmdKey) {
-                    ctrlDown = false;
-                    console.log(blockContainer.getFocusedPageType());
+                    vpKeyManager.keyCheck.ctrlKey = false;
+                }
+                if (e.keyCode == shiftKey) {
+                    vpKeyManager.keyCheck.shiftKey = false;
                 }
                 if (e.keyCode == escKey) {
                     // close popup on esc
-                    if (blockContainer.getFocusedPageType() != FOCUSED_PAGE_TYPE.NULL) {
+                    if (blockContainer.getFocusedPageType() != FOCUSED_PAGE_TYPE.NULL
+                        && blockContainer.appsMenu) {
                         blockContainer.appsMenu.close();
                     }
                 }

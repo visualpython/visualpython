@@ -141,6 +141,9 @@
 .vp-apiblock-menu-apps-item.line3 {
     background: #EB773C;
 }
+.vp-apiblock-menu-apps-item.line4 {
+    background: #E56139;
+}
 .vp-apiblock-menu-apps-item.preparing {
     background: var(--gray-color);
 }

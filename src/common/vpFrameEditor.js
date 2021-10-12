@@ -1198,7 +1198,7 @@ define([
         if (this.pageThis) {
             $(this.pageThis.wrapSelector('#' + this.targetId)).val(code);
             $(this.pageThis.wrapSelector('#' + this.targetId)).trigger({
-                type: 'frame_run',
+                type: 'apps_run',
                 title: 'Frame',
                 code: code,
                 state: this.state,
@@ -1208,7 +1208,7 @@ define([
         } else {
             $(vpCommon.wrapSelector('#' + this.targetId)).val(code);
             $(vpCommon.wrapSelector('#' + this.targetId)).trigger({
-                type: 'frame_run',
+                type: 'apps_run',
                 title: 'Frame',
                 code: code,
                 state: this.state,
@@ -1674,6 +1674,7 @@ define([
                 $(that.wrapSelector('.' + VP_FE_DETAIL_BOX)).hide();
             }
             if (!$(evt.target).hasClass(VP_FE_BUTTON_PREVIEW)
+                && !$(evt.target).hasClass(VP_FE_PREVIEW_BOX)
                 && $(that.wrapSelector('.' + VP_FE_PREVIEW_BOX)).has(evt.target).length === 0) {
                 that.closePreview();
             }

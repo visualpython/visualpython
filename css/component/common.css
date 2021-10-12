@@ -63,3 +63,22 @@
     height: 15px;
     border-right: 1px solid var(--font-primary);
 }
+
+/* Width selector */
+.wp50 {
+    width: 50px;
+}
+.wp80 {
+    width: 80px;
+}
+.wp100 {
+    width: 100px;
+}
+.wp120 {
+    width: 120px;
+}
+
+/* font selector */
+.fb {
+    font-weight: bold;
+}
