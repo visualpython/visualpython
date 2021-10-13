@@ -66,6 +66,11 @@ define([
         bindEvent() {
             var blockContainer = this.blockContainerThis;
 
+            // block preparing apps
+            if (this.colorLevel == 0) {
+                return;
+            }
+
             $(this.dom).on('click', function() {
                 var menu = $(this).attr('data-menu');
 

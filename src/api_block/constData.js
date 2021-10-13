@@ -813,16 +813,17 @@ define([
         },
         'merge': {
             label: 'Merge',
+            tooltip: 'Work In Progress', // FIXME:
             file: 'nbextensions/visualpython/src/common/vpMerge',
             icon: '/nbextensions/visualpython/resource/apps/apps_merge.svg',
-            color: 3,
+            color: 0,
         },
         'reshape': {
             label: 'Reshape',
-            tooltip: 'Pivot & Melt',
+            tooltip: 'Work In Progress', // FIXME: 'Pivot & Melt',
             file: 'nbextensions/visualpython/src/common/vpReshape',
             icon: '/nbextensions/visualpython/resource/apps/apps_reshape.svg',
-            color: 3,
+            color: 0,
         },
         'chart': {
             label: 'Chart',
