@@ -305,7 +305,7 @@ define([
             // groupby column
             page.appendLine('<div>');
             page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_gbBy', 'vp-orange-text wp80', 'Groupby');
-            page.appendFormatLine('<input type="text" id="{0}" placeholder="{1}" disabled/>', 'vp_gbBy', 'Groupby coluns');
+            page.appendFormatLine('<input type="text" id="{0}" placeholder="{1}" disabled/>', 'vp_gbBy', 'Groupby columns');
             page.appendFormatLine('<button id="{0}" class="{1}">{2}</button>', 'vp_gbBySelect', 'vp-button wp50', 'Edit');
             page.appendFormatLine('<label><input type="checkbox" id="{0}" disabled/><span>{1}</span></label>', 'vp_gbByGrouper', 'Grouper');
             page.appendFormatLine('<div class="{0}" style="display:none;">', 'vp-gb-by-grouper-box');
