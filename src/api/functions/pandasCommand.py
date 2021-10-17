@@ -47,6 +47,26 @@ def _vp_get_columns_list(df):
         colList.append(cInfo)
     return colList
 
+def _vp_get_multi_columns_list(dfs = []):
+    """
+    Get Columns List with Detail Information of multiple dataframe
+    """
+    common_set = {}
+    for df in dfs:
+        common_set = common_set & set(df)
+    common_columns = list(common_set)
+
+    colList = []
+    for i, c in enumerate(common_columns):
+        cInfo = { 'label': c, 'value': c, 'dtype': str(dfs[0][c].dtype), 'location': i }
+        # value
+        if type(c).__name__ == 'str':
+            cInfo['value'] = "'{}'".format(c)
+        elif type(c).__name__ == 'Timestamp':
+            cInfo['value'] = str(c)
+        colList.append(cInfo)
+    return colList
+
 def _vp_get_column_category(df, col):
     """
     Get Column's Uniq values(Categrical data only, limit 20)

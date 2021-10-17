@@ -49,38 +49,60 @@ define([
         /**
          * 
          * @param {string} frameSelector        query for parent component
-         * @param {string} dataframe            dataframe variable name
+         * @param {Object} config  dataframe:[], selectedList=[], includeList=[]
+         * @param {Array<string>} dataframe            dataframe variable name
          * @param {Array<string>} selectedList  
          * @param {Array<string>} includeList   
          */
-        constructor(frameSelector, dataframe, selectedList=[], includeList=[]) {
+        constructor(frameSelector, config) {
             this.uuid = 'u' + vpCommon.getUUID();
             this.frameSelector = frameSelector;
+
+            // configuration
+            var { dataframe, selectedList=[], includeList=[] } = config;
             this.dataframe = dataframe;
             this.selectedList = selectedList;
             this.includeList = includeList;
+
             this.columnList = [];
             this.pointer = { start: -1, end: -1 };
 
             var that = this;
-            kernelApi.getColumnList(dataframe, function(result) {
-                var colList = JSON.parse(result);
-                colList = colList.map(function(x) {
-                    return {
-                        ...x,
-                        value: x.label,
-                        code: x.value
-                    };
+            if (dataframe && dataframe.length > 1) {
+                kernelApi.getCommonColumnList(dataframe, function(result) {
+                    var colList = JSON.parse(result);
+                    colList = colList.map(function(x) {
+                        return {
+                            ...x,
+                            value: x.label,
+                            code: x.value
+                        };
+                    });
+                    if (includeList && includeList.length > 0) {
+                        that.columnList = colList.filter(col => includeList.includes(col.code));
+                    } else {
+                        that.columnList = colList;
+                    }
+                    that.load();
                 });
-                if (includeList && includeList.length > 0) {
-                    that.columnList = colList.filter(col => includeList.includes(col.code));
-                } else {
-                    that.columnList = colList;
-                }
-                that.load();
-                that.bindEvent();
-                that.bindDraggable();
-            });
+            } else {
+                kernelApi.getColumnList(dataframe, function(result) {
+                    var colList = JSON.parse(result);
+                    colList = colList.map(function(x) {
+                        return {
+                            ...x,
+                            value: x.label,
+                            code: x.value
+                        };
+                    });
+                    if (includeList && includeList.length > 0) {
+                        that.columnList = colList.filter(col => includeList.includes(col.code));
+                    } else {
+                        that.columnList = colList;
+                    }
+                    that.load();
+                });
+            }
         }
 
         _wrapSelector(query='') {
@@ -90,6 +112,8 @@ define([
         load() {
             $(vpCommon.wrapSelector(this.frameSelector)).html(this.render());
             vpCommon.loadCssForDiv(this._wrapSelector(), Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH + 'common/component/columnSelector.css');
+            this.bindEvent();
+            this.bindDraggable();
         }
 
         getColumnList() {

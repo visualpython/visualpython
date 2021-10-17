@@ -485,7 +485,10 @@ define([
          * @param {Array<string>} includeList columns to include 
          */
         renderColumnSelector(previousList, includeList) {
-            this.popup.ColSelector = new vpColumnSelector(this._wrapSelector('.' + APP_POPUP_BODY), this.state.variable, previousList, includeList);
+            this.popup.ColSelector = new vpColumnSelector(
+                this._wrapSelector('.' + APP_POPUP_BODY), 
+                { dataframe: [this.state.variable], selectedList: previousList, includeList: includeList }
+            );
         }
 
         /**
