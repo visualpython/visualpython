@@ -358,7 +358,6 @@ define([
             page.appendLine('<div>');
             page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_gbAllocateTo', 'wp80', 'Allocate to');
             page.appendFormatLine('<input type="text" id="{0}" placeholder="{1}"/>', 'vp_gbAllocateTo', 'New variable name');
-            
             page.appendLine('</div>');
             
             page.appendLine('</div>'); // end of df-box
@@ -663,6 +662,8 @@ define([
                     $(that._wrapSelector('#vp_gbBy')).val('');
                     $(that._wrapSelector('#vp_gbDisplay')).val('');
                     that.state.variable = newVal;
+                    that.state.groupby = [];
+                    that.state.display = [];
                 }
             });
 

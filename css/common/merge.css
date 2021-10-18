@@ -2,3 +2,26 @@
     width: 700px;
     height: 550px;
 }
+
+.vp-mg-container .vp-pp-body {
+    overflow: hidden;
+}
+
+.vp-mg-df-box {
+    display: grid;
+    grid-template-rows: 30px;
+    grid-row-gap: 5px;
+}
+
+.vp-mg-df-refresh {
+    display: inline-block;
+    cursor: pointer;
+    margin-left: 5px;
+}
+.vp-mg-df-box label {
+    font-weight: bold;
+}
+.vp-mg-df-box select,
+.vp-mg-df-box input {
+    width: 160px;
+}

@@ -46,7 +46,9 @@
     background: #EF6B10;
 }
 .vp-button.disabled,
-.vp-button.disabled:hover {
+.vp-button.disabled:hover,
+.vp-button:disabled,
+.vp-button:disabled:hover {
     background: #E5E5E5;
     border: 0px;
     border: 0.25px solid #E4E4E4;

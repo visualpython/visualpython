@@ -51,9 +51,12 @@ def _vp_get_multi_columns_list(dfs = []):
     """
     Get Columns List with Detail Information of multiple dataframe
     """
-    common_set = {}
-    for df in dfs:
-        common_set = common_set & set(df)
+    if len(dfs) <= 0:
+        return []
+
+    common_set = set(dfs[0].columns)
+    for df in dfs[1:]:
+        common_set = common_set & set(df.columns)
     common_columns = list(common_set)
 
     colList = []
