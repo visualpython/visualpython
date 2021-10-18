@@ -1,27 +1,27 @@
-.vp-mg-container {
+.vp-bd-container {
     width: 700px;
     height: 550px;
 }
 
-.vp-mg-container .vp-pp-body {
+.vp-bd-container .vp-pp-body {
     overflow: hidden;
 }
 
-.vp-mg-df-box {
+.vp-bd-df-box {
     display: grid;
     grid-template-rows: 30px;
     grid-row-gap: 5px;
 }
 
-.vp-mg-df-refresh {
+.vp-bd-df-refresh {
     display: inline-block;
     cursor: pointer;
     margin-left: 5px;
 }
-.vp-mg-df-box label {
+.vp-bd-df-box label {
     font-weight: bold;
 }
-.vp-mg-df-box select,
-.vp-mg-df-box input {
+.vp-bd-df-box select,
+.vp-bd-df-box input {
     width: 160px;
 }

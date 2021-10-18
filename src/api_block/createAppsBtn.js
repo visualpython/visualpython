@@ -95,7 +95,7 @@ define([
                     case 'profiling':
                     case 'pdf':
                     case 'groupby':
-                    case 'merge':
+                    case 'bind':
                     case 'reshape':
                         blockContainer.setSelectBlock(null);
                         blockContainer.createAppsPage(menu, file, config);

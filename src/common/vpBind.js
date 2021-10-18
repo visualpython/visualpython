@@ -1,9 +1,9 @@
 /*
  *    Project Name    : Visual Python
  *    Description     : GUI-based Python code generator
- *    File Name       : vpMerge.js
+ *    File Name       : vpBind.js
  *    Author          : Black Logic
- *    Note            : Merge app
+ *    Note            : Bind app
  *    License         : GNU GPLv3 with Visual Python special exception
  *    Date            : 2021. 10. 05
  *    Change Date     :
@@ -55,9 +55,9 @@ define([
 
 
     //========================================================================
-    // [CLASS] Merge
+    // [CLASS] Bind
     //========================================================================
-    class Merge {
+    class Bind {
         /**
          * constructor
          * @param {object} pageThis
@@ -100,30 +100,30 @@ define([
                 left, right, on, how, allocateTo, resetIndex
             } = state;
 
-            $(this._wrapSelector('#vp_mgLeftDataframe')).val(left.variable);
+            $(this._wrapSelector('#vp_bdLeftDataframe')).val(left.variable);
             $(this._wrapSelector('#vp_mpRightDataframe')).val(right.variable);
 
-            $(this._wrapSelector('#vp_mgHow')).val(how);
-            this._loadColumnSelectorInput(this._wrapSelector('#vp_mgOn'), on);
+            $(this._wrapSelector('#vp_bdHow')).val(how);
+            this._loadColumnSelectorInput(this._wrapSelector('#vp_bdOn'), on);
             if (on && on.length > 0) {
-                $(this._wrapSelector('#vp_mgLeftOnSelect')).attr('disabled', true);
-                $(this._wrapSelector('#vp_mgRightOnSelect')).attr('disabled', true);
+                $(this._wrapSelector('#vp_bdLeftOnSelect')).attr('disabled', true);
+                $(this._wrapSelector('#vp_bdRightOnSelect')).attr('disabled', true);
             }
-            this._loadColumnSelectorInput(this._wrapSelector('#vp_mgLeftOn'), left.on);
-            this._loadColumnSelectorInput(this._wrapSelector('#vp_mgRightOn'), right.on);
+            this._loadColumnSelectorInput(this._wrapSelector('#vp_bdLeftOn'), left.on);
+            this._loadColumnSelectorInput(this._wrapSelector('#vp_bdRightOn'), right.on);
             if (left.on.length > 0 || right.on.length > 0) {
-                $(this._wrapSelector('#vp_mgOnSelect')).attr('disabled', true);
+                $(this._wrapSelector('#vp_bdOnSelect')).attr('disabled', true);
             }
 
-            $(this._wrapSelector('#vp_mgLeftIndex')).prop('checked', left.useIndex);
-            $(this._wrapSelector('#vp_mgRightIndex')).prop('checked', right.useIndex);
+            $(this._wrapSelector('#vp_bdLeftIndex')).prop('checked', left.useIndex);
+            $(this._wrapSelector('#vp_bdRightIndex')).prop('checked', right.useIndex);
 
-            $(this._wrapSelector('#vp_mgLeftSuffix')).val(left.suffix);
-            $(this._wrapSelector('#vp_mgRightSuffix')).val(right.suffix);
+            $(this._wrapSelector('#vp_bdLeftSuffix')).val(left.suffix);
+            $(this._wrapSelector('#vp_bdRightSuffix')).val(right.suffix);
 
-            $(this._wrapSelector('#vp_mgAllocateTo')).val(allocateTo);
+            $(this._wrapSelector('#vp_bdAllocateTo')).val(allocateTo);
 
-            $(this._wrapSelector('#vp_mgResetIndex')).prop('checked', resetIndex);
+            $(this._wrapSelector('#vp_bdResetIndex')).prop('checked', resetIndex);
         }
 
         _loadColumnSelectorInput(tag, colList) {
@@ -194,7 +194,7 @@ define([
             this.bindEvent();
             this.render();
             vpCommon.loadCssForDiv(this._wrapSelector(), Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH + 'common/popupPage.css');
-            vpCommon.loadCssForDiv(this._wrapSelector(), Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH + 'common/merge.css');
+            vpCommon.loadCssForDiv(this._wrapSelector(), Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH + 'common/bind.css');
 
             this.loadVariableList();
         }
@@ -202,14 +202,14 @@ define([
         render() {
             var page = new sb.StringBuilder();
             page.appendFormatLine('<div class="{0} {1}">', APP_PREFIX, this.uuid);
-            page.appendFormatLine('<div class="{0} {1}">', APP_CONTAINER, 'vp-mg-container');
+            page.appendFormatLine('<div class="{0} {1}">', APP_CONTAINER, 'vp-bd-container');
 
             // popup
             page.appendLine(this.renderInnerPopup());
 
             // title
             page.appendFormat('<div class="{0}">{1}</div>',
-                APP_TITLE, 'Merge');
+                APP_TITLE, 'Bind');
 
             // close button
             page.appendFormatLine('<div class="{0}"><img src="{1}"/></div>',
@@ -217,26 +217,26 @@ define([
 
             // body start
             page.appendFormatLine('<div class="{0}">', APP_BODY);
-            page.appendFormatLine('<div class="{0}">', 'vp-mg-df-box'); // df-box
+            page.appendFormatLine('<div class="{0}">', 'vp-bd-df-box'); // df-box
             // left dataframe
             page.appendLine('<div>');
-            page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_mgLeftDataframe', 'vp-orange-text wp100', 'Left Dataframe');
-            page.appendFormatLine('<select id="{0}">', 'vp_mgLeftDataframe');
+            page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_bdLeftDataframe', 'vp-orange-text wp100', 'Left Dataframe');
+            page.appendFormatLine('<select id="{0}">', 'vp_bdLeftDataframe');
             page.appendLine('</select>');
-            page.appendFormatLine('<div class="{0}" title="{1}"><img src="{2}"/></div>', 'vp-mg-df-refresh', 'Refresh all dataframe list', '/nbextensions/visualpython/resource/refresh.svg');
+            page.appendFormatLine('<div class="{0}" title="{1}"><img src="{2}"/></div>', 'vp-bd-df-refresh', 'Refresh all dataframe list', '/nbextensions/visualpython/resource/refresh.svg');
             page.appendLine('</div>');
             // right dataframe
             page.appendLine('<div>');
-            page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_mgRightDataframe', 'vp-orange-text wp100', 'Right Dataframe');
-            page.appendFormatLine('<select id="{0}">', 'vp_mgRightDataframe');
+            page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_bdRightDataframe', 'vp-orange-text wp100', 'Right Dataframe');
+            page.appendFormatLine('<select id="{0}">', 'vp_bdRightDataframe');
             page.appendLine('</select>');
             page.appendLine('</div>');
             // divider
             page.appendLine('<hr style="margin: 5px 0;"/>');
             // how
             page.appendLine('<div>');
-            page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_mgHow', 'wp100', 'How');
-            page.appendFormatLine('<select id="{0}">', 'vp_mgHow');
+            page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_bdHow', 'wp100', 'How');
+            page.appendFormatLine('<select id="{0}">', 'vp_bdHow');
             var savedHow = this.state.how;
             this.howList.forEach(how => {
                 page.appendFormatLine('<option value="{0}"{1}>{2}</option>', how.value, savedHow==how.value?' selected':'', how.label);
@@ -245,40 +245,40 @@ define([
             page.appendLine('</div>');
             // on
             page.appendLine('<div>');
-            page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_mgOn', 'wp100', 'On');
-            page.appendFormatLine('<input type="text" id="{0}" placeholder="{1}" disabled>', 'vp_mgOn', 'Merge key');
-            page.appendFormatLine('<button id="{0}" class="{1}">{2}</button>', 'vp_mgOnSelect', 'vp-button wp50', 'Edit');
+            page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_bdOn', 'wp100', 'On');
+            page.appendFormatLine('<input type="text" id="{0}" placeholder="{1}" disabled>', 'vp_bdOn', 'Merge key');
+            page.appendFormatLine('<button id="{0}" class="{1}">{2}</button>', 'vp_bdOnSelect', 'vp-button wp50', 'Edit');
             page.appendLine('</div>');
             // left on
             page.appendLine('<div>');
-            page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_mgLeftOn', 'wp100', 'Left on');
-            page.appendFormatLine('<input type="text" id="{0}" placeholder="{1}" disabled>', 'vp_mgLeftOn', 'Left key');
-            page.appendFormatLine('<button id="{0}" class="{1}">{2}</button>', 'vp_mgLeftOnSelect', 'vp-button wp50', 'Edit');
+            page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_bdLeftOn', 'wp100', 'Left on');
+            page.appendFormatLine('<input type="text" id="{0}" placeholder="{1}" disabled>', 'vp_bdLeftOn', 'Left key');
+            page.appendFormatLine('<button id="{0}" class="{1}">{2}</button>', 'vp_bdLeftOnSelect', 'vp-button wp50', 'Edit');
             // left use index
-            page.appendFormatLine('<label><input type="checkbox" id="{0}"/><span>{1}</span></label>', 'vp_mgRightIndex', 'use index');
+            page.appendFormatLine('<label><input type="checkbox" id="{0}"/><span>{1}</span></label>', 'vp_bdRightIndex', 'use index');
             page.appendLine('</div>');
             // right on
             page.appendLine('<div>');
-            page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_mgRightOn', 'wp100', 'Right on');
-            page.appendFormatLine('<input type="text" id="{0}" placeholder="{1}" disabled>', 'vp_mgRightOn', 'Right key');
-            page.appendFormatLine('<button id="{0}" class="{1}">{2}</button>', 'vp_mgRightOnSelect', 'vp-button wp50', 'Edit');
+            page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_bdRightOn', 'wp100', 'Right on');
+            page.appendFormatLine('<input type="text" id="{0}" placeholder="{1}" disabled>', 'vp_bdRightOn', 'Right key');
+            page.appendFormatLine('<button id="{0}" class="{1}">{2}</button>', 'vp_bdRightOnSelect', 'vp-button wp50', 'Edit');
             // right use index
-            page.appendFormatLine('<label><input type="checkbox" id="{0}"/><span>{1}</span></label>', 'vp_mgLeftIndex', 'use index');
+            page.appendFormatLine('<label><input type="checkbox" id="{0}"/><span>{1}</span></label>', 'vp_bdLeftIndex', 'use index');
             page.appendLine('</div>');
             // suffixes
             page.appendLine('<div>');
             page.appendFormatLine('<label class="{0}">{1}</label>', 'wp100', 'Suffixes');
-            page.appendFormatLine('<input type="text" id="{0}" placeholder="{1}"/>', 'vp_mgLeftSuffix', 'Left suffix');
-            page.appendFormatLine('<input type="text" id="{0}" placeholder="{1}"/>', 'vp_mgRightSuffix', 'Right suffix');
+            page.appendFormatLine('<input type="text" id="{0}" placeholder="{1}"/>', 'vp_bdLeftSuffix', 'Left suffix');
+            page.appendFormatLine('<input type="text" id="{0}" placeholder="{1}"/>', 'vp_bdRightSuffix', 'Right suffix');
             page.appendLine('</div>');
             // divider
             page.appendLine('<hr style="margin: 5px 0;"/>');
             // allocate to
             page.appendLine('<div>');
-            page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_mgAllocateTo', 'wp100', 'Allocate to');
-            page.appendFormatLine('<input type="text" id="{0}" placeholder="{1}"/>', 'vp_mgAllocateTo', 'New variable name');
+            page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_bdAllocateTo', 'wp100', 'Allocate to');
+            page.appendFormatLine('<input type="text" id="{0}" placeholder="{1}"/>', 'vp_bdAllocateTo', 'New variable name');
             // reset index
-            page.appendFormatLine('<label><input type="checkbox" id="{0}"/><span>{1}</span></label>', 'vp_mgResetIndex', 'reset index');
+            page.appendFormatLine('<label><input type="checkbox" id="{0}"/><span>{1}</span></label>', 'vp_bdResetIndex', 'reset index');
             
             page.appendLine('</div>');
             page.appendLine('</div>'); // end of df-box
@@ -417,18 +417,18 @@ define([
                     // get prevvalue
                     var prevValue = that.state.left.variable;
                     // replace
-                    $(that._wrapSelector('#vp_mgLeftDataframe')).replaceWith(function() {
-                        return that.renderVariableList('vp_mgLeftDataframe', varList, prevValue);
+                    $(that._wrapSelector('#vp_bdLeftDataframe')).replaceWith(function() {
+                        return that.renderVariableList('vp_bdLeftDataframe', varList, prevValue);
                     });
-                    $(that._wrapSelector('#vp_mgLeftDataframe')).trigger('change');
+                    $(that._wrapSelector('#vp_bdLeftDataframe')).trigger('change');
 
                     prevValue = that.state.right.variable;
-                    $(that._wrapSelector('#vp_mgRightDataframe')).replaceWith(function() {
-                        return that.renderVariableList('vp_mgRightDataframe', varList, prevValue);
+                    $(that._wrapSelector('#vp_bdRightDataframe')).replaceWith(function() {
+                        return that.renderVariableList('vp_bdRightDataframe', varList, prevValue);
                     });
-                    $(that._wrapSelector('#vp_mgRightDataframe')).trigger('change');
+                    $(that._wrapSelector('#vp_bdRightDataframe')).trigger('change');
                 } catch (ex) {
-                    console.log('Merge:', result);
+                    console.log('Bind:', result);
                 }
             });
         }
@@ -436,22 +436,22 @@ define([
         unbindEvent() {
             $(document).unbind(vpCommon.formatString(".{0} .{1}", this.uuid, APP_BODY));
 
-            $(document).off('change', this._wrapSelector('#vp_mgLeftDataframe'));
-            $(document).off('change', this._wrapSelector('#vp_mgRightDataframe'));
-            $(document).off('click', this._wrapSelector('.vp-mg-df-refresh'));
-            $(document).off('change', this._wrapSelector('#vp_mgHow'));
-            $(document).off('change', this._wrapSelector('#vp_mgOn'));
-            $(document).off('click', this._wrapSelector('#vp_mgOnSelect'));
-            $(document).off('change', this._wrapSelector('#vp_mgLeftOn'));
-            $(document).off('click', this._wrapSelector('#vp_mgLeftOnSelect'));
+            $(document).off('change', this._wrapSelector('#vp_bdLeftDataframe'));
+            $(document).off('change', this._wrapSelector('#vp_bdRightDataframe'));
+            $(document).off('click', this._wrapSelector('.vp-bd-df-refresh'));
+            $(document).off('change', this._wrapSelector('#vp_bdHow'));
+            $(document).off('change', this._wrapSelector('#vp_bdOn'));
+            $(document).off('click', this._wrapSelector('#vp_bdOnSelect'));
+            $(document).off('change', this._wrapSelector('#vp_bdLeftOn'));
+            $(document).off('click', this._wrapSelector('#vp_bdLeftOnSelect'));
             $(document).off('change', this._wrapSelector('#vp_gbLeftIndex'));
-            $(document).off('change', this._wrapSelector('#vp_mgRightOn'));
-            $(document).off('click', this._wrapSelector('#vp_mgRightOnSelect'));
+            $(document).off('change', this._wrapSelector('#vp_bdRightOn'));
+            $(document).off('click', this._wrapSelector('#vp_bdRightOnSelect'));
             $(document).off('change', this._wrapSelector('#vp_gbRightIndex'));
-            $(document).off('change', this._wrapSelector('#vp_mgLeftSuffix'));
-            $(document).off('change', this._wrapSelector('#vp_mgRightSuffix'));
-            $(document).off('change', this._wrapSelector('#vp_mgAllocateTo'));
-            $(document).off('change', this._wrapSelector('#vp_mgResetIndex'));
+            $(document).off('change', this._wrapSelector('#vp_bdLeftSuffix'));
+            $(document).off('change', this._wrapSelector('#vp_bdRightSuffix'));
+            $(document).off('change', this._wrapSelector('#vp_bdAllocateTo'));
+            $(document).off('change', this._wrapSelector('#vp_bdResetIndex'));
             
 
             $(document).off('click', this._wrapSelector('.' + APP_CLOSE));
@@ -477,24 +477,24 @@ define([
             // User operation Events
             //====================================================================
             // Left variable change event
-            $(document).on('change', this._wrapSelector('#vp_mgLeftDataframe'), function() {
+            $(document).on('change', this._wrapSelector('#vp_bdLeftDataframe'), function() {
                 // if variable changed, clear groupby, display
                 var newVal = $(this).val();
                 if (newVal != that.state.left.variable) {
-                    $(that._wrapSelector('#vp_mgOn')).val('');
-                    $(that._wrapSelector('#vp_mgLeftOn')).val('');
+                    $(that._wrapSelector('#vp_bdOn')).val('');
+                    $(that._wrapSelector('#vp_bdLeftOn')).val('');
                     that.state.left.variable = newVal;
                     that.state.left.on = [];
                     that.state.on = [];
                 }
             });
             // Right variable change event
-            $(document).on('change', this._wrapSelector('#vp_mgRightDataframe'), function() {
+            $(document).on('change', this._wrapSelector('#vp_bdRightDataframe'), function() {
                 // if variable changed, clear groupby, display
                 var newVal = $(this).val();
                 if (newVal != that.state.right.variable) {
-                    $(that._wrapSelector('#vp_mgOn')).val('');
-                    $(that._wrapSelector('#vp_mgRightOn')).val('');
+                    $(that._wrapSelector('#vp_bdOn')).val('');
+                    $(that._wrapSelector('#vp_bdRightOn')).val('');
                     that.state.right.variable = newVal;
                     that.state.right.on = [];
                     that.state.on = [];
@@ -502,114 +502,114 @@ define([
             });
 
             // variable refresh event
-            $(document).on('click', this._wrapSelector('.vp-mg-df-refresh'), function() {
+            $(document).on('click', this._wrapSelector('.vp-bd-df-refresh'), function() {
                 that.loadVariableList();
             });
 
             // how
-            $(document).on('change', this._wrapSelector('#vp_mgHow'), function() {
+            $(document).on('change', this._wrapSelector('#vp_bdHow'), function() {
                 that.state.how = $(this).val();
             });
 
             // on change event
-            $(document).on('change', this._wrapSelector('#vp_mgOn'), function(event) {
+            $(document).on('change', this._wrapSelector('#vp_bdOn'), function(event) {
                 var colList = event.colList;
                 that.state.on = colList;
                 
                 if (colList && colList.length > 0) {
-                    $(that._wrapSelector('#vp_mgLeftOnSelect')).attr('disabled', true);
-                    $(that._wrapSelector('#vp_mgRightOnSelect')).attr('disabled', true);
+                    $(that._wrapSelector('#vp_bdLeftOnSelect')).attr('disabled', true);
+                    $(that._wrapSelector('#vp_bdRightOnSelect')).attr('disabled', true);
                 } else {
-                    $(that._wrapSelector('#vp_mgLeftOnSelect')).attr('disabled', false);
-                    $(that._wrapSelector('#vp_mgRightOnSelect')).attr('disabled', false);
+                    $(that._wrapSelector('#vp_bdLeftOnSelect')).attr('disabled', false);
+                    $(that._wrapSelector('#vp_bdRightOnSelect')).attr('disabled', false);
                 }
             });
 
             // on select button event
-            $(document).on('click', this._wrapSelector('#vp_mgOnSelect'), function() {
+            $(document).on('click', this._wrapSelector('#vp_bdOnSelect'), function() {
                 var targetVariable = [ that.state.left.variable, that.state.right.variable ];
-                that.openInnerPopup(targetVariable, $(that._wrapSelector('#vp_mgOn')), 'Select columns from both dataframe');
+                that.openInnerPopup(targetVariable, $(that._wrapSelector('#vp_bdOn')), 'Select columns from both dataframe');
             });
 
             // Left on change event
-            $(document).on('change', this._wrapSelector('#vp_mgLeftOn'), function(event) {
+            $(document).on('change', this._wrapSelector('#vp_bdLeftOn'), function(event) {
                 var colList = event.colList;
                 that.state.left.on = colList;
                 
                 if ((colList && colList.length > 0)
                     || that.state.right.on && that.state.right.on.length > 0) {
-                    $(that._wrapSelector('#vp_mgOnSelect')).attr('disabled', true);
+                    $(that._wrapSelector('#vp_bdOnSelect')).attr('disabled', true);
                 } else {
-                    $(that._wrapSelector('#vp_mgOnSelect')).attr('disabled', false);
+                    $(that._wrapSelector('#vp_bdOnSelect')).attr('disabled', false);
                 }
             });
 
             // Left on select button event
-            $(document).on('click', this._wrapSelector('#vp_mgLeftOnSelect'), function() {
+            $(document).on('click', this._wrapSelector('#vp_bdLeftOnSelect'), function() {
                 var targetVariable = [ that.state.left.variable ];
-                that.openInnerPopup(targetVariable, $(that._wrapSelector('#vp_mgLeftOn')), 'Select columns from left dataframe');
+                that.openInnerPopup(targetVariable, $(that._wrapSelector('#vp_bdLeftOn')), 'Select columns from left dataframe');
             });
 
             // Left use index
-            $(document).on('change', this._wrapSelector('#vp_mgLeftIndex'), function() {
+            $(document).on('change', this._wrapSelector('#vp_bdLeftIndex'), function() {
                 var useIndex = $(this).prop('checked');
                 that.state.left.useIndex = useIndex;
 
                 if (useIndex || that.state.right.useIndex) {
-                    $(that._wrapSelector('#vp_mgOnSelect')).attr('disabled', true);
+                    $(that._wrapSelector('#vp_bdOnSelect')).attr('disabled', true);
                 } else {
-                    $(that._wrapSelector('#vp_mgOnSelect')).attr('disabled', false);
+                    $(that._wrapSelector('#vp_bdOnSelect')).attr('disabled', false);
                 }
             });
 
             // Right on change event
-            $(document).on('change', this._wrapSelector('#vp_mgRightOn'), function(event) {
+            $(document).on('change', this._wrapSelector('#vp_bdRightOn'), function(event) {
                 var colList = event.colList;
                 that.state.right.on = colList;
                 
                 if ((colList && colList.length > 0)
                     || that.state.left.on && that.state.left.on.length > 0) {
-                    $(that._wrapSelector('#vp_mgOnSelect')).attr('disabled', true);
+                    $(that._wrapSelector('#vp_bdOnSelect')).attr('disabled', true);
                 } else {
-                    $(that._wrapSelector('#vp_mgOnSelect')).attr('disabled', false);
+                    $(that._wrapSelector('#vp_bdOnSelect')).attr('disabled', false);
                 }
             });
 
             // Right on select button event
-            $(document).on('click', this._wrapSelector('#vp_mgRightOnSelect'), function() {
+            $(document).on('click', this._wrapSelector('#vp_bdRightOnSelect'), function() {
                 var targetVariable = [ that.state.right.variable ];
-                that.openInnerPopup(targetVariable, $(that._wrapSelector('#vp_mgRightOn')), 'Select columns from right dataframe');
+                that.openInnerPopup(targetVariable, $(that._wrapSelector('#vp_bdRightOn')), 'Select columns from right dataframe');
             });
 
             // Right use index
-            $(document).on('change', this._wrapSelector('#vp_mgRightIndex'), function() {
+            $(document).on('change', this._wrapSelector('#vp_bdRightIndex'), function() {
                 var useIndex = $(this).prop('checked');
                 that.state.right.useIndex = useIndex;
 
                 if (useIndex || that.state.left.useIndex) {
-                    $(that._wrapSelector('#vp_mgOnSelect')).attr('disabled', true);
+                    $(that._wrapSelector('#vp_bdOnSelect')).attr('disabled', true);
                 } else {
-                    $(that._wrapSelector('#vp_mgOnSelect')).attr('disabled', false);
+                    $(that._wrapSelector('#vp_bdOnSelect')).attr('disabled', false);
                 }
             });
 
             // Left suffix change event
-            $(document).on('change', this._wrapSelector('#vp_mgLeftSuffix'), function() {
+            $(document).on('change', this._wrapSelector('#vp_bdLeftSuffix'), function() {
                 that.state.left.suffix = $(this).val();
             });
 
             // Right suffix change event
-            $(document).on('change', this._wrapSelector('#vp_mgRightSuffix'), function() {
+            $(document).on('change', this._wrapSelector('#vp_bdRightSuffix'), function() {
                 that.state.right.suffix = $(this).val();
             });
 
             // allocateTo event
-            $(document).on('change', this._wrapSelector('#vp_mgAllocateTo'), function() {
+            $(document).on('change', this._wrapSelector('#vp_bdAllocateTo'), function() {
                 that.state.allocateTo = $(this).val();
             });
             
             // reset index checkbox event
-            $(document).on('change', this._wrapSelector('#vp_mgResetIndex'), function() {
+            $(document).on('change', this._wrapSelector('#vp_bdResetIndex'), function() {
                 that.state.resetIndex = $(this).prop('checked');
             });
 
@@ -707,7 +707,7 @@ define([
                 $(this.pagethis._wrapSelector('#' + this.targetId)).val(code);
                 $(this.pagethis._wrapSelector('#' + this.targetId)).trigger({
                     type: 'apps_run',
-                    title: 'Merge',
+                    title: 'Bind',
                     code: code,
                     state: this.state,
                     addCell: addCell,
@@ -717,7 +717,7 @@ define([
                 $(vpCommon.wrapSelector('#' + this.targetId)).val(code);
                 $(vpCommon.wrapSelector('#' + this.targetId)).trigger({
                     type: 'apps_run',
-                    title: 'Merge',
+                    title: 'Bind',
                     code: code,
                     state: this.state,
                     addCell: addCell,
@@ -854,7 +854,7 @@ define([
         }
     }
 
-    return Merge
+    return Bind
 }); /* function, define */
 
 /* End of file */

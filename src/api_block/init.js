@@ -130,7 +130,7 @@ define([
         /** Apps menu 생성 */
         var appsList = [
             'import', 'file', 'variable', 'snippets', 'frame', 'subset', 'instance', 'groupby',
-            'merge', 'reshape', 'chart', 'markdown', 'pdf', 'profiling'
+            'bind', 'reshape', 'chart', 'markdown', 'pdf', 'profiling'
         ];
         appsList.forEach(menu => {
             var app = new CreateAppsBtn(blockContainer, menu);
