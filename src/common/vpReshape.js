@@ -17,14 +17,14 @@ define([
     'nbextensions/visualpython/src/common/StringBuilder',
     'nbextensions/visualpython/src/common/vpCommon',
     'nbextensions/visualpython/src/common/kernelApi',
-    'nbextensions/visualpython/src/common/component/vpColumnSelector',
+    'nbextensions/visualpython/src/common/component/vpMultiSelector',
 
     'codemirror/lib/codemirror',
     'codemirror/mode/python/python',
     'notebook/js/codemirror-ipython',
     'codemirror/addon/display/placeholder',
     'codemirror/addon/display/autorefresh'
-], function (vpConst, sb, vpCommon, kernelApi, vpColumnSelector, codemirror) {   
+], function (vpConst, sb, vpCommon, kernelApi, vpMultiSelector, codemirror) {   
 
     //========================================================================
     // Define variable
@@ -357,9 +357,9 @@ define([
          * @param {Array<string>} includeList columns to include 
          */
         renderColumnSelector(targetVariable, previousList, includeList) {
-            this.popup.ColSelector = new vpColumnSelector(
+            this.popup.ColSelector = new vpMultiSelector(
                 this._wrapSelector('.' + APP_POPUP_BODY), 
-                { dataframe: targetVariable, selectedList: previousList, includeList: includeList }
+                { mode: 'columns', parent: targetVariable, selectedList: previousList, includeList: includeList }
             );
         }
 
@@ -634,11 +634,11 @@ define([
             // ok input popup
             $(document).on('click', this._wrapSelector('.' + APP_POPUP_OK), function() {
                 // ok input popup
-                var colList = that.popup.ColSelector.getColumnList();
+                var dataList = that.popup.ColSelector.getDataList();
 
-                $(that.popup.targetSelector).val(colList.map(col => { return col.code }).join(','));
-                $(that.popup.targetSelector).data('list', colList);
-                $(that.popup.targetSelector).trigger({ type: 'change', colList: colList });
+                $(that.popup.targetSelector).val(dataList.map(col => { return col.code }).join(','));
+                $(that.popup.targetSelector).data('list', dataList);
+                $(that.popup.targetSelector).trigger({ type: 'change', dataList: dataList });
                 that.closeInnerPopup(); that.closeInnerPopup();
             });
 

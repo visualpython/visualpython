@@ -17,14 +17,14 @@ define([
     'nbextensions/visualpython/src/common/StringBuilder',
     'nbextensions/visualpython/src/common/vpCommon',
     'nbextensions/visualpython/src/common/kernelApi',
-    'nbextensions/visualpython/src/common/component/vpColumnSelector',
+    'nbextensions/visualpython/src/common/component/vpMultiSelector',
 
     'codemirror/lib/codemirror',
     'codemirror/mode/python/python',
     'notebook/js/codemirror-ipython',
     'codemirror/addon/display/placeholder',
     'codemirror/addon/display/autorefresh'
-], function (vpConst, sb, vpCommon, kernelApi, vpColumnSelector, codemirror) {   
+], function (vpConst, sb, vpCommon, kernelApi, vpMultiSelector, codemirror) {   
 
     //========================================================================
     // Define variable
@@ -72,11 +72,11 @@ define([
             this.codepreview = undefined;
 
             this.howList = [
-                { label: 'inner', value: 'inner' },
-                { label: 'outer', value: 'outer' },
-                { label: 'left', value: 'left' },
-                { label: 'right', value: 'right' },
-                { label: 'cross', value: 'cross' },
+                { label: 'inner', value: 'Inner' },
+                { label: 'outer', value: 'Outer' },
+                { label: 'left', value: 'Left' },
+                { label: 'right', value: 'Right' },
+                { label: 'cross', value: 'Cross' },
             ]
         }
 
@@ -97,38 +97,48 @@ define([
 
         _loadState(state) {
             var {
-                left, right, on, how, allocateTo, resetIndex
+                type, concat, merge, allocateTo, resetIndex
             } = state;
 
-            $(this._wrapSelector('#vp_bdLeftDataframe')).val(left.variable);
-            $(this._wrapSelector('#vp_mpRightDataframe')).val(right.variable);
+            // type
+            $(this._wrapSelector('#vp_bdType')).val(type);
 
-            $(this._wrapSelector('#vp_bdHow')).val(how);
-            this._loadColumnSelectorInput(this._wrapSelector('#vp_bdOn'), on);
-            if (on && on.length > 0) {
-                $(this._wrapSelector('#vp_bdLeftOnSelect')).attr('disabled', true);
-                $(this._wrapSelector('#vp_bdRightOnSelect')).attr('disabled', true);
+            if (type == 'concat') {
+                // load concat state
+                this._loadSelectorInput(this._wrapSelector('#vp_bdVariable'), concat.variable);
+                $(this._wrapSelector('#vp_bdJoin')).val(concat.join);
+                $(this._wrapSelector('#vp_bdAxis')).val(concat.axis);
+                $(this._wrapSelector('#vp_bdSort')).val(concat.sort?'yes':'no');
+            } else {
+                // load merge state
+                $(this._wrapSelector('#vp_bdLeftDataframe')).val(merge.left.variable);
+                $(this._wrapSelector('#vp_mpRightDataframe')).val(merge.right.variable);
+    
+                $(this._wrapSelector('#vp_bdHow')).val(merge.how);
+                this._loadSelectorInput(this._wrapSelector('#vp_bdOn'), merge.on);
+                if (on && on.length > 0) {
+                    $(this._wrapSelector('#vp_bdLeftOnSelect')).attr('disabled', true);
+                    $(this._wrapSelector('#vp_bdRightOnSelect')).attr('disabled', true);
+                }
+                this._loadSelectorInput(this._wrapSelector('#vp_bdLeftOn'), merge.left.on);
+                this._loadSelectorInput(this._wrapSelector('#vp_bdRightOn'), merge.right.on);
+                if (merge.left.on.length > 0 || merge.right.on.length > 0) {
+                    $(this._wrapSelector('#vp_bdOnSelect')).attr('disabled', true);
+                }
+    
+                $(this._wrapSelector('#vp_bdLeftIndex')).prop('checked', merge.left.useIndex);
+                $(this._wrapSelector('#vp_bdRightIndex')).prop('checked', merge.right.useIndex);
+    
+                $(this._wrapSelector('#vp_bdLeftSuffix')).val(merge.left.suffix);
+                $(this._wrapSelector('#vp_bdRightSuffix')).val(merge.right.suffix);
             }
-            this._loadColumnSelectorInput(this._wrapSelector('#vp_bdLeftOn'), left.on);
-            this._loadColumnSelectorInput(this._wrapSelector('#vp_bdRightOn'), right.on);
-            if (left.on.length > 0 || right.on.length > 0) {
-                $(this._wrapSelector('#vp_bdOnSelect')).attr('disabled', true);
-            }
-
-            $(this._wrapSelector('#vp_bdLeftIndex')).prop('checked', left.useIndex);
-            $(this._wrapSelector('#vp_bdRightIndex')).prop('checked', right.useIndex);
-
-            $(this._wrapSelector('#vp_bdLeftSuffix')).val(left.suffix);
-            $(this._wrapSelector('#vp_bdRightSuffix')).val(right.suffix);
-
             $(this._wrapSelector('#vp_bdAllocateTo')).val(allocateTo);
-
             $(this._wrapSelector('#vp_bdResetIndex')).prop('checked', resetIndex);
         }
 
-        _loadColumnSelectorInput(tag, colList) {
-            $(tag).val(colList.map(col=>col.code).join(','));
-            $(tag).data('list', colList)
+        _loadSelectorInput(tag, dataList) {
+            $(tag).val(dataList.map(data=>data.code).join(','));
+            $(tag).data('list', dataList)
         }
 
         _saveState() {
@@ -160,27 +170,36 @@ define([
 
         init(state = undefined) {
             this.state = {
-                left: {
-                    variable: '',
-                    on: [],
-                    useIndex: false,
-                    suffix: ''
+                type: 'concat',
+                concat: {
+                    variable: [], // DataFrame, Series
+                    join: 'outer',
+                    axis: 0, // 0: index, 1: column
+                    sort: false
                 },
-                right: {
-                    variable: '',
+                merge: {
+                    left: {
+                        variable: '',
+                        on: [],
+                        useIndex: false,
+                        suffix: ''
+                    },
+                    right: {
+                        variable: '',
+                        on: [],
+                        useIndex: false,
+                        suffix: ''
+                    },
                     on: [],
-                    useIndex: false,
-                    suffix: ''
+                    how: 'inner',
                 },
-                on: [],
-                how: 'inner',
                 allocateTo: '',
                 resetIndex: false
             }
             this.popup = {
                 type: '',
                 targetSelector: '',
-                ColSelector: undefined
+                MultiSelector: undefined
             }
 
             // load state
@@ -217,7 +236,110 @@ define([
 
             // body start
             page.appendFormatLine('<div class="{0}">', APP_BODY);
-            page.appendFormatLine('<div class="{0}">', 'vp-bd-df-box'); // df-box
+            page.appendFormatLine('<div class="{0}">', 'vp-bd-grid-box');
+            // bind type : concat merge
+            page.appendLine('<div>');
+            page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_bdType', 'vp-orange-text wp100', 'Bind type');
+            page.appendFormatLine('<select id="{0}">', 'vp_bdType');
+            page.appendFormatLine('<option value="{0}" {1}>{2}</option>', 'concat', this.state.type=='concat'?'selected':'', 'concat');
+            page.appendFormatLine('<option value="{0}" {1}>{2}</option>', 'merge', this.state.type=='merge'?'selected':'', 'merge');
+            page.appendLine('</select>');
+            page.appendLine('</div>');
+            // divider
+            page.appendLine('<hr style="margin: 5px 0;"/>');
+
+            // concat box
+            page.appendLine(this.renderConcatBox());
+            // merge box
+            page.appendLine(this.renderMergeBox());
+
+            // divider
+            page.appendLine('<hr style="margin: 5px 0;"/>');
+            // allocate to
+            page.appendLine('<div>');
+            page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_bdAllocateTo', 'wp100', 'Allocate to');
+            page.appendFormatLine('<input type="text" id="{0}" placeholder="{1}"/>', 'vp_bdAllocateTo', 'New variable name');
+            // reset index
+            page.appendFormatLine('<label><input type="checkbox" id="{0}"/><span>{1}</span></label>', 'vp_bdResetIndex', 'reset index');
+            page.appendLine('</div>');
+
+            page.appendLine('</div>'); // vp-bd-grid-box
+            page.appendLine('</div>'); // APP_BODY
+
+            // preview box
+            page.appendFormatLine('<div class="{0} {1}">', APP_PREVIEW_BOX, 'vp-apiblock-scrollbar');
+            page.appendFormatLine('<textarea id="{0}" name="code"></textarea>', 'vp_codePreview');
+            page.appendLine('</div>');
+
+            // button box
+            page.appendFormatLine('<div class="{0}">', APP_BUTTON_BOX);
+            page.appendFormatLine('<button type="button" class="{0} {1} {2}">{3}</button>'
+                                    , 'vp-button', APP_BUTTON, APP_BUTTON_PREVIEW, 'Code view');
+            page.appendFormatLine('<button type="button" class="{0} {1} {2}">{3}</button>'
+                                    , 'vp-button cancel', APP_BUTTON, APP_BUTTON_CANCEL, 'Cancel');
+            page.appendFormatLine('<div class="{0}">', APP_BUTTON_RUNADD);
+            page.appendFormatLine('<button type="button" class="{0} {1}" title="{2}">{3}</button>'
+                                    , 'vp-button activated', APP_BUTTON_RUN, 'Apply to Board & Run Cell', 'Run');
+            page.appendFormatLine('<button type="button" class="{0} {1}"><img src="{2}"/></button>'
+                                    , 'vp-button activated', APP_BUTTON_DETAIL, '/nbextensions/visualpython/resource/arrow_short_up.svg');
+            page.appendFormatLine('<div class="{0} {1}">', APP_DETAIL_BOX, 'vp-cursor');
+            page.appendFormatLine('<div class="{0}" data-type="{1}" title="{2}">{3}</div>', APP_DETAIL_ITEM, 'apply', 'Apply to Board', 'Apply');
+            page.appendFormatLine('<div class="{0}" data-type="{1}" title="{2}">{3}</div>', APP_DETAIL_ITEM, 'add', 'Apply to Board & Add Cell', 'Add');
+            page.appendLine('</div>'); // APP_DETAIL_BOX
+            page.appendLine('</div>'); // APP_BUTTON_RUNADD
+            page.appendLine('</div>'); // APP_BUTTON_BOX
+
+
+            page.appendLine('</div>'); // APP_CONTAINER
+            page.appendLine('</div>'); // APPS
+
+            $('#vp-wrapper').append(page.toString());
+            $(this._wrapSelector()).hide();
+        }
+
+        renderConcatBox() {
+            var page = new sb.StringBuilder();
+            // concat box
+            page.appendFormatLine('<div class="{0} {1}" {2}>', 'vp-bd-type-box', 'concat', this.state.type=='concat'?'':'style="display: none;"');
+            // variable
+            page.appendLine('<div>');
+            page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_bdVariable', 'vp-orange-text wp100', 'Variable');
+            page.appendFormatLine('<input type="text" id="{0}" placeholder="{1}" disabled>', 'vp_bdVariable', 'Variable');
+            page.appendFormatLine('<button id="{0}" class="{1}">{2}</button>', 'vp_bdVariableSelect', 'vp-button wp50', 'Edit');
+            page.appendLine('</div>');
+            // join
+            page.appendLine('<div>');
+            page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_bdJoin', 'wp100', 'Join');
+            page.appendFormatLine('<select id="{0}">', 'vp_bdJoin');
+            page.appendFormatLine('<option value="{0}" {1}>{2}</option>', 'outer', this.state.concat.join=='outer'?'selected':'', 'Outer');
+            page.appendFormatLine('<option value="{0}" {1}>{2}</option>', 'inner', this.state.concat.join=='inner'?'selected':'', 'Inner');
+            page.appendLine('</select>');
+            page.appendLine('</select>');
+            page.appendLine('</div>');
+            // axis
+            page.appendLine('<div>');
+            page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_bdAxis', 'wp100', 'Axis');
+            page.appendFormatLine('<select id="{0}">', 'vp_bdAxis');
+            page.appendFormatLine('<option value="{0}" {1}>{2}</option>', 0, this.state.concat.axis==0?'selected':'', 'Index');
+            page.appendFormatLine('<option value="{0}" {1}>{2}</option>', 1, this.state.concat.axis==1?'selected':'', 'Column');
+            page.appendLine('</select>');
+            page.appendLine('</div>');
+            // sort
+            page.appendLine('<div>');
+            page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_bdSort', 'wp100', 'Sort');
+            page.appendFormatLine('<select id="{0}">', 'vp_bdSort');
+            page.appendFormatLine('<option value="{0}" {1}>{2}</option>', 'no', this.state.concat.sort=='no'?'selected':'', 'No');
+            page.appendFormatLine('<option value="{0}" {1}>{2}</option>', 'yes', this.state.concat.sort=='yes'?'selected':'', 'Yes');
+            page.appendLine('</select>');
+            page.appendLine('</div>');
+            page.appendLine('</div>'); // vp-bd-type-box concat
+            return page.toString();
+        }
+
+        renderMergeBox() {
+            var page = new sb.StringBuilder();
+            // merge box
+            page.appendFormatLine('<div class="{0} {1}" {2}>', 'vp-bd-type-box', 'merge', this.state.type=='merge'?'':'style="display: none;"');
             // left dataframe
             page.appendLine('<div>');
             page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_bdLeftDataframe', 'vp-orange-text wp100', 'Left Dataframe');
@@ -231,13 +353,13 @@ define([
             page.appendFormatLine('<select id="{0}">', 'vp_bdRightDataframe');
             page.appendLine('</select>');
             page.appendLine('</div>');
-            // divider
+            // divider  
             page.appendLine('<hr style="margin: 5px 0;"/>');
             // how
             page.appendLine('<div>');
             page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_bdHow', 'wp100', 'How');
             page.appendFormatLine('<select id="{0}">', 'vp_bdHow');
-            var savedHow = this.state.how;
+            var savedHow = this.state.merge.how;
             this.howList.forEach(how => {
                 page.appendFormatLine('<option value="{0}"{1}>{2}</option>', how.value, savedHow==how.value?' selected':'', how.label);
             });
@@ -271,49 +393,8 @@ define([
             page.appendFormatLine('<input type="text" id="{0}" placeholder="{1}"/>', 'vp_bdLeftSuffix', 'Left suffix');
             page.appendFormatLine('<input type="text" id="{0}" placeholder="{1}"/>', 'vp_bdRightSuffix', 'Right suffix');
             page.appendLine('</div>');
-            // divider
-            page.appendLine('<hr style="margin: 5px 0;"/>');
-            // allocate to
-            page.appendLine('<div>');
-            page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_bdAllocateTo', 'wp100', 'Allocate to');
-            page.appendFormatLine('<input type="text" id="{0}" placeholder="{1}"/>', 'vp_bdAllocateTo', 'New variable name');
-            // reset index
-            page.appendFormatLine('<label><input type="checkbox" id="{0}"/><span>{1}</span></label>', 'vp_bdResetIndex', 'reset index');
-            
-            page.appendLine('</div>');
-            page.appendLine('</div>'); // end of df-box
-
-            page.appendLine('</div>'); // APP_BODY
-
-            // preview box
-            page.appendFormatLine('<div class="{0} {1}">', APP_PREVIEW_BOX, 'vp-apiblock-scrollbar');
-            page.appendFormatLine('<textarea id="{0}" name="code"></textarea>', 'vp_codePreview');
-            page.appendLine('</div>');
-
-            // button box
-            page.appendFormatLine('<div class="{0}">', APP_BUTTON_BOX);
-            page.appendFormatLine('<button type="button" class="{0} {1} {2}">{3}</button>'
-                                    , 'vp-button', APP_BUTTON, APP_BUTTON_PREVIEW, 'Code view');
-            page.appendFormatLine('<button type="button" class="{0} {1} {2}">{3}</button>'
-                                    , 'vp-button cancel', APP_BUTTON, APP_BUTTON_CANCEL, 'Cancel');
-            page.appendFormatLine('<div class="{0}">', APP_BUTTON_RUNADD);
-            page.appendFormatLine('<button type="button" class="{0} {1}" title="{2}">{3}</button>'
-                                    , 'vp-button activated', APP_BUTTON_RUN, 'Apply to Board & Run Cell', 'Run');
-            page.appendFormatLine('<button type="button" class="{0} {1}"><img src="{2}"/></button>'
-                                    , 'vp-button activated', APP_BUTTON_DETAIL, '/nbextensions/visualpython/resource/arrow_short_up.svg');
-            page.appendFormatLine('<div class="{0} {1}">', APP_DETAIL_BOX, 'vp-cursor');
-            page.appendFormatLine('<div class="{0}" data-type="{1}" title="{2}">{3}</div>', APP_DETAIL_ITEM, 'apply', 'Apply to Board', 'Apply');
-            page.appendFormatLine('<div class="{0}" data-type="{1}" title="{2}">{3}</div>', APP_DETAIL_ITEM, 'add', 'Apply to Board & Add Cell', 'Add');
-            page.appendLine('</div>'); // APP_DETAIL_BOX
-            page.appendLine('</div>'); // APP_BUTTON_RUNADD
-            page.appendLine('</div>'); // APP_BUTTON_BOX
-
-
-            page.appendLine('</div>'); // APP_CONTAINER
-            page.appendLine('</div>'); // APPS
-
-            $('#vp-wrapper').append(page.toString());
-            $(this._wrapSelector()).hide();
+            page.appendLine('</div>'); // vp-bd-type-box merge
+            return page.toString();
         }
 
         /**
@@ -363,31 +444,45 @@ define([
         }
 
         /**
-         * Render column selector using ColumnSelector module
-         * @param {Array<string>} previousList previous selected columns
-         * @param {Array<string>} includeList columns to include 
+         * Open Inner popup page for variable selection
+         * @param {Object} targetSelector 
          */
-        renderColumnSelector(targetVariable, previousList, includeList) {
-            this.popup.ColSelector = new vpColumnSelector(
+        openVariablePopup(targetSelector) {
+            this.popup.targetSelector = targetSelector;
+            var previousList = this.popup.targetSelector.data('list');
+            if (previousList) {
+                previousList = previousList.map(data => data.code)
+            }
+            this.popup.MultiSelector = new vpMultiSelector(
                 this._wrapSelector('.' + APP_POPUP_BODY), 
-                { dataframe: targetVariable, selectedList: previousList, includeList: includeList }
+                { mode: 'variable', type: ['DataFrame', 'Series'], selectedList: previousList }
             );
+
+            // set title
+            $(this._wrapSelector('.' + APP_POPUP_BOX + ' .' + APP_TITLE)).text('Select variables');
+    
+            // show popup box
+            $(this._wrapSelector('.' + APP_POPUP_BOX)).show();
         }
 
         /**
          * Open Inner popup page for column selection
+         * @param {string} targetVariable 
          * @param {Object} targetSelector 
-         * @param {string} title 
-         * @param {Array<string>} includeList 
+         * @param {string} title
          */
-        openInnerPopup(targetVariable, targetSelector, title='Select columns', includeList=[]) {
+        openColumnPopup(targetVariable, targetSelector, title='Select Columns') {
             this.popup.targetVariable = targetVariable;
             this.popup.targetSelector = targetSelector;
             var previousList = this.popup.targetSelector.data('list');
             if (previousList) {
                 previousList = previousList.map(col => col.code)
             }
-            this.renderColumnSelector(targetVariable, previousList, includeList);
+
+            this.popup.MultiSelector = new vpMultiSelector(
+                this._wrapSelector('.' + APP_POPUP_BODY), 
+                { mode: 'columns', parent: [ targetVariable ], selectedList: previousList }
+            );
     
             // set title
             $(this._wrapSelector('.' + APP_POPUP_BOX + ' .' + APP_TITLE)).text(title);
@@ -415,14 +510,14 @@ define([
                     var varList = JSON.parse(result);
                     // render variable list
                     // get prevvalue
-                    var prevValue = that.state.left.variable;
+                    var prevValue = that.state.merge.left.variable;
                     // replace
                     $(that._wrapSelector('#vp_bdLeftDataframe')).replaceWith(function() {
                         return that.renderVariableList('vp_bdLeftDataframe', varList, prevValue);
                     });
                     $(that._wrapSelector('#vp_bdLeftDataframe')).trigger('change');
 
-                    prevValue = that.state.right.variable;
+                    prevValue = that.state.merge.right.variable;
                     $(that._wrapSelector('#vp_bdRightDataframe')).replaceWith(function() {
                         return that.renderVariableList('vp_bdRightDataframe', varList, prevValue);
                     });
@@ -435,6 +530,14 @@ define([
 
         unbindEvent() {
             $(document).unbind(vpCommon.formatString(".{0} .{1}", this.uuid, APP_BODY));
+
+            $(document).off('change', this._wrapSelector('#vp_bdType'));
+
+            $(document).off('change', this._wrapSelector('#vp_bdVariable'));
+            $(document).off('click', this._wrapSelector('#vp_bdVariableSelect'));
+            $(document).off('change', this._wrapSelector('#vp_bdJoin'));
+            $(document).off('change', this._wrapSelector('#vp_bdAxis'));
+            $(document).off('change', this._wrapSelector('#vp_bdSort'));
 
             $(document).off('change', this._wrapSelector('#vp_bdLeftDataframe'));
             $(document).off('change', this._wrapSelector('#vp_bdRightDataframe'));
@@ -476,28 +579,72 @@ define([
             //====================================================================
             // User operation Events
             //====================================================================
+            $(document).on('change', this._wrapSelector('#vp_bdType'), function() {
+                var type = $(this).val();
+                that.state.type = type;
+                if (type == 'concat') {
+                    $(that._wrapSelector('.vp-bd-type-box.concat')).show();
+                    $(that._wrapSelector('.vp-bd-type-box.merge')).hide();
+                } else {
+                    $(that._wrapSelector('.vp-bd-type-box.merge')).show();
+                    $(that._wrapSelector('.vp-bd-type-box.concat')).hide();
+                }
+            });
+
+            //====================================================================
+            // Concat box Events
+            //====================================================================\
+            // variable change event
+            $(document).on('change', this._wrapSelector('#vp_bdVariable'), function(event) {
+                var varList = event.dataList;
+                that.state.concat.variable = varList;
+            });
+
+            // variable select button event
+            $(document).on('click', this._wrapSelector('#vp_bdVariableSelect'), function() {
+                that.openVariablePopup($(that._wrapSelector('#vp_bdVariable')));
+            });
+
+            // join
+            $(document).on('change', this._wrapSelector('#vp_bdJoin'), function() {
+                that.state.concat.join = $(this).val();
+            });
+
+            // axis
+            $(document).on('change', this._wrapSelector('#vp_bdAxis'), function() {
+                that.state.concat.axis = $(this).val();
+            });
+
+            // sort
+            $(document).on('change', this._wrapSelector('#vp_bdSort'), function() {
+                that.state.concat.sort = $(this).val() == 'yes';
+            });
+
+            //====================================================================
+            // Merge box Events
+            //====================================================================
             // Left variable change event
             $(document).on('change', this._wrapSelector('#vp_bdLeftDataframe'), function() {
                 // if variable changed, clear groupby, display
                 var newVal = $(this).val();
-                if (newVal != that.state.left.variable) {
+                if (newVal != that.state.merge.left.variable) {
                     $(that._wrapSelector('#vp_bdOn')).val('');
                     $(that._wrapSelector('#vp_bdLeftOn')).val('');
-                    that.state.left.variable = newVal;
-                    that.state.left.on = [];
-                    that.state.on = [];
+                    that.state.merge.left.variable = newVal;
+                    that.state.merge.left.on = [];
+                    that.state.merge.on = [];
                 }
             });
             // Right variable change event
             $(document).on('change', this._wrapSelector('#vp_bdRightDataframe'), function() {
                 // if variable changed, clear groupby, display
                 var newVal = $(this).val();
-                if (newVal != that.state.right.variable) {
+                if (newVal != that.state.merge.right.variable) {
                     $(that._wrapSelector('#vp_bdOn')).val('');
                     $(that._wrapSelector('#vp_bdRightOn')).val('');
-                    that.state.right.variable = newVal;
-                    that.state.right.on = [];
-                    that.state.on = [];
+                    that.state.merge.right.variable = newVal;
+                    that.state.merge.right.on = [];
+                    that.state.merge.on = [];
                 }
             });
 
@@ -508,13 +655,13 @@ define([
 
             // how
             $(document).on('change', this._wrapSelector('#vp_bdHow'), function() {
-                that.state.how = $(this).val();
+                that.state.merge.how = $(this).val();
             });
 
             // on change event
             $(document).on('change', this._wrapSelector('#vp_bdOn'), function(event) {
                 var colList = event.colList;
-                that.state.on = colList;
+                that.state.merge.on = colList;
                 
                 if (colList && colList.length > 0) {
                     $(that._wrapSelector('#vp_bdLeftOnSelect')).attr('disabled', true);
@@ -527,17 +674,17 @@ define([
 
             // on select button event
             $(document).on('click', this._wrapSelector('#vp_bdOnSelect'), function() {
-                var targetVariable = [ that.state.left.variable, that.state.right.variable ];
-                that.openInnerPopup(targetVariable, $(that._wrapSelector('#vp_bdOn')), 'Select columns from both dataframe');
+                var targetVariable = [ that.state.merge.left.variable, that.state.merge.right.variable ];
+                that.openColumnPopup(targetVariable, $(that._wrapSelector('#vp_bdOn')), 'Select columns from both dataframe');
             });
 
             // Left on change event
             $(document).on('change', this._wrapSelector('#vp_bdLeftOn'), function(event) {
                 var colList = event.colList;
-                that.state.left.on = colList;
+                that.state.merge.left.on = colList;
                 
                 if ((colList && colList.length > 0)
-                    || that.state.right.on && that.state.right.on.length > 0) {
+                    || that.state.merge.right.on && that.state.merge.right.on.length > 0) {
                     $(that._wrapSelector('#vp_bdOnSelect')).attr('disabled', true);
                 } else {
                     $(that._wrapSelector('#vp_bdOnSelect')).attr('disabled', false);
@@ -546,16 +693,16 @@ define([
 
             // Left on select button event
             $(document).on('click', this._wrapSelector('#vp_bdLeftOnSelect'), function() {
-                var targetVariable = [ that.state.left.variable ];
-                that.openInnerPopup(targetVariable, $(that._wrapSelector('#vp_bdLeftOn')), 'Select columns from left dataframe');
+                var targetVariable = [ that.state.merge.left.variable ];
+                that.openColumnPopup(targetVariable, $(that._wrapSelector('#vp_bdLeftOn')), 'Select columns from left dataframe');
             });
 
             // Left use index
             $(document).on('change', this._wrapSelector('#vp_bdLeftIndex'), function() {
                 var useIndex = $(this).prop('checked');
-                that.state.left.useIndex = useIndex;
+                that.state.merge.left.useIndex = useIndex;
 
-                if (useIndex || that.state.right.useIndex) {
+                if (useIndex || that.state.merge.right.useIndex) {
                     $(that._wrapSelector('#vp_bdOnSelect')).attr('disabled', true);
                 } else {
                     $(that._wrapSelector('#vp_bdOnSelect')).attr('disabled', false);
@@ -565,10 +712,10 @@ define([
             // Right on change event
             $(document).on('change', this._wrapSelector('#vp_bdRightOn'), function(event) {
                 var colList = event.colList;
-                that.state.right.on = colList;
+                that.state.merge.right.on = colList;
                 
                 if ((colList && colList.length > 0)
-                    || that.state.left.on && that.state.left.on.length > 0) {
+                    || that.state.merge.left.on && that.state.merge.left.on.length > 0) {
                     $(that._wrapSelector('#vp_bdOnSelect')).attr('disabled', true);
                 } else {
                     $(that._wrapSelector('#vp_bdOnSelect')).attr('disabled', false);
@@ -577,16 +724,16 @@ define([
 
             // Right on select button event
             $(document).on('click', this._wrapSelector('#vp_bdRightOnSelect'), function() {
-                var targetVariable = [ that.state.right.variable ];
-                that.openInnerPopup(targetVariable, $(that._wrapSelector('#vp_bdRightOn')), 'Select columns from right dataframe');
+                var targetVariable = [ that.state.merge.right.variable ];
+                that.openColumnPopup(targetVariable, $(that._wrapSelector('#vp_bdRightOn')), 'Select columns from right dataframe');
             });
 
             // Right use index
             $(document).on('change', this._wrapSelector('#vp_bdRightIndex'), function() {
                 var useIndex = $(this).prop('checked');
-                that.state.right.useIndex = useIndex;
+                that.state.merge.right.useIndex = useIndex;
 
-                if (useIndex || that.state.left.useIndex) {
+                if (useIndex || that.state.merge.left.useIndex) {
                     $(that._wrapSelector('#vp_bdOnSelect')).attr('disabled', true);
                 } else {
                     $(that._wrapSelector('#vp_bdOnSelect')).attr('disabled', false);
@@ -595,12 +742,12 @@ define([
 
             // Left suffix change event
             $(document).on('change', this._wrapSelector('#vp_bdLeftSuffix'), function() {
-                that.state.left.suffix = $(this).val();
+                that.state.merge.left.suffix = $(this).val();
             });
 
             // Right suffix change event
             $(document).on('change', this._wrapSelector('#vp_bdRightSuffix'), function() {
-                that.state.right.suffix = $(this).val();
+                that.state.merge.right.suffix = $(this).val();
             });
 
             // allocateTo event
@@ -678,12 +825,12 @@ define([
             // ok input popup
             $(document).on('click', this._wrapSelector('.' + APP_POPUP_OK), function() {
                 // ok input popup
-                var colList = that.popup.ColSelector.getColumnList();
+                var dataList = that.popup.MultiSelector.getDataList();
 
-                $(that.popup.targetSelector).val(colList.map(col => { return col.code }).join(','));
-                $(that.popup.targetSelector).data('list', colList);
-                $(that.popup.targetSelector).trigger({ type: 'change', colList: colList });
-                that.closeInnerPopup(); that.closeInnerPopup();
+                $(that.popup.targetSelector).val(dataList.map(data => { return data.code }).join(','));
+                $(that.popup.targetSelector).data('list', dataList);
+                $(that.popup.targetSelector).trigger({ type: 'change', dataList: dataList });
+                that.closeInnerPopup();
             });
 
             // cancel input popup
@@ -733,7 +880,7 @@ define([
         generateCode() {
             var code = new sb.StringBuilder();
             var {
-                left, right, on, how, allocateTo, resetIndex
+                type, concat, merge, allocateTo, resetIndex
             } = this.state;
 
             //====================================================================
@@ -746,54 +893,77 @@ define([
             //====================================================================
             // Dataframe variables
             //====================================================================
-            code.appendFormat('pd.merge({0}, {1}', left.variable, right.variable);
+            code.appendFormat('pd.{0}(', type);
 
-            if (on && on.length > 0) {
-                //================================================================
-                // On columns
-                //================================================================
-                code.appendFormat(', on=[{0}]', on.map(col => col.code));
+            if (type == 'concat') {
+                // FIXME: consider default
+                code.appendFormat("[{0}], join='{1}', axis={2}", concat.variable.map(data=>data.code).join(','), concat.join, concat.axis);
+
+                //====================================================================
+                // Sort
+                //====================================================================
+                if (concat.sort) {
+                    code.append(', sort=True');
+                }
+
+                //====================================================================
+                // Reset index
+                //====================================================================
+                if (resetIndex) {
+                    code.append(', ignore_index=True');
+                }
+
+                code.append(')');
             } else {
-                //====================================================================
-                // Left & Right On columns
-                //====================================================================
-                if (left.useIndex) {
-                    code.append(', left_index=True');
+                code.appendFormat('{0}, {1}', merge.left.variable, merge.right.variable);
+    
+                if (merge.on && merge.on.length > 0) {
+                    //================================================================
+                    // On columns
+                    //================================================================
+                    code.appendFormat(', on=[{0}]', on.map(col => col.code));
                 } else {
-                    if (left.on && left.on.length > 0) {
-                        code.appendFormat(', left_on=[{0}]', left.on.map(col => col.code));
-                    } 
+                    //====================================================================
+                    // Left & Right On columns
+                    //====================================================================
+                    if (merge.left.useIndex) {
+                        code.append(', left_index=True');
+                    } else {
+                        if (merge.left.on && merge.left.on.length > 0) {
+                            code.appendFormat(', left_on=[{0}]', merge.left.on.map(col => col.code));
+                        } 
+                    }
+    
+                    if (merge.right.useIndex) {
+                        code.append(', right_index=True');
+                    } else {
+                        if (merge.right.on && merge.right.on.length > 0) {
+                            code.appendFormat(', right_on=[{0}]', merge.right.on.map(col => col.code));
+                        } 
+                    }
                 }
-
-                if (right.useIndex) {
-                    code.append(', right_index=True');
-                } else {
-                    if (right.on && right.on.length > 0) {
-                        code.appendFormat(', right_on=[{0}]', right.on.map(col => col.code));
-                    } 
+                //====================================================================
+                // How
+                //====================================================================
+                if (merge.how) {
+                    code.appendFormat(", how='{0}'", merge.how);
                 }
-            }
-            //====================================================================
-            // How
-            //====================================================================
-            if (how) {
-                code.appendFormat(", how='{0}'", how);
-            }
-
-            //====================================================================
-            // Suffixes
-            //====================================================================
-            if (left.suffix != '' || right.suffix != '') {
-                code.appendFormat(", suffixes=('{0}', '{1}')", left.suffix, right.suffix);
-            }
-
-            code.append(')');
-
-            //====================================================================
-            // Reset index
-            //====================================================================
-            if (resetIndex) {
-                code.append('.reset_index()');
+    
+                //====================================================================
+                // Suffixes
+                //====================================================================
+                if (merge.left.suffix != '' || merge.right.suffix != '') {
+                    code.appendFormat(", suffixes=('{0}', '{1}')", merge.left.suffix, merge.right.suffix);
+                }
+    
+                code.append(')');
+    
+                //====================================================================
+                // Reset index
+                //====================================================================
+                if (resetIndex) {
+                    code.append('.reset_index()');
+                }
             }
 
             if (allocateTo && allocateTo != '') {

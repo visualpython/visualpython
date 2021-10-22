@@ -17,14 +17,14 @@ define([
     'nbextensions/visualpython/src/common/StringBuilder',
     'nbextensions/visualpython/src/common/vpCommon',
     'nbextensions/visualpython/src/common/kernelApi',
-    'nbextensions/visualpython/src/common/component/vpColumnSelector',
+    'nbextensions/visualpython/src/common/component/vpMultiSelector',
 
     'codemirror/lib/codemirror',
     'codemirror/mode/python/python',
     'notebook/js/codemirror-ipython',
     'codemirror/addon/display/placeholder',
     'codemirror/addon/display/autorefresh'
-], function (vpConst, sb, vpCommon, kernelApi, vpColumnSelector, codemirror) {   
+], function (vpConst, sb, vpCommon, kernelApi, vpMultiSelector, codemirror) {   
 
     //========================================================================
     // Define variable
@@ -479,14 +479,14 @@ define([
         }
 
         /**
-         * Render column selector using ColumnSelector module
+         * Render column selector using MultiSelector module
          * @param {Array<string>} previousList previous selected columns
          * @param {Array<string>} includeList columns to include 
          */
-        renderColumnSelector(previousList, includeList) {
-            this.popup.ColSelector = new vpColumnSelector(
+        renderMultiSelector(previousList, includeList) {
+            this.popup.ColSelector = new vpMultiSelector(
                 this._wrapSelector('.' + APP_POPUP_BODY), 
-                { dataframe: [this.state.variable], selectedList: previousList, includeList: includeList }
+                { mode: 'columns', parent: [this.state.variable], selectedList: previousList, includeList: includeList }
             );
         }
 
@@ -541,7 +541,7 @@ define([
             if (previousList) {
                 previousList = previousList.map(col => col.code)
             }
-            this.renderColumnSelector(previousList, includeList);
+            this.renderMultiSelector(previousList, includeList);
     
             // set title
             $(this._wrapSelector('.' + APP_POPUP_BOX + ' .' + APP_TITLE)).text(title);
@@ -674,11 +674,11 @@ define([
 
             // groupby change event
             $(document).on('change', this._wrapSelector('#vp_gbBy'), function(event) {
-                var colList = event.colList;
+                var colList = event.dataList;
                 that.state.groupby = colList;
                 
                 if (colList && colList.length == 1
-                    && colList[0].dtype.includes('datetime')) {
+                    && colList[0].type.includes('datetime')) {
                     $(that._wrapSelector('#vp_gbByGrouper')).removeAttr('disabled');
                 } else {
                     $(that._wrapSelector('#vp_gbByGrouper')).attr('disabled', true);
@@ -714,7 +714,7 @@ define([
 
             // display change event
             $(document).on('change', this._wrapSelector('#vp_gbDisplay'), function(event) {
-                var colList = event.colList;
+                var colList = event.dataList;
                 that.state.display = colList;
             });
 
@@ -772,7 +772,7 @@ define([
 
             // advanced item - column change event
             $(document).on('change', this._wrapSelector('.vp-gb-adv-col'), function(event) {
-                var colList = event.colList;
+                var colList = event.dataList;
                 var idx = $(that._wrapSelector('.vp-gb-adv-col')).index(this);
                 
                 // if there's change, reset display namings
@@ -931,11 +931,11 @@ define([
             $(document).on('click', this._wrapSelector('.' + APP_POPUP_OK), function() {
                 // ok input popup
                 if (that.popup.type == 'column') {
-                    var colList = that.popup.ColSelector.getColumnList();
+                    var dataList = that.popup.ColSelector.getDataList();
     
-                    $(that.popup.targetSelector).val(colList.map(col => { return col.code }).join(','));
-                    $(that.popup.targetSelector).data('list', colList);
-                    $(that.popup.targetSelector).trigger({ type: 'change', colList: colList });
+                    $(that.popup.targetSelector).val(dataList.map(col => { return col.code }).join(','));
+                    $(that.popup.targetSelector).data('list', dataList);
+                    $(that.popup.targetSelector).trigger({ type: 'change', dataList: dataList });
                     that.closeInnerPopup();
                 } else {
                     var dict = {};
