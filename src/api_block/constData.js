@@ -820,7 +820,7 @@ define([
         },
         'reshape': {
             label: 'Reshape',
-            tooltip: 'Work In Progress', // FIXME: 'Pivot & Melt',
+            tooltip: 'Pivot & Melt',
             file: 'nbextensions/visualpython/src/common/vpReshape',
             icon: '/nbextensions/visualpython/resource/apps/apps_reshape.svg',
             color: 3,
