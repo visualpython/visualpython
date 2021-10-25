@@ -228,7 +228,7 @@ define([
         code.appendLine('import matplotlib.pyplot as plt');
         code.appendLine('import json');
         // code.append(`print(json.dumps(plt.style.available))`);
-        code.append(`print(json.dumps([{ 'label': s, 'value': "'"+s+"'" } for s in plt.style.available]))`);
+        code.append(`print(json.dumps([{ 'label': s, 'value': s } for s in plt.style.available]))`);
         this.kernelExecute(code.toString(), function(result) {
             // 사용가능한 스타일 시트 목록
             var varList = JSON.parse(result);
@@ -261,7 +261,7 @@ define([
         code.appendLine('import json');
         code.appendLine("import matplotlib.font_manager as fm");
         code.appendLine("_ttflist = fm.fontManager.ttflist");
-        code.append(`print(json.dumps([{"label": f.name, "value":("'" + f.name + "'")} for f in _ttflist]))`);
+        code.append(`print(json.dumps([{"label": f.name, "value": f.name} for f in _ttflist]))`);
         this.kernelExecute(code.toString(), function(result) {
             // 사용가능한 폰트 목록
             var varList = JSON.parse(result);
@@ -273,7 +273,7 @@ define([
             if (mdvalue != undefined && mdvalue != '') {
                 suggestInput.setValue(mdvalue);
             } else {
-                suggestInput.setValue("'Gulim'");
+                suggestInput.setValue("Gulim");
             }
             suggestInput.setSuggestList(function() { return varList; });
             // suggestInput.setNormalFilter(false);
@@ -317,7 +317,7 @@ define([
             sbCode.appendLine('');
             sbCode.appendLine("from matplotlib.pylab import rcParams");
             if (fontfamily != '') {
-                sbCode.appendFormatLine("rcParams['font.family'] = {0}", fontfamily);
+                sbCode.appendFormatLine("rcParams['font.family'] = '{0}'", fontfamily);
             }
             if (fontsize != '') {
                 sbCode.appendFormatLine("rcParams['font.size'] = {0}", fontsize);

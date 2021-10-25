@@ -1116,7 +1116,9 @@ define([
         if (fontName && fontName.length > 0) {
             code.appendFormatLine("rcParams['font.family'] = '{0}'", fontName);
         }
-        code.appendFormatLine("rcParams['font.size'] = {0}", fontSize);
+        if (fontSize && fontSize.length > 0) {
+            code.appendFormatLine("rcParams['font.size'] = {0}", fontSize);
+        }
         code.append("rcParams['axes.unicode_minus'] = False");
 
         return code.toString();
