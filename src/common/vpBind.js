@@ -72,11 +72,11 @@ define([
             this.codepreview = undefined;
 
             this.howList = [
-                { label: 'inner', value: 'Inner' },
-                { label: 'outer', value: 'Outer' },
-                { label: 'left', value: 'Left' },
-                { label: 'right', value: 'Right' },
-                { label: 'cross', value: 'Cross' },
+                { label: 'Inner', value: 'inner' },
+                { label: 'Outer', value: 'outer' },
+                { label: 'Left', value: 'left' },
+                { label: 'Right', value: 'right' },
+                { label: 'Cross', value: 'cross' },
             ]
         }
 
@@ -377,7 +377,7 @@ define([
             page.appendFormatLine('<input type="text" id="{0}" placeholder="{1}" disabled>', 'vp_bdLeftOn', 'Left key');
             page.appendFormatLine('<button id="{0}" class="{1}">{2}</button>', 'vp_bdLeftOnSelect', 'vp-button wp50', 'Edit');
             // left use index
-            page.appendFormatLine('<label><input type="checkbox" id="{0}"/><span>{1}</span></label>', 'vp_bdRightIndex', 'use index');
+            page.appendFormatLine('<label><input type="checkbox" id="{0}"/><span>{1}</span></label>', 'vp_bdLeftIndex', 'use index');
             page.appendLine('</div>');
             // right on
             page.appendLine('<div>');
@@ -385,7 +385,7 @@ define([
             page.appendFormatLine('<input type="text" id="{0}" placeholder="{1}" disabled>', 'vp_bdRightOn', 'Right key');
             page.appendFormatLine('<button id="{0}" class="{1}">{2}</button>', 'vp_bdRightOnSelect', 'vp-button wp50', 'Edit');
             // right use index
-            page.appendFormatLine('<label><input type="checkbox" id="{0}"/><span>{1}</span></label>', 'vp_bdLeftIndex', 'use index');
+            page.appendFormatLine('<label><input type="checkbox" id="{0}"/><span>{1}</span></label>', 'vp_bdRightIndex', 'use index');
             page.appendLine('</div>');
             // suffixes
             page.appendLine('<div>');
@@ -467,7 +467,7 @@ define([
 
         /**
          * Open Inner popup page for column selection
-         * @param {string} targetVariable 
+         * @param {Array<string>} targetVariable 
          * @param {Object} targetSelector 
          * @param {string} title
          */
@@ -481,7 +481,7 @@ define([
 
             this.popup.MultiSelector = new vpMultiSelector(
                 this._wrapSelector('.' + APP_POPUP_BODY), 
-                { mode: 'columns', parent: [ targetVariable ], selectedList: previousList }
+                { mode: 'columns', parent: targetVariable, selectedList: previousList }
             );
     
             // set title
@@ -660,7 +660,7 @@ define([
 
             // on change event
             $(document).on('change', this._wrapSelector('#vp_bdOn'), function(event) {
-                var colList = event.colList;
+                var colList = event.dataList;
                 that.state.merge.on = colList;
                 
                 if (colList && colList.length > 0) {
@@ -680,7 +680,7 @@ define([
 
             // Left on change event
             $(document).on('change', this._wrapSelector('#vp_bdLeftOn'), function(event) {
-                var colList = event.colList;
+                var colList = event.dataList;
                 that.state.merge.left.on = colList;
                 
                 if ((colList && colList.length > 0)
@@ -711,7 +711,7 @@ define([
 
             // Right on change event
             $(document).on('change', this._wrapSelector('#vp_bdRightOn'), function(event) {
-                var colList = event.colList;
+                var colList = event.dataList;
                 that.state.merge.right.on = colList;
                 
                 if ((colList && colList.length > 0)
@@ -896,6 +896,9 @@ define([
             code.appendFormat('pd.{0}(', type);
 
             if (type == 'concat') {
+                //====================================================================
+                // Concat
+                //====================================================================
                 // FIXME: consider default
                 code.appendFormat("[{0}], join='{1}', axis={2}", concat.variable.map(data=>data.code).join(','), concat.join, concat.axis);
 
@@ -915,6 +918,9 @@ define([
 
                 code.append(')');
             } else {
+                //====================================================================
+                // Merge
+                //====================================================================
                 code.appendFormat('{0}, {1}', merge.left.variable, merge.right.variable);
     
                 if (merge.on && merge.on.length > 0) {

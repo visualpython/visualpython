@@ -233,9 +233,14 @@ define([
             dataList && dataList.forEach((data, idx) => {
                 // for column : data.array parsing
                 var info = vpCommon.safeString(data.array);
+                if (info) {
+                    info = data.value + ':\n';
+                } else {
+                    info = '';
+                }
                 // render item box
                 tag.appendFormatLine('<div class="{0} {1}" data-idx="{2}" data-name="{3}" data-type="{4}" data-code="{5}" title="{6}"><span>{7}</span></div>'
-                                    , APP_SELECT_ITEM, APP_DRAGGABLE, data.location, data.value, data.type, data.code, info?data.value + ': \n' + info:'', data.value);
+                                    , APP_SELECT_ITEM, APP_DRAGGABLE, data.location, data.value, data.type, data.code, info, data.value);
             });
             tag.appendLine('</div>');  // APP_SELECT_BOX
             return tag.toString();
@@ -248,9 +253,14 @@ define([
             dataList && dataList.forEach((data, idx) => {
                 // for column : data.array parsing
                 var info = vpCommon.safeString(data.array);
+                if (info) {
+                    info = data.value + ':\n';
+                } else {
+                    info = '';
+                }
                 // render item box
                 tag.appendFormatLine('<div class="{0} {1} {2}" data-idx="{3}" data-name="{4}" data-type="{5}" data-code="{6}" title="{7}"><span>{8}</span></div>'
-                                    , APP_SELECT_ITEM, APP_DRAGGABLE, 'added', data.location, data.value, data.type, data.code, info?data.value + ': \n' + info:'', data.value);
+                                    , APP_SELECT_ITEM, APP_DRAGGABLE, 'added', data.location, data.value, data.type, data.code, info, data.value);
             });
             tag.appendLine('</div>');  // APP_SELECT_BOX
             return tag.toString();
