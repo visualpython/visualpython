@@ -501,7 +501,7 @@ define([
 
             // index change event
             $(document).on('change', this._wrapSelector('#vp_rsIndex'), function(event) {
-                var colList = event.colList;
+                var colList = event.dataList;
                 that.state.pivot.index = colList;
             });
 
@@ -513,7 +513,7 @@ define([
 
             // columns change event
             $(document).on('change', this._wrapSelector('#vp_rsColumns'), function(event) {
-                var colList = event.colList;
+                var colList = event.dataList;
                 that.state.pivot.columns = colList;
             });
 
@@ -525,7 +525,7 @@ define([
 
             // values change event
             $(document).on('change', this._wrapSelector('#vp_rsValues'), function(event) {
-                var colList = event.colList;
+                var colList = event.dataList;
                 that.state.pivot.values = colList;
             });
 
@@ -537,7 +537,7 @@ define([
 
             // id vars change event
             $(document).on('change', this._wrapSelector('#vp_rsIdVars'), function(event) {
-                var colList = event.colList;
+                var colList = event.dataList;
                 that.state.melt.idVars = colList;
             });
 
@@ -549,7 +549,7 @@ define([
 
             // value vars change event
             $(document).on('change', this._wrapSelector('#vp_rsValueVars'), function(event) {
-                var colList = event.colList;
+                var colList = event.dataList;
                 that.state.melt.valueVars = colList;
             });
 
