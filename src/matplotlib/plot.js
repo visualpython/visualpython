@@ -130,11 +130,6 @@ define([
         // accBoxImport.setOpenBox(true);
         sbTagString.clear();
         sbTagString.appendFormatLine('<div class="{0}">', 'vp-import-box');
-        // import
-        sbTagString.appendLine('<div>');
-        sbTagString.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_plImport', '', 'Matplot.pyplot as');
-        sbTagString.appendFormatLine('<input type="text" id="{0}" placeholder="{1}" value="{2}" disabled>', 'vp_plImport', 'alias', 'plt');
-        sbTagString.appendLine('</div>');
         // figure size
         sbTagString.appendLine('<div>');
         sbTagString.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_plFigureWidth', '', 'Figure size');
@@ -160,7 +155,7 @@ define([
         sbTagString.appendLine('</div>');
         // import button
         sbTagString.appendLine('<div>');
-        sbTagString.appendFormatLine('<input type="button" id="{0}" class="{1}" value="{2}">', 'vp_plImportRun', 'vp-button activated vp-pl-import-run', 'Import');
+        sbTagString.appendFormatLine('<input type="button" id="{0}" class="{1}" value="{2}">', 'vp_plImportRun', 'vp-button activated vp-pl-import-run', 'Apply');
         sbTagString.appendLine('</div>');
 
         sbTagString.appendLine('</div>');
@@ -468,7 +463,7 @@ define([
             // run cell
             $(vpCommon.wrapSelector('#vp_appsCode')).trigger({
                 type: 'popup_run',
-                title: 'Snippets',
+                title: 'Background',
                 code: code,
                 addCell: true,
                 runCell: true
@@ -1098,14 +1093,12 @@ define([
         var code = new sb.StringBuilder();
 
         // get parameters
-        var alias = $(this.wrapSelector('#vp_plImport')).val();
         var figWidth = $(this.wrapSelector('#vp_plFigureWidth')).val();
         var figHeight = $(this.wrapSelector('#vp_plFigureHeight')).val();
         var styleName = $(this.wrapSelector('#vp_plStyle')).val();
         var fontName = $(this.wrapSelector('#vp_plFontName')).val();
         var fontSize = $(this.wrapSelector('#vp_plFontSize')).val();
 
-        code.appendLine('import matplotlib.pyplot as plt');
         code.appendFormatLine("plt.rc('figure', figsize=({0}, {1}))", figWidth, figHeight);
         if (styleName && styleName.length > 0) {
             code.appendFormatLine("plt.style.use('{0}')", styleName);
