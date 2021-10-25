@@ -127,7 +127,7 @@ define([
 
         // Box 1. Import
         var accBoxImport = this.createOptionContainer('Import Options');
-        accBoxImport.setOpenBox(true);
+        // accBoxImport.setOpenBox(true);
         sbTagString.clear();
         sbTagString.appendFormatLine('<div class="{0}">', 'vp-import-box');
         // import
