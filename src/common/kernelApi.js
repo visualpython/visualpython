@@ -69,6 +69,14 @@ define([
         });
     }
 
+    var getCommonColumnList = function(dataframeList, callback) {
+        executePython(
+            vpCommon.formatString('_vp_print(_vp_get_multi_columns_list([{0}]))', dataframeList.join(','))
+            , function(result) {
+                callback(result);
+        });
+    }
+
     var getRowList = function(dataframe, callback) {
         executePython(
             vpCommon.formatString('_vp_print(_vp_get_rows_list({0}))', dataframe)
@@ -87,6 +95,7 @@ define([
         executePython: executePython,
         searchVarList: searchVarList,
         getColumnList: getColumnList,
+        getCommonColumnList: getCommonColumnList,
         getRowList: getRowList,
         getProfilingList: getProfilingList
     }

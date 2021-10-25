@@ -552,6 +552,13 @@
     // 기본설정 불러오기
     readDefaultConfig();
 
+    // Operations on kernel restart
+    events.on('kernel_ready.Kernel', function (evt, info) {
+        console.log('vp operations for kernel ready...');
+        // read vp functions
+        read_kernel_functions();
+    });
+
     return {
         vpInit: vpInit, readConfig: readConfig
     };

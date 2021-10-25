@@ -66,6 +66,11 @@ define([
         bindEvent() {
             var blockContainer = this.blockContainerThis;
 
+            // block preparing apps
+            if (this.colorLevel == 0) {
+                return;
+            }
+
             $(this.dom).on('click', function() {
                 var menu = $(this).attr('data-menu');
 
@@ -90,7 +95,7 @@ define([
                     case 'profiling':
                     case 'pdf':
                     case 'groupby':
-                    case 'merge':
+                    case 'bind':
                     case 'reshape':
                         blockContainer.setSelectBlock(null);
                         blockContainer.createAppsPage(menu, file, config);

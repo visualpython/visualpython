@@ -117,16 +117,16 @@ define([
                         label: 'Sample File',
                         component: 'option_select',
                         options: [
-                            'iris.csv', 'Titanic_train.csv', 'Titanic_test.csv', 'cancer.csv',
+                            'iris.csv', 'titanic.csv', 'cancer.csv',
                             'fish.csv', 'accidentData.csv', 'campusRecruitment.csv', 'houseData_500.csv',
                             'lolRankedData_500.csv', 'weatherData_500.csv', 'welfareCenter.csv',
-                            'mnist_train_1000.csv'
+                            'mnist_train_1000.csv', 'economic_index.csv', 'tips.csv'
                         ],
                         options_label: [
-                            'iris', 'Titanic_train', 'Titanic_test', 'cancer',
+                            'iris', 'titanic', 'cancer',
                             'fish', 'accidentData', 'campusRecruitment', 'houseData_500',
                             'lolRankedData_500', 'weatherData_500', 'welfareCenter',
-                            'mnist_train_1000'
+                            'mnist_train_1000', 'economic index', 'tips'
                         ]
                     }
                 ],

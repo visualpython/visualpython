@@ -19,6 +19,7 @@
     height: calc(100% - 100px);
 }
 .vp-apiblock-tab-container {
+    min-width: 265px;
 }
 .vp-apiblock-tab-header {
     height: 40px;
