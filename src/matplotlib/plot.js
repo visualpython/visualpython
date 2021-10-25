@@ -1099,6 +1099,7 @@ define([
         var fontName = $(this.wrapSelector('#vp_plFontName')).val();
         var fontSize = $(this.wrapSelector('#vp_plFontSize')).val();
 
+        code.appendLine('import matplotlib.pyplot as plt');
         code.appendFormatLine("plt.rc('figure', figsize=({0}, {1}))", figWidth, figHeight);
         if (styleName && styleName.length > 0) {
             code.appendFormatLine("plt.style.use('{0}')", styleName);

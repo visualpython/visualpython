@@ -294,7 +294,7 @@ define([
 
             // 코드 생성
             // 필수 입력 항목
-            sbCode.appendFormatLine('import matplotlib.pyplot as {0}', $(this.wrapSelector('#i0')).val());
+            sbCode.appendLine('import matplotlib.pyplot as plt');
             sbCode.appendFormatLine('%matplotlib {0}', $(this.wrapSelector('#magic')).val());
 
             // style range, sheet
