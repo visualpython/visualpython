@@ -152,7 +152,7 @@ define([
 
             // title
             page.appendFormat('<div class="{0}">{1}</div>',
-                VP_PDF_TITLE, 'PyMuPDF - Extract text from pdf');
+                VP_PDF_TITLE, 'Extract text from PDF');
 
             // close button
             page.appendFormatLine('<div class="{0}"><img src="{1}"/></div>',

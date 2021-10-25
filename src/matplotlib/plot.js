@@ -7,8 +7,9 @@ define([
     , 'nbextensions/visualpython/src/common/vpFuncJS'
     , 'nbextensions/visualpython/src/container/vpContainer'
     , 'nbextensions/visualpython/src/pandas/common/pandasGenerator'
+    , 'nbextensions/visualpython/src/common/component/vpSuggestInputText'
     , 'nbextensions/visualpython/src/pandas/fileNavigation/index'
-], function (requirejs, $, vpCommon, vpConst, sb, vpFuncJS, vpContainer, pdGen, fileNavigation) {
+], function (requirejs, $, vpCommon, vpConst, sb, vpFuncJS, vpContainer, pdGen, vpSuggestInputText, fileNavigation) {
     // 옵션 속성
     const funcOptProp = {
         stepCount : 1
@@ -124,13 +125,49 @@ define([
         var sbPageContent = new sb.StringBuilder();
         var sbTagString = new sb.StringBuilder();
 
+        // Box 1. Import
+        var accBoxImport = this.createOptionContainer('Import Options');
+        // accBoxImport.setOpenBox(true);
+        sbTagString.clear();
+        sbTagString.appendFormatLine('<div class="{0}">', 'vp-import-box');
+        // figure size
+        sbTagString.appendLine('<div>');
+        sbTagString.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_plFigureWidth', '', 'Figure size');
+        sbTagString.appendFormatLine('<input type="number" id="{0}" placeholder="{1}" value="{2}">', 'vp_plFigureWidth', 'width', 12);
+        sbTagString.appendFormatLine('<input type="number" id="{0}" placeholder="{1}" value="{2}">', 'vp_plFigureHeight', 'height', 8);
+        sbTagString.appendLine('</div>');
+        // style sheet
+        sbTagString.appendLine('<div>');
+        sbTagString.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_plStyle', '', 'Style sheet');
+        sbTagString.appendFormatLine('<input type="text" id="{0}" placeholder="{1}">', 'vp_plStyle', 'style name');
+        sbTagString.appendLine('</div>');
+        // divider
+        sbTagString.appendLine('<hr style="margin: 5px 0;"/>');
+        // system font
+        sbTagString.appendLine('<div>');
+        sbTagString.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_plFontName', '', 'System font');
+        sbTagString.appendFormatLine('<input type="text" id="{0}" placeholder="{1}">', 'vp_plFontName', 'font name');
+        sbTagString.appendLine('</div>');
+        // font size
+        sbTagString.appendLine('<div>');
+        sbTagString.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_plFontSize', '', 'Font size');
+        sbTagString.appendFormatLine('<input type="number" id="{0}" placeholder="{1}" value="{2}">', 'vp_plFontSize', 'size', 10);
+        sbTagString.appendLine('</div>');
+        // import button
+        sbTagString.appendLine('<div>');
+        sbTagString.appendFormatLine('<input type="button" id="{0}" class="{1}" value="{2}">', 'vp_plImportRun', 'vp-button activated vp-pl-import-run', 'Apply');
+        sbTagString.appendLine('</div>');
+
+        sbTagString.appendLine('</div>');
+        accBoxImport.appendContent(sbTagString.toString());
+        sbPageContent.appendLine(accBoxImport.toTagString());
 
         // Popup Box. variable view box
         sbTagString.clear();
         sbTagString.appendLine('<div id="vp_varViewBox" class="vp-var-view-box">');
         sbTagString.appendLine('<div class="vp-icon-btn vp-close-view"><img src="/nbextensions/visualpython/resource/close_big.svg"/></div>');
         // variable list
-        sbTagString.appendLine('<div class="vp-var-view-div">');
+        sbTagString.appendLine('<div class="vp-var-view-div vp-scrollbar">');
         sbTagString.appendLine('<table id="vp_varViewList" class="vp-option-table vp-var-view-list no-selection">');
         sbTagString.appendLine('<colgroup><col width="40%"/><col width="*"/></colgroup>');
         sbTagString.appendLine('<thead>');
@@ -145,28 +182,27 @@ define([
         // detail
         sbTagString.appendLine('<div id="vp_varViewDetail">');
         sbTagString.appendLine('<table class="vp-option-table vp-var-view-detail no-selection">');
-        sbTagString.appendLine('<colgroup><col width="40%"/><col width="*"/></colgroup>');
-        sbTagString.appendLine('<thead><tr><th>Column</th><th>Method</th></tr></thead>');
-        sbTagString.appendLine('<tbody>');
-        sbTagString.appendLine('<tr><td><div id="vp_varDetailColList" class="vp-column-select"></div></td>');
-        sbTagString.appendLine('<td><div id="vp_varDetailArray" class="vp-method-select"></div></td></tr>');
-        sbTagString.appendLine('</tbody>');
+        sbTagString.appendLine('<colgroup><col width="*"/></colgroup>');
+        sbTagString.appendLine('<thead><tr><th>Column</th></tr></thead>');
+        sbTagString.appendLine('<tbody><tr>');
+        sbTagString.appendLine('<td><div id="vp_varDetailColList" class="vp-column-select vp-scrollbar"></div></td>');
+        // sbTagString.appendLine('<td><div id="vp_varDetailArray" class="vp-method-select"></div></td>');
+        sbTagString.appendLine('</tr></tbody>');
         sbTagString.appendLine('</table>');
         sbTagString.appendLine('</div>');
         // footer
         sbTagString.appendLine('<div class="var-view-footer">');
         sbTagString.appendLine('<input id="vp_varSelectCode" type="text" class="vp-input" readonly/>');
-        sbTagString.appendLine('<input id="vp_varSelectBtn" type="button" value="select"/>');
+        sbTagString.appendLine('<input id="vp_varSelectBtn" type="button" class="vp-button activated wp50" value="Select"/>');
         sbTagString.appendLine('</div>');
         sbTagString.appendLine('</div>');
         sbPageContent.appendLine(sbTagString.toString());
 
-        // Box 1. Required Input & Output
+        // Box 2. Required Input & Output
         var accBoxRequire = this.createOptionContainer(vpConst.API_REQUIRE_OPTION_BOX_CAPTION);
         accBoxRequire.setOpenBox(true);
 
         sbTagString.clear();
-        // 대상변수 자동입력 칸 //FIXME:
         sbTagString.appendLine('<input type="hidden" class="vp-input input-single" id="i0" value="plt"/>');
 
         sbTagString.appendFormatLine('<div class="{0} {1}">{2}</div>', 'vp-thead', vpConst.COLOR_FONT_ORANGE, 'Chart Type');
@@ -265,11 +301,11 @@ define([
                                     , 'vp_userOption', 'key=value, key=value ...');
         tblLayoutRequire.addRow('User Option', sbTagString.toString());
 
-        // 박스에 추가
+        // add to box
         accBoxRequire.appendContent(tblLayoutRequire.toTagString());
         sbPageContent.appendLine(accBoxRequire.toTagString());
 
-        // Box 2. Additional Options
+        // Box 3. Additional Options
         var tblAdditional = this.createVERSimpleLayout("15%");
         var accBoxAdditional = this.createOptionContainer('Additional Options');
         accBoxAdditional.setOpenBox(true);
@@ -322,7 +358,7 @@ define([
         sbTagString.appendFormatLine('<div id="{0}" class="{1}"></div>', 'vp_openFileNavigationBtn', 'vp-file-browser-button');
         tblAdditional.addRow('Save Figure', sbTagString.toString());
 
-        // 박스에 추가
+        // add to box
         accBoxAdditional.appendContent(tblAdditional.toTagString());
         sbPageContent.appendLine(accBoxAdditional.toTagString());
 
@@ -331,7 +367,8 @@ define([
         this.setPage(sbPageContent.toString());
 
         
-        // 차트 서브플롯 페이지 구성
+        // Chart subplot option
+        this.bindImportOptions();
         this.bindSubplotOption1();
         this.bindCmapSelector();
 
@@ -362,6 +399,76 @@ define([
      */
     MatplotPackage.prototype.showFunctionTitle = function() {
         $(this.wrapSelector('.vp_functionName')).text(funcOptProp.funcName);
+    }
+
+    /**
+     * Bind Import options event
+     */
+    MatplotPackage.prototype.bindImportOptions = function() {
+        var that = this;
+
+        //====================================================================
+        // Stylesheet suggestinput
+        //====================================================================
+        var stylesheetTag = $(this.wrapSelector('#vp_plStyle'));
+        // search available stylesheet list
+        var code = new sb.StringBuilder(); 
+        // FIXME: convert it to kernelApi
+        code.appendLine('import matplotlib.pyplot as plt');
+        code.appendLine('import json');
+        code.append(`print(json.dumps([{ 'label': s, 'value': s } for s in plt.style.available]))`);
+        this.kernelExecute(code.toString(), function(result) {
+            // get available stylesheet list
+            var varList = JSON.parse(result);
+            var suggestInput = new vpSuggestInputText.vpSuggestInputText();
+            suggestInput.setComponentID('vp_plStyle');
+            suggestInput.setSuggestList(function() { return varList; });
+            suggestInput.setPlaceholder('style name');
+            // suggestInput.setNormalFilter(false);
+            $(stylesheetTag).replaceWith(function() {
+                return suggestInput.toTagString();
+            });
+        });
+
+        //====================================================================
+        // System font suggestinput
+        //====================================================================
+        var fontFamilyTag = $(this.wrapSelector('#vp_plFontName'));
+        // search system font list
+        var code = new sb.StringBuilder();
+        // FIXME: convert it to kernelApi
+        code.appendLine('import json'); 
+        code.appendLine("import matplotlib.font_manager as fm");
+        code.appendLine("_ttflist = fm.fontManager.ttflist");
+        code.append("print(json.dumps([{'label': f.name, 'value': f.name } for f in _ttflist]))");
+        this.kernelExecute(code.toString(), function(result) {
+            // get available font list
+            var varList = JSON.parse(result);
+            var suggestInput = new vpSuggestInputText.vpSuggestInputText();
+            suggestInput.setComponentID('vp_plFontName');
+            suggestInput.setSuggestList(function() { return varList; });
+            suggestInput.setPlaceholder('font name');
+            // suggestInput.setNormalFilter(false);
+            $(fontFamilyTag).replaceWith(function() {
+                return suggestInput.toTagString();
+            });
+        });
+
+        //====================================================================
+        // Events
+        //====================================================================
+        $(this.wrapSelector('#vp_plImportRun')).click(function() {
+            // generateImportCode
+            var code = that.generateImportCode();
+            // run cell
+            $(vpCommon.wrapSelector('#vp_appsCode')).trigger({
+                type: 'popup_run',
+                title: 'Background',
+                code: code,
+                addCell: true,
+                runCell: true
+            });
+        });
     }
 
     /**
@@ -976,6 +1083,39 @@ define([
         }
 
         return code;
+    }
+
+    /**
+     * Generate Import options code
+     * @returns code
+     */
+    MatplotPackage.prototype.generateImportCode = function() {
+        var code = new sb.StringBuilder();
+
+        // get parameters
+        var figWidth = $(this.wrapSelector('#vp_plFigureWidth')).val();
+        var figHeight = $(this.wrapSelector('#vp_plFigureHeight')).val();
+        var styleName = $(this.wrapSelector('#vp_plStyle')).val();
+        var fontName = $(this.wrapSelector('#vp_plFontName')).val();
+        var fontSize = $(this.wrapSelector('#vp_plFontSize')).val();
+
+        code.appendLine('import matplotlib.pyplot as plt');
+        code.appendFormatLine("plt.rc('figure', figsize=({0}, {1}))", figWidth, figHeight);
+        if (styleName && styleName.length > 0) {
+            code.appendFormatLine("plt.style.use('{0}')", styleName);
+        }
+        code.appendLine();
+
+        code.appendLine('from matplotlib import rcParams');
+        if (fontName && fontName.length > 0) {
+            code.appendFormatLine("rcParams['font.family'] = '{0}'", fontName);
+        }
+        if (fontSize && fontSize.length > 0) {
+            code.appendFormatLine("rcParams['font.size'] = {0}", fontSize);
+        }
+        code.append("rcParams['axes.unicode_minus'] = False");
+
+        return code.toString();
     }
 
     /**

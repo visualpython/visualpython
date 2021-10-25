@@ -1,7 +1,7 @@
 /*
  *    Project Name    : Visual Python
  *    Description     : GUI-based Python code generator
- *    File Name       : vpColumnSelector.js
+ *    File Name       : vpMultiSelector.js
  *    Author          : Black Logic
  *    Note            : Groupby app
  *    License         : GNU GPLv3 with Visual Python special exception
@@ -42,45 +42,117 @@ define([
 
 
     //========================================================================
-    // [CLASS] ColumnSelector
+    // [CLASS] MultiSelector
     //========================================================================
-    class ColumnSelector {
+    class MultiSelector {
 
         /**
          * 
          * @param {string} frameSelector        query for parent component
-         * @param {string} dataframe            dataframe variable name
-         * @param {Array<string>} selectedList  
-         * @param {Array<string>} includeList   
+         * @param {Object} config  parent:[], selectedList=[], includeList=[]
          */
-        constructor(frameSelector, dataframe, selectedList=[], includeList=[]) {
+        constructor(frameSelector, config) {
             this.uuid = 'u' + vpCommon.getUUID();
             this.frameSelector = frameSelector;
-            this.dataframe = dataframe;
+
+            // configuration
+            this.config = config;
+
+            var { mode, type, parent, selectedList=[], includeList=[], excludeList=[] } = config;
+            this.mode = mode;
+            this.parent = parent;
             this.selectedList = selectedList;
             this.includeList = includeList;
-            this.columnList = [];
+            this.excludeList = excludeList;
+
+            this.dataList = [];
             this.pointer = { start: -1, end: -1 };
 
             var that = this;
-            kernelApi.getColumnList(dataframe, function(result) {
-                var colList = JSON.parse(result);
-                colList = colList.map(function(x) {
-                    return {
-                        ...x,
-                        value: x.label,
-                        code: x.value
-                    };
-                });
-                if (includeList && includeList.length > 0) {
-                    that.columnList = colList.filter(col => includeList.includes(col.code));
-                } else {
-                    that.columnList = colList;
+
+            switch (mode) {
+                case 'columns':
+                    this._getColumnList(parent, function(dataList) {
+                        that._executeCallback(dataList);
+                    });
+                    break;
+                case 'variable':
+                    this._getVariableList(type, function(dataList) {
+                        that._executeCallback(dataList);
+                    })
+                    break;
+            }
+        }
+
+        _executeCallback(dataList) {
+            if (this.includeList && this.includeList.length > 0) {
+                dataList = dataList.filter(data => this.includeList.includes(data.code));
+            }
+            if (this.excludeList && this.excludeList.length > 0) {
+                dataList = dataList.filter(data => !this.excludeList.includes(data.code));
+            }
+            this.dataList = dataList;
+
+            // load
+            this.load();
+        }
+
+        _getVariableList(type, callback) {
+            kernelApi.searchVarList(type, function(result) {
+                try {
+                    var dataList = JSON.parse(result);
+                    dataList = dataList.map(function(x, idx) {
+                        return {
+                            ...x,
+                            value: x.varName,
+                            code: x.varName,
+                            type: x.varType,
+                            location: idx
+                        };
+                    });
+                    callback(dataList);
+                } catch (e) {
+                    callback([]);
                 }
-                that.load();
-                that.bindEvent();
-                that.bindDraggable();
             });
+        }
+        
+        _getColumnList(parent, callback) {
+            if (parent && parent.length > 1) {
+                kernelApi.getCommonColumnList(parent, function(result) {
+                    try {
+                        var colList = JSON.parse(result);
+                        colList = colList.map(function(x) {
+                            return {
+                                ...x,
+                                value: x.label,
+                                code: x.value,
+                                type: x.dtype
+                            };
+                        });
+                        callback(colList);
+                    } catch (e) {
+                        callback([]);
+                    }
+                });
+            } else {
+                kernelApi.getColumnList(parent, function(result) {
+                    try {
+                        var colList = JSON.parse(result);
+                        colList = colList.map(function(x) {
+                            return {
+                                ...x,
+                                value: x.label,
+                                code: x.value,
+                                type: x.dtype
+                            };
+                        });
+                        callback(colList);
+                    } catch (e) {
+                        callback([]);
+                    }
+                });
+            }
         }
 
         _wrapSelector(query='') {
@@ -89,23 +161,25 @@ define([
 
         load() {
             $(vpCommon.wrapSelector(this.frameSelector)).html(this.render());
-            vpCommon.loadCssForDiv(this._wrapSelector(), Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH + 'common/component/columnSelector.css');
+            vpCommon.loadCssForDiv(this._wrapSelector(), Jupyter.notebook.base_url + vpConst.BASE_PATH + vpConst.STYLE_PATH + 'common/component/multiSelector.css');
+            this.bindEvent();
+            this.bindDraggable();
         }
 
-        getColumnList() {
+        getDataList() {
             var colTags = $(this._wrapSelector('.' + APP_SELECT_ITEM + '.added:not(.moving)'));
-            var colList = [];
+            var dataList = [];
             if (colTags.length > 0) {
                 for (var i = 0; i < colTags.length; i++) {
-                    var colName = $(colTags[i]).data('colname');
-                    var colDtype = $(colTags[i]).data('dtype');
-                    var colCode = $(colTags[i]).data('code');
-                    if (colCode) {
-                        colList.push({ name: colName, dtype: colDtype, code: colCode});                   
+                    var name = $(colTags[i]).data('name');
+                    var type = $(colTags[i]).data('type');
+                    var code = $(colTags[i]).data('code');
+                    if (code) {
+                        dataList.push({ name: name, type: type, code: code});                   
                     }
                 }
             }
-            return colList;
+            return dataList;
         }
 
         render() {
@@ -113,14 +187,14 @@ define([
 
             var tag = new sb.StringBuilder();
             tag.appendFormatLine('<div class="{0} {1}">', APP_SELECT_CONTAINER, this.uuid);
-            // col select - left
+            // select - left
             tag.appendFormatLine('<div class="{0}">', APP_SELECT_LEFT);
             // tag.appendFormatLine('<input type="text" class="{0}" placeholder="{1}"/>'
             //                         , APP_SELECT_SEARCH, 'Search Column');
             var vpSearchSuggest = new vpSuggestInputText.vpSuggestInputText();
             vpSearchSuggest.addClass(APP_SELECT_SEARCH);
-            vpSearchSuggest.setPlaceholder('Search Column');
-            vpSearchSuggest.setSuggestList(function() { return that.columnList; });
+            vpSearchSuggest.setPlaceholder('Search ' + this.mode);
+            vpSearchSuggest.setSuggestList(function() { return that.dataList; });
             vpSearchSuggest.setSelectEvent(function(value) {
                 $(this.wrapSelector()).val(value);
                 $(this.wrapSelector()).trigger('change');
@@ -129,54 +203,64 @@ define([
             tag.appendLine(vpSearchSuggest.toTagString());
             tag.appendFormatLine('<i class="fa fa-search search-icon"></i>')
             
-            var selectionList = this.columnList.filter(col => !that.selectedList.includes(col.code));
-            tag.appendLine(this.renderColumnSelectionBox(selectionList));
+            var selectionList = this.dataList.filter(data => !that.selectedList.includes(data.code));
+            tag.appendLine(this.renderSelectionBox(selectionList));
             tag.appendLine('</div>');  // APP_SELECT_LEFT
-            // col select - buttons
+            // select - buttons
             tag.appendFormatLine('<div class="{0}">', APP_SELECT_BTN_BOX);
             tag.appendFormatLine('<button type="button" class="{0}" title="{1}">{2}</button>'
-                                , APP_SELECT_ADD_ALL_BTN, 'Add all columns', '<img src="/nbextensions/visualpython/resource/arrow_right_double.svg"/></i>');
+                                , APP_SELECT_ADD_ALL_BTN, 'Add all items', '<img src="/nbextensions/visualpython/resource/arrow_right_double.svg"/></i>');
             tag.appendFormatLine('<button type="button" class="{0}" title="{1}">{2}</button>'
-                                ,  APP_SELECT_ADD_BTN, 'Add selected columns', '<img src="/nbextensions/visualpython/resource/arrow_right.svg"/></i>');
+                                ,  APP_SELECT_ADD_BTN, 'Add selected items', '<img src="/nbextensions/visualpython/resource/arrow_right.svg"/></i>');
             tag.appendFormatLine('<button type="button" class="{0}" title="{1}">{2}</button>'
-                                , APP_SELECT_DEL_BTN, 'Remove selected columns', '<img src="/nbextensions/visualpython/resource/arrow_left.svg"/>');
+                                , APP_SELECT_DEL_BTN, 'Remove selected items', '<img src="/nbextensions/visualpython/resource/arrow_left.svg"/>');
             tag.appendFormatLine('<button type="button" class="{0}" title="{1}">{2}</button>'
-                                , APP_SELECT_DEL_ALL_BTN, 'Remove all columns', '<img src="/nbextensions/visualpython/resource/arrow_left_double.svg"/>');
+                                , APP_SELECT_DEL_ALL_BTN, 'Remove all items', '<img src="/nbextensions/visualpython/resource/arrow_left_double.svg"/>');
             tag.appendLine('</div>');  // APP_SELECT_BTNS
-            // col select - right
+            // select - right
             tag.appendFormatLine('<div class="{0}">', APP_SELECT_RIGHT);
-            var selectedList = this.columnList.filter(col => that.selectedList.includes(col.code));
-            tag.appendLine(this.renderColumnSelectedBox(selectedList));
+            var selectedList = this.dataList.filter(data => that.selectedList.includes(data.code));
+            tag.appendLine(this.renderSelectedBox(selectedList));
             tag.appendLine('</div>');  // APP_SELECT_RIGHT
             tag.appendLine('</div>');  // APP_SELECT_CONTAINER
             return tag.toString();
         }
 
-        renderColumnSelectionBox(colList) {
+        renderSelectionBox(dataList) {
             var tag = new sb.StringBuilder();
             tag.appendFormatLine('<div class="{0} {1} {2} {3}">', APP_SELECT_BOX, 'left', APP_DROPPABLE, 'no-selection');
-            // get col data and make draggable items
-            colList && colList.forEach((col, idx) => {
-                // col.array parsing
-                var colInfo = vpCommon.safeString(col.array);
-                // render column box
-                tag.appendFormatLine('<div class="{0} {1}" data-idx="{2}" data-colname="{3}" data-dtype="{4}" data-code="{5}" title="{6}"><span>{7}</span></div>'
-                                    , APP_SELECT_ITEM, APP_DRAGGABLE, col.location, col.value, col.dtype, col.code, col.label + ': \n' + colInfo, col.label);
+            // get data and make draggable items
+            dataList && dataList.forEach((data, idx) => {
+                // for column : data.array parsing
+                var info = vpCommon.safeString(data.array);
+                if (info) {
+                    info = data.value + ':\n';
+                } else {
+                    info = '';
+                }
+                // render item box
+                tag.appendFormatLine('<div class="{0} {1}" data-idx="{2}" data-name="{3}" data-type="{4}" data-code="{5}" title="{6}"><span>{7}</span></div>'
+                                    , APP_SELECT_ITEM, APP_DRAGGABLE, data.location, data.value, data.type, data.code, info, data.value);
             });
             tag.appendLine('</div>');  // APP_SELECT_BOX
             return tag.toString();
         }
 
-        renderColumnSelectedBox(colList) {
+        renderSelectedBox(dataList) {
             var tag = new sb.StringBuilder();
             tag.appendFormatLine('<div class="{0} {1} {2} {3}">', APP_SELECT_BOX, 'right', APP_DROPPABLE, 'no-selection');
-            // get col data and make draggable items
-            colList && colList.forEach((col, idx) => {
-                // col.array parsing
-                var colInfo = vpCommon.safeString(col.array);
-                // render column box
-                tag.appendFormatLine('<div class="{0} {1} {2}" data-idx="{3}" data-colname="{4}" data-dtype="{5}" data-code="{6}" title="{7}"><span>{8}</span></div>'
-                                    , APP_SELECT_ITEM, APP_DRAGGABLE, 'added', col.location, col.value, col.dtype, col.code, col.label + ': \n' + colInfo, col.label);
+            // get data and make draggable items
+            dataList && dataList.forEach((data, idx) => {
+                // for column : data.array parsing
+                var info = vpCommon.safeString(data.array);
+                if (info) {
+                    info = data.value + ':\n';
+                } else {
+                    info = '';
+                }
+                // render item box
+                tag.appendFormatLine('<div class="{0} {1} {2}" data-idx="{3}" data-name="{4}" data-type="{5}" data-code="{6}" title="{7}"><span>{8}</span></div>'
+                                    , APP_SELECT_ITEM, APP_DRAGGABLE, 'added', data.location, data.value, data.type, data.code, info, data.value);
             });
             tag.appendLine('</div>');  // APP_SELECT_BOX
             return tag.toString();
@@ -184,22 +268,22 @@ define([
 
         bindEvent() {
             var that = this;
-            // item indexing - search columns
+            // item indexing - search
             $(this._wrapSelector('.' + APP_SELECT_SEARCH)).on('change', function(event) {
                 var searchValue = $(this).val();
                 
-                // filter added columns
+                // filter added items
                 var addedTags = $(that._wrapSelector('.' + APP_SELECT_RIGHT + ' .' + APP_SELECT_ITEM + '.added'));
-                var addedColumnList = [];
+                var addedList = [];
                 for (var i = 0; i < addedTags.length; i++) {
                     var value = $(addedTags[i]).attr('data-colname');
-                    addedColumnList.push(value);
+                    addedList.push(value);
                 }
-                var filteredColumnList = that.columnList.filter(x => x.value.includes(searchValue) && !addedColumnList.includes(x.value));
+                var filteredList = that.dataList.filter(x => x.value.includes(searchValue) && !addedList.includes(x.value));
 
-                // column indexing
+                // items indexing
                 $(that._wrapSelector('.' + APP_SELECT_BOX + '.left')).replaceWith(function() {
-                    return that.renderColumnSelectionBox(filteredColumnList);
+                    return that.renderSelectionBox(filteredList);
                 });
 
                 // draggable
@@ -390,7 +474,7 @@ define([
         }
     }
 
-    return ColumnSelector;
+    return MultiSelector;
 });
 
 /* End of file */

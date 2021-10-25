@@ -46,7 +46,9 @@
     background: #EF6B10;
 }
 .vp-button.disabled,
-.vp-button.disabled:hover {
+.vp-button.disabled:hover,
+.vp-button:disabled,
+.vp-button:disabled:hover {
     background: #E5E5E5;
     border: 0px;
     border: 0.25px solid #E4E4E4;
@@ -64,6 +66,20 @@
     border-right: 1px solid var(--font-primary);
 }
 
+/* Scrollbar */
+.vp-scrollbar {
+    overflow-y: auto;
+    --webkit-mask-position: left top;
+}
+.vp-scrollbar::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+} 
+.vp-scrollbar::-webkit-scrollbar-thumb {
+    border: 0.3px solid #C4C4C4;
+    background: #C4C4C4;
+}
+
 /* Width selector */
 .wp50 {
     width: 50px;
@@ -76,6 +92,13 @@
 }
 .wp120 {
     width: 120px;
+}
+
+.w40 {
+    width: 40%;
+}
+.w100 {
+    width: 100%;
 }
 
 /* font selector */

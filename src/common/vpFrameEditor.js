@@ -559,14 +559,9 @@ define([
         content.appendLine('<table><colgroup><col width="80px"><col width="*"></colgroup>');
         content.appendLine('<tr><th><label>column</label></th>');
         content.appendFormatLine('<td>{0}</td></tr>', this.renderColumnList(this.state.columnList));
-        content.appendLine('<tr><th><label>lambda x:</label></th>');
-        var suggestInput = new vpSuggestInputText.vpSuggestInputText();
-        suggestInput.setComponentID('vp_popupAddApply');
-        suggestInput.addClass('vp-input vp-popup-apply-lambda');
-        suggestInput.setSuggestList(function() { return ['x']; });
-        suggestInput.setValue('x');
-        suggestInput.setNormalFilter(false);
-        content.appendFormatLine('<td>{0}</td>', suggestInput.toTagString());
+        content.appendLine('<tr><th><label>function</label></th>');
+        content.appendFormatLine('<td><input type="text" id="{0}" class="{1}" placeholder="{2}"/></td>'
+                                , 'vp_popupAddApply', 'vp-input vp-popup-apply-lambda', 'Type code manually');
         content.appendLine('</tr></table>');
         content.appendLine('</div>'); // end of vp-popup-tab apply
         content.appendLine('</div>'); // end of vp-popup-addpage
@@ -1084,7 +1079,7 @@ define([
                     }
                     code.append(')');
                 } else if (tab == 'apply') {
-                    code.appendFormat("{0}[{1}] = {2}[{3}].apply(lambda x: {4})", tempObj, name, tempObj, content.column, content.apply);
+                    code.appendFormat("{0}[{1}] = {2}[{3}].apply({4})", tempObj, name, tempObj, content.column, content.apply);
                 }
                 break;
             case FRAME_EDIT_TYPE.ADD_ROW: 

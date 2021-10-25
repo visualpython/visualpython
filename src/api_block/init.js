@@ -130,7 +130,7 @@ define([
         /** Apps menu 생성 */
         var appsList = [
             'import', 'file', 'variable', 'snippets', 'frame', 'subset', 'instance', 'groupby',
-            'merge', 'reshape', 'chart', 'markdown', 'pdf', 'profiling'
+            'bind', 'reshape', 'chart', 'markdown', 'pdf', 'profiling'
         ];
         appsList.forEach(menu => {
             var app = new CreateAppsBtn(blockContainer, menu);
@@ -378,7 +378,27 @@ define([
                     blockContainer.addNodeBlock(createdBlock);
                     blockContainer.resetBlockList();
                     blockContainer.reRenderAllBlock_asc();
-                } 
+                } else if (title == "Background") {
+                    // 1. add code block
+                    // create block as group block
+                    createdBlock = blockContainer.createBlock(BLOCK_CODELINE_TYPE.CODE, null, null, true);
+                    // set code
+                    createdBlock.setState({
+                        [STATE_codeLine]: code
+                    });
+                    createdBlock.writeCode(code);
+                    createdBlock.apply();
+                    if (isFirstBlock == true) {
+                        // if it is first block, set as ROOT
+                        createdBlock.setDirection(BLOCK_DIRECTION.ROOT);
+                    } else {
+                        var lastBottomBlock = blockContainer.getRootToLastBottomBlock();
+                        lastBottomBlock.appendBlock(createdBlock, BLOCK_DIRECTION.DOWN);
+                    }
+                    blockContainer.addNodeBlock(createdBlock);
+                    blockContainer.resetBlockList();
+                    blockContainer.reRenderAllBlock_asc();
+                }
             }
 
             // 2. add cell and run cell

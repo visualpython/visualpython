@@ -3,6 +3,34 @@
     --bgcolor: #696969;
 }
 
+/* Import Options box*/
+.vp-import-box {
+    display: grid;
+    grid-template-rows: 30px;
+    grid-row-gap: 5px;
+    border: 1px solid var(--border-gray-color);
+    padding: 10px 0px;
+}
+.vp-import-box label {
+    min-width: 130px;
+    max-width: 300px;
+    vertical-align: middle;
+    text-align: left;
+    font-weight: bold;
+    height: 30px;
+    padding: 2px 5px 2px 16px;
+}
+.vp-import-box input[type="text"] {
+    width: 160px;
+}
+.vp-import-box input[type="number"] {
+    width: 79px;
+}
+.vp-pl-import-run {
+    float: right;
+    margin-right: 10px;
+}
+
 .vp-icon-btn.vp-close-view {
     position: absolute;
     right: 10px;
@@ -268,18 +296,19 @@
 .vp-method-select {
     border: 0.25px solid #C4C4C4;
     overflow-y: auto;
-    width: 125px;
+    width: 250px;
     height: 100px;
 }
 .vp-column-select-item,
 .vp-method-select-item {
-    padding-left: 3px;
     cursor: pointer;
+    padding: 3px;
+    border-bottom: 0.25px solid var(--border-gray-color);
 }
 .vp-column-select-item.selected,
 .vp-method-select-item.selected {
     color:  var(--font-hightlight);
-    background: #C4C4C4;
+    background: var(--light-gray-color);
 }
 
 /* Select Data Button */

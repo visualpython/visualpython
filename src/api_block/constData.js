@@ -811,10 +811,11 @@ define([
             color: 2,
             config: { width: '700px', height: '550px' }
         },
-        'merge': {
-            label: 'Merge',
-            file: 'nbextensions/visualpython/src/common/vpMerge',
-            icon: '/nbextensions/visualpython/resource/apps/apps_merge.svg',
+        'bind': {
+            label: 'Bind',
+            tooltip: 'Bind pandas objects', 
+            file: 'nbextensions/visualpython/src/common/vpBind',
+            icon: '/nbextensions/visualpython/resource/apps/apps_bind.svg',
             color: 3,
         },
         'reshape': {
