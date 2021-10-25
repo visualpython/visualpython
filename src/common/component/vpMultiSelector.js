@@ -58,11 +58,12 @@ define([
             // configuration
             this.config = config;
 
-            var { mode, type, parent, selectedList=[], includeList=[] } = config;
+            var { mode, type, parent, selectedList=[], includeList=[], excludeList=[] } = config;
             this.mode = mode;
             this.parent = parent;
             this.selectedList = selectedList;
             this.includeList = includeList;
+            this.excludeList = excludeList;
 
             this.dataList = [];
             this.pointer = { start: -1, end: -1 };
@@ -84,12 +85,13 @@ define([
         }
 
         _executeCallback(dataList) {
-            this.dataList = dataList;
             if (this.includeList && this.includeList.length > 0) {
-                this.dataList = dataList.filter(data => this.includeList.includes(data.code));
-            } else {
-                this.dataList = dataList;
+                dataList = dataList.filter(data => this.includeList.includes(data.code));
             }
+            if (this.excludeList && this.excludeList.length > 0) {
+                dataList = dataList.filter(data => !this.excludeList.includes(data.code));
+            }
+            this.dataList = dataList;
 
             // load
             this.load();

@@ -354,12 +354,12 @@ define([
         /**
          * Render column selector using ColumnSelector module
          * @param {Array<string>} previousList previous selected columns
-         * @param {Array<string>} includeList columns to include 
+         * @param {Array<string>} excludeList columns to exclude 
          */
-        renderColumnSelector(targetVariable, previousList, includeList) {
+        renderColumnSelector(targetVariable, previousList, excludeList) {
             this.popup.ColSelector = new vpMultiSelector(
                 this._wrapSelector('.' + APP_POPUP_BODY), 
-                { mode: 'columns', parent: targetVariable, selectedList: previousList, includeList: includeList }
+                { mode: 'columns', parent: targetVariable, selectedList: previousList, excludeList: excludeList }
             );
         }
 
@@ -367,16 +367,16 @@ define([
          * Open Inner popup page for column selection
          * @param {Object} targetSelector 
          * @param {string} title 
-         * @param {Array<string>} includeList 
+         * @param {Array<string>} excludeList 
          */
-        openInnerPopup(targetVariable, targetSelector, title='Select columns', includeList=[]) {
+        openInnerPopup(targetVariable, targetSelector, title='Select columns', excludeList=[]) {
             this.popup.targetVariable = targetVariable;
             this.popup.targetSelector = targetSelector;
             var previousList = this.popup.targetSelector.data('list');
             if (previousList) {
                 previousList = previousList.map(col => col.code)
             }
-            this.renderColumnSelector(targetVariable, previousList, includeList);
+            this.renderColumnSelector(targetVariable, previousList, excludeList);
     
             // set title
             $(this._wrapSelector('.' + APP_POPUP_BOX + ' .' + APP_TITLE)).text(title);
@@ -508,7 +508,8 @@ define([
             // index select button event
             $(document).on('click', this._wrapSelector('#vp_rsIndexSelect'), function() {
                 var targetVariable = [ that.state.variable ];
-                that.openInnerPopup(targetVariable, $(that._wrapSelector('#vp_rsIndex')), 'Select columns');
+                var excludeList = [ ...that.state.pivot.columns, ...that.state.pivot.values ].map(obj => obj.code);
+                that.openInnerPopup(targetVariable, $(that._wrapSelector('#vp_rsIndex')), 'Select columns', excludeList);
             });
 
             // columns change event
@@ -520,7 +521,8 @@ define([
             // columns select button event
             $(document).on('click', this._wrapSelector('#vp_rsColumnsSelect'), function() {
                 var targetVariable = [ that.state.variable ];
-                that.openInnerPopup(targetVariable, $(that._wrapSelector('#vp_rsColumns')), 'Select columns');
+                var excludeList = [ ...that.state.pivot.index, ...that.state.pivot.values ].map(obj => obj.code);
+                that.openInnerPopup(targetVariable, $(that._wrapSelector('#vp_rsColumns')), 'Select columns', excludeList);
             });
 
             // values change event
@@ -532,7 +534,8 @@ define([
             // values select button event
             $(document).on('click', this._wrapSelector('#vp_rsValuesSelect'), function() {
                 var targetVariable = [ that.state.variable ];
-                that.openInnerPopup(targetVariable, $(that._wrapSelector('#vp_rsValues')), 'Select columns');
+                var excludeList = [ ...that.state.pivot.index, ...that.state.pivot.columns ].map(obj => obj.code);
+                that.openInnerPopup(targetVariable, $(that._wrapSelector('#vp_rsValues')), 'Select columns', excludeList);
             });
 
             // id vars change event
@@ -544,7 +547,8 @@ define([
             // id vars select button event
             $(document).on('click', this._wrapSelector('#vp_rsIdVarsSelect'), function() {
                 var targetVariable = [ that.state.variable ];
-                that.openInnerPopup(targetVariable, $(that._wrapSelector('#vp_rsIdVars')), 'Select columns');
+                var excludeList = that.state.melt.valueVars.map(obj => obj.code);
+                that.openInnerPopup(targetVariable, $(that._wrapSelector('#vp_rsIdVars')), 'Select columns', excludeList);
             });
 
             // value vars change event
@@ -556,7 +560,8 @@ define([
             // value vars select button event
             $(document).on('click', this._wrapSelector('#vp_rsValueVarsSelect'), function() {
                 var targetVariable = [ that.state.variable ];
-                that.openInnerPopup(targetVariable, $(that._wrapSelector('#vp_rsValueVars')), 'Select columns');
+                var excludeList = that.state.melt.idVars.map(obj => obj.code);
+                that.openInnerPopup(targetVariable, $(that._wrapSelector('#vp_rsValueVars')), 'Select columns', excludeList);
             });
 
             // allocateTo event
