@@ -152,11 +152,15 @@ define([
         var splitedDirStrArr = currentDirStr.split('/');
         var rootFolderName = splitedDirStrArr[splitedDirStrArr.length - 1];
 
+        var notebookFolder = this.getNotebookFolder(); //TEST:
         var firstIndex = currentDirStr.indexOf( this.getNotebookFolder() );
 
         var currentRelativePathStr = '';
         if ( firstIndex === -1 ) {
-            currentRelativePathStr = currentDirStr.substring(this.getNotebookDir().length + 1, currentDirStr.length);
+            var notebookDir = this.getNotebookDir(); //TEST:
+            // FIXME: if current path is upper than Jupyter Home, send no permission?
+            // currentRelativePathStr = currentDirStr.substring(this.getNotebookDir().length + 1, currentDirStr.length);
+            currentRelativePathStr = getRelativePath(notebookDir, currentDirStr);
         } else {
             currentRelativePathStr = currentDirStr.substring(firstIndex, currentDirStr.length); 
         }
@@ -171,6 +175,43 @@ define([
             currentRelativePathStr,
             rootFolderName
         }
+    }
+
+    /**
+     * Get relative path based on start path
+     * - referred python os.path.relpath()
+     * @param {string} start start path (base path)
+     * @param {string} path current path
+     * @returns current relative path
+     */
+    var getRelativePath = function(start, path) {
+        const sep = '/';
+        const curdir = '.';
+        const pardir = '..';
+
+        var startSplit = start.split(sep);
+        var pathSplit = path.split(sep);
+
+        // TODO: check drive: startSplit[0] == pathSplit[0]
+
+        var startList = startSplit.slice(1);
+        var pathList = pathSplit.slice(1);
+
+        var stopIdx = 0;
+        while (stopIdx < startList.length) {
+            var e1 = startList[stopIdx];
+            var e2 = pathList[stopIdx];
+            if (e1 != e2) {
+                break;
+            }
+            stopIdx++;
+        }
+        var parList = Array(startList.length - stopIdx).fill(pardir);
+        var relList = parList.concat(pathList.slice(stopIdx));
+        if (!relList || relList.length == 0) {
+            return ''; // curdir
+        }
+        return relList.join(sep);
     }
 
     return FileNavigationState;

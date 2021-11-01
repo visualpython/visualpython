@@ -56,7 +56,7 @@ def _vp_get_documents_path():
 
 def _vp_sizeof_fmt(num, suffix='B'):
     """
-    파일크기 보기 좋게 변환해서 반환
+    Return resized image
     """
     for unit in ['','K','M','G','T','P','E','Z']:
         if abs(num) < 1024.0:
@@ -66,7 +66,7 @@ def _vp_sizeof_fmt(num, suffix='B'):
     
 def _vp_search_path(path):
     """
-    경로 하위 폴더, 파일 조회
+    Search child folder and file list under the given path
     """
     import datetime as _dt
     _current = _vp_os.path.abspath(path)
@@ -94,8 +94,20 @@ def _vp_search_path(path):
 
 def _vp_get_image_by_path(path):
     """
-    경로로 이미지 파일 받아오기
+    Get image file by path
     """
     from PIL import Image
     img = Image.open(path)
     return img
+
+def _vp_get_relative_path(start, path):
+    """
+    Get relative path using start path and current path
+    start: str
+        start path
+    path: str
+        current path
+    returns: str
+        current relative path
+    """
+    return _vp_os.path.relpath(path, start)
