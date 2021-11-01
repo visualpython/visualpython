@@ -127,7 +127,7 @@ define([
 
         // Box 1. Import
         var accBoxImport = this.createOptionContainer('Import Options');
-        // accBoxImport.setOpenBox(true);
+        accBoxImport.setOpenBox(true);
         sbTagString.clear();
         sbTagString.appendFormatLine('<div class="{0}">', 'vp-import-box');
         // figure size
@@ -141,8 +141,6 @@ define([
         sbTagString.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_plStyle', '', 'Style sheet');
         sbTagString.appendFormatLine('<input type="text" id="{0}" placeholder="{1}">', 'vp_plStyle', 'style name');
         sbTagString.appendLine('</div>');
-        // divider
-        sbTagString.appendLine('<hr style="margin: 5px 0;"/>');
         // system font
         sbTagString.appendLine('<div>');
         sbTagString.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_plFontName', '', 'System font');
@@ -152,11 +150,11 @@ define([
         sbTagString.appendLine('<div>');
         sbTagString.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_plFontSize', '', 'Font size');
         sbTagString.appendFormatLine('<input type="number" id="{0}" placeholder="{1}" value="{2}">', 'vp_plFontSize', 'size', 10);
-        sbTagString.appendLine('</div>');
-        // import button
-        sbTagString.appendLine('<div>');
         sbTagString.appendFormatLine('<input type="button" id="{0}" class="{1}" value="{2}">', 'vp_plImportRun', 'vp-button activated vp-pl-import-run', 'Apply');
         sbTagString.appendLine('</div>');
+        // // apply button
+        // sbTagString.appendLine('<div>');
+        // sbTagString.appendLine('</div>');
 
         sbTagString.appendLine('</div>');
         accBoxImport.appendContent(sbTagString.toString());

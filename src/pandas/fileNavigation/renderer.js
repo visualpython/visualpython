@@ -277,7 +277,9 @@ define([
         
         if (baseFolder === notebookFolder && Jupyter.notebook.notebook_path.indexOf('/') === -1) {
             var index = currentRelativePathStrArray.indexOf(baseFolder)
-            currentRelativePathStrArray.splice(index,1);
+            if (index >= 0) {
+                currentRelativePathStrArray.splice(index,1);
+            }
         }
 
         var currentRelativePathDomElement = $(`<div><div>`);
@@ -297,6 +299,13 @@ define([
         });
 
         var nestedLength = 0;
+        // if it's outside of notebookPath, ignore notebookPath
+        var prevLength = notebookPathStrLength;
+        var useSidebar = false;
+        if (currentRelativePathStrArray.includes('..')) {
+            prevLength = 0;
+            useSidebar = true;
+        }
         currentRelativePathStrArray.forEach((pathToken,index) => {
             if (index === 0) {
                 slashStr = '';
@@ -307,7 +316,8 @@ define([
             var spanElement = $(`<span class='vp-filenavigation-nowLocation' value='${pathToken}'> 
                                     ${slashStr} ${pathToken}
                                 </span>`);
-            var pathLength = notebookPathStrLength + pathToken.length + 1 + nestedLength;
+            
+            var pathLength = prevLength + pathToken.length + 1 + nestedLength;
             spanElement.click(function() {
                 var currentRelativePathStr = `${currentDirStr.substring(0, pathLength)}`;
      

@@ -342,14 +342,14 @@ define([
             page.appendFormatLine('<div class="{0} {1}" {2}>', 'vp-bd-type-box', 'merge', this.state.type=='merge'?'':'style="display: none;"');
             // left dataframe
             page.appendLine('<div>');
-            page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_bdLeftDataframe', 'vp-orange-text wp100', 'Left Dataframe');
+            page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_bdLeftDataframe', 'vp-orange-text wp100', 'Left Data');
             page.appendFormatLine('<select id="{0}">', 'vp_bdLeftDataframe');
             page.appendLine('</select>');
             page.appendFormatLine('<div class="{0}" title="{1}"><img src="{2}"/></div>', 'vp-bd-df-refresh', 'Refresh all dataframe list', '/nbextensions/visualpython/resource/refresh.svg');
             page.appendLine('</div>');
             // right dataframe
             page.appendLine('<div>');
-            page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_bdRightDataframe', 'vp-orange-text wp100', 'Right Dataframe');
+            page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_bdRightDataframe', 'vp-orange-text wp100', 'Right Data');
             page.appendFormatLine('<select id="{0}">', 'vp_bdRightDataframe');
             page.appendLine('</select>');
             page.appendLine('</div>');
