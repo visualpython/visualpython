@@ -149,7 +149,7 @@
     transform: translate(-50%, -50%);
     min-width: 400px;
     min-height: 150px;
-    width: 30%;
+    width: fit-content;
     height: fit-content;
     background-color: white;
     z-index: 200;

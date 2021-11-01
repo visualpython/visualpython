@@ -639,6 +639,7 @@ define([
     FrameEditor.prototype.renderRenamePage = function() {
         var content = new sb.StringBuilder();
         content.appendLine('<table>');
+        content.appendLine('<colgroup><col width="100px"><col width="*"></colgroup>');
         this.state.selected.forEach((col, idx) => {
             content.appendLine('<tr>');
             content.appendFormatLine('<th><label>{0}</label></th>', col.label);
@@ -680,6 +681,7 @@ define([
     FrameEditor.prototype.renderAsType = function() {
         var astypeList = this.astypeList;
         var content = new sb.StringBuilder();
+        content.appendFormatLine('<div class="{0}">', 'vp-popup-astype');
         content.appendFormatLine('<table class="{0}">', 'vp-popup-astype-table');
         content.appendLine('<colgroup><col width="140px"><col width="80px"><col width="*"></colgroup>');
         content.appendFormatLine('<thead style="height: 30px"><th>{0}</th><th>{1}</th><th class="{2}">{3}</th></thead>'
@@ -698,6 +700,7 @@ define([
             content.appendLine('</tr>');
         });
         content.appendLine('</tbody></table>');
+        content.append('</div>');
         return content.toString();
     }
 
