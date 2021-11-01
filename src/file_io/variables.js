@@ -8,7 +8,7 @@ define([
     , 'nbextensions/visualpython/src/pandas/common/commonPandas'
     , 'nbextensions/visualpython/src/pandas/common/pandasGenerator'
 ], function (requirejs, $, vpCommon, vpConst, sb, vpFuncJS, libPandas, pdGen) {
-    // 옵션 속성
+    // option property
     const funcOptProp = {
         stepCount : 1
         , funcName : "Variables"
@@ -17,74 +17,73 @@ define([
     }
 
     /**
-     * html load 콜백. 고유 id 생성하여 부과하며 js 객체 클래스 생성하여 컨테이너로 전달
-     * @param {function} callback 호출자(컨테이너) 의 콜백함수
+     * html load callback. 고유 id 생성하여 부과하며 js 객체 클래스 생성하여 컨테이너로 전달
+     * @param {function} callback container's callback
      */
     var optionLoadCallback = function(callback, meta) {
-        // document.getElementsByTagName("head")[0].appendChild(link);
-        // 컨테이너에서 전달된 callback 함수가 존재하면 실행.
+        // execute callback function if available
         if (typeof(callback) === 'function') {
             var uuid = 'u' + vpCommon.getUUID();
-            // 최대 10회 중복되지 않도록 체크
+            // maximum 10 duplication allowed
             for (var idx = 0; idx < 10; idx++) {
-                // 이미 사용중인 uuid 인 경우 다시 생성
+                // uuid check and re-generate
                 if ($(vpConst.VP_CONTAINER_ID).find("." + uuid).length > 0) {
                     uuid = 'u' + vpCommon.getUUID();
                 }
             }
             $(vpCommon.wrapSelector(vpCommon.formatString("#{0}", vpConst.OPTION_GREEN_ROOM))).find(vpCommon.formatString(".{0}", vpConst.API_OPTION_PAGE)).addClass(uuid);
 
-            // 옵션 객체 생성
+            // create object
             var varPackage = new VariablePackage(uuid);
             varPackage.metadata = meta;
 
-            // 옵션 속성 할당.
+            // set option property
             varPackage.setOptionProp(funcOptProp);
-            // html 설정.
+            // html setting
             varPackage.initHtml();
-            callback(varPackage);  // 공통 객체를 callback 인자로 전달
+            callback(varPackage);
         }
     }
     
     /**
-     * html 로드. 
-     * @param {function} callback 호출자(컨테이너) 의 콜백함수
+     * Load html
+     * @param {function} callback container's callback
      */
     var initOption = function(callback, meta) {
         vpCommon.loadHtml(vpCommon.wrapSelector(vpCommon.formatString("#{0}", vpConst.OPTION_GREEN_ROOM)), "file_io/variables.html", optionLoadCallback, callback, meta);
     }
 
     /**
-     * 본 옵션 처리 위한 클래스
-     * @param {String} uuid 고유 id
+     * Option package
+     * @param {String} uuid unique id
      */
     var VariablePackage = function(uuid) {
         this.uuid = uuid;   // Load html 영역의 uuid.
-        // pandas 함수
+        // pandas function
         this.package = libPandas._PANDAS_FUNCTION[funcOptProp.libID];
     }
 
 
 
     /**
-     * vpFuncJS 에서 상속
+     * Extend vpFuncJS
      */
     VariablePackage.prototype = Object.create(vpFuncJS.VpFuncJS.prototype);
 
     /**
-     * 유효성 검사
-     * @returns 유효성 검사 결과. 적합시 true
+     * Validation
+     * @returns true if it's valid
      */
     VariablePackage.prototype.optionValidation = function() {
         return true;
 
-        // 부모 클래스 유효성 검사 호출.
+        // parent's validation
         // vpFuncJS.VpFuncJS.prototype.optionValidation.apply(this);
     }
 
 
     /**
-     * html 내부 binding 처리
+     * html inner binding
      */
     VariablePackage.prototype.initHtml = function() {
         this.showFunctionTitle();
@@ -98,7 +97,7 @@ define([
     }
 
     /**
-     * 선택한 패키지명 입력
+     * package title
      */
     VariablePackage.prototype.showFunctionTitle = function() {
         $(this.wrapSelector('.vp_functionName')).text(funcOptProp.funcName);
@@ -115,43 +114,43 @@ define([
     }
 
     /**
-     * Variables 조회
+     * Search variables
      */
     VariablePackage.prototype.loadVariables = function() {
         var that = this;
 
-        // 조회가능한 변수 data type 정의 FIXME: 조회 필요한 변수 유형 추가
+        // Searchable variable types
         var types = [
-            // pandas 객체
+            // pandas object
             'DataFrame', 'Series', 'Index', 'Period', 'GroupBy', 'Timestamp'
-            // Index 하위 유형
+            // Index type object
             , 'RangeIndex', 'CategoricalIndex', 'MultiIndex', 'IntervalIndex', 'DatetimeIndex', 'TimedeltaIndex', 'PeriodIndex', 'Int64Index', 'UInt64Index', 'Float64Index'
-            // GroupBy 하위 유형
+            // GroupBy type object
             , 'DataFrameGroupBy', 'SeriesGroupBy'
-            // Plot 관련 유형
+            // Plot type
             , 'Figure', 'AxesSubplot'
             // Numpy
             , 'ndarray'
-            // Python 변수
+            // Python variable
             , 'str', 'int', 'float', 'bool', 'dict', 'list', 'tuple'
         ];
 
         var tagTable = this.wrapSelector('#vp_var_variableBox table');
 
-        // 변수 정보 표시
+        // variable list table
         var tagDetailTable = this.wrapSelector("#vp_varDetailTable");
         
         // initialize tags
         $(tagTable).find('tr:not(:first)').remove();
         $(tagDetailTable).html('');
         
-        // HTML 구성
+        // HTML rendering
         pdGen.vp_searchVarList(types, function(result) {
             // var jsonVars = result.replace(/'/gi, `"`);
             // var varList = JSON.parse(jsonVars);
             var varList = JSON.parse(result);
 
-            // table 에 변수목록 추가
+            // add variable list in table
             varList.forEach(varObj => {
                 if (types.includes(varObj.varType) && varObj.varName[0] !== '_') {
                     var tagTr = document.createElement('tr');
@@ -167,30 +166,12 @@ define([
                     $(tagTr).append(tagTdName);
                     $(tagTr).append(tagTdType);
 
-                    $(tagTdName).attr({
-                        'title': 'Click to copy'
-                    });
-                    // 변수이름 클릭 시 클립보드에 복사
-                    $(tagTdName).click(function() {
-                        // // 클립보드 복사 시작
-                        var tempElem = document.createElement('input');
-                        tempElem.value = varObj.varName;  
-                        document.body.appendChild(tempElem);
-                      
-                        tempElem.select();
-                        document.execCommand("copy");
-                        document.body.removeChild(tempElem);
-                        // 클립보드 복사 완료
-                        vpCommon.renderSuccessMessage('Copied!');
-                    });
-
-                    // 변수 선택 시 표시
+                    // variable click
                     $(tagTr).click(function() {
                         $(this).parent().find('tr').removeClass('selected');
                         $(this).addClass('selected');
 
-                        // TEST: 변수 선택 시 변수 정보를 하단에 표시
-                        // vpFuncJS.kernelExecute 에서는 callback에 msg.content["text"]를 전달해주기 때문에 따로 구현함
+                        // show variable information on clicking variable
                         Jupyter.notebook.kernel.execute(
                             varObj.varName,
                             {
@@ -202,14 +183,14 @@ define([
                                         
                                         $(tagDetailTable).html('');
                                         if (htmlResult != undefined) {
-                                            // 1. HTML 태그로 구성되어 반환되는 경우
+                                            // 1. HTML tag
                                             $(tagDetailTable).append(htmlResult);
                                         } else if (imgResult != undefined) {
-                                            // 2. 이미지 데이터가 반환되는 경우 (base64)
+                                            // 2. Image data (base64)
                                             var imgTag = '<img src="data:image/png;base64, ' + imgResult + '">';
                                             $(tagDetailTable).append(imgTag);
                                         } else if (textResult != undefined) {
-                                            // 3. 텍스트 데이터가 반환되는 경우
+                                            // 3. Text data
                                             var preTag = document.createElement('pre');
                                             $(preTag).text(textResult);
                                             $(tagDetailTable).html(preTag);
@@ -221,7 +202,6 @@ define([
                             },
                             { silent: false }
                         );
-                        // TEST: END
                     })
 
                     $(tagTable).append(tagTr);
@@ -231,14 +211,14 @@ define([
     };
 
     /**
-     * 코드 생성
-     * @param {boolean} exec 실행여부
+     * Generate code
+     * @param {boolean} exec do execute
      */
     VariablePackage.prototype.generateCode = function(addCell, exec) {
         
         var sbCode = new sb.StringBuilder();
 
-        // TODO: 변수 내용 조회
+        // show selected variable
         var selectedVariable = $(this.wrapSelector('#vp_var_variableBox table tr.selected'));
         if (selectedVariable) {
             var varName = selectedVariable.attr('data-var-name');

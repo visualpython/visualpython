@@ -324,6 +324,7 @@
 }
 .vp-block {
     position: relative;
+    min-width: 205px;
     min-height: 25px;
     z-index: 1;
     text-align: left;
