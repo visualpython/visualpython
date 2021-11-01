@@ -233,8 +233,8 @@ define([
             dataList && dataList.forEach((data, idx) => {
                 // for column : data.array parsing
                 var info = vpCommon.safeString(data.array);
-                if (info) {
-                    info = data.value + ':\n';
+                if (info && info != 'undefined') {
+                    info = data.value + ':\n' + info;
                 } else {
                     info = '';
                 }
