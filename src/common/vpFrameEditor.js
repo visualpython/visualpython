@@ -320,7 +320,12 @@ define([
         page.appendFormatLine('<input type="text" class="{0}" id="{1}" placeholder="{2}"/>', 'vp-input', 'vp_feReturn', 'Variable name');
         page.appendLine('</div>');
         page.appendLine('</div>');
-
+        page.appendFormatLine('<div class="{0}">', 'vp-fe-toolbar');
+        page.appendFormatLine('<button type="button" class="{0}" data-type="{1}">{2}</button>'
+                            , 'vp-button vp-fe-toolbar-item', FRAME_EDIT_TYPE.ADD_COL, 'Add Column');
+        page.appendFormatLine('<button type="button" class="{0}" data-type="{1}">{2}</button>'
+                            , 'vp-button vp-fe-toolbar-item', FRAME_EDIT_TYPE.ADD_ROW, 'Add Row');
+        page.appendLine('</div>');
         // Table
         page.appendFormatLine('<div class="{0} {1}">', VP_FE_TABLE, 'no-selection');
 
@@ -677,7 +682,8 @@ define([
         var content = new sb.StringBuilder();
         content.appendFormatLine('<table class="{0}">', 'vp-popup-astype-table');
         content.appendLine('<colgroup><col width="140px"><col width="80px"><col width="*"></colgroup>');
-        content.appendFormatLine('<thead><th>{0}</th><th>{1}</th><th class="{2}">{3}</th></thead>', 'Column', 'Data type', 'vp-orange-text', 'New data type');
+        content.appendFormatLine('<thead style="height: 30px"><th>{0}</th><th>{1}</th><th class="{2}">{3}</th></thead>'
+                                , 'Column', 'Data type', 'vp-orange-text', 'New data type');
         content.appendLine('<tbody>');
         this.state.selected.forEach((col, idx) => {
             content.appendLine('<tr>');
@@ -1327,6 +1333,7 @@ define([
         $(document).off('click', this.wrapSelector('.' + VP_FE_ADD_COLUMN));
         $(document).off('click', this.wrapSelector('.' + VP_FE_ADD_ROW));
         $(document).off('click', this.wrapSelector('.' + VP_FE_TABLE_MORE));
+        $(document).off('click', this.wrapSelector('.vp-fe-toolbar-item'));
         $(document).off('click', this.wrapSelector('.' + VP_FE_MENU_ITEM));
         $(document).off('click', this.wrapSelector('.vp-popup-replace-add'));
         $(document).off('click', this.wrapSelector('.vp-popup-delete'));
@@ -1583,6 +1590,17 @@ define([
         $(document).on('click', this.wrapSelector('.' + VP_FE_TABLE_MORE), function() {
             that.state.lines += TABLE_LINES;
             that.loadCode(that.getTypeCode(FRAME_EDIT_TYPE.SHOW));
+        });
+
+        // click toolbar item
+        $(document).on('click', this.wrapSelector('.vp-fe-toolbar-item'), function() {
+            var itemType = $(this).data('type');
+            switch (parseInt(itemType)) {
+                case FRAME_EDIT_TYPE.ADD_COL:
+                case FRAME_EDIT_TYPE.ADD_ROW:
+                    that.openInputPopup(itemType);
+                    break;
+            }
         });
 
         // click menu item
