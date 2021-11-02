@@ -190,6 +190,13 @@
     top: 0;
     background: #FFFFFF;
     border-bottom: 1px solid #E4E4E4;
+
+    text-align: right;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    height: 30px !important;
+    min-width: 80px;
+    white-space: nowrap;
 }
 .vp-fe-table tbody tr:nth-child(odd) {
     background: #F5F5F5;
@@ -223,6 +230,10 @@
     width: 100%;
     z-index: -1;        
 } */
+.vp-fe-table tr th:nth-child(1),
+.vp-fe-add-column {
+    min-width: 30px !important;
+}
 
 .vp-fe-table-more {
     margin-top: 10px;
