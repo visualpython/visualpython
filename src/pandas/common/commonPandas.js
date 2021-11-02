@@ -152,6 +152,11 @@ define([
             ],
             variable: [
                 {
+                    name: 'encoding',
+                    type: 'text',
+                    label: 'Encoding'
+                },
+                {
                     name:'names',
                     type:'list',
                     label: 'Columns'
