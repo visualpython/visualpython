@@ -375,7 +375,7 @@
     padding: 10px;
 }
 .vp-popup-addpage .vp-popup-tab.replace {
-    height: calc(100% - 50px);
+    height: calc(100% - 60px);
 }
 .vp-popup-addtype {
     width: 153px;
@@ -383,6 +383,12 @@
 }
 .vp-popup-delete {
     padding-bottom: 20px;
+}
+.vp-popup-rename-page {
+    max-height: 400px;
+}
+.vp-popup-replace-table {
+    max-height: 350px;
 }
 .vp-popup-replace-add {
     margin-top: 30px

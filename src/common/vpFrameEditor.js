@@ -638,6 +638,7 @@ define([
 
     FrameEditor.prototype.renderRenamePage = function() {
         var content = new sb.StringBuilder();
+        content.appendFormatLine('<div class="{0} {1}">', 'vp-popup-rename-page', 'vp-scrollbar');
         content.appendLine('<table>');
         content.appendLine('<colgroup><col width="100px"><col width="*"></colgroup>');
         this.state.selected.forEach((col, idx) => {
@@ -648,6 +649,7 @@ define([
             content.appendLine('</tr>');
         });
         content.appendLine('</table>');
+        content.appendLine('</div>');
         return content.toString();
     }
 
@@ -655,10 +657,12 @@ define([
         var content = new sb.StringBuilder();
         content.appendFormatLine('<label><input type="checkbox" class="{0}"/><span>{1}</span></label>', 'vp-popup-use-regex', 'Use Regular Expression');
         content.appendLine('<br/><br/>');
-        content.appendFormatLine('<table class="{0}">', 'vp-popup-replace-table');
+        content.appendFormatLine('<div class="{0}">', 'vp-popup-replace-table');
+        content.appendLine('<table>');
         content.appendLine(this.renderReplaceInput(0));
         content.appendFormatLine('<tr><td colspan="3"><button class="{0} {1}">{2}</button></td></tr>', 'vp-button', 'vp-popup-replace-add', '+ Add Key');
         content.appendLine('</table>');
+        content.appendLine('</div>');
         return content.toString();
     }
 
