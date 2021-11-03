@@ -1196,8 +1196,12 @@ define([
         this.loading = true;
         kernelApi.executePython(code.toString(), function(result) {
             try {
+                if (!result || result.length <= 0) {
+                    return;
+                }
+                var data = JSON.parse(result.substr(1,result.length - 2).replaceAll('\\\\', '\\'));
+                
                 kernelApi.getColumnList(tempObj, function(columnResult) {
-                    var data = JSON.parse(result.substr(1,result.length - 2).replaceAll('\\\\', '\\'));
                     
                     var columnList = JSON.parse(columnResult);
                     // var columnList = data.columns;
@@ -1429,6 +1433,11 @@ define([
             that.state.originObj = origin;
             that.state.tempObj = '_vp';
             that.initState();
+
+            // reset table
+            $(that.wrapSelector('.' + VP_FE_TABLE)).replaceWith(function() {
+                return that.renderTable('');
+            });
 
             // load code with temporary df
             that.loadCode(that.getTypeCode(FRAME_EDIT_TYPE.INIT));
