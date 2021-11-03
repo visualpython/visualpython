@@ -1487,9 +1487,9 @@ define([
 
         if (isColor == true) {
             if (this.getBlockType() == BLOCK_CODELINE_TYPE.TEXT) {
-                $(this.getBlockMainDom()).css(STR_BORDER_LEFT, '2px solid var(--highlight-color');
+                $(this.getBlockMainDom()).css(STR_BORDER_LEFT, '2px solid var(--highlight-color)');
             } else {
-                $(this.getBlockMainDom()).css(STR_BORDER, '2px solid var(--highlight-color');
+                $(this.getBlockMainDom()).css(STR_BORDER, '2px solid var(--highlight-color)');
             }
         }
     }

@@ -1,11 +1,21 @@
 <div class="vp-option-page" id="vp_varPage">
-    <div id="vp_var_variableBox">
+    <div id="vp_var_variableBox" class="vp-scrollbar">
         <table class="vp-option-table vp-option-horizontal-table-layout">
             <colgroup><col width="150px"/><col width="*"/></colgroup>
-            <tr>
-                <th title="Refresh the list"><span class="vp-multilang" data-caption-id="varName">Variable Name</span><span id="vp_varRefresh"><img src="/nbextensions/visualpython/resource/refresh.svg"/></span></th>
-                <th title="Click to copy"><span class="vp-multilang" data-caption-id="dataType">Data Type</span></th>
-            </tr>
+            <thead>
+                <tr>
+                    <th>
+                        <span class="vp-multilang" data-caption-id="varName">Variable Name</span>
+                        <span id="vp_varRefresh"  title="Refresh the list"><img src="/nbextensions/visualpython/resource/refresh.svg"/></span>
+                    </th>
+                    <th>
+                        <span class="vp-multilang" data-caption-id="dataType">Data Type</span>
+                    </th>
+                </tr>   
+            </thead>
+            <tbody>
+                <!-- variable list -->
+            </tbody>
         </table>
     </div>
     <hr/>

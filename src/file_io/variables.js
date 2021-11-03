@@ -63,8 +63,6 @@ define([
         this.package = libPandas._PANDAS_FUNCTION[funcOptProp.libID];
     }
 
-
-
     /**
      * Extend vpFuncJS
      */
@@ -135,13 +133,13 @@ define([
             , 'str', 'int', 'float', 'bool', 'dict', 'list', 'tuple'
         ];
 
-        var tagTable = this.wrapSelector('#vp_var_variableBox table');
+        var tagTable = this.wrapSelector('#vp_var_variableBox table tbody');
 
         // variable list table
         var tagDetailTable = this.wrapSelector("#vp_varDetailTable");
         
         // initialize tags
-        $(tagTable).find('tr:not(:first)').remove();
+        $(tagTable).find('tr').remove();
         $(tagDetailTable).html('');
         
         // HTML rendering

@@ -320,11 +320,11 @@
     flex-direction: column;
     margin-left: 14px;
     margin-bottom: 400px;
-    width: calc(100% - 68px);
+    width: calc(100% - 60px);
 }
 .vp-block {
     position: relative;
-    min-width: 205px;
+    width: 100%;
     min-height: 25px;
     z-index: 1;
     text-align: left;
@@ -822,7 +822,7 @@
 }
 .vp-apiblock-codeline-ellipsis {
     width: 100%;
-    background-color: rgba(255, 255, 255, 0.5);
+    /* background-color: rgba(255, 255, 255, 0.5); */
     color:  var(--font-primary);
     font-size: 12px;
     text-indent: 0.5em;

@@ -7,7 +7,7 @@ define([
     , 'nbextensions/visualpython/src/common/vpFuncJS'
     , 'nbextensions/visualpython/src/common/component/vpSuggestInputText'
     , 'nbextensions/visualpython/src/pandas/common/pandasGenerator'
-    , 'nbextensions/visualpython/src/component/fileNavigation/index'
+    , 'nbextensions/visualpython/src/pandas/fileNavigation/index'
 ], function (requirejs, $, vpCommon, vpConst, sb, vpFuncJS, vpSuggestInputText, pdGen, fileNavigation) {
     // 옵션 속성
     const funcOptProp = {
@@ -140,7 +140,7 @@ define([
 
         sbTagString.clear();
         sbTagString.appendFormat('<input type="text" id="{0}" class="{1}" />', 'vp_pyReturn', 'vp-input');
-        tblLayoutRequire.addRow("Allocate toto", sbTagString.toString());
+        tblLayoutRequire.addRow("Allocate to", sbTagString.toString());
         
         sbTagString.clear();
         sbTagString.appendFormat('<select id="{0}" class="{1}">', 'vp_pyModeSelector', 'vp-select');
@@ -171,9 +171,14 @@ define([
         sbTagString.appendFormat('<input type="number" id="{0}" class="{1}" />', 'vp_pyBuffering', 'vp-input');
         tblLayoutAdditional.addRow("Buffering", sbTagString.toString());
 
-        sbTagString.clear();
-        sbTagString.appendFormat('<input type="text" id="{0}" class="{1}" />', 'vp_pyEncoding', 'vp-input');
-        tblLayoutAdditional.addRow("Encoding", sbTagString.toString());
+        // encoding list : utf8 cp949 ascii
+        var encodingList = ['utf8', 'cp949', 'ascii'];
+        var suggestInput = new vpSuggestInputText.vpSuggestInputText();
+        suggestInput.setComponentID('vp_pyEncoding');
+        suggestInput.addClass('vp-input');
+        suggestInput.setSuggestList(function() { return encodingList; });
+        suggestInput.setPlaceholder('encoding option');
+        tblLayoutAdditional.addRow("Encoding", suggestInput.toTagString());
 
         sbTagString.clear();
         // sbTagString.appendFormat('<input type="text" id="{0}" class="{1}" />', 'vp_pyErrors', 'vp-input');
