@@ -621,9 +621,11 @@ define([
         }
 
         // resize
-        var blockContainer = apiBlockJS.getBlockContainer();
-        if (blockContainer.getIsOptionPageResize() == false) {
-            blockContainer.resizeAPIblock();
+        if (apiBlockJS) {
+            var blockContainer = apiBlockJS.getBlockContainer();
+            if (blockContainer && blockContainer.getIsOptionPageResize() == false) {
+                blockContainer.resizeAPIblock();
+            }
         }
     }
 
