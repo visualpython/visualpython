@@ -108,10 +108,10 @@ define([
         var requiredFontStyle = required? vpConst.COLOR_FONT_ORANGE : '';
         $(lbl).attr({
             'for': obj.name,
-            'class': requiredFontStyle
+            'class': requiredFontStyle,
+            'title': '(' + obj.name + ')'
         });
-        // lbl.innerText = (required? '* ':'') + obj.label + (showKey?' ('+obj.name+')':'');
-        lbl.innerText = obj.label + (showKey?' ('+obj.name+')':'');
+        lbl.innerText = obj.label;
         tblLabel.appendChild(lbl);
 
         // 명시된 component에 맞는 태그 구성해서 붙여주기

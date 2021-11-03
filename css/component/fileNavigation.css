@@ -47,7 +47,8 @@
     .fileNavigationPage-inner {
         float: right;
         display: grid;
-        grid-template-rows: 30px auto min-content;
+        /* grid-template-rows: 30px auto min-content; */
+        grid-template-rows: min-content auto min-content;
         width: 80%;
         height: 100%; 
     }
@@ -107,7 +108,8 @@
   }
   .fileNavigationPage-menu {
     min-height: 30px;
-    height: 6%;
+    /* height: 6%; */
+    height: fit-content;
     padding-left: 10px;
     background-color: #EEE;
     border:  1px solid #ddd;;
@@ -127,7 +129,7 @@
     justify-content: center; 
   }
   .fileNavigationPage-menu-block {
-    margin-left: 10px;
+    padding: 0 35px 0 10px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -192,11 +194,11 @@
   .fileNavigationPage-closedBtn {
     position: fixed;
     z-index: 3;
-    right: 5px;
+    right: 10px;
     width: 20px;
     height: 20px;
     line-height: 20px;
-    top: 5px;
+    top: 3px;
     text-align: center;
   }
   .fileNavigationPage-closedBtn:hover {

@@ -619,6 +619,14 @@ define([
         } else {
             $(vpCommon.wrapSelector(vpCommon.formatString("#{0}", vpConst.API_MODE_CONTAINER))).width($(vpCommon.wrapSelector(".vp-main-container")).width());
         }
+
+        // resize
+        if (apiBlockJS) {
+            var blockContainer = apiBlockJS.getBlockContainer();
+            if (blockContainer && blockContainer.getIsOptionPageResize() == false) {
+                blockContainer.resizeAPIblock();
+            }
+        }
     }
 
     /**
