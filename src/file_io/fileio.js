@@ -7,8 +7,9 @@ define([
     , 'nbextensions/visualpython/src/common/vpFuncJS'
     , 'nbextensions/visualpython/src/pandas/common/commonPandas'
     , 'nbextensions/visualpython/src/pandas/common/pandasGenerator'
+    , 'nbextensions/visualpython/src/common/component/vpSuggestInputText'
     , 'nbextensions/visualpython/src/pandas/fileNavigation/index'
-], function (requirejs, $, vpCommon, vpConst, sb, vpFuncJS, libPandas, pdGen, fileNavigation) {
+], function (requirejs, $, vpCommon, vpConst, sb, vpFuncJS, libPandas, pdGen, vpSuggestInputText, fileNavigation) {
     // 옵션 속성
     const funcOptProp = {
         stepCount : 1
@@ -349,6 +350,18 @@ define([
                     , vpConst.FILE_BROWSER_INPUT_BUTTON)
             );
         }
+
+        // encoding suggest input
+        $(this.wrapSelector('#encoding')).replaceWith(function() {
+            // encoding list : utf8 cp949 ascii
+            var encodingList = ['utf8', 'cp949', 'ascii'];
+            var suggestInput = new vpSuggestInputText.vpSuggestInputText();
+            suggestInput.setComponentID('encoding');
+            suggestInput.addClass('vp-input');
+            suggestInput.setSuggestList(function() { return encodingList; });
+            suggestInput.setPlaceholder('encoding option');
+            return suggestInput.toTagString();
+        });
 
         
     }
