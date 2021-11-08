@@ -621,6 +621,7 @@ define([
             $(document).off('change', this._wrapSelector('#vp_gbMethodSelect'));
             $(document).off('change', this._wrapSelector('#vp_gbAdvanced'));
             $(document).off('change', this._wrapSelector('#vp_gbAllocateTo'));
+            $(document).off('change', this._wrapSelector('#vp_gbToFrame'));
             $(document).off('change', this._wrapSelector('#vp_gbResetIndex'));
 
             $(document).off('click', this._wrapSelector('#vp_gbAdvAdd'));
