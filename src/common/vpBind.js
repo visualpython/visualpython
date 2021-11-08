@@ -72,11 +72,11 @@ define([
             this.codepreview = undefined;
 
             this.howList = [
-                { label: 'Inner', value: 'inner' },
-                { label: 'Outer', value: 'outer' },
-                { label: 'Left', value: 'left' },
-                { label: 'Right', value: 'right' },
-                { label: 'Cross', value: 'cross' },
+                { label: 'Inner', value: 'inner', desc: 'Inner join' },
+                { label: 'Full outer', value: 'outer', desc: 'Full outer join' },
+                { label: 'Left outer', value: 'left', desc: 'Left outer join' },
+                { label: 'Right outer', value: 'right', desc: 'Right outer join' },
+                { label: 'Cross', value: 'cross', desc: 'Cartesian product' },
             ]
         }
 
@@ -361,7 +361,7 @@ define([
             page.appendFormatLine('<select id="{0}">', 'vp_bdHow');
             var savedHow = this.state.merge.how;
             this.howList.forEach(how => {
-                page.appendFormatLine('<option value="{0}"{1}>{2}</option>', how.value, savedHow==how.value?' selected':'', how.label);
+                page.appendFormatLine('<option value="{0}"{1} title="{2}">{3}</option>', how.value, savedHow==how.value?' selected':'', how.desc, how.label);
             });
             page.appendLine('</select>');
             page.appendLine('</div>');
