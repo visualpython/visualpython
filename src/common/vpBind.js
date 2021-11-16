@@ -116,13 +116,16 @@ define([
     
                 $(this._wrapSelector('#vp_bdHow')).val(merge.how);
                 this._loadSelectorInput(this._wrapSelector('#vp_bdOn'), merge.on);
-                if (on && on.length > 0) {
+                if (merge.on && merge.on.length > 0) {
                     $(this._wrapSelector('#vp_bdLeftOnSelect')).attr('disabled', true);
                     $(this._wrapSelector('#vp_bdRightOnSelect')).attr('disabled', true);
+                    $(this._wrapSelector('#vp_bdLeftIndex')).attr('disabled', true);
+                    $(this._wrapSelector('#vp_bdRightIndex')).attr('disabled', true);
                 }
                 this._loadSelectorInput(this._wrapSelector('#vp_bdLeftOn'), merge.left.on);
                 this._loadSelectorInput(this._wrapSelector('#vp_bdRightOn'), merge.right.on);
-                if (merge.left.on.length > 0 || merge.right.on.length > 0) {
+                if (merge.left.on.length > 0 || merge.right.on.length > 0 
+                    || merge.left.useIndex || merge.right.useIndex) {
                     $(this._wrapSelector('#vp_bdOnSelect')).attr('disabled', true);
                 }
     
@@ -666,9 +669,13 @@ define([
                 if (colList && colList.length > 0) {
                     $(that._wrapSelector('#vp_bdLeftOnSelect')).attr('disabled', true);
                     $(that._wrapSelector('#vp_bdRightOnSelect')).attr('disabled', true);
+                    $(that._wrapSelector('#vp_bdLeftIndex')).attr('disabled', true);
+                    $(that._wrapSelector('#vp_bdRightIndex')).attr('disabled', true);
                 } else {
                     $(that._wrapSelector('#vp_bdLeftOnSelect')).attr('disabled', false);
                     $(that._wrapSelector('#vp_bdRightOnSelect')).attr('disabled', false);
+                    $(that._wrapSelector('#vp_bdLeftIndex')).attr('disabled', false);
+                    $(that._wrapSelector('#vp_bdRightIndex')).attr('disabled', false);
                 }
             });
 
