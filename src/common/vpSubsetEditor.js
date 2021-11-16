@@ -72,8 +72,10 @@ define([
     const VP_DS_DRAGGABLE = 'vp-ds-draggable';
 
     /** select btns */
+    const VP_DS_SELECT_ADD_ALL_BTN = 'vp-ds-select-add-all-btn';
     const VP_DS_SELECT_ADD_BTN = 'vp-ds-select-add-btn';
     const VP_DS_SELECT_DEL_BTN = 'vp-ds-select-del-btn';
+    const VP_DS_SELECT_DEL_ALL_BTN = 'vp-ds-select-del-all-btn';
 
     /** slicing box */
     const VP_DS_SLICING_BOX = 'vp-ds-slicing-box';
@@ -509,8 +511,12 @@ define([
         tag.appendLine('</div>');  // VP_DS_SELECT_LEFT
         // row select - buttons
         tag.appendFormatLine('<div class="{0}">', VP_DS_SELECT_BTN_BOX);
+        tag.appendFormatLine('<button type="button" class="{0} {1}" title="{2}">{3}</button>'
+                                , VP_DS_SELECT_ADD_ALL_BTN, 'select-row', 'Add all items', '<img src="/nbextensions/visualpython/resource/arrow_right_double.svg"/></i>');
         tag.appendFormatLine('<button type="button" class="{0} {1}">{2}</button>', VP_DS_SELECT_ADD_BTN, 'select-row', '<img src="/nbextensions/visualpython/resource/arrow_right.svg"/>');
         tag.appendFormatLine('<button type="button" class="{0} {1}">{2}</button>', VP_DS_SELECT_DEL_BTN, 'select-row', '<img src="/nbextensions/visualpython/resource/arrow_left.svg"/>');
+        tag.appendFormatLine('<button type="button" class="{0} {1}" title="{2}">{3}</button>'
+                                , VP_DS_SELECT_DEL_ALL_BTN, 'select-row', 'Remove all items', '<img src="/nbextensions/visualpython/resource/arrow_left_double.svg"/>');
         tag.appendLine('</div>');  // VP_DS_SELECT_BTNS
         // row select - right
         tag.appendFormatLine('<div class="{0}">', VP_DS_SELECT_RIGHT);
@@ -612,8 +618,12 @@ define([
         tag.appendLine('</div>');  // VP_DS_SELECT_LEFT
         // col select - buttons
         tag.appendFormatLine('<div class="{0}">', VP_DS_SELECT_BTN_BOX);
+        tag.appendFormatLine('<button type="button" class="{0} {1}" title="{2}">{3}</button>'
+                                , VP_DS_SELECT_ADD_ALL_BTN, 'select-col', 'Add all items', '<img src="/nbextensions/visualpython/resource/arrow_right_double.svg"/></i>');
         tag.appendFormatLine('<button type="button" class="{0} {1}">{2}</button>', VP_DS_SELECT_ADD_BTN, 'select-col', '<img src="/nbextensions/visualpython/resource/arrow_right.svg"/></i>');
         tag.appendFormatLine('<button type="button" class="{0} {1}">{2}</button>', VP_DS_SELECT_DEL_BTN, 'select-col', '<img src="/nbextensions/visualpython/resource/arrow_left.svg"/>');
+        tag.appendFormatLine('<button type="button" class="{0} {1}" title="{2}">{3}</button>'
+                                , VP_DS_SELECT_DEL_ALL_BTN, 'select-col', 'Remove all items', '<img src="/nbextensions/visualpython/resource/arrow_left_double.svg"/>');
         tag.appendLine('</div>');  // VP_DS_SELECT_BTNS
         // col select - right
         tag.appendFormatLine('<div class="{0}">', VP_DS_SELECT_RIGHT);
@@ -1320,8 +1330,10 @@ define([
         $(document).off('change', this.wrapSelector('.select-row .' + VP_DS_SELECT_SEARCH));
         $(document).off('change', this.wrapSelector('.select-col .' + VP_DS_SELECT_SEARCH));
         $(document).off('click', this.wrapSelector('.' + VP_DS_SELECT_ITEM));
+        $(document).off('click', this.wrapSelector('.' + VP_DS_SELECT_ADD_ALL_BTN));
         $(document).off('click', this.wrapSelector('.' + VP_DS_SELECT_ADD_BTN));
         $(document).off('click', this.wrapSelector('.' + VP_DS_SELECT_DEL_BTN));
+        $(document).off('click', this.wrapSelector('.' + VP_DS_SELECT_DEL_ALL_BTN));
         $(document).off('click', this.wrapSelector('.vp-add-col'));
         $(document).off('click', this.wrapSelector('.vp-del-col'));
         $(document).off('change', this.wrapSelector('.vp-ds-slicing-box input[type="text"]'));
@@ -1653,6 +1665,21 @@ define([
             }
         });
 
+        // item indexing - add all
+        $(document).on('click', this.wrapSelector('.' + VP_DS_SELECT_ADD_ALL_BTN), function(event) {
+            var itemType = $(this).hasClass('select-row')? 'row':'col';
+            var selector = '.select-' + itemType;
+            
+            $(that.wrapSelector('.' + VP_DS_SELECT_BOX + '.left .' + VP_DS_SELECT_ITEM + selector)).appendTo(
+                $(that.wrapSelector(selector + ' .' + VP_DS_SELECT_BOX + '.right'))
+            );
+            $(that.wrapSelector(selector + ' .' + VP_DS_SELECT_BOX + ' .' + VP_DS_SELECT_ITEM)).addClass('added');
+            $(that.wrapSelector('.' + VP_DS_SELECT_ITEM + '.selected')).removeClass('selected');
+            that.state[itemType + 'Pointer'] = { start: -1, end: -1 };
+
+            that.generateCode();
+        });
+
         // item indexing - add
         $(document).on('click', this.wrapSelector('.' + VP_DS_SELECT_ADD_BTN), function(event) {
             var itemType = $(this).hasClass('select-row')? 'row':'col';
@@ -1686,6 +1713,28 @@ define([
             );
             selectedTag.removeClass('added');
             selectedTag.removeClass('selected');
+            that.state[itemType + 'Pointer'] = { start: -1, end: -1 };
+
+            that.generateCode();
+        });
+
+        // item indexing - del all
+        $(document).on('click', this.wrapSelector('.' + VP_DS_SELECT_DEL_ALL_BTN), function(event) {
+            var itemType = $(this).hasClass('select-row')? 'row':'col';
+            var selector = '.select-' + itemType;
+
+            var targetBoxQuery = that.wrapSelector(selector + ' .' + VP_DS_SELECT_BOX + '.left');
+            $(that.wrapSelector(selector + ' .' + VP_DS_SELECT_ITEM)).appendTo(
+                $(targetBoxQuery)
+            );
+            // sort
+            $(targetBoxQuery + ' .' + VP_DS_SELECT_ITEM).sort(function(a, b) {
+                return ($(b).data('idx')) < ($(a).data('idx')) ? 1 : -1;
+            }).appendTo(
+                $(targetBoxQuery)
+            );
+            $(that.wrapSelector(selector + ' .' + VP_DS_SELECT_ITEM)).removeClass('added');
+            $(that.wrapSelector(selector + ' .' + VP_DS_SELECT_ITEM)).removeClass('selected');
             that.state[itemType + 'Pointer'] = { start: -1, end: -1 };
 
             that.generateCode();
@@ -2122,7 +2171,7 @@ define([
                 var rowList = [];
                 for (var i = 0; i < rowTags.length; i++) {
                     var rowValue = $(rowTags[i]).data('code');
-                    if (rowValue) {
+                    if (rowValue != undefined) {
                         rowList.push(rowValue);
                     }
                 }

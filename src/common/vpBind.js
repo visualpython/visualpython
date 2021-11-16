@@ -72,11 +72,11 @@ define([
             this.codepreview = undefined;
 
             this.howList = [
-                { label: 'Inner', value: 'inner' },
-                { label: 'Outer', value: 'outer' },
-                { label: 'Left', value: 'left' },
-                { label: 'Right', value: 'right' },
-                { label: 'Cross', value: 'cross' },
+                { label: 'Inner', value: 'inner', desc: 'Inner join' },
+                { label: 'Full outer', value: 'outer', desc: 'Full outer join' },
+                { label: 'Left outer', value: 'left', desc: 'Left outer join' },
+                { label: 'Right outer', value: 'right', desc: 'Right outer join' },
+                { label: 'Cross', value: 'cross', desc: 'Cartesian product' },
             ]
         }
 
@@ -116,13 +116,16 @@ define([
     
                 $(this._wrapSelector('#vp_bdHow')).val(merge.how);
                 this._loadSelectorInput(this._wrapSelector('#vp_bdOn'), merge.on);
-                if (on && on.length > 0) {
+                if (merge.on && merge.on.length > 0) {
                     $(this._wrapSelector('#vp_bdLeftOnSelect')).attr('disabled', true);
                     $(this._wrapSelector('#vp_bdRightOnSelect')).attr('disabled', true);
+                    $(this._wrapSelector('#vp_bdLeftIndex')).attr('disabled', true);
+                    $(this._wrapSelector('#vp_bdRightIndex')).attr('disabled', true);
                 }
                 this._loadSelectorInput(this._wrapSelector('#vp_bdLeftOn'), merge.left.on);
                 this._loadSelectorInput(this._wrapSelector('#vp_bdRightOn'), merge.right.on);
-                if (merge.left.on.length > 0 || merge.right.on.length > 0) {
+                if (merge.left.on.length > 0 || merge.right.on.length > 0 
+                    || merge.left.useIndex || merge.right.useIndex) {
                     $(this._wrapSelector('#vp_bdOnSelect')).attr('disabled', true);
                 }
     
@@ -361,7 +364,7 @@ define([
             page.appendFormatLine('<select id="{0}">', 'vp_bdHow');
             var savedHow = this.state.merge.how;
             this.howList.forEach(how => {
-                page.appendFormatLine('<option value="{0}"{1}>{2}</option>', how.value, savedHow==how.value?' selected':'', how.label);
+                page.appendFormatLine('<option value="{0}"{1} title="{2}">{3}</option>', how.value, savedHow==how.value?' selected':'', how.desc, how.label);
             });
             page.appendLine('</select>');
             page.appendLine('</div>');
@@ -666,9 +669,13 @@ define([
                 if (colList && colList.length > 0) {
                     $(that._wrapSelector('#vp_bdLeftOnSelect')).attr('disabled', true);
                     $(that._wrapSelector('#vp_bdRightOnSelect')).attr('disabled', true);
+                    $(that._wrapSelector('#vp_bdLeftIndex')).attr('disabled', true);
+                    $(that._wrapSelector('#vp_bdRightIndex')).attr('disabled', true);
                 } else {
                     $(that._wrapSelector('#vp_bdLeftOnSelect')).attr('disabled', false);
                     $(that._wrapSelector('#vp_bdRightOnSelect')).attr('disabled', false);
+                    $(that._wrapSelector('#vp_bdLeftIndex')).attr('disabled', false);
+                    $(that._wrapSelector('#vp_bdRightIndex')).attr('disabled', false);
                 }
             });
 
@@ -927,7 +934,7 @@ define([
                     //================================================================
                     // On columns
                     //================================================================
-                    code.appendFormat(', on=[{0}]', on.map(col => col.code));
+                    code.appendFormat(', on=[{0}]', merge.on.map(col => col.code));
                 } else {
                     //====================================================================
                     // Left & Right On columns
