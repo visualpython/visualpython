@@ -3,6 +3,7 @@ File Navigation Commands
 """
 
 import os as _vp_os 
+import stat as _vp_stat
 
 def _vp_get_userprofile_path():
     """
@@ -64,9 +65,17 @@ def _vp_sizeof_fmt(num, suffix='B'):
         num /= 1024.0
     return '%.1f%s%s' % (num, 'Yi', suffix)
     
-def _vp_search_path(path):
+def _vp_search_path(path, show_hidden=False):
     """
     Search child folder and file list under the given path
+    path: str
+        path to search file/dir list
+    show_hidden: bool (optional; default: False)
+        set True for show hidden file/dir
+    returns: list
+        list with scanned file/dir list
+        0 element with current and parent path information
+        1~n elements with file/dir list under given path
     """
     import datetime as _dt
     _current = _vp_os.path.abspath(path)
@@ -76,20 +85,21 @@ def _vp_search_path(path):
         _info = []
         _info.append({'current':_current,'parent':_parent})
         for _entry in i:
-            _name = _entry.name
-            _path = _entry.path      # 파일 경로
-            _stat = _entry.stat()
-            _size = _vp_sizeof_fmt(_stat.st_size)    # 파일 크기
-            _a_time = _stat.st_atime # 최근 액세스 시간
-            _a_dt = _dt.datetime.fromtimestamp(_a_time).strftime('%Y-%m-%d %H:%M')
-            _m_time = _stat.st_mtime # 최근 수정 시간
-            _m_dt = _dt.datetime.fromtimestamp(_m_time).strftime('%Y-%m-%d %H:%M')
-            _e_type = 'other'
-            if _entry.is_file():
-                _e_type = 'file'
-            elif _entry.is_dir():
-                _e_type = 'dir'
-            _info.append({'name':_name, 'type':_e_type, 'path':_path, 'size':_size, 'atime':str(_a_dt), 'mtime':str(_m_dt)})
+            if show_hidden or _vp_check_hidden(_entry.path) == False:
+                _name = _entry.name
+                _path = _entry.path      # 파일 경로
+                _stat = _entry.stat()
+                _size = _vp_sizeof_fmt(_stat.st_size)    # 파일 크기
+                _a_time = _stat.st_atime # 최근 액세스 시간
+                _a_dt = _dt.datetime.fromtimestamp(_a_time).strftime('%Y-%m-%d %H:%M')
+                _m_time = _stat.st_mtime # 최근 수정 시간
+                _m_dt = _dt.datetime.fromtimestamp(_m_time).strftime('%Y-%m-%d %H:%M')
+                _e_type = 'other'
+                if _entry.is_file():
+                    _e_type = 'file'
+                elif _entry.is_dir():
+                    _e_type = 'dir'
+                _info.append({'name':_name, 'type':_e_type, 'path':_path, 'size':_size, 'atime':str(_a_dt), 'mtime':str(_m_dt)})
         return _info
 
 def _vp_get_image_by_path(path):
@@ -104,10 +114,20 @@ def _vp_get_relative_path(start, path):
     """
     Get relative path using start path and current path
     start: str
-        start path
+        start path+
     path: str
         current path
     returns: str
         current relative path
     """
     return _vp_os.path.relpath(path, start)
+
+def _vp_check_hidden(path):
+    """
+    Check if it's hidden
+    path: str
+        file path
+    returns: bool
+        True for hidden file/dir, False for others
+    """
+    return bool(_vp_os.stat(path).st_file_attributes & _vp_stat.FILE_ATTRIBUTE_HIDDEN)

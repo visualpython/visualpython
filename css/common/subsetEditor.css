@@ -242,16 +242,11 @@
     margin: auto;
     display: inherit;
 }
-.vp-ds-select-add-btn {
+.vp-ds-select-btn-box button {
     height: 24px;
     background: #FFFFFF;
     border: 0.25px solid #E4E4E4;
-}
-.vp-ds-select-del-btn {
-    height: 24px;
-    background: #FFFFFF;
-    border: 0.25px solid #E4E4E4;
-    margin-top: 5px;
+    grid-row-gap: 5px;
 }
 .vp-ds-btn-add-condition {
     width: 95px;

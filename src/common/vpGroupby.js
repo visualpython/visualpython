@@ -102,6 +102,7 @@ define([
             ]
 
             this.methodList = [
+                { label: 'None', value: '' },
                 { label: 'count', value: 'count' },
                 { label: 'first', value: 'first' },
                 { label: 'last', value: 'last' },
@@ -134,13 +135,14 @@ define([
         _loadState(state) {
             var {
                 variable, groupby, useGrouper, grouperNumber, grouperPeriod, 
-                display, method, advanced, allocateTo, resetIndex,
+                display, method, advanced, allocateTo, toFrame, resetIndex,
                 advPageDom, advColList, advNamingList
             } = state;
 
             $(this._wrapSelector('#vp_gbVariable')).val(variable);
             $(this._wrapSelector('#vp_gbBy')).val(groupby.map(col=>col.code).join(','));
             $(this._wrapSelector('#vp_gbBy')).data('list', groupby);
+            $(this._wrapSelector('#vp_gbResetIndex')).val(resetIndex?'yes':'no');
             if (useGrouper) {
                 $(this._wrapSelector('#vp_gbByGrouper')).removeAttr('disabled');
                 $(this._wrapSelector('#vp_gbByGrouper')).prop('checked', useGrouper);
@@ -157,7 +159,7 @@ define([
                 $(this._wrapSelector('#vp_gbAdvanced')).trigger('change');
             }
             $(this._wrapSelector('#vp_gbAllocateTo')).val(allocateTo);
-            $(this._wrapSelector('#vp_gbResetIndex')).val(resetIndex?'yes':'no');
+            $(this._wrapSelector('#vp_gbToFrame')).val(toFrame);
 
             $(this._wrapSelector('.vp-gb-adv-box')).html(advPageDom);
             
@@ -358,6 +360,7 @@ define([
             page.appendLine('<div>');
             page.appendFormatLine('<label for="{0}" class="{1}">{2}</label>', 'vp_gbAllocateTo', 'wp80', 'Allocate to');
             page.appendFormatLine('<input type="text" id="{0}" placeholder="{1}"/>', 'vp_gbAllocateTo', 'New variable name');
+            page.appendFormatLine('<label style="display:none;"><input type="checkbox" id="{0}"/><span>{1}</span></label>', 'vp_gbToFrame', 'To DataFrame');
             page.appendLine('</div>');
             
             page.appendLine('</div>'); // end of df-box
@@ -618,6 +621,7 @@ define([
             $(document).off('change', this._wrapSelector('#vp_gbMethodSelect'));
             $(document).off('change', this._wrapSelector('#vp_gbAdvanced'));
             $(document).off('change', this._wrapSelector('#vp_gbAllocateTo'));
+            $(document).off('change', this._wrapSelector('#vp_gbToFrame'));
             $(document).off('change', this._wrapSelector('#vp_gbResetIndex'));
 
             $(document).off('click', this._wrapSelector('#vp_gbAdvAdd'));
@@ -716,6 +720,12 @@ define([
             $(document).on('change', this._wrapSelector('#vp_gbDisplay'), function(event) {
                 var colList = event.dataList;
                 that.state.display = colList;
+
+                if (colList && colList.length == 1) {
+                    $(that._wrapSelector('#vp_gbToFrame')).parent().show();
+                } else {
+                    $(that._wrapSelector('#vp_gbToFrame')).parent().hide();
+                }
             });
 
             // display select button event
@@ -755,6 +765,11 @@ define([
             // allocateTo event
             $(document).on('change', this._wrapSelector('#vp_gbAllocateTo'), function() {
                 that.state.allocateTo = $(this).val();
+            });
+
+            // to dataframe event
+            $(document).on('change', this._wrapSelector('#vp_gbToFrame'), function() {
+                that.state.toFrame = $(this).prop('checked') == true;
             });
             
             // reset index checkbox event
@@ -1009,8 +1024,12 @@ define([
             var code = new sb.StringBuilder();
             var { 
                 variable, groupby, useGrouper, grouperNumber, grouperPeriod, 
-                display, method, advanced, allocateTo, resetIndex 
+                display, method, advanced, allocateTo, toFrame, resetIndex 
             } = this.state;
+
+            if (!variable || variable == '') {
+                return '';
+            }
 
             // mapping colList states
             groupby = groupby.map(col => col.code);
@@ -1048,13 +1067,13 @@ define([
             //====================================================================
             var colStr = '';
             if (display) {
-                if (display.length == 1) {
-                    // for 1 column
-                    colStr = '[' + display.join('') + ']';
-                } else if (display.length > 1) {
+                if (toFrame || display.length > 1) {
                     // over 2 columns
                     colStr = '[[' + display.join(',') + ']]';
-                }
+                } else if (display.length == 1) {
+                    // for 1 column
+                    colStr = '[' + display.join('') + ']';
+                } 
             }
 
             //====================================================================
@@ -1172,21 +1191,24 @@ define([
                 //================================================================
                 // Method code generation
                 //================================================================
-                methodStr.appendFormat('{0}()', method);
+                if (method != '') {
+                    methodStr.appendFormat('{0}()', method);
+                }
             }
 
-            // when using as_index option with Grouper, use .reset_index()
-            if (useGrouper && resetIndex) {
-                methodStr.append('.reset_index()');
+            if (method != '') {
+                // when using as_index option with Grouper, use .reset_index()
+                if (useGrouper && resetIndex) {
+                    methodStr.append('.reset_index()');
+                }
+                // display columns
+                code.appendFormat('{0}.{1}', colStr, methodStr.toString());
             }
-            // display columns
-            code.appendFormat('{0}.{1}', colStr, methodStr.toString());
-
+            
             if (allocateTo && allocateTo != '') {
                 code.appendLine();
                 code.append(allocateTo);
             }
-
             return code.toString();
         }
 

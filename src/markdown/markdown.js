@@ -403,7 +403,7 @@ define([
 
             MathJax.Hub.Queue(["Typeset", MathJax.Hub, that.wrapSelector(vpCommon.formatString("{0}{1}", vpConst.VP_ID_PREFIX, "markdownPreview"))]);
 
-            // 변환안 된 이미지 있으면 경로로 설정하기 FIXME:
+            // // 변환안 된 이미지 있으면 경로로 설정하기 FIXME:
             html = html.replaceAll('vpImportImage:', '');
 
             textBlock.writeCode(html);
@@ -431,7 +431,8 @@ define([
             .then(data => {
                 var imgResult = data["image/png"];
                 
-                textarea.value = vpCommon.formatString("{0}![{1}]({2}:{3}){4}", preText, file, vpConst.VP_MARKDOWN_TOOLBAR_IMAGE_INDICATOR, file, postText);
+                // textarea.value = vpCommon.formatString("{0}![{1}]({2}:{3}){4}", preText, file, vpConst.VP_MARKDOWN_TOOLBAR_IMAGE_INDICATOR, file, postText);
+                textarea.value = vpCommon.formatString("{0}![{1}]({2}){3}", preText, file, file, postText);
             
                 // 파일 ATTACH ID 생성
                 var pathSplit = file.split('.').join('/').split('/');
