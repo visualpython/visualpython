@@ -437,6 +437,9 @@ define([
             page.appendFormatLine('<option value="{0}">{1}</option>', '', 'Select method type');
             page.appendFormatLine('<option value="{0}">{1}</option>', 'typing', 'Typing');
             this.methodList.forEach(method => {
+                if (method.value == '') {
+                    return;
+                }
                 page.appendFormatLine('<option value="{0}">{1}</option>', method.value, method.label);
             });
             page.appendLine('</select>');
@@ -1196,7 +1199,7 @@ define([
                 }
             }
 
-            if (method != '') {
+            if (method != '' || advanced) {
                 // when using as_index option with Grouper, use .reset_index()
                 if (useGrouper && resetIndex) {
                     methodStr.append('.reset_index()');
