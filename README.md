@@ -4,24 +4,24 @@
 
 [![PyPI version shields.io](https://img.shields.io/pypi/v/visualpython)](https://pypi.python.org/pypi/visualpython/)
 ![Python: 3.x](https://img.shields.io/badge/Python-3.x-yellowgreen)
-[![License: GPLv3](https://img.shields.io/badge/License-GPLv3-brightgreen)](https://www.gnu.org/licenses/gpl-3.0.html)
+[![License: GPLv3](https://img.shields.io/badge/License-GPLv3-brightgreen)](https://github.com/visualpython/visualpython/blob/main/LICENSE)
 [![Code of Conduct: Contributor Covenant](https://img.shields.io/badge/Code%20of%20Conduct-Contributor%20Covenant-pink)](https://github.com/visualpython/visualpython/blob/main/CODE_OF_CONDUCT.md)
 [![Downloads: ](https://img.shields.io/pypi/dm/visualpython?color=orange)](https://pypistats.org/packages/visualpython)
-[![Issues: ](https://img.shields.io/github/issues/visualpython/visualpython?color=%23FF6347)](https://pypistats.org/packages/visualpython)
+[![Issues: ](https://img.shields.io/github/issues/visualpython/visualpython?color=%23FF6347)](https://github.com/visualpython/visualpython/issues)
 
 ## Introduction
 Visual Python is a GUI-based Python code generator, developed on the Jupyter Notebook as an extension. <br>
-Visual Python is an open source project started for students who struggle with coding during a Python class for data science.
+Visual Python is an open source project started for students who struggle with coding during Python classes for data science.
 
 <br>
 
-Try Visual Python if you would like: <br>
-* to manage big data with minimal coding skills. <br>
-* to help students / business analysts / researchers to overcome learning barriers for Python. <br>
-* to save & reuse repeatedly used codes(snippets). <br>
+Try Visual Python if you would like to: <br>
+* manage big data with minimal coding skills. <br>
+* help students / business analysts / researchers to overcome learning barriers for Python. <br>
+* save & reuse repeatedly used codes(snippets). <br>
 
 <br>
-<img src="https://i.esdrop.com/d/7o0dj05m8rnz/ZPvkMGVeix.gif" width="85%">
+<img src="https://i.esdrop.com/d/7o0dj05m8rnz/Vo69p6HOwb.gif" width="85%">
 
 ## Getting Started
 
