@@ -46,7 +46,7 @@ where %PIP_T% > nul 2>&1 && set PIP=%PIP_T%
 set JP_NB=jupyter nbextension
 
 set VP_NAME=visualpython
-set VP_BIND=visualpython/src/main
+set VP_BIND=visualpython/visualpython
 
 set PIP_UNINST=%PIP% uninstall %VP_NAME%
 set PIP_UPGRAD=%PIP% install %VP_NAME% --upgrade

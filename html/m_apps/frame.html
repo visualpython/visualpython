@@ -1,0 +1,44 @@
+<body>
+    <div class="vp-fe-container">
+        <div class="vp-fe-menu-box vp-close-on-blur" style="display:none;">
+            <div class="vp-fe-menu-item vp-fe-menu-drop" data-type="3">Drop<i class="fa fa-caret-right"
+                    style="padding-left: 5px;"></i>
+                <div class="vp-fe-menu-sub-box" style="top: 0px;">
+                    <div class="vp-fe-menu-item vp-fe-menu-drop" data-type="3">Drop</div>
+                    <div class="vp-fe-menu-item vp-fe-menu-drop-na" data-type="4">Drop NA</div>
+                    <div class="vp-fe-menu-item vp-fe-menu-drop-duplicate" data-type="5" data-axis="col">Drop
+                        Duplicate</div>
+                </div>
+            </div>
+            <div class="vp-fe-menu-item vp-fe-menu-rename" data-type="2">Rename</div>
+            <div class="vp-fe-menu-item vp-fe-menu-ohe" data-type="6" data-axis="col">One-Hot Encoding</div>
+            <div class="vp-fe-menu-item vp-fe-menu-set-index" data-type="7" data-axis="col">Set Index</div>
+            <div class="vp-fe-menu-item vp-fe-menu-reset-index" data-type="8" data-axis="row">Reset Index</div>
+            <div class="vp-fe-menu-item vp-fe-menu-replace" data-type="9" data-axis="col">Replace</div>
+            <div class="vp-fe-menu-item vp-fe-menu-astype" data-type="10" data-axis="col">As Type</div>
+        </div>
+        <div class="vp-fe-body">
+            <div class="vp-fe-preview"><textarea id="vp_fePreviewCode" name="code"># Code preview</textarea></div>
+            <div class="vp-fe-df-box">
+                <div>
+                    <label for="vp_feVariable" class="vp-orange-text">DataFrame</label>
+                    <select id="vp_feVariable">
+                    </select>
+                    <div class="vp-fe-df-refresh"><img src="/nbextensions/visualpython/img/refresh.svg" />
+                    </div>
+                </div>
+                <div>
+                    <label for="vp_feReturn">Allocate to</label>
+                    <input type="text" class="vp-input" id="vp_feReturn" placeholder="Variable name" />
+                </div>
+            </div>
+            <div class="vp-fe-toolbar">
+                <button type="button" class="vp-button vp-fe-toolbar-item" data-type="97">Add Column</button>
+                <button type="button" class="vp-button vp-fe-toolbar-item" data-type="98">Add Row</button>
+            </div>
+            <div class="vp-fe-table no-selection">
+                <!-- Frame table -->
+            </div>
+        </div>
+    </div>
+</body>

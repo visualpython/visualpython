@@ -1,0 +1,14 @@
+#vp_fileioPage .vp-fileio-type {
+    border: 2px solid #FFCF73;
+    width: 100%;
+    height: 35px;
+    background-position: 97% 50%;
+    cursor: pointer;
+}
+#vp_fileioPage .vp-fileio-body {
+    padding: 5px;
+    margin-top: 10px;
+}
+.vp-option-table {
+    width: 100%;
+}

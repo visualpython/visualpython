@@ -1,0 +1,85 @@
+<body>
+    <div class="vp-option-page" id="vp_fileioPage">
+        <select id="vp_fileioType" class="vp-fileio-type">
+            <option value="Read">Read File</option>
+            <option value="Write">Write File</option>
+            <option value="Sample">Sample File</option>
+        </select>
+        <input id="vp_pageDom" type="hidden"/>
+        <div class="vp-fileio-body">
+            <div id="vp_fileRead" class="vp-fileio-box">
+                <form id="vp_optionForm">
+            
+                    <div class="vp-accordian-container">
+                        <div class="vp-accordian vp-open"><span class="vp-indicator"></span><span class="vp-accordian-caption" data-caption-id="TODO:Variable">Required Input & Output</span></div>
+                        <div id="vp_inputOutputBox" class="vp-accordian-box">
+                            <table class="vp-option-table">
+                                <colgroup><col width="30%"/><col width="*"/></colgroup>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="vp-accordian-container vp-accordion-gray-color">
+                        <div class="vp-accordian vp-open"><span class="vp-indicator"></span><span class="vp-accordian-caption" data-caption-id="TODO:Variable">Additional Options</span></div>
+                        <div id="vp_optionBox" class="vp-accordian-box">
+                            <table class="vp-option-table">
+                                <colgroup><col width="30%"/><col width="*"/></colgroup>
+                                
+                            </table>
+                        </div>
+                    </div>
+                    
+                </form>
+            </div>
+            <div id="vp_fileWrite" class="vp-fileio-box" style="display:none;">
+                <form id="vp_optionForm">
+            
+                    <div class="vp-accordian-container">
+                        <div class="vp-accordian vp-open"><span class="vp-indicator"></span><span class="vp-accordian-caption" data-caption-id="TODO:Variable">Required Input & Output</span></div>
+                        <div id="vp_inputOutputBox" class="vp-accordian-box">
+                            <table class="vp-option-table">
+                                <colgroup><col width="30%"/><col width="*"/></colgroup>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="vp-accordian-container vp-accordian-gray-color">
+                        <div class="vp-accordian vp-open"><span class="vp-indicator"></span><span class="vp-accordian-caption" data-caption-id="TODO:Variable">Additional Options</span></div>
+                        <div id="vp_optionBox" class="vp-accordian-box">
+                            <table class="vp-option-table">
+                                <colgroup><col width="30%"/><col width="*"/></colgroup>
+                                
+                            </table>
+                        </div>
+                    </div>
+                    
+                </form>
+            </div>
+            <div id="vp_fileSample" class="vp-fileio-box" style="display:none;">
+                <table class="vp-option-table">
+                    <thead>
+                        <colgroup><col width="40%"><col width="*"></colgroup>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><label for="vp_sampleFile" class="vp-orange-text">Sample File</label></td>
+                            <td>
+                                <select class="vp-select option-select" id="vp_sampleFile">
+                                    <option name="vp_sampleFile" value="iris.csv">iris</option>
+                                    <option name="vp_sampleFile" value="titanic.csv">titanic</option>
+                                    <option name="vp_sampleFile" value="fish.csv">fish</option>
+                                    <option name="vp_sampleFile" value="campusRecruitment.csv">campus recruitment</option>
+                                    <option name="vp_sampleFile" value="houseData_500.csv">house data</option>
+                                    <option name="vp_sampleFile" value="economic_index.csv">economic index</option>
+                                    <option name="vp_sampleFile" value="tips.csv">tips</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label for="vp_sampleReturn" class="vp-orange-text">Allocate to</label></td>
+                            <td><input type="text" class="vp-input input-single" id="vp_sampleReturn" placeholder="" value="" title=""></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>

@@ -1,0 +1,2199 @@
+{
+    "library": {
+        "version": "0.0.1",
+        "item": [
+            {
+                "id"   : "com_setting",
+                "type" : "function",
+                "level": 0,
+                "name" : "Setting",
+                "tag"  : "SETTING",
+                "path" : "visualpython - setting",
+                "desc" : "Settings for visual python",
+                "file" : "file_io/settings"
+            },
+            {
+                "id"   : "com_pip",
+                "type" : "function",
+                "level": 0,
+                "name" : "Package Management",
+                "tag"  : "PIP,INSTALL,UPDATE,PYTHON INSTALL PACKAGE",
+                "path" : "visualpython - pip",
+                "desc" : "Settings for visual python",
+                "file" : "file_io/pip"
+            },
+            {
+                "id"   : "pkg_apps",
+                "type" : "package",
+                "level": 0,
+                "name" : "Apps",
+                "path" : "visualpython - apps",
+                "desc" : "Application modules",
+                "open" : true,
+                "item" : [
+                    {
+                        "id"   : "apps_import",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Import",
+                        "tag"  : "IMPORT,APPS",
+                        "path" : "visualpython - apps - import",
+                        "desc" : "Import",
+                        "file" : "m_apps/Import",
+                        "apps" : {
+                            "color": 1,
+                            "icon": "apps/apps_import.svg"
+                        }
+                    },
+                    {
+                        "id"   : "apps_file",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "File",
+                        "tag"  : "FILE,APPS",
+                        "path" : "visualpython - apps - file",
+                        "desc" : "File",
+                        "file" : "m_apps/File",
+                        "apps" : {
+                            "color": 1,
+                            "icon": "apps/apps_file.svg"
+                        }
+                    },
+                    {
+                        "id"   : "apps_variable",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Variable",
+                        "tag"  : "VARIABLE,APPS",
+                        "path" : "visualpython - apps - variable",
+                        "desc" : "Variable",
+                        "file" : "m_apps/Variable",
+                        "apps" : {
+                            "color": 1,
+                            "icon": "apps/apps_variable.svg"
+                        }
+                    },
+                    {
+                        "id"   : "apps_snippets",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Snippets",
+                        "tag"  : "SNIPPETS,APPS",
+                        "path" : "visualpython - apps - snippets",
+                        "desc" : "Snippets",
+                        "file" : "m_apps/Snippets",
+                        "apps" : {
+                            "color": 1,
+                            "icon": "apps/apps_snippets.svg"
+                        }
+                    },
+                    {
+                        "id"   : "apps_frame",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Frame",
+                        "tag"  : "FRAME,APPS",
+                        "path" : "visualpython - apps - frame",
+                        "desc" : "Frame",
+                        "file" : "m_apps/Frame",
+                        "apps" : {
+                            "color": 2,
+                            "icon": "apps/apps_frame.svg"
+                        }
+                    },
+                    {
+                        "id"   : "apps_subset",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Subset",
+                        "tag"  : "SUBSET,APPS",
+                        "path" : "visualpython - apps - subset",
+                        "desc" : "Subset",
+                        "file" : "m_apps/Subset",
+                        "apps" : {
+                            "color": 2,
+                            "icon": "apps/apps_subset.svg"
+                        }
+                    },
+                    {
+                        "id"   : "apps_instance",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Instance",
+                        "tag"  : "INSTANCE,APPS",
+                        "path" : "visualpython - apps - instance",
+                        "desc" : "Instance",
+                        "file" : "m_apps/Instance",
+                        "apps" : {
+                            "color": 2,
+                            "icon": "apps/apps_instance.svg"
+                        }
+                    },
+                    {
+                        "id"   : "apps_groupby",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Groupby",
+                        "tag"  : "GROUPBY,APPS",
+                        "path" : "visualpython - apps - groupby",
+                        "desc" : "Groupby",
+                        "file" : "m_apps/Groupby",
+                        "apps" : {
+                            "color": 2,
+                            "icon": "apps/apps_groupby.svg"
+                        }
+                    },
+                    {
+                        "id"   : "apps_bind",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Bind",
+                        "tag"  : "BIND,APPS",
+                        "path" : "visualpython - apps - bind",
+                        "desc" : "Concat & Merge",
+                        "file" : "m_apps/Bind",
+                        "apps" : {
+                            "color": 3,
+                            "icon": "apps/apps_bind.svg"
+                        }
+                    },
+                    {
+                        "id"   : "apps_reshape",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Reshape",
+                        "tag"  : "RESHAPE,APPS",
+                        "path" : "visualpython - apps - reshape",
+                        "desc" : "Reshape",
+                        "file" : "m_apps/Reshape",
+                        "apps" : {
+                            "color": 3,
+                            "icon": "apps/apps_reshape.svg"
+                        }
+                    },
+                    {
+                        "id"   : "apps_chart",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Chart",
+                        "tag"  : "CHART,APPS",
+                        "path" : "visualpython - apps - chart",
+                        "desc" : "Chart",
+                        "file" : "m_apps/Chart",
+                        "apps" : {
+                            "color": 3,
+                            "icon": "apps/apps_chart.svg"
+                        }
+                    },
+                    {
+                        "id"   : "apps_markdown",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Markdown",
+                        "tag"  : "MARKDOWN,APPS",
+                        "path" : "visualpython - apps - markdown",
+                        "desc" : "Markdown",
+                        "file" : "m_apps/Markdown",
+                        "apps" : {
+                            "color": 3,
+                            "icon": "apps/apps_markdown.svg"
+                        }
+                    },
+                    {
+                        "id"   : "apps_pdf",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "PDF",
+                        "tag"  : "PDF,PYMUPDF,APPS",
+                        "path" : "visualpython - apps - pdf",
+                        "desc" : "PDF",
+                        "file" : "m_apps/PDF",
+                        "apps" : {
+                            "color": 4,
+                            "icon": "apps/apps_pymupdf.svg"
+                        }
+                    },
+                    {
+                        "id"   : "apps_profiling",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Profiling",
+                        "tag"  : "PROFILING,PANDAS PROFILING,APPS",
+                        "path" : "visualpython - apps - profiling",
+                        "desc" : "Pandas Profiling",
+                        "file" : "m_apps/Profiling",
+                        "apps" : {
+                            "color": 4,
+                            "icon": "apps/apps_profiling.svg"
+                        }
+                    }
+                ]
+            },
+            {
+                "id"   : "pkg_logic",
+                "type" : "package",
+                "level": 0,
+                "name" : "Logic",
+                "path" : "visualpython - logic",
+                "desc" : "Python logic operations",
+                "item" : [
+                    {
+                        "id"   : "log_define",
+                        "type" : "package",
+                        "level": 1,
+                        "name" : "Define",
+                        "path" : "visualpython - logic - define",
+                        "desc" : "Define class or function",
+                        "open" : true,
+                        "item" : [
+                            {
+                                "id"   : "lgDef_class",
+                                "type" : "function",
+                                "level": 1,
+                                "name" : "class",
+                                "tag"  : "CLASS,LOGIC",
+                                "path" : "visualpython - logic - define - class",
+                                "desc" : "Define class",
+                                "file" : "m_logic/Class"
+                            },
+                            {
+                                "id"   : "lgDef_def",
+                                "type" : "function",
+                                "level": 1,
+                                "name" : "def",
+                                "tag"  : "DEF,FUNCTION,LOGIC",
+                                "path" : "visualpython - logic - define - function",
+                                "desc" : "Define function",
+                                "file" : "m_logic/Def"
+                            }
+                        ]
+                    },
+                    {
+                        "id"   : "log_control",
+                        "type" : "package",
+                        "level": 1,
+                        "name" : "Control",
+                        "path" : "visualpython - logic - control",
+                        "desc" : "Control grammars",
+                        "open" : true,
+                        "item" : [
+                            {
+                                "id"   : "lgCtrl_for",
+                                "type" : "function",
+                                "level": 1,
+                                "name" : "for",
+                                "tag"  : "FOR LOOP,LOGIC",
+                                "path" : "visualpython - logic - control - for",
+                                "desc" : "for loop",
+                                "file" : "m_logic/For"
+                            },
+                            {
+                                "id"   : "lgCtrl_while",
+                                "type" : "function",
+                                "level": 1,
+                                "name" : "while",
+                                "tag"  : "WHILE LOOP,LOGIC",
+                                "path" : "visualpython - logic - control - while",
+                                "desc" : "while loop",
+                                "file" : "m_logic/While"
+                            },
+                            {
+                                "id"   : "lgCtrl_if",
+                                "type" : "function",
+                                "level": 1,
+                                "name" : "if",
+                                "tag"  : "IF,LOGIC",
+                                "path" : "visualpython - logic - control - if",
+                                "desc" : "if",
+                                "file" : "m_logic/If"
+                            },
+                            {
+                                "id"   : "lgCtrl_try",
+                                "type" : "function",
+                                "level": 1,
+                                "name" : "try",
+                                "tag"  : "TRY CATCH EXCEPT,FINALLY,EXCEPTION,HANDLE ERROR,LOGIC",
+                                "path" : "visualpython - logic - control - try",
+                                "desc" : "try except",
+                                "file" : "m_logic/Try"
+                            },
+                            {
+                                "id"   : "lgCtrl_return",
+                                "type" : "function",
+                                "level": 1,
+                                "name" : "return",
+                                "tag"  : "RETURN,LOGIC",
+                                "path" : "visualpython - logic - control - return",
+                                "desc" : "return variables",
+                                "file" : "m_logic/Return"
+                            },
+                            {
+                                "id"   : "lgCtrl_continue",
+                                "type" : "function",
+                                "level": 1,
+                                "name" : "continue",
+                                "tag"  : "CONTINUE,LOGIC",
+                                "path" : "visualpython - logic - execute - continue",
+                                "desc" : "continue on loop",
+                                "file" : "m_logic/Continue"
+                            },
+                            {
+                                "id"   : "lgCtrl_break",
+                                "type" : "function",
+                                "level": 1,
+                                "name" : "break",
+                                "tag"  : "BREAK,LOGIC",
+                                "path" : "visualpython - logic - execute - break",
+                                "desc" : "break on loop",
+                                "file" : "m_logic/Break"
+                            },
+                            {
+                                "id"   : "lgCtrl_pass",
+                                "type" : "function",
+                                "level": 1,
+                                "name" : "pass",
+                                "tag"  : "PASS,LOGIC",
+                                "path" : "visualpython - logic - execute - pass",
+                                "desc" : "pass",
+                                "file" : "m_logic/Pass"
+                            },
+                            {
+                                "id"   : "lgCtrl_except",
+                                "type" : "function",
+                                "level": 1,
+                                "name" : "except",
+                                "tag"  : "TRY CATCH EXCEPT,FINALLY,EXCEPTION,HANDLE ERROR,LOGIC",
+                                "path" : "visualpython - logic - control - except",
+                                "desc" : "try except",
+                                "file" : "m_logic/Except",
+                                "hide" : true
+                            },
+                            {
+                                "id"   : "lgCtrl_finally",
+                                "type" : "function",
+                                "level": 1,
+                                "name" : "finally",
+                                "tag"  : "TRY CATCH EXCEPT,FINALLY,EXCEPTION,HANDLE ERROR,LOGIC",
+                                "path" : "visualpython - logic - control - finally",
+                                "desc" : "try finally",
+                                "file" : "m_logic/Finally",
+                                "hide" : true
+                            },
+                            {
+                                "id"   : "lgCtrl_elif",
+                                "type" : "function",
+                                "level": 1,
+                                "name" : "elif",
+                                "tag"  : "ELSE,LOGIC",
+                                "path" : "visualpython - logic - control - elif",
+                                "desc" : "elif",
+                                "file" : "m_logic/Elif",
+                                "hide" : true
+                            },
+                            {
+                                "id"   : "lgCtrl_else",
+                                "type" : "function",
+                                "level": 1,
+                                "name" : "else",
+                                "tag"  : "ELSE,LOGIC",
+                                "path" : "visualpython - logic - control - else",
+                                "desc" : "else",
+                                "file" : "m_logic/Else",
+                                "hide" : true
+                            }
+                        ]
+                    },
+                    {
+                        "id"   : "log_execute",
+                        "type" : "package",
+                        "level": 1,
+                        "name" : "Execute",
+                        "path" : "visualpython - logic - execute",
+                        "desc" : "Executing codes",
+                        "open" : true,
+                        "item" : [
+                            {
+                                "id"   : "lgExe_lambda",
+                                "type" : "function",
+                                "level": 1,
+                                "name" : "lambda",
+                                "tag"  : "LAMBDA,EXECUTE,LOGIC",
+                                "path" : "visualpython - logic - execute - lambda",
+                                "desc" : "lambda",
+                                "file" : "m_logic/Lambda"
+                            },
+                            {
+                                "id"   : "lgExe_code",
+                                "type" : "function",
+                                "level": 1,
+                                "name" : "code",
+                                "tag"  : "CODE,EDITOR,LOGIC",
+                                "path" : "visualpython - logic - execute - code",
+                                "desc" : "code editor",
+                                "file" : "m_logic/Code"
+                            },
+                            {
+                                "id"   : "lgExe_print",
+                                "type" : "function",
+                                "level": 1,
+                                "name" : "print",
+                                "tag"  : "PRINT,LOGIC",
+                                "path" : "visualpython - logic - execute - print",
+                                "desc" : "print",
+                                "file" : "m_logic/Print"
+                            },
+                            {
+                                "id"   : "lgExe_comment",
+                                "type" : "function",
+                                "level": 1,
+                                "name" : "comment",
+                                "tag"  : "COMMENT,LOGIC",
+                                "path" : "visualpython - logic - execute - comment",
+                                "desc" : "comment",
+                                "file" : "m_logic/Comment"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id"   : "pkg_library",
+                "type" : "package",
+                "level": 0,
+                "name" : "Library",
+                "path" : "visualpython - library",
+                "desc" : "Libraries",
+                "item" : [
+                    {
+                        "id"   : "lib_python",
+                        "type" : "package",
+                        "level": 1,
+                        "name" : "Python",
+                        "path" : "visualpython - library - python",
+                        "desc" : "Python operations",
+                        "item" : [
+                            {
+                                "id": "python_builtInFunctions",
+                                "type": "package",
+                                "level": 2,
+                                "name": "Built-in functions",
+                                "path": "visualpython - library - python - built in function",
+                                "desc": "",
+                                "item": [
+                                    {
+                                        "id": "pyBuilt_abs",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "abs",
+                                        "path": "visualpython - library - python - built in functions - abs",
+                                        "desc": "",
+                                        "tag": "PYTHON, ABS",
+                                        "file": "m_python_common/abs.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_all",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "all",
+                                        "path": "visualpython - library - python - built in functions - all",
+                                        "desc": "",
+                                        "tag": "PYTHON, ALL",
+                                        "file": "m_python_common/all.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_any",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "any",
+                                        "path": "visualpython - library - python - built in functions - any",
+                                        "desc": "",
+                                        "tag": "PYTHON, ANY",
+                                        "file": "m_python_common/any.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_ascii",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "ascii",
+                                        "path": "visualpython - library - python - built in functions - ascii",
+                                        "desc": "",
+                                        "tag": "PYTHON, ASCII",
+                                        "file": "m_python_common/ascii.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_bin",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "bin",
+                                        "path": "visualpython - library - python - built in functions - bin",
+                                        "desc": "",
+                                        "tag": "PYTHON, BIN",
+                                        "file": "m_python_common/bin.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_bool",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "bool",
+                                        "path": "visualpython - library - python - built in functions - bool",
+                                        "desc": "",
+                                        "tag": "PYTHON, BOOL",
+                                        "file": "m_python_common/bool.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_breakpoint",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "breakpoint",
+                                        "path": "visualpython - library - python - built in functions - breakpoint",
+                                        "desc": "",
+                                        "tag": "PYTHON, BREAKPOINT",
+                                        "file": "m_python_common/breakpoint.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_bytearray",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "bytearray",
+                                        "path": "visualpython - library - python - built in functions - bytearray",
+                                        "desc": "",
+                                        "tag": "PYTHON, BYTEARRAY",
+                                        "file": "m_python_common/bytearray.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_bytes",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "bytes",
+                                        "path": "visualpython - library - python - built in functions - bytes",
+                                        "desc": "",
+                                        "tag": "PYTHON, BYTES",
+                                        "file": "m_python_common/bytes.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_callable",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "callable",
+                                        "path": "visualpython - library - python - built in functions - callable",
+                                        "desc": "",
+                                        "tag": "PYTHON, CALLABLE",
+                                        "file": "m_python_common/callable.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_chr",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "chr",
+                                        "path": "visualpython - library - python - built in functions - chr",
+                                        "desc": "",
+                                        "tag": "PYTHON, CHR",
+                                        "file": "m_python_common/chr.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_classmethod",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "classmethod",
+                                        "path": "visualpython - library - python - built in functions - classmethod",
+                                        "desc": "",
+                                        "tag": "PYTHON, CLASSMETHOD",
+                                        "file": "m_python_common/classmethod.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_complex",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "complex",
+                                        "path": "visualpython - library - python - built in functions - complex",
+                                        "desc": "",
+                                        "tag": "PYTHON, COMPLEX",
+                                        "file": "m_python_common/complex.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_delattr",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "delattr",
+                                        "path": "visualpython - library - python - built in functions - delattr",
+                                        "desc": "",
+                                        "tag": "PYTHON, DELATTR",
+                                        "file": "m_python_common/delattr.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_dict",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "dict",
+                                        "path": "visualpython - library - python - built in functions - dict",
+                                        "desc": "",
+                                        "tag": "PYTHON, DICT",
+                                        "file": "m_python_common/dict.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_dir",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "dir",
+                                        "path": "visualpython - library - python - built in functions - dir",
+                                        "desc": "",
+                                        "tag": "PYTHON, DIR",
+                                        "file": "m_python_common/dir.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_divmod",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "divmod",
+                                        "path": "visualpython - library - python - built in functions - divmod",
+                                        "desc": "",
+                                        "tag": "PYTHON, DIVMOD",
+                                        "file": "m_python_common/divmod.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_enumerate",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "enumerate",
+                                        "path": "visualpython - library - python - built in functions - enumerate",
+                                        "desc": "",
+                                        "tag": "PYTHON, ENUMERATE",
+                                        "file": "m_python_common/enumerate.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_eval",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "eval",
+                                        "path": "visualpython - library - python - built in functions - eval",
+                                        "desc": "",
+                                        "tag": "PYTHON, EVAL",
+                                        "file": "m_python_common/eval.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_exec",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "exec",
+                                        "path": "visualpython - library - python - built in functions - exec",
+                                        "desc": "",
+                                        "tag": "PYTHON, EXEC",
+                                        "file": "m_python_common/exec.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_filter",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "filter",
+                                        "path": "visualpython - library - python - built in functions - filter",
+                                        "desc": "",
+                                        "tag": "PYTHON, FILTER",
+                                        "file": "m_python_common/filter.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_float",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "float",
+                                        "path": "visualpython - library - python - built in functions - float",
+                                        "desc": "",
+                                        "tag": "PYTHON, FLOAT",
+                                        "file": "m_python_common/float.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_format",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "format",
+                                        "path": "visualpython - library - python - built in functions - format",
+                                        "desc": "",
+                                        "tag": "PYTHON, FORMAT",
+                                        "file": "m_python_common/format.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_frozenset",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "frozenset",
+                                        "path": "visualpython - library - python - built in functions - frozenset",
+                                        "desc": "",
+                                        "tag": "PYTHON, FROZENSET",
+                                        "file": "m_python_common/frozenset.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_getattr",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "getattr",
+                                        "path": "visualpython - library - python - built in functions - getattr",
+                                        "desc": "",
+                                        "tag": "PYTHON, GETATTR",
+                                        "file": "m_python_common/getattr.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_globals",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "globals",
+                                        "path": "visualpython - library - python - built in functions - globals",
+                                        "desc": "",
+                                        "tag": "PYTHON, GLOBALS",
+                                        "file": "m_python_common/globals.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_hasattr",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "hasattr",
+                                        "path": "visualpython - library - python - built in functions - hasattr",
+                                        "desc": "",
+                                        "tag": "PYTHON, HASATTR",
+                                        "file": "m_python_common/hasattr.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_hash",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "hash",
+                                        "path": "visualpython - library - python - built in functions - hash",
+                                        "desc": "",
+                                        "tag": "PYTHON, HASH",
+                                        "file": "m_python_common/hash.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_help",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "help",
+                                        "path": "visualpython - library - python - built in functions - help",
+                                        "desc": "",
+                                        "tag": "PYTHON, HELP",
+                                        "file": "m_python_common/help.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_hex",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "hex",
+                                        "path": "visualpython - library - python - built in functions - hex",
+                                        "desc": "",
+                                        "tag": "PYTHON, HEX",
+                                        "file": "m_python_common/hex.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_id",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "id",
+                                        "path": "visualpython - library - python - built in functions - id",
+                                        "desc": "",
+                                        "tag": "PYTHON, ID",
+                                        "file": "m_python_common/id.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_input",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "input",
+                                        "path": "visualpython - library - python - built in functions - input",
+                                        "desc": "",
+                                        "tag": "PYTHON, INPUT",
+                                        "file": "m_python_common/input.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_int",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "int",
+                                        "path": "visualpython - library - python - built in functions - int",
+                                        "desc": "",
+                                        "tag": "PYTHON, INT",
+                                        "file": "m_python_common/int.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_isinstance",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "isinstance",
+                                        "path": "visualpython - library - python - built in functions - isinstance",
+                                        "desc": "",
+                                        "tag": "PYTHON, ISINSTANCE",
+                                        "file": "m_python_common/isinstance.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_issubclass",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "issubclass",
+                                        "path": "visualpython - library - python - built in functions - issubclass",
+                                        "desc": "",
+                                        "tag": "PYTHON, ISSUBCLASS",
+                                        "file": "m_python_common/issubclass.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_iter",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "iter",
+                                        "path": "visualpython - library - python - built in functions - iter",
+                                        "desc": "",
+                                        "tag": "PYTHON, ITER",
+                                        "file": "m_python_common/iter.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_len",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "len",
+                                        "path": "visualpython - library - python - built in functions - len",
+                                        "desc": "",
+                                        "tag": "PYTHON, LEN",
+                                        "file": "m_python_common/len.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_list",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "list",
+                                        "path": "visualpython - library - python - built in functions - list",
+                                        "desc": "",
+                                        "tag": "PYTHON, LIST",
+                                        "file": "m_python_common/list.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_locals",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "locals",
+                                        "path": "visualpython - library - python - built in functions - locals",
+                                        "desc": "",
+                                        "tag": "PYTHON, LOCALS",
+                                        "file": "m_python_common/locals.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_map",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "map",
+                                        "path": "visualpython - library - python - built in functions - map",
+                                        "desc": "",
+                                        "tag": "PYTHON, MAP",
+                                        "file": "m_python_common/map.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_max",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "max",
+                                        "path": "visualpython - library - python - built in functions - max",
+                                        "desc": "",
+                                        "tag": "PYTHON, MAX",
+                                        "file": "m_python_common/max.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_memoryview",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "memoryview",
+                                        "path": "visualpython - library - python - built in functions - memoryview",
+                                        "desc": "",
+                                        "tag": "PYTHON, MEMORYVIEW",
+                                        "file": "m_python_common/memoryview.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_min",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "min",
+                                        "path": "visualpython - library - python - built in functions - min",
+                                        "desc": "",
+                                        "tag": "PYTHON, MIN",
+                                        "file": "m_python_common/min.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_next",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "next",
+                                        "path": "visualpython - library - python - built in functions - next",
+                                        "desc": "",
+                                        "tag": "PYTHON, NEXT",
+                                        "file": "m_python_common/next.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_object",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "object",
+                                        "path": "visualpython - library - python - built in functions - object",
+                                        "desc": "",
+                                        "tag": "PYTHON, OBJECT",
+                                        "file": "m_python_common/object.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_oct",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "oct",
+                                        "path": "visualpython - library - python - built in functions - oct",
+                                        "desc": "",
+                                        "tag": "PYTHON, OCT",
+                                        "file": "m_python_common/oct.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_open",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "open",
+                                        "path": "visualpython - library - python - built in functions - open",
+                                        "desc": "",
+                                        "tag": "PYTHON, OPEN",
+                                        "file": "m_python_common/open.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_ord",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "ord",
+                                        "path": "visualpython - library - python - built in functions - ord",
+                                        "desc": "",
+                                        "tag": "PYTHON, ORD",
+                                        "file": "m_python_common/ord.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_pow",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "pow",
+                                        "path": "visualpython - library - python - built in functions - pow",
+                                        "desc": "",
+                                        "tag": "PYTHON, POW",
+                                        "file": "m_python_common/pow.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_print",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "print",
+                                        "path": "visualpython - library - python - built in functions - print",
+                                        "desc": "",
+                                        "tag": "PYTHON, PRINT",
+                                        "file": "m_python_common/print.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_property",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "property",
+                                        "path": "visualpython - library - python - built in functions - property",
+                                        "desc": "",
+                                        "tag": "PYTHON, PROPERTY",
+                                        "file": "m_python_common/property.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_range",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "range",
+                                        "path": "visualpython - library - python - built in functions - range",
+                                        "desc": "",
+                                        "tag": "PYTHON, RANGE",
+                                        "file": "m_python_common/range.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_repr",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "repr",
+                                        "path": "visualpython - library - python - built in functions - repr",
+                                        "desc": "",
+                                        "tag": "PYTHON, REPR",
+                                        "file": "m_python_common/repr.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_reversed",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "reversed",
+                                        "path": "visualpython - library - python - built in functions - reversed",
+                                        "desc": "",
+                                        "tag": "PYTHON, REVERSED",
+                                        "file": "m_python_common/reversed.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_round",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "round",
+                                        "path": "visualpython - library - python - built in functions - round",
+                                        "desc": "",
+                                        "tag": "PYTHON, ROUND",
+                                        "file": "m_python_common/round.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_set",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "set",
+                                        "path": "visualpython - library - python - built in functions - set",
+                                        "desc": "",
+                                        "tag": "PYTHON, SET",
+                                        "file": "m_python_common/set.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_setattr",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "setattr",
+                                        "path": "visualpython - library - python - built in functions - setattr",
+                                        "desc": "",
+                                        "tag": "PYTHON, SETATTR",
+                                        "file": "m_python_common/setattr.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_slice",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "slice",
+                                        "path": "visualpython - library - python - built in functions - slice",
+                                        "desc": "",
+                                        "tag": "PYTHON, SLICE",
+                                        "file": "m_python_common/slice.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_sorted",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "sorted",
+                                        "path": "visualpython - library - python - built in functions - sorted",
+                                        "desc": "",
+                                        "tag": "PYTHON, SORTED",
+                                        "file": "m_python_common/sorted.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_staticmethod",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "staticmethod",
+                                        "path": "visualpython - library - python - built in functions - staticmethod",
+                                        "desc": "",
+                                        "tag": "PYTHON, STATICMETHOD",
+                                        "file": "m_python_common/staticmethod.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_str",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "str",
+                                        "path": "visualpython - library - python - built in functions - str",
+                                        "desc": "",
+                                        "tag": "PYTHON, STR",
+                                        "file": "m_python_common/str.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_sum",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "sum",
+                                        "path": "visualpython - library - python - built in functions - sum",
+                                        "desc": "",
+                                        "tag": "PYTHON, SUM",
+                                        "file": "m_python_common/sum.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_super",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "super",
+                                        "path": "visualpython - library - python - built in functions - super",
+                                        "desc": "",
+                                        "tag": "PYTHON, SUPER",
+                                        "file": "m_python_common/super.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_tuple",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "tuple",
+                                        "path": "visualpython - library - python - built in functions - tuple",
+                                        "desc": "",
+                                        "tag": "PYTHON, TUPLE",
+                                        "file": "m_python_common/tuple.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_type",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "type",
+                                        "path": "visualpython - library - python - built in functions - type",
+                                        "desc": "",
+                                        "tag": "PYTHON, TYPE",
+                                        "file": "m_python_common/type.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_vars",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "vars",
+                                        "path": "visualpython - library - python - built in functions - vars",
+                                        "desc": "",
+                                        "tag": "PYTHON, VARS",
+                                        "file": "m_python_common/vars.js"
+                                    },
+                                    {
+                                        "id": "pyBuilt_zip",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "zip",
+                                        "path": "visualpython - library - python - built in functions - zip",
+                                        "desc": "",
+                                        "tag": "PYTHON, ZIP",
+                                        "file": "m_python_common/zip.js"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "python_moduleFunctions",
+                                "type": "package",
+                                "level": 2,
+                                "name": "Module functions",
+                                "path": "visualpython - library - python - module functions",
+                                "desc": "",
+                                "item": [
+                                    {
+                                        "id": "pyMod_glob",
+                                        "type": "package",
+                                        "level": 3,
+                                        "name": "glob",
+                                        "path": "visualpython - library - python - module functions - glob",
+                                        "desc": "",
+                                        "item": []
+                                    },
+                                    {
+                                        "id": "pyMod_os",
+                                        "type": "package",
+                                        "level": 3,
+                                        "name": "os",
+                                        "path": "visualpython - library - python - module functions - os",
+                                        "desc": "",
+                                        "item": []
+                                    },
+                                    {
+                                        "id": "pyMod_pickle",
+                                        "type": "package",
+                                        "level": 3,
+                                        "name": "pickle",
+                                        "path": "visualpython - library - python - module functions - pickle",
+                                        "desc": "",
+                                        "item": []
+                                    },
+                                    {
+                                        "id": "pyMod_random",
+                                        "type": "package",
+                                        "level": 3,
+                                        "name": "random",
+                                        "path": "visualpython - library - python - module functions - random",
+                                        "desc": "",
+                                        "item": []
+                                    },
+                                    {
+                                        "id": "pyMod_shutil",
+                                        "type": "package",
+                                        "level": 3,
+                                        "name": "shutil",
+                                        "path": "visualpython - library - python - module functions - shutil",
+                                        "desc": "",
+                                        "item": []
+                                    },
+                                    {
+                                        "id": "pyMod_sys",
+                                        "type": "package",
+                                        "level": 3,
+                                        "name": "sys",
+                                        "path": "visualpython - library - python - module functions - sys",
+                                        "desc": "",
+                                        "item": []
+                                    },
+                                    {
+                                        "id": "pyMod_tempfile",
+                                        "type": "package",
+                                        "level": 3,
+                                        "name": "tempfile",
+                                        "path": "visualpython - library - python - module functions - tempfile",
+                                        "desc": "",
+                                        "item": []
+                                    },
+                                    {
+                                        "id": "pyMod_threading",
+                                        "type": "package",
+                                        "level": 3,
+                                        "name": "threading",
+                                        "path": "visualpython - library - python - module functions - threading",
+                                        "desc": "",
+                                        "item": []
+                                    },
+                                    {
+                                        "id": "pyMod_time",
+                                        "type": "package",
+                                        "level": 3,
+                                        "name": "time",
+                                        "path": "visualpython - library - python - module functions - time",
+                                        "desc": "",
+                                        "item": []
+                                    }
+                                ]
+                            },
+                            {
+                                "id"   : "python_userDefFunctions",
+                                "type" : "package",
+                                "level": 2,
+                                "name" : "User defined functions",
+                                "path" : "visualpython - library - python - user defined function",
+                                "desc" : "Python User defined functions",
+                                "item" : [
+
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id"   : "lib_numpy",
+                        "type" : "package",
+                        "level": 1,
+                        "name" : "Numpy",
+                        "path" : "visualpython - library - numpy",
+                        "desc" : "Numpy operations",
+                        "item" : [
+                            {
+                                "id": "npPkg_arrayCreation",
+                                "type": "package",
+                                "level": 2,
+                                "name": "Array creation",
+                                "path": "visualpython - library - numpy - array creation",
+                                "desc": "",
+                                "item": [
+                                    {
+                                        "id": "np_array",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "array",
+                                        "path": "visualpython - library - numpy - np.array",
+                                        "desc": "",
+                                        "tag": "NP, ARRAY, NP.ARRAY, NUMPY",
+                                        "file": "m_numpy/pageList/functionList/array/index.js"
+                                    },
+                                    {
+                                        "id": "np_zeros",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "zeros",
+                                        "path": "visualpython - library - numpy - np.zeros",
+                                        "desc": "",
+                                        "tag": "NP, ZEROS, NP.ZEROS, NUMPY",
+                                        "file": "m_numpy/pageList/functionList/zeros/index.js"
+                                    },
+                                    {
+                                        "id": "np_ones",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "ones",
+                                        "path": "visualpython - library - numpy - np.ones",
+                                        "desc": "",
+                                        "tag": "NP, ONES, NP.ONES, NUMPY",
+                                        "file": "m_numpy/pageList/functionList/ones/index.js"
+                                    },
+                                    {
+                                        "id": "np_empty",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "empty",
+                                        "path": "visualpython - library - numpy - np.empty",
+                                        "desc": "",
+                                        "tag": "NP, EMPTY, NP.EMPTY, NUMPY",
+                                        "file": "m_numpy/pageList/functionList/empty/index.js"
+                                    },
+                                    {
+                                        "id": "np_copy",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "copy",
+                                        "path": "visualpython - library - numpy - np.copy",
+                                        "desc": "",
+                                        "tag": "NP, COPY, NP.COPY, NUMPY",
+                                        "file": "m_numpy/pageList/functionList/copy/index.js"
+                                    }
+                                ]
+                            },
+                            {
+                                "id"   : "npPkg_numericalRanges",
+                                "type" : "package",
+                                "level": 2,
+                                "name" : "Numerical ranges",
+                                "path" : "visualpython - library - numpy - numerical ranges",
+                                "desc" : "Numerical ranges",
+                                "item" : [
+                                    
+                                ]
+                            },
+                            {
+                                "id"   : "npPkg_joiningArrays",
+                                "type" : "package",
+                                "level": 2,
+                                "name" : "Joining arrays",
+                                "path" : "visualpython - library - numpy - joining arrays",
+                                "desc" : "Joining arrays",
+                                "item" : [
+                                    
+                                ]
+                            },
+                            {
+                                "id"   : "npPkg_splittingArrays",
+                                "type" : "package",
+                                "level": 2,
+                                "name" : "Splitting arrays",
+                                "path" : "visualpython - library - numpy - splitting arrays",
+                                "desc" : "Splitting arrays",
+                                "item" : [
+                                    
+                                ]
+                            },
+                            {
+                                "id"   : "npPkg_shapeManipulation",
+                                "type" : "package",
+                                "level": 2,
+                                "name" : "Shape manipulation",
+                                "path" : "visualpython - library - numpy - shape manipulation",
+                                "desc" : "Shape manipulation",
+                                "item" : [
+                                    
+                                ]
+                            },
+                            {
+                                "id"   : "npPkg_statistics",
+                                "type" : "package",
+                                "level": 2,
+                                "name" : "Statistics",
+                                "path" : "visualpython - library - numpy - statistics",
+                                "desc" : "Statistics",
+                                "item" : [
+                                    
+                                ]
+                            },
+                            {
+                                "id"   : "npPkg_universalLinearAlgebra",
+                                "type" : "package",
+                                "level": 2,
+                                "name" : "Linear algebra",
+                                "path" : "visualpython - library - numpy - linear algebra",
+                                "desc" : "Linear algebra",
+                                "item" : [
+                                    
+                                ]
+                            },
+                            {
+                                "id"   : "npPkg_universalBinaryArithmetic",
+                                "type" : "package",
+                                "level": 2,
+                                "name" : "Math operation",
+                                "path" : "visualpython - library - numpy - math operation",
+                                "desc" : "Math operation",
+                                "item" : [
+                                    
+                                ]
+                            },
+                            {
+                                "id"   : "npPkg_universalUnaryLogical",
+                                "type" : "package",
+                                "level": 2,
+                                "name" : "Boolean operation",
+                                "path" : "visualpython - library - numpy - boolean operation",
+                                "desc" : "Boolean operation",
+                                "item" : [
+                                    
+                                ]
+                            },
+                            {
+                                "id"   : "npPkg_universalTrigonometric",
+                                "type" : "package",
+                                "level": 2,
+                                "name" : "Trigonometric functions",
+                                "path" : "visualpython - library - numpy - trigonometric functions",
+                                "desc" : "Trigonometric functions",
+                                "item" : [
+                                    
+                                ]
+                            },
+                            {
+                                "id"   : "npPkg_universalComparator",
+                                "type" : "package",
+                                "level": 2,
+                                "name" : "Comparison operation",
+                                "path" : "visualpython - library - numpy - comparison operation",
+                                "desc" : "Comparison operation",
+                                "item" : [
+                                    
+                                ]
+                            },
+                            {
+                                "id"   : "npPkg_universalRandom",
+                                "type" : "package",
+                                "level": 2,
+                                "name" : "Random number generation",
+                                "path" : "visualpython - library - numpy - random number generation",
+                                "desc" : "Random number generation",
+                                "item" : [
+                                    
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id"   : "lib_pandas",
+                        "type" : "package",
+                        "level": 1,
+                        "name" : "Pandas",
+                        "path" : "visualpython - library - pandas",
+                        "desc" : "Pandas operations",
+                        "open" : true,
+                        "item" : [
+                            {
+                                "id"   : "pd_plot",
+                                "type" : "function",
+                                "level": 1,
+                                "name" : "Pandas Plot",
+                                "tag"  : "PANDAS PLOT,PANDAS",
+                                "path" : "visualpython - library - pandas - plot",
+                                "desc" : "Pandas Plot",
+                                "file" : "m_pandas/plot",
+                                "useAuto" : true
+                            },
+                            {
+                                "id"   : "pdPkg_inputOutput",
+                                "type" : "package",
+                                "level": 2,
+                                "name" : "Input/Output",
+                                "path" : "visualpython - library - pandas - input output",
+                                "desc" : "Pandas file input & output",
+                                "item" : [
+                                    {
+                                        "id"   : "pdIo_readFile",
+                                        "type" : "function",
+                                        "level": 3,
+                                        "name" : "Read file",
+                                        "tag"  : "READ FILE,CSV,EXCEL,PICKLE,JSON",
+                                        "path" : "visualpython - library - pandas - input output - read file",
+                                        "desc" : "Read file",
+                                        "file" : "m_pandas/readFile"
+                                    },
+                                    {
+                                        "id"   : "pdIo_toFile",
+                                        "type" : "function",
+                                        "level": 3,
+                                        "name" : "To file",
+                                        "tag"  : "WRITE FILE,CSV,EXCEL,PICKLE,JSON",
+                                        "path" : "visualpython - library - pandas - input output - write file",
+                                        "desc" : "Write file",
+                                        "file" : "m_pandas/toFile"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "pdPkg_pandasObjects",
+                                "type": "package",
+                                "level": 2,
+                                "name": "Pandas objects",
+                                "path": "visualpython - library - pandas - pandas objects",
+                                "desc": "Pandas objects",
+                                "item": [
+                                    {
+                                        "id": "pdPdo_series",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "Series",
+                                        "path": "visualpython - library - pandas - pandas objects - series",
+                                        "desc": "Series",
+                                        "tag": "CREATE SERIES",
+                                        "file": "m_pandas/series.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdPdo_dataframe",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "DataFrame",
+                                        "path": "visualpython - library - pandas - pandas objects - dataframe",
+                                        "desc": "DataFrame",
+                                        "tag": "CREATE DATAFRAME",
+                                        "file": "m_pandas/dataframe.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdPdo_index",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "Index objects",
+                                        "path": "visualpython - library - pandas - pandas objects - index",
+                                        "desc": "Index",
+                                        "tag": "CREATE INDEX",
+                                        "file": "m_pandas/index.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdPdo_copy",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "copy",
+                                        "path": "visualpython - library - pandas - pandas objects - copy",
+                                        "desc": "Copy pandas object",
+                                        "tag": "COPY PANDAS OBJECT, COPY",
+                                        "file": "m_pandas/copy.js",
+                                        "useAuto" : true
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "pdPkg_infoData",
+                                "type": "package",
+                                "level": 2,
+                                "name": "Data info",
+                                "path": "visualpython - library - pandas - data info",
+                                "desc": "Check data information",
+                                "item": [
+                                    {
+                                        "id": "pdIdt_head",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "head",
+                                        "path": "visualpython - library - pandas - data info - head",
+                                        "desc": "Search head data",
+                                        "tag": "SEARCH HEAD DATA, HEAD",
+                                        "file": "m_pandas/head.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdIdt_tail",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "tail",
+                                        "path": "visualpython - library - pandas - data info - tail",
+                                        "desc": "Search tail data",
+                                        "tag": "SEARCH TAIL DATA, TAIL",
+                                        "file": "m_pandas/tail.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdIdt_take",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "take",
+                                        "path": "visualpython - library - pandas - data info - take",
+                                        "desc": "Search part of data",
+                                        "tag": "TAKE DATA, TAKE",
+                                        "file": "m_pandas/take.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdIdt_values",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "values",
+                                        "path": "visualpython - library - pandas - data info - get values",
+                                        "desc": "Get pandas object's values",
+                                        "tag": "GET VALUES, .VALUES",
+                                        "file": "m_pandas/getValues.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdIdt_index",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "index",
+                                        "path": "visualpython - library - pandas - data info - get index",
+                                        "desc": "Get indexes",
+                                        "tag": "GET INDEX, .INDEX",
+                                        "file": "m_pandas/getIndex.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdIdt_columns",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "columns",
+                                        "path": "visualpython - library - pandas - data info - get columns",
+                                        "desc": "Get columns",
+                                        "tag": "GET COLUMNS, .COLUMNS",
+                                        "file": "m_pandas/getColumns.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdIdt_len",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "len",
+                                        "path": "visualpython - library - pandas - data info - get length",
+                                        "desc": "Get length",
+                                        "tag": "GET LENGTH, LEN",
+                                        "file": "m_pandas/getLength.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdIdt_valueCounts",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "value_counts",
+                                        "path": "visualpython - library - pandas - data info - get value counts",
+                                        "desc": "values counts",
+                                        "tag": "GET VALUE COUNTS, .VALUE_COUNTS",
+                                        "file": "m_pandas/getValueCounts.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdIdt_info",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "info",
+                                        "path": "visualpython - library - pandas - data info - get info",
+                                        "desc": "Dataframe's basic information",
+                                        "tag": "GET BASIC INFO FROM DATAFRAME, INFO",
+                                        "file": "m_pandas/getInfo.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdIdt_describe",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "describe",
+                                        "path": "visualpython - library - pandas - data info - get described info",
+                                        "desc": "Pandas object details",
+                                        "tag": "GET DETAILED INFO FROM DATAFRAME OR SERIES, DESCRIBE",
+                                        "file": "m_pandas/getDescribedInfo.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdIdt_transpose",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "T",
+                                        "path": "visualpython - library - pandas - data info - transpose",
+                                        "desc": "Transpose",
+                                        "tag": "TRANSPOSE, .T",
+                                        "file": "m_pandas/transpose.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdIdt_unique",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "unique",
+                                        "path": "visualpython - library - pandas - data info - get unique",
+                                        "desc": "Get unique values",
+                                        "tag": "GET UNIQUE DATA, UNIQUE",
+                                        "file": "m_pandas/getUnique.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdIdt_size",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "size",
+                                        "path": "visualpython - library - pandas - data info - get size",
+                                        "desc": "Get size",
+                                        "tag": "GET SIZE, SIZE",
+                                        "file": "m_pandas/getSize.js",
+                                        "useAuto" : true
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "pdPkg_generalFunc",
+                                "type": "package",
+                                "level": 2,
+                                "name": "General functions",
+                                "path": "visualpython - library - pandas - general functions",
+                                "desc": "",
+                                "item": [
+                                    {
+                                        "id": "pdFunc_merge",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "merge",
+                                        "path": "visualpython - library - pandas - general functions - merge",
+                                        "desc": "",
+                                        "tag": "MERGE, JOIN, MERGE",
+                                        "file": "m_pandas/merge.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdFunc_concat",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "concat",
+                                        "path": "visualpython - library - pandas - general functions - concat",
+                                        "desc": "",
+                                        "tag": "CONCATENATE, CONCAT",
+                                        "file": "m_pandas/concat.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdFunc_reindex",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "reindex",
+                                        "path": "visualpython - library - pandas - general functions - reindex",
+                                        "desc": "",
+                                        "tag": "REINDEX",
+                                        "file": "m_pandas/reindex.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdFunc_setIndex",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "set_index",
+                                        "path": "visualpython - library - pandas - general functions - set index",
+                                        "desc": "",
+                                        "tag": "SET INDEX",
+                                        "file": "m_pandas/setIndex.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdFunc_resetIndex",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "reset_index",
+                                        "path": "visualpython - library - pandas - general functions - reset index",
+                                        "desc": "",
+                                        "tag": "RESET INDEX",
+                                        "file": "m_pandas/resetIndex.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdFunc_stack",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "stack",
+                                        "path": "visualpython - library - pandas - general functions - stack",
+                                        "desc": "",
+                                        "tag": "STACK",
+                                        "file": "m_pandas/stack.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdFunc_unstack",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "unstack",
+                                        "path": "visualpython - library - pandas - general functions - unstack",
+                                        "desc": "",
+                                        "tag": "UNSTACK",
+                                        "file": "m_pandas/unstack.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdFunc_pivot",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "pivot",
+                                        "path": "visualpython - library - pandas - general functions - pivot",
+                                        "desc": "",
+                                        "tag": "PIVOT",
+                                        "file": "m_pandas/pivot.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdFunc_melt",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "melt",
+                                        "path": "visualpython - library - pandas - general functions - melt",
+                                        "desc": "",
+                                        "tag": "MELT",
+                                        "file": "m_pandas/melt.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdFunc_pivotTable",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "pivot_table",
+                                        "path": "visualpython - library - pandas - general functions - pivot table",
+                                        "desc": "",
+                                        "tag": "PIVOT TABLE",
+                                        "file": "m_pandas/pivotTable.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdFunc_replace",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "replace",
+                                        "path": "visualpython - library - pandas - general functions - replace",
+                                        "desc": "",
+                                        "tag": "REPLACE VALUE, REPLACE",
+                                        "file": "m_pandas/replace.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdFunc_isDuplicated",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "duplicated",
+                                        "path": "visualpython - library - pandas - general functions - is duplicated",
+                                        "desc": "",
+                                        "tag": "CHECK IF DUPLICATED, DUPLICATED",
+                                        "file": "m_pandas/isDuplicated.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdFunc_dropDuplicates",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "drop_duplicates",
+                                        "path": "visualpython - library - pandas - general functions - drop duplicates",
+                                        "desc": "",
+                                        "tag": "DROP DUPLICATES, REMOVE DUPLICATES, DROP_DUPICATES",
+                                        "file": "m_pandas/dropDuplicates.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdFunc_isNull",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "isnull",
+                                        "path": "visualpython - library - pandas - general functions - is null",
+                                        "desc": "",
+                                        "tag": "IS NULL, IS MISSING VALUE, ISNULL",
+                                        "file": "m_pandas/isNull.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdFunc_notNull",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "notnull",
+                                        "path": "visualpython - library - pandas - general functions - not null",
+                                        "desc": "",
+                                        "tag": "NOT NULL, NOTNULL",
+                                        "file": "m_pandas/notNull.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdFunc_dropNA",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "dropna",
+                                        "path": "visualpython - library - pandas - general functions - drop na",
+                                        "desc": "",
+                                        "tag": "DROP NA, REMOVE MISSING VALUES, DROPNA",
+                                        "file": "m_pandas/dropNA.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdFunc_fillNA",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "fillna",
+                                        "path": "visualpython - library - pandas - general functions - fill na",
+                                        "desc": "",
+                                        "tag": "FILL NA, REPLACE AND FILL MISSING VALUES, FILLNA",
+                                        "file": "m_pandas/fillNA.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdFunc_combineFirst",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "combine_first",
+                                        "path": "visualpython - library - pandas - general functions - combine first",
+                                        "desc": "",
+                                        "tag": "COMBINE FIRST, REPLACE MISSING VALUES WITH OTHER DATA, COMBINE_FIRST",
+                                        "file": "m_pandas/combineFirst.js",
+                                        "useAuto" : true
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "pdPkg_pdArrays",
+                                "type": "package",
+                                "level": 2,
+                                "name": "pandas arrays",
+                                "path": "visualpython - library - pandas - pandas arrays",
+                                "desc": "",
+                                "item": [
+                                    {
+                                        "id": "pdParr_period",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "Period",
+                                        "path": "visualpython - library - pandas - pandas arrays - period",
+                                        "desc": "",
+                                        "tag": "CREATE PERIOD",
+                                        "file": "m_pandas/period.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdParr_periodIndex",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "PeriodIndex",
+                                        "path": "visualpython - library - pandas - pandas arrays - period index",
+                                        "desc": "",
+                                        "tag": "CREATE PERIOD INDEX",
+                                        "file": "m_pandas/periodIndex.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdParr_timestamp",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "Timestamp",
+                                        "path": "visualpython - library - pandas - pandas arrays - timestamp",
+                                        "desc": "",
+                                        "tag": "CREATE TIMESTAMP",
+                                        "file": "m_pandas/timestamp.js",
+                                        "useAuto" : true
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "pd_groupby",
+                                "type": "package",
+                                "level": 2,
+                                "name": "GroupBy",
+                                "path": "visualpython - library - pandas - groupby",
+                                "desc": "",
+                                "item": [
+                                    {
+                                        "id": "pdGrp_groupby",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "groupby",
+                                        "path": "visualpython - library - pandas - groupby - groupby",
+                                        "desc": "",
+                                        "tag": "GROUP BY DATA, GROUPBY",
+                                        "file": "m_pandas/groupby.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdGrp_groups",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "groups",
+                                        "path": "visualpython - library - pandas - groupby - groups",
+                                        "desc": "",
+                                        "tag": "GROUPS INFORMATION, .GROUPS",
+                                        "file": "m_pandas/groups.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdGrp_agg",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "agg",
+                                        "path": "visualpython - library - pandas - groupby - agg",
+                                        "desc": "",
+                                        "tag": "AGG",
+                                        "file": "m_pandas/agg.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdGrp_sum",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "sum",
+                                        "path": "visualpython - library - pandas - groupby - sum",
+                                        "desc": "",
+                                        "tag": "SUM",
+                                        "file": "m_pandas/agg_sum.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdGrp_mean",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "mean",
+                                        "path": "visualpython - library - pandas - groupby - mean",
+                                        "desc": "",
+                                        "tag": "MEAN",
+                                        "file": "m_pandas/agg_mean.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdGrp_count",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "count",
+                                        "path": "visualpython - library - pandas - groupby - count",
+                                        "desc": "",
+                                        "tag": "COUNT",
+                                        "file": "m_pandas/agg_count.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdGrp_max",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "max",
+                                        "path": "visualpython - library - pandas - groupby - max",
+                                        "desc": "",
+                                        "tag": "MAX",
+                                        "file": "m_pandas/agg_max.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdGrp_min",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "min",
+                                        "path": "visualpython - library - pandas - groupby - min",
+                                        "desc": "",
+                                        "tag": "MIN",
+                                        "file": "m_pandas/agg_min.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdGrp_median",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "median",
+                                        "path": "visualpython - library - pandas - groupby - median",
+                                        "desc": "",
+                                        "tag": "MEDIAN",
+                                        "file": "m_pandas/agg_median.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdGrp_std",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "std",
+                                        "path": "visualpython - library - pandas - groupby - std",
+                                        "desc": "",
+                                        "tag": "STD, STANDARD DEVIATION",
+                                        "file": "m_pandas/agg_std.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdGrp_size",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "size",
+                                        "path": "visualpython - library - pandas - groupby - size",
+                                        "desc": "",
+                                        "tag": "SIZE",
+                                        "file": "m_pandas/agg_size.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdGrp_quantile",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "quantile",
+                                        "path": "visualpython - library - pandas - groupby - quantile",
+                                        "desc": "",
+                                        "tag": "QUANTILE",
+                                        "file": "m_pandas/agg_quantile.js",
+                                        "useAuto" : true
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "pdPkg_sortData",
+                                "type": "package",
+                                "level": 2,
+                                "name": "Sort Data",
+                                "path": "visualpython - library - pandas - sort data",
+                                "desc": "",
+                                "item": [
+                                    {
+                                        "id": "pdSdt_sortByIndex",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "sort_index",
+                                        "path": "visualpython - library - pandas - sort data - sort by index",
+                                        "desc": "",
+                                        "tag": "SORT BY INDEX, SORT_INDEX",
+                                        "file": "m_pandas/sortByIndex.js",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdSdt_sortByValues",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "sort_values",
+                                        "path": "visualpython - library - pandas - sort data - sort by values",
+                                        "desc": "",
+                                        "tag": "SORT BY VALUES, SORT_VALUES",
+                                        "file": "m_pandas/sortByValues.js",
+                                        "useAuto" : true
+                                    }
+                                ]
+                            },
+                            {
+                                "id": "pdPkg_rowcol",
+                                "type": "package",
+                                "level": 2,
+                                "name": "Row/Column",
+                                "path": "visualpython - library - pandas - rowcol",
+                                "desc": "",
+                                "item": [
+                                    {
+                                        "id": "pdEdtRC_dropRowCol",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "drop",
+                                        "path": "visualpython - library - pandas - rowcol - drop rowcol",
+                                        "desc": "",
+                                        "tag": "DROP ROW COLUMN, DROP",
+                                        "file": "m_pandas/dropRowCol.js",
+                                        "useAuto" : true
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id"   : "lib_matplotlib",
+                        "type" : "package",
+                        "level": 1,
+                        "name" : "Matplotlib",
+                        "path" : "visualpython - library - matplotlib",
+                        "desc" : "Matplotlib Visualization",
+                        "item" : [
+                            {
+                                "id": "mp_importMatplotlib",
+                                "type": "function",
+                                "level": 2,
+                                "name": "import",
+                                "path": "visualpython - library - matplotlib - import matplotlib",
+                                "desc": "",
+                                "tag": "IMPORT MATPLOTLIB",
+                                "file": "m_matplotlib/import.js"
+                            },
+                            {
+                                "id": "mp_plot",
+                                "type": "function",
+                                "level": 2,
+                                "name": "Create chart",
+                                "path": "visualpython - library - matplotlib - plot",
+                                "desc": "",
+                                "tag": "MATPLOTLIB, PLOT, CHART",
+                                "file": "m_matplotlib/plot.js"
+                            },
+                            {
+                                "id": "mp_figure",
+                                "type": "function",
+                                "level": 2,
+                                "name": "subplots",
+                                "path": "visualpython - library - matplotlib - figure",
+                                "desc": "",
+                                "tag": "MATPLOTLIB FIGURE, FIGURE, SUBPLOTS",
+                                "file": "m_matplotlib/figure.js"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

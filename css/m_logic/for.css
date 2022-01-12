@@ -1,0 +1,15 @@
+.vp-flex-row-between {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+.vp-flex-column-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.vp-flex-row-right {
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+}

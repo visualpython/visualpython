@@ -1,0 +1,321 @@
+<body>
+    <div class="vp-option-page">
+        <!-- Variable Selector -->
+        <div id="vp_varViewBox" class="vp-var-view-box vp-close-on-blur">
+            <div class="vp-icon-btn vp-close-view"><img src="/nbextensions/visualpython/img/close_big.svg"/></div>
+            <div class="vp-var-view-div">
+                <table id="vp_varViewList" class="vp-option-table vp-var-view-list no-selection">
+                    <colgroup><col width="40%"/><col width="*"/></colgroup>
+                    <thead>
+                        <tr><th>Variable</th><th>Data Type</th></tr>
+                        <tr><th colspan="2"><hr style="margin: 0px;"/></th></tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+            </div>
+            <hr style="margin: 0px;"/>
+            <div id="vp_varViewDetail">   
+                <table class="vp-option-table vp-var-view-detail no-selection">
+                    <colgroup>
+                        <col width="*"/>
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>Column</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div id="vp_varDetailColList" class="vp-column-select">
+                                    
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="var-view-footer">
+                <input id="vp_varSelectCode" type="text" class="vp-input" readonly/>
+                <input id="vp_varSelectBtn" type="button" value="select"/>
+            </div>
+        </div>
+        <!-- Import option -->
+        <div class="vp-accordian-container">
+            <div class="vp-accordian vp-open">
+                <span class="vp-indicator"></span>
+                <span class="vp-accordian-caption">Import Options</span>
+            </div>
+            <div class="vp-accordian-box">
+                <div class="vp-import-box">
+                    <div>
+                        <label for="vp_plFigureWidth" class="">Figure size</label>
+                        <input type="number" id="vp_plFigureWidth" class="vp-input" placeholder="width" value="12">
+                        <input type="number" id="vp_plFigureHeight" class="vp-input" placeholder="height" value="8">
+                    </div>
+                    <div>
+                        <label for="vp_plStyle" class="">Style sheet</label>
+                        <input type="text" class="vp-input" id="vp_plStyle" placeholder="style name" value="">
+                    </div>
+                    <div>
+                        <label for="vp_plFontName" class="">System font</label>
+                        <input type="text" class="vp-input" id="vp_plFontName" placeholder="font name" value="">
+                    </div>
+                    <div>
+                        <label for="vp_plFontSize" class="">Font size</label>
+                        <input type="number" id="vp_plFontSize" class="vp-input" placeholder="size" value="10">
+                        <input type="button" id="vp_plImportRun" class="vp-button activated vp-pl-import-run" value="Run">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- -->
+        <div class="vp-accordian-container">
+            <div class="vp-accordian vp-open">
+                <span class="vp-indicator"></span>
+                <span class="vp-accordian-caption">Required Input</span>
+            </div>
+            <div class="vp-accordian-box">
+                <input type="hidden" class="vp-input input-single vp-state" id="i0" value="plt" />
+                <div class="vp-thead vp-orange-text">
+                    Chart Type</div><select id="kind" class="vp-select option-select vp-state"></select>
+                <div id="vp_plotKind" class="vp-plot-kind">
+                    <div class="vp-plot-item" data-kind="plot" data-show-text="Line">
+                        <div class="vp-plot-thumb plot"></div>
+                        <div class="vp-plot-name">Line</div>
+                    </div>
+                    <div class="vp-plot-item" data-kind="bar" data-show-text="Bar 1">
+                        <div class="vp-plot-thumb bar"></div>
+                        <div class="vp-plot-name">Bar 1</div>
+                    </div>
+                    <div class="vp-plot-item" data-kind="barh" data-show-text="Bar 2">
+                        <div class="vp-plot-thumb barh"></div>
+                        <div class="vp-plot-name">Bar 2</div>
+                    </div>
+                    <div class="vp-plot-item" data-kind="hist" data-show-text="Histogram">
+                        <div class="vp-plot-thumb hist"></div>
+                        <div class="vp-plot-name">Histogram</div>
+                    </div>
+                    <div class="vp-plot-item" data-kind="boxplot" data-show-text="Box">
+                        <div class="vp-plot-thumb boxplot">
+                        </div>
+                        <div class="vp-plot-name">Box</div>
+                    </div>
+                    <div class="vp-plot-item" data-kind="stackplot" data-show-text="Stack">
+                        <div class="vp-plot-thumb stackplot"></div>
+                        <div class="vp-plot-name">Stack
+                        </div>
+                    </div>
+                    <div class="vp-plot-item" data-kind="pie" data-show-text="Pie">
+                        <div class="vp-plot-thumb pie"></div>
+                        <div class="vp-plot-name">Pie</div>
+                    </div>
+                    <div class="vp-plot-item" data-kind="scatter" data-show-text="Scatter">
+                        <div class="vp-plot-thumb scatter">
+                        </div>
+                        <div class="vp-plot-name">Scatter</div>
+                    </div>
+                    <div class="vp-plot-item" data-kind="hexbin" data-show-text="Hexbin">
+                        <div class="vp-plot-thumb hexbin"></div>
+                        <div class="vp-plot-name">Hexbin
+                        </div>
+                    </div>
+                    <div class="vp-plot-item" data-kind="contour" data-show-text="Contour">
+                        <div class="vp-plot-thumb contour"></div>
+                        <div class="vp-plot-name">Contour</div>
+                    </div>
+                    <div class="vp-plot-item" data-kind="imshow" data-show-text="Image">
+                        <div class="vp-plot-thumb imshow">
+                        </div>
+                        <div class="vp-plot-name">Image</div>
+                    </div>
+                    <div class="vp-plot-item" data-kind="errorbar" data-show-text="Error Bar">
+                        <div class="vp-plot-thumb errorbar"></div>
+                        <div class="vp-plot-name">Error
+                            Bar</div>
+                    </div>
+                </div>
+                <table class='vp-option-vertical-table-layout  vp-plot-setting-table'>
+                    <colgroup>
+                        <col width='15%' />
+                        <col width='*' />
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <th class="vp-orange-text">X Value</th>
+                            <td><input type="text" class="vp-input vp-state" id="x" />
+                                <input type="button" class="vp-button vp-select-data" data-axes="x" value="Select" /></td>
+                        </tr>
+                        <tr>
+                            <th class="vp-orange-text">Y Value</th>
+                            <td><input type="text" class="vp-input vp-state" id="y" />
+                                <input type="button" class="vp-button vp-select-data" data-axes="y" value="Select" /></td>
+                        </tr>
+                        <tr>
+                            <th class="vp-orange-text">Z Value</th>
+                            <td><input type="text" class="vp-input vp-state" id="z" placeholder="[[2-dimension]]" /></td>
+                        </tr>
+                        <tr>
+                            <th class="vp-orange-text">Bins</th>
+                            <td><input type="text" class="vp-input vp-state" id="bins" value="10" /></td>
+                        </tr>
+                        <tr>
+                            <th>X, Y Extent</th>
+                            <td><input type="text" class="vp-input vp-state" id="extent" placeholder="[xmin, xmax, ymin, ymax]" /></td>
+                        </tr>
+                        <tr>
+                            <th>Origin</th>
+                            <td><input type="text" class="vp-input vp-state" id="origin" value="lower" /></td>
+                        </tr>
+                        <tr>
+                            <th>Color Map</th>
+                            <td><select id="cmap" class="vp-select vp-state"></select>
+                                <div class="vp-plot-cmap-wrapper">
+                                    <div id="vp_plotCmap" , class="vp-plot-cmap"><span id="vp_selectedCmap" class="vp-multilang"
+                                            data-caption-id="nothing_selected">none</span></div>
+                                    <div id="vp_plotCmapSelector" class="vp-plot-cmap-selector"></div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Chart Label</th>
+                            <td><input type="text" class="vp-input vp-state" id="label" /></td>
+                        </tr>
+                        <tr>
+                            <th>Color</th>
+                            <td><input type="checkbox" class="vp-input vp-state" id="useColor" /><label for="useColor">use
+                                    color</label><br /><input type="color" class="vp-input vp-state" id="color" /></td>
+                        </tr>
+                        <tr>
+                            <th>Marker</th>
+                            <td><select id="markerSelector" class="vp-select option-select vp-state">
+                                    <option value="." data-img="m00.png" data-caption-id="point">.</option>
+                                    <option value="," data-img="m01.png" data-caption-id="pixel">,</option>
+                                    <option value="o" data-img="m02.png" data-caption-id="circle">o</option>
+                                    <option value="v" data-img="m03.png" data-caption-id="triangle_down">▼</option>
+                                    <option value="^" data-img="m04.png" data-caption-id="triangle_up">▲</option>
+                                    <option value="<" data-img="m05.png" data-caption-id="triangle_left">◀</option>
+                                    <option value=">" data-img="m06.png" data-caption-id="triangle_right">▶</option>
+                                    <option value="1" data-img="m07.png" data-caption-id="tri_down">┬</option>
+                                    <option value="2" data-img="m08.png" data-caption-id="tri_up">┵</option>
+                                    <option value="3" data-img="m09.png" data-caption-id="tri_left">┤</option>
+                                    <option value="4" data-img="m10.png" data-caption-id="tri_right">├</option>
+                                    <option value="8" data-img="m11.png" data-caption-id="octagon">octagon</option>
+                                    <option value="s" data-img="m12.png" data-caption-id="square">square</option>
+                                    <option value="p" data-img="m13.png" data-caption-id="pentagon">pentagon</option>
+                                    <option value="P" data-img="m23.png" data-caption-id="plus (filled)">filled plus</option>
+                                    <option value="*" data-img="m14.png" data-caption-id="star">star</option>
+                                    <option value="h" data-img="m15.png" data-caption-id="hexagon1">hexagon1</option>
+                                    <option value="H" data-img="m16.png" data-caption-id="hexagon2">hexagon2</option>
+                                    <option value="+" data-img="m17.png" data-caption-id="plus">plus</option>
+                                    <option value="x" data-img="m18.png" data-caption-id="x">x</option>
+                                    <option value="X" data-img="m24.png" data-caption-id="x (filled)">filled x</option>
+                                    <option value="D" data-img="m19.png" data-caption-id="diamond">diamond</option>
+                                    <option value="d" data-img="m20.png" data-caption-id="thin_diamond">thin diamond</option>
+                                </select><br />
+                                <input type="text" id="marker" class="vp-input vp-state" style="display:none;"/></td>
+                        </tr>
+                        <tr>
+                            <th>Line Style</th>
+                            <td><select id="linestyle" class="vp-select option-select vp-state">
+                                    <option value="-">solid</option>
+                                    <option value="--">dashed</option>
+                                    <option value=":">dotted</option>
+                                    <option value="-.">
+                                        dash-dot</option>
+                                </select></td>
+                        </tr>
+                        <tr>
+                            <th>User Option</th>
+                            <td><input id="vp_userOption" type="text" class="vp-input vp-state" placeholder="key=value, key=value ..." />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- Additional Options -->
+        <div class="vp-accordian-container">
+            <div class="vp-accordian vp-open">
+                <span class="vp-indicator"></span>
+                <span class="vp-accordian-caption">Additional Options</span>
+            </div>
+            <div class="vp-accordian-box">
+                <table class="vp-option-vertical-table-layout">
+                    <colgroup>
+                        <col width='15%' />
+                        <col width='*' />
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <th>Title</th>
+                            <td><input type="text" class="vp-input vp-state" id="title" /></td>
+                        </tr>
+                        <tr>
+                            <th>X Label</th>
+                            <td><input type="text" class="vp-input vp-state" id="xlabel" /></td>
+                        </tr>
+                        <tr>
+                            <th>Y Label</th>
+                            <td><input type="text" class="vp-input vp-state" id="ylabel" /></td>
+                        </tr>
+                        <tr>
+                            <th>X Limit</th>
+                            <td><input type="text" class="vp-input vp-state" id="xlimit" placeholder="(min, max)" /></td>
+                        </tr>
+                        <tr>
+                            <th>Y Limit</th>
+                            <td><input type="text" class="vp-input vp-state" id="ylimit" placeholder="(min, max)" /></td>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <td>
+                                <hr style="margin:0" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Legend Title</th>
+                            <td><input type="text" class="vp-input vp-state" id="legendTitle" /></td>
+                        </tr>
+                        <tr>
+                            <th>Legend Labels</th>
+                            <td><input type="text" class="vp-input vp-state" id="legendLabel" /></td>
+                        </tr>
+                        <tr>
+                            <th>Legend Position</th>
+                            <td><select class="vp-select vp-state" id="legendLoc">
+                                    <option value="best">best</option>
+                                    <option value="upper right">upper right</option>
+                                    <option value="upper left">upper left</option>
+                                    <option value="lower left">lower left</option>
+                                    <option value="lower right">lower right
+                                    </option>
+                                    <option value="center left">center left</option>
+                                    <option value="center right">
+                                        center right</option>
+                                    <option value="lower center">lower center</option>
+                                    <option value="upper center">upper center</option>
+                                    <option value="center">center</option>
+                                    <option value="center">center</option>
+                                </select></td>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <td>
+                                <hr style="margin:0" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Save Figure</th>
+                            <td><input type="text" class="vp-input vp-state" id="savefigpath" placeholder="file.png" />
+                                <div id="vp_openFileNavigationBtn" class="vp-file-browser-button"></div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>

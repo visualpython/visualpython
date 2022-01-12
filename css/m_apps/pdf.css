@@ -1,0 +1,56 @@
+.vp-pdf-grid-box {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    grid-row-gap: 5px;
+    grid-template-rows: 60px 140px 150px;
+}
+.vp-pdf-prepare-box {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    align-items: baseline;
+    align-content: center;
+    border: 1px solid #E4E4E4;
+    border-radius: 5px;
+    box-sizing: border-box;
+    padding: 15px;
+}
+.vp-pdf-link {
+    color: var(--highlight-color);
+}
+.vp-pdf-install-btn{
+    margin-left: 7px;
+}
+.vp-pdf-check-btn {
+    display: inline-block;
+    margin-left: 5px;
+}
+.vp-pdf-import-btn {
+    margin-left: 10px;
+}
+.vp-pdf-show-box {
+    display: grid;
+    grid-row-gap: 10px;
+    border: 1px solid #E4E4E4;
+    border-radius: 5px;
+    box-sizing: border-box;
+    padding: 15px;
+}
+.vp-pdf-df-box {
+    display: grid;
+    grid-template-columns: 95px auto;
+    grid-row-gap: 3px;
+    align-items: baseline;
+    align-content: space-evenly;
+}
+.vp-pdf #vp_pdfVariable { 
+    width: 62%;
+    height: 30px;
+}
+.vp-pdf-input {
+    width: 62%;
+}
+.vp-pdf-run-btn {
+    width: 112px !important;
+    margin-left: 5px;
+}

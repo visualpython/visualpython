@@ -1,0 +1,54 @@
+<body>
+    <div class="vp-gb-df-box">
+        <div>
+            <label for="vp_gbVariable" class="vp-orange-text w80">DataFrame</label>
+            <select id="vp_gbVariable">
+                <!-- DataFrame -->
+            </select>            
+            <div class="vp-gb-df-refresh"><img src="/nbextensions/visualpython/img/refresh.svg"></div>
+        </div>
+        <div>
+            <label for="vp_gbBy" class="vp-orange-text w80">Groupby</label>
+            <input type="text" id="vp_gbBy" placeholder="Groupby columns" disabled="">
+            <button id="vp_gbBySelect" class="vp-button w50">Edit</button>
+            <label><input type="checkbox" id="vp_gbByGrouper" disabled=""><span>Grouper</span></label>
+            <div class="vp-gb-by-grouper-box" style="display:none;">
+                <input type="number" id="vp_gbByGrouperNumber" class="vp-gb-by-number">
+                <select id="vp_gbByGrouperPeriod">
+                    <!-- period list -->
+                </select>
+            </div>
+        </div>
+        <div>
+            <label for="vp_gbResetIndex" class="w80">Reset Index</label>
+            <select id="vp_gbResetIndex">
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+            </select>
+        </div>
+        <hr style="margin: 5px 0;">
+        <div>
+            <label for="vp_gbDisplay" class="w80">Columns</label>
+            <input type="text" id="vp_gbDisplay" placeholder="Display columns" disabled="">
+            <button id="vp_gbDisplaySelect" class="vp-button w50">Edit</button>
+        </div>
+        <div>
+            <label for="vp_gbMethodSelect" class="w80">Method</label>
+            <select id="vp_gbMethodSelect">
+                <!-- method list -->
+            </select>
+            <input type="text" id="vp_gbMethod" class="vp-gb-method" disabled="" style="display: none;" value="">
+            <label><input type="checkbox" id="vp_gbAdvanced"><span>Advanced</span></label>
+        </div>
+        <div class="vp-gb-adv-box vp-scrollbar" style="display: none;">
+            <!-- render adv item -->
+            <button id="vp_gbAdvAdd" class="vp-button">+ Add</button>
+        </div>
+        <hr style="margin: 5px 0;">
+        <div>
+            <label for="vp_gbAllocateTo" class="w80">Allocate to</label>
+            <input type="text" id="vp_gbAllocateTo" placeholder="New variable name">
+            <label style="display:none;"><input type="checkbox" id="vp_gbToFrame"><span>To DataFrame</span></label>
+        </div>
+    </div>
+</body>

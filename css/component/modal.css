@@ -1,0 +1,69 @@
+/* Modal */
+#vp_multiButtonModal {
+    position: fixed;
+    top: 0; 
+    left: 0;
+    width: 100%; 
+    height: 100%; 
+    z-index: 400;
+    background-color: rgba(0,0,0,.4);
+}
+#vp_multiButtonModal .vp-multi-button-modal-box {
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform:translate(-50%, -50%);
+    width: 400px; 
+    height: 170px;
+    padding: 2rem;
+	background-color: white;
+	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+}
+#vp_multiButtonModal .vp-multi-button-modal-message {
+	display: flex;
+    flex-direction: row;
+    align-items: center;
+	justify-content: center;
+	
+	width: 100%;
+	height: 80px;
+	overflow: hidden;
+}
+#vp_multiButtonModal .vp-multi-button-modal-message span {
+	color: var(--font-hightlight);
+	font-weight: 700;
+}
+#vp_multiButtonModal .vp-multi-button-modal-message-inner {
+	display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+	height: 80%;
+}
+#vp_multiButtonModal .vp-modal-button {
+	min-width: 100px;
+	height: 30px;
+	font-family: AppleSDGothicNeo;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 14px;
+	line-height: 21px;
+	text-align: center;
+	color: var(--font-primary);
+	background: #F5F5F5;
+	border: 0.25px solid #C4C4C4;
+	box-sizing: border-box;
+	border-radius: 2px;
+}
+#vp_multiButtonModal .vp-modal-button:nth(2) {
+	background-color: var(--font-hightlight);
+	color: white;
+	margin-right: 10px;
+}
+#vp_multiButtonModal .vp-multi-button-modal-buttons {
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	width: 100%;
+	height: 60px;
+}
