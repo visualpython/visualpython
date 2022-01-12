@@ -1,0 +1,137 @@
+/* Markdown Editor Toolbar */
+.vp-markdown-editor-toolbar {
+	width: 100%;
+	min-height: 30px;
+	background-color: rgb(247 247 247);
+	border-top: 0.25px solid #E4E4E4;
+	border-right: 0.25px solid #E4E4E4;
+	border-bottom: none;
+	border-left: 0.25px solid #E4E4E4;
+}
+.vp-markdown-editor-toolbar .vp-markdown-editor-toolbar-btn-title {
+	background-image: url(../../img/font-size-2.svg);
+	cursor: pointer;
+	display: inline-block;
+    width: 20px;
+	height: 20px;
+	margin: 5px 5px 5px 10px;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center;
+}
+.vp-markdown-editor-toolbar .vp-markdown-editor-toolbar-btn-bold {
+	background-image: url(../../img/bold.svg);
+	cursor: pointer;
+	display: inline-block;
+    width: 20px;
+	height: 20px;
+	margin: 5px 5px 5px 10px;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center;
+}
+.vp-markdown-editor-toolbar .vp-markdown-editor-toolbar-btn-italic {
+	background-image: url(../../img/italic.svg);
+	cursor: pointer;
+	display: inline-block;
+    width: 20px;
+	height: 20px;
+	margin: 5px 5px 5px 10px;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center;
+}
+.vp-markdown-editor-toolbar .vp-markdown-editor-toolbar-btn-code {
+	background-image: url(../../img/code-fill.svg);
+	cursor: pointer;
+	display: inline-block;
+    width: 20px;
+	height: 20px;
+	margin: 5px 5px 5px 10px;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center;
+}
+.vp-markdown-editor-toolbar .vp-markdown-editor-toolbar-btn-link {
+	background-image: url(../../img/link-m.svg);
+	cursor: pointer;
+	display: inline-block;
+    width: 20px;
+	height: 20px;
+	margin: 5px 5px 5px 10px;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center;
+}
+.vp-markdown-editor-toolbar .vp-markdown-editor-toolbar-btn-image {
+	background-image: url(../../img/image-line.svg);
+	cursor: pointer;
+	display: inline-block;
+    width: 20px;
+	height: 20px;
+	margin: 5px 5px 5px 10px;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center;
+}
+.vp-markdown-editor-toolbar .vp-input-file-image {
+	display: none;
+}
+.vp-markdown-editor-toolbar .vp-markdown-editor-toolbar-btn-indent {
+	background-image: url(../../img/indent-increase.svg);
+	cursor: pointer;
+	display: inline-block;
+    width: 20px;
+	height: 20px;
+	margin: 5px 5px 5px 10px;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center;
+}
+.vp-markdown-editor-toolbar .vp-markdown-editor-toolbar-btn-order-list {
+	background-image: url(../../img/list-ordered.svg);
+	cursor: pointer;
+	display: inline-block;
+    width: 20px;
+	height: 20px;
+	margin: 5px 5px 5px 10px;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center;
+}
+.vp-markdown-editor-toolbar .vp-markdown-editor-toolbar-btn-unorder-list {
+	background-image: url(../../img/list-unordered.svg);
+	cursor: pointer;
+	display: inline-block;
+    width: 20px;
+	height: 20px;
+	margin: 5px 5px 5px 10px;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center;
+}
+.vp-markdown-editor-toolbar .vp-markdown-editor-toolbar-btn-horizontal-line {
+	background-image: url(../../img/separator.svg);
+	cursor: pointer;
+	display: inline-block;
+    width: 20px;
+	height: 20px;
+	margin: 5px 5px 5px 10px;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center;
+}
+/* Markdown Preview */
+.vp-divide-top {
+
+}
+.vp-divide-bot {
+	width: 100%;
+    position: sticky;
+    min-height: 90px;
+	margin-top: 10px;
+}
+.vp-divide-bot:empty::after {
+	content: '(Nothing to preview)';
+	color: var(--gray-color);
+}

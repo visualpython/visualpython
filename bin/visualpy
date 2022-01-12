@@ -37,7 +37,7 @@ which ${PIP_T} > /dev/null 2>&1 && PIP=${PIP_T}
 JP_NB='jupyter nbextension'
 
 VP_NAME='visualpython'
-VP_BIND='visualpython/src/main'
+VP_BIND='visualpython/visualpython'
 
 PIP_UNINST=${PIP}' uninstall '${VP_NAME}
 PIP_UPGRAD=${PIP}' install '${VP_NAME}' --upgrade'

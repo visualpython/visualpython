@@ -1,0 +1,65 @@
+<body>
+    <div class="vp-rs-df-box">
+        <div>
+            <label for="vp_rsDataframe" class="vp-orange-text w100">DataFrame</label>
+            <select id="vp_rsDataframe">
+            </select>
+            <div class="vp-rs-df-refresh" title="Refresh dataframe list"><img src="/nbextensions/visualpython/img/refresh.svg"></div>
+        </div>
+        <div>
+            <label for="vp_rsType" class="vp-orange-text w100">Reshape Type</label>
+            <select id="vp_rsType">
+                <option value="pivot" selected="">pivot</option>
+                <option value="melt">melt</option>
+            </select>
+        </div>
+        <hr style="margin: 5px 0;">
+        <div class="vp-rs-type-box pivot">
+            <div>
+                <label for="vp_rsIndex" class="w100">Index</label>
+                <input type="text" id="vp_rsIndex" placeholder="Index key" disabled="">
+                <button id="vp_rsIndexSelect" class="vp-button w50">Edit</button>
+            </div>
+            <div>
+                <label for="vp_rsColumns" class="vp-orange-text w100">Columns</label>
+                <input type="text" id="vp_rsColumns" placeholder="Columns key" disabled="">
+                <button id="vp_rsColumnsSelect" class="vp-button w50">Edit</button>
+            </div>
+            <div>
+                <label for="vp_rsValues" class="w100">Values</label>
+                <input type="text" id="vp_rsValues" placeholder="Values key" disabled="">
+                <button id="vp_rsValuesSelect" class="vp-button w50">Edit</button>
+            </div>
+        </div>
+        <div class="vp-rs-type-box melt" style="display:none;">
+            <div>
+                <label for="vp_rsIdVars" class="w100">Id</label>
+                <input type="text" id="vp_rsIdVars" placeholder="Id vars" disabled="">
+                <button id="vp_rsIdVarsSelect" class="vp-button w50">Edit</button>
+            </div>
+            <div>
+                <label for="vp_rsValueVars" class="w100">Value</label>
+                <input type="text" id="vp_rsValueVars" placeholder="Value vars" disabled="">
+                <button id="vp_rsValueVarsSelect" class="vp-button w50">Edit</button>
+            </div>
+            <div>
+                <label for="vp_rsVarName" class="w100">Var name</label>
+                <input type="text" id="vp_rsVarName" class="vp-state" data-key="melt.varName" placeholder="Var name">
+            </div>
+            <div>
+                <label for="vp_rsValueName" class="w100">Value name</label>
+                <input type="text" id="vp_rsValueName" class="vp-state" data-key="melt.valueName" placeholder="Value name">
+            </div>
+        </div>
+        <hr style="margin: 5px 0;">
+        <div>
+            <label for="vp_rsUserOption" class="w100">User option</label>
+            <input type="text" id="vp_rsUserOption" placeholder="key=value, ...">
+        </div>
+        <div>
+            <label for="vp_rsAllocateTo" class="w100">Allocate to</label>
+            <input type="text" id="vp_rsAllocateTo" placeholder="New variable name">
+            <label><input type="checkbox" id="vp_rsResetIndex"><span>Reset index</span></label>
+        </div>
+    </div>
+</body>

@@ -1,0 +1,32 @@
+Type: Jupyter Notebook Extension
+Name: VisualPython
+Description: GUI-based Python code generator
+Link: README.md
+Icon: img/logo.png
+Main: visualpython.js
+Compatibility: 4.x, 5.x, 6.x
+Parameters:
+- name: vpcfg.run_code_without_asking
+  description: Run code without asking
+  input_type: checkbox
+  default: false
+- name: vpcfg.change_task_without_asking
+  description: Change task without asking
+  input_type: checkbox
+  default: false
+- name: vpcfg.code_insert_position
+  description: Code insert position
+  input_type: text
+  default: below
+- name: vpcfg.api_list_sort_by
+  description: Api list sorting by...
+  input_type: text
+  default: frequency
+- name: vpcfg.default_variable_for_required
+  description: Default variable for required input
+  input_type: checkbox
+  default: false
+- name: vpcfg.auto_import_package
+  description: Automatically import packages
+  input_type: checkbox
+  default: false

@@ -1,0 +1,92 @@
+<body>
+    <div class="vp-ds-body vp-scrollbar">
+        <table>
+            <thead></thead><colgroup><col width="127px"><col width="*"></colgroup>
+            <tbody>
+                <tr>
+                    <td colspan="2">
+                        <!-- Preview code board -->
+                        <div class="vp-ds-preview">
+                            <textarea id="vp_previewCode" name="code"># Code preview</textarea>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <!-- Variable : Pandas Object-->
+                    <td><label class="vp-ds-label vp-orange-text">Variable</label></td>
+                    <td>
+                        <div class="vp-ds-pandas-object-box" style="display:inline-block;">
+                            <!-- Var Selector -->
+                            <input class="vp-input vp-ds-pandas-object"/>
+                        </div>  
+                        <!-- use copy -->
+                        <label><input type="checkbox" class="vp-ds-use-copy"><span>Make a copy</span></label>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label class="vp-ds-label vp-orange-text">Method</label></td>
+                    <td>
+                        <!-- Subset type -->
+                        <select class="vp-ds-subset-type vp-select">
+                            <option value="subset">subset</option>
+                            <option value="loc">loc</option>
+                            <option value="iloc">iloc</option>
+                        </select>
+                        <!-- to frame -->
+                        <label style="display:none;"><input type="checkbox" class="vp-ds-to-frame"><span>To DataFrame</span></label>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label class="vp-ds-label">Allocate to</label></td>
+                    <td><input type="text" class="vp-input vp-ds-allocate-to" placeholder="New variable name"></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="vp-ds-tab-page subset">
+            <div class="vp-ds-tab-page-box subset-row">
+                <div>
+                    <label class="vp-ds-rowcol-subset-title">Row Subset</label>
+                    <select class="vp-ds-rowtype vp-select m">
+                        <!-- render row subset type -->
+                    </select>
+                </div>
+                <div class="vp-ds-rowtype-box indexing" style="display: none;">
+                    <div class="vp-ds-select-container select-row">
+                        <!-- render row indexing -->
+                    </div>
+                </div>
+                <div class="vp-ds-rowtype-box slicing" style="display:none;">
+                    <div class="vp-ds-slicing-box">
+                        <!-- render row slicing -->
+                    </div>
+                </div>
+                <div class="vp-ds-rowtype-box condition vp-scrollbar no-selection">
+                    <table class="vp-ds-cond-tbl">
+                        <!-- render column condition list -->
+                    </table>
+                </div>
+                <div class="vp-ds-rowtype-box timestamp no-selection" style="display:none;">
+                    <input type="text" class="vp-ds-indexing-timestamp vp-input" placeholder="Timestamp Index">
+                </div>
+            </div>
+            <div class="vp-ds-tab-page-box subset-column">
+                <div>
+                    <label class="vp-ds-rowcol-subset-title">Column Subset</label>
+                    <select class="vp-ds-coltype vp-select m">
+                        <!-- render column subset type -->
+                    </select>
+                </div>
+                <div class="vp-ds-coltype-box indexing">
+                    <div class="vp-ds-select-container select-col">
+                        <!-- render column indexing -->
+                    </div>
+                </div>
+                <div class="vp-ds-coltype-box slicing" style="display:none;">
+                    <div class="vp-ds-slicing-box">
+                        <!-- render column slicing -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
