@@ -238,6 +238,13 @@
         if (cfg.vp_section_display && vpFrame) {
             vpFrame.openVp();
         }
+
+        // Operations on kernel restart
+        events.on('kernel_ready.Kernel', function (evt, info) {
+            vpLog.display(VP_LOG_TYPE.LOG, 'vp operations for kernel ready...');
+            // read vp functions
+            _readKernelFunction();
+        });
     }
 
     return { initVisualpython: initVisualpython, readConfig: readConfig };
