@@ -194,6 +194,7 @@ define([
 
                     com_util.renderSuccessMessage('Default snippets imported');
                 }
+                $(that.wrapSelector('.vp-sn-menu-box')).hide();
                 evt.stopPropagation();
             });
 

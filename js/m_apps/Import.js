@@ -81,7 +81,7 @@ define([
             page.appendLine('</tr></thead>');
             page.appendLine('<tbody>');
             let that = this;
-            this.state.importMeta.forEach((lib, idx) => {
+            this.state.importMeta && this.state.importMeta.forEach((lib, idx) => {
                 page.appendLine(that.templateForLibrary(idx, lib.library, lib.alias));
             });
             page.appendLine('</tbody>');

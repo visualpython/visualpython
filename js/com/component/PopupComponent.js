@@ -435,10 +435,6 @@ define([
             } 
             if (!dataview) {
                 $(this.wrapSelector('.vp-popup-button[data-type="data"]')).hide();
-            } else {
-                if (!codeview) {
-                    $(this.wrapSelector('.vp-popup-button[data-type="data"]')).css({left: '15px', top: '9px'});
-                }
             }
 
             // footer

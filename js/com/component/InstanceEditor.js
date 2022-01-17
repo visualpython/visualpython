@@ -433,6 +433,14 @@ define([
                 if (callback) {
                     callback(varObj);
                 }
+            }).catch(function(resultObj) {
+                let { result } = resultObj;
+                // show alert
+                com_util.renderAlertModal(result.ename + ': ' + result.evalue);
+                // callback
+                if (callback) {
+                    callback('');
+                }
             });
 
 

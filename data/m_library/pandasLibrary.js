@@ -5119,7 +5119,7 @@ define([
             name: 'Plot',
             library: 'pandas',
             description: 'create chart',
-            code: '${o0} = ${i0}.plot(${v}${etc})',
+            code: '${o0} = ${i0}.plot(${v}${etc})\nplt.show()',
             input: [
                 {
                     name: 'i0',
