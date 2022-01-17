@@ -115,29 +115,29 @@
     height: 50px;
 }
 .vp-popup-button[data-type="code"] {
-    position: absolute;
-    left: 15px;
-    top: 9px;
+    float: left;
+    margin-top: 9px;
+    margin-left: 10px;
 }
 .vp-popup-button[data-type="data"] {
-    position: absolute;
-    left: 102px;
-    top: 9px;
+    float: left;
+    margin-top: 9px;
+    margin-left: 10px;
 }
 .vp-popup-button[data-type="cancel"] {
-    position: absolute;
+    float: right;
     background-color: #E4E4E4;
-    top: 9px;
-    right: 106px;
+    margin-top: 9px;
+    margin-right: 10px;
 }
 .vp-popup-runadd-box {
-    position: absolute;
-    top: 9px;
-    right: 15px;
+    float: right;
     width: fit-content;
     height: 30px;
     background: #F38504;
     border-radius: 2px;
+    margin-top: 9px;
+    margin-right: 10px;
 }
 .vp-popup-button[data-type="run"] {
     display: inline-block;
@@ -157,8 +157,8 @@
     background: white;
     border: 0.25px solid var(--border-gray-color);
     position: absolute;
-    bottom: 35px;
-    right: 0px;
+    bottom: 45px;
+    right: 10px;
     width: 120px;
     text-align: center;
     line-height: 30px;
@@ -172,10 +172,11 @@
     background: var(--light-gray-color);
 }
 .vp-popup-save-button {
-    position: absolute;
-    top: 9px;
-    right: 15px;
+    float: right;
     height: 30px;
+    width: 100px;
+    margin-top: 9px;
+    margin-right: 10px;
 }
 /* writable codemirror style*/
 /* Code Option Codemirror */
