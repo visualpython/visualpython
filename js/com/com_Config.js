@@ -90,7 +90,17 @@ define([], function() {
                         '        except ValueError:',
                         '            return 0.0'
                     ]
-                }
+                },
+                'vpimport': [
+                    { library: 'numpy', alias:'np' },
+                    { library: 'pandas', alias:'pd' },
+                    { library: 'matplotlib.pyplot', alias:'plt',
+                        include: [
+                            '%matplotlib inline'
+                        ]
+                    },
+                    { library: 'seaborn', alias:'sns' }
+                ]
             }
 
             this.data = {
@@ -165,7 +175,8 @@ define([], function() {
                 Jupyter.notebook.config.loaded.then(function() {
                     var data = Jupyter.notebook.config.data[configKey];
                     if (data == undefined) {
-                        data = {};
+                        reject('No data available.');
+                        return;
                     }
                     if (dataKey == '') {
                         resolve(data);
@@ -184,7 +195,7 @@ define([], function() {
             Jupyter.notebook.config.load();
             var data = Jupyter.notebook.config.data[configKey];
             if (data == undefined) {
-                data = {};
+                return undefined;
             }
             if (dataKey == '') {
                 return data;
