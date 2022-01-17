@@ -156,7 +156,6 @@
     flex-direction: column;
     justify-content: center;
     touch-action: none;
-    cursor: pointer;
     color: var(--font-primary);
     font-family: 'AppleSDGothicNeo';
     
@@ -180,6 +179,7 @@
     overflow: hidden;
     border: 2px solid transparent;
     border-radius: 2px;
+    cursor: pointer;
 }
 .vp-block-left-holder {
     display: none;
@@ -197,6 +197,7 @@
     position: absolute;
     left: 0px;
     color: rgba(0,0,0,0.3);
+    cursor: default;
 }
 .vp-block-num-info {
     color: #828282;

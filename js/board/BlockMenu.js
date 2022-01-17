@@ -74,7 +74,7 @@ define([
             // run button
             sbBlockMenu.appendLine('<div id="vp_block_menu_run" class="vp-block-menu-item">Run</div>');
             // add button
-            sbBlockMenu.appendLine('<div id="vp_block_menu_add" class="vp-block-menu-item">Add</div>');
+            sbBlockMenu.appendLine('<div id="vp_block_menu_add" class="vp-block-menu-item">Code to cell</div>');
             // duplicate button
             sbBlockMenu.appendLine('<div id="vp_block_menu_duplicate" class="vp-block-menu-item">Duplicate</div>');
             // delete button

@@ -1,16 +1,16 @@
 /*
  *    Project Name    : Visual Python
  *    Description     : GUI-based Python code generator
- *    File Name       : If.js
+ *    File Name       : Elif.js
  *    Author          : Black Logic
- *    Note            : Logic > if
+ *    Note            : Logic > elif
  *    License         : GNU GPLv3 with Visual Python special exception
  *    Date            : 2021. 11. 18
  *    Change Date     :
  */
 
 //============================================================================
-// [CLASS] If
+// [CLASS] Elif
 //============================================================================
 define([
     'vp_base/js/com/com_String',
@@ -20,9 +20,9 @@ define([
 ], function(com_String, com_util, PopupComponent, SuggestInput) {
 
     /**
-     * If
+     * Elif
      */
-    class If extends PopupComponent {
+    class Elif extends PopupComponent {
         _init() {
             super._init();
             /** Write codes executed before rendering */
@@ -31,7 +31,7 @@ define([
             this.config.saveOnly = true;
 
             this.state = {
-                v1: [],
+                v1: [{ type: 'condition', value: {} }],
                 ...this.state
             }
         }
@@ -43,11 +43,23 @@ define([
             // Add param
             $(this.wrapSelector('#vp_addCondition')).on('click', function() {
                 that.state.v1.push({ type: 'condition', value: {} });
-                $(that.wrapSelector('.v1 tbody')).append(that.templateForList(that.state.v1.length, {}));
+                $(that.wrapSelector('.v1-table')).append(that.templateForList(that.state.v1.length, {}));
+
+                // enable and disable last one
+                // enable all operator
+                $(that.wrapSelector('.v1 .v1-i4')).prop('disabled', false);
+                // disable last operator
+                $(that.wrapSelector('.v1 tr:last .v1-i4')).prop('disabled', true);
             });
             $(this.wrapSelector('#vp_addUserInput')).on('click', function() {
                 that.state.v1.push({ type: 'input', value: {} });
-                $(that.wrapSelector('.v1 tbody')).append(that.templateForInput(that.state.v1.length, {}));
+                $(that.wrapSelector('.v1-table')).append(that.templateForInput(that.state.v1.length, {}));
+
+                // enable and disable last one
+                // enable all operator
+                $(that.wrapSelector('.v1 .v1-i4')).prop('disabled', false);
+                // disable last operator
+                $(that.wrapSelector('.v1 tr:last .v1-i4')).prop('disabled', true);
             });
 
             // Delete param
@@ -61,6 +73,9 @@ define([
                 $(that.wrapSelector('.v1-tr')).each((idx, tag) => {
                     $(tag).find('th').text(idx + 1);
                 });
+
+                // disable last operator
+                $(that.wrapSelector('.v1 tr:last .v1-i4')).prop('disabled', true);
             });
         }
 
@@ -94,7 +109,8 @@ define([
             var page = new com_String();
             page.appendLine('<table class="v1 wp100" style="margin: 10px 0">');
             // page.appendLine('<thead><tr><td></td><td>Parameter</td><td></td><td>Default Value</td></tr></thead>');
-            page.appendLine('<tbody><colgroup><col width="20px"><col width="100px"><col width="100px"><col width="100px"><col width="100px"><col width="30px"></colgroup>');
+            page.appendLine('<colgroup><col width="20px"><col width="100px"><col width="100px"><col width="100px"><col width="100px"><col width="30px"></colgroup>');
+            page.appendLine('<tbody class="v1-table">');
             this.state.v1.forEach((v, idx) => {
                 if (v.type == 'condition') {
                     page.appendLine(this.templateForList(idx + 1, v.value));
@@ -118,8 +134,20 @@ define([
             page.appendFormatLine('<th>{0}</th>', idx);
             page.appendFormatLine('<td><input type="text" class="vp-input w100 {0}" value="{1}" placeholder="{2}"/></td>'
                                 , 'v1-i1', v.i1, 'Variable');
-            page.appendFormatLine('<td><input type="text" class="vp-input w100 {0}" value="{1}" placeholder="{2}"/></td>'
-                                , 'v1-i2', v.i2, 'Operator');
+            // suggestInput for operator
+            let operList = ['', '==', '!=', 'in', 'not in', '<', '<=', '>', '>='];
+            var suggestInput = new SuggestInput();
+            suggestInput.addClass('vp-input w100 v1-i2');
+            suggestInput.setSuggestList(function() { return operList; });
+            suggestInput.setPlaceholder('Operator');
+            suggestInput.setNormalFilter(false);
+            suggestInput.setValue(v.i2);
+            suggestInput.setSelectEvent(function(selectedValue) {
+                // trigger change
+                $(this.wrapSelector()).val(selectedValue);
+                $(this.wrapSelector()).trigger('change');
+            });
+            page.appendFormatLine('<td>{0}</td>', suggestInput.toTagString());
             page.appendFormatLine('<td><input type="text" class="vp-input w100 {0}" value="{1}" placeholder="{2}"/></td>'
                                 , 'v1-i3', v.i3, 'Variable');
             page.appendFormatLine('<td><select class="vp-select w100 {0}">', 'v1-i4');
@@ -153,6 +181,13 @@ define([
             return page.toString();
         }
 
+        render() {
+            super.render();
+
+            // disable last operator
+            $(this.wrapSelector('.v1 tr:last .v1-i4')).prop('disabled', true);
+        }
+
         generateCode() {
             this.saveState();
 
@@ -179,5 +214,5 @@ define([
 
     }
 
-    return If;
+    return Elif;
 });
