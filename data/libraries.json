@@ -384,7 +384,7 @@
                                 "type" : "function",
                                 "level": 1,
                                 "name" : "elif",
-                                "tag"  : "ELSE,LOGIC",
+                                "tag"  : "ELIF,LOGIC",
                                 "path" : "visualpython - logic - control - elif",
                                 "desc" : "elif",
                                 "file" : "m_logic/Elif",
