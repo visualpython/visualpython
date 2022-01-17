@@ -157,6 +157,10 @@ define([
                 let component = evt.component;
                 component.close();
             });
+            $(this.wrapSelector('#vp_instanceVariable')).on('focus_option_page', function(evt) {
+                let component = evt.component;
+                component.focus();
+            });
             $(this.wrapSelector('#vp_instanceVariable')).on('apply_option_page', function(evt) {
                 let component = evt.component;
                 // apply its value
@@ -217,6 +221,21 @@ define([
             }
 
             return sbCode.toString();
+        }
+
+        hide() {
+            super.hide();
+            this.state.subsetEditor && this.state.subsetEditor.hide();
+        }
+
+        close() {
+            super.close();
+            this.state.subsetEditor && this.state.subsetEditor.close();
+        }
+
+        remove() {
+            super.remove();
+            this.state.subsetEditor && this.state.subsetEditor.remove();
         }
 
         updateValue(value) {
