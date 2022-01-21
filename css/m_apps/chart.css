@@ -235,8 +235,7 @@
 }
 .vp-var-view-box table.vp-option-table.vp-var-view-list,
 .vp-var-view-box table.vp-option-table.vp-var-view-detail {
-    margin-left: 10px;
-    margin-top: 7px;
+    padding: 5px;
 }
 .vp-var-view-box .vp-var-view-list tbody tr:hover {
     background: #C4C4C4;
@@ -247,11 +246,10 @@
     color:  var(--font-hightlight);
 }
 .vp-var-view-box .var-view-footer {
-    padding-left: 10px;
-    padding-bottom: 7px;
+    margin-top: 7px;
 }
 .vp-var-view-box .var-view-footer input[type="text"] {
-    width: 200px;
+    width: 210px;
 }
 
 /* Column Selector */
@@ -259,7 +257,6 @@
 .vp-method-select {
     border: 0.25px solid #C4C4C4;
     overflow-y: auto;
-    width: 250px;
     height: 100px;
 }
 .vp-column-select-item,
@@ -278,8 +275,4 @@
 .vp-select-data {
     width: 80px;
     height: 30px;
-    background: #F5F5F5;
-    border: 0.25px solid #C4C4C4;
-    box-sizing: border-box;
-    border-radius: 2px;
 }

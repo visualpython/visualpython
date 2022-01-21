@@ -4,7 +4,7 @@
         <div id="vp_varViewBox" class="vp-var-view-box vp-close-on-blur">
             <div class="vp-icon-btn vp-close-view"><img src="/nbextensions/visualpython/img/close_big.svg"/></div>
             <div class="vp-var-view-div">
-                <table id="vp_varViewList" class="vp-option-table vp-var-view-list no-selection">
+                <table id="vp_varViewList" class="vp-option-table vp-var-view-list no-selection wp100">
                     <colgroup><col width="40%"/><col width="*"/></colgroup>
                     <thead>
                         <tr><th>Variable</th><th>Data Type</th></tr>
@@ -17,19 +17,26 @@
             </div>
             <hr style="margin: 0px;"/>
             <div id="vp_varViewDetail">   
-                <table class="vp-option-table vp-var-view-detail no-selection">
+                <table class="vp-option-table vp-var-view-detail no-selection wp100">
                     <colgroup>
-                        <col width="*"/>
+                        <col width="50%"/>
+                        <col width="50%"/>
                     </colgroup>
                     <thead>
                         <tr>
                             <th>Column</th>
+                            <th>Method</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td>
-                                <div id="vp_varDetailColList" class="vp-column-select">
+                                <div id="vp_varDetailColList" class="vp-column-select vp-scrollbar">
+                                    
+                                </div>
+                            </td>
+                            <td>
+                                <div id="vp_varDetailArray" class="vp-method-select vp-scrollbar">
                                     
                                 </div>
                             </td>
@@ -39,7 +46,7 @@
             </div>
             <div class="var-view-footer">
                 <input id="vp_varSelectCode" type="text" class="vp-input" readonly/>
-                <input id="vp_varSelectBtn" type="button" value="select"/>
+                <input id="vp_varSelectBtn" type="button" class="vp-button w50" value="select"/>
             </div>
         </div>
         <!-- Import option -->

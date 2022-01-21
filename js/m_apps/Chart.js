@@ -485,7 +485,6 @@ define([
                     if (varType == 'DataFrame') {
                         if (varResult.length > 0) {
                             varResult.forEach(v => {
-                                // var option = $(`<option value="${v.colName}" data-dtype="${v.dtype}" data-array="${v.array}">${v.colName}</option>`)
                                 var option = $(`<div class="vp-column-select-item" 
                                                 data-dtype="${v.dtype}" data-array="${v.array}" data-col="${v.colName}" title="${v.array}">
                                                     ${v.colName}</div>`);
@@ -551,7 +550,7 @@ define([
                 // allow multi select
                 var methodArrayCode = new com_String();
                 var methodList;
-                // 선택된 항목들 중 categorical variable 존재하면 categorical로 분류
+                // if categorical variable exists, set as categorical
                 var hasObject = false;
                 var selectedColumnList = $(that.wrapSelector('#vp_varDetailColList .vp-column-select-item.selected'));
                 if (selectedColumnList.length > 0) {
