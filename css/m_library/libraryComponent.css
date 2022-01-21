@@ -28,14 +28,12 @@
 
 /* Input & Select Design */
 .vp-popup-frame .vp-input {
-    width: 176px;
     height: 30px;
     background-color: #FFFFFF;
     box-sizing: border-box;
     padding: 0px 5px 0px 5px;
 }
 .vp-popup-frame .vp-select {
-    width: 176px;
     height: 30px;
     background-color: #F5F5F5;
     box-sizing: border-box;
