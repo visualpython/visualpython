@@ -127,7 +127,7 @@ define([], function() {
                 vp_config_version: '1.0.0',
                 vp_signature: 'VisualPython',
                 vp_position: {},
-                vp_section_display: true,
+                vp_section_display: false,
                 vp_note_display: true,
                 vp_menu_width: Config.MENU_MIN_WIDTH,
                 vp_note_width: Config.BOARD_MIN_WIDTH
