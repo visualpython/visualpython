@@ -531,13 +531,17 @@ define([
                 block.popup.run();
                 return;
             }
+            let rootBlockDepth = block.depth;
             let groupedBlocks = block.getGroupedBlocks();
             let code = new com_String();
             let indentCount = this.state.indentCount;
             groupedBlocks.forEach((groupBlock, idx) => {
                 let prevNewLine = idx > 0?'\n':'';
-                let indent = ' '.repeat(groupBlock.depth * indentCount);
-                code.appendFormat('{0}{1}{2}', prevNewLine, indent, groupBlock.popup.generateCode());
+                let indent = ' '.repeat((groupBlock.depth - rootBlockDepth) * indentCount);
+                let thisBlockCode = groupBlock.popup.generateCode();
+                // set indent to every line of thisblockcode
+                thisBlockCode = thisBlockCode.replaceAll('\n', '\n' + indent);
+                code.appendFormat('{0}{1}{2}', prevNewLine, indent, thisBlockCode);
             });
             com_interface.insertCell('code', code.toString(), execute, block.blockNumber);
         }
