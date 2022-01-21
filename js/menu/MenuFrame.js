@@ -81,6 +81,19 @@ define([
             $(this.wrapSelector('#vp_toggleBoard')).on('click', function() {
                 that.prop.parent.toggleNote();
             });
+            // Click extra menu item
+            $(this.wrapSelector('#vp_headerExtraMenu li')).on('click', function() {
+                let menu = $(this).data('menu');
+                switch(menu) {
+                    case 'restart':
+                        // restart vp
+                        vpConfig.readKernelFunction();
+                        break;
+                    case 'about':
+                    case 'vpnote':
+                        break;
+                }
+            })
         }
 
         _unbindResizable() {

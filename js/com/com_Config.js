@@ -11,7 +11,7 @@
 //============================================================================
 // [CLASS] Configuration
 //============================================================================
-define([], function() {
+define(['./com_Const'], function(com_Const) {
 	'use strict';
     //========================================================================
     // Define Inner Variable
@@ -144,6 +144,43 @@ define([], function() {
         
             // merge default config
             $.extend(true, this.defaultConfig, this.metadataSettings);
+        }
+
+        /**
+         * Read kernel functions for using visualpython
+         * - manually click restart menu (MenuFrame.js)
+         * - automatically restart on jupyter kernel restart (loadVisualpython.js)
+         */
+        readKernelFunction() {
+            var libraryList = [ 
+                'printCommand.py',
+                'fileNaviCommand.py',
+                'pandasCommand.py',
+                'variableCommand.py'
+            ];
+            let promiseList = [];
+            libraryList.forEach(libName => {
+                var libPath = com_Const.PYTHON_PATH + libName
+                $.get(libPath).done(function(data) {
+                    var code_init = data;
+                    promiseList.push(vpKernel.execute(code_init));
+                }).fail(function() {
+                    console.log('visualpython - failed to read library file', libName);
+                });
+            });
+            // run all promises
+            let failed = false;
+            Promise.all(promiseList).then(function(resultObj) {
+            }).catch(function(resultObj) {
+                failed = true;
+                console.log('visualpython - failed to load library', resultObj);
+            }).finally(function() {
+                if (!failed) {
+                    console.log('visualpython - loaded libraries', libraryList);
+                } else {
+                    console.log('visualpython - failed to load libraries');
+                }
+            });
         }
 
         getMode() {

@@ -139,29 +139,6 @@
         });
     };
 
-    /**
-     * Declare background vp functions
-     */
-    var _readKernelFunction = function() {
-        var libraryList = [ 
-            'printCommand.py',
-            'fileNaviCommand.py',
-            'pandasCommand.py',
-            'variableCommand.py'
-        ];
-        libraryList.forEach(libName => {
-            var libPath = com_Const.PYTHON_PATH + libName
-            $.get(libPath).done(function(data) {
-                var code_init = data;
-                Jupyter.notebook.kernel.execute(code_init, { iopub: { output: function(data) {
-                    console.log('visualpython - loaded library', data);
-                } } }, { silent: false });
-            }).fail(function() {
-                console.log('visualpython - failed to load getPath library');
-            });
-        })
-    }
-
     var _setGlobalVariables = function() {
         /**
          * visualpython log util
@@ -231,7 +208,7 @@
 
         let cfg = readConfig();
 
-        _readKernelFunction();
+        vpConfig.readKernelFunction();
         _addToolBarVpButton();
         _loadVpResource(cfg);
 
@@ -243,7 +220,7 @@
         events.on('kernel_ready.Kernel', function (evt, info) {
             vpLog.display(VP_LOG_TYPE.LOG, 'vp operations for kernel ready...');
             // read vp functions
-            _readKernelFunction();
+            vpConfig.readKernelFunction();
         });
     }
 
