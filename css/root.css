@@ -312,6 +312,10 @@ hr.vp-extra-menu-line {
     border-spacing: 5px;
     border-collapse: separate;
 }
+.vp-tbl-gap10 {
+    border-spacing: 10px;
+    border-collapse: separate; 
+}
 /* Table Layout */
 .vp-option-vertical-table-layout {
 	/* width: 100%; */

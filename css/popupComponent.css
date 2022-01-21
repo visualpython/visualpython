@@ -347,11 +347,11 @@
 .vp-inner-popup-box {
     position: absolute;
     left: calc(50% - 200px);
-    top: calc(50% - 150px);
+    top: calc(50% - 200px);
     min-width: 400px;
     min-height: 150px;
-    width: 30%;
-    height: 300px;
+    width: 400px;
+    height: 400px;
     background-color: white;
     z-index: 200;
     border: 0.25px solid var(--border-gray-color);
