@@ -70,7 +70,7 @@ define([
                 'display: none; position: fixed;');
             // edit button
             sbBlockMenu.appendLine('<div id="vp_block_menu_edit" class="vp-block-menu-item">Edit</div>');
-            sbBlockMenu.appendLine('<hr class="vp-extra-menu-line">');
+            sbBlockMenu.appendLine('<hr class="vp-extra-menu-line" id="vp_block_menu_line_1">');
             // run button
             sbBlockMenu.appendLine('<div id="vp_block_menu_run" class="vp-block-menu-item">Run</div>');
             // add button
@@ -91,11 +91,21 @@ define([
             };
             
             $(this.wrapSelector()).css(this.position);
+            // show items
+            $(this.wrapSelector('.vp-block-menu-item')).show();
+            $(this.wrapSelector('.vp-extra-menu-line')).show();
             $(this.wrapSelector()).show();
+
             // filter menu depends on block
+            let noContentBlocks = ['lgCtrl_try', 'lgCtrl_else', 'lgCtrl_finally'];
             if (this.block.isSubBlock) {
                 // no duplicate
                 $(this.wrapSelector('#vp_block_menu_duplicate')).hide();
+            } 
+            if (noContentBlocks.includes(this.block.id)) {
+                // no edit mode
+                $(this.wrapSelector('#vp_block_menu_edit')).hide();
+                $(this.wrapSelector('#vp_block_menu_line_1')).hide();
             }
         }
         
