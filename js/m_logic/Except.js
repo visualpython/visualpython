@@ -31,13 +31,12 @@ define([
             this.state = {
                 v1: '',
                 v2: '',
-                v3: '',
                 ...this.state
             }
         }
 
         templateForBody() {
-            let { v1, v2, v3 } = this.state;
+            let { v1, v2 } = this.state;
             let page = new com_String();
             // suggestInput for operator
             let errorList = [ 
@@ -48,7 +47,7 @@ define([
             ];
             var suggestInput = new SuggestInput();
             suggestInput.setComponentID('v1');
-            suggestInput.addClass('vp-input vp-state w100 v1');
+            suggestInput.addClass('vp-input vp-state w150 v1');
             suggestInput.setSuggestList(function() { return errorList; });
             suggestInput.setPlaceholder('Error');
             suggestInput.setNormalFilter(false);
@@ -59,16 +58,16 @@ define([
                 $(this.wrapSelector()).trigger('change');
             });
             page.appendLine(suggestInput.toTagString());
+            page.appendLine('<label style="padding: 0 10px 0 10px;">as</label>');
             page.appendFormatLine('<input type="text" id="v2" class="vp-input vp-state w50 v2" value="{0}"/>', v2);
-            page.appendFormatLine('<input type="text" id="v3" class="vp-input vp-state w50 v3" value="{0}"/>', v3);
             return page.toString();
         }
 
         generateCode() {
-            let { v1, v2, v3 } = this.state;
+            let { v1, v2 } = this.state;
             let asVariableStr = '';
             if (v2 != '') {
-                asVariableStr = ' ' + v2 + ' ' + v3;
+                asVariableStr = ' as ' + v2;
             }
             return `except ${v1}${asVariableStr}:`;
         }
