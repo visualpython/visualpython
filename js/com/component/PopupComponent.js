@@ -621,6 +621,10 @@ define([
             $('.vp-popup-frame').css({ 'z-index': 200 });
             $(this.wrapSelector()).addClass('vp-focused');
             $(this.wrapSelector()).css({ 'z-index': 205 }); // move forward
+            // focus on its block
+            if (this.taskItem) {
+                this.taskItem.focusItem();
+            }
         }
 
         blur() {
