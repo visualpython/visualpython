@@ -386,7 +386,7 @@ define([
                                 if (parentBlock == null) {
                                     parentBlock = newBlock; // set parent block of created block
                                 } else {
-                                    if (prevBlock != null && !newBlock.isGroup) {
+                                    if (!(blockState && blockState.depth != undefined) && prevBlock != null && !newBlock.isGroup) {
                                         let newDepth = prevBlock.getChildDepth();
                                         if (tmpState && tmpState.relativeDepth) {
                                             newDepth = parentBlock.getChildDepth() + tmpState.relativeDepth;
@@ -522,7 +522,6 @@ define([
                         }
 
                     ];
-                    break;
                     break;
                 case 'lgCtrl_for':
                 case 'lgCtrl_while':

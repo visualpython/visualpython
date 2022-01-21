@@ -164,7 +164,7 @@ define([
 
             // template for block button
             let { elseFlag, finallyFlag } = this.state; 
-            if (taskId == 'lgCtrl_for') {
+            if (taskId == 'lgCtrl_for' || taskId == 'lgCtrl_while') {
                 page.appendLine('<div class="vp-block-button-group">');
                 page.appendFormatLine('<div class="vp-block-button {0}" data-menu="{1}">{2}</div>', 'else', 'else', 'else ' + (elseFlag?'off':'on'));
                 page.appendLine('</div>');
