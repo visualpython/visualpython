@@ -263,11 +263,19 @@
                         </tr>
                         <tr>
                             <th>X Limit</th>
-                            <td><input type="text" class="vp-input vp-state" id="xlimit" placeholder="(min, max)" /></td>
+                            <td>
+                                <input type="number" class="vp-input vp-state" id="xlimit_min" placeholder="Minimum limit" />
+                                <input type="number" class="vp-input vp-state" id="xlimit_max" placeholder="Maximum limit" />
+                                <input type="text" class="vp-hidden vp-state" id="xlim"/>
+                            </td>
                         </tr>
                         <tr>
                             <th>Y Limit</th>
-                            <td><input type="text" class="vp-input vp-state" id="ylimit" placeholder="(min, max)" /></td>
+                            <td>
+                                <input type="number" class="vp-input vp-state" id="ylimit_min" placeholder="Minimum limit" />
+                                <input type="number" class="vp-input vp-state" id="ylimit_max" placeholder="Maximum limit" />
+                                <input type="text" class="vp-hidden vp-state" id="ylim"/>
+                            </td>
                         </tr>
                         <tr>
                             <th></th>

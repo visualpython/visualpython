@@ -133,6 +133,28 @@ define([
                 });
                 fileNavi.open();
             });
+            
+            // xlimit
+            $(this.wrapSelector('#xlimit_min')).change(function() {
+                let xlim_min = $(that.wrapSelector('#xlimit_min')).val();
+                let xlim_max = $(that.wrapSelector('#xlimit_max')).val();
+                $(that.wrapSelector('#xlim')).val(com_util.formatString('({0}, {1})', xlim_min, xlim_max));
+            });
+            $(this.wrapSelector('#xlimit_max')).change(function() {
+                let xlim_min = $(that.wrapSelector('#xlimit_min')).val();
+                let xlim_max = $(that.wrapSelector('#xlimit_max')).val();
+                $(that.wrapSelector('#xlim')).val(com_util.formatString('({0}, {1})', xlim_min, xlim_max));
+            });
+            $(this.wrapSelector('#ylimit_min')).change(function() {
+                let ylim_min = $(that.wrapSelector('#ylimit_min')).val();
+                let ylim_max = $(that.wrapSelector('#ylimit_max')).val();
+                $(that.wrapSelector('#ylim')).val(com_util.formatString('({0}, {1})', ylim_min, ylim_max));
+            });
+            $(this.wrapSelector('#ylimit_max')).change(function() {
+                let ylim_min = $(that.wrapSelector('#ylimit_min')).val();
+                let ylim_max = $(that.wrapSelector('#ylimit_max')).val();
+                $(that.wrapSelector('#ylim')).val(com_util.formatString('({0}, {1})', ylim_min, ylim_max));
+            });
         }
 
         templateForBody() {

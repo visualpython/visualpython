@@ -253,6 +253,10 @@ body {
 .vp-cursor {
     cursor: pointer;
 }
+/* hidden */
+.vp-hidden {
+    display: none;
+}
 /* No-selection */
 .vp-no-selection {
     -webkit-touch-callout: none; /* iOS Safari */
