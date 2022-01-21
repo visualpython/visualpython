@@ -372,6 +372,7 @@ define([
                         if (OptionComponent) {
                             let taskState = menuState.taskState;
                             let blockState = menuState.blockState;
+                            let tmpState = menuState.tmpState;
                             let state = {
                                 ...taskState,
                                 config: menuConfig
@@ -386,9 +387,14 @@ define([
                                     parentBlock = newBlock; // set parent block of created block
                                 } else {
                                     if (prevBlock != null && !newBlock.isGroup) {
-                                        newBlock.setDepth(prevBlock.getChildDepth());
+                                        let newDepth = prevBlock.getChildDepth();
+                                        if (tmpState && tmpState.relativeDepth) {
+                                            newDepth = parentBlock.getChildDepth() + tmpState.relativeDepth;
+                                        }
+                                        newBlock.setDepth(newDepth);
                                     }
                                 }
+                                vpLog.display(VP_LOG_TYPE.DEVELOP, 'new block ' + position + ' with depth ' + newBlock.depth);
                                 prevBlock = newBlock;
                             } else {
                                 // add to task list
@@ -485,10 +491,42 @@ define([
                         }
                     ]
                     break;
+                case 'lgCtrl_try':
+                    childBlocks = [
+                        { 
+                            menuId: 'lgCtrl_pass', 
+                            menuState: { 
+                                blockState: {
+                                    isGroup: false
+                                }
+                            }
+                        },
+                        { 
+                            menuId: 'lgCtrl_except', 
+                            menuState: { 
+                                blockState: {
+                                    isGroup: false
+                                },
+                                tmpState: {
+                                    relativeDepth: -1
+                                }
+                            }
+                        },
+                        { 
+                            menuId: 'lgCtrl_pass', 
+                            menuState: { 
+                                blockState: {
+                                    isGroup: false
+                                }
+                            }
+                        }
+
+                    ];
+                    break;
+                    break;
                 case 'lgCtrl_for':
                 case 'lgCtrl_while':
                 case 'lgCtrl_if':
-                case 'lgCtrl_try':
                 case 'lgCtrl_elif':
                 case 'lgCtrl_except':
                 case 'lgCtrl_else':

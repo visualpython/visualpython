@@ -768,6 +768,10 @@ define([
                 if (elseBlock.length > 0) {
                     this.removeBlock(elseBlock[0]);
                 }
+                // focus it
+                setTimeout(function() {
+                    block.focusItem();
+                }, 100);
             }
         }
 
@@ -800,6 +804,10 @@ define([
                 if (finallyBlock) {
                     this.removeBlock(finallyBlock);
                 }
+                // focus it
+                setTimeout(function() {
+                    block.focusItem();
+                }, 100);
             }
         }
 
