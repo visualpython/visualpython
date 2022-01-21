@@ -346,13 +346,12 @@
 /* inner popup */
 .vp-inner-popup-box {
     position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    left: calc(50% - 200px);
+    top: calc(50% - 150px);
     min-width: 400px;
     min-height: 150px;
     width: 30%;
-    height: fit-content;
+    height: 300px;
     background-color: white;
     z-index: 200;
     border: 0.25px solid var(--border-gray-color);

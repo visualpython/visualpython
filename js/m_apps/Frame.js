@@ -760,9 +760,10 @@ define([
             return content.toString();
         }
 
-        openInputPopup = function(type, width=0, height=0) {
+        openInputPopup = function(type, width=400, height=300) {
             var title = '';
             var content = '';
+            let size = { width: width, height: height };
     
             switch (parseInt(type)) {
                 case FRAME_EDIT_TYPE.ADD_COL:
@@ -792,6 +793,9 @@ define([
             }
     
             this.state.popup.type = type;
+
+            // set size
+            $(this.wrapSelector('.vp-inner-popup-box')).css(size);
 
             // set content
             $(this.wrapSelector('.vp-inner-popup-body')).html(content);

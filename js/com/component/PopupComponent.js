@@ -394,6 +394,12 @@ define([
                     });
                 }
             });
+
+            // inner popup draggable
+            $(this.wrapSelector('.vp-inner-popup-box')).draggable({
+                handle: '.vp-inner-popup-title',
+                containment: 'parent'
+            });
         }
 
         _unbindResizable() {
