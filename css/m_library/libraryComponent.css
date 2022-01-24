@@ -1,10 +1,6 @@
 .vp-popup-frame .vp-option-page table.vp-option-table {
     width: 100%;
 }
-.vp-popup-frame .vp-option-page table.vp-option-table td {
-    padding-top: 4.5px;
-    padding-bottom: 2.5px;
-}
 .vp-popup-frame .vp-option-page .vp-option-table select.var-multi, select.option-multi {
     height: 60px;
 }
