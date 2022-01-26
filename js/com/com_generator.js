@@ -25,14 +25,14 @@ define([
     var vp_showInterfaceOnPage = function(selector, package) {
 
         // generate input variable tag
-        var tblInput = $(selector+' #vp_inputOutputBox table');
+        var tblInput = $(selector+' #vp_inputOutputBox table tbody');
         package.input && package.input.forEach(function(o, i) {
             var obj = JSON.parse(JSON.stringify(o));
             tblInput.append(vp_createTag(selector, obj, true, (obj.required == false? false: true)));
         });
 
         // generate option variable tag
-        var tblOption = $(selector+' #vp_optionBox table');
+        var tblOption = $(selector+' #vp_optionBox table tbody');
         package.variable && package.variable.forEach(function(o, i) {
             // cell metadata test
             var obj = JSON.parse(JSON.stringify(o)); // deep copy
@@ -40,7 +40,7 @@ define([
         });
 
         // generate output variable tag
-        var tblOutput = $(selector+' #vp_inputOutputBox table');
+        var tblOutput = $(selector+' #vp_inputOutputBox table tbody');
         package.output && package.output.forEach(function(o, i) {
             var obj = JSON.parse(JSON.stringify(o)); // deep copy
             tblOutput.append(vp_createTag(selector, obj, true, (obj.required == true)));
@@ -275,7 +275,7 @@ define([
 
     /**
      * pageId wrap selector
-     * @param {string} pageId vp-option-page의 uuid값
+     * @param {string} pageId vp-option-page uuid
      * @param {string} query 
      */
     var vp_wrapSelector = function(pageId, query) {

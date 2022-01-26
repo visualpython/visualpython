@@ -89,8 +89,7 @@
                     'help': com_Const.TOOLBAR_BTN_INFO.HELP
                     , 'icon': com_Const.TOOLBAR_BTN_INFO.ICON
                     , 'handler': function () {
-                        // Extension 버튼 클릭 시 실행
-                        // _toggleVp(cfg);
+                        // on clicking extension button
                         vpFrame.toggleVp();
                     }
                 }, com_Const.TOOLBAR_BTN_INFO.NAME, com_Const.TOOLBAR_BTN_INFO.PREFIX)

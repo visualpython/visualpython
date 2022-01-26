@@ -147,8 +147,7 @@ define([
     }
 
     /** 
-     * alertModal html과 css를 load하는 함수
-     * alertModal은 주로 코드 생성 validation message로 사용한다
+     * AlertModal
      * @param {string} titleStr 
      */
     var renderAlertModal = function(titleStr) {

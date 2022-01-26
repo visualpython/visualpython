@@ -15,14 +15,10 @@
 define([
     'text!vp_base/html/m_library/libraryComponent.html!strip',
     'css!vp_base/css/m_library/libraryComponent.css',
-    'vp_base/js/com/com_util',
-    'vp_base/js/com/com_Const',
-    'vp_base/js/com/com_String',
-    'vp_base/js/com/com_interface',
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/com_generator',
     'vp_base/data/m_library/pandasLibrary'
-], function(libHtml, libCss, com_util, com_Const, com_String, com_interface, PopupComponent, com_generator, pandasLibrary) {
+], function(libHtml, libCss, PopupComponent, com_generator, pandasLibrary) {
 
     /**
      * LibraryComponent
@@ -134,6 +130,11 @@ define([
 
             // show interface
             com_generator.vp_showInterfaceOnPage(this.wrapSelector(), this.package);
+
+            // hide optional page if no options
+            if ($.trim($(this.wrapSelector('#vp_optionBox table tbody')).html())=='') {
+                $(this.wrapSelector('.vp-option-box')).hide();
+            }
         }
 
         generateCode() {
