@@ -2393,8 +2393,7 @@
                                         "path": "visualpython - library - pandas - data info - get value counts",
                                         "desc": "values counts",
                                         "tag": "GET VALUE COUNTS, .VALUE_COUNTS",
-                                        "file": "m_library/m_pandas/getValueCounts.js",
-                                        "useAuto" : true
+                                        "file": "m_library/m_pandas/getValueCounts"
                                     },
                                     {
                                         "id": "pdIdt_info",

@@ -24,11 +24,20 @@ define([
      */
     var vp_showInterfaceOnPage = function(selector, package) {
 
+        let autoCols = {};
+
         // generate input variable tag
         var tblInput = $(selector+' #vp_inputOutputBox table tbody');
         package.input && package.input.forEach(function(o, i) {
             var obj = JSON.parse(JSON.stringify(o));
             tblInput.append(vp_createTag(selector, obj, true, (obj.required == false? false: true)));
+            if (obj.component === 'col_select') {
+                if (autoCols[obj.target] != undefined) {
+                    autoCols[obj.target].push(obj.name);
+                } else {
+                    autoCols[obj.target] = [ obj.name ];
+                }
+            }
         });
 
         // generate option variable tag
@@ -37,6 +46,13 @@ define([
             // cell metadata test
             var obj = JSON.parse(JSON.stringify(o)); // deep copy
             tblOption.append(vp_createTag(selector, obj, true, (obj.required == true)));
+            if (obj.component === 'col_select') {
+                if (autoCols[obj.target] != undefined) {
+                    autoCols[obj.target].push(obj.name);
+                } else {
+                    autoCols[obj.target] = [ obj.name ];
+                }
+            }
         });
 
         // generate output variable tag
@@ -44,6 +60,24 @@ define([
         package.output && package.output.forEach(function(o, i) {
             var obj = JSON.parse(JSON.stringify(o)); // deep copy
             tblOutput.append(vp_createTag(selector, obj, true, (obj.required == true)));
+            if (obj.component === 'col_select') {
+                if (autoCols[obj.target] != undefined) {
+                    autoCols[obj.target].push(obj.name);
+                } else {
+                    autoCols[obj.target] = [ obj.name ];
+                }
+            }
+        });
+
+        // bind column list FIXME: change event not triggered on changing df input
+        Object.keys(autoCols).forEach(target => {
+            let targetSelector = selector + ' #' + target;
+            vp_bindColumnSource(selector, targetSelector, autoCols[target]);
+            // on change event
+            $(targetSelector).on('change', function() {
+                console.log('change event ', selector, targetSelector, autoCols[target]);
+                vp_bindColumnSource(selector, this, autoCols[target]);
+            });
         });
     }
 
@@ -135,6 +169,15 @@ define([
                 vp_generateVarSelect(tag, obj.var_type, obj.value);
                 tblInput.appendChild(tag);
                 break;
+            case 'col_select':
+                var tag = document.createElement('input');
+                $(tag).attr({
+                    'type': 'text',
+                    'id': obj.name,
+                    'class': 'vp-input vp-state'
+                });
+                tblInput.appendChild(tag);
+                break;
             case 'textarea':
                 var textarea = $(`<textarea id="${obj.name}" class="vp-textarea vp-state">${(obj.default==undefined?'':obj.default)}</textarea>`);
                 // cell metadata test
@@ -209,7 +252,7 @@ define([
             suggestInput.setSelectEvent(function(selectedValue) {
                 // trigger change
                 $(divTag + ' #' + obj.name).val(selectedValue);
-                $(divTag + ' #' + obj.name).trigger('select_suggestvalue');
+                $(divTag + ' #' + obj.name).trigger('change');
             });
             $(divTag + ' #' + obj.name).replaceWith(function() {
                 return suggestInput.toTagString();
@@ -320,6 +363,9 @@ define([
             case 'var_multi':
                 value = $(vp_wrapSelector(pageId, '#'+obj.name)).val();
                 break;
+            case 'col_select':
+                value = $(vp_wrapSelector(pageId, '#'+obj.name)).val();
+                break;
             case 'table':
             case 'file':
             default:
@@ -424,26 +470,28 @@ define([
 
     /**
      * Bind columns source function
-     * @param {object} pageThis 
+     * @param {string} selector thisWrapSelector 
      * @param {object} target 
      * @param {array} columnInputIdList 
      * Usage : 
      *  $(document).on('change', this.wrapSelector('#dataframe_tag_id'), function() {
-     *      pdGen.vp_bindColumnSource(that, this, ['column_input_id']);
+     *      pdGen.vp_bindColumnSource(that.wrapSelector(), this, ['column_input_id']);
      *  });
      */
-    var vp_bindColumnSource = function(pageThis, target, columnInputIdList) {
-        var varName = $(target).val();
-
+    var vp_bindColumnSource = function(selector, target, columnInputIdList) {
+        var varName = '';
+        if ($(target).length > 0) {
+            varName = $(target).val();
+        }
         if (varName === '') {
             // reset with no source
             columnInputIdList && columnInputIdList.forEach(columnInputId => {
                 var suggestInputX = new SuggestInput();
                 suggestInputX.setComponentID(columnInputId);
-                suggestInputX.addClass('vp-input');
+                suggestInputX.addClass('vp-input vp-state');
                 suggestInputX.setNormalFilter(false);
-                suggestInputX.setValue($(pageThis.wrapSelector('#' + columnInputId)).val());
-                $(pageThis.wrapSelector('#' + columnInputId)).replaceWith(function() {
+                suggestInputX.setValue($(selector + ' #' + columnInputId).val());
+                $(selector + ' #' + columnInputId).replaceWith(function() {
                     return suggestInputX.toTagString();
                 });
             });
@@ -454,22 +502,20 @@ define([
             try {
                 let { result, type, msg } = resultObj;
                 var varResult = JSON.parse(result);
-    
-                if (varResult.length > 0) {
-                    // columns using suggestInput
-                    columnInputIdList && columnInputIdList.forEach(columnInputId => {
-                        var suggestInputX = new SuggestInput();
-                        suggestInputX.setComponentID(columnInputId);
-                        suggestInputX.addClass('vp-input');
-                        suggestInputX.setPlaceholder("column name");
-                        suggestInputX.setSuggestList(function() { return varResult; }); //FIXME:
-                        suggestInputX.setNormalFilter(false);
-                        suggestInputX.setValue($(pageThis.wrapSelector('#' + columnInputId)).val());
-                        $(pageThis.wrapSelector('#' + columnInputId)).replaceWith(function() {
-                            return suggestInputX.toTagString();
-                        });
+
+                // columns using suggestInput
+                columnInputIdList && columnInputIdList.forEach(columnInputId => {
+                    var suggestInputX = new SuggestInput();
+                    suggestInputX.setComponentID(columnInputId);
+                    suggestInputX.addClass('vp-input vp-state');
+                    suggestInputX.setPlaceholder("column name");
+                    suggestInputX.setSuggestList(function() { return varResult; }); //FIXME:
+                    suggestInputX.setNormalFilter(false);
+                    suggestInputX.setValue($(selector + ' #' + columnInputId).val());
+                    $(selector + ' #' + columnInputId).replaceWith(function() {
+                        return suggestInputX.toTagString();
                     });
-                }
+                });
             } catch (e) {
                 vpLog.display(VP_LOG_TYPE.ERROR, 'com_generator - bindColumnSource: not supported data type. ', e);
             }

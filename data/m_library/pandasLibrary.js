@@ -1927,8 +1927,8 @@ define([
                     name: 'i0',
                     type: 'var',
                     label: 'Target Variable',
-                    component: 'var_select',
-                    var_type: ['DataFrame', 'Series', 'Index']
+                    // component: 'var_select',
+                    // var_type: ['DataFrame', 'Series', 'Index']
                 }
             ],
             variable: [],
