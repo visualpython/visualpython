@@ -39,7 +39,7 @@ define([
      * Component
      */
     class PopupComponent extends Component {
-        constructor(state={}, prop={}) {
+        constructor(state={ config: { id: 'popup', name: 'Popup title', path: 'path/file' }}, prop={}) {
             super($('#site'), state, prop);
         }
 
@@ -111,6 +111,8 @@ define([
 
         /**
          * Add codemirror object
+         * usage: 
+         *  this._addCodemirror('code', this.wrapSelector('#code'));
          * @param {String} key stateKey
          * @param {String} selector textarea class name
          * @param {boolean} type code(python)/readonly/markdown
@@ -562,7 +564,8 @@ define([
             vpLog.display(VP_LOG_TYPE.DEVELOP, 'savedState', that.state);   
         }
 
-        run(execute=true) {
+        run(execute=true, addcell=true) {
+            let code = this.generateCode();
             let mode = this.config.executeMode;
             let blockNumber = -1;
             // check if it's block
@@ -570,7 +573,10 @@ define([
                 let block = this.taskItem;
                 blockNumber = block.blockNumber;
             }
-            com_interface.insertCell(mode, this.generateCode(), execute, blockNumber);
+            if (addcell) {
+                com_interface.insertCell(mode, code, execute, blockNumber);
+            }
+            return code;
         }
 
         /**
