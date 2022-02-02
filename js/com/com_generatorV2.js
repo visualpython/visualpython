@@ -21,12 +21,20 @@ define([
     const _VP_COMP_TYPE_LABEL = {
         '1dlen': '1D Length',
         '2dlen': '2D Length',
+        '3dlen': '3D Length',
         '1darr': '1D Array',
         '2darr': '2D Array',
         'ndarr': 'ND Array',
         'scalar': 'Scalar Value',
         'param': 'Param Value',
         'dtype': 'Dtype',
+        'bool_checkbox': 'Boolean',
+        'option_select': 'Select option',
+        'var_select': 'Select Variable',
+        'var_multi': 'Select N-Variables',
+        'col_select': 'Select Column',
+        'textarea': 'Input textarea',
+        'input': 'Input text'
     }
 
     const _VP_NP_DTYPES = [
@@ -200,6 +208,9 @@ define([
             case '2dlen':
                 content = render2dLen(pageThis, obj, state);
                 break;
+            case '3dlen':
+                content = render3dLen(pageThis, obj, state);
+                break;
             case '1darr':
                 content = render1dArr(pageThis, obj, state);
                 break;
@@ -234,7 +245,7 @@ define([
                     'id':obj.name
                 });
                 // if required, no default option
-                if (required != true) {
+                if (obj.required != true) {
                     $(optSlct).append($('<option value="">Default</option>'));
                 }
                 obj.options.forEach((opt, idx, arr) => {
@@ -497,6 +508,18 @@ define([
                     if (v.code != undefined) {
                         val = v.code.split(id).join(val);
                     }
+                    // code completion2
+                    if (v.component != undefined && v.componentCode != undefined) {
+                        let autoSelector = state[v.name + '_type'];
+                        let compIdx = v.component.indexOf(autoSelector);
+                        if (compIdx < 0) {
+                            compIdx = 0;
+                        }
+                        let compCode = v.componentCode[compIdx];
+                        if (compCode != '') {
+                            val = compCode.split(id).join(val);
+                        }
+                    }
                     code = code.split(id).join(val);
                 }
             });
@@ -617,6 +640,36 @@ define([
                     Col
                 </span>
                 <input type="text" id="${obj.name}_col" data-id="${obj.name}"  value="${state[obj.name+'_col']}" class="vp-input vp-state vp-numpy-2dlen-item" style="width:150px;" placeholder="Number">
+            </div>
+            <input type="hidden" class="vp-state" id="${obj.name}" value="${state[obj.name]}">
+        </div>`);
+    }
+
+    var render3dLen = function(pageThis, obj, state) {
+        state = {
+            [obj.name + '_plane']: '',
+            [obj.name + '_row']: '',
+            [obj.name + '_col']: '',
+            ...state
+        }
+        return $(`<div class="vp-numpy-style-flex-row">
+            <div class="vp-numpy-style-flex-row" style="margin-right:10px;">
+                <span class="vp-numpy-style-flex-column-center" style="margin-right:5px;">
+                    Plane
+                </span>
+                <input type="text" id="${obj.name}_plane" data-id="${obj.name}" value="${state[obj.name+'_plane']}" class="vp-input vp-state vp-numpy-3dlen-item" style="width:150px;" placeholder="Number">
+            </div>
+            <div class="vp-numpy-style-flex-row" style="margin-right:10px;">
+                <span class="vp-numpy-style-flex-column-center" style="margin-right:5px;">
+                    Row
+                </span>
+                <input type="text" id="${obj.name}_row" data-id="${obj.name}" value="${state[obj.name+'_row']}" class="vp-input vp-state vp-numpy-3dlen-item" style="width:150px;" placeholder="Number">
+            </div>
+            <div class="vp-numpy-style-flex-row" style="margin-right:10px;">
+                <span class="vp-numpy-style-flex-column-center" style="margin-right:5px;">
+                    Col
+                </span>
+                <input type="text" id="${obj.name}_col" data-id="${obj.name}"  value="${state[obj.name+'_col']}" class="vp-input vp-state vp-numpy-3dlen-item" style="width:150px;" placeholder="Number">
             </div>
             <input type="hidden" class="vp-state" id="${obj.name}" value="${state[obj.name]}">
         </div>`);
@@ -773,7 +826,7 @@ define([
         });
         contentTag.data('obj', obj);
         // Array Items
-        let arrItems = $(`<div class="vp-numpy-style-flex-row-between-wrap"></div>`);
+        let arrItems = $(`<div class="vp-numpy-style-flex-row-between-wrap vp-scrollbar" style="max-height: 200px; overflow: auto;"></div>`);
         arrState.forEach((item, idx) => {
             arrItems.append($(`<div class="vp-numpy-style-flex-row">
                 <div class="vp-numpy-style-flex-column-center vp-bold mr5 w10">
@@ -847,6 +900,16 @@ define([
         $(selector).on('change', '.vp-numpy-2dlen-item', function() {
             let id = $(this).data('id');
             let newValue = pageThis.getState(id+'_row') + ',' + pageThis.getState(id+'_col');
+            $(pageThis.wrapSelector('#' + id)).val(newValue);
+            $(pageThis.wrapSelector('#' + id)).trigger('change');
+        }); 
+
+        //====================================================================
+        // Event for 3dLen
+        //====================================================================
+        $(selector).on('change', '.vp-numpy-3dlen-item', function() {
+            let id = $(this).data('id');
+            let newValue = pageThis.getState(id+'_plane') + ',' + pageThis.getState(id+'_row') + ',' + pageThis.getState(id+'_col');
             $(pageThis.wrapSelector('#' + id)).val(newValue);
             $(pageThis.wrapSelector('#' + id)).trigger('change');
         }); 

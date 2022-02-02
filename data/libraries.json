@@ -2252,7 +2252,7 @@
                                 "desc" : "Random number generation",
                                 "item" : [
                                         {
-                                            "id": "np_randomRandint",
+                                            "id": "np_randint",
                                             "type": "function",
                                             "level": 3,
                                             "name": "randint",
@@ -2263,7 +2263,7 @@
                                             "useAutoV2": true
                                         },
                                         {
-                                            "id": "np_randomRand",
+                                            "id": "np_rand",
                                             "type": "function",
                                             "level": 3,
                                             "name": "rand",
