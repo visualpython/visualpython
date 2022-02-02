@@ -1864,7 +1864,7 @@ define([
             "name": "equal",
             "library": "numpy",
             "description": "",
-            "code": "${o0} = np.equal(${i0}, ${i1}${dtype})",
+            "code": "${o0} = np.equal(${i0}, ${i1})",
             "options": [
                 {
                     "name": "i0",
@@ -1899,7 +1899,7 @@ define([
             "name": "greater",
             "library": "numpy",
             "description": "",
-            "code": "${o0} = np.greater(${i0}, ${i1}${dtype})",
+            "code": "${o0} = np.greater(${i0}, ${i1})",
             "options": [
                 {
                     "name": "i0",
@@ -1934,7 +1934,7 @@ define([
             "name": "greater_equal",
             "library": "numpy",
             "description": "",
-            "code": "${o0} = np.greater_equal(${i0}, ${i1}${dtype})",
+            "code": "${o0} = np.greater_equal(${i0}, ${i1})",
             "options": [
                 {
                     "name": "i0",
@@ -1969,7 +1969,7 @@ define([
             "name": "less",
             "library": "numpy",
             "description": "",
-            "code": "${o0} = np.less(${i0}, ${i1}${dtype})",
+            "code": "${o0} = np.less(${i0}, ${i1})",
             "options": [
                 {
                     "name": "i0",
@@ -2004,7 +2004,7 @@ define([
             "name": "less_equal",
             "library": "numpy",
             "description": "",
-            "code": "${o0} = np.less_equal(${i0}, ${i1}${dtype})",
+            "code": "${o0} = np.less_equal(${i0}, ${i1})",
             "options": [
                 {
                     "name": "i0",

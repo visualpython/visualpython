@@ -129,7 +129,7 @@ define([
             super.render();
 
             // show interface
-            com_generatorV2.vp_showInterfaceOnPage(this, this.package);
+            com_generatorV2.vp_showInterfaceOnPage(this, this.package, this.state);
 
             // hide optional page if no options
             if ($.trim($(this.wrapSelector('#vp_optionBox table tbody')).html())=='') {

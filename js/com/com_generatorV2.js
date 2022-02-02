@@ -39,6 +39,10 @@ define([
 
     const _VP_NP_DTYPES = [
         {
+            name: 'Default',
+            value: ''
+        },
+        {
             name: 'None',
             value: 'None'
         },
@@ -185,7 +189,7 @@ define([
         }
         // render content
         let contentTag = $('<div class="vp-auto-component-content"></div>');
-        contentTag.append(renderContent(pageThis, componentType, obj, value, state));
+        contentTag.append(renderContent(pageThis, componentType, obj, state));
         tblContent.append(contentTag);
         
         tblRow.append(tblLabel);
@@ -489,7 +493,7 @@ define([
         try {
             package.options && package.options.forEach(function(v, i) {
                 var val = state[v.name];
-                if (val == undefined) {
+                if (val == undefined || val == '') {
                     val = vp_getTagValue(pageThis, v);
                 }
                 var id = '${' + v.name + '}';
@@ -847,7 +851,7 @@ define([
         if (obj.placeholder) {
             placeholder = obj.placeholder;
         }
-        return $(`<input class="vp-input vp-state" placeholder="${placeholder}" value="${state[obj.name]}"/>`);
+        return $(`<input class="vp-input vp-state" id="${obj.name}" placeholder="${placeholder}" value="${state[obj.name]}"/>`);
     }
 
     var renderParam = function(pageThis, obj, defaultValue) {
@@ -855,7 +859,7 @@ define([
         if (obj.placeholder) {
             placeholder = obj.placeholder;
         }
-        return $(`<input class="vp-input vp-state" placeholder="${placeholder}" value="${state[obj.name]}"/>`);
+        return $(`<input class="vp-input vp-state" id="${obj.name}" placeholder="${placeholder}" value="${state[obj.name]}"/>`);
     }
 
     var renderDtypeSelector = function(pageThis, obj, defaultValue) {
@@ -889,8 +893,6 @@ define([
             let contentTag = $(this).parent().find('.vp-auto-component-content');
             let newType = $(this).val();
             let obj = $(this).data('obj');
-            // reset state
-            pageThis.setState({ [obj.name]: '' });
             $(contentTag).html(renderContent(pageThis, newType, obj, pageThis.getState()));
         }); 
 
@@ -992,7 +994,10 @@ define([
             let row = $(this).parent().find('.vp-numpy-2darr-set-row').val();
             let col = $(this).parent().find('.vp-numpy-2darr-set-col').val();
             // update state
-            let state = Array(parseInt(row)).fill(Array(parseInt(col)).fill(0));
+            let state = Array(parseInt(row));
+            for (let i = 0; i < state.length; i++) {
+                state[i] = Array(parseInt(col)).fill(0);
+            }
             pageThis.setState({ [arrId]: state });
             pageThis.setState({ [id]: `[${state.map(ele => '[' + ele.join(',') + ']').join(',')}]` });
             // re-render
@@ -1060,7 +1065,10 @@ define([
             // update state
             let state = pageThis.getState(arrId);
             if (!state) {
-                state = Array(rowIdx + 1).fill([]);
+                state = Array(rowIdx + 1);
+                for (let i = 0; i < state.length; i++) {
+                    state[i] = [];
+                }
             }
             state[rowIdx].push(0);
             pageThis.setState({ [arrId]: state });
