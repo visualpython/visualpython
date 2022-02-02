@@ -727,10 +727,6 @@ define([
         //========================================================================
         // Get / set
         //========================================================================
-        getState() {
-            return this.state;
-        }
-
         getCodemirror(key) {
             let filteredCm = this.cmCodeList.find(cmObj => cmObj.key == key);
             return filteredCm;

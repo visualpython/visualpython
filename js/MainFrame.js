@@ -326,6 +326,10 @@ define([
                         // if useAuto is true, use LibraryComponent to auto-generate page
                         fileName = 'com/component/LibraryComponent';
                     }
+                    if (menuConfig.useAutoV2) {
+                        // FIXME: must merge LibraryComponent and NumpyComponent
+                        fileName = 'com/component/NumpyComponent';
+                    }
                     // add to menu list
                     let filePath = 'vp_base/js/' + fileName;
                     let menuArgIdx = loadMenuList.indexOf(filePath);

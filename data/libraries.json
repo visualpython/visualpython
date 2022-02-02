@@ -1280,7 +1280,8 @@
                                         "path": "visualpython - library - numpy - array creation - np.array",
                                         "desc": "",
                                         "tag": "NP, ARRAY, NP.ARRAY, NUMPY",
-                                        "file": "m_library/m_numpy/array"
+                                        "file": "m_library/m_numpy/array",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "np_zeros",
@@ -1290,7 +1291,8 @@
                                         "path": "visualpython - library - numpy - array creation - np.zeros",
                                         "desc": "",
                                         "tag": "NP, ZEROS, NP.ZEROS, NUMPY",
-                                        "file": "m_library/m_numpy/zeros"
+                                        "file": "m_library/m_numpy/zeros",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "np_ones",
@@ -1300,7 +1302,8 @@
                                         "path": "visualpython - library - numpy - array creation - np.ones",
                                         "desc": "",
                                         "tag": "NP, ONES, NP.ONES, NUMPY",
-                                        "file": "m_library/m_numpy/ones"
+                                        "file": "m_library/m_numpy/ones",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "np_empty",
@@ -1310,7 +1313,8 @@
                                         "path": "visualpython - library - numpy - array creation - np.empty",
                                         "desc": "",
                                         "tag": "NP, EMPTY, NP.EMPTY, NUMPY",
-                                        "file": "m_library/m_numpy/empty"
+                                        "file": "m_library/m_numpy/empty",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "np_copy",
@@ -1320,7 +1324,8 @@
                                         "path": "visualpython - library - numpy - array creation - np.copy",
                                         "desc": "",
                                         "tag": "NP, COPY, NP.COPY, NUMPY",
-                                        "file": "m_library/m_numpy/copy"
+                                        "file": "m_library/m_numpy/copy",
+                                        "useAutoV2": true
                                     }
                                 ]
                             },
@@ -1340,7 +1345,8 @@
                                         "path": "visualpython - library - numpy - numerical ranges - np.arange",
                                         "desc": "",
                                         "tag": "NP, ARANGE, NP.ARANGE, NUMPY",
-                                        "file": "m_library/m_numpy/arange"
+                                        "file": "m_library/m_numpy/arange",
+                                        "useAutoV2": true
                                     }
                                 ]
                             },
@@ -1360,7 +1366,8 @@
                                         "path": "visualpython - library - numpy - joining arrays - np.concatenate",
                                         "desc": "",
                                         "tag": "NP, CONCATENATE, NP.CONCATENATE, NUMPY",
-                                        "file": "m_library/m_numpy/concatenate"
+                                        "file": "m_library/m_numpy/concatenate",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "np_stack",
@@ -1370,7 +1377,8 @@
                                         "path": "visualpython - library - numpy - joining arrays - np.stack",
                                         "desc": "",
                                         "tag": "NP, STACK, NP.STACK, NUMPY",
-                                        "file": "m_library/m_numpy/stack"
+                                        "file": "m_library/m_numpy/stack",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "np_dstack",
@@ -1380,7 +1388,8 @@
                                         "path": "visualpython - library - numpy - joining arrays - np.dstack",
                                         "desc": "",
                                         "tag": "NP, DSTACK, NP.DSTACK, NUMPY",
-                                        "file": "m_library/m_numpy/dstack"
+                                        "file": "m_library/m_numpy/dstack",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "np_hstack",
@@ -1390,7 +1399,8 @@
                                         "path": "visualpython - library - numpy - joining arrays - np.hstack",
                                         "desc": "",
                                         "tag": "NP, HSTACK, NP.HSTACK, NUMPY",
-                                        "file": "m_library/m_numpy/hstack"
+                                        "file": "m_library/m_numpy/hstack",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "np_vstack",
@@ -1400,7 +1410,8 @@
                                         "path": "visualpython - library - numpy - joining arrays - np.vstack",
                                         "desc": "",
                                         "tag": "NP, VSTACK, NP.VSTACK, NUMPY",
-                                        "file": "m_library/m_numpy/vstack"
+                                        "file": "m_library/m_numpy/vstack",
+                                        "useAutoV2": true
                                     }
                                 ]
                             },
@@ -1420,7 +1431,8 @@
                                         "path": "visualpython - library - numpy - splitting arrays - np.split",
                                         "desc": "",
                                         "tag": "NP, SPLIT, NP.SPLIT, NUMPY",
-                                        "file": "m_library/m_numpy/split"
+                                        "file": "m_library/m_numpy/split",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "np_dsplit",
@@ -1430,7 +1442,8 @@
                                         "path": "visualpython - library - numpy - splitting arrays - np.dsplit",
                                         "desc": "",
                                         "tag": "NP, DSPLIT, NP.DSPLIT, NUMPY",
-                                        "file": "m_library/m_numpy/dsplit"
+                                        "file": "m_library/m_numpy/dsplit",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "np_hsplit",
@@ -1440,7 +1453,8 @@
                                         "path": "visualpython - library - numpy - splitting arrays - np.hsplit",
                                         "desc": "",
                                         "tag": "NP, HSPLIT, NP.HSPLIT, NUMPY",
-                                        "file": "m_library/m_numpy/hsplit"
+                                        "file": "m_library/m_numpy/hsplit",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "np_vsplit",
@@ -1450,7 +1464,8 @@
                                         "path": "visualpython - library - numpy - splitting arrays - np.vsplit",
                                         "desc": "",
                                         "tag": "NP, VSPLIT, NP.VSPLIT, NUMPY",
-                                        "file": "m_library/m_numpy/vsplit"
+                                        "file": "m_library/m_numpy/vsplit",
+                                        "useAutoV2": true
                                     }
                                 ]
                             },
@@ -1470,7 +1485,8 @@
                                         "path": "visualpython - library - numpy - shape manipulation - np.reshape",
                                         "desc": "",
                                         "tag": "NP, RESHAPE, NP.RESHAPE, NUMPY",
-                                        "file": "m_library/m_numpy/reshape"
+                                        "file": "m_library/m_numpy/reshape",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "np_transpose",
@@ -1480,7 +1496,8 @@
                                         "path": "visualpython - library - numpy - shape manipulation - np.transpose",
                                         "desc": "",
                                         "tag": "NP, TRANSPOSE, NP.TRANSPOSE, NUMPY",
-                                        "file": "m_library/m_numpy/transpose"
+                                        "file": "m_library/m_numpy/transpose",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "np_t",
@@ -1490,7 +1507,8 @@
                                         "path": "visualpython - library - numpy - shape manipulation - np.T",
                                         "desc": "",
                                         "tag": "NP, T, NP.T, NUMPY",
-                                        "file": "m_library/m_numpy/T"
+                                        "file": "m_library/m_numpy/T",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "np_flatten",
@@ -1500,7 +1518,8 @@
                                         "path": "visualpython - library - numpy - shape manipulation - np.flatten",
                                         "desc": "",
                                         "tag": "NP, FLATTEN, NP.FLATTEN, NUMPY",
-                                        "file": "m_library/m_numpy/flatten"
+                                        "file": "m_library/m_numpy/flatten",
+                                        "useAutoV2": true
                                     }
                                 ]
                             },
@@ -1520,7 +1539,8 @@
                                             "path": "visualpython - library - numpy - statistics - np.mean",
                                             "desc": "",
                                             "tag": "NP, MEAN, NP.MEAN, NUMPY",
-                                            "file": "m_library/m_numpy/mean"
+                                            "file": "m_library/m_numpy/mean",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_var",
@@ -1530,7 +1550,8 @@
                                             "path": "visualpython - library - numpy - statistics - np.var",
                                             "desc": "",
                                             "tag": "NP, VAR, NP.VAR, NUMPY",
-                                            "file": "m_library/m_numpy/var"
+                                            "file": "m_library/m_numpy/var",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_std",
@@ -1540,7 +1561,8 @@
                                             "path": "visualpython - library - numpy - statistics - np.std ",
                                             "desc": "",
                                             "tag": "NP, STD, NP.STD, NUMPY",
-                                            "file": "m_library/m_numpy/std"
+                                            "file": "m_library/m_numpy/std",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_max",
@@ -1550,7 +1572,8 @@
                                             "path": "visualpython - library - numpy - statistics - np.max",
                                             "desc": "",
                                             "tag": "NP, MAX, NP.MAX, NUMPY",
-                                            "file": "m_library/m_numpy/max"
+                                            "file": "m_library/m_numpy/max",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_min",
@@ -1560,7 +1583,8 @@
                                             "path": "visualpython - library - numpy - statistics - np.min",
                                             "desc": "",
                                             "tag": "NP, MIN, NP.MIN, NUMPY",
-                                            "file": "m_library/m_numpy/min"
+                                            "file": "m_library/m_numpy/min",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_median",
@@ -1570,7 +1594,8 @@
                                             "path": "visualpython - library - numpy - statistics - np.median",
                                             "desc": "",
                                             "tag": "NP, MEDIAN, NP.MEDIAN, NUMPY",
-                                            "file": "m_library/m_numpy/median"
+                                            "file": "m_library/m_numpy/median",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_percentile",
@@ -1580,7 +1605,8 @@
                                             "path": "visualpython - library - numpy - statistics - np.percentile",
                                             "desc": "",
                                             "tag": "NP, PERCENTILE, NP.PERCENTILE, NUMPY",
-                                            "file": "m_library/m_numpy/percentile"
+                                            "file": "m_library/m_numpy/percentile",
+                                            "useAutoV2": true
                                         }
                                     ]
                             },
@@ -1600,7 +1626,8 @@
                                             "path": "visualpython - library - numpy - linear algebra - np.linalg.inv",
                                             "desc": "",
                                             "tag": "NP, LINALG INV, NP.LINALG.INV, NUMPY",
-                                            "file": "m_library/m_numpy/linalgInv"
+                                            "file": "m_library/m_numpy/linalgInv",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_linalg_det",
@@ -1610,7 +1637,8 @@
                                             "path": "visualpython - library - numpy - linear algebra - np.linalg.det",
                                             "desc": "",
                                             "tag": "NP, LINALG, NP.LINALG.DET, NUMPY",
-                                            "file": "m_library/m_numpy/linalgDet"
+                                            "file": "m_library/m_numpy/linalgDet",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_linalg_eig",
@@ -1620,7 +1648,8 @@
                                             "path": "visualpython - library - numpy - linear algebra - np.linalg.eig",
                                             "desc": "",
                                             "tag": "NP, LINALG, NP.LINALG.EIG, NUMPY",
-                                            "file": "m_library/m_numpy/linalgEig"
+                                            "file": "m_library/m_numpy/linalgEig",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_linalg_svd",
@@ -1630,7 +1659,8 @@
                                             "path": "visualpython - library - numpy - linear algebra - np.linalg.svd",
                                             "desc": "",
                                             "tag": "NP, LINALG, NP.LINALG.SVD, NUMPY",
-                                            "file": "m_library/m_numpy/linalgSvd"
+                                            "file": "m_library/m_numpy/linalgSvd",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_trace",
@@ -1640,7 +1670,8 @@
                                             "path": "visualpython - library - numpy - linear algebra - np.trace",
                                             "desc": "",
                                             "tag": "NP, TRACE, NP.TRACE, NUMPY",
-                                            "file": "m_library/m_numpy/Trace"
+                                            "file": "m_library/m_numpy/Trace",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_dot",
@@ -1650,7 +1681,8 @@
                                             "path": "visualpython - library - numpy - linear algebra - np.dot",
                                             "desc": "",
                                             "tag": "NP, DOT, NP.DOT, NUMPY",
-                                            "file": "m_library/m_numpy/dot"
+                                            "file": "m_library/m_numpy/dot",
+                                            "useAutoV2": true
                                         }
                                     ]
                             },
@@ -1670,7 +1702,8 @@
                                             "path": "visualpython - library - numpy - math operation - np.add",
                                             "desc": "",
                                             "tag": "NP, ADD, NP.ADD, NUMPY",
-                                            "file": "m_library/m_numpy/add"
+                                            "file": "m_library/m_numpy/add",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_divide",
@@ -1680,7 +1713,8 @@
                                             "path": "visualpython - library - numpy - math operation - np.divide",
                                             "desc": "",
                                             "tag": "NP, DIVIDE, NP.DIVIDE, NUMPY",
-                                            "file": "m_library/m_numpy/divide"
+                                            "file": "m_library/m_numpy/divide",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_floor_divide",
@@ -1690,7 +1724,8 @@
                                             "path": "visualpython - library - numpy - math operation - np.floor_divide",
                                             "desc": "",
                                             "tag": "NP, DIVIDE, NP.DIVIDE, NUMPY",
-                                            "file": "m_library/m_numpy/floor_divide"
+                                            "file": "m_library/m_numpy/floor_divide",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_fmax",
@@ -1700,7 +1735,8 @@
                                             "path": "visualpython - library - numpy - math operation - np.fmax",
                                             "desc": "",
                                             "tag": "NP, FMAX, NP.FMAX, NUMPY",
-                                            "file": "m_library/m_numpy/fmax"
+                                            "file": "m_library/m_numpy/fmax",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_fmin",
@@ -1710,7 +1746,8 @@
                                             "path": "visualpython - library - numpy - math operation - np.fmin",
                                             "desc": "",
                                             "tag": "NP, FMIN, NP.FMIN, NUMPY",
-                                            "file": "m_library/m_numpy/fmin"
+                                            "file": "m_library/m_numpy/fmin",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_maximum",
@@ -1720,7 +1757,8 @@
                                             "path": "visualpython - library - numpy - math operation - np.maximum",
                                             "desc": "",
                                             "tag": "NP, MAXIMUM, NP.MAXIMUM, NUMPY",
-                                            "file": "m_library/m_numpy/maximum"
+                                            "file": "m_library/m_numpy/maximum",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_minimum",
@@ -1730,7 +1768,8 @@
                                             "path": "visualpython - library - numpy - math operation - np.minimum",
                                             "desc": "",
                                             "tag": "NP, MINIMUM, NP.MINIMUM, NUMPY",
-                                            "file": "m_library/m_numpy/minimum"
+                                            "file": "m_library/m_numpy/minimum",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_mod",
@@ -1740,7 +1779,8 @@
                                             "path": "visualpython - library - numpy - math operation - np.mod",
                                             "desc": "",
                                             "tag": " NP, MOD, NP.MOD, NUMPY",
-                                            "file": "m_library/m_numpy/mod"
+                                            "file": "m_library/m_numpy/mod",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_sum",
@@ -1750,7 +1790,8 @@
                                             "path": "visualpython - library - numpy - math operation - np.sum",
                                             "desc": "",
                                             "tag": "NP, SUM, NP.SUM, NUMPY",
-                                            "file": "m_library/m_numpy/sum"
+                                            "file": "m_library/m_numpy/sum",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_multiply",
@@ -1760,7 +1801,8 @@
                                             "path": "visualpython - library - numpy - math operation - np.multiply",
                                             "desc": "",
                                             "tag": "NP, MULTIPLY, NP.MULTIPLY, NUMPY",
-                                            "file": "m_library/m_numpy/multiply"
+                                            "file": "m_library/m_numpy/multiply",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_prod",
@@ -1770,7 +1812,8 @@
                                             "path": "visualpython - library - numpy - math operation - np.prod",
                                             "desc": "",
                                             "tag": "NP, PROD, NP.PROD, NUMPY",
-                                            "file": "m_library/m_numpy/prod"
+                                            "file": "m_library/m_numpy/prod",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_power",
@@ -1780,7 +1823,8 @@
                                             "path": "visualpython - library - numpy - math operation - np.power",
                                             "desc": "",
                                             "tag": "NP, POWER, NP.POWER, NUMPY",
-                                            "file": "m_library/m_numpy/power"
+                                            "file": "m_library/m_numpy/power",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_subtract",
@@ -1790,7 +1834,8 @@
                                             "path": "visualpython - library - numpy - math operation - np.subtract",
                                             "desc": "",
                                             "tag": "NP, SUBTRACT, NP.SUBTRACT, NUMPY",
-                                            "file": "m_library/m_numpy/subtract"
+                                            "file": "m_library/m_numpy/subtract",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_abs",
@@ -1800,7 +1845,8 @@
                                             "path": "visualpython - library - numpy - math operation - np.abs",
                                             "desc": "",
                                             "tag": "NP, ABS, NP.ABS, NUMPY",
-                                            "file": "m_library/m_numpy/abs"
+                                            "file": "m_library/m_numpy/abs",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_ceil",
@@ -1810,7 +1856,8 @@
                                             "path": "visualpython - library - numpy - math operation - np.ceil",
                                             "desc": "",
                                             "tag": "NP, CEIL, NP.CEIL, NUMPY",
-                                            "file": "m_library/m_numpy/ceil"
+                                            "file": "m_library/m_numpy/ceil",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_exp",
@@ -1820,7 +1867,8 @@
                                             "path": "visualpython - library - numpy - math operation - np.exp",
                                             "desc": "",
                                             "tag": "NP, EXP, NP.EXP, NUMPY",
-                                            "file": "m_library/m_numpy/exp"
+                                            "file": "m_library/m_numpy/exp",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_fabs",
@@ -1830,7 +1878,8 @@
                                             "path": "visualpython - library - numpy - math operation - np.fabs",
                                             "desc": "",
                                             "tag": "NP, FABS, NP.FABS, NUMPY",
-                                            "file": "m_library/m_numpy/fabs"
+                                            "file": "m_library/m_numpy/fabs",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_floor",
@@ -1840,7 +1889,8 @@
                                             "path": "visualpython - library - numpy - math operation - np.floor",
                                             "desc": "",
                                             "tag": "NP, FLOOR, NP.FLOOR, NUMPY",
-                                            "file": "m_library/m_numpy/floor"
+                                            "file": "m_library/m_numpy/floor",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_log",
@@ -1850,7 +1900,8 @@
                                             "path": "visualpython - library - numpy - math operation - np.log",
                                             "desc": "",
                                             "tag": "NP, LOG, NP.LOG, NUMPY",
-                                            "file": "m_library/m_numpy/log"
+                                            "file": "m_library/m_numpy/log",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_log1p",
@@ -1860,7 +1911,8 @@
                                             "path": "visualpython - library - numpy - math operation - np.log1p",
                                             "desc": "",
                                             "tag": "NP, LOG1P, NP.LOG1P, NUMPY",
-                                            "file": "m_library/m_numpy/pageList/universalFunctionList/unary/arithmetic/log1p/index"
+                                            "file": "m_library/m_numpy/log1p",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_log2",
@@ -1870,7 +1922,8 @@
                                             "path": "visualpython - library - numpy - math operation - np.log2",
                                             "desc": "",
                                             "tag": "NP, LOG2, NP.LOG2, NUMPY",
-                                            "file": "m_library/m_numpy/pageList/universalFunctionList/unary/arithmetic/log2/index"
+                                            "file": "m_library/m_numpy/log2",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_log10",
@@ -1880,7 +1933,8 @@
                                             "path": "visualpython - library - numpy - math operation - np.log10",
                                             "desc": "",
                                             "tag": "NP, LOG10, NP.LOG10, NUMPY",
-                                            "file": "m_library/m_numpy/pageList/universalFunctionList/unary/arithmetic/log10/index"
+                                            "file": "m_library/m_numpy/log10",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_modf",
@@ -1890,7 +1944,8 @@
                                             "path": "visualpython - library - numpy - math operation - np.modf",
                                             "desc": "",
                                             "tag": "NP, MODF, NP.MODF, NUMPY",
-                                            "file": "m_library/m_numpy/modf"
+                                            "file": "m_library/m_numpy/modf",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_rint",
@@ -1900,7 +1955,8 @@
                                             "path": "visualpython - library - numpy - math operation - np.rint",
                                             "desc": "",
                                             "tag": "NP, RINT, NP.RINT, NUMPY",
-                                            "file": "m_library/m_numpy/rint"
+                                            "file": "m_library/m_numpy/rint",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_sqrt",
@@ -1910,7 +1966,8 @@
                                             "path": "visualpython - library - numpy - math operation - np.sqrt",
                                             "desc": "",
                                             "tag": "NP, SQRT, NP.SQRT, NUMPY",
-                                            "file": "m_library/m_numpy/sqrt"
+                                            "file": "m_library/m_numpy/sqrt",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_square",
@@ -1920,7 +1977,8 @@
                                             "path": "visualpython - library - numpy - math operation - np.square",
                                             "desc": "",
                                             "tag": "NP, SQUARE, NP.SQUARE, NUMPY",
-                                            "file": "m_library/m_numpy/square"
+                                            "file": "m_library/m_numpy/square",
+                                            "useAutoV2": true
                                         }
                                     ]
                             },
@@ -1940,7 +1998,8 @@
                                             "path": "visualpython - library - numpy - boolean operation - np.all",
                                             "desc": "",
                                             "tag": "NP, ALL, NP.ALL, NUMPY",
-                                            "file": "m_library/m_numpy/all"
+                                            "file": "m_library/m_numpy/all",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_any",
@@ -1950,7 +2009,8 @@
                                             "path": "visualpython - library - numpy - boolean operation - np.any",
                                             "desc": "",
                                             "tag": "NP, ANY, NP.ANY, NUMPY",
-                                            "file": "m_library/m_numpy/any"
+                                            "file": "m_library/m_numpy/any",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_isanan",
@@ -1960,7 +2020,8 @@
                                             "path": "visualpython - library - numpy - boolean operation - np.isanan",
                                             "desc": "",
                                             "tag": "NP, ISANAN, NP.ISANAN, NUMPY",
-                                            "file": "m_library/m_numpy/isanan"
+                                            "file": "m_library/m_numpy/isanan",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_isfinite",
@@ -1970,7 +2031,8 @@
                                             "path": "visualpython - library - numpy - boolean operation - np.isfinite",
                                             "desc": "",
                                             "tag": "NP, ISFINITE, NP.ISFINITE, NUMPY",
-                                            "file": "m_library/m_numpy/isfinite"
+                                            "file": "m_library/m_numpy/isfinite",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_isinf",
@@ -1980,7 +2042,8 @@
                                             "path": "visualpython - library - numpy - boolean operation - np.isinf",
                                             "desc": "",
                                             "tag": "NP, ISINF, NP.ISINF, NUMPY",
-                                            "file": "m_library/m_numpy/isinf"
+                                            "file": "m_library/m_numpy/isinf",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_isnan",
@@ -1990,7 +2053,8 @@
                                             "path": "visualpython - library - numpy - boolean operation - np.isnan",
                                             "desc": "",
                                             "tag": "NP, ISNAN, NP.ISNAN, NUMPY",
-                                            "file": "m_library/m_numpy/isnan"
+                                            "file": "m_library/m_numpy/isnan",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_isneginf",
@@ -2000,7 +2064,8 @@
                                             "path": "visualpython - library - numpy - boolean operation - np.isneginf",
                                             "desc": "",
                                             "tag": "NP, ISNEGINF, NP.ISNEGINF, NUMPY",
-                                            "file": "m_library/m_numpy/isneginf"
+                                            "file": "m_library/m_numpy/isneginf",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_isposinf",
@@ -2010,7 +2075,8 @@
                                             "path": "visualpython - library - numpy - boolean operation - np.isposinf",
                                             "desc": "",
                                             "tag": "NP, ISPOSINF, NP.ISPOSINF, NUMPY",
-                                            "file": "m_library/m_numpy/isposinf"
+                                            "file": "m_library/m_numpy/isposinf",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_logical_not",
@@ -2020,7 +2086,8 @@
                                             "path": "visualpython - library - numpy - boolean operation - np.logical_not",
                                             "desc": "",
                                             "tag": "NP, LOGICAL_NOT, NP.LOGICAL_NOT, NUMPY",
-                                            "file": "m_library/m_numpy/logical_not"
+                                            "file": "m_library/m_numpy/logical_not",
+                                            "useAutoV2": true
                                         }
                                     ]
                             },
@@ -2040,7 +2107,8 @@
                                             "path": "visualpython - library - numpy - trigonometric functions - np.sin",
                                             "desc": "",
                                             "tag": "NP, SIN, NP.SIN, NUMPY",
-                                            "file": "m_library/m_numpy/sin"
+                                            "file": "m_library/m_numpy/sin",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_cos",
@@ -2050,7 +2118,8 @@
                                             "path": "visualpython - library - numpy - trigonometric functions - np.cos",
                                             "desc": "",
                                             "tag": "NP, COS, NP.COS, NUMPY",
-                                            "file": "m_library/m_numpy/cos"
+                                            "file": "m_library/m_numpy/cos",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_tan",
@@ -2060,7 +2129,8 @@
                                             "path": "visualpython - library - numpy - trigonometric functions - np.tan",
                                             "desc": "",
                                             "tag": "NP, TAN, NP.TAN, NUMPY",
-                                            "file": "m_library/m_numpy/tan"
+                                            "file": "m_library/m_numpy/tan",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_arcsin",
@@ -2070,7 +2140,8 @@
                                             "path": "visualpython - library - numpy - trigonometric functions - np.arcsin",
                                             "desc": "",
                                             "tag": "NP, SIN, NP.SIN, NUMPY",
-                                            "file": "m_library/m_numpy/arcsin"
+                                            "file": "m_library/m_numpy/arcsin",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_arccos",
@@ -2080,7 +2151,8 @@
                                             "path": "visualpython - library - numpy - trigonometric functions - np.arccos",
                                             "desc": "",
                                             "tag": "NP, COS, NP.COS, NUMPY",
-                                            "file": "m_library/m_numpy/arccos"
+                                            "file": "m_library/m_numpy/arccos",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_arctan",
@@ -2090,7 +2162,8 @@
                                             "path": "visualpython - library - numpy - trigonometric functions - np.arctan",
                                             "desc": "",
                                             "tag": "NP, TAN, NP.TAN, NUMPY",
-                                            "file": "m_library/m_numpy/arctan"
+                                            "file": "m_library/m_numpy/arctan",
+                                            "useAutoV2": true
                                         }
                                     ]
                             },
@@ -2110,7 +2183,8 @@
                                             "path": "visualpython - library - numpy - comparison operation - np.equal",
                                             "desc": "",
                                             "tag": "NP, EQUAL, NP.EQUAL, NUMPY",
-                                            "file": "m_library/m_numpy/equal"
+                                            "file": "m_library/m_numpy/equal",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_greater",
@@ -2120,7 +2194,8 @@
                                             "path": "visualpython - library - numpy - comparison operation - np.greater",
                                             "desc": "",
                                             "tag": "NP, GREATER, NP.GREATER, NUMPY",
-                                            "file": "m_library/m_numpy/greater"
+                                            "file": "m_library/m_numpy/greater",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_greater_equal",
@@ -2130,7 +2205,8 @@
                                             "path": "visualpython - library - numpy - comparison operation - np.greater_equal",
                                             "desc": "",
                                             "tag": "NP, GREATER, EQUAL, NP.EQUAL, NP.GREATER, NUMPY",
-                                            "file": "m_library/m_numpy/greater_equal"
+                                            "file": "m_library/m_numpy/greater_equal",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_less",
@@ -2140,7 +2216,8 @@
                                             "path": "visualpython - library - numpy - comparison operation - np.less",
                                             "desc": "",
                                             "tag": "NP, LESS, NP.LESS, NUPY",
-                                            "file": "m_library/m_numpy/less"
+                                            "file": "m_library/m_numpy/less",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_less_equal",
@@ -2150,7 +2227,8 @@
                                             "path": "visualpython - library - numpy - comparison operation - np.less_equal",
                                             "desc": "",
                                             "tag": "NP, LESS, EQUAL, NP.EQUAL, NP.LESS, NUMPY",
-                                            "file": "m_library/m_numpy/less_equal"
+                                            "file": "m_library/m_numpy/less_equal",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_not_equal",
@@ -2160,7 +2238,8 @@
                                             "path": "visualpython - library - numpy - comparison operation - np.not_equal",
                                             "desc": "",
                                             "tag": "NP, LESS, EQUAL, NP.EQUAL, NP.LESS, NUMPY",
-                                            "file": "m_library/m_numpy/not_equal"
+                                            "file": "m_library/m_numpy/not_equal",
+                                            "useAutoV2": true
                                         }
                                     ]
                             },
@@ -2180,7 +2259,8 @@
                                             "path": "visualpython - library - numpy - random number generation - np.random.randint ",
                                             "desc": "",
                                             "tag": "NUMPY, UNIVERSAL, RANDOM, NP.RANDOM.RANDINT, NP, RANDOM, RANDINT",
-                                            "file": "m_library/m_numpy/randint"
+                                            "file": "m_library/m_numpy/randint",
+                                            "useAutoV2": true
                                         },
                                         {
                                             "id": "np_randomRand",
@@ -2190,7 +2270,8 @@
                                             "path": "visualpython - library - numpy - random number generation - np.random.rand ",
                                             "desc": "",
                                             "tag": "NUMPY, UNIVERSAL, RANDOM, NP.RANDOM.RAND, NP, RANDOM, RAND",
-                                            "file": "m_library/m_numpy/rand"
+                                            "file": "m_library/m_numpy/rand",
+                                            "useAutoV2": true
                                         }
                                     ]
                             }
