@@ -488,7 +488,8 @@
                                         "path": "visualpython - library - python - built in functions - abs",
                                         "desc": "",
                                         "tag": "PYTHON, ABS",
-                                        "file": "m_library/m_python/abs"
+                                        "file": "m_library/m_python/abs",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_all",
@@ -498,7 +499,8 @@
                                         "path": "visualpython - library - python - built in functions - all",
                                         "desc": "",
                                         "tag": "PYTHON, ALL",
-                                        "file": "m_library/m_python/all"
+                                        "file": "m_library/m_python/all",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_any",
@@ -508,7 +510,8 @@
                                         "path": "visualpython - library - python - built in functions - any",
                                         "desc": "",
                                         "tag": "PYTHON, ANY",
-                                        "file": "m_library/m_python/any"
+                                        "file": "m_library/m_python/any",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_ascii",
@@ -518,7 +521,8 @@
                                         "path": "visualpython - library - python - built in functions - ascii",
                                         "desc": "",
                                         "tag": "PYTHON, ASCII",
-                                        "file": "m_library/m_python/ascii"
+                                        "file": "m_library/m_python/ascii",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_bin",
@@ -528,7 +532,8 @@
                                         "path": "visualpython - library - python - built in functions - bin",
                                         "desc": "",
                                         "tag": "PYTHON, BIN",
-                                        "file": "m_library/m_python/bin"
+                                        "file": "m_library/m_python/bin",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_bool",
@@ -538,7 +543,8 @@
                                         "path": "visualpython - library - python - built in functions - bool",
                                         "desc": "",
                                         "tag": "PYTHON, BOOL",
-                                        "file": "m_library/m_python/bool"
+                                        "file": "m_library/m_python/bool",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_breakpoint",
@@ -548,7 +554,8 @@
                                         "path": "visualpython - library - python - built in functions - breakpoint",
                                         "desc": "",
                                         "tag": "PYTHON, BREAKPOINT",
-                                        "file": "m_library/m_python/breakpoint"
+                                        "file": "m_library/m_python/breakpoint",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_bytearray",
@@ -558,7 +565,8 @@
                                         "path": "visualpython - library - python - built in functions - bytearray",
                                         "desc": "",
                                         "tag": "PYTHON, BYTEARRAY",
-                                        "file": "m_library/m_python/bytearray"
+                                        "file": "m_library/m_python/bytearray",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_bytes",
@@ -568,7 +576,8 @@
                                         "path": "visualpython - library - python - built in functions - bytes",
                                         "desc": "",
                                         "tag": "PYTHON, BYTES",
-                                        "file": "m_library/m_python/bytes"
+                                        "file": "m_library/m_python/bytes",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_callable",
@@ -578,7 +587,8 @@
                                         "path": "visualpython - library - python - built in functions - callable",
                                         "desc": "",
                                         "tag": "PYTHON, CALLABLE",
-                                        "file": "m_library/m_python/callable"
+                                        "file": "m_library/m_python/callable",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_chr",
@@ -588,7 +598,8 @@
                                         "path": "visualpython - library - python - built in functions - chr",
                                         "desc": "",
                                         "tag": "PYTHON, CHR",
-                                        "file": "m_library/m_python/chr"
+                                        "file": "m_library/m_python/chr",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_classmethod",
@@ -598,7 +609,8 @@
                                         "path": "visualpython - library - python - built in functions - classmethod",
                                         "desc": "",
                                         "tag": "PYTHON, CLASSMETHOD",
-                                        "file": "m_library/m_python/classmethod"
+                                        "file": "m_library/m_python/classmethod",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_complex",
@@ -608,7 +620,8 @@
                                         "path": "visualpython - library - python - built in functions - complex",
                                         "desc": "",
                                         "tag": "PYTHON, COMPLEX",
-                                        "file": "m_library/m_python/complex"
+                                        "file": "m_library/m_python/complex",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_delattr",
@@ -618,7 +631,8 @@
                                         "path": "visualpython - library - python - built in functions - delattr",
                                         "desc": "",
                                         "tag": "PYTHON, DELATTR",
-                                        "file": "m_library/m_python/delattr"
+                                        "file": "m_library/m_python/delattr",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_dict",
@@ -628,7 +642,8 @@
                                         "path": "visualpython - library - python - built in functions - dict",
                                         "desc": "",
                                         "tag": "PYTHON, DICT",
-                                        "file": "m_library/m_python/dict"
+                                        "file": "m_library/m_python/dict",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_dir",
@@ -638,7 +653,8 @@
                                         "path": "visualpython - library - python - built in functions - dir",
                                         "desc": "",
                                         "tag": "PYTHON, DIR",
-                                        "file": "m_library/m_python/dir"
+                                        "file": "m_library/m_python/dir",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_divmod",
@@ -648,7 +664,8 @@
                                         "path": "visualpython - library - python - built in functions - divmod",
                                         "desc": "",
                                         "tag": "PYTHON, DIVMOD",
-                                        "file": "m_library/m_python/divmod"
+                                        "file": "m_library/m_python/divmod",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_enumerate",
@@ -658,7 +675,8 @@
                                         "path": "visualpython - library - python - built in functions - enumerate",
                                         "desc": "",
                                         "tag": "PYTHON, ENUMERATE",
-                                        "file": "m_library/m_python/enumerate"
+                                        "file": "m_library/m_python/enumerate",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_eval",
@@ -668,7 +686,8 @@
                                         "path": "visualpython - library - python - built in functions - eval",
                                         "desc": "",
                                         "tag": "PYTHON, EVAL",
-                                        "file": "m_library/m_python/eval"
+                                        "file": "m_library/m_python/eval",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_exec",
@@ -678,7 +697,8 @@
                                         "path": "visualpython - library - python - built in functions - exec",
                                         "desc": "",
                                         "tag": "PYTHON, EXEC",
-                                        "file": "m_library/m_python/exec"
+                                        "file": "m_library/m_python/exec",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_filter",
@@ -688,7 +708,8 @@
                                         "path": "visualpython - library - python - built in functions - filter",
                                         "desc": "",
                                         "tag": "PYTHON, FILTER",
-                                        "file": "m_library/m_python/filter"
+                                        "file": "m_library/m_python/filter",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_float",
@@ -698,7 +719,8 @@
                                         "path": "visualpython - library - python - built in functions - float",
                                         "desc": "",
                                         "tag": "PYTHON, FLOAT",
-                                        "file": "m_library/m_python/float"
+                                        "file": "m_library/m_python/float",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_format",
@@ -708,7 +730,8 @@
                                         "path": "visualpython - library - python - built in functions - format",
                                         "desc": "",
                                         "tag": "PYTHON, FORMAT",
-                                        "file": "m_library/m_python/format"
+                                        "file": "m_library/m_python/format",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_frozenset",
@@ -718,7 +741,8 @@
                                         "path": "visualpython - library - python - built in functions - frozenset",
                                         "desc": "",
                                         "tag": "PYTHON, FROZENSET",
-                                        "file": "m_library/m_python/frozenset"
+                                        "file": "m_library/m_python/frozenset",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_getattr",
@@ -728,7 +752,8 @@
                                         "path": "visualpython - library - python - built in functions - getattr",
                                         "desc": "",
                                         "tag": "PYTHON, GETATTR",
-                                        "file": "m_library/m_python/getattr"
+                                        "file": "m_library/m_python/getattr",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_globals",
@@ -738,7 +763,8 @@
                                         "path": "visualpython - library - python - built in functions - globals",
                                         "desc": "",
                                         "tag": "PYTHON, GLOBALS",
-                                        "file": "m_library/m_python/globals"
+                                        "file": "m_library/m_python/globals",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_hasattr",
@@ -748,7 +774,8 @@
                                         "path": "visualpython - library - python - built in functions - hasattr",
                                         "desc": "",
                                         "tag": "PYTHON, HASATTR",
-                                        "file": "m_library/m_python/hasattr"
+                                        "file": "m_library/m_python/hasattr",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_hash",
@@ -758,7 +785,8 @@
                                         "path": "visualpython - library - python - built in functions - hash",
                                         "desc": "",
                                         "tag": "PYTHON, HASH",
-                                        "file": "m_library/m_python/hash"
+                                        "file": "m_library/m_python/hash",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_help",
@@ -768,7 +796,8 @@
                                         "path": "visualpython - library - python - built in functions - help",
                                         "desc": "",
                                         "tag": "PYTHON, HELP",
-                                        "file": "m_library/m_python/help"
+                                        "file": "m_library/m_python/help",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_hex",
@@ -778,7 +807,8 @@
                                         "path": "visualpython - library - python - built in functions - hex",
                                         "desc": "",
                                         "tag": "PYTHON, HEX",
-                                        "file": "m_library/m_python/hex"
+                                        "file": "m_library/m_python/hex",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_id",
@@ -788,7 +818,8 @@
                                         "path": "visualpython - library - python - built in functions - id",
                                         "desc": "",
                                         "tag": "PYTHON, ID",
-                                        "file": "m_library/m_python/id"
+                                        "file": "m_library/m_python/id",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_input",
@@ -798,7 +829,8 @@
                                         "path": "visualpython - library - python - built in functions - input",
                                         "desc": "",
                                         "tag": "PYTHON, INPUT",
-                                        "file": "m_library/m_python/input"
+                                        "file": "m_library/m_python/input",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_int",
@@ -808,7 +840,8 @@
                                         "path": "visualpython - library - python - built in functions - int",
                                         "desc": "",
                                         "tag": "PYTHON, INT",
-                                        "file": "m_library/m_python/int"
+                                        "file": "m_library/m_python/int",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_isinstance",
@@ -818,7 +851,8 @@
                                         "path": "visualpython - library - python - built in functions - isinstance",
                                         "desc": "",
                                         "tag": "PYTHON, ISINSTANCE",
-                                        "file": "m_library/m_python/isinstance"
+                                        "file": "m_library/m_python/isinstance",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_issubclass",
@@ -828,7 +862,8 @@
                                         "path": "visualpython - library - python - built in functions - issubclass",
                                         "desc": "",
                                         "tag": "PYTHON, ISSUBCLASS",
-                                        "file": "m_library/m_python/issubclass"
+                                        "file": "m_library/m_python/issubclass",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_iter",
@@ -838,7 +873,8 @@
                                         "path": "visualpython - library - python - built in functions - iter",
                                         "desc": "",
                                         "tag": "PYTHON, ITER",
-                                        "file": "m_library/m_python/iter"
+                                        "file": "m_library/m_python/iter",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_len",
@@ -848,7 +884,8 @@
                                         "path": "visualpython - library - python - built in functions - len",
                                         "desc": "",
                                         "tag": "PYTHON, LEN",
-                                        "file": "m_library/m_python/len"
+                                        "file": "m_library/m_python/len",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_list",
@@ -858,7 +895,8 @@
                                         "path": "visualpython - library - python - built in functions - list",
                                         "desc": "",
                                         "tag": "PYTHON, LIST",
-                                        "file": "m_library/m_python/list"
+                                        "file": "m_library/m_python/list",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_locals",
@@ -868,7 +906,8 @@
                                         "path": "visualpython - library - python - built in functions - locals",
                                         "desc": "",
                                         "tag": "PYTHON, LOCALS",
-                                        "file": "m_library/m_python/locals"
+                                        "file": "m_library/m_python/locals",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_map",
@@ -878,7 +917,8 @@
                                         "path": "visualpython - library - python - built in functions - map",
                                         "desc": "",
                                         "tag": "PYTHON, MAP",
-                                        "file": "m_library/m_python/map"
+                                        "file": "m_library/m_python/map",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_max",
@@ -888,7 +928,8 @@
                                         "path": "visualpython - library - python - built in functions - max",
                                         "desc": "",
                                         "tag": "PYTHON, MAX",
-                                        "file": "m_library/m_python/max"
+                                        "file": "m_library/m_python/max",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_memoryview",
@@ -898,7 +939,8 @@
                                         "path": "visualpython - library - python - built in functions - memoryview",
                                         "desc": "",
                                         "tag": "PYTHON, MEMORYVIEW",
-                                        "file": "m_library/m_python/memoryview"
+                                        "file": "m_library/m_python/memoryview",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_min",
@@ -908,7 +950,8 @@
                                         "path": "visualpython - library - python - built in functions - min",
                                         "desc": "",
                                         "tag": "PYTHON, MIN",
-                                        "file": "m_library/m_python/min"
+                                        "file": "m_library/m_python/min",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_next",
@@ -918,7 +961,8 @@
                                         "path": "visualpython - library - python - built in functions - next",
                                         "desc": "",
                                         "tag": "PYTHON, NEXT",
-                                        "file": "m_library/m_python/next"
+                                        "file": "m_library/m_python/next",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_object",
@@ -928,7 +972,8 @@
                                         "path": "visualpython - library - python - built in functions - object",
                                         "desc": "",
                                         "tag": "PYTHON, OBJECT",
-                                        "file": "m_library/m_python/object"
+                                        "file": "m_library/m_python/object",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_oct",
@@ -938,7 +983,8 @@
                                         "path": "visualpython - library - python - built in functions - oct",
                                         "desc": "",
                                         "tag": "PYTHON, OCT",
-                                        "file": "m_library/m_python/oct"
+                                        "file": "m_library/m_python/oct",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_open",
@@ -948,7 +994,8 @@
                                         "path": "visualpython - library - python - built in functions - open",
                                         "desc": "",
                                         "tag": "PYTHON, OPEN",
-                                        "file": "m_library/m_python/open"
+                                        "file": "m_library/m_python/open",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_ord",
@@ -958,7 +1005,8 @@
                                         "path": "visualpython - library - python - built in functions - ord",
                                         "desc": "",
                                         "tag": "PYTHON, ORD",
-                                        "file": "m_library/m_python/ord"
+                                        "file": "m_library/m_python/ord",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_pow",
@@ -968,7 +1016,8 @@
                                         "path": "visualpython - library - python - built in functions - pow",
                                         "desc": "",
                                         "tag": "PYTHON, POW",
-                                        "file": "m_library/m_python/pow"
+                                        "file": "m_library/m_python/pow",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_print",
@@ -978,7 +1027,8 @@
                                         "path": "visualpython - library - python - built in functions - print",
                                         "desc": "",
                                         "tag": "PYTHON, PRINT",
-                                        "file": "m_library/m_python/print"
+                                        "file": "m_library/m_python/print",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_property",
@@ -988,7 +1038,8 @@
                                         "path": "visualpython - library - python - built in functions - property",
                                         "desc": "",
                                         "tag": "PYTHON, PROPERTY",
-                                        "file": "m_library/m_python/property"
+                                        "file": "m_library/m_python/property",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_range",
@@ -998,7 +1049,8 @@
                                         "path": "visualpython - library - python - built in functions - range",
                                         "desc": "",
                                         "tag": "PYTHON, RANGE",
-                                        "file": "m_library/m_python/range"
+                                        "file": "m_library/m_python/range",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_repr",
@@ -1008,7 +1060,8 @@
                                         "path": "visualpython - library - python - built in functions - repr",
                                         "desc": "",
                                         "tag": "PYTHON, REPR",
-                                        "file": "m_library/m_python/repr"
+                                        "file": "m_library/m_python/repr",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_reversed",
@@ -1018,7 +1071,8 @@
                                         "path": "visualpython - library - python - built in functions - reversed",
                                         "desc": "",
                                         "tag": "PYTHON, REVERSED",
-                                        "file": "m_library/m_python/reversed"
+                                        "file": "m_library/m_python/reversed",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_round",
@@ -1028,7 +1082,8 @@
                                         "path": "visualpython - library - python - built in functions - round",
                                         "desc": "",
                                         "tag": "PYTHON, ROUND",
-                                        "file": "m_library/m_python/round"
+                                        "file": "m_library/m_python/round",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_set",
@@ -1038,7 +1093,8 @@
                                         "path": "visualpython - library - python - built in functions - set",
                                         "desc": "",
                                         "tag": "PYTHON, SET",
-                                        "file": "m_library/m_python/set"
+                                        "file": "m_library/m_python/set",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_setattr",
@@ -1048,7 +1104,8 @@
                                         "path": "visualpython - library - python - built in functions - setattr",
                                         "desc": "",
                                         "tag": "PYTHON, SETATTR",
-                                        "file": "m_library/m_python/setattr"
+                                        "file": "m_library/m_python/setattr",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_slice",
@@ -1058,7 +1115,8 @@
                                         "path": "visualpython - library - python - built in functions - slice",
                                         "desc": "",
                                         "tag": "PYTHON, SLICE",
-                                        "file": "m_library/m_python/slice"
+                                        "file": "m_library/m_python/slice",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_sorted",
@@ -1068,7 +1126,8 @@
                                         "path": "visualpython - library - python - built in functions - sorted",
                                         "desc": "",
                                         "tag": "PYTHON, SORTED",
-                                        "file": "m_library/m_python/sorted"
+                                        "file": "m_library/m_python/sorted",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_staticmethod",
@@ -1078,7 +1137,8 @@
                                         "path": "visualpython - library - python - built in functions - staticmethod",
                                         "desc": "",
                                         "tag": "PYTHON, STATICMETHOD",
-                                        "file": "m_library/m_python/staticmethod"
+                                        "file": "m_library/m_python/staticmethod",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_str",
@@ -1088,7 +1148,8 @@
                                         "path": "visualpython - library - python - built in functions - str",
                                         "desc": "",
                                         "tag": "PYTHON, STR",
-                                        "file": "m_library/m_python/str"
+                                        "file": "m_library/m_python/str",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_sum",
@@ -1098,7 +1159,8 @@
                                         "path": "visualpython - library - python - built in functions - sum",
                                         "desc": "",
                                         "tag": "PYTHON, SUM",
-                                        "file": "m_library/m_python/sum"
+                                        "file": "m_library/m_python/sum",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_super",
@@ -1108,7 +1170,8 @@
                                         "path": "visualpython - library - python - built in functions - super",
                                         "desc": "",
                                         "tag": "PYTHON, SUPER",
-                                        "file": "m_library/m_python/super"
+                                        "file": "m_library/m_python/super",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_tuple",
@@ -1118,7 +1181,8 @@
                                         "path": "visualpython - library - python - built in functions - tuple",
                                         "desc": "",
                                         "tag": "PYTHON, TUPLE",
-                                        "file": "m_library/m_python/tuple"
+                                        "file": "m_library/m_python/tuple",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_type",
@@ -1128,7 +1192,8 @@
                                         "path": "visualpython - library - python - built in functions - type",
                                         "desc": "",
                                         "tag": "PYTHON, TYPE",
-                                        "file": "m_library/m_python/type"
+                                        "file": "m_library/m_python/type",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_vars",
@@ -1138,7 +1203,8 @@
                                         "path": "visualpython - library - python - built in functions - vars",
                                         "desc": "",
                                         "tag": "PYTHON, VARS",
-                                        "file": "m_library/m_python/vars"
+                                        "file": "m_library/m_python/vars",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_zip",
@@ -1148,7 +1214,8 @@
                                         "path": "visualpython - library - python - built in functions - zip",
                                         "desc": "",
                                         "tag": "PYTHON, ZIP",
-                                        "file": "m_library/m_python/zip"
+                                        "file": "m_library/m_python/zip",
+                                        "useAutoV2": true
                                     }
                                 ]
                             },

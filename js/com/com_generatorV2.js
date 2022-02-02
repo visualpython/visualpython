@@ -29,13 +29,22 @@ define([
         'param': 'Param Value',
         'dtype': 'Dtype',
         'bool_checkbox': 'Boolean',
+        'bool_select': 'Select Boolean',
         'option_select': 'Select option',
+        'option_suggest': 'Input option',
         'var_select': 'Select Variable',
         'var_multi': 'Select N-Variables',
         'col_select': 'Select Column',
         'textarea': 'Input textarea',
+        'input_number': 'Input number',
         'input': 'Input text'
     }
+
+    const _VP_BOOL_OPTIONS = [
+        { name: 'Default', value: '' },
+        { name: 'True', value: 'True' },
+        { name: 'False', value: 'False' }
+    ]
 
     const _VP_NP_DTYPES = [
         {
@@ -125,6 +134,8 @@ define([
                 tblOption.append(newTag);
             }
         });
+
+        // TODO: userOption
 
         bindAutoComponentEvent(pageThis);
     }
@@ -243,6 +254,31 @@ define([
                     .append($('<option value="False">False</option>'));
                 content = select;
                 break;
+            case 'bool_select':
+                var optSlct = $('<select></select>').attr({
+                    'class':'vp-select option-select vp-state',
+                    'id':obj.name
+                });
+                _VP_BOOL_OPTIONS.forEach((opt, idx) => {
+                    var option = $(`<option>${opt.label}</option>`).attr({
+                        // 'id':opt,
+                        'index':obj.index,
+                        'name':obj.name,
+                        'value':opt.value
+                    });
+                    // cell metadata test
+                    if (value != undefined) {
+                        // set as saved value
+                        if (value == opt.value) {
+                            $(option).attr({
+                                'selected':'selected'
+                            });
+                        }
+                    }
+                    optSlct.append(option);
+                });
+                content = optSlct;
+                break;
             case 'option_select':
                 var optSlct = $('<select></select>').attr({
                     'class':'vp-select option-select vp-state',
@@ -272,6 +308,30 @@ define([
                     optSlct.append(option);
                 });
                 content = optSlct;
+                break;
+            case 'option_suggest':
+                // suggest input tag
+                var tag = $('<input/>').attr({
+                    'type': 'text',
+                    'id': obj.name,
+                    'class': 'vp-input vp-state'
+                });
+                // 1. Target Variable
+                var suggestInput = new SuggestInput();
+                suggestInput.setComponentID(obj.name);
+                suggestInput.addClass('vp-input vp-state');
+                suggestInput.setSuggestList(function() { return obj.options; });
+                suggestInput.setNormalFilter(false);
+                suggestInput.setValue($(pageThis.wrapSelector('#' + obj.name)).val());
+                suggestInput.setSelectEvent(function(selectedValue) {
+                    // trigger change
+                    $(pageThis.wrapSelector('#' + obj.name)).val(selectedValue);
+                    $(pageThis.wrapSelector('#' + obj.name)).trigger('change');
+                });
+                $(pageThis.wrapSelector('#' + obj.name)).replaceWith(function() {
+                    return suggestInput.toTagString();
+                });
+                content = tag;
                 break;
             case 'var_select':
                 // suggest input tag
@@ -311,6 +371,24 @@ define([
                 }
                 content = textarea;
                 break;
+            case 'input_number':
+                var input = $('<input/>').attr({
+                    'type':'number',
+                    'class':'vp-input vp-state',
+                    'id':obj.name,
+                    'placeholder':(obj.placeholder==undefined?'Input Number':obj.placeholder),
+                    'value':(obj.default==undefined?'':obj.default),
+                    'title':(obj.help==undefined?'':obj.help)
+                });
+                // cell metadata test
+                if (value != undefined) {
+                    // set as saved value
+                    $(input).attr({
+                        'value': value
+                    });
+                }
+                content = input;
+                break;
             case 'table':
                 // break;
             case 'file':
@@ -321,7 +399,7 @@ define([
                     'type':'text',
                     'class':'vp-input input-single vp-state',
                     'id':obj.name,
-                    'placeholder':(obj.placeholder==undefined?'':obj.placeholder),
+                    'placeholder':(obj.placeholder==undefined?'Input Data':obj.placeholder),
                     'value':(obj.default==undefined?'':obj.default),
                     'title':(obj.help==undefined?'':obj.help)
                 });
@@ -347,14 +425,18 @@ define([
         var types = obj.var_type;
         var defaultValue = obj.value;
 
+        if (types == undefined) {
+            types = [];
+        }
+
         // Include various index types for Index type
         var INDEX_TYPES = ['RangeIndex', 'CategoricalIndex', 'MultiIndex', 'IntervalIndex', 'DatetimeIndex', 'TimedeltaIndex', 'PeriodIndex', 'Int64Index', 'UInt64Index', 'Float64Index'];
         // Include various groupby types for Groupby type
         var GROUPBY_TYPES = ['DataFrameGroupBy', 'SeriesGroupBy']
-        if (types.indexOf('Index') >= 0) {
+        if (types && types.indexOf('Index') >= 0) {
             types = types.concat(INDEX_TYPES);
         }
-        if (types.indexOf('GroupBy') >= 0) {
+        if (types && types.indexOf('GroupBy') >= 0) {
             types = types.concat(GROUPBY_TYPES);
         }
 
@@ -462,6 +544,9 @@ define([
                 value = value.substr(0, value.length-1);
                 break;
             case 'input_multi':
+            case 'input_number':
+            case 'option_suggest':
+            case 'bool_select':
             case 'var_select':
             case 'var_multi':
             case 'col_select':
@@ -512,7 +597,11 @@ define([
                     if (v.code != undefined) {
                         val = v.code.split(id).join(val);
                     }
-                    // code completion2
+                    // code completion 2
+                    if (v.usePair == true) {
+                        val = ', ' + v.name + '=' + val;
+                    }
+                    // code completion 3
                     if (v.component != undefined && v.componentCode != undefined) {
                         let autoSelector = state[v.name + '_type'];
                         let compIdx = v.component.indexOf(autoSelector);

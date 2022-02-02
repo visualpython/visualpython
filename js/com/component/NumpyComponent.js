@@ -17,8 +17,9 @@ define([
     'css!vp_base/css/m_library/numpyComponent.css',
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/com_generatorV2',
-    'vp_base/data/m_library/numpyLibrary'
-], function(libHtml, libCss, PopupComponent, com_generatorV2, numpyLibrary) {
+    'vp_base/data/m_library/numpyLibrary',
+    'vp_base/data/m_library/pythonLibrary'
+], function(libHtml, libCss, PopupComponent, com_generatorV2, numpyLibrary, pythonLibrary) {
 
     /**
      * NumpyComponent
@@ -34,7 +35,13 @@ define([
             // deep copy package info
             this.package = null;
             try {
-                let findPackage = numpyLibrary.NUMPY_LIBRARIES[this.packageId];
+                let packageName = this.state.config.path.split(' - ')[2];
+                let findPackage = null;
+                if (packageName == 'numpy') {
+                    findPackage = numpyLibrary.NUMPY_LIBRARIES[this.packageId];
+                } else if (packageName == 'python') {
+                    findPackage = pythonLibrary.PYTHON_LIBRARIES[this.packageId];
+                }
                 if (findPackage) {
                     this.package = JSON.parse(JSON.stringify(findPackage)); // deep copy of package
                 } else {
@@ -130,6 +137,11 @@ define([
 
             // show interface
             com_generatorV2.vp_showInterfaceOnPage(this, this.package, this.state);
+
+            // hide required page if no options
+            if ($.trim($(this.wrapSelector('#vp_inputOutputBox table tbody')).html())=='') {
+                $(this.wrapSelector('.vp-require-box')).hide();
+            }
 
             // hide optional page if no options
             if ($.trim($(this.wrapSelector('#vp_optionBox table tbody')).html())=='') {
