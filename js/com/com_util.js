@@ -146,6 +146,27 @@ define([
         }   
     }
 
+    /**
+     * Modal
+     * @param {Object} config { title, message, buttons(list), final(function), defaultIdx(int) } 
+     */
+    var renderModal = function(config={title:'', message:'', buttons:['Ok']}) {
+        require(['vp_base/js/com/component/Modal'], function(Modal) {
+            let modal = new Modal(config);
+            modal.open();
+        });
+    }
+
+    /** 
+     * InfoModal
+     * @param {string} titleStr 
+     */
+     var renderInfoModal = function(titleStr) {
+        require(['vp_base/js/com/component/InfoModal'], function(InfoModal) {
+            new InfoModal(titleStr);
+        });
+    }
+
     /** 
      * AlertModal
      * @param {string} titleStr 
@@ -219,6 +240,8 @@ define([
         convertToStr: convertToStr,
 
         removeHeadScript: removeHeadScript,
+        renderModal: renderModal,
+        renderInfoModal: renderInfoModal,
         renderAlertModal: renderAlertModal,
         renderSuccessMessage: renderSuccessMessage,
 

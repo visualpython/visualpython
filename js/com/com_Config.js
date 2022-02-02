@@ -314,6 +314,47 @@ define(['./com_Const'], function(com_Const) {
             Jupyter.notebook.metadata[configKey] = {};
         }
 
+        /**
+         * Check vp pypi package version (Promise)
+         * usage:
+         *  vpConfig.getPackageVersion('visualpython').then(function(version) {
+         *      // do something after loading version
+         *      ...
+         *  }).catch(function(err) {
+         *      // error handling
+         *      ...
+         *  })
+         */
+        getPackageVersion(packName='visualpython') {
+            let url = `https://pypi.org/pypi/${packName}/json`;
+            // using the Fetch API
+            return new Promise(function(resolve, reject) {
+                try {
+                    fetch(url).then(function (response) {
+                        if (response.ok) {
+                            return response.json();
+                        } else {
+                            throw new Error('Error', response);
+                        }
+                    }).then(function (data) {
+                        resolve(data.info.version);
+                    }).catch(function(err) {
+                        let errMsg = err.message;
+                        if (errMsg.includes('Failed to fetch')) {
+                            errMsg = 'Network connection error';
+                        }
+                        reject(errMsg);
+                    });
+                } catch (err) {
+                    reject(err);
+                }
+            });
+        }
+        
+        getVpInstalledVersion() {
+            return Config.version;
+        }
+
     }
 
     //========================================================================
@@ -324,6 +365,11 @@ define(['./com_Const'], function(com_Const) {
      */
     // Config.serverMode = _MODE_TYPE.DEVELOP;
     Config.serverMode = _MODE_TYPE.RELEASE;
+
+    /**
+     * Version
+     */
+    Config.version = "2.0.1";
 
     /**
      * Type of mode

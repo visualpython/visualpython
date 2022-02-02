@@ -17,7 +17,8 @@ define([
     'css!../../css/menuFrame.css',
 
     '../com/com_Config',
-    '../com/com_Const',
+    '../com/com_util',
+    '../com/com_interface',
     '../com/component/Component',
     '../com/component/SuggestInput',
 
@@ -26,7 +27,7 @@ define([
     './MenuGroup',
     './MenuItem',
     './TaskBar'
-], function(menuFrameHtml, menuFrameCss, com_Config, com_Const, Component, SuggestInput, 
+], function(menuFrameHtml, menuFrameCss, com_Config, com_util, com_interface, Component, SuggestInput, 
             librariesJson, 
             MenuGroup, MenuItem, TaskBar) {
 	'use strict';
@@ -85,6 +86,41 @@ define([
             $(this.wrapSelector('#vp_headerExtraMenu li')).on('click', function() {
                 let menu = $(this).data('menu');
                 switch(menu) {
+                    case 'check-version':
+                        // check vp version
+                        let nowVersion = vpConfig.getVpInstalledVersion();
+                        vpConfig.getPackageVersion().then(function(latestVersion) {
+                            if (nowVersion === latestVersion) {
+                                // if it's already up to date
+                                let msg = com_util.formatString('Visualpython is up to date. ({0})', latestVersion);
+                                com_util.renderInfoModal(msg);
+                            } else {
+                                let msg = com_util.formatString('Visualpython updates are available.\n(Latest version: {0})', latestVersion);
+                                com_util.renderModal({
+                                    title: 'Check version', 
+                                    message: msg,
+                                    buttons: ['Cancel', 'Update'],
+                                    defaultButtonIdx: 0,
+                                    buttonClass: ['cancel', 'activated'],
+                                    finish: function(clickedBtnIdx) {
+                                        switch (clickedBtnIdx) {
+                                            case 0:
+                                                // cancel
+                                                break;
+                                            case 1:
+                                                // update
+                                                com_interface.insertCell('code', '!pip install visualpython --upgrade');
+                                                com_interface.insertCell('code', '!visualpy install');
+                                                // TODO: refresh browser, after executed
+                                                break;
+                                        }
+                                    }
+                                })
+                            }
+                        }).catch(function(err) {
+                            com_util.renderAlertModal(err);
+                        })
+                        break;
                     case 'restart':
                         // restart vp
                         vpConfig.readKernelFunction();

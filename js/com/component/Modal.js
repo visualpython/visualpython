@@ -29,8 +29,10 @@ define([
          *  - title   : string / modal title
          *  - message : string / modal message
          *  - buttons : list / at least 1 button needed
-         *  - defaultButtonIdx : int
+         * [optional]
+         *  - defaultButtonIdx : int (default: 1)
          *  - finish : callback function when modal button clicked (result:button idx 0~n)
+         *  - buttonClass : list / same length as buttons, define classes for buttons
          */
         constructor(state) {
             super($('body'), state);
@@ -42,7 +44,10 @@ define([
                 message: '',
                 buttons: [],
                 defaultButtonIdx: 1,
-                finish: null,
+                finish: function(modalIdx) {
+                    /* Implementation needed */
+                },
+                buttonClass: [],
                 ...this.state
             }
             /** Write codes executed before rendering */
@@ -72,7 +77,7 @@ define([
 
         template() {
             /** Implement generating template */
-            let { title, message, buttons, defaultButtonIdx } = this.state;
+            let { title, message, buttons, defaultButtonIdx, buttonClass } = this.state;
             var sbTagString = new com_String();
             sbTagString.appendLine("<div id='vp_multiButtonModal'>");
             sbTagString.appendLine("<div class='vp-multi-button-modal-box'>");
@@ -85,8 +90,9 @@ define([
             sbTagString.appendLine("<div class='vp-multi-button-modal-buttons'>");
 
             buttons && buttons.forEach((btn, idx) => {
-                sbTagString.appendFormatLine("<input class='vp-modal-button {0}' data-idx={1} type='button' value='{2}' />",
+                sbTagString.appendFormatLine("<input class='vp-button vp-modal-button {0} {1}' data-idx={2} type='button' value='{3}' />",
                     defaultButtonIdx == idx? 'vp-modal-selected-button' : '',
+                    buttonClass[idx],
                     idx,
                     btn);
             });
