@@ -310,6 +310,9 @@ hr.vp-extra-menu-line {
 .mb5 {
     margin-bottom: 5px;
 }
+.mr5 {
+    margin-right: 5px;
+}
 /* table style */
 .vp-tbl-gap5 {
     border-spacing: 5px;

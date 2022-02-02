@@ -676,7 +676,7 @@ define([
 
     var render2dArrItem = function(rowIdx, item) {
         let arrRowBox = $(`<div class="vp-numpy-arrayEditor-row-block vp-numpy-style-flex-row vp-numpy-box-border"></div>`);
-        let arrRows = $(`<div class="overflow-x-auto vp-numpy-style-flex-row vp-scrollbar" style="width: 80%; overflow: auto; margin-top:5px; margin-bottom:5px;"></div>`);
+        let arrRows = $(`<div class="vp-numpy-style-flex-row" style="width: 80%; margin-top:5px; margin-bottom:5px;"></div>`);
         // row index
         arrRows.append($(`<div class="vp-numpy-style-flex-column-center vp-bold vp-numpy-2darr-row" data-idx="${rowIdx}" style="width: 10%;">
             ${rowIdx}
@@ -709,16 +709,54 @@ define([
         return arrRowBox;
     }
 
-    var renderNdArr = function(pageThis, obj, defaultValue) {
-        return $('<input value="ndarr"/>');
+    var renderNdArr = function(pageThis, obj, state) {
+        let arrKey = obj.name + '_ndarr';
+        let arrState = [ '' ];
+        let value = `${arrState.join(',')}`;
+        if (state[arrKey] == undefined) {
+            pageThis.setState({ [arrKey]: arrState });
+            pageThis.setState({ [obj.name]: value});
+        } else {
+            arrState = state[arrKey];
+            value = `${arrState.join(',')}`;
+        }
+
+        let contentTag = $(`<div class="vp-numpy-ndarr-box"></div>`);
+        $(contentTag).attr({
+            'data-id': obj.name
+        });
+        contentTag.data('obj', obj);
+        // Array Items
+        let arrItems = $(`<div class="vp-numpy-style-flex-row-between-wrap"></div>`);
+        arrState.forEach((item, idx) => {
+            arrItems.append($(`<div class="vp-numpy-style-flex-row">
+                <div class="vp-numpy-style-flex-column-center vp-bold mr5">
+                    ${idx + 1}
+                </div>
+                <input class="vp-numpy-input vp-numpy-ndarr-item" data-idx="${idx}" value="${item}" type="text" placeholder="Value">
+                <button class="vp-button vp-numpy-ndarr-del">x</button>
+            </div>`));
+        });
+        contentTag.append(arrItems);
+        // add button
+        contentTag.append($(`<button class="vp-button vp-numpy-ndarr-add">+</button>`));
+        return contentTag;
     }
 
-    var renderScalar = function(pageThis, obj, defaultValue) {
-        return $('<input value="scalar"/>');
+    var renderScalar = function(pageThis, obj, state) {
+        let placeholder = 'Input Scalar';
+        if (obj.placeholder) {
+            placeholder = obj.placeholder;
+        }
+        return $(`<input class="vp-input vp-state" placeholder="${placeholder}" value="${state[obj.name]}"/>`);
     }
 
     var renderParam = function(pageThis, obj, defaultValue) {
-        return $('<input value="param"/>');
+        let placeholder = 'Input Param';
+        if (obj.placeholder) {
+            placeholder = obj.placeholder;
+        }
+        return $(`<input class="vp-input vp-state" placeholder="${placeholder}" value="${state[obj.name]}"/>`);
     }
 
     var renderDtypeSelector = function(pageThis, obj, defaultValue) {
@@ -931,8 +969,61 @@ define([
         //====================================================================
         // Event for ndArr
         //====================================================================
+        $(selector).on('click', '.vp-numpy-ndarr-del', function() {
+            let id = $(this).closest('.vp-numpy-ndarr-box').data('id');
+            let arrId = id + '_ndarr';
+            let idx = $(this).parent().find('.vp-numpy-ndarr-item').data('idx');
+            // update state
+            let state = pageThis.getState(arrId);
+            state.splice(idx, 1);
+            pageThis.setState({ [arrId]: state });
+            pageThis.setState({ [id]: `${state.join(',')}` });
+            // re-render
+            let obj = $(this).closest('.vp-numpy-ndarr-box').data('obj');
+            $(this).closest('.vp-numpy-ndarr-box').replaceWith(function() {
+                return renderNdArr(pageThis, obj, pageThis.getState());
+            });
+        });
+
+        $(selector).on('click', '.vp-numpy-ndarr-add', function() {
+            let id = $(this).closest('.vp-numpy-ndarr-box').data('id');
+            let arrId = id + '_ndarr';
+            let idx = 0;
+            // update state
+            let state = pageThis.getState(arrId);
+            if (!state) {
+                state = [ ];
+            } else {
+                idx = state.length;
+            }
+            state.push(0);
+            pageThis.setState({ [arrId]: state });
+            pageThis.setState({ [id]: `${state.join(',')}` });
+            // re-render
+            let obj = $(this).closest('.vp-numpy-ndarr-box').data('obj');
+            $(this).closest('.vp-numpy-ndarr-box').replaceWith(function() {
+                return renderNdArr(pageThis, obj, pageThis.getState());
+            });
+        });
+
+        $(selector).on('change', '.vp-numpy-ndarr-item', function() {
+            let id = $(this).closest('.vp-numpy-ndarr-box').data('id');
+            let arrId = id + '_ndarr';
+            let idx = $(this).data('idx');
+            let value = $(this).val();
+            // update state
+            let state = pageThis.getState(arrId);
+            state[idx] = value;
+            let code = `${state.join(',')}`;
+            pageThis.setState({ [arrId]: state });
+            pageThis.setState({ [id]: code });
+            $(pageThis.wrapSelector('#'+id)).val(code);
+        });
 
 
+        //====================================================================
+        // Event for tabBlock
+        //====================================================================
     }
 
     return {
