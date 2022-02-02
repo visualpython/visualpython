@@ -335,10 +335,16 @@ define([
             return new Promise(function(resolve, reject) {
                 try {
                     fetch(url).then(function (response) {
-                        if (response.ok) {
+                        if (response.statusCode === 200) {
                             return response.json();
+                        } else if (response.statusCode === 204) {
+                            throw new Error('No Contents', response);
+                        } else if (response.statusCode === 404) {
+                            throw new Error('Page Not Found', response);
+                        } else if (response.statusCode === 500) {
+                            throw new Error('Internal Server Error', response);
                         } else {
-                            throw new Error('Error', response);
+                            throw new Error('Unexpected Http Status Code', response);
                         }
                     }).then(function (data) {
                         resolve(data.info.version);
