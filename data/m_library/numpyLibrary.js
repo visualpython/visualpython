@@ -44,6 +44,31 @@ define([
                     component: ['dtype']
                 }
             ]
+        },
+        'np_zeros': {
+            name: 'zeros',
+            library: 'numpy',
+            description: '',
+            code: '${o0} = np.zeros((${i0})${dtype})',
+            options: [
+                {
+                    name: 'i0',
+                    label: 'Input Parameter',
+                    component: ['1dlen', '2dlen', 'ndarr'],
+                    required: true
+                },
+                {
+                    name: 'o0',
+                    label: 'Allocate to',
+                    placeholder: 'New variable'
+                },
+                {
+                    name: 'dtype',
+                    label: 'Select Data Type',
+                    code: ', dtype=${dtype}',
+                    component: ['dtype']
+                }
+            ]
         }
     };
 

@@ -19,6 +19,8 @@ define([
     var _VP_SHOW_RESULT = true;
 
     const _VP_COMP_TYPE_LABEL = {
+        '1dlen': '1D Length',
+        '2dlen': '2D Length',
         '1darr': '1D Array',
         '2darr': '2D Array',
         'ndarr': 'ND Array',
@@ -192,6 +194,12 @@ define([
         }
         // create as component type
         switch (componentType) {
+            case '1dlen':
+                content = render1dLen(pageThis, obj, state);
+                break;
+            case '2dlen':
+                content = render2dLen(pageThis, obj, state);
+                break;
             case '1darr':
                 content = render1dArr(pageThis, obj, state);
                 break;
@@ -576,6 +584,44 @@ define([
     //========================================================================
     // Render components
     //========================================================================
+    var render1dLen = function(pageThis, obj, state) {
+        state = {
+            [obj.name]: '',
+            ...state
+        };
+        return $(`<div class="vp-numpy-style-flex-row">
+            <div class="vp-numpy-style-flex-row" style="margin-right:10px;">
+                <span class="vp-numpy-style-flex-column-center mr5">
+                    Length
+                </span>
+                <input type="text" id="${obj.name}" value="${state[obj.name]}" class="vp-input vp-state" style="width:200px;" placeholder="Input Number">
+            </div>
+        </div>`)
+    }
+
+    var render2dLen = function(pageThis, obj, state) {
+        state = {
+            [obj.name + '_row']: '',
+            [obj.name + '_col']: '',
+            ...state
+        }
+        return $(`<div class="vp-numpy-style-flex-row">
+            <div class="vp-numpy-style-flex-row" style="margin-right:10px;">
+                <span class="vp-numpy-style-flex-column-center" style="margin-right:5px;">
+                    Row
+                </span>
+                <input type="text" id="${obj.name}_row" data-id="${obj.name}" value="${state[obj.name+'_row']}" class="vp-input vp-state vp-numpy-2dlen-item" style="width:150px;" placeholder="Number">
+            </div>
+            <div class="vp-numpy-style-flex-row" style="margin-right:10px;">
+                <span class="vp-numpy-style-flex-column-center" style="margin-right:5px;">
+                    Col
+                </span>
+                <input type="text" id="${obj.name}_col" data-id="${obj.name}"  value="${state[obj.name+'_col']}" class="vp-input vp-state vp-numpy-2dlen-item" style="width:150px;" placeholder="Number">
+            </div>
+            <input type="hidden" class="vp-state" id="${obj.name}" value="${state[obj.name]}">
+        </div>`);
+    }
+
     var render1dArr = function(pageThis, obj, state) {
         let arrKey = obj.name + '_1darr';
         let arrState = [ 0 ];
@@ -730,16 +776,16 @@ define([
         let arrItems = $(`<div class="vp-numpy-style-flex-row-between-wrap"></div>`);
         arrState.forEach((item, idx) => {
             arrItems.append($(`<div class="vp-numpy-style-flex-row">
-                <div class="vp-numpy-style-flex-column-center vp-bold mr5">
+                <div class="vp-numpy-style-flex-column-center vp-bold mr5 w10">
                     ${idx + 1}
                 </div>
                 <input class="vp-numpy-input vp-numpy-ndarr-item" data-idx="${idx}" value="${item}" type="text" placeholder="Value">
-                <button class="vp-button vp-numpy-ndarr-del">x</button>
+                <button class="vp-button vp-numpy-ndarr-del w30">x</button>
             </div>`));
         });
         contentTag.append(arrItems);
         // add button
-        contentTag.append($(`<button class="vp-button vp-numpy-ndarr-add">+</button>`));
+        contentTag.append($(`<button class="vp-button vp-numpy-ndarr-add w30">+</button>`));
         return contentTag;
     }
 
@@ -790,7 +836,19 @@ define([
             let contentTag = $(this).parent().find('.vp-auto-component-content');
             let newType = $(this).val();
             let obj = $(this).data('obj');
+            // reset state
+            pageThis.setState({ [obj.name]: '' });
             $(contentTag).html(renderContent(pageThis, newType, obj, pageThis.getState()));
+        }); 
+
+        //====================================================================
+        // Event for 2dLen
+        //====================================================================
+        $(selector).on('change', '.vp-numpy-2dlen-item', function() {
+            let id = $(this).data('id');
+            let newValue = pageThis.getState(id+'_row') + ',' + pageThis.getState(id+'_col');
+            $(pageThis.wrapSelector('#' + id)).val(newValue);
+            $(pageThis.wrapSelector('#' + id)).trigger('change');
         }); 
 
         //====================================================================

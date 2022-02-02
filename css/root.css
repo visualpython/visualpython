@@ -306,6 +306,9 @@ hr.vp-extra-menu-line {
 .w30 {
     width: 30px !important;
 }
+.w10 {
+    width: 10px !important;
+}
 /* temporary margin */
 .mb5 {
     margin-bottom: 5px;
