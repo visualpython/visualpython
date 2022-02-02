@@ -27,12 +27,22 @@
     background-color: #FFFFFF;
     border-bottom: 1px solid var(--border-gray-color);
 }
+.vp-version-updater {
+    display: none;
+    float: right;
+    position: relative;
+    font-size: 10px;
+    color: var(--font-hightlight);
+    font-weight: bold;
+    margin: 8px 6px 8px 3px;
+    cursor: pointer;
+}
 .vp-menu-header-button {
     cursor: pointer;
 	background-image: url(../../visualpython/img/dot_menu.svg);
 	width: 19px;
 	height: 19px;
-	margin: 7px 10px 0px 0px;
+	margin: 5px 0px 0px 0px;
 	background-repeat: no-repeat;
 	background-size: contain;
 	background-position: center;
@@ -103,7 +113,7 @@
 #vp_headerExtraMenu {
     display: none;
     cursor: auto;
-    margin: 30px 7px 0px 0px;
+    margin: 30px 0px 0px 0px;
     width: 150px;
     float: right;
     background: #FFFFFF;

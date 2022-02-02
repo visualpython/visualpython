@@ -88,38 +88,7 @@ define([
                 switch(menu) {
                     case 'check-version':
                         // check vp version
-                        let nowVersion = vpConfig.getVpInstalledVersion();
-                        vpConfig.getPackageVersion().then(function(latestVersion) {
-                            if (nowVersion === latestVersion) {
-                                // if it's already up to date
-                                let msg = com_util.formatString('Visualpython is up to date. ({0})', latestVersion);
-                                com_util.renderInfoModal(msg);
-                            } else {
-                                let msg = com_util.formatString('Visualpython updates are available.\n(Latest version: {0})', latestVersion);
-                                com_util.renderModal({
-                                    title: 'Check version', 
-                                    message: msg,
-                                    buttons: ['Cancel', 'Update'],
-                                    defaultButtonIdx: 0,
-                                    buttonClass: ['cancel', 'activated'],
-                                    finish: function(clickedBtnIdx) {
-                                        switch (clickedBtnIdx) {
-                                            case 0:
-                                                // cancel
-                                                break;
-                                            case 1:
-                                                // update
-                                                com_interface.insertCell('code', '!pip install visualpython --upgrade');
-                                                com_interface.insertCell('code', '!visualpy install');
-                                                // TODO: refresh browser, after executed
-                                                break;
-                                        }
-                                    }
-                                })
-                            }
-                        }).catch(function(err) {
-                            com_util.renderAlertModal(err);
-                        })
+                        vpConfig.checkVpVersion();
                         break;
                     case 'restart':
                         // restart vp
@@ -129,7 +98,33 @@ define([
                     case 'vpnote':
                         break;
                 }
-            })
+            });
+            // Click version updater
+            $(this.wrapSelector('#vp_versionUpdater')).on('click', function() {
+                let latestVersion = $(this).data('version');
+                let msg = com_util.formatString('Visualpython updates are available.\n(Latest version: {0})', latestVersion);
+                // render update modal (same as com/com_Config.js:checkVpVersion())
+                com_util.renderModal({
+                    title: 'Update version', 
+                    message: msg,
+                    buttons: ['Cancel', 'Update'],
+                    defaultButtonIdx: 0,
+                    buttonClass: ['cancel', 'activated'],
+                    finish: function(clickedBtnIdx) {
+                        switch (clickedBtnIdx) {
+                            case 0:
+                                // cancel
+                                break;
+                            case 1:
+                                // update
+                                com_interface.insertCell('code', '!pip install visualpython --upgrade');
+                                com_interface.insertCell('code', '!visualpy install');
+                                // TODO: refresh browser, after executed
+                                break;
+                        }
+                    }
+                });
+            });
         }
 
         _unbindResizable() {

@@ -161,6 +161,41 @@
         window.vpKernel = new com_Kernel();
     }
 
+    var _checkVersion = function() {
+        // check version timestamp
+        let nowDate = new Date();
+        vpConfig.getData('version_timestamp', 'vpcfg').then(function(data) {
+            let doCheckVersion = false;
+            if (data == undefined) {
+                // no timestamp, check version
+                doCheckVersion = true;
+            } else if (data != '') {
+                let lastCheck = new Date(parseInt(data));
+                let diffCheck_now = new Date(nowDate.getFullYear(), nowDate.getMonth() + 1, nowDate.getDate());
+                let diffCheck_last = new Date(lastCheck.getFullYear(), lastCheck.getMonth() + 1, lastCheck.getDate());
+
+                let diff = Math.abs(diffCheck_now.getTime() - diffCheck_last.getTime());
+                diff = Math.ceil(diff / (1000 * 3600 * 24));
+
+                if (diff >= 1) {
+                    // if More than 1 day passed, check version
+                    doCheckVersion = true;
+                }
+            }
+
+            // check version and update version_timestamp
+            if (doCheckVersion == true) {
+                vpConfig.checkVpVersion(true);
+
+                // update version_timestamp
+                vpConfig.setData({ 'version_timestamp': nowDate.getTime() }, 'vpcfg');
+            }
+
+        }).catch(function(err) {
+            com_util.renderAlertModal(err);
+        })
+    }
+
     //========================================================================
     // External call function
     //========================================================================
@@ -210,6 +245,7 @@
         vpConfig.readKernelFunction();
         _addToolBarVpButton();
         _loadVpResource(cfg);
+        _checkVersion();
 
         if (cfg.vp_section_display && vpFrame) {
             vpFrame.openVp();

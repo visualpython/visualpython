@@ -11,7 +11,11 @@
 //============================================================================
 // [CLASS] Configuration
 //============================================================================
-define(['./com_Const'], function(com_Const) {
+define([
+    './com_Const', 
+    './com_util', 
+    './com_interface'
+], function(com_Const, com_util, com_interface) {
 	'use strict';
     //========================================================================
     // Define Inner Variable
@@ -353,6 +357,58 @@ define(['./com_Const'], function(com_Const) {
         
         getVpInstalledVersion() {
             return Config.version;
+        }
+
+        checkVpVersion(background=false) {
+            let nowVersion = this.getVpInstalledVersion();
+            this.getPackageVersion().then(function(latestVersion) {
+                if (nowVersion === latestVersion) {
+                    // if it's already up to date
+                    if (background) {
+                        // hide version update icon
+                        $('#vp_versionUpdater').hide();
+                    } else {
+                        let msg = com_util.formatString('Visualpython is up to date. ({0})', latestVersion);
+                        com_util.renderInfoModal(msg);
+                    }
+                } else {
+                    let msg = com_util.formatString('Visualpython updates are available.\n(Latest version: {0})', latestVersion);
+                    if (background) {
+                        // show version update icon
+                        $('#vp_versionUpdater').attr('title', msg);
+                        $('#vp_versionUpdater').data('version', latestVersion);
+                        $('#vp_versionUpdater').show();
+                    } else {
+                        // render update modal (same as menu/MenuFrame.js:_bindEvent()-Click version updater)
+                        com_util.renderModal({
+                            title: 'Update version', 
+                            message: msg,
+                            buttons: ['Cancel', 'Update'],
+                            defaultButtonIdx: 0,
+                            buttonClass: ['cancel', 'activated'],
+                            finish: function(clickedBtnIdx) {
+                                switch (clickedBtnIdx) {
+                                    case 0:
+                                        // cancel
+                                        break;
+                                    case 1:
+                                        // update
+                                        com_interface.insertCell('code', '!pip install visualpython --upgrade');
+                                        com_interface.insertCell('code', '!visualpy install');
+                                        // TODO: refresh browser, after executed
+                                        break;
+                                }
+                            }
+                        })
+                    }
+                }
+            }).catch(function(err) {
+                if (background) {
+                    vpLog.display(VP_LOG_TYPE.ERROR, 'Version Checker - ' + err);
+                } else {
+                    com_util.renderAlertModal(err);
+                }
+            })
         }
 
     }
