@@ -388,11 +388,12 @@ define([
                 } else {
                     let msg = com_util.formatString('Visualpython updates are available.<br/>(Latest version: {0} / Your version: {1})', 
                                     latestVersion, nowVersion);
+                    // show version update icon
+                    $('#vp_versionUpdater').attr('title', msg);
+                    $('#vp_versionUpdater').data('version', latestVersion);
+                    $('#vp_versionUpdater').show();
                     if (background) {
-                        // show version update icon
-                        $('#vp_versionUpdater').attr('title', msg);
-                        $('#vp_versionUpdater').data('version', latestVersion);
-                        $('#vp_versionUpdater').show();
+                        ;
                     } else {
                         // render update modal (same as menu/MenuFrame.js:_bindEvent()-Click version updater)
                         com_util.renderModal({
