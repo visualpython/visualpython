@@ -222,7 +222,7 @@ define([
         
                     that.getFileList(dirObj);
                 } else {
-                    let dirPath = that.makeNewCurrRelativePath();
+                    let dirPath = that.getRelativePath(that.pathState.baseDir, that.pathState.currentPath);
                     let extension = name.substring(name.lastIndexOf('.') + 1);
                     let allowExtensionList = that.state.extensions;
                     // if it is not allowed extension
@@ -640,49 +640,6 @@ define([
                 this.pathState.notebookFolder = rootFolderName;
                 this.pathState.notebookPath = slicedCurrentDirStr;
             }
-        }
-
-        /**
-         * Make relative path using current path
-         * @returns 
-         */
-        makeNewCurrRelativePath() {
-            var pathState = this.pathState;
-            var dirPath = pathState.relativeDir;
-            /** 
-             * current path on opening file navigation
-             *  ex) if current path is 'C:/Users/VP/Desktop/Test'
-             *      baseFolder = 'Test'
-             */
-            var baseFolder = pathState.baseFolder;
-            /** 
-             * base folder for jupyter notebook
-             *  ex) if current path is 'C:/Users/VP/Desktop/Test'
-             *      Jupyter.notebook.notebook_path = 'Desktop/Test/Untitled.ipynb'
-             *      notebookFolder = 'Desktop'
-             */
-            var noteBookFolder = pathState.notebookFolder;
-    
-    
-            /** if baseFolder is included in current relative path */
-            if (dirPath.indexOf(baseFolder) !== -1) {
-                var baseFolderIndex = dirPath.indexOf(baseFolder);
-                dirPath = dirPath.substring(baseFolderIndex,dirPath.length);
-                dirPath = dirPath.replace(baseFolder, '');
-            }
-            
-            /**  
-             * if baseFolder is same with noteBookFolder,
-             * not replacing notebookFolder inside dirPath
-             * */
-            if (baseFolder !== noteBookFolder) {
-                dirPath = dirPath.replace(noteBookFolder, '');
-            }
-    
-            if (dirPath[0] === '/') {
-                dirPath = dirPath.substring(1, dirPath.length);
-            }
-            return dirPath;
         }
 
         splitPathStrAndSetStack(dirObj, resultInfoArr){
