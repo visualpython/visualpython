@@ -186,13 +186,10 @@
             // check version and update version_timestamp
             if (doCheckVersion == true) {
                 vpConfig.checkVpVersion(true);
-
-                // update version_timestamp
-                vpConfig.setData({ 'version_timestamp': nowDate.getTime() }, 'vpcfg');
             }
 
         }).catch(function(err) {
-            com_util.renderAlertModal(err);
+            vpLog.display(VP_LOG_TYPE.ERROR, err);
         })
     }
 

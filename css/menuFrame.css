@@ -31,9 +31,9 @@
     display: none;
     float: right;
     position: relative;
-    font-size: 10px;
-    color: var(--font-hightlight);
+    font-size: 13px;
     font-weight: bold;
+    color: var(--highlight-color);
     margin: 8px 6px 8px 3px;
     cursor: pointer;
 }

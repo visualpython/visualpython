@@ -102,7 +102,9 @@ define([
             // Click version updater
             $(this.wrapSelector('#vp_versionUpdater')).on('click', function() {
                 let latestVersion = $(this).data('version');
-                let msg = com_util.formatString('Visualpython updates are available.\n(Latest version: {0})', latestVersion);
+                let nowVersion = vpConfig.getVpInstalledVersion();
+                let msg = com_util.formatString('Visualpython updates are available.<br/>(Latest version: {0} / Your version: {1})', 
+                            latestVersion, nowVersion);
                 // render update modal (same as com/com_Config.js:checkVpVersion())
                 com_util.renderModal({
                     title: 'Update version', 
@@ -117,9 +119,20 @@ define([
                                 break;
                             case 1:
                                 // update
+                                let info = [
+                                    '## Visual Python Upgrade',
+                                    'NOTE: ',
+                                    '- Refresh your web browser to start a new version.',
+                                    '- Save VP Note before refreshing the page.'
+                                ];
+                                com_interface.insertCell('markdown', info.join('\n'));
                                 com_interface.insertCell('code', '!pip install visualpython --upgrade');
                                 com_interface.insertCell('code', '!visualpy install');
-                                // TODO: refresh browser, after executed
+                                
+                                // update version_timestamp
+                                vpConfig.setData({ 'version_timestamp': new Date().getTime() }, 'vpcfg');
+                                // hide updater
+                                $(that.wrapSelector('#vp_versionUpdater')).hide();
                                 break;
                         }
                     }

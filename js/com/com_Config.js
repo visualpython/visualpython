@@ -216,7 +216,7 @@ define([
                 Jupyter.notebook.config.loaded.then(function() {
                     var data = Jupyter.notebook.config.data[configKey];
                     if (data == undefined) {
-                        reject('No data available.');
+                        resolve(data);
                         return;
                     }
                     if (dataKey == '') {
@@ -335,16 +335,21 @@ define([
             return new Promise(function(resolve, reject) {
                 try {
                     fetch(url).then(function (response) {
-                        if (response.statusCode === 200) {
+                        // if (response.statusCode === 200) {
+                        //     return response.json();
+                        // } else if (response.statusCode === 204) {
+                        //     throw new Error('No Contents', response);
+                        // } else if (response.statusCode === 404) {
+                        //     throw new Error('Page Not Found', response);
+                        // } else if (response.statusCode === 500) {
+                        //     throw new Error('Internal Server Error', response);
+                        // } else {
+                        //     throw new Error('Unexpected Http Status Code', response);
+                        // }
+                        if (response.ok) {
                             return response.json();
-                        } else if (response.statusCode === 204) {
-                            throw new Error('No Contents', response);
-                        } else if (response.statusCode === 404) {
-                            throw new Error('Page Not Found', response);
-                        } else if (response.statusCode === 500) {
-                            throw new Error('Internal Server Error', response);
                         } else {
-                            throw new Error('Unexpected Http Status Code', response);
+                            throw new Error('Error', response);
                         }
                     }).then(function (data) {
                         resolve(data.info.version);
@@ -366,6 +371,7 @@ define([
         }
 
         checkVpVersion(background=false) {
+            let that = this;
             let nowVersion = this.getVpInstalledVersion();
             this.getPackageVersion().then(function(latestVersion) {
                 if (nowVersion === latestVersion) {
@@ -377,8 +383,11 @@ define([
                         let msg = com_util.formatString('Visualpython is up to date. ({0})', latestVersion);
                         com_util.renderInfoModal(msg);
                     }
+                    // update version_timestamp
+                    that.setData({ 'version_timestamp': new Date().getTime() }, 'vpcfg');
                 } else {
-                    let msg = com_util.formatString('Visualpython updates are available.\n(Latest version: {0})', latestVersion);
+                    let msg = com_util.formatString('Visualpython updates are available.<br/>(Latest version: {0} / Your version: {1})', 
+                                    latestVersion, nowVersion);
                     if (background) {
                         // show version update icon
                         $('#vp_versionUpdater').attr('title', msg);
@@ -399,9 +408,20 @@ define([
                                         break;
                                     case 1:
                                         // update
+                                        let info = [
+                                            '## Visual Python Upgrade',
+                                            'NOTE: ',
+                                            '- Refresh your web browser to start a new version.',
+                                            '- Save VP Note before refreshing the page.'
+                                        ];
+                                        com_interface.insertCell('markdown', info.join('\n'));
                                         com_interface.insertCell('code', '!pip install visualpython --upgrade');
                                         com_interface.insertCell('code', '!visualpy install');
-                                        // TODO: refresh browser, after executed
+
+                                        // update version_timestamp
+                                        that.setData({ 'version_timestamp': new Date().getTime() }, 'vpcfg');
+                                        // hide updater
+                                        $('#vp_versionUpdater').hide();
                                         break;
                                 }
                             }
