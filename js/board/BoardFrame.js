@@ -110,14 +110,8 @@ define([
                     case 'code-export':
                         that.exportCode();
                         break;
-                    case 'view-depth':
-                        that.viewDepthInfo();
-                        break;
                     case 'clear':
                         that.clearBoard();
-                        break;
-                    case 'close':
-                        that.closeBoard();
                         break;
                 }
             });
@@ -614,18 +608,21 @@ define([
             });
             fileNavi.open();
         }
-        viewDepthInfo() {
-            this.state.viewDepthNumber = !this.state.viewDepthNumber;
+        /**
+         * Deprecated on v2.0.2.
+         */
+        // viewDepthInfo() {
+        //     this.state.viewDepthNumber = !this.state.viewDepthNumber;
 
-            if (this.state.viewDepthNumber) {
-                $(this.wrapSelector('.vp-board-header-button-inner li[data-menu="view-depth"]')).text('Hide Depth Number');
-            } else {
-                $(this.wrapSelector('.vp-board-header-button-inner li[data-menu="view-depth"]')).text('View Depth Number');
-            }
+        //     if (this.state.viewDepthNumber) {
+        //         $(this.wrapSelector('.vp-board-header-button-inner li[data-menu="view-depth"]')).text('Hide Depth Number');
+        //     } else {
+        //         $(this.wrapSelector('.vp-board-header-button-inner li[data-menu="view-depth"]')).text('View Depth Number');
+        //     }
 
-            // reloadBlockList
-            this.reloadBlockList();
-        }
+        //     // reloadBlockList
+        //     this.reloadBlockList();
+        // }
         clearBoard() {
             // TODO: alert before clearing
             let that = this;
@@ -638,9 +635,12 @@ define([
             // render block list  
             this.reloadBlockList();
         }
-        closeBoard() {
-            this.createNewNote();
-        }
+        /**
+         * Deprecated on v2.0.2.
+         */
+        // closeBoard() {
+        //     this.createNewNote();
+        // }
         //========================================================================
         // Block control
         //========================================================================
