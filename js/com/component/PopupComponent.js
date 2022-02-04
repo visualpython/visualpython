@@ -39,7 +39,7 @@ define([
      * Component
      */
     class PopupComponent extends Component {
-        constructor(state={}, prop={}) {
+        constructor(state={ config: { id: 'popup', name: 'Popup title', path: 'path/file' }}, prop={}) {
             super($('#site'), state, prop);
         }
 
@@ -111,6 +111,8 @@ define([
 
         /**
          * Add codemirror object
+         * usage: 
+         *  this._addCodemirror('code', this.wrapSelector('#code'));
          * @param {String} key stateKey
          * @param {String} selector textarea class name
          * @param {boolean} type code(python)/readonly/markdown
@@ -394,6 +396,12 @@ define([
                     });
                 }
             });
+
+            // inner popup draggable
+            $(this.wrapSelector('.vp-inner-popup-box')).draggable({
+                handle: '.vp-inner-popup-title',
+                containment: 'parent'
+            });
         }
 
         _unbindResizable() {
@@ -556,7 +564,8 @@ define([
             vpLog.display(VP_LOG_TYPE.DEVELOP, 'savedState', that.state);   
         }
 
-        run(execute=true) {
+        run(execute=true, addcell=true) {
+            let code = this.generateCode();
             let mode = this.config.executeMode;
             let blockNumber = -1;
             // check if it's block
@@ -564,7 +573,10 @@ define([
                 let block = this.taskItem;
                 blockNumber = block.blockNumber;
             }
-            com_interface.insertCell(mode, this.generateCode(), execute, blockNumber);
+            if (addcell) {
+                com_interface.insertCell(mode, code, execute, blockNumber);
+            }
+            return code;
         }
 
         /**
@@ -621,6 +633,10 @@ define([
             $('.vp-popup-frame').css({ 'z-index': 200 });
             $(this.wrapSelector()).addClass('vp-focused');
             $(this.wrapSelector()).css({ 'z-index': 205 }); // move forward
+            // focus on its block
+            if (this.taskItem) {
+                this.taskItem.focusItem();
+            }
         }
 
         blur() {
@@ -711,10 +727,6 @@ define([
         //========================================================================
         // Get / set
         //========================================================================
-        getState() {
-            return this.state;
-        }
-
         getCodemirror(key) {
             let filteredCm = this.cmCodeList.find(cmObj => cmObj.key == key);
             return filteredCm;

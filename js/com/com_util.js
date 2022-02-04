@@ -146,9 +146,29 @@ define([
         }   
     }
 
+    /**
+     * Modal
+     * @param {Object} config { title, message, buttons(list), final(function), defaultIdx(int) } 
+     */
+    var renderModal = function(config={title:'', message:'', buttons:['Ok']}) {
+        require(['vp_base/js/com/component/Modal'], function(Modal) {
+            let modal = new Modal(config);
+            modal.open();
+        });
+    }
+
     /** 
-     * alertModal html과 css를 load하는 함수
-     * alertModal은 주로 코드 생성 validation message로 사용한다
+     * InfoModal
+     * @param {string} titleStr 
+     */
+     var renderInfoModal = function(titleStr) {
+        require(['vp_base/js/com/component/InfoModal'], function(InfoModal) {
+            new InfoModal(titleStr);
+        });
+    }
+
+    /** 
+     * AlertModal
      * @param {string} titleStr 
      */
     var renderAlertModal = function(titleStr) {
@@ -220,6 +240,8 @@ define([
         convertToStr: convertToStr,
 
         removeHeadScript: removeHeadScript,
+        renderModal: renderModal,
+        renderInfoModal: renderInfoModal,
         renderAlertModal: renderAlertModal,
         renderSuccessMessage: renderSuccessMessage,
 

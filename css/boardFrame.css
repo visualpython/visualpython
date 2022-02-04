@@ -217,6 +217,7 @@
     background-position: center;
     background-repeat: no-repeat; 
     color: transparent;
+    cursor: pointer;
 }
 
 /* block color labeling */

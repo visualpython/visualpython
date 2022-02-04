@@ -22,8 +22,10 @@ define([
     '../com/component/Component',
     '../com/component/FileNavigation',
     './Block',
-    './BlockMenu'
-], function(boardFrameHtml, boardFrameCss, com_Config, com_String, com_util, com_interface, Component, FileNavigation, Block, BlockMenu) {
+    './BlockMenu',
+    './CodeView'
+], function(boardFrameHtml, boardFrameCss, com_Config, com_String, com_util, com_interface, 
+            Component, FileNavigation, Block, BlockMenu, CodeView) {
 	'use strict';
     //========================================================================
     // Define Variable
@@ -102,14 +104,14 @@ define([
                     case 'run-all':
                         that.runAll();
                         break;
-                    case 'view-depth':
-                        that.viewDepthInfo();
+                    case 'code-view':
+                        that.viewCode();
+                        break;
+                    case 'code-export':
+                        that.exportCode();
                         break;
                     case 'clear':
                         that.clearBoard();
-                        break;
-                    case 'close':
-                        that.closeBoard();
                         break;
                 }
             });
@@ -525,21 +527,27 @@ define([
             });
             fileNavi.open();
         }
-        runBlock(block, execute=true) {
+        runBlock(block, execute=true, addcell=true) {
             if (block.id == 'apps_markdown') {
                 // if markdown, run single
-                block.popup.run();
-                return;
+                return block.popup.run(execute, addcell);
             }
+            let rootBlockDepth = block.depth;
             let groupedBlocks = block.getGroupedBlocks();
             let code = new com_String();
             let indentCount = this.state.indentCount;
             groupedBlocks.forEach((groupBlock, idx) => {
                 let prevNewLine = idx > 0?'\n':'';
-                let indent = ' '.repeat(groupBlock.depth * indentCount);
-                code.appendFormat('{0}{1}{2}', prevNewLine, indent, groupBlock.popup.generateCode());
+                let indent = ' '.repeat((groupBlock.depth - rootBlockDepth) * indentCount);
+                let thisBlockCode = groupBlock.popup.generateCode();
+                // set indent to every line of thisblockcode
+                thisBlockCode = thisBlockCode.replaceAll('\n', '\n' + indent);
+                code.appendFormat('{0}{1}{2}', prevNewLine, indent, thisBlockCode);
             });
-            com_interface.insertCell('code', code.toString(), execute, block.blockNumber);
+            if (addcell) {
+                com_interface.insertCell('code', code.toString(), execute, block.blockNumber);
+            }
+            return code.toString();
         }
         runAll() {
             let that = this;
@@ -549,18 +557,72 @@ define([
                 }
             })
         }
-        viewDepthInfo() {
-            this.state.viewDepthNumber = !this.state.viewDepthNumber;
-
-            if (this.state.viewDepthNumber) {
-                $(this.wrapSelector('.vp-board-header-button-inner li[data-menu="view-depth"]')).text('Hide Depth Number');
-            } else {
-                $(this.wrapSelector('.vp-board-header-button-inner li[data-menu="view-depth"]')).text('View Depth Number');
-            }
-
-            // reloadBlockList
-            this.reloadBlockList();
+        getOverallCode() {
+            let overallCode = new com_String();
+            let that = this;
+            this.blockList.forEach((block) => {
+                if (block.isGroup) {
+                    if (overallCode.toString() != '') {
+                        overallCode.appendLine();
+                        overallCode.appendLine();
+                    }
+                    let groupCode = that.runBlock(block, false, false);
+                    if (block.id == 'apps_markdown') {
+                        // if markdown, add #
+                        groupCode = '#' + groupCode.replaceAll('\n', '\n# ');
+                    }
+                    overallCode.appendFormatLine('# VisualPython [{0}]{1}', block.blockNumber,
+                        block.id == 'apps_markdown'? ' - Markdown':'');
+                    overallCode.append(groupCode);
+                }
+            });
+            return overallCode.toString();
         }
+        viewCode() {
+            let overallCode = this.getOverallCode();
+            let codeview = new CodeView({ 
+                codeview: overallCode,
+                config: {
+                    id: 'boardCodeview',
+                    name: 'Overall Codeview',
+                    path: ''
+                }
+            });
+            codeview.open();
+        }
+        exportCode() {
+            let that = this;
+            // save .py file
+            let fileNavi = new FileNavigation({
+                type: 'save',
+                fileName: this.tmpState.boardTitle,
+                extensions: ['py'],
+                finish: function(filesPath, status, error) {
+                    let fileName = filesPath[0].file;
+                    let filePath = filesPath[0].path;
+
+                    // save py file
+                    let overallCode = that.getOverallCode();
+                    vpKernel.saveFile(fileName, filePath, overallCode);
+                }
+            });
+            fileNavi.open();
+        }
+        /**
+         * Deprecated on v2.0.2.
+         */
+        // viewDepthInfo() {
+        //     this.state.viewDepthNumber = !this.state.viewDepthNumber;
+
+        //     if (this.state.viewDepthNumber) {
+        //         $(this.wrapSelector('.vp-board-header-button-inner li[data-menu="view-depth"]')).text('Hide Depth Number');
+        //     } else {
+        //         $(this.wrapSelector('.vp-board-header-button-inner li[data-menu="view-depth"]')).text('View Depth Number');
+        //     }
+
+        //     // reloadBlockList
+        //     this.reloadBlockList();
+        // }
         clearBoard() {
             // TODO: alert before clearing
             let that = this;
@@ -573,9 +635,12 @@ define([
             // render block list  
             this.reloadBlockList();
         }
-        closeBoard() {
-            this.createNewNote();
-        }
+        /**
+         * Deprecated on v2.0.2.
+         */
+        // closeBoard() {
+        //     this.createNewNote();
+        // }
         //========================================================================
         // Block control
         //========================================================================
@@ -768,6 +833,10 @@ define([
                 if (elseBlock.length > 0) {
                     this.removeBlock(elseBlock[0]);
                 }
+                // focus it
+                setTimeout(function() {
+                    block.focusItem();
+                }, 100);
             }
         }
 
@@ -800,6 +869,10 @@ define([
                 if (finallyBlock) {
                     this.removeBlock(finallyBlock);
                 }
+                // focus it
+                setTimeout(function() {
+                    block.focusItem();
+                }, 100);
             }
         }
 

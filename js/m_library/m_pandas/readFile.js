@@ -1,9 +1,9 @@
 /*
  *    Project Name    : Visual Python
  *    Description     : GUI-based Python code generator
- *    File Name       : toFile.js
+ *    File Name       : readFile.js
  *    Author          : Black Logic
- *    Note            : to file
+ *    Note            : read file
  *    License         : GNU GPLv3 with Visual Python special exception
  *    Date            : 2021. 11. 18
  *    Change Date     :
@@ -52,15 +52,15 @@ define([
             }
             this.dataPath = window.location.origin + com_Const.DATA_PATH + "sample_csv/";
             this.fileResultState = {
-                pathInputId : this.wrapSelector('#i1'),
+                pathInputId : this.wrapSelector('#i0'),
                 fileInputId : this.wrapSelector('#fileName')
             };
             this.fileState = {
                 fileTypeId: {
-                    'csv': 'pd005',
-                    'excel': 'pd124',
-                    'json': 'pd077',
-                    'pickle': 'pd078'
+                    'csv': 'pd004',
+                    'excel': 'pd123',
+                    'json': 'pd076',
+                    'pickle': 'pd079'
                 },
                 package: null
             };
@@ -87,7 +87,7 @@ define([
             // open file navigation
             $(this.wrapSelector('#vp_openFileNavigationBtn')).click(function() {
                 let fileNavi = new FileNavigation({
-                    type: 'save',
+                    type: 'open',
                     extensions: [ that.state.fileExtension ],
                     finish: function(filesPath, status, error) {
                         let {file, path} = filesPath[0];
@@ -143,7 +143,7 @@ define([
                     <div class="vp-accordian-container">
                     <div class="vp-accordian vp-open"><span class="vp-indicator"></span><span class="vp-accordian-caption">Required Input & Output</span></div>
                     <div id="vp_inputOutputBox" class="vp-accordian-box">
-                        <table class="vp-option-table">
+                        <table class="vp-option-table vp-tbl-gap5">
                             <colgroup><col width="30%"/><col width="*"/></colgroup>
                         </table>
                     </div>
@@ -151,7 +151,7 @@ define([
                 <div class="vp-accordian-container vp-accordion-gray-color">
                     <div class="vp-accordian vp-open"><span class="vp-indicator"></span><span class="vp-accordian-caption">Additional Options</span></div>
                     <div id="vp_optionBox" class="vp-accordian-box">
-                        <table class="vp-option-table">
+                        <table class="vp-option-table vp-tbl-gap5">
                             <colgroup><col width="30%"/><col width="*"/></colgroup>
                             
                         </table>
@@ -180,20 +180,12 @@ define([
     
             var fileTypeObj = this.fileState['fileTypeId'];
             var selectedType = this.state['selectedType'];
-
             let fileId = fileTypeObj[selectedType];
             let pdLib = pandasLibrary.PANDAS_FUNCTION;
             let thisPkg = JSON.parse(JSON.stringify(pdLib[fileId]));
 
             this.fileState.package = thisPkg;
             this.state.fileExtension = that.fileExtensions[selectedType];
-
-            if (selectedType == 'json') {
-                this.fileResultState.pathInputId = this.wrapSelector('#path_or_buf');
-            }
-            if (selectedType == 'pickle') {
-                this.fileResultState.pathInputId = this.wrapSelector('#path');
-            }
 
             // render interface
             pdGen.vp_showInterfaceOnPage(this.wrapSelector('.vp-fileio-box'), thisPkg);
@@ -213,23 +205,11 @@ define([
             $(this.wrapSelector('#fileType')).val(selectedType);
     
             // add file navigation button
-            if (selectedType == 'json') {
-                $(this.wrapSelector('#path_or_buf')).parent().html(
-                    com_util.formatString('<input type="text" class="vp-input input-single" id="path_or_buf" index="0" placeholder="" value="" title=""><div id="vp_openFileNavigationBtn" class="{0}"></div>'
+            $(this.fileResultState['pathInputId']).parent().html(
+                com_util.formatString('<input type="text" class="vp-input input-single" id="{0}" index="0" placeholder="" value="" title=""><div id="vp_openFileNavigationBtn" class="{1}"></div>'
+                    , 'i0'
                     , 'vp-file-browser-button')
-                );
-            } else if (selectedType == 'pickle') {
-                $(this.wrapSelector('#path')).parent().html(
-                    com_util.formatString('<input type="text" class="vp-input input-single" id="path" index="0" placeholder="" value="" title=""><div id="vp_openFileNavigationBtn" class="{0}"></div>'
-                    , 'vp-file-browser-button')
-                );
-            } else {
-                $(this.fileResultState['pathInputId']).parent().html(
-                    com_util.formatString('<input type="text" class="vp-input input-single" id="{0}" index="0" placeholder="" value="" title=""><div id="vp_openFileNavigationBtn" class="{1}"></div>'
-                        , 'i1'
-                        , 'vp-file-browser-button')
-                );
-            }
+            );
     
             // encoding suggest input
             $(this.wrapSelector('#encoding')).replaceWith(function() {
@@ -242,6 +222,8 @@ define([
                 suggestInput.setPlaceholder('encoding option');
                 return suggestInput.toTagString();
             });
+    
+            
         }
 
         generateCode() {

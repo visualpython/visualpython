@@ -142,6 +142,7 @@ body {
     box-shadow: 0.5px 0.5px 0.5px rgb(0 0 0 / 10%);
     border-radius: 2px;
     line-height: 30px;
+    vertical-align: middle;
     font-family: 'AppleSDGothicNeo';
     font-size: 14px;
     text-align: center;
@@ -253,6 +254,10 @@ body {
 .vp-cursor {
     cursor: pointer;
 }
+/* hidden */
+.vp-hidden {
+    display: none;
+}
 /* No-selection */
 .vp-no-selection {
     -webkit-touch-callout: none; /* iOS Safari */
@@ -283,11 +288,17 @@ hr.vp-extra-menu-line {
 .wp5 {
     width: 5% !important;
 }
+.w150 {
+    width: 150px !important;
+}
 .w100 {
     width: 100px !important;
 }
 .w80 {
     width: 80px !important;
+}
+.w70 {
+    width: 70px !important;
 }
 .w50 {
     width: 50px !important;
@@ -295,14 +306,24 @@ hr.vp-extra-menu-line {
 .w30 {
     width: 30px !important;
 }
+.w10 {
+    width: 10px !important;
+}
 /* temporary margin */
 .mb5 {
     margin-bottom: 5px;
+}
+.mr5 {
+    margin-right: 5px;
 }
 /* table style */
 .vp-tbl-gap5 {
     border-spacing: 5px;
     border-collapse: separate;
+}
+.vp-tbl-gap10 {
+    border-spacing: 10px;
+    border-collapse: separate; 
 }
 /* Table Layout */
 .vp-option-vertical-table-layout {

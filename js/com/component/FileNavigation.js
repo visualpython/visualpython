@@ -222,7 +222,7 @@ define([
         
                     that.getFileList(dirObj);
                 } else {
-                    let dirPath = that.makeNewCurrRelativePath();
+                    let dirPath = that.getRelativePath(that.pathState.baseDir, that.pathState.currentPath);
                     let extension = name.substring(name.lastIndexOf('.') + 1);
                     let allowExtensionList = that.state.extensions;
                     // if it is not allowed extension
@@ -313,9 +313,17 @@ define([
             // if it's outside of notebookPath, ignore notebookPath
             var prevLength = notebookPathStrLength;
             var useSidebar = false;
-            if (currentRelativePathStrArray.includes('..')) {
-                prevLength = 0;
-                useSidebar = true;
+            if (currentRelativePathStr.includes('..')) {
+                var upperList = currentRelativePathStr.match(/(\.\.\/)/g);
+                if (upperList && upperList.length > 0) {
+                    // in case, currentRelativePathStr = ../../somePathHere
+                    prevLength -= upperList.length * 3; // 3 = length of '../' upper path string
+                    useSidebar = true;
+                } else {
+                    // in case, currentRelativePathStr = .. 
+                    prevLength = 0;
+                    useSidebar = true;
+                }
             }
             let slashStr = '/';
             currentRelativePathStrArray.forEach((pathToken,index) => {
@@ -447,54 +455,7 @@ define([
             var fileNavigationState = this.pathState;
 
             var baseFolder = fileNavigationState.baseFolder;
-            var baseDirStr = fileNavigationState.baseDir;
-            var noteBookPathStr = fileNavigationState.notebookPath;
             var currentDirStr = fileNavigationState.currentPath;
-            var noteBookPathStrLength = noteBookPathStr.length;
-        
-            var baseDirStrLength = baseDirStr.length;
-
-            /** upDirectoryCount: 
-             *  count how many times went up to the parent path, since file navigation opened
-             */
-            var upDirectoryCount = 0;
-            var _upDirectoryCount = 0;
-
-            var splitedNoteBookPathStrArray = noteBookPathStr.split('/');
-            var splitedBaseDirArray = baseDirStr.split('/');
-            var splitedCurrentDirArray  = currentDirStr.split('/');
-
-            var relativeBaseDirArray = splitedBaseDirArray.slice(splitedNoteBookPathStrArray.length, splitedBaseDirArray.length);
-            var relativeCurrentDirArray = splitedCurrentDirArray.slice(splitedNoteBookPathStrArray.length, splitedCurrentDirArray.length);
-
-            /** 
-             * compare base path and notebook path, increase upDirectoryCount
-             */
-            var _baseDirStrLength = baseDirStrLength;
-            while ( noteBookPathStrLength < _baseDirStrLength ) {
-                _baseDirStrLength--;
-                if ( baseDirStr[_baseDirStrLength] === '/') {
-                    upDirectoryCount += 1;
-                }
-            }
-
-            /**
-             * Compare notebook path and current relative path, decrease upDirectoryCount
-             */
-            relativeCurrentDirArray.forEach((forderName,index) => {
-                if ( forderName === relativeBaseDirArray[index] ) {
-                    upDirectoryCount -= 1;
-                }
-            });
-        
-            /**
-             * Add ../ based on upDirectoryCount
-             */
-            _upDirectoryCount = upDirectoryCount;
-            var prefixUpDirectory = ``;
-            while (_upDirectoryCount-- > 0) {
-                prefixUpDirectory += `../`;
-            }
 
             var slashstr = `/`;
             if (relativeDirPath === '') {
@@ -504,10 +465,9 @@ define([
             var pathInput = '';
             var fileInput = `${filePathStr}`;
             // if baseFolder doesn't exist in current path
-            if (upDirectoryCount > 0 
-                && currentDirStr.indexOf(baseFolder) === -1) {
+            if (currentDirStr.indexOf(baseFolder) === -1) {
                 
-                pathInput = `${prefixUpDirectory}${relativeDirPath}${slashstr}${filePathStr}`;
+                pathInput = `${relativeDirPath}${slashstr}${filePathStr}`;
             } else {
                 // if baseFolder exists in current path
                 pathInput = `./${relativeDirPath}${slashstr}${filePathStr}`;
@@ -680,49 +640,6 @@ define([
                 this.pathState.notebookFolder = rootFolderName;
                 this.pathState.notebookPath = slicedCurrentDirStr;
             }
-        }
-
-        /**
-         * Make relative path using current path
-         * @returns 
-         */
-        makeNewCurrRelativePath() {
-            var pathState = this.pathState;
-            var dirPath = pathState.relativeDir;
-            /** 
-             * current path on opening file navigation
-             *  ex) if current path is 'C:/Users/VP/Desktop/Test'
-             *      baseFolder = 'Test'
-             */
-            var baseFolder = pathState.baseFolder;
-            /** 
-             * base folder for jupyter notebook
-             *  ex) if current path is 'C:/Users/VP/Desktop/Test'
-             *      Jupyter.notebook.notebook_path = 'Desktop/Test/Untitled.ipynb'
-             *      notebookFolder = 'Desktop'
-             */
-            var noteBookFolder = pathState.notebookFolder;
-    
-    
-            /** if baseFolder is included in current relative path */
-            if (dirPath.indexOf(baseFolder) !== -1) {
-                var baseFolderIndex = dirPath.indexOf(baseFolder);
-                dirPath = dirPath.substring(baseFolderIndex,dirPath.length);
-                dirPath = dirPath.replace(baseFolder, '');
-            }
-            
-            /**  
-             * if baseFolder is same with noteBookFolder,
-             * not replacing notebookFolder inside dirPath
-             * */
-            if (baseFolder !== noteBookFolder) {
-                dirPath = dirPath.replace(noteBookFolder, '');
-            }
-    
-            if (dirPath[0] === '/') {
-                dirPath = dirPath.substring(1, dirPath.length);
-            }
-            return dirPath;
         }
 
         splitPathStrAndSetStack(dirObj, resultInfoArr){

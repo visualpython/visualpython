@@ -1,7 +1,7 @@
 /*
  *    Project Name    : Visual Python
  *    Description     : GUI-based Python code generator
- *    File Name       : LibraryComponent.js
+ *    File Name       : NumpyComponent.js
  *    Author          : Black Logic
  *    Note            : Library Component
  *    License         : GNU GPLv3 with Visual Python special exception
@@ -10,20 +10,21 @@
  */
 
 //============================================================================
-// [CLASS] LibraryComponent
+// [CLASS] NumpyComponent
 //============================================================================
 define([
-    'text!vp_base/html/m_library/libraryComponent.html!strip',
-    'css!vp_base/css/m_library/libraryComponent.css',
+    'text!vp_base/html/m_library/numpyComponent.html!strip',
+    'css!vp_base/css/m_library/numpyComponent.css',
     'vp_base/js/com/component/PopupComponent',
-    'vp_base/js/com/com_generator',
-    'vp_base/data/m_library/pandasLibrary'
-], function(libHtml, libCss, PopupComponent, com_generator, pandasLibrary) {
+    'vp_base/js/com/com_generatorV2',
+    'vp_base/data/m_library/numpyLibrary',
+    'vp_base/data/m_library/pythonLibrary'
+], function(libHtml, libCss, PopupComponent, com_generatorV2, numpyLibrary, pythonLibrary) {
 
     /**
-     * LibraryComponent
+     * NumpyComponent
      */
-    class LibraryComponent extends PopupComponent {
+    class NumpyComponent extends PopupComponent {
         _init() {
             super._init();
             /** Write codes executed before rendering */
@@ -34,7 +35,13 @@ define([
             // deep copy package info
             this.package = null;
             try {
-                let findPackage = pandasLibrary.PANDAS_FUNCTION[this.packageId];
+                let packageName = this.state.config.path.split(' - ')[2];
+                let findPackage = null;
+                if (packageName == 'numpy') {
+                    findPackage = numpyLibrary.NUMPY_LIBRARIES[this.packageId];
+                } else if (packageName == 'python') {
+                    findPackage = pythonLibrary.PYTHON_LIBRARIES[this.packageId];
+                }
                 if (findPackage) {
                     this.package = JSON.parse(JSON.stringify(findPackage)); // deep copy of package
                 } else {
@@ -129,7 +136,12 @@ define([
             super.render();
 
             // show interface
-            com_generator.vp_showInterfaceOnPage(this.wrapSelector(), this.package);
+            com_generatorV2.vp_showInterfaceOnPage(this, this.package, this.state);
+
+            // hide required page if no options
+            if ($.trim($(this.wrapSelector('#vp_inputOutputBox table tbody')).html())=='') {
+                $(this.wrapSelector('.vp-require-box')).hide();
+            }
 
             // hide optional page if no options
             if ($.trim($(this.wrapSelector('#vp_optionBox table tbody')).html())=='') {
@@ -137,11 +149,20 @@ define([
             }
         }
 
+        open() {
+            super.open();
+            // hide optional page if no options
+            if ($.trim($(this.wrapSelector('#vp_optionBox table tbody')).html())=='') {
+                $(this.wrapSelector('.vp-option-box')).hide();
+            }
+        }
+
         generateCode() {
-            return com_generator.vp_codeGenerator(this.uuid, this.package);
+            let code = com_generatorV2.vp_codeGenerator(this, this.package, this.state);
+            return code;
         }
 
     }
 
-    return LibraryComponent;
+    return NumpyComponent;
 });

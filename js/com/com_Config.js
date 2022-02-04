@@ -11,7 +11,11 @@
 //============================================================================
 // [CLASS] Configuration
 //============================================================================
-define([], function() {
+define([
+    './com_Const', 
+    './com_util', 
+    './com_interface'
+], function(com_Const, com_util, com_interface) {
 	'use strict';
     //========================================================================
     // Define Inner Variable
@@ -127,7 +131,7 @@ define([], function() {
                 vp_config_version: '1.0.0',
                 vp_signature: 'VisualPython',
                 vp_position: {},
-                vp_section_display: true,
+                vp_section_display: false,
                 vp_note_display: true,
                 vp_menu_width: Config.MENU_MIN_WIDTH,
                 vp_note_width: Config.BOARD_MIN_WIDTH
@@ -144,6 +148,43 @@ define([], function() {
         
             // merge default config
             $.extend(true, this.defaultConfig, this.metadataSettings);
+        }
+
+        /**
+         * Read kernel functions for using visualpython
+         * - manually click restart menu (MenuFrame.js)
+         * - automatically restart on jupyter kernel restart (loadVisualpython.js)
+         */
+        readKernelFunction() {
+            var libraryList = [ 
+                'printCommand.py',
+                'fileNaviCommand.py',
+                'pandasCommand.py',
+                'variableCommand.py'
+            ];
+            let promiseList = [];
+            libraryList.forEach(libName => {
+                var libPath = com_Const.PYTHON_PATH + libName
+                $.get(libPath).done(function(data) {
+                    var code_init = data;
+                    promiseList.push(vpKernel.execute(code_init));
+                }).fail(function() {
+                    console.log('visualpython - failed to read library file', libName);
+                });
+            });
+            // run all promises
+            let failed = false;
+            Promise.all(promiseList).then(function(resultObj) {
+            }).catch(function(resultObj) {
+                failed = true;
+                console.log('visualpython - failed to load library', resultObj);
+            }).finally(function() {
+                if (!failed) {
+                    console.log('visualpython - loaded libraries', libraryList);
+                } else {
+                    console.log('visualpython - failed to load libraries');
+                }
+            });
         }
 
         getMode() {
@@ -175,7 +216,7 @@ define([], function() {
                 Jupyter.notebook.config.loaded.then(function() {
                     var data = Jupyter.notebook.config.data[configKey];
                     if (data == undefined) {
-                        reject('No data available.');
+                        resolve(data);
                         return;
                     }
                     if (dataKey == '') {
@@ -277,6 +318,126 @@ define([], function() {
             Jupyter.notebook.metadata[configKey] = {};
         }
 
+        /**
+         * Check vp pypi package version (Promise)
+         * usage:
+         *  vpConfig.getPackageVersion('visualpython').then(function(version) {
+         *      // do something after loading version
+         *      ...
+         *  }).catch(function(err) {
+         *      // error handling
+         *      ...
+         *  })
+         */
+        getPackageVersion(packName='visualpython') {
+            let url = `https://pypi.org/pypi/${packName}/json`;
+            // using the Fetch API
+            return new Promise(function(resolve, reject) {
+                try {
+                    fetch(url).then(function (response) {
+                        // if (response.statusCode === 200) {
+                        //     return response.json();
+                        // } else if (response.statusCode === 204) {
+                        //     throw new Error('No Contents', response);
+                        // } else if (response.statusCode === 404) {
+                        //     throw new Error('Page Not Found', response);
+                        // } else if (response.statusCode === 500) {
+                        //     throw new Error('Internal Server Error', response);
+                        // } else {
+                        //     throw new Error('Unexpected Http Status Code', response);
+                        // }
+                        if (response.ok) {
+                            return response.json();
+                        } else {
+                            throw new Error('Error', response);
+                        }
+                    }).then(function (data) {
+                        resolve(data.info.version);
+                    }).catch(function(err) {
+                        let errMsg = err.message;
+                        if (errMsg.includes('Failed to fetch')) {
+                            errMsg = 'Network connection error';
+                        }
+                        reject(errMsg);
+                    });
+                } catch (err) {
+                    reject(err);
+                }
+            });
+        }
+        
+        getVpInstalledVersion() {
+            return Config.version;
+        }
+
+        checkVpVersion(background=false) {
+            let that = this;
+            let nowVersion = this.getVpInstalledVersion();
+            this.getPackageVersion().then(function(latestVersion) {
+                if (nowVersion === latestVersion) {
+                    // if it's already up to date
+                    if (background) {
+                        // hide version update icon
+                        $('#vp_versionUpdater').hide();
+                    } else {
+                        let msg = com_util.formatString('Visualpython is up to date. ({0})', latestVersion);
+                        com_util.renderInfoModal(msg);
+                    }
+                    // update version_timestamp
+                    that.setData({ 'version_timestamp': new Date().getTime() }, 'vpcfg');
+                } else {
+                    let msg = com_util.formatString('Visualpython updates are available.<br/>(Latest version: {0} / Your version: {1})', 
+                                    latestVersion, nowVersion);
+                    // show version update icon
+                    $('#vp_versionUpdater').attr('title', msg);
+                    $('#vp_versionUpdater').data('version', latestVersion);
+                    $('#vp_versionUpdater').show();
+                    if (background) {
+                        ;
+                    } else {
+                        // render update modal (same as menu/MenuFrame.js:_bindEvent()-Click version updater)
+                        com_util.renderModal({
+                            title: 'Update version', 
+                            message: msg,
+                            buttons: ['Cancel', 'Update'],
+                            defaultButtonIdx: 0,
+                            buttonClass: ['cancel', 'activated'],
+                            finish: function(clickedBtnIdx) {
+                                switch (clickedBtnIdx) {
+                                    case 0:
+                                        // cancel
+                                        break;
+                                    case 1:
+                                        // update
+                                        let info = [
+                                            '## Visual Python Upgrade',
+                                            'NOTE: ',
+                                            '- Refresh your web browser to start a new version.',
+                                            '- Save VP Note before refreshing the page.'
+                                        ];
+                                        com_interface.insertCell('markdown', info.join('\n'));
+                                        com_interface.insertCell('code', '!pip install visualpython --upgrade');
+                                        com_interface.insertCell('code', '!visualpy install');
+
+                                        // update version_timestamp
+                                        that.setData({ 'version_timestamp': new Date().getTime() }, 'vpcfg');
+                                        // hide updater
+                                        $('#vp_versionUpdater').hide();
+                                        break;
+                                }
+                            }
+                        })
+                    }
+                }
+            }).catch(function(err) {
+                if (background) {
+                    vpLog.display(VP_LOG_TYPE.ERROR, 'Version Checker - ' + err);
+                } else {
+                    com_util.renderAlertModal(err);
+                }
+            })
+        }
+
     }
 
     //========================================================================
@@ -287,6 +448,11 @@ define([], function() {
      */
     // Config.serverMode = _MODE_TYPE.DEVELOP;
     Config.serverMode = _MODE_TYPE.RELEASE;
+
+    /**
+     * Version
+     */
+    Config.version = "2.0.2";
 
     /**
      * Type of mode

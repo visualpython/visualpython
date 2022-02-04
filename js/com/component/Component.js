@@ -125,6 +125,20 @@ define([
         getTag() {
             return $(this.wrapSelector());
         }
+
+        setState(stateObj) {
+            this.state = {
+                ...this.state,
+                ...stateObj
+            }
+        }
+
+        getState(stateKey=undefined) {
+            if (stateKey == undefined) {
+                return this.state;
+            }
+            return this.state[stateKey];
+        }
     }
 
     return Component;

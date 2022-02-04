@@ -17,7 +17,8 @@ define([
     'css!../../css/menuFrame.css',
 
     '../com/com_Config',
-    '../com/com_Const',
+    '../com/com_util',
+    '../com/com_interface',
     '../com/component/Component',
     '../com/component/SuggestInput',
 
@@ -26,7 +27,7 @@ define([
     './MenuGroup',
     './MenuItem',
     './TaskBar'
-], function(menuFrameHtml, menuFrameCss, com_Config, com_Const, Component, SuggestInput, 
+], function(menuFrameHtml, menuFrameCss, com_Config, com_util, com_interface, Component, SuggestInput, 
             librariesJson, 
             MenuGroup, MenuItem, TaskBar) {
 	'use strict';
@@ -80,6 +81,62 @@ define([
             // Click toggle board icon
             $(this.wrapSelector('#vp_toggleBoard')).on('click', function() {
                 that.prop.parent.toggleNote();
+            });
+            // Click extra menu item
+            $(this.wrapSelector('#vp_headerExtraMenu li')).on('click', function() {
+                let menu = $(this).data('menu');
+                switch(menu) {
+                    case 'check-version':
+                        // check vp version
+                        vpConfig.checkVpVersion();
+                        break;
+                    case 'restart':
+                        // restart vp
+                        vpConfig.readKernelFunction();
+                        break;
+                    case 'about':
+                    case 'vpnote':
+                        break;
+                }
+            });
+            // Click version updater
+            $(this.wrapSelector('#vp_versionUpdater')).on('click', function() {
+                let latestVersion = $(this).data('version');
+                let nowVersion = vpConfig.getVpInstalledVersion();
+                let msg = com_util.formatString('Visualpython updates are available.<br/>(Latest version: {0} / Your version: {1})', 
+                            latestVersion, nowVersion);
+                // render update modal (same as com/com_Config.js:checkVpVersion())
+                com_util.renderModal({
+                    title: 'Update version', 
+                    message: msg,
+                    buttons: ['Cancel', 'Update'],
+                    defaultButtonIdx: 0,
+                    buttonClass: ['cancel', 'activated'],
+                    finish: function(clickedBtnIdx) {
+                        switch (clickedBtnIdx) {
+                            case 0:
+                                // cancel
+                                break;
+                            case 1:
+                                // update
+                                let info = [
+                                    '## Visual Python Upgrade',
+                                    'NOTE: ',
+                                    '- Refresh your web browser to start a new version.',
+                                    '- Save VP Note before refreshing the page.'
+                                ];
+                                com_interface.insertCell('markdown', info.join('\n'));
+                                com_interface.insertCell('code', '!pip install visualpython --upgrade');
+                                com_interface.insertCell('code', '!visualpy install');
+                                
+                                // update version_timestamp
+                                vpConfig.setData({ 'version_timestamp': new Date().getTime() }, 'vpcfg');
+                                // hide updater
+                                $(that.wrapSelector('#vp_versionUpdater')).hide();
+                                break;
+                        }
+                    }
+                });
             });
         }
 

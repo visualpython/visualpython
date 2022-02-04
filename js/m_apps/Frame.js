@@ -593,7 +593,7 @@ define([
             var content = new com_String();
             content.appendFormatLine('<div class="{0}">', 'vp-inner-popup-addpage');
             content.appendLine('<div>');
-            content.appendLine('<table><colgroup><col width="80px"><col width="*"></colgroup>');
+            content.appendLine('<table class="vp-tbl-gap5"><colgroup><col width="80px"><col width="*"></colgroup>');
             content.appendFormatLine('<tr><th class="{0}">{1}</th>', 'vp-orange-text', targetLabel);
             var target = '';
             if (type == 'replace') {
@@ -617,7 +617,7 @@ define([
             
             // tab 1. value
             content.appendFormatLine('<div class="{0} {1}">', 'vp-inner-popup-tab', 'value');
-            content.appendLine('<table><colgroup><col width="80px"><col width="*"></colgroup><tr>');
+            content.appendLine('<table class="vp-tbl-gap5"><colgroup><col width="80px"><col width="*"></colgroup><tr>');
             content.appendLine('<th><label>Value</label></th>');
             content.appendFormatLine('<td><input type="text" class="{0}"/>', 'vp-inner-popup-input2');
             content.appendFormatLine('<label><input type="checkbox" class="{0}" checked/><span>{1}</span></label>', 'vp-inner-popup-istext2','Text');
@@ -626,16 +626,16 @@ define([
     
             // tab 2. calculation
             content.appendFormatLine('<div class="{0} {1}" style="display: none;">', 'vp-inner-popup-tab', 'calculation');
-            content.appendLine('<table><colgroup><col width="80px"><col width="*"></colgroup>');
+            content.appendLine('<table class="vp-tbl-gap5"><colgroup><col width="80px"><col width="*"></colgroup>');
             // calc - variable 1
             content.appendLine('<tr>');
             content.appendLine('<th><label>Variable 1</label></th>');
             var dataTypes = ['DataFrame', 'Series', 'nparray', 'list', 'str'];
             var varSelector1 = new VarSelector(dataTypes, 'DataFrame', true, true);
-            varSelector1.addBoxClass('vp-inner-popup-var1box');
+            varSelector1.addBoxClass('vp-inner-popup-var1box mb5');
             varSelector1.addClass('vp-inner-popup-var1');
-            content.appendFormatLine('<td>{0}</td>', varSelector1.render());
-            content.appendFormatLine('<td><select class="{0}"></select></td>', 'vp-inner-popup-var1col');
+            content.appendFormatLine('<td>{0}', varSelector1.render());
+            content.appendFormatLine('<select class="{0}"></select></td>', 'vp-inner-popup-var1col');
             content.appendLine('</tr>');
             // calc -operator
             content.appendLine('<tr>');
@@ -651,10 +651,10 @@ define([
             content.appendLine('<tr>');
             content.appendLine('<th><label>Variable 2</label></th>');
             var varSelector2 = new VarSelector(dataTypes, 'DataFrame', true, true);
-            varSelector2.addBoxClass('vp-inner-popup-var2box');
+            varSelector2.addBoxClass('vp-inner-popup-var2box mb5');
             varSelector2.addClass('vp-inner-popup-var2');
-            content.appendFormatLine('<td>{0}</td>', varSelector2.render());
-            content.appendFormatLine('<td><select class="{0}"></select></td>', 'vp-inner-popup-var2col');
+            content.appendFormatLine('<td>{0}', varSelector2.render());
+            content.appendFormatLine('<select class="{0}"></select></td>', 'vp-inner-popup-var2col');
             content.appendLine('</tr>');
             content.appendLine('</table>');
             content.appendLine('</div>'); // end of vp-inner-popup-tab calculation
@@ -666,7 +666,7 @@ define([
             
             // tab 4. apply
             content.appendFormatLine('<div class="{0} {1}" style="display: none;">', 'vp-inner-popup-tab', 'apply');
-            content.appendLine('<table><colgroup><col width="80px"><col width="*"></colgroup>');
+            content.appendLine('<table class="vp-tbl-gap5"><colgroup><col width="80px"><col width="*"></colgroup>');
             content.appendLine('<tr><th><label>column</label></th>');
             content.appendFormatLine('<td>{0}</td></tr>', this.renderColumnList(this.state.columnList));
             content.appendLine('<tr><th><label>function</label></th>');
@@ -760,9 +760,10 @@ define([
             return content.toString();
         }
 
-        openInputPopup = function(type, width=0, height=0) {
+        openInputPopup = function(type, width=400, height=400) {
             var title = '';
             var content = '';
+            let size = { width: width, height: height };
     
             switch (parseInt(type)) {
                 case FRAME_EDIT_TYPE.ADD_COL:
@@ -792,6 +793,9 @@ define([
             }
     
             this.state.popup.type = type;
+
+            // set size
+            $(this.wrapSelector('.vp-inner-popup-box')).css(size);
 
             // set content
             $(this.wrapSelector('.vp-inner-popup-body')).html(content);

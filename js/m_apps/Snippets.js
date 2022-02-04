@@ -395,10 +395,10 @@ define([
                     if (cmCode) {
                         cmCode.save();
                         var code = cmCode.getValue();
-                        // 기존 title 제거
+                        // Remove original title
                         vpConfig.removeData(prevTitle);
                         
-                        // 새 title로 저장
+                        // Save data with new title
                         // save udf
                         var newTimestamp = new Date().getTime();
                         var newSnippet = { [newTitle]: { code: code, timestamp: newTimestamp } };

@@ -488,7 +488,8 @@
                                         "path": "visualpython - library - python - built in functions - abs",
                                         "desc": "",
                                         "tag": "PYTHON, ABS",
-                                        "file": "m_python_common/abs.js"
+                                        "file": "m_library/m_python/abs",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_all",
@@ -498,7 +499,8 @@
                                         "path": "visualpython - library - python - built in functions - all",
                                         "desc": "",
                                         "tag": "PYTHON, ALL",
-                                        "file": "m_python_common/all.js"
+                                        "file": "m_library/m_python/all",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_any",
@@ -508,7 +510,8 @@
                                         "path": "visualpython - library - python - built in functions - any",
                                         "desc": "",
                                         "tag": "PYTHON, ANY",
-                                        "file": "m_python_common/any.js"
+                                        "file": "m_library/m_python/any",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_ascii",
@@ -518,7 +521,8 @@
                                         "path": "visualpython - library - python - built in functions - ascii",
                                         "desc": "",
                                         "tag": "PYTHON, ASCII",
-                                        "file": "m_python_common/ascii.js"
+                                        "file": "m_library/m_python/ascii",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_bin",
@@ -528,7 +532,8 @@
                                         "path": "visualpython - library - python - built in functions - bin",
                                         "desc": "",
                                         "tag": "PYTHON, BIN",
-                                        "file": "m_python_common/bin.js"
+                                        "file": "m_library/m_python/bin",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_bool",
@@ -538,7 +543,8 @@
                                         "path": "visualpython - library - python - built in functions - bool",
                                         "desc": "",
                                         "tag": "PYTHON, BOOL",
-                                        "file": "m_python_common/bool.js"
+                                        "file": "m_library/m_python/bool",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_breakpoint",
@@ -548,7 +554,8 @@
                                         "path": "visualpython - library - python - built in functions - breakpoint",
                                         "desc": "",
                                         "tag": "PYTHON, BREAKPOINT",
-                                        "file": "m_python_common/breakpoint.js"
+                                        "file": "m_library/m_python/breakpoint",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_bytearray",
@@ -558,7 +565,8 @@
                                         "path": "visualpython - library - python - built in functions - bytearray",
                                         "desc": "",
                                         "tag": "PYTHON, BYTEARRAY",
-                                        "file": "m_python_common/bytearray.js"
+                                        "file": "m_library/m_python/bytearray",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_bytes",
@@ -568,7 +576,8 @@
                                         "path": "visualpython - library - python - built in functions - bytes",
                                         "desc": "",
                                         "tag": "PYTHON, BYTES",
-                                        "file": "m_python_common/bytes.js"
+                                        "file": "m_library/m_python/bytes",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_callable",
@@ -578,7 +587,8 @@
                                         "path": "visualpython - library - python - built in functions - callable",
                                         "desc": "",
                                         "tag": "PYTHON, CALLABLE",
-                                        "file": "m_python_common/callable.js"
+                                        "file": "m_library/m_python/callable",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_chr",
@@ -588,7 +598,8 @@
                                         "path": "visualpython - library - python - built in functions - chr",
                                         "desc": "",
                                         "tag": "PYTHON, CHR",
-                                        "file": "m_python_common/chr.js"
+                                        "file": "m_library/m_python/chr",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_classmethod",
@@ -598,7 +609,8 @@
                                         "path": "visualpython - library - python - built in functions - classmethod",
                                         "desc": "",
                                         "tag": "PYTHON, CLASSMETHOD",
-                                        "file": "m_python_common/classmethod.js"
+                                        "file": "m_library/m_python/classmethod",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_complex",
@@ -608,7 +620,8 @@
                                         "path": "visualpython - library - python - built in functions - complex",
                                         "desc": "",
                                         "tag": "PYTHON, COMPLEX",
-                                        "file": "m_python_common/complex.js"
+                                        "file": "m_library/m_python/complex",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_delattr",
@@ -618,7 +631,8 @@
                                         "path": "visualpython - library - python - built in functions - delattr",
                                         "desc": "",
                                         "tag": "PYTHON, DELATTR",
-                                        "file": "m_python_common/delattr.js"
+                                        "file": "m_library/m_python/delattr",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_dict",
@@ -628,7 +642,8 @@
                                         "path": "visualpython - library - python - built in functions - dict",
                                         "desc": "",
                                         "tag": "PYTHON, DICT",
-                                        "file": "m_python_common/dict.js"
+                                        "file": "m_library/m_python/dict",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_dir",
@@ -638,7 +653,8 @@
                                         "path": "visualpython - library - python - built in functions - dir",
                                         "desc": "",
                                         "tag": "PYTHON, DIR",
-                                        "file": "m_python_common/dir.js"
+                                        "file": "m_library/m_python/dir",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_divmod",
@@ -648,7 +664,8 @@
                                         "path": "visualpython - library - python - built in functions - divmod",
                                         "desc": "",
                                         "tag": "PYTHON, DIVMOD",
-                                        "file": "m_python_common/divmod.js"
+                                        "file": "m_library/m_python/divmod",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_enumerate",
@@ -658,7 +675,8 @@
                                         "path": "visualpython - library - python - built in functions - enumerate",
                                         "desc": "",
                                         "tag": "PYTHON, ENUMERATE",
-                                        "file": "m_python_common/enumerate.js"
+                                        "file": "m_library/m_python/enumerate",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_eval",
@@ -668,7 +686,8 @@
                                         "path": "visualpython - library - python - built in functions - eval",
                                         "desc": "",
                                         "tag": "PYTHON, EVAL",
-                                        "file": "m_python_common/eval.js"
+                                        "file": "m_library/m_python/eval",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_exec",
@@ -678,7 +697,8 @@
                                         "path": "visualpython - library - python - built in functions - exec",
                                         "desc": "",
                                         "tag": "PYTHON, EXEC",
-                                        "file": "m_python_common/exec.js"
+                                        "file": "m_library/m_python/exec",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_filter",
@@ -688,7 +708,8 @@
                                         "path": "visualpython - library - python - built in functions - filter",
                                         "desc": "",
                                         "tag": "PYTHON, FILTER",
-                                        "file": "m_python_common/filter.js"
+                                        "file": "m_library/m_python/filter",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_float",
@@ -698,7 +719,8 @@
                                         "path": "visualpython - library - python - built in functions - float",
                                         "desc": "",
                                         "tag": "PYTHON, FLOAT",
-                                        "file": "m_python_common/float.js"
+                                        "file": "m_library/m_python/float",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_format",
@@ -708,7 +730,8 @@
                                         "path": "visualpython - library - python - built in functions - format",
                                         "desc": "",
                                         "tag": "PYTHON, FORMAT",
-                                        "file": "m_python_common/format.js"
+                                        "file": "m_library/m_python/format",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_frozenset",
@@ -718,7 +741,8 @@
                                         "path": "visualpython - library - python - built in functions - frozenset",
                                         "desc": "",
                                         "tag": "PYTHON, FROZENSET",
-                                        "file": "m_python_common/frozenset.js"
+                                        "file": "m_library/m_python/frozenset",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_getattr",
@@ -728,7 +752,8 @@
                                         "path": "visualpython - library - python - built in functions - getattr",
                                         "desc": "",
                                         "tag": "PYTHON, GETATTR",
-                                        "file": "m_python_common/getattr.js"
+                                        "file": "m_library/m_python/getattr",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_globals",
@@ -738,7 +763,8 @@
                                         "path": "visualpython - library - python - built in functions - globals",
                                         "desc": "",
                                         "tag": "PYTHON, GLOBALS",
-                                        "file": "m_python_common/globals.js"
+                                        "file": "m_library/m_python/globals",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_hasattr",
@@ -748,7 +774,8 @@
                                         "path": "visualpython - library - python - built in functions - hasattr",
                                         "desc": "",
                                         "tag": "PYTHON, HASATTR",
-                                        "file": "m_python_common/hasattr.js"
+                                        "file": "m_library/m_python/hasattr",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_hash",
@@ -758,7 +785,8 @@
                                         "path": "visualpython - library - python - built in functions - hash",
                                         "desc": "",
                                         "tag": "PYTHON, HASH",
-                                        "file": "m_python_common/hash.js"
+                                        "file": "m_library/m_python/hash",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_help",
@@ -768,7 +796,8 @@
                                         "path": "visualpython - library - python - built in functions - help",
                                         "desc": "",
                                         "tag": "PYTHON, HELP",
-                                        "file": "m_python_common/help.js"
+                                        "file": "m_library/m_python/help",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_hex",
@@ -778,7 +807,8 @@
                                         "path": "visualpython - library - python - built in functions - hex",
                                         "desc": "",
                                         "tag": "PYTHON, HEX",
-                                        "file": "m_python_common/hex.js"
+                                        "file": "m_library/m_python/hex",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_id",
@@ -788,7 +818,8 @@
                                         "path": "visualpython - library - python - built in functions - id",
                                         "desc": "",
                                         "tag": "PYTHON, ID",
-                                        "file": "m_python_common/id.js"
+                                        "file": "m_library/m_python/id",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_input",
@@ -798,7 +829,8 @@
                                         "path": "visualpython - library - python - built in functions - input",
                                         "desc": "",
                                         "tag": "PYTHON, INPUT",
-                                        "file": "m_python_common/input.js"
+                                        "file": "m_library/m_python/input",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_int",
@@ -808,7 +840,8 @@
                                         "path": "visualpython - library - python - built in functions - int",
                                         "desc": "",
                                         "tag": "PYTHON, INT",
-                                        "file": "m_python_common/int.js"
+                                        "file": "m_library/m_python/int",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_isinstance",
@@ -818,7 +851,8 @@
                                         "path": "visualpython - library - python - built in functions - isinstance",
                                         "desc": "",
                                         "tag": "PYTHON, ISINSTANCE",
-                                        "file": "m_python_common/isinstance.js"
+                                        "file": "m_library/m_python/isinstance",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_issubclass",
@@ -828,7 +862,8 @@
                                         "path": "visualpython - library - python - built in functions - issubclass",
                                         "desc": "",
                                         "tag": "PYTHON, ISSUBCLASS",
-                                        "file": "m_python_common/issubclass.js"
+                                        "file": "m_library/m_python/issubclass",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_iter",
@@ -838,7 +873,8 @@
                                         "path": "visualpython - library - python - built in functions - iter",
                                         "desc": "",
                                         "tag": "PYTHON, ITER",
-                                        "file": "m_python_common/iter.js"
+                                        "file": "m_library/m_python/iter",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_len",
@@ -848,7 +884,8 @@
                                         "path": "visualpython - library - python - built in functions - len",
                                         "desc": "",
                                         "tag": "PYTHON, LEN",
-                                        "file": "m_python_common/len.js"
+                                        "file": "m_library/m_python/len",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_list",
@@ -858,7 +895,8 @@
                                         "path": "visualpython - library - python - built in functions - list",
                                         "desc": "",
                                         "tag": "PYTHON, LIST",
-                                        "file": "m_python_common/list.js"
+                                        "file": "m_library/m_python/list",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_locals",
@@ -868,7 +906,8 @@
                                         "path": "visualpython - library - python - built in functions - locals",
                                         "desc": "",
                                         "tag": "PYTHON, LOCALS",
-                                        "file": "m_python_common/locals.js"
+                                        "file": "m_library/m_python/locals",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_map",
@@ -878,7 +917,8 @@
                                         "path": "visualpython - library - python - built in functions - map",
                                         "desc": "",
                                         "tag": "PYTHON, MAP",
-                                        "file": "m_python_common/map.js"
+                                        "file": "m_library/m_python/map",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_max",
@@ -888,7 +928,8 @@
                                         "path": "visualpython - library - python - built in functions - max",
                                         "desc": "",
                                         "tag": "PYTHON, MAX",
-                                        "file": "m_python_common/max.js"
+                                        "file": "m_library/m_python/max",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_memoryview",
@@ -898,7 +939,8 @@
                                         "path": "visualpython - library - python - built in functions - memoryview",
                                         "desc": "",
                                         "tag": "PYTHON, MEMORYVIEW",
-                                        "file": "m_python_common/memoryview.js"
+                                        "file": "m_library/m_python/memoryview",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_min",
@@ -908,7 +950,8 @@
                                         "path": "visualpython - library - python - built in functions - min",
                                         "desc": "",
                                         "tag": "PYTHON, MIN",
-                                        "file": "m_python_common/min.js"
+                                        "file": "m_library/m_python/min",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_next",
@@ -918,7 +961,8 @@
                                         "path": "visualpython - library - python - built in functions - next",
                                         "desc": "",
                                         "tag": "PYTHON, NEXT",
-                                        "file": "m_python_common/next.js"
+                                        "file": "m_library/m_python/next",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_object",
@@ -928,7 +972,8 @@
                                         "path": "visualpython - library - python - built in functions - object",
                                         "desc": "",
                                         "tag": "PYTHON, OBJECT",
-                                        "file": "m_python_common/object.js"
+                                        "file": "m_library/m_python/object",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_oct",
@@ -938,7 +983,8 @@
                                         "path": "visualpython - library - python - built in functions - oct",
                                         "desc": "",
                                         "tag": "PYTHON, OCT",
-                                        "file": "m_python_common/oct.js"
+                                        "file": "m_library/m_python/oct",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_open",
@@ -948,7 +994,8 @@
                                         "path": "visualpython - library - python - built in functions - open",
                                         "desc": "",
                                         "tag": "PYTHON, OPEN",
-                                        "file": "m_python_common/open.js"
+                                        "file": "m_library/m_python/open",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_ord",
@@ -958,7 +1005,8 @@
                                         "path": "visualpython - library - python - built in functions - ord",
                                         "desc": "",
                                         "tag": "PYTHON, ORD",
-                                        "file": "m_python_common/ord.js"
+                                        "file": "m_library/m_python/ord",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_pow",
@@ -968,7 +1016,8 @@
                                         "path": "visualpython - library - python - built in functions - pow",
                                         "desc": "",
                                         "tag": "PYTHON, POW",
-                                        "file": "m_python_common/pow.js"
+                                        "file": "m_library/m_python/pow",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_print",
@@ -978,7 +1027,8 @@
                                         "path": "visualpython - library - python - built in functions - print",
                                         "desc": "",
                                         "tag": "PYTHON, PRINT",
-                                        "file": "m_python_common/print.js"
+                                        "file": "m_library/m_python/print",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_property",
@@ -988,7 +1038,8 @@
                                         "path": "visualpython - library - python - built in functions - property",
                                         "desc": "",
                                         "tag": "PYTHON, PROPERTY",
-                                        "file": "m_python_common/property.js"
+                                        "file": "m_library/m_python/property",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_range",
@@ -998,7 +1049,8 @@
                                         "path": "visualpython - library - python - built in functions - range",
                                         "desc": "",
                                         "tag": "PYTHON, RANGE",
-                                        "file": "m_python_common/range.js"
+                                        "file": "m_library/m_python/range",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_repr",
@@ -1008,7 +1060,8 @@
                                         "path": "visualpython - library - python - built in functions - repr",
                                         "desc": "",
                                         "tag": "PYTHON, REPR",
-                                        "file": "m_python_common/repr.js"
+                                        "file": "m_library/m_python/repr",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_reversed",
@@ -1018,7 +1071,8 @@
                                         "path": "visualpython - library - python - built in functions - reversed",
                                         "desc": "",
                                         "tag": "PYTHON, REVERSED",
-                                        "file": "m_python_common/reversed.js"
+                                        "file": "m_library/m_python/reversed",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_round",
@@ -1028,7 +1082,8 @@
                                         "path": "visualpython - library - python - built in functions - round",
                                         "desc": "",
                                         "tag": "PYTHON, ROUND",
-                                        "file": "m_python_common/round.js"
+                                        "file": "m_library/m_python/round",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_set",
@@ -1038,7 +1093,8 @@
                                         "path": "visualpython - library - python - built in functions - set",
                                         "desc": "",
                                         "tag": "PYTHON, SET",
-                                        "file": "m_python_common/set.js"
+                                        "file": "m_library/m_python/set",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_setattr",
@@ -1048,7 +1104,8 @@
                                         "path": "visualpython - library - python - built in functions - setattr",
                                         "desc": "",
                                         "tag": "PYTHON, SETATTR",
-                                        "file": "m_python_common/setattr.js"
+                                        "file": "m_library/m_python/setattr",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_slice",
@@ -1058,7 +1115,8 @@
                                         "path": "visualpython - library - python - built in functions - slice",
                                         "desc": "",
                                         "tag": "PYTHON, SLICE",
-                                        "file": "m_python_common/slice.js"
+                                        "file": "m_library/m_python/slice",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_sorted",
@@ -1068,7 +1126,8 @@
                                         "path": "visualpython - library - python - built in functions - sorted",
                                         "desc": "",
                                         "tag": "PYTHON, SORTED",
-                                        "file": "m_python_common/sorted.js"
+                                        "file": "m_library/m_python/sorted",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_staticmethod",
@@ -1078,7 +1137,8 @@
                                         "path": "visualpython - library - python - built in functions - staticmethod",
                                         "desc": "",
                                         "tag": "PYTHON, STATICMETHOD",
-                                        "file": "m_python_common/staticmethod.js"
+                                        "file": "m_library/m_python/staticmethod",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_str",
@@ -1088,7 +1148,8 @@
                                         "path": "visualpython - library - python - built in functions - str",
                                         "desc": "",
                                         "tag": "PYTHON, STR",
-                                        "file": "m_python_common/str.js"
+                                        "file": "m_library/m_python/str",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_sum",
@@ -1098,7 +1159,8 @@
                                         "path": "visualpython - library - python - built in functions - sum",
                                         "desc": "",
                                         "tag": "PYTHON, SUM",
-                                        "file": "m_python_common/sum.js"
+                                        "file": "m_library/m_python/sum",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_super",
@@ -1108,7 +1170,8 @@
                                         "path": "visualpython - library - python - built in functions - super",
                                         "desc": "",
                                         "tag": "PYTHON, SUPER",
-                                        "file": "m_python_common/super.js"
+                                        "file": "m_library/m_python/super",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_tuple",
@@ -1118,7 +1181,8 @@
                                         "path": "visualpython - library - python - built in functions - tuple",
                                         "desc": "",
                                         "tag": "PYTHON, TUPLE",
-                                        "file": "m_python_common/tuple.js"
+                                        "file": "m_library/m_python/tuple",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_type",
@@ -1128,7 +1192,8 @@
                                         "path": "visualpython - library - python - built in functions - type",
                                         "desc": "",
                                         "tag": "PYTHON, TYPE",
-                                        "file": "m_python_common/type.js"
+                                        "file": "m_library/m_python/type",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_vars",
@@ -1138,7 +1203,8 @@
                                         "path": "visualpython - library - python - built in functions - vars",
                                         "desc": "",
                                         "tag": "PYTHON, VARS",
-                                        "file": "m_python_common/vars.js"
+                                        "file": "m_library/m_python/vars",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "pyBuilt_zip",
@@ -1148,7 +1214,8 @@
                                         "path": "visualpython - library - python - built in functions - zip",
                                         "desc": "",
                                         "tag": "PYTHON, ZIP",
-                                        "file": "m_python_common/zip.js"
+                                        "file": "m_library/m_python/zip",
+                                        "useAutoV2": true
                                     }
                                 ]
                             },
@@ -1277,50 +1344,55 @@
                                         "type": "function",
                                         "level": 3,
                                         "name": "array",
-                                        "path": "visualpython - library - numpy - np.array",
+                                        "path": "visualpython - library - numpy - array creation - np.array",
                                         "desc": "",
                                         "tag": "NP, ARRAY, NP.ARRAY, NUMPY",
-                                        "file": "m_numpy/pageList/functionList/array/index.js"
+                                        "file": "m_library/m_numpy/array",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "np_zeros",
                                         "type": "function",
                                         "level": 3,
                                         "name": "zeros",
-                                        "path": "visualpython - library - numpy - np.zeros",
+                                        "path": "visualpython - library - numpy - array creation - np.zeros",
                                         "desc": "",
                                         "tag": "NP, ZEROS, NP.ZEROS, NUMPY",
-                                        "file": "m_numpy/pageList/functionList/zeros/index.js"
+                                        "file": "m_library/m_numpy/zeros",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "np_ones",
                                         "type": "function",
                                         "level": 3,
                                         "name": "ones",
-                                        "path": "visualpython - library - numpy - np.ones",
+                                        "path": "visualpython - library - numpy - array creation - np.ones",
                                         "desc": "",
                                         "tag": "NP, ONES, NP.ONES, NUMPY",
-                                        "file": "m_numpy/pageList/functionList/ones/index.js"
+                                        "file": "m_library/m_numpy/ones",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "np_empty",
                                         "type": "function",
                                         "level": 3,
                                         "name": "empty",
-                                        "path": "visualpython - library - numpy - np.empty",
+                                        "path": "visualpython - library - numpy - array creation - np.empty",
                                         "desc": "",
                                         "tag": "NP, EMPTY, NP.EMPTY, NUMPY",
-                                        "file": "m_numpy/pageList/functionList/empty/index.js"
+                                        "file": "m_library/m_numpy/empty",
+                                        "useAutoV2": true
                                     },
                                     {
                                         "id": "np_copy",
                                         "type": "function",
                                         "level": 3,
                                         "name": "copy",
-                                        "path": "visualpython - library - numpy - np.copy",
+                                        "path": "visualpython - library - numpy - array creation - np.copy",
                                         "desc": "",
                                         "tag": "NP, COPY, NP.COPY, NUMPY",
-                                        "file": "m_numpy/pageList/functionList/copy/index.js"
+                                        "file": "m_library/m_numpy/copy",
+                                        "useAutoV2": true
                                     }
                                 ]
                             },
@@ -1331,8 +1403,18 @@
                                 "name" : "Numerical ranges",
                                 "path" : "visualpython - library - numpy - numerical ranges",
                                 "desc" : "Numerical ranges",
-                                "item" : [
-                                    
+                                "item": [
+                                    {
+                                        "id": "np_arange",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "arange",
+                                        "path": "visualpython - library - numpy - numerical ranges - np.arange",
+                                        "desc": "",
+                                        "tag": "NP, ARANGE, NP.ARANGE, NUMPY",
+                                        "file": "m_library/m_numpy/arange",
+                                        "useAutoV2": true
+                                    }
                                 ]
                             },
                             {
@@ -1343,7 +1425,61 @@
                                 "path" : "visualpython - library - numpy - joining arrays",
                                 "desc" : "Joining arrays",
                                 "item" : [
-                                    
+                                    {
+                                        "id": "np_concatenate",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "concatenate",
+                                        "path": "visualpython - library - numpy - joining arrays - np.concatenate",
+                                        "desc": "",
+                                        "tag": "NP, CONCATENATE, NP.CONCATENATE, NUMPY",
+                                        "file": "m_library/m_numpy/concatenate",
+                                        "useAutoV2": true
+                                    },
+                                    {
+                                        "id": "np_stack",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "stack",
+                                        "path": "visualpython - library - numpy - joining arrays - np.stack",
+                                        "desc": "",
+                                        "tag": "NP, STACK, NP.STACK, NUMPY",
+                                        "file": "m_library/m_numpy/stack",
+                                        "useAutoV2": true
+                                    },
+                                    {
+                                        "id": "np_dstack",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "dstack",
+                                        "path": "visualpython - library - numpy - joining arrays - np.dstack",
+                                        "desc": "",
+                                        "tag": "NP, DSTACK, NP.DSTACK, NUMPY",
+                                        "file": "m_library/m_numpy/dstack",
+                                        "useAutoV2": true
+                                    },
+                                    {
+                                        "id": "np_hstack",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "hstack",
+                                        "path": "visualpython - library - numpy - joining arrays - np.hstack",
+                                        "desc": "",
+                                        "tag": "NP, HSTACK, NP.HSTACK, NUMPY",
+                                        "file": "m_library/m_numpy/hstack",
+                                        "useAutoV2": true
+                                    },
+                                    {
+                                        "id": "np_vstack",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "vstack",
+                                        "path": "visualpython - library - numpy - joining arrays - np.vstack",
+                                        "desc": "",
+                                        "tag": "NP, VSTACK, NP.VSTACK, NUMPY",
+                                        "file": "m_library/m_numpy/vstack",
+                                        "useAutoV2": true
+                                    }
                                 ]
                             },
                             {
@@ -1354,7 +1490,50 @@
                                 "path" : "visualpython - library - numpy - splitting arrays",
                                 "desc" : "Splitting arrays",
                                 "item" : [
-                                    
+                                    {
+                                        "id": "np_split",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "split",
+                                        "path": "visualpython - library - numpy - splitting arrays - np.split",
+                                        "desc": "",
+                                        "tag": "NP, SPLIT, NP.SPLIT, NUMPY",
+                                        "file": "m_library/m_numpy/split",
+                                        "useAutoV2": true
+                                    },
+                                    {
+                                        "id": "np_dsplit",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "dsplit",
+                                        "path": "visualpython - library - numpy - splitting arrays - np.dsplit",
+                                        "desc": "",
+                                        "tag": "NP, DSPLIT, NP.DSPLIT, NUMPY",
+                                        "file": "m_library/m_numpy/dsplit",
+                                        "useAutoV2": true
+                                    },
+                                    {
+                                        "id": "np_hsplit",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "hsplit",
+                                        "path": "visualpython - library - numpy - splitting arrays - np.hsplit",
+                                        "desc": "",
+                                        "tag": "NP, HSPLIT, NP.HSPLIT, NUMPY",
+                                        "file": "m_library/m_numpy/hsplit",
+                                        "useAutoV2": true
+                                    },
+                                    {
+                                        "id": "np_vsplit",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "vsplit",
+                                        "path": "visualpython - library - numpy - splitting arrays - np.vsplit",
+                                        "desc": "",
+                                        "tag": "NP, VSPLIT, NP.VSPLIT, NUMPY",
+                                        "file": "m_library/m_numpy/vsplit",
+                                        "useAutoV2": true
+                                    }
                                 ]
                             },
                             {
@@ -1365,7 +1544,50 @@
                                 "path" : "visualpython - library - numpy - shape manipulation",
                                 "desc" : "Shape manipulation",
                                 "item" : [
-                                    
+                                    {
+                                        "id": "np_reshape",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "reshape",
+                                        "path": "visualpython - library - numpy - shape manipulation - np.reshape",
+                                        "desc": "",
+                                        "tag": "NP, RESHAPE, NP.RESHAPE, NUMPY",
+                                        "file": "m_library/m_numpy/reshape",
+                                        "useAutoV2": true
+                                    },
+                                    {
+                                        "id": "np_transpose",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "transpose",
+                                        "path": "visualpython - library - numpy - shape manipulation - np.transpose",
+                                        "desc": "",
+                                        "tag": "NP, TRANSPOSE, NP.TRANSPOSE, NUMPY",
+                                        "file": "m_library/m_numpy/transpose",
+                                        "useAutoV2": true
+                                    },
+                                    {
+                                        "id": "np_t",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "T",
+                                        "path": "visualpython - library - numpy - shape manipulation - np.T",
+                                        "desc": "",
+                                        "tag": "NP, T, NP.T, NUMPY",
+                                        "file": "m_library/m_numpy/T",
+                                        "useAutoV2": true
+                                    },
+                                    {
+                                        "id": "np_flatten",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "flatten",
+                                        "path": "visualpython - library - numpy - shape manipulation - np.flatten",
+                                        "desc": "",
+                                        "tag": "NP, FLATTEN, NP.FLATTEN, NUMPY",
+                                        "file": "m_library/m_numpy/flatten",
+                                        "useAutoV2": true
+                                    }
                                 ]
                             },
                             {
@@ -1376,8 +1598,84 @@
                                 "path" : "visualpython - library - numpy - statistics",
                                 "desc" : "Statistics",
                                 "item" : [
-                                    
-                                ]
+                                        {
+                                            "id": "np_mean",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "mean",
+                                            "path": "visualpython - library - numpy - statistics - np.mean",
+                                            "desc": "",
+                                            "tag": "NP, MEAN, NP.MEAN, NUMPY",
+                                            "file": "m_library/m_numpy/mean",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_var",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "var",
+                                            "path": "visualpython - library - numpy - statistics - np.var",
+                                            "desc": "",
+                                            "tag": "NP, VAR, NP.VAR, NUMPY",
+                                            "file": "m_library/m_numpy/var",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_std",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "std",
+                                            "path": "visualpython - library - numpy - statistics - np.std ",
+                                            "desc": "",
+                                            "tag": "NP, STD, NP.STD, NUMPY",
+                                            "file": "m_library/m_numpy/std",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_max",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "max",
+                                            "path": "visualpython - library - numpy - statistics - np.max",
+                                            "desc": "",
+                                            "tag": "NP, MAX, NP.MAX, NUMPY",
+                                            "file": "m_library/m_numpy/max",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_min",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "min",
+                                            "path": "visualpython - library - numpy - statistics - np.min",
+                                            "desc": "",
+                                            "tag": "NP, MIN, NP.MIN, NUMPY",
+                                            "file": "m_library/m_numpy/min",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_median",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "median",
+                                            "path": "visualpython - library - numpy - statistics - np.median",
+                                            "desc": "",
+                                            "tag": "NP, MEDIAN, NP.MEDIAN, NUMPY",
+                                            "file": "m_library/m_numpy/median",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_percentile",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "percentile",
+                                            "path": "visualpython - library - numpy - statistics - np.percentile",
+                                            "desc": "",
+                                            "tag": "NP, PERCENTILE, NP.PERCENTILE, NUMPY",
+                                            "file": "m_library/m_numpy/percentile",
+                                            "useAutoV2": true
+                                        }
+                                    ]
                             },
                             {
                                 "id"   : "npPkg_universalLinearAlgebra",
@@ -1387,8 +1685,73 @@
                                 "path" : "visualpython - library - numpy - linear algebra",
                                 "desc" : "Linear algebra",
                                 "item" : [
-                                    
-                                ]
+                                        {
+                                            "id": "np_linalg_inv",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "linalg.inv",
+                                            "path": "visualpython - library - numpy - linear algebra - np.linalg.inv",
+                                            "desc": "",
+                                            "tag": "NP, LINALG INV, NP.LINALG.INV, NUMPY",
+                                            "file": "m_library/m_numpy/linalgInv",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_linalg_det",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "linalg.det",
+                                            "path": "visualpython - library - numpy - linear algebra - np.linalg.det",
+                                            "desc": "",
+                                            "tag": "NP, LINALG, NP.LINALG.DET, NUMPY",
+                                            "file": "m_library/m_numpy/linalgDet",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_linalg_eig",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "linalg.eig",
+                                            "path": "visualpython - library - numpy - linear algebra - np.linalg.eig",
+                                            "desc": "",
+                                            "tag": "NP, LINALG, NP.LINALG.EIG, NUMPY",
+                                            "file": "m_library/m_numpy/linalgEig",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_linalg_svd",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "linalg.svd",
+                                            "path": "visualpython - library - numpy - linear algebra - np.linalg.svd",
+                                            "desc": "",
+                                            "tag": "NP, LINALG, NP.LINALG.SVD, NUMPY",
+                                            "file": "m_library/m_numpy/linalgSvd",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_trace",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "trace",
+                                            "path": "visualpython - library - numpy - linear algebra - np.trace",
+                                            "desc": "",
+                                            "tag": "NP, TRACE, NP.TRACE, NUMPY",
+                                            "file": "m_library/m_numpy/Trace",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_dot",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "dot",
+                                            "path": "visualpython - library - numpy - linear algebra - np.dot",
+                                            "desc": "",
+                                            "tag": "NP, DOT, NP.DOT, NUMPY",
+                                            "file": "m_library/m_numpy/dot",
+                                            "useAutoV2": true
+                                        }
+                                    ]
                             },
                             {
                                 "id"   : "npPkg_universalBinaryArithmetic",
@@ -1398,8 +1761,293 @@
                                 "path" : "visualpython - library - numpy - math operation",
                                 "desc" : "Math operation",
                                 "item" : [
-                                    
-                                ]
+                                        {
+                                            "id": "np_add",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "add",
+                                            "path": "visualpython - library - numpy - math operation - np.add",
+                                            "desc": "",
+                                            "tag": "NP, ADD, NP.ADD, NUMPY",
+                                            "file": "m_library/m_numpy/add",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_divide",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "divide",
+                                            "path": "visualpython - library - numpy - math operation - np.divide",
+                                            "desc": "",
+                                            "tag": "NP, DIVIDE, NP.DIVIDE, NUMPY",
+                                            "file": "m_library/m_numpy/divide",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_floor_divide",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "floor_divide",
+                                            "path": "visualpython - library - numpy - math operation - np.floor_divide",
+                                            "desc": "",
+                                            "tag": "NP, DIVIDE, NP.DIVIDE, NUMPY",
+                                            "file": "m_library/m_numpy/floor_divide",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_fmax",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "fmax",
+                                            "path": "visualpython - library - numpy - math operation - np.fmax",
+                                            "desc": "",
+                                            "tag": "NP, FMAX, NP.FMAX, NUMPY",
+                                            "file": "m_library/m_numpy/fmax",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_fmin",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "fmin",
+                                            "path": "visualpython - library - numpy - math operation - np.fmin",
+                                            "desc": "",
+                                            "tag": "NP, FMIN, NP.FMIN, NUMPY",
+                                            "file": "m_library/m_numpy/fmin",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_maximum",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "maximum",
+                                            "path": "visualpython - library - numpy - math operation - np.maximum",
+                                            "desc": "",
+                                            "tag": "NP, MAXIMUM, NP.MAXIMUM, NUMPY",
+                                            "file": "m_library/m_numpy/maximum",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_minimum",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "minimum",
+                                            "path": "visualpython - library - numpy - math operation - np.minimum",
+                                            "desc": "",
+                                            "tag": "NP, MINIMUM, NP.MINIMUM, NUMPY",
+                                            "file": "m_library/m_numpy/minimum",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_mod",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "mod",
+                                            "path": "visualpython - library - numpy - math operation - np.mod",
+                                            "desc": "",
+                                            "tag": " NP, MOD, NP.MOD, NUMPY",
+                                            "file": "m_library/m_numpy/mod",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_sum",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "sum",
+                                            "path": "visualpython - library - numpy - math operation - np.sum",
+                                            "desc": "",
+                                            "tag": "NP, SUM, NP.SUM, NUMPY",
+                                            "file": "m_library/m_numpy/sum",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_multiply",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "multiply",
+                                            "path": "visualpython - library - numpy - math operation - np.multiply",
+                                            "desc": "",
+                                            "tag": "NP, MULTIPLY, NP.MULTIPLY, NUMPY",
+                                            "file": "m_library/m_numpy/multiply",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_prod",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "prod",
+                                            "path": "visualpython - library - numpy - math operation - np.prod",
+                                            "desc": "",
+                                            "tag": "NP, PROD, NP.PROD, NUMPY",
+                                            "file": "m_library/m_numpy/prod",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_power",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "power",
+                                            "path": "visualpython - library - numpy - math operation - np.power",
+                                            "desc": "",
+                                            "tag": "NP, POWER, NP.POWER, NUMPY",
+                                            "file": "m_library/m_numpy/power",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_subtract",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "subtract",
+                                            "path": "visualpython - library - numpy - math operation - np.subtract",
+                                            "desc": "",
+                                            "tag": "NP, SUBTRACT, NP.SUBTRACT, NUMPY",
+                                            "file": "m_library/m_numpy/subtract",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_abs",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "abs",
+                                            "path": "visualpython - library - numpy - math operation - np.abs",
+                                            "desc": "",
+                                            "tag": "NP, ABS, NP.ABS, NUMPY",
+                                            "file": "m_library/m_numpy/abs",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_ceil",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "ceil",
+                                            "path": "visualpython - library - numpy - math operation - np.ceil",
+                                            "desc": "",
+                                            "tag": "NP, CEIL, NP.CEIL, NUMPY",
+                                            "file": "m_library/m_numpy/ceil",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_exp",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "exp",
+                                            "path": "visualpython - library - numpy - math operation - np.exp",
+                                            "desc": "",
+                                            "tag": "NP, EXP, NP.EXP, NUMPY",
+                                            "file": "m_library/m_numpy/exp",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_fabs",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "fabs",
+                                            "path": "visualpython - library - numpy - math operation - np.fabs",
+                                            "desc": "",
+                                            "tag": "NP, FABS, NP.FABS, NUMPY",
+                                            "file": "m_library/m_numpy/fabs",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_floor",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "floor",
+                                            "path": "visualpython - library - numpy - math operation - np.floor",
+                                            "desc": "",
+                                            "tag": "NP, FLOOR, NP.FLOOR, NUMPY",
+                                            "file": "m_library/m_numpy/floor",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_log",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "log",
+                                            "path": "visualpython - library - numpy - math operation - np.log",
+                                            "desc": "",
+                                            "tag": "NP, LOG, NP.LOG, NUMPY",
+                                            "file": "m_library/m_numpy/log",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_log1p",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "log1p",
+                                            "path": "visualpython - library - numpy - math operation - np.log1p",
+                                            "desc": "",
+                                            "tag": "NP, LOG1P, NP.LOG1P, NUMPY",
+                                            "file": "m_library/m_numpy/log1p",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_log2",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "log2",
+                                            "path": "visualpython - library - numpy - math operation - np.log2",
+                                            "desc": "",
+                                            "tag": "NP, LOG2, NP.LOG2, NUMPY",
+                                            "file": "m_library/m_numpy/log2",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_log10",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "log10",
+                                            "path": "visualpython - library - numpy - math operation - np.log10",
+                                            "desc": "",
+                                            "tag": "NP, LOG10, NP.LOG10, NUMPY",
+                                            "file": "m_library/m_numpy/log10",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_modf",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "modf",
+                                            "path": "visualpython - library - numpy - math operation - np.modf",
+                                            "desc": "",
+                                            "tag": "NP, MODF, NP.MODF, NUMPY",
+                                            "file": "m_library/m_numpy/modf",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_rint",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "rint",
+                                            "path": "visualpython - library - numpy - math operation - np.rint",
+                                            "desc": "",
+                                            "tag": "NP, RINT, NP.RINT, NUMPY",
+                                            "file": "m_library/m_numpy/rint",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_sqrt",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "sqrt",
+                                            "path": "visualpython - library - numpy - math operation - np.sqrt",
+                                            "desc": "",
+                                            "tag": "NP, SQRT, NP.SQRT, NUMPY",
+                                            "file": "m_library/m_numpy/sqrt",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_square",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "square",
+                                            "path": "visualpython - library - numpy - math operation - np.square",
+                                            "desc": "",
+                                            "tag": "NP, SQUARE, NP.SQUARE, NUMPY",
+                                            "file": "m_library/m_numpy/square",
+                                            "useAutoV2": true
+                                        }
+                                    ]
                             },
                             {
                                 "id"   : "npPkg_universalUnaryLogical",
@@ -1409,8 +2057,106 @@
                                 "path" : "visualpython - library - numpy - boolean operation",
                                 "desc" : "Boolean operation",
                                 "item" : [
-                                    
-                                ]
+                                        {
+                                            "id": "np_all",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "all",
+                                            "path": "visualpython - library - numpy - boolean operation - np.all",
+                                            "desc": "",
+                                            "tag": "NP, ALL, NP.ALL, NUMPY",
+                                            "file": "m_library/m_numpy/all",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_any",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "any",
+                                            "path": "visualpython - library - numpy - boolean operation - np.any",
+                                            "desc": "",
+                                            "tag": "NP, ANY, NP.ANY, NUMPY",
+                                            "file": "m_library/m_numpy/any",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_isanan",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "isanan",
+                                            "path": "visualpython - library - numpy - boolean operation - np.isanan",
+                                            "desc": "",
+                                            "tag": "NP, ISANAN, NP.ISANAN, NUMPY",
+                                            "file": "m_library/m_numpy/isanan",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_isfinite",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "isfinite",
+                                            "path": "visualpython - library - numpy - boolean operation - np.isfinite",
+                                            "desc": "",
+                                            "tag": "NP, ISFINITE, NP.ISFINITE, NUMPY",
+                                            "file": "m_library/m_numpy/isfinite",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_isinf",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "isinf",
+                                            "path": "visualpython - library - numpy - boolean operation - np.isinf",
+                                            "desc": "",
+                                            "tag": "NP, ISINF, NP.ISINF, NUMPY",
+                                            "file": "m_library/m_numpy/isinf",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_isnan",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "isnan",
+                                            "path": "visualpython - library - numpy - boolean operation - np.isnan",
+                                            "desc": "",
+                                            "tag": "NP, ISNAN, NP.ISNAN, NUMPY",
+                                            "file": "m_library/m_numpy/isnan",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_isneginf",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "isneginf",
+                                            "path": "visualpython - library - numpy - boolean operation - np.isneginf",
+                                            "desc": "",
+                                            "tag": "NP, ISNEGINF, NP.ISNEGINF, NUMPY",
+                                            "file": "m_library/m_numpy/isneginf",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_isposinf",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "isposinf",
+                                            "path": "visualpython - library - numpy - boolean operation - np.isposinf",
+                                            "desc": "",
+                                            "tag": "NP, ISPOSINF, NP.ISPOSINF, NUMPY",
+                                            "file": "m_library/m_numpy/isposinf",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_logical_not",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "logical_not",
+                                            "path": "visualpython - library - numpy - boolean operation - np.logical_not",
+                                            "desc": "",
+                                            "tag": "NP, LOGICAL_NOT, NP.LOGICAL_NOT, NUMPY",
+                                            "file": "m_library/m_numpy/logical_not",
+                                            "useAutoV2": true
+                                        }
+                                    ]
                             },
                             {
                                 "id"   : "npPkg_universalTrigonometric",
@@ -1420,8 +2166,73 @@
                                 "path" : "visualpython - library - numpy - trigonometric functions",
                                 "desc" : "Trigonometric functions",
                                 "item" : [
-                                    
-                                ]
+                                        {
+                                            "id": "np_sin",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "sin",
+                                            "path": "visualpython - library - numpy - trigonometric functions - np.sin",
+                                            "desc": "",
+                                            "tag": "NP, SIN, NP.SIN, NUMPY",
+                                            "file": "m_library/m_numpy/sin",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_cos",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "cos",
+                                            "path": "visualpython - library - numpy - trigonometric functions - np.cos",
+                                            "desc": "",
+                                            "tag": "NP, COS, NP.COS, NUMPY",
+                                            "file": "m_library/m_numpy/cos",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_tan",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "tan",
+                                            "path": "visualpython - library - numpy - trigonometric functions - np.tan",
+                                            "desc": "",
+                                            "tag": "NP, TAN, NP.TAN, NUMPY",
+                                            "file": "m_library/m_numpy/tan",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_arcsin",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "arcsin",
+                                            "path": "visualpython - library - numpy - trigonometric functions - np.arcsin",
+                                            "desc": "",
+                                            "tag": "NP, SIN, NP.SIN, NUMPY",
+                                            "file": "m_library/m_numpy/arcsin",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_arccos",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "arccos",
+                                            "path": "visualpython - library - numpy - trigonometric functions - np.arccos",
+                                            "desc": "",
+                                            "tag": "NP, COS, NP.COS, NUMPY",
+                                            "file": "m_library/m_numpy/arccos",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_arctan",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "arctan",
+                                            "path": "visualpython - library - numpy - trigonometric functions - np.arctan",
+                                            "desc": "",
+                                            "tag": "NP, TAN, NP.TAN, NUMPY",
+                                            "file": "m_library/m_numpy/arctan",
+                                            "useAutoV2": true
+                                        }
+                                    ]
                             },
                             {
                                 "id"   : "npPkg_universalComparator",
@@ -1431,8 +2242,73 @@
                                 "path" : "visualpython - library - numpy - comparison operation",
                                 "desc" : "Comparison operation",
                                 "item" : [
-                                    
-                                ]
+                                        {
+                                            "id": "np_equal",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "equal",
+                                            "path": "visualpython - library - numpy - comparison operation - np.equal",
+                                            "desc": "",
+                                            "tag": "NP, EQUAL, NP.EQUAL, NUMPY",
+                                            "file": "m_library/m_numpy/equal",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_greater",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "greater",
+                                            "path": "visualpython - library - numpy - comparison operation - np.greater",
+                                            "desc": "",
+                                            "tag": "NP, GREATER, NP.GREATER, NUMPY",
+                                            "file": "m_library/m_numpy/greater",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_greater_equal",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "greater_equal",
+                                            "path": "visualpython - library - numpy - comparison operation - np.greater_equal",
+                                            "desc": "",
+                                            "tag": "NP, GREATER, EQUAL, NP.EQUAL, NP.GREATER, NUMPY",
+                                            "file": "m_library/m_numpy/greater_equal",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_less",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "less",
+                                            "path": "visualpython - library - numpy - comparison operation - np.less",
+                                            "desc": "",
+                                            "tag": "NP, LESS, NP.LESS, NUPY",
+                                            "file": "m_library/m_numpy/less",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_less_equal",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "less_equal",
+                                            "path": "visualpython - library - numpy - comparison operation - np.less_equal",
+                                            "desc": "",
+                                            "tag": "NP, LESS, EQUAL, NP.EQUAL, NP.LESS, NUMPY",
+                                            "file": "m_library/m_numpy/less_equal",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_not_equal",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "not_equal",
+                                            "path": "visualpython - library - numpy - comparison operation - np.not_equal",
+                                            "desc": "",
+                                            "tag": "NP, LESS, EQUAL, NP.EQUAL, NP.LESS, NUMPY",
+                                            "file": "m_library/m_numpy/not_equal",
+                                            "useAutoV2": true
+                                        }
+                                    ]
                             },
                             {
                                 "id"   : "npPkg_universalRandom",
@@ -1442,8 +2318,29 @@
                                 "path" : "visualpython - library - numpy - random number generation",
                                 "desc" : "Random number generation",
                                 "item" : [
-                                    
-                                ]
+                                        {
+                                            "id": "np_randint",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "randint",
+                                            "path": "visualpython - library - numpy - random number generation - np.random.randint ",
+                                            "desc": "",
+                                            "tag": "NUMPY, UNIVERSAL, RANDOM, NP.RANDOM.RANDINT, NP, RANDOM, RANDINT",
+                                            "file": "m_library/m_numpy/randint",
+                                            "useAutoV2": true
+                                        },
+                                        {
+                                            "id": "np_rand",
+                                            "type": "function",
+                                            "level": 3,
+                                            "name": "rand",
+                                            "path": "visualpython - library - numpy - random number generation - np.random.rand ",
+                                            "desc": "",
+                                            "tag": "NUMPY, UNIVERSAL, RANDOM, NP.RANDOM.RAND, NP, RANDOM, RAND",
+                                            "file": "m_library/m_numpy/rand",
+                                            "useAutoV2": true
+                                        }
+                                    ]
                             }
                         ]
                     },
@@ -1464,7 +2361,7 @@
                                 "tag"  : "PANDAS PLOT,PANDAS",
                                 "path" : "visualpython - library - pandas - plot",
                                 "desc" : "Pandas Plot",
-                                "file" : "m_pandas/plot",
+                                "file" : "m_library/m_pandas/plot",
                                 "useAuto" : true
                             },
                             {
@@ -1483,7 +2380,7 @@
                                         "tag"  : "READ FILE,CSV,EXCEL,PICKLE,JSON",
                                         "path" : "visualpython - library - pandas - input output - read file",
                                         "desc" : "Read file",
-                                        "file" : "m_pandas/readFile"
+                                        "file" : "m_library/m_pandas/readFile"
                                     },
                                     {
                                         "id"   : "pdIo_toFile",
@@ -1493,7 +2390,7 @@
                                         "tag"  : "WRITE FILE,CSV,EXCEL,PICKLE,JSON",
                                         "path" : "visualpython - library - pandas - input output - write file",
                                         "desc" : "Write file",
-                                        "file" : "m_pandas/toFile"
+                                        "file" : "m_library/m_pandas/toFile"
                                     }
                                 ]
                             },
@@ -1513,7 +2410,7 @@
                                         "path": "visualpython - library - pandas - pandas objects - series",
                                         "desc": "Series",
                                         "tag": "CREATE SERIES",
-                                        "file": "m_pandas/series.js",
+                                        "file": "m_library/m_pandas/series",
                                         "useAuto" : true
                                     },
                                     {
@@ -1524,7 +2421,7 @@
                                         "path": "visualpython - library - pandas - pandas objects - dataframe",
                                         "desc": "DataFrame",
                                         "tag": "CREATE DATAFRAME",
-                                        "file": "m_pandas/dataframe.js",
+                                        "file": "m_library/m_pandas/dataframe",
                                         "useAuto" : true
                                     },
                                     {
@@ -1535,7 +2432,7 @@
                                         "path": "visualpython - library - pandas - pandas objects - index",
                                         "desc": "Index",
                                         "tag": "CREATE INDEX",
-                                        "file": "m_pandas/index.js",
+                                        "file": "m_library/m_pandas/index",
                                         "useAuto" : true
                                     },
                                     {
@@ -1546,7 +2443,7 @@
                                         "path": "visualpython - library - pandas - pandas objects - copy",
                                         "desc": "Copy pandas object",
                                         "tag": "COPY PANDAS OBJECT, COPY",
-                                        "file": "m_pandas/copy.js",
+                                        "file": "m_library/m_pandas/copy",
                                         "useAuto" : true
                                     }
                                 ]
@@ -1567,7 +2464,7 @@
                                         "path": "visualpython - library - pandas - data info - head",
                                         "desc": "Search head data",
                                         "tag": "SEARCH HEAD DATA, HEAD",
-                                        "file": "m_pandas/head.js",
+                                        "file": "m_library/m_pandas/head",
                                         "useAuto" : true
                                     },
                                     {
@@ -1578,7 +2475,7 @@
                                         "path": "visualpython - library - pandas - data info - tail",
                                         "desc": "Search tail data",
                                         "tag": "SEARCH TAIL DATA, TAIL",
-                                        "file": "m_pandas/tail.js",
+                                        "file": "m_library/m_pandas/tail",
                                         "useAuto" : true
                                     },
                                     {
@@ -1589,7 +2486,7 @@
                                         "path": "visualpython - library - pandas - data info - take",
                                         "desc": "Search part of data",
                                         "tag": "TAKE DATA, TAKE",
-                                        "file": "m_pandas/take.js",
+                                        "file": "m_library/m_pandas/take",
                                         "useAuto" : true
                                     },
                                     {
@@ -1600,7 +2497,7 @@
                                         "path": "visualpython - library - pandas - data info - get values",
                                         "desc": "Get pandas object's values",
                                         "tag": "GET VALUES, .VALUES",
-                                        "file": "m_pandas/getValues.js",
+                                        "file": "m_library/m_pandas/getValues",
                                         "useAuto" : true
                                     },
                                     {
@@ -1611,7 +2508,7 @@
                                         "path": "visualpython - library - pandas - data info - get index",
                                         "desc": "Get indexes",
                                         "tag": "GET INDEX, .INDEX",
-                                        "file": "m_pandas/getIndex.js",
+                                        "file": "m_library/m_pandas/getIndex",
                                         "useAuto" : true
                                     },
                                     {
@@ -1622,7 +2519,7 @@
                                         "path": "visualpython - library - pandas - data info - get columns",
                                         "desc": "Get columns",
                                         "tag": "GET COLUMNS, .COLUMNS",
-                                        "file": "m_pandas/getColumns.js",
+                                        "file": "m_library/m_pandas/getColumns",
                                         "useAuto" : true
                                     },
                                     {
@@ -1633,7 +2530,7 @@
                                         "path": "visualpython - library - pandas - data info - get length",
                                         "desc": "Get length",
                                         "tag": "GET LENGTH, LEN",
-                                        "file": "m_pandas/getLength.js",
+                                        "file": "m_library/m_pandas/getLength",
                                         "useAuto" : true
                                     },
                                     {
@@ -1644,8 +2541,7 @@
                                         "path": "visualpython - library - pandas - data info - get value counts",
                                         "desc": "values counts",
                                         "tag": "GET VALUE COUNTS, .VALUE_COUNTS",
-                                        "file": "m_pandas/getValueCounts.js",
-                                        "useAuto" : true
+                                        "file": "m_library/m_pandas/getValueCounts"
                                     },
                                     {
                                         "id": "pdIdt_info",
@@ -1655,7 +2551,7 @@
                                         "path": "visualpython - library - pandas - data info - get info",
                                         "desc": "Dataframe's basic information",
                                         "tag": "GET BASIC INFO FROM DATAFRAME, INFO",
-                                        "file": "m_pandas/getInfo.js",
+                                        "file": "m_library/m_pandas/getInfo",
                                         "useAuto" : true
                                     },
                                     {
@@ -1666,7 +2562,7 @@
                                         "path": "visualpython - library - pandas - data info - get described info",
                                         "desc": "Pandas object details",
                                         "tag": "GET DETAILED INFO FROM DATAFRAME OR SERIES, DESCRIBE",
-                                        "file": "m_pandas/getDescribedInfo.js",
+                                        "file": "m_library/m_pandas/getDescribedInfo",
                                         "useAuto" : true
                                     },
                                     {
@@ -1677,7 +2573,7 @@
                                         "path": "visualpython - library - pandas - data info - transpose",
                                         "desc": "Transpose",
                                         "tag": "TRANSPOSE, .T",
-                                        "file": "m_pandas/transpose.js",
+                                        "file": "m_library/m_pandas/transpose",
                                         "useAuto" : true
                                     },
                                     {
@@ -1688,7 +2584,7 @@
                                         "path": "visualpython - library - pandas - data info - get unique",
                                         "desc": "Get unique values",
                                         "tag": "GET UNIQUE DATA, UNIQUE",
-                                        "file": "m_pandas/getUnique.js",
+                                        "file": "m_library/m_pandas/getUnique",
                                         "useAuto" : true
                                     },
                                     {
@@ -1699,7 +2595,7 @@
                                         "path": "visualpython - library - pandas - data info - get size",
                                         "desc": "Get size",
                                         "tag": "GET SIZE, SIZE",
-                                        "file": "m_pandas/getSize.js",
+                                        "file": "m_library/m_pandas/getSize",
                                         "useAuto" : true
                                     }
                                 ]
@@ -1720,7 +2616,7 @@
                                         "path": "visualpython - library - pandas - general functions - merge",
                                         "desc": "",
                                         "tag": "MERGE, JOIN, MERGE",
-                                        "file": "m_pandas/merge.js",
+                                        "file": "m_library/m_pandas/merge",
                                         "useAuto" : true
                                     },
                                     {
@@ -1731,7 +2627,7 @@
                                         "path": "visualpython - library - pandas - general functions - concat",
                                         "desc": "",
                                         "tag": "CONCATENATE, CONCAT",
-                                        "file": "m_pandas/concat.js",
+                                        "file": "m_library/m_pandas/concat",
                                         "useAuto" : true
                                     },
                                     {
@@ -1742,7 +2638,7 @@
                                         "path": "visualpython - library - pandas - general functions - reindex",
                                         "desc": "",
                                         "tag": "REINDEX",
-                                        "file": "m_pandas/reindex.js",
+                                        "file": "m_library/m_pandas/reindex",
                                         "useAuto" : true
                                     },
                                     {
@@ -1753,7 +2649,7 @@
                                         "path": "visualpython - library - pandas - general functions - set index",
                                         "desc": "",
                                         "tag": "SET INDEX",
-                                        "file": "m_pandas/setIndex.js",
+                                        "file": "m_library/m_pandas/setIndex",
                                         "useAuto" : true
                                     },
                                     {
@@ -1764,7 +2660,7 @@
                                         "path": "visualpython - library - pandas - general functions - reset index",
                                         "desc": "",
                                         "tag": "RESET INDEX",
-                                        "file": "m_pandas/resetIndex.js",
+                                        "file": "m_library/m_pandas/resetIndex",
                                         "useAuto" : true
                                     },
                                     {
@@ -1775,7 +2671,7 @@
                                         "path": "visualpython - library - pandas - general functions - stack",
                                         "desc": "",
                                         "tag": "STACK",
-                                        "file": "m_pandas/stack.js",
+                                        "file": "m_library/m_pandas/stack",
                                         "useAuto" : true
                                     },
                                     {
@@ -1786,7 +2682,7 @@
                                         "path": "visualpython - library - pandas - general functions - unstack",
                                         "desc": "",
                                         "tag": "UNSTACK",
-                                        "file": "m_pandas/unstack.js",
+                                        "file": "m_library/m_pandas/unstack",
                                         "useAuto" : true
                                     },
                                     {
@@ -1797,7 +2693,7 @@
                                         "path": "visualpython - library - pandas - general functions - pivot",
                                         "desc": "",
                                         "tag": "PIVOT",
-                                        "file": "m_pandas/pivot.js",
+                                        "file": "m_library/m_pandas/pivot",
                                         "useAuto" : true
                                     },
                                     {
@@ -1808,7 +2704,7 @@
                                         "path": "visualpython - library - pandas - general functions - melt",
                                         "desc": "",
                                         "tag": "MELT",
-                                        "file": "m_pandas/melt.js",
+                                        "file": "m_library/m_pandas/melt",
                                         "useAuto" : true
                                     },
                                     {
@@ -1819,7 +2715,7 @@
                                         "path": "visualpython - library - pandas - general functions - pivot table",
                                         "desc": "",
                                         "tag": "PIVOT TABLE",
-                                        "file": "m_pandas/pivotTable.js",
+                                        "file": "m_library/m_pandas/pivotTable",
                                         "useAuto" : true
                                     },
                                     {
@@ -1830,7 +2726,7 @@
                                         "path": "visualpython - library - pandas - general functions - replace",
                                         "desc": "",
                                         "tag": "REPLACE VALUE, REPLACE",
-                                        "file": "m_pandas/replace.js",
+                                        "file": "m_library/m_pandas/replace",
                                         "useAuto" : true
                                     },
                                     {
@@ -1841,7 +2737,7 @@
                                         "path": "visualpython - library - pandas - general functions - is duplicated",
                                         "desc": "",
                                         "tag": "CHECK IF DUPLICATED, DUPLICATED",
-                                        "file": "m_pandas/isDuplicated.js",
+                                        "file": "m_library/m_pandas/isDuplicated",
                                         "useAuto" : true
                                     },
                                     {
@@ -1852,7 +2748,7 @@
                                         "path": "visualpython - library - pandas - general functions - drop duplicates",
                                         "desc": "",
                                         "tag": "DROP DUPLICATES, REMOVE DUPLICATES, DROP_DUPICATES",
-                                        "file": "m_pandas/dropDuplicates.js",
+                                        "file": "m_library/m_pandas/dropDuplicates",
                                         "useAuto" : true
                                     },
                                     {
@@ -1863,7 +2759,7 @@
                                         "path": "visualpython - library - pandas - general functions - is null",
                                         "desc": "",
                                         "tag": "IS NULL, IS MISSING VALUE, ISNULL",
-                                        "file": "m_pandas/isNull.js",
+                                        "file": "m_library/m_pandas/isNull",
                                         "useAuto" : true
                                     },
                                     {
@@ -1874,7 +2770,7 @@
                                         "path": "visualpython - library - pandas - general functions - not null",
                                         "desc": "",
                                         "tag": "NOT NULL, NOTNULL",
-                                        "file": "m_pandas/notNull.js",
+                                        "file": "m_library/m_pandas/notNull",
                                         "useAuto" : true
                                     },
                                     {
@@ -1885,7 +2781,7 @@
                                         "path": "visualpython - library - pandas - general functions - drop na",
                                         "desc": "",
                                         "tag": "DROP NA, REMOVE MISSING VALUES, DROPNA",
-                                        "file": "m_pandas/dropNA.js",
+                                        "file": "m_library/m_pandas/dropNA",
                                         "useAuto" : true
                                     },
                                     {
@@ -1896,7 +2792,7 @@
                                         "path": "visualpython - library - pandas - general functions - fill na",
                                         "desc": "",
                                         "tag": "FILL NA, REPLACE AND FILL MISSING VALUES, FILLNA",
-                                        "file": "m_pandas/fillNA.js",
+                                        "file": "m_library/m_pandas/fillNA",
                                         "useAuto" : true
                                     },
                                     {
@@ -1907,7 +2803,7 @@
                                         "path": "visualpython - library - pandas - general functions - combine first",
                                         "desc": "",
                                         "tag": "COMBINE FIRST, REPLACE MISSING VALUES WITH OTHER DATA, COMBINE_FIRST",
-                                        "file": "m_pandas/combineFirst.js",
+                                        "file": "m_library/m_pandas/combineFirst",
                                         "useAuto" : true
                                     }
                                 ]
@@ -1928,7 +2824,7 @@
                                         "path": "visualpython - library - pandas - pandas arrays - period",
                                         "desc": "",
                                         "tag": "CREATE PERIOD",
-                                        "file": "m_pandas/period.js",
+                                        "file": "m_library/m_pandas/period",
                                         "useAuto" : true
                                     },
                                     {
@@ -1939,7 +2835,7 @@
                                         "path": "visualpython - library - pandas - pandas arrays - period index",
                                         "desc": "",
                                         "tag": "CREATE PERIOD INDEX",
-                                        "file": "m_pandas/periodIndex.js",
+                                        "file": "m_library/m_pandas/periodIndex",
                                         "useAuto" : true
                                     },
                                     {
@@ -1950,7 +2846,7 @@
                                         "path": "visualpython - library - pandas - pandas arrays - timestamp",
                                         "desc": "",
                                         "tag": "CREATE TIMESTAMP",
-                                        "file": "m_pandas/timestamp.js",
+                                        "file": "m_library/m_pandas/timestamp",
                                         "useAuto" : true
                                     }
                                 ]
@@ -1971,7 +2867,7 @@
                                         "path": "visualpython - library - pandas - groupby - groupby",
                                         "desc": "",
                                         "tag": "GROUP BY DATA, GROUPBY",
-                                        "file": "m_pandas/groupby.js",
+                                        "file": "m_library/m_pandas/groupby",
                                         "useAuto" : true
                                     },
                                     {
@@ -1982,7 +2878,7 @@
                                         "path": "visualpython - library - pandas - groupby - groups",
                                         "desc": "",
                                         "tag": "GROUPS INFORMATION, .GROUPS",
-                                        "file": "m_pandas/groups.js",
+                                        "file": "m_library/m_pandas/groups",
                                         "useAuto" : true
                                     },
                                     {
@@ -1993,7 +2889,7 @@
                                         "path": "visualpython - library - pandas - groupby - agg",
                                         "desc": "",
                                         "tag": "AGG",
-                                        "file": "m_pandas/agg.js",
+                                        "file": "m_library/m_pandas/agg",
                                         "useAuto" : true
                                     },
                                     {
@@ -2004,7 +2900,7 @@
                                         "path": "visualpython - library - pandas - groupby - sum",
                                         "desc": "",
                                         "tag": "SUM",
-                                        "file": "m_pandas/agg_sum.js",
+                                        "file": "m_library/m_pandas/agg_sum",
                                         "useAuto" : true
                                     },
                                     {
@@ -2015,7 +2911,7 @@
                                         "path": "visualpython - library - pandas - groupby - mean",
                                         "desc": "",
                                         "tag": "MEAN",
-                                        "file": "m_pandas/agg_mean.js",
+                                        "file": "m_library/m_pandas/agg_mean",
                                         "useAuto" : true
                                     },
                                     {
@@ -2026,7 +2922,7 @@
                                         "path": "visualpython - library - pandas - groupby - count",
                                         "desc": "",
                                         "tag": "COUNT",
-                                        "file": "m_pandas/agg_count.js",
+                                        "file": "m_library/m_pandas/agg_count",
                                         "useAuto" : true
                                     },
                                     {
@@ -2037,7 +2933,7 @@
                                         "path": "visualpython - library - pandas - groupby - max",
                                         "desc": "",
                                         "tag": "MAX",
-                                        "file": "m_pandas/agg_max.js",
+                                        "file": "m_library/m_pandas/agg_max",
                                         "useAuto" : true
                                     },
                                     {
@@ -2048,7 +2944,7 @@
                                         "path": "visualpython - library - pandas - groupby - min",
                                         "desc": "",
                                         "tag": "MIN",
-                                        "file": "m_pandas/agg_min.js",
+                                        "file": "m_library/m_pandas/agg_min",
                                         "useAuto" : true
                                     },
                                     {
@@ -2059,7 +2955,7 @@
                                         "path": "visualpython - library - pandas - groupby - median",
                                         "desc": "",
                                         "tag": "MEDIAN",
-                                        "file": "m_pandas/agg_median.js",
+                                        "file": "m_library/m_pandas/agg_median",
                                         "useAuto" : true
                                     },
                                     {
@@ -2070,7 +2966,7 @@
                                         "path": "visualpython - library - pandas - groupby - std",
                                         "desc": "",
                                         "tag": "STD, STANDARD DEVIATION",
-                                        "file": "m_pandas/agg_std.js",
+                                        "file": "m_library/m_pandas/agg_std",
                                         "useAuto" : true
                                     },
                                     {
@@ -2081,7 +2977,7 @@
                                         "path": "visualpython - library - pandas - groupby - size",
                                         "desc": "",
                                         "tag": "SIZE",
-                                        "file": "m_pandas/agg_size.js",
+                                        "file": "m_library/m_pandas/agg_size",
                                         "useAuto" : true
                                     },
                                     {
@@ -2092,7 +2988,7 @@
                                         "path": "visualpython - library - pandas - groupby - quantile",
                                         "desc": "",
                                         "tag": "QUANTILE",
-                                        "file": "m_pandas/agg_quantile.js",
+                                        "file": "m_library/m_pandas/agg_quantile",
                                         "useAuto" : true
                                     }
                                 ]
@@ -2113,7 +3009,7 @@
                                         "path": "visualpython - library - pandas - sort data - sort by index",
                                         "desc": "",
                                         "tag": "SORT BY INDEX, SORT_INDEX",
-                                        "file": "m_pandas/sortByIndex.js",
+                                        "file": "m_library/m_pandas/sortByIndex",
                                         "useAuto" : true
                                     },
                                     {
@@ -2124,7 +3020,7 @@
                                         "path": "visualpython - library - pandas - sort data - sort by values",
                                         "desc": "",
                                         "tag": "SORT BY VALUES, SORT_VALUES",
-                                        "file": "m_pandas/sortByValues.js",
+                                        "file": "m_library/m_pandas/sortByValues",
                                         "useAuto" : true
                                     }
                                 ]
@@ -2145,7 +3041,7 @@
                                         "path": "visualpython - library - pandas - rowcol - drop rowcol",
                                         "desc": "",
                                         "tag": "DROP ROW COLUMN, DROP",
-                                        "file": "m_pandas/dropRowCol.js",
+                                        "file": "m_library/m_pandas/dropRowCol",
                                         "useAuto" : true
                                     }
                                 ]
@@ -2168,7 +3064,7 @@
                                 "path": "visualpython - library - matplotlib - import matplotlib",
                                 "desc": "",
                                 "tag": "IMPORT MATPLOTLIB",
-                                "file": "m_matplotlib/import.js"
+                                "file": "m_matplotlib/import"
                             },
                             {
                                 "id": "mp_plot",
@@ -2178,7 +3074,7 @@
                                 "path": "visualpython - library - matplotlib - plot",
                                 "desc": "",
                                 "tag": "MATPLOTLIB, PLOT, CHART",
-                                "file": "m_matplotlib/plot.js"
+                                "file": "m_matplotlib/plot"
                             },
                             {
                                 "id": "mp_figure",
@@ -2188,7 +3084,7 @@
                                 "path": "visualpython - library - matplotlib - figure",
                                 "desc": "",
                                 "tag": "MATPLOTLIB FIGURE, FIGURE, SUBPLOTS",
-                                "file": "m_matplotlib/figure.js"
+                                "file": "m_matplotlib/figure"
                             }
                         ]
                     }

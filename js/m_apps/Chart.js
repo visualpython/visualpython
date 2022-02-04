@@ -133,6 +133,28 @@ define([
                 });
                 fileNavi.open();
             });
+            
+            // xlimit
+            $(this.wrapSelector('#xlimit_min')).change(function() {
+                let xlim_min = $(that.wrapSelector('#xlimit_min')).val();
+                let xlim_max = $(that.wrapSelector('#xlimit_max')).val();
+                $(that.wrapSelector('#xlim')).val(com_util.formatString('({0}, {1})', xlim_min, xlim_max));
+            });
+            $(this.wrapSelector('#xlimit_max')).change(function() {
+                let xlim_min = $(that.wrapSelector('#xlimit_min')).val();
+                let xlim_max = $(that.wrapSelector('#xlimit_max')).val();
+                $(that.wrapSelector('#xlim')).val(com_util.formatString('({0}, {1})', xlim_min, xlim_max));
+            });
+            $(this.wrapSelector('#ylimit_min')).change(function() {
+                let ylim_min = $(that.wrapSelector('#ylimit_min')).val();
+                let ylim_max = $(that.wrapSelector('#ylimit_max')).val();
+                $(that.wrapSelector('#ylim')).val(com_util.formatString('({0}, {1})', ylim_min, ylim_max));
+            });
+            $(this.wrapSelector('#ylimit_max')).change(function() {
+                let ylim_min = $(that.wrapSelector('#ylimit_min')).val();
+                let ylim_max = $(that.wrapSelector('#ylimit_max')).val();
+                $(that.wrapSelector('#ylim')).val(com_util.formatString('({0}, {1})', ylim_min, ylim_max));
+            });
         }
 
         templateForBody() {
@@ -463,7 +485,6 @@ define([
                     if (varType == 'DataFrame') {
                         if (varResult.length > 0) {
                             varResult.forEach(v => {
-                                // var option = $(`<option value="${v.colName}" data-dtype="${v.dtype}" data-array="${v.array}">${v.colName}</option>`)
                                 var option = $(`<div class="vp-column-select-item" 
                                                 data-dtype="${v.dtype}" data-array="${v.array}" data-col="${v.colName}" title="${v.array}">
                                                     ${v.colName}</div>`);
@@ -529,7 +550,7 @@ define([
                 // allow multi select
                 var methodArrayCode = new com_String();
                 var methodList;
-                // 선택된 항목들 중 categorical variable 존재하면 categorical로 분류
+                // if categorical variable exists, set as categorical
                 var hasObject = false;
                 var selectedColumnList = $(that.wrapSelector('#vp_varDetailColList .vp-column-select-item.selected'));
                 if (selectedColumnList.length > 0) {

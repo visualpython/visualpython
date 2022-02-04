@@ -339,7 +339,7 @@ define([
                             });
                         }
 
-                        // Method/Function... 이면 Method 항목에 표시
+                        // Method/Function... -> Method
                         else if (_METHOD_TYPES.includes(obj.type)) {
                             methodListTag.appendFormatLine('<li class="{0}" data-var-name="{1}" data-var-type="{2}" title="{3}">{4}</li>',
                                 VP_INS_SELECT_ITEM, obj.name + '()', obj.type, obj.type, obj.name);
@@ -349,10 +349,6 @@ define([
                                 type: obj.type
                             });
                         } else {
-                            // FIXME: type이 module일 경우엔 pd(pandas) module만 표시
-                            // if (obj.type == 'module' && obj.name != 'pd') {
-                            //     ;
-                            // } else {
                             attrListTag.appendFormatLine('<li class="{0}" data-var-name="{1}" data-var-type="{2}" title="{3}">{4}</li>',
                                 VP_INS_SELECT_ITEM, obj.name, obj.type, obj.type, obj.name);
                             attrList.push({
@@ -360,7 +356,6 @@ define([
                                 value: obj.name,
                                 type: obj.type
                             });
-                            // }
                         }
                     });
                     $(that.wrapSelector('.' + VP_INS_SELECT_LIST + '.attr')).html(attrListTag.toString());

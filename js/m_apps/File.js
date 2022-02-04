@@ -245,8 +245,8 @@ define([
             var prefix = '#vp_file' + pageType + ' ';
     
             // clear
-            $(this.wrapSelector(prefix + '#vp_inputOutputBox table')).html('<colgroup><col width="40%"/><col width="*"/></colgroup>');
-            $(this.wrapSelector(prefix + '#vp_optionBox table')).html('<colgroup><col width="40%"/><col width="*"/></colgroup>');
+            $(this.wrapSelector(prefix + '#vp_inputOutputBox table tbody')).html('');
+            $(this.wrapSelector(prefix + '#vp_optionBox table tbody')).html('');
     
             var fileTypeObj = this.fileState[pageType]['fileTypeId'];
             var selectedType = this.fileState[pageType]['selectedType'];
@@ -273,7 +273,7 @@ define([
             pdGen.vp_showInterfaceOnPage(this.wrapSelector('#vp_file' + pageType), thisPkg);
     
             // prepend file type selector
-            $(this.wrapSelector(prefix + '#vp_inputOutputBox table')).prepend(
+            $(this.wrapSelector(prefix + '#vp_inputOutputBox table tbody')).prepend(
                 $('<tr>').append($(`<td><label for="fileType" class="vp-orange-text">File Type</label></td>`))
                     .append($('<td><select id="fileType" class="vp-select"></select></td>'))
             );
@@ -292,7 +292,7 @@ define([
                         .append($('<td><input id="userOption" type="text" class="vp-input vp-state" placeholder="key=value, ..."/></td>'))
                 )
             } else {
-                $(this.wrapSelector(prefix + '#vp_inputOutputBox table')).append(
+                $(this.wrapSelector(prefix + '#vp_inputOutputBox table tbody')).append(
                     $('<tr>').append($(`<td><label for="userOption">User Option</label></td>`))
                         .append($('<td><input id="userOption" type="text" class="vp-input vp-state" placeholder="key=value, ..."/></td>'))
                 )

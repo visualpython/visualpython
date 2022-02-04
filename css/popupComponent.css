@@ -270,7 +270,6 @@
     font-size: 13px;
     line-height: 16px;
     height: 30px;
-    margin-bottom: 5px;
     padding: 3px 7px;
     color: var(--font-primary);
     background: #FFFFFF;
@@ -347,13 +346,12 @@
 /* inner popup */
 .vp-inner-popup-box {
     position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    left: calc(50% - 200px);
+    top: calc(50% - 200px);
     min-width: 400px;
     min-height: 150px;
-    width: 30%;
-    height: fit-content;
+    width: 400px;
+    height: 400px;
     background-color: white;
     z-index: 200;
     border: 0.25px solid var(--border-gray-color);
