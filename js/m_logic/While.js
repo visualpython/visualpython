@@ -107,9 +107,9 @@ define([
         templateForBody() {
             /** Implement generating template */
             var page = new com_String();
-            page.appendLine('<table class="v1 wp100" style="margin: 10px 0">');
+            page.appendLine('<table class="v1 wp100 vp-tbl-gap5" style="margin: 10px 0">');
             // page.appendLine('<thead><tr><td></td><td>Parameter</td><td></td><td>Default Value</td></tr></thead>');
-            page.appendLine('<colgroup><col width="20px"><col width="100px"><col width="100px"><col width="100px"><col width="100px"><col width="30px"></colgroup>');
+            page.appendLine('<colgroup><col width="20px"><col width="100px"><col width="70px"><col width="100px"><col width="100px"><col width="30px"></colgroup>');
             page.appendLine('<tbody class="v1-table">');
             let that = this;
             this.state.v1.forEach((v, idx) => {
@@ -138,7 +138,7 @@ define([
             // suggestInput for operator
             let operList = ['', '==', '!=', 'in', 'not in', '<', '<=', '>', '>='];
             var suggestInput = new SuggestInput();
-            suggestInput.addClass('vp-input w100 v1-i2');
+            suggestInput.addClass('vp-input w70 v1-i2');
             suggestInput.setSuggestList(function() { return operList; });
             suggestInput.setPlaceholder('Operator');
             suggestInput.setNormalFilter(false);

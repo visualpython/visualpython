@@ -1,7 +1,6 @@
 define([
 ], function () {
     // TEST
-    // pandas 함수 설정값
     /**
      * Replaced with
     '([a-zA-Z0-9_.]*)'[ ]*: (\{[\n\t ]*id:)[ ]*'([a-zA-Z0-9]*)'
@@ -80,7 +79,7 @@ define([
             id: 'Index',
             name: 'Index',
             library: 'pandas',
-            description: '색인 객체 생성',
+            description: 'Create index object',
             code: '${o0} = pd.Index(${data}${v})',
             input: [
                 {
@@ -96,7 +95,6 @@ define([
                     label: 'Numpy Dtype',
                     component: 'option_select',
                     options: ["'object'", 'None', "'int32'", "'int64'", "'float32'", "'float64'", "'string'", "'complex64'", "'bool'"],
-                    options_label: ['객체', '선택 안 함', '정수형(32)', '정수형(64)', '실수형(32)', '실수형(64)', '문자형', '복소수(64bit)', 'bool형'],
                     default: "'object'"
                 },
                 {
@@ -251,79 +249,11 @@ define([
                 }
             ]
         },
-        'pd006': {
-            id: 'select_row',
-            name: '행 선택',
-            library: 'pandas',
-            description: '행 선택해 조회',
-            code: '${o0} = ${i0}[${i1}:${i2}]',
-            input: [
-                {
-                    name:'i0',
-                    type:'var',
-                    label: 'Target Variable',
-                    component: 'var_select',
-                    var_type: ['DataFrame', 'Series']
-                },
-                {
-                    name:'i1',
-                    type:'int',
-                    label: 'Start Row',
-                    required: false
-                },
-                {
-                    name:'i2',
-                    type:'int',
-                    label: 'End Row',
-                    required: false
-                }
-            ],
-            output: [
-                {
-                    name:'o0',
-                    type:'var',
-                    label: 'Allocate to'
-                },
-            ],
-            variable: [
-            ]
-        },
-        'pd007': {
-            id: 'select_column',
-            name: '열 선택',
-            library: 'pandas',
-            description: '열 선택해 조회',
-            code: '${o0} = ${i0}[${i1}]',
-            input: [
-                {
-                    name:'i0',
-                    type:'var',
-                    label: 'Target Variable',
-                    var_type: ['DataFrame', 'Series'],
-                    component: 'var_select'
-                },
-                {
-                    name:'i1',
-                    type:'list',
-                    label: 'Columns',
-                    required: false
-                }
-            ],
-            output: [
-                {
-                    name:'o0',
-                    type:'var',
-                    label: 'Allocate to'
-                },
-            ],
-            variable: [
-            ]
-        },
         'pdFunc_merge': {
             id: 'merge',
             name: 'Merge',
             library: 'pandas',
-            description: '두 객체를 병합',
+            description: 'Merge 2 objects',
             code: '${o0} = pd.merge(${i0}, ${i1}${v})',
             input: [
                 {
@@ -377,7 +307,7 @@ define([
             id: 'join',
             name: 'Join',
             library: 'pandas',
-            description: '다수의 객체를 병합',
+            description: 'Merge multiple objects',
             code: '${o0} = ${i0}.join(${i1}${v})',
             input: [
                 {
@@ -437,7 +367,7 @@ define([
             id: 'concat',
             name: 'Concat',
             library: 'pandas',
-            description: '다수의 객체를 병합',
+            description: 'Merge multiple objects',
             code: '${o0} = pd.concat([${i0}]${v})',
             guide: [
                 's1 = pd.Series([0, 1],    index=["a", "b"])',
@@ -495,7 +425,7 @@ define([
             id: 'sort_index',
             name: 'Sort By Index',
             library: 'pandas',
-            description: 'DataFrame/Series 객체를 index 기준으로 정렬',
+            description: 'Sort by index',
             code: '${o0} = ${i0}.sort_index(${v})',
             input: [
                 {
@@ -553,7 +483,7 @@ define([
             id: 'groupby',
             name: 'Group By',
             library: 'pandas',
-            description: 'DataFrame/Series 객체의 그룹화',
+            description: 'Group DataFrame/Series',
             code: '${o0} = ${i0}.groupby(${level}${v})',
             input: [
                 {
@@ -606,7 +536,7 @@ define([
             id: 'period',
             name: 'Period',
             library: 'pandas',
-            description: 'Period 객체 생성',
+            description: 'Create Period object',
             code: '${o0} = pd.Period(${i0}${v})',
             input: [
                 {
@@ -629,7 +559,7 @@ define([
                     type: 'var',
                     component: 'option_select',
                     options: ['s', 'T', 'H', 'D', 'B', 'W', 'W-MON', 'M'],
-                    options_label: ['초', '분', '시간', '일', '주말이 아닌 평일', '주(일요일)', '주(월요일)', '각 달의 마지막 날']
+                    options_label: ['second', 'minute', 'hour', 'day', 'weekdays', 'week(Sunday)', 'week(Monday)', 'last day of month']
                 },
                 {
                     index : 1,
@@ -655,7 +585,7 @@ define([
             id: 'dropna',
             name: 'Drop NA',
             library: 'pandas',
-            description: 'dropna()로 결측치 처리',
+            description: '',
             code: '${o0} = ${i0}.dropna(${v})',
             guide: [
                 'from numpy import nan as NA',
@@ -700,7 +630,6 @@ define([
                     name: 'thresh',
                     type: 'int',
                     label: 'Na Minimum Standard',
-                    help: '결측치가 몇 개일 때 부터 제거할지 개수 입력'
                 }
             ]
         },
@@ -708,15 +637,14 @@ define([
             id: 'fillna',
             name: 'Fill NA',
             library: 'pandas',
-            description: 'fillna()로 널 값 대체',
+            description: 'replace null using value',
             code: '${o0} = ${i0}.fillna(${v})',
             guide: [
                 'from numpy import nan as NA',
+                '',
                 'df = pd.DataFrame([[1,2,3,NA],[4,NA,1,2],[0,9,6,7]])',
-                '# dictionary 형식으로 받았는데 앞의 key가 컬럼을 나타낸다',
                 'df.fillna({1: 0.5, 3: -1})',
-                '# fillna는 값을 채워 넣은 객체의 참조를 반환한다',
-                '_ = df.fillna(0, inplace=True)'
+                'df.fillna(0, inplace=True)'
             ],
             input: [
                 {
@@ -757,8 +685,7 @@ define([
                     help: 'ffill:fill with before value\nbfill:fill with after value',
                     component: 'option_select',
                     default: 'None',
-                    options: ['None', "'ffill'", "'bfill'"],
-                    options_label: ['선택 안 함', '이전 값으로 채우기', '이후 값으로 채우기']
+                    options: ['None', "'ffill'", "'bfill'"]
                 },
                 {
                     name: 'inplace',
@@ -769,8 +696,7 @@ define([
                 {
                     name: 'limit',
                     type: 'int',
-                    label: 'Gap Limit',
-                    help: '전/후 보간 시에 사용할 최대 갭 크기'
+                    label: 'Gap Limit'
 
                 }
             ]
@@ -779,7 +705,7 @@ define([
             id: 'duplicated',
             name: 'Get Duplicates',
             library: 'pandas',
-            description: '중복 조회',
+            description: 'Get duplicates',
             code: '${o0} = ${i0}.duplicated(${v})',
             guide: [
                 'data.duplicated()'
@@ -805,19 +731,17 @@ define([
                     name: 'keep',
                     type:'var',
                     label: 'Mark Duplicated When',
-                    help: 'first:첫 번째 항목 뺀 모두 중복으로 표시 / last:마지막 항목 뺀 모두 중복으로 표시 / False:모두 중복으로 표시',
                     component: 'option_select',
                     default: "'first'",
-                    options: ["'first'", "'last'", 'False'],
-                    options_label: ['첫 번째 항목 제외한 모두 중복으로 표시', '마지막 항목 제외한 모두 중복으로 표시', '모두 중복으로 표시']
+                    options: ["'first'", "'last'", 'False']
                 }
             ]
         },
         'pdFunc_dropDuplicates': {
             id: 'drop_duplicates',
-            name: 'Drop  Duplicates',
+            name: 'Drop Duplicates',
             library: 'pandas',
-            description: '중복된 항목 제거',
+            description: 'Drop duplicates',
             code: '${o0} = ${i0}.drop_duplicates(${v})',
             input: [
                 {
@@ -840,11 +764,9 @@ define([
                     name: 'keep',
                     type:'var',
                     label: 'Mark Duplicated When',
-                    help: 'first:첫 번째 항목 뺀 모두 중복으로 표시 / last:마지막 항목 뺀 모두 중복으로 표시 / False:모두 중복으로 표시',
                     component: 'option_select',
                     default: "'first'",
-                    options: ["'first'", "'last'", 'False'],
-                    options_label: ['첫 번째 항목 제외한 모두 중복으로 표시', '마지막 항목 제외한 모두 중복으로 표시', '모두 중복으로 표시']
+                    options: ["'first'", "'last'", 'False']
                 }
             ]
         },
@@ -852,7 +774,7 @@ define([
             id: 'replace_scala',
             name: 'Scala Replace',
             library: 'pandas',
-            description: 'Scala 값 치환',
+            description: 'Replace scala value',
             code: '${o0} = ${i0}.replace(${v})',
             guide: [
                 `s = pd.Series([0, 1, 2, 3, 4])`,
@@ -895,7 +817,6 @@ define([
                     type:'var',
                     label: 'Method',
                     options: ["'ffill'", "'bfill'", 'None'],
-                    options_label: ['이전 값으로 채우기', '이후 값으로 채우기', '선택 안 함'],
                     component: 'option_select',
                     default: "'ffill'"
                 }
@@ -905,7 +826,7 @@ define([
             id: 'replace_list',
             name: 'List-like Replace',
             library: 'pandas',
-            description: 'List 값 치환',
+            description: 'Replace values using list',
             code: '${o0} = ${i0}.replace(${v})',
             guide: [
                 `df.replace([0, 1, 2, 3], 4)`,
@@ -945,7 +866,6 @@ define([
                     type:'var',
                     label: 'Method',
                     options: ["'ffill'", "'bfill'", 'None'],
-                    options_label: ['이전 값으로 채우기', '이후 값으로 채우기', '선택 안 함'],
                     component: 'option_select',
                     default: "'ffill'"
                 }
@@ -955,7 +875,7 @@ define([
             id: 'replace_dict',
             name: 'Dict-like Replace',
             library: 'pandas',
-            description: 'Dictionary 값 치환',
+            description: 'Replace values using dictionary',
             code: '${o0} = ${i0}.replace(${v})',
             guide: [
                 `df.replace({0: 10, 1: 100})`,
@@ -995,18 +915,17 @@ define([
                     type:'var',
                     label: 'Method',
                     options: ["'ffill'", "'bfill'", 'None'],
-                    options_label: ['이전 값으로 채우기', '이후 값으로 채우기', '선택 안 함'],
                     component: 'option_select',
                     default: "'ffill'"
                 }
             ]
         },
-        // TODO: 정규식은 PENDING
+        // TODO: PENDING
         'pd021': {
             id: 'replace_regex',
             name: 'Regular Expression Replace',
             library: 'pandas',
-            description: '정규식 치환',
+            description: '',
             code: '${o0} = ${i0}.replace(${v})',
             guide: [
                 `df = pd.DataFrame({'A': ['bat', 'foo', 'bait'],`,
@@ -1050,7 +969,6 @@ define([
                     type:'var',
                     label: 'Method',
                     options: ["'ffill'", "'bfill'", 'None'],
-                    options_label: ['이전 값으로 채우기', '이후 값으로 채우기', '선택 안 함'],
                     component: 'option_select',
                     default: "'ffill'"
                 },
@@ -1066,7 +984,7 @@ define([
             id: 'sum',
             name: 'Sum',
             library: 'pandas',
-            description: '합계 계산',
+            description: '',
             code: '${o0} = ${i0}.sum(${v})',
             input: [
                 {
@@ -1089,7 +1007,6 @@ define([
                     name: 'axis',
                     type: 'int',
                     label: 'Axis',
-                    description: '연산을 수행할 축. DataFrame에서 0은 로우고 1은 칼럼이다.',
                     component: 'option_select',
                     options: [0, 1],
                     options_label: ['row', 'column']
@@ -1098,7 +1015,6 @@ define([
                     name: 'skipna',
                     type: 'bool',
                     label: 'Skip Na Value',
-                    description: '누락된 값을 제외할 것인지 정하는 옵션. 기본값은 True다.',
                     component: 'bool_checkbox',
                     default: true
                 },
@@ -1106,7 +1022,6 @@ define([
                     name: 'level',
                     type: ['int', 'text'],
                     label: 'Level',
-                    description: '계산하려는 축이 계층적 색인(다중 색인)이라면 레벨에 따라 묶어서 계산한다.'
                 }
             ]
         },
@@ -1114,7 +1029,7 @@ define([
             id: 'mean',
             name: 'Mean',
             library: 'pandas',
-            description: '평균 계산',
+            description: '',
             code: '${o0} = ${i0}.mean(${v})',
             input: [
                 {
@@ -1137,7 +1052,6 @@ define([
                     name: 'axis',
                     type: 'int',
                     label: 'Axis',
-                    description: '연산을 수행할 축. DataFrame에서 0은 로우고 1은 칼럼이다.',
                     component: 'option_select',
                     options: [0, 1],
                     options_label: ['row', 'column']
@@ -1146,15 +1060,13 @@ define([
                     name: 'skipna',
                     type: 'bool',
                     label: 'Skip Na Value',
-                    description: '누락된 값을 제외할 것인지 정하는 옵션. 기본값은 True다.',
                     component: 'bool_checkbox',
                     default: true
                 },
                 {
                     name: 'level',
                     type: ['int', 'text'],
-                    label: 'Level',
-                    description: '계산하려는 축이 계층적 색인(다중 색인)이라면 레벨에 따라 묶어서 계산한다.'
+                    label: 'Level'
                 }
             ]
         },
@@ -1162,7 +1074,7 @@ define([
             id: 'count',
             name: 'Count',
             library: 'pandas',
-            description: 'NA 값을 제외한 값의 수를 계산',
+            description: 'Count except NA values',
             code: '${o0} = ${i0}.count(${v})',
             input: [
                 {
@@ -1185,7 +1097,6 @@ define([
                     name: 'axis',
                     type: 'int',
                     label: 'Axis',
-                    description: '연산을 수행할 축. DataFrame에서 0은 로우고 1은 칼럼이다.',
                     component: 'option_select',
                     options: [0, 1],
                     options_label: ['row', 'column']
@@ -1194,15 +1105,13 @@ define([
                     name: 'skipna',
                     type: 'bool',
                     label: 'Skip Na Value',
-                    description: '누락된 값을 제외할 것인지 정하는 옵션. 기본값은 True다.',
                     component: 'bool_checkbox',
                     default: true
                 },
                 {
                     name: 'level',
                     type: ['int', 'text'],
-                    label: 'Level',
-                    description: '계산하려는 축이 계층적 색인(다중 색인)이라면 레벨에 따라 묶어서 계산한다.'
+                    label: 'Level'
                 }
             ]
         },
@@ -1210,7 +1119,7 @@ define([
             id: 'max',
             name: 'Max',
             library: 'pandas',
-            description: '최대값을 계산',
+            description: '',
             code: '${o0} = ${i0}.max(${v})',
             input: [
                 {
@@ -1233,7 +1142,6 @@ define([
                     name: 'axis',
                     type: 'int',
                     label: 'Axis',
-                    description: '연산을 수행할 축. DataFrame에서 0은 로우고 1은 칼럼이다.',
                     component: 'option_select',
                     options: [0, 1],
                     options_label: ['row', 'column']
@@ -1242,15 +1150,13 @@ define([
                     name: 'skipna',
                     type: 'bool',
                     label: 'Skip Na Value',
-                    description: '누락된 값을 제외할 것인지 정하는 옵션. 기본값은 True다.',
                     component: 'bool_checkbox',
                     default: true
                 },
                 {
                     name: 'level',
                     type: ['int', 'text'],
-                    label: 'Level',
-                    description: '계산하려는 축이 계층적 색인(다중 색인)이라면 레벨에 따라 묶어서 계산한다.'
+                    label: 'Level'
                 }
             ]
         },
@@ -1258,7 +1164,7 @@ define([
             id: 'min',
             name: 'Min',
             library: 'pandas',
-            description: '최소값을 계산',
+            description: '',
             code: '${o0} = ${i0}.min(${v})',
             input: [
                 {
@@ -1281,7 +1187,6 @@ define([
                     name: 'axis',
                     type: 'int',
                     label: 'Axis',
-                    description: '연산을 수행할 축. DataFrame에서 0은 로우고 1은 칼럼이다.',
                     component: 'option_select',
                     options: [0, 1],
                     options_label: ['row', 'column']
@@ -1290,15 +1195,13 @@ define([
                     name: 'skipna',
                     type: 'bool',
                     label: 'Skip Na Value',
-                    description: '누락된 값을 제외할 것인지 정하는 옵션. 기본값은 True다.',
                     component: 'bool_checkbox',
                     default: true
                 },
                 {
                     name: 'level',
                     type: ['int', 'text'],
-                    label: 'Level',
-                    description: '계산하려는 축이 계층적 색인(다중 색인)이라면 레벨에 따라 묶어서 계산한다.'
+                    label: 'Level'
                 }
             ]
         },
@@ -1306,7 +1209,7 @@ define([
             id: 'median',
             name: 'Median',
             library: 'pandas',
-            description: '중간값(50% 분위)을 계산',
+            description: 'Median(50%)',
             code: '${o0} = ${i0}.median(${v})',
             input: [
                 {
@@ -1329,7 +1232,6 @@ define([
                     name: 'axis',
                     type: 'int',
                     label: 'Axis',
-                    description: '연산을 수행할 축. DataFrame에서 0은 로우고 1은 칼럼이다.',
                     component: 'option_select',
                     options: [0, 1],
                     options_label: ['row', 'column']
@@ -1338,7 +1240,6 @@ define([
                     name: 'skipna',
                     type: 'bool',
                     label: 'Skip Na Value',
-                    description: '누락된 값을 제외할 것인지 정하는 옵션. 기본값은 True다.',
                     component: 'bool_checkbox',
                     default: true
 
@@ -1346,8 +1247,7 @@ define([
                 {
                     name: 'level',
                     type: ['int', 'text'],
-                    label: 'Level',
-                    description: '계산하려는 축이 계층적 색인(다중 색인)이라면 레벨에 따라 묶어서 계산한다.'
+                    label: 'Level'
                 },
                 {
                     name: 'numeric_only',
@@ -1356,8 +1256,7 @@ define([
                     type: 'var',
                     component: 'option_select',
                     default: 'None',
-                    options: ['None', "'false'", "'true'"],
-                    options_label: ['선택 안 함', '모두 집계', '숫자만 집계']
+                    options: ['None', "'false'", "'true'"]
                 }
             ]
         },
@@ -1365,7 +1264,7 @@ define([
             id: 'std',
             name: 'Std',
             library: 'pandas',
-            description: '표본 정규 분산의 값을 계산',
+            description: '',
             code: '${o0} = ${i0}.std(${v})',
             input: [
                 {
@@ -1388,7 +1287,6 @@ define([
                     name: 'axis',
                     type: 'int',
                     label: 'Axis',
-                    description: '연산을 수행할 축. DataFrame에서 0은 로우고 1은 칼럼이다.',
                     component: 'option_select',
                     options: [0, 1],
                     options_label: ['row', 'column']
@@ -1397,15 +1295,13 @@ define([
                     name: 'skipna',
                     type: 'bool',
                     label: 'Skip Na Value',
-                    description: '누락된 값을 제외할 것인지 정하는 옵션. 기본값은 True다.',
                     component: 'bool_checkbox',
                     default: true
                 },
                 {
                     name: 'level',
                     type: ['int', 'text'],
-                    label: 'Level',
-                    description: '계산하려는 축이 계층적 색인(다중 색인)이라면 레벨에 따라 묶어서 계산한다.'
+                    label: 'Level'
                 },
                 {
                     name: 'numeric_only',
@@ -1414,8 +1310,7 @@ define([
                     type: 'var',
                     component: 'option_select',
                     default: 'None',
-                    options: ['None', "'false'", "'true'"],
-                    options_label: ['선택 안 함', '모두 집계', '숫자만 집계']
+                    options: ['None', "'false'", "'true'"]
                 }
             ]
         },
@@ -1423,7 +1318,7 @@ define([
             id: 'quantile',
             name: 'Quantile',
             library: 'pandas',
-            description: '0부터 1까지의 분위수를 계산',
+            description: 'Calculate quantile between 0 and 1',
             code: '${o0} = ${i0}.quantile(${v})',
             input: [
                 {
@@ -1445,7 +1340,7 @@ define([
                 {
                     name: 'q',
                     type: ['float', 'list'],
-                    label: 'Percentile', // 백분위수
+                    label: 'Percentile',
                     placeholder: '(0 ~ 1)',
                     description: '',
                     default: 0.5
@@ -1454,7 +1349,6 @@ define([
                     name: 'axis',
                     type: 'int',
                     label: 'Axis',
-                    description: '연산을 수행할 축. DataFrame에서 0은 로우고 1은 칼럼이다.',
                     component: 'option_select',
                     options: [0, 1],
                     options_label: ['row', 'column']
@@ -1465,8 +1359,7 @@ define([
                     var_type: ['DataFrame'],
                     type: 'var',
                     component: 'option_select',
-                    options: ['False', 'True'],
-                    options_label: ['모두 집계', '숫자만 집계']
+                    options: ['False', 'True']
                 },
                 {
                     name: 'interpolation',
@@ -1482,7 +1375,7 @@ define([
             id: 'drop',
             name: 'Drop Row/Column',
             library: 'pandas',
-            description: '지정한 행/열을 삭제',
+            description: 'Drop row and column',
             code: '${o0} = ${i0}.drop(${i1}${v})',
             input: [
                 {
@@ -1523,7 +1416,7 @@ define([
             id: 'date_range',
             name: 'date_range',
             library: 'pandas',
-            description: '정규 날짜 시퀀스를 DatetimeIndex형 타임스탬프로 생성',
+            description: 'Create DatetimeIndex type timestamp',
             code: '${o0} = pd.date_range(${v})',
             input: [
             ],
@@ -1559,7 +1452,8 @@ define([
                     type: 'text',
                     component: 'option_select',
                     options: ['s', 'T', 'H', 'D', 'B', 'W', 'W-MON', 'MS', 'M', 'BMS', 'BM'],
-                    options_label: ['초', '분', '시간', '일', '주말이 아닌 평일', '주(일요일)', '주(월요일)', '각 달의 첫날', '각 달의 마지막 날', '평일 중 각 달의 첫날', '평일 중 각 달의 마지막 날']
+                    options_label: ['second', 'minute', 'hour', 'day', 'weekdays', 'week(Sunday)', 'week(Monday)', 
+                        'first day of month', 'last day of month', 'first weekday of month', 'last weekday of month']
                 }
             ]
         },
@@ -1567,7 +1461,7 @@ define([
             id: 'sort_values',
             name: 'Sort By Values',
             library: 'pandas',
-            description: 'Series/DataFrame의 데이터를 기준으로 정렬',
+            description: '',
             code: '${o0} = ${i0}.sort_values(${v})',
             input: [
                 {
@@ -1622,8 +1516,7 @@ define([
                     label: 'Sort Type',
                     component: 'option_select',
                     default: 'quicksort',
-                    options: ['quicksort', 'mergesort', 'heapsort'],
-                    options_label: ['퀵정렬', '합병정렬', '힙정렬']
+                    options: ['quicksort', 'mergesort', 'heapsort']
                 }
             ]
         },
@@ -1631,7 +1524,7 @@ define([
             id: 'isnull',
             name: 'Is Null',
             library: 'pandas',
-            description: 'Series/DataFrame의 결측치 탐색',
+            description: 'Find null',
             code: '${o0} = pd.isnull(${i0})',
             input: [
                 {
@@ -1646,8 +1539,7 @@ define([
                 {
                     name:'o0',
                     type:'var',
-                    label:'Allocate to',
-                    help: '결측치 여부를 마스킹한 DataFrame/Series'
+                    label:'Allocate to'
                 }
             ],
             variable: [
@@ -1657,7 +1549,7 @@ define([
             id: 'notnull',
             name: 'Not Null',
             library: 'pandas',
-            description: 'Series/DataFrame의 결측치가 아닌 값을 탐색',
+            description: 'Find not null',
             code: '${o0} = pd.notnull(${i0})',
             input: [
                 {
@@ -1672,8 +1564,7 @@ define([
                 {
                     name:'o0',
                     type:'var',
-                    label:'Allocate to',
-                    help: '결측치가 아닌 값을 마스킹한 DataFrame/Series'
+                    label:'Allocate to'
                 }
             ],
             variable: [
@@ -1683,7 +1574,7 @@ define([
             id: '.T',
             name: 'Transpose',
             library: 'pandas',
-            description: '행/열을 바꿔 조회',
+            description: 'Transpose row and column',
             code: '${o0} = ${i0}.T',
             input: [
                 {
@@ -1705,9 +1596,9 @@ define([
         },
         'pdIdt_columns': {
             id: '.columns',
-            name: 'Columns 조회',
+            name: 'Get columns',
             library: 'pandas',
-            description: '열 목록 조회',
+            description: '',
             code: '${o0} = ${i0}.columns',
             input: [
                 {
@@ -1729,9 +1620,9 @@ define([
         },
         'pdIdt_index': {
             id: '.index',
-            name: 'index 조회',
+            name: 'Get index',
             library: 'pandas',
-            description: '행 목록 조회',
+            description: 'Get index',
             code: '${o0} = ${i0}.index',
             input: [
                 {
@@ -1753,9 +1644,9 @@ define([
         },
         'pdIdt_values': {
             id: '.values',
-            name: 'Values 조회',
+            name: 'Values',
             library: 'pandas',
-            description: '내부 값들만 조회',
+            description: '',
             code: '${o0} = ${i0}.values',
             input: [
                 {
@@ -1777,9 +1668,9 @@ define([
         },
         'pd039': {
             id: '.name',
-            name: 'name 조회',
+            name: 'name',
             library: 'pandas',
-            description: '객체의 이름 조회',
+            description: '',
             code: '${o0} = ${i0}.name',
             input: [
                 {
@@ -1803,7 +1694,7 @@ define([
             id: 'loc',
             name: 'Loc',
             library: 'pandas',
-            description: 'index 이름으로 행 선택',
+            description: '',
             code: '${o0} = ${i0}.loc[${i1}]',
             input: [
                 {
@@ -1832,7 +1723,7 @@ define([
             id: 'iloc',
             name: 'iLoc',
             library: 'pandas',
-            description: 'index 위치로 행 선택',
+            description: '',
             code: '${o0} = ${i0}.iloc[${i1}]',
             input: [
                 {
@@ -1859,9 +1750,9 @@ define([
         },
         'pd042': {
             id: '.array',
-            name: 'array 조회',
+            name: 'array',
             library: 'pandas',
-            description: '객체의 배열 조회',
+            description: '',
             code: '${o0} = ${i0}.array',
             input: [
                 {
@@ -1883,9 +1774,9 @@ define([
         },
         'pd043': {
             id: '.axes',
-            name: 'axes 조회',
+            name: 'axes',
             library: 'pandas',
-            description: 'Series의 인덱스 조회',
+            description: '',
             code: '${o0} = ${i0}.axes',
             input: [
                 {
@@ -1907,9 +1798,9 @@ define([
         },
         'pd044': {
             id: '.hasnans',
-            name: 'hasnans 조회',
+            name: 'hasnans',
             library: 'pandas',
-            description: 'NAN 값을 갖고 있는지 여부를 확인',
+            description: 'Check if it has NaN values',
             code: '${o0} = ${i0}.hasnans',
             input: [
                 {
@@ -1931,9 +1822,9 @@ define([
         },
         'pd045': {
             id: '.shape',
-            name: 'shape 조회',
+            name: 'shape',
             library: 'pandas',
-            description: '객체의 행/열 크기를 튜플 형태로 반환',
+            description: '',
             code: '${o0} = ${i0}.shape',
             input: [
                 {
@@ -1955,9 +1846,9 @@ define([
         },
         'pd046': {
             id: '.dtype',
-            name: 'dtype 조회',
+            name: 'dtype',
             library: 'pandas',
-            description: 'Index 객체의 데이터타입 조회',
+            description: 'Check data type of Index',
             code: '${o0} = ${i0}.dtype',
             input: [
                 {
@@ -1979,9 +1870,9 @@ define([
         },
         'pdIdt_len': {
             id: 'len',
-            name: '크기 조회',
+            name: 'Length',
             library: 'pandas',
-            description: '배열 객체의 길이 조회',
+            description: '',
             code: '${o0} = len(${i0})',
             input: [
                 {
@@ -2003,9 +1894,9 @@ define([
         },
         'pdIdt_unique': {
             id: 'unique',
-            name: '고유값 조회',
+            name: 'Unique',
             library: 'pandas',
-            description: '객체의 고유값 목록을 조회',
+            description: '',
             code: '${o0} = ${i0}.unique()',
             input: [
                 {
@@ -2027,17 +1918,17 @@ define([
         },
         'pdIdt_valueCounts': {
             id: 'value_counts',
-            name: '데이터 개수 조회',
+            name: 'get data counts',
             library: 'pandas',
-            description: '각 데이터별 개수 집계',
+            description: 'get data value counts',
             code: '${o0} = ${i0}.value_counts()',
             input: [
                 {
                     name: 'i0',
                     type: 'var',
                     label: 'Target Variable',
-                    component: 'var_select',
-                    var_type: ['DataFrame', 'Series', 'Index']
+                    // component: 'var_select',
+                    // var_type: ['DataFrame', 'Series', 'Index']
                 }
             ],
             variable: [],
@@ -2051,9 +1942,9 @@ define([
         },
         'pdIdt_info': {
             id: 'info',
-            name: '기본 정보 조회',
+            name: 'Info',
             library: 'pandas',
-            description: 'DataFrame 객체의 정보(컬럼별 정보, 데이터타입, 메모리 사용량 등) 조회',
+            description: 'DataFrame info(info per columns, data type, memory usage, ...)',
             code: '${o0} = ${i0}.info()',
             input: [
                 {
@@ -2075,9 +1966,9 @@ define([
         },
         'pdIdt_describe': {
             id: 'describe',
-            name: '기본 상세정보 조회',
+            name: 'Describe',
             library: 'pandas',
-            description: 'DataFrame/Series 객체의 행/열별 집계 연산',
+            description: '',
             code: '${o0} = ${i0}.describe()',
             input: [
                 {
@@ -2099,9 +1990,9 @@ define([
         },
         'pd052': {
             id: 'add',
-            name: 'Add 산술연산',
+            name: 'Add',
             library: 'pandas',
-            description: 'DataFrame/Series의 덧셈연산',
+            description: 'DataFrame/Series addition',
             code: '${o0} = ${i0}.add(${i1}${v})',
             input: [
                 {
@@ -2149,9 +2040,9 @@ define([
         },
         'pd053': {
             id: 'sub',
-            name: 'Sub 산술연산',
+            name: 'Subtract',
             library: 'pandas',
-            description: 'DataFrame/Series의 뺄셈연산',
+            description: 'DataFrame/Series subtraction',
             code: '${o0} = ${i0}.sub(${i1}${v})',
             input: [
                 {
@@ -2176,7 +2067,7 @@ define([
                     label: 'Axis',
                     component: 'option_select',
                     options: [0, 1],
-                    options_label: ['행(index)', '열(columns)']
+                    options_label: ['Index', 'Columns']
                 },
                 {
                     name: 'level',
@@ -2199,9 +2090,9 @@ define([
         },
         'pd054': {
             id: 'div',
-            name: 'Div 산술연산',
+            name: 'Divide',
             library: 'pandas',
-            description: 'DataFrame/Series의 나눗셈연산',
+            description: 'DataFrame/Series division',
             code: '${o0} = ${i0}.div(${i1}${v})',
             input: [
                 {
@@ -2226,7 +2117,7 @@ define([
                     label: 'Axis',
                     component: 'option_select',
                     options: [0, 1],
-                    options_label: ['행(index)', '열(columns)']
+                    options_label: ['Index', 'Columns']
                 },
                 {
                     name: 'level',
@@ -2249,9 +2140,9 @@ define([
         },
         'pd055': {
             id: 'mul',
-            name: 'Mul 산술연산',
+            name: 'Multiply',
             library: 'pandas',
-            description: 'DataFrame/Series의 곱셈연산',
+            description: 'DataFrame/Series multipy',
             code: '${o0} = ${i0}.mul(${i1}${v})',
             input: [
                 {
@@ -2276,7 +2167,7 @@ define([
                     label: 'Axis',
                     component: 'option_select',
                     options: [0, 1],
-                    options_label: ['행(index)', '열(columns)']
+                    options_label: ['Index', 'Columns']
                 },
                 {
                     name: 'level',
@@ -2301,7 +2192,7 @@ define([
             id: 'insert_column',
             name: 'Insert Column',
             library: 'pandas',
-            description: 'DataFrame의 열 추가',
+            description: '',
             code: '${o0} = ${i0}.insert(${v})',
             input: [
                 {
@@ -2351,7 +2242,7 @@ define([
             id: 'insert_column_value',
             name: 'Insert Column Value',
             library: 'pandas',
-            description: 'DataFrame의 열 추가',
+            description: '',
             code: '${i0}[${i1}] = ${i2}',
             input: [
                 {
@@ -2380,7 +2271,7 @@ define([
             id: 'insert_row_loc',
             name: 'Insert Row Value',
             library: 'pandas',
-            description: 'DataFrame의 행 추가',
+            description: '',
             code: '${i0}.loc[${i1}] = ${i2}',
             input: [
                 {
@@ -2409,7 +2300,7 @@ define([
             id: '.groups',
             name: 'Groups',
             library: 'pandas',
-            description: 'GroupBy 객체의 groups 조회',
+            description: '',
             code: '${o0} = ${i0}.groups',
             input: [
                 {
@@ -2433,7 +2324,7 @@ define([
             id: 'reindex',
             name: 'Reindex',
             library: 'pandas',
-            description: 'DataFrame/Series/Index의 index를 수정',
+            description: '',
             code: '${o0} = ${i0}.reindex(${v})',
             input: [
                 {
@@ -2472,10 +2363,9 @@ define([
                     name: 'method',
                     type: 'text',
                     label: 'Method',
-                    help: 'ffill:이전 값으로 채우기\nbfill:뒤에 있는 값으로 채우기',
+                    help: 'ffill:fill with front value\nbfill:fill with back value',
                     component: 'option_select',
-                    options: ['ffill', 'bfill', 'nearest'],
-                    options_label: ['이전 값으로 채우기', '이후 값으로 채우기', '가장 가까운 값으로 채우기']
+                    options: ['ffill', 'bfill', 'nearest']
                 }
             ],
             output: [
@@ -2490,7 +2380,7 @@ define([
             id: 'set_index',
             name: 'Set Index Values',
             library: 'pandas',
-            description: 'DataFrame의 column을 이용해 index를 생성',
+            description: 'create index using column',
             code: '${o0} = ${i0}.set_index(${v})',
             input: [
                 {
@@ -2542,7 +2432,7 @@ define([
             id: 'reset_index',
             name: 'Reset Index Values',
             library: 'pandas',
-            description: 'DataFrame/Series의 index를 이용해 column을 생성',
+            description: '',
             code: '${o0} = ${i0}.reset_index(${v})',
             input: [
                 {
@@ -2587,7 +2477,7 @@ define([
             id: 'edit_row_data',
             name: 'Edit Row Data',
             library: 'pandas',
-            description: 'DataFrame/Series/Index객체의 index 데이터 수정',
+            description: '',
             code: '${i0}[${i1}] = ${i2}',
             input: [
                 {
@@ -2615,7 +2505,7 @@ define([
             id: 'head',
             name: 'Head',
             library: 'pandas',
-            description: '첫 n줄의 데이터 확인',
+            description: '',
             code: '${o0} = ${i0}.head(${v})',
             input: [
                 {
@@ -2646,7 +2536,7 @@ define([
             id: 'tail',
             name: 'Tail',
             library: 'pandas',
-            description : '마지막 n줄의 데이터 확인',
+            description : '',
             code: '${o0} = ${i0}.tail(${v})',
             input: [
                 {
@@ -2677,7 +2567,7 @@ define([
             id: 'take',
             name: 'Take',
             library: 'pandas',
-            description: 'index로 데이터 조회',
+            description: '',
             code: '${o0} = ${i0}.take(${i1}${v})',
             input: [
                 {
@@ -2699,7 +2589,7 @@ define([
                     type: 'int',
                     label: 'Axis',
                     options: [0, 1, 'None'],
-                    options_label: ['행', '열', '선택 안 함'],
+                    options_label: ['Row', 'Column', 'None'],
                     component: 'option_select',
                     default: 0
                 }
@@ -2716,7 +2606,7 @@ define([
             id: 'op_add',
             name: '+',
             library: 'pandas',
-            description: '변수 덧셈 연산',
+            description: 'Addition',
             code: '${o0} = ${i0} + ${i1}',
             input: [
                 {
@@ -2743,7 +2633,7 @@ define([
             id: 'op_sub',
             name: '-',
             library: 'pandas',
-            description: '변수 뺄셈 연산',
+            description: 'Subtract',
             code: '${o0} = ${i0} - ${i1}',
             input: [
                 {
@@ -2770,7 +2660,7 @@ define([
             id: 'op_mul',
             name: '*',
             library: 'pandas',
-            description: '변수 곱셈 연산',
+            description: 'Multiply',
             code: '${o0} = ${i0} * ${i1}',
             input: [
                 {
@@ -2795,9 +2685,9 @@ define([
         },
         'pd070': {
             id: 'op_pow',
-            name: '**',
+            name: 'power',
             library: 'pandas',
-            description: '변수 n승 연산',
+            description: '',
             code: '${o0} = ${i0} ** ${i1}',
             input: [
                 {
@@ -2824,7 +2714,7 @@ define([
             id: 'op_div',
             name: '/',
             library: 'pandas',
-            description: '변수 나눗셈 연산',
+            description: 'Divide',
             code: '${o0} = ${i0} / ${i1}',
             input: [
                 {
@@ -2851,7 +2741,7 @@ define([
             id: 'op_mod',
             name: '//',
             library: 'pandas',
-            description: '변수 나눗셈(몫) 연산',
+            description: 'Quotient',
             code: '${o0} = ${i0} // ${i1}',
             input: [
                 {
@@ -2878,7 +2768,7 @@ define([
             id: 'op_mod_left',
             name: '%',
             library: 'pandas',
-            description: '변수 나눗셈(나머지) 연산',
+            description: 'Remainder',
             code: '${o0} = ${i0} % ${i1}',
             input: [
                 {
@@ -2905,7 +2795,7 @@ define([
             id: 'bool',
             name: 'bool',
             library: 'pandas',
-            description: 'bool형 연산',
+            description: 'bool',
             code: '${o0} = ${i0} ${i2} ${i1}',
             input: [
                 {
@@ -2939,7 +2829,7 @@ define([
             id: 'copy',
             name: 'copy',
             library: 'pandas',
-            description: '데이터 복사',
+            description: 'Copy data',
             code: '${o0} = ${i0}.copy(${v})',
             input: [
                 {
@@ -3002,7 +2892,7 @@ define([
                     type: 'text',
                     label: 'JSON Orient',
                     options: ['split', 'records', 'index', 'columns', 'values', 'table'],
-                    default: 'columns' // typ=series일 경우, index가 default
+                    default: 'columns' // if typ==series, index is default
                 },
                 {
                     name:'convert_dates',
@@ -3059,7 +2949,7 @@ define([
                     name: 'orient',
                     type: 'text',
                     label: 'Orient',
-                    // options: series 객체일 경우 0~3 / dataframe 객체는 모두
+                    // options: series 0~3 / dataframe *
                     options: ['split', 'records', 'index', 'table', 'columns', 'values']
                 }
             ]
@@ -3117,7 +3007,7 @@ define([
             id: 'combine_first',
             name: 'Combine First',
             library: 'pandas',
-            description: '참조 객체의 동일한 위치의 값을 결측치 대체값으로 사용',
+            description: 'Use same position of target data as substitue value for missing value',
             code: '${o0} = ${i0}.combine_first(${i1})',
             input: [
                 {
@@ -3148,7 +3038,7 @@ define([
             id: 'stack',
             name: 'Stack',
             library: 'pandas',
-            description: 'DataFrame의 컬럼을 인덱스층에 추가',
+            description: 'Add column to index level',
             code: '${o0} = ${i0}.stack(${v})',
             input: [
                 {
@@ -3186,7 +3076,7 @@ define([
             id: 'unstack',
             name: 'Unstack',
             library: 'pandas',
-            description: '계층적 인덱스 중 특정계층의 index를 컬럼으로 변환',
+            description: 'Convert specific index level to column',
             code: '${o0} = ${i0}.unstack(${v})',
             input: [
                 {
@@ -3222,7 +3112,7 @@ define([
             id: 'pivot',
             name: 'Pivot',
             library: 'pandas',
-            description: '행 데이터를 열 데이터로 회전해 데이터 재구조화',
+            description: 'Pivot data',
             code: '${o0} = ${i0}.pivot(${v})',
             input: [
                 {
@@ -3262,7 +3152,7 @@ define([
             id: 'melt',
             name: 'Melt',
             library: 'pandas',
-            description: '특정컬럼과 데이터를 variable과 value 형태로 재구조화',
+            description: 'Melt data',
             code: '${o0} = ${i0}.melt(${v})',
             input: [
                 {
@@ -3312,7 +3202,7 @@ define([
             id: 'map',
             name: 'Map',
             library: 'pandas',
-            description: '함수/매핑을 이용해 데이터 변형',
+            description: 'Map data using function or argument',
             code: '${o0} = ${i0}.map(${v})',
             input: [
                 {
@@ -3343,7 +3233,7 @@ define([
                     label: 'Na Action',
                     component: 'option_select',
                     options: ['None', "'ignore'"],
-                    options_label: ['선택 안함', '결측치 무시'],
+                    options_label: ['None', 'Ignore NA'],
                     default: 'None'
                 }
             ]
@@ -3352,7 +3242,7 @@ define([
             id: 'apply',
             name: 'Apply',
             library: 'pandas',
-            description: '임의 함수를 이용해 데이터 변형',
+            description: 'Change data using function',
             code: '${o0} = ${i0}.apply(${v})',
             input: [
                 {
@@ -3394,7 +3284,8 @@ define([
                     label: 'Raw',
                     default: false,
                     component: 'option_select',
-                    options_label: ['Series 객체', 'ndarray 객체']
+                    options: ['False', 'True'],
+                    options_label: ['Series', 'ndarray']
                 }
             ]
         },
@@ -3402,7 +3293,7 @@ define([
             id: 'applymap',
             name: 'ApplyMap',
             library: 'pandas',
-            description: '임의 함수를 이용해 데이터 변형',
+            description: 'Map data using function',
             code: '${o0} = ${i0}.applymap(${i1})',
             guide: [
                 'df = pd.DataFrame([[1, 2.12], [3.356, 4.567]])',
@@ -3437,7 +3328,7 @@ define([
             id: 'cut',
             name: 'Cut',
             library: 'pandas',
-            description: '동일 길이로 나눠 범주 구성',
+            description: 'Cut data for ranging',
             code: '${o0} = pd.cut(${i0}, ${i1}${v})',
             input: [
                 {
@@ -3483,7 +3374,7 @@ define([
             id: 'qcut',
             name: 'Qcut',
             library: 'pandas',
-            description: '동일 개수로 나눠 범주 구성',
+            description: 'Q-cut',
             code: '${o0} = pd.qcut(${i0}, ${i1}${v})',
             input: [
                 {
@@ -3542,7 +3433,7 @@ define([
                 }
             ],
             variable: [
-                // n과 frac은 동시에 쓸 수 없음
+                // cannot use n and func on same time
                 {
                     name: 'n',
                     type: 'int',
@@ -3641,7 +3532,7 @@ define([
             id: '.str',
             name: '.Str',
             library: 'pandas',
-            description: '문자열의 벡터화 (문자배열에만 사용 가능)',
+            description: '',
             code: '${o0} = ${i0}.str',
             input: [
                 {
@@ -3665,7 +3556,7 @@ define([
             id: 'var',
             name: 'Var',
             library: 'pandas',
-            description: '분산 조회',
+            description: '',
             code: '${o0} = ${i0}.var(${v})',
             input: [
                 {
@@ -3716,7 +3607,7 @@ define([
                     label: 'Include Numeric Only',
                     component: 'option_select',
                     options: ['None', "'True'", "'False'"],
-                    options_label: ['선택 안 함', 'O', 'X'],
+                    options_label: ['None', 'Yes', 'No'],
                     default: 'None'
                 }
             ]
@@ -3725,7 +3616,7 @@ define([
             id: 'prod',
             name: 'Prod',
             library: 'pandas',
-            description: '결측치가 아닌 값들의 곱',
+            description: '',
             code: '${o0} = ${i0}.prod(${v})',
             input: [
                 {
@@ -3770,7 +3661,7 @@ define([
                     label: 'Include Numeric Only',
                     component: 'option_select',
                     options: ['None', "'True'", "'False'"],
-                    options_label: ['선택 안 함', 'O', 'X'],
+                    options_label: ['None', 'Yes', 'No'],
                     default: 'None'
                 },
                 {
@@ -3785,7 +3676,7 @@ define([
             id: 'first',
             name: 'First',
             library: 'pandas',
-            description: '결측치가 아닌 값들 중 첫 번째 값',
+            description: '',
             code: '${o0} = ${i0}.first(${i1})',
             input: [
                 {
@@ -3798,8 +3689,7 @@ define([
                 {
                     name: 'i1', // offset
                     type: ['text','var'],
-                    label: 'Date Offset',
-                    help: '1M은 1달'
+                    label: 'Date Offset'
                 }
             ],
             output: [
@@ -3817,7 +3707,7 @@ define([
             id: 'last',
             name: 'Last',
             library: 'pandas',
-            description: '결측치가 아닌 값들 중 마지막 값',
+            description: '',
             code: '${o0} = ${i0}.last(${i1})',
             input: [
                 {
@@ -3830,8 +3720,7 @@ define([
                 {
                     name: 'i1', // offset
                     type: ['text','var'],
-                    label: 'Date Offset',
-                    help: '1M은 1달'
+                    label: 'Date Offset'
                 }
             ],
             output: [
@@ -3848,7 +3737,7 @@ define([
             id: 'agg',
             name: 'Aggregation',
             library: 'pandas',
-            description: '결측치가 아닌 값들 중 마지막 값',
+            description: '',
             code: '${o0} = ${i0}.agg(${i1}${v})',
             input: [
                 {
@@ -3928,7 +3817,7 @@ define([
             id: 'pivot_table',
             name: 'Pivot Table',
             library: 'pandas',
-            description: '집계연산한 결과물로 2차원 피봇테이블 구성',
+            description: '',
             code: '${o0} = ${i0}.pivot_table(${v})',
             input: [
                 {
@@ -3998,7 +3887,7 @@ define([
             id: 'crosstab',
             name: 'CrossTable',
             library: 'pandas',
-            description: '교차테이블 구성',
+            description: '',
             code: '${o0} = pd.crosstab(${i0}, ${i1}${v})',
             input: [
                 {
@@ -4078,7 +3967,7 @@ define([
             id: 'to_datetime',
             name: 'To Datetime',
             library: 'pandas',
-            description: '문자열/배열을 datetime 객체로 변환',
+            description: '',
             code: '${o0} = pd.to_datetime(${i0}${v})',
             input: [
                 {
@@ -4104,8 +3993,7 @@ define([
                     label: 'Errors',
                     component: 'option_select',
                     default: 'raise',
-                    options: ['raise', 'ignore', 'coerce'],
-                    options_label: ['오류 발생', 'NaT 값으로 설정', '입력값 그대로']
+                    options: ['raise', 'ignore', 'coerce']
                 },
                 {
                     name: 'dayfirst',
@@ -4174,8 +4062,8 @@ define([
                     label: 'Offset',
                     options: ['5T', '10T', '20T', '1H', '1D', '1W', '1M', 'Q', '1Y'],
                     options_label: [
-                        '5분 단위', '10분 단위', '20분 단위', '1시간 단위',
-                        '1일 단위', '1주일 단위', '1달 단위', '분기별', '1년 단위'
+                        '5 min', '10 min', '20 min', '1 hour',
+                        '1 day', '1 week', '1 month', '1 quarter', '1 year'
                     ]
                 }
             ],
@@ -4232,7 +4120,7 @@ define([
                     type: 'var',
                     label: 'Frequency Offset',
                     options: ['M', 'D', '90T'],
-                    options_label: ['월', '일', '90시간']
+                    options_label: ['Month', 'Day', '90 hour']
                 },
                 {
                     name: 'axis',
@@ -4283,7 +4171,7 @@ define([
                     type: 'var',
                     label: 'Frequency Offset',
                     options: ['M', 'D', '90T'],
-                    options_label: ['월', '일', '90시간']
+                    options_label: ['Month', 'Day', '90 hour']
                 },
                 {
                     name: 'axis',
@@ -4336,7 +4224,7 @@ define([
             id: 'tz_localize',
             name: 'Timezone Localize',
             library: 'pandas',
-            description: '지역 시간대 설정',
+            description: '',
             code: '${o0} = ${i0}.tz_localize(${i1}${v})',
             input: [
                 {
@@ -4391,7 +4279,7 @@ define([
             id: 'tz_convert',
             name: 'Timezone Convert',
             library: 'pandas',
-            description: '지역 시간대 변경',
+            description: '',
             code: '${o0} = ${i0}.tz_convert(${i1}${v})',
             input: [
                 {
@@ -4449,7 +4337,7 @@ define([
             id: 'Timestamp',
             name: 'Timestamp',
             library: 'pandas',
-            description: 'Timestamp 객체 생성',
+            description: 'Create Timestamp object',
             code: '${o0} = pd.Timestamp(${v})',
             input: [
             ],
@@ -4594,11 +4482,9 @@ define([
                     name: 'method',
                     type: 'var',
                     label: 'Method',
-                    help: 'ffill:이전 값으로 채우기\nbfill:뒤에 있는 값으로 채우기',
                     component: 'option_select',
                     default: 'None',
-                    options: ['None', "'ffill'", "'bfill'"],
-                    options_label: ['선택 안 함', '이전 값으로 채우기', '이후 값으로 채우기']
+                    options: ['None', "'ffill'", "'bfill'"]
                 },
                 {
                     name: 'normalize',
@@ -4618,7 +4504,7 @@ define([
             id: 'to_period',
             name: 'To Period',
             library: 'pandas',
-            description: 'Timestamp에서 Period로 변환',
+            description: '',
             code: '${o0} = ${i0}.to_period(${v})',
             input: [
                 {
@@ -4642,7 +4528,8 @@ define([
                     label: 'Frequency',
                     type: 'text',
                     options: ['s', 'T', 'H', 'D', 'B', 'W', 'W-MON', 'MS', 'M', 'BMS', 'BM'],
-                    options_label: ['초', '분', '시간', '일', '주말이 아닌 평일', '주(일요일)', '주(월요일)', '각 달의 첫날', '각 달의 마지막 날', '평일 중 각 달의 첫날', '평일 중 각 달의 마지막 날']
+                    options_label: ['second', 'minute', 'hour', 'day', 'weekdays', 'week(Sunday)', 'week(Monday)', 
+                        'first day of month', 'last day of month', 'first weekday of month', 'last weekday of month']
                 },
                 {
                     name: 'axis',
@@ -4666,7 +4553,7 @@ define([
             id: 'to_timestamp',
             name: 'To Timestamp',
             library: 'pandas',
-            description: 'PeriodIndex를 DatetimeIndex로 변환',
+            description: 'Convert from PeriodIndex to DatetimeIndex',
             code: '${o0} = ${i0}.to_timestamp(${v})',
             input: [
                 {
@@ -4690,15 +4577,15 @@ define([
                     label: 'Frequency',
                     type: 'text',
                     options: ['s', 'T', 'H', 'D', 'B', 'W', 'W-MON', 'MS', 'M', 'BMS', 'BM'],
-                    options_label: ['초', '분', '시간', '일', '주말이 아닌 평일', '주(일요일)', '주(월요일)', '각 달의 첫날', '각 달의 마지막 날', '평일 중 각 달의 첫날', '평일 중 각 달의 마지막 날']
+                    options_label: ['second', 'minute', 'hour', 'day', 'weekdays', 'week(Sunday)', 'week(Monday)', 
+                    'first day of month', 'last day of month', 'first weekday of month', 'last weekday of month']
                 },
                 {
                     name: 'how',
                     label: 'How', // TODO:
                     type: 'text',
                     component: 'option_select',
-                    options : ['start', 'end'],
-                    options_label: ['시작점', '종료점']
+                    options : ['start', 'end']
                 },
                             {
                     name: 'axis',
@@ -4722,7 +4609,7 @@ define([
             id: 'PeriodIndex',
             name: 'PeriodIndex',
             library: 'pandas',
-            description: 'PeriodIndex 생성',
+            description: 'Create PeriodIndex',
             code: '${o0} = pd.PeriodIndex(${v})',
             input: [
             ],
@@ -4753,7 +4640,8 @@ define([
                     label: 'Frequency',
                     component: 'option_select',
                     options: ['s', 'T', 'H', 'D', 'B', 'W', 'W-MON', 'MS', 'M', 'BMS', 'BM'],
-                    options_label: ['초', '분', '시간', '일', '주말이 아닌 평일', '주(일요일)', '주(월요일)', '각 달의 첫날', '각 달의 마지막 날', '평일 중 각 달의 첫날', '평일 중 각 달의 마지막 날']
+                    options_label: ['second', 'minute', 'hour', 'day', 'weekdays', 'week(Sunday)', 'week(Monday)', 
+                    'first day of month', 'last day of month', 'first weekday of month', 'last weekday of month']
                 },
                 {
                     name: 'year',
@@ -4804,7 +4692,7 @@ define([
             id: 'rolling',
             name: 'Rolling',
             library: 'pandas',
-            description: '시계열 롤링 통계',
+            description: '',
             code: '${o0} = ${i0}.rolling(${i1}${v})',
             input: [
                 {
@@ -4832,7 +4720,6 @@ define([
                     name: 'min_periods',
                     type: 'int',
                     label: 'Minimum Periods',
-                    help: '범위 내 데이터가 최소 개수보다 많으면 연산에 포함한다'
                 },
                 {
                     name: 'center',
@@ -4864,7 +4751,7 @@ define([
             id: 'ewm',
             name: 'EWM',
             library: 'pandas',
-            description: '지수 이동평균 계산',
+            description: '',
             code: '${o0} = ${i0}.ewm(${v})',
             input: [
                 {
@@ -4887,19 +4774,19 @@ define([
                     name: 'com',
                     type: 'float',
                     label: 'Com',
-                    help: 'com≥0 일 때, α=1/(1+com)'
+                    help: 'com≥0, α=1/(1+com)'
                 },
                 {
                     name: 'span',
                     type: 'float',
                     label: 'Span',
-                    help: 'span≥1 일 때, α=2/(span+1)'
+                    help: 'span≥1, α=2/(span+1)'
                 },
                 {
                     name: 'halflife',
                     type: 'float',
                     label: 'Half Life', 
-                    help: 'halflife>0 일 때, α=1−exp(log(0.5)/halflife)'
+                    help: 'halflife>0, α=1−exp(log(0.5)/halflife)'
                 },
                 {
                     name: 'alpha',
@@ -4943,7 +4830,7 @@ define([
             id: 'pct_change',
             name: 'PCT Change',
             library: 'pandas',
-            description: '전일/또는 어떤 기간에서의 변화율 계산',
+            description: '',
             code: '${o0} = ${i0}.pct_change(${v})',
             input: [
                 {
@@ -4974,7 +4861,7 @@ define([
                     label: 'Fill Method',
                     default: 'ffill',
                     options: ["'ffill'", "'bfill'"],
-                    options_label: ['이전 값으로 채우기', '이후 값으로 채우기']
+                    options_label: ['fill with front value', 'fill with back value']
                 },
                 {
                     name: 'limit',
@@ -4986,7 +4873,8 @@ define([
                     type: ['text','var'],
                     label: 'Frequency',
                     options: ['s', 'T', 'H', 'D', 'B', 'W', 'W-MON', 'MS', 'M', 'BMS', 'BM'],
-                    options_label: ['초', '분', '시간', '일', '주말이 아닌 평일', '주(일요일)', '주(월요일)', '각 달의 첫날', '각 달의 마지막 날', '평일 중 각 달의 첫날', '평일 중 각 달의 마지막 날']
+                    options_label: ['second', 'minute', 'hour', 'day', 'weekdays', 'week(Sunday)', 'week(Monday)', 
+                        'first day of month', 'last day of month', 'first weekday of month', 'last weekday of month']
                 },
             ]
         },
@@ -4994,7 +4882,7 @@ define([
             id: 'corr',
             name: 'Correlation',
             library: 'pandas',
-            description: '컬럼 간 상관관계 연산',
+            description: 'correlation between columns',
             code: '${o0} = ${i0}.corr(${v})',
             input: [
                 {
@@ -5219,22 +5107,20 @@ define([
                     name: 'xticks',
                     type: 'list',
                     label: 'X Ticks',
-                    placeholder: "['tick', ...]",
-                    description: 'x축에 표시되는 지점 별 라벨 목록'
+                    placeholder: "['tick', ...]"
                 },
                 {
                     name: 'yticks',
                     type: 'list',
                     label: 'Y Ticks',
-                    placeholder: "['tick', ...]",
-                    description: 'y축에 표시되는 지점 별 라벨 목록'
+                    placeholder: "['tick', ...]"
                 },
                 {
                     name: 'style',
                     type: ['list', 'dict'],
                     label: 'Style',
                     placeholder: '["-", "--", "-.", ":"]',
-                    help: '컬럼 수와 목록 개수가 맞아야 합니다'
+                    help: 'Length of columns and style list must be same'
                 },
                 {
                     name: 'x',

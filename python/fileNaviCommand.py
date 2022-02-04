@@ -88,12 +88,12 @@ def _vp_search_path(path, show_hidden=False):
         for _entry in i:
             if show_hidden or _vp_check_hidden(_entry.path) == False:
                 _name = _entry.name
-                _path = _entry.path      # 파일 경로
+                _path = _entry.path      # file path
                 _stat = _entry.stat()
-                _size = _vp_sizeof_fmt(_stat.st_size)    # 파일 크기
-                _a_time = _stat.st_atime # 최근 액세스 시간
+                _size = _vp_sizeof_fmt(_stat.st_size)    # file size
+                _a_time = _stat.st_atime # current access time
                 _a_dt = _dt.datetime.fromtimestamp(_a_time).strftime('%Y-%m-%d %H:%M')
-                _m_time = _stat.st_mtime # 최근 수정 시간
+                _m_time = _stat.st_mtime # current modified time
                 _m_dt = _dt.datetime.fromtimestamp(_m_time).strftime('%Y-%m-%d %H:%M')
                 _e_type = 'other'
                 if _entry.is_file():

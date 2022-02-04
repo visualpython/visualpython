@@ -7,7 +7,9 @@ define([
     const VP_VS_DATA_TYPE = 'vp-vs-data-type';
     const VP_VS_VARIABLES = 'vp-vs-variables';
     const VP_VS_TYPING_INPUT = 'vp-vs-typing-input';  
-  
+    const VP_VS_COLUMN_INPUT = 'vp-vs-column-input';
+    const VP_VS_REFRESH = 'vp-vs-refresh';
+
     /**
      * @class VarSelector
      * @param {Array} dataTypes
@@ -15,7 +17,7 @@ define([
      * @constructor
      * 
      * using sample:
-        var varSelector = new vpVarSelector(this, ['DataFrame', 'Series'], 'DataFrame');
+        var varSelector = new VarSelector(['DataFrame', 'Series'], 'DataFrame');
         $(this.wrapSelector('.vp-vs-tester')).html(varSelector.render());
      */
     class VarSelector {
@@ -32,8 +34,9 @@ define([
             this.class = [];
             this.attributes = {};
 
-            this.typeClass = [];
-            this.varClass = [];
+            this.typeClass = []; // type selector class
+            this.varClass = [];  // variable selector class
+            this.colClass = [];  // column selector class
 
             this.dataTypes = dataTypes;
             if (defaultType == '') {
@@ -44,14 +47,17 @@ define([
             }
             this.state = {
                 selectedType: defaultType,
-                varList: []
+                varList: [],
+                column: ''
             };
 
             this.defaultType = defaultType;
             this.defaultValue = '';
+            this.defaultColumn = '';
 
             this.showOthers = showOthers;
             this.useTyping = useTyping;
+            this.useColumn = false;
 
             this.reload();
             this.bindEvent();
@@ -71,11 +77,30 @@ define([
         addVarClass(classname) {
             this.varClass.push(classname);
         }
+        addColClass(classname) {
+            this.colClass.push(classname);
+        }
         addAttribute(key, value) {
             this.attributes.push({ [key]: value });
         }
         setValue(value) {
             this.defaultValue = value;
+            if (value.includes('[') && value.includes(']') ) {
+                // divide it to variable / column
+                let startIdx = value.indexOf('[');
+                let endIdx = value.indexOf(']');
+                this.defaultValue = value.substring(0, startIdx);
+                this.defaultColumn = value.substring(startIdx + 1, endIdx);
+            }
+        }
+        setState(newState) {
+            this.state = {
+                ...this.state,
+                ...newState
+            }
+        }
+        setUseColumn(useColumn) {
+            this.useColumn = useColumn;
         }
         wrapSelector(selector = '') {
             return com_util.formatString('.{0} {1}', this.uuid, selector);
@@ -93,7 +118,7 @@ define([
             tag.appendFormatLine('<select class="{0} {1} {2}">', VP_VS_DATA_TYPE, 'vp-select m', this.typeClass.join(' '));
             this.dataTypes.forEach((v, i) => {
                 tag.appendFormatLine('<option value="{0}" {1}>{2}</option>', v,
-                    this.defaultType == v ? 'selected' : '', v);
+                    defaultType == v ? 'selected' : '', v);
             });
             if (this.showOthers) {
                 tag.appendFormatLine('<option value="{0}">{1}</option>', 'others', this.label.others);
@@ -118,6 +143,14 @@ define([
                 defaultType,
                 attrStr);
 
+            // column for dataframe
+            tag.appendFormatLine('<select class="{0} {1} {2}" {3}></select>', 
+                VP_VS_COLUMN_INPUT, 'vp-select m', this.colClass.join(' '),
+                (this.useColumn == true && defaultType == 'DataFrame'?'':'style="display: none;"'));
+
+            // reload
+            tag.appendFormatLine('<span class="{0} vp-cursor" title="{1}"><img src="{2}"></span>',
+                                VP_VS_REFRESH, 'Refresh variables', '/nbextensions/visualpython/img/refresh.svg');
 
             tag.appendLine('</div>'); // VP_VS_BOX
             return tag.toString();
@@ -159,12 +192,32 @@ define([
         loadVariableList(varList) {
             var filteredList = varList;
             var that = this;
+            let dataTypes = this.dataTypes;
+            // Include various index types for Index type
+            var INDEX_TYPES = ['RangeIndex', 'CategoricalIndex', 'MultiIndex', 'IntervalIndex', 'DatetimeIndex', 'TimedeltaIndex', 'PeriodIndex', 'Int64Index', 'UInt64Index', 'Float64Index'];
+            // Include various groupby types for Groupby type
+            var GROUPBY_TYPES = ['DataFrameGroupBy', 'SeriesGroupBy']
+            if (dataTypes.indexOf('Index') >= 0) {
+                dataTypes = dataTypes.concat(INDEX_TYPES);
+            }
+            if (dataTypes.indexOf('GroupBy') >= 0) {
+                dataTypes = dataTypes.concat(GROUPBY_TYPES);
+            }
+
             if (this.state.selectedType == 'others') {
-                filteredList = varList.filter(v => !this.dataTypes.includes(v.varType));
+                filteredList = varList.filter(v => !dataTypes.includes(v.varType));
             } else if (this.state.selectedType == 'typing') {
                 filteredList = [];
             } else {
-                filteredList = varList.filter(v => v.varType == this.state.selectedType);
+                let filterDataTypes = [ this.state.selectedType ];
+                if (filterDataTypes.indexOf('Index') >= 0) {
+                    filterDataTypes = filterDataTypes.concat(INDEX_TYPES);
+                }
+                if (filterDataTypes.indexOf('GroupBy') >= 0) {
+                    filterDataTypes = filterDataTypes.concat(GROUPBY_TYPES);
+                }
+
+                filteredList = varList.filter(v => filterDataTypes.includes(v.varType));
             }
 
             // replace
@@ -172,6 +225,37 @@ define([
                 return that.renderVariableList(filteredList);
             });
             $(this.wrapSelector('.' + VP_VS_VARIABLES)).trigger('change');
+        }
+        loadColumnList(varName) {
+            let that = this;
+            // get result and show on detail box
+            vpKernel.getColumnList(varName).then(function(resultObj) {
+                try {
+                    let { result, type, msg } = resultObj;
+                    var varResult = JSON.parse(result);
+
+                    let newTag = new com_String();
+                    newTag.appendFormatLine('<select class="{0} {1} {2}" {3}>', 
+                        VP_VS_COLUMN_INPUT, 'vp-select m', that.colClass.join(' '),
+                        (that.useColumn == true && that.defaultType == 'DataFrame'?'':'style="display: none;"'));
+                    newTag.appendFormatLine('<option value="{0}" data-dtype="{1}">{2}</option>',
+                        '', '', '');
+                    varResult && varResult.forEach(col => {
+                        // label, value, dtype, array, location, category
+                        newTag.appendFormatLine('<option value="{0}" data-dtype="{1}" {2}>{3}</option>',
+                            col.value, col.dtype, 
+                            that.defaultColumn == col.value ? 'selected' : '',
+                            col.label);
+                    });
+                    newTag.appendLine('</select>');
+                    // replace
+                    $(that.wrapSelector('.' + VP_VS_COLUMN_INPUT)).replaceWith(function() {
+                        return newTag.toString();
+                    });
+                } catch (e) {
+                    vpLog.display(VP_LOG_TYPE.ERROR, 'varSelector - bindColumnSource: not supported data type. ', e);
+                }
+            });
         }
         bindEvent() {
             var that = this;
@@ -198,6 +282,16 @@ define([
                     // 2) load on every selection of data types
                     // that.reload();
                 }
+
+                if (that.useColumn == true) {
+                    if (dataType == 'DataFrame') {
+                        $(that.wrapSelector('.' + VP_VS_COLUMN_INPUT)).show();
+                    } else {
+                        $(that.wrapSelector('.' + VP_VS_COLUMN_INPUT)).hide();
+                    }
+                } else {
+                    $(that.wrapSelector('.' + VP_VS_COLUMN_INPUT)).hide();
+                }
             });
 
             // variable selection
@@ -211,6 +305,35 @@ define([
                     value: value,
                     dataType: dataType
                 });
+
+                // if datatype == dataframe, change column list
+                if (that.useColumn == true && dataType == 'DataFrame') {
+                    that.loadColumnList(value);
+                }
+            });
+
+            // column selection
+            $(document).on('change', this.wrapSelector('.' + VP_VS_COLUMN_INPUT), function(event) {
+                var value = $(that.wrapSelector('.' + VP_VS_VARIABLES)).val();
+                var colValue = $(this).val();
+                var newValue = value;
+                if (colValue != '') {
+                    newValue += '[' + colValue + ']';
+                }
+
+                var dataType = $(this).find('option:selected').attr('data-type');
+                $(that.wrapSelector('.' + VP_VS_TYPING_INPUT)).val(newValue);
+                $(that.wrapSelector('.' + VP_VS_TYPING_INPUT)).attr('data-type', dataType);
+                $(that.wrapSelector('.' + VP_VS_TYPING_INPUT)).trigger({
+                    type: 'var_changed',
+                    value: newValue,
+                    dataType: 'DataFrame'
+                });
+            });
+
+            // refresh
+            $(document).on('click', this.wrapSelector('.' + VP_VS_REFRESH), function() {
+                that.reload();
             });
         }
     }

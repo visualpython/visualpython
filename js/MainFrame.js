@@ -326,6 +326,10 @@ define([
                         // if useAuto is true, use LibraryComponent to auto-generate page
                         fileName = 'com/component/LibraryComponent';
                     }
+                    if (menuConfig.useAutoV2) {
+                        // FIXME: must merge LibraryComponent and NumpyComponent
+                        fileName = 'com/component/NumpyComponent';
+                    }
                     // add to menu list
                     let filePath = 'vp_base/js/' + fileName;
                     let menuArgIdx = loadMenuList.indexOf(filePath);
@@ -372,6 +376,7 @@ define([
                         if (OptionComponent) {
                             let taskState = menuState.taskState;
                             let blockState = menuState.blockState;
+                            let tmpState = menuState.tmpState;
                             let state = {
                                 ...taskState,
                                 config: menuConfig
@@ -385,10 +390,15 @@ define([
                                 if (parentBlock == null) {
                                     parentBlock = newBlock; // set parent block of created block
                                 } else {
-                                    if (prevBlock != null && !newBlock.isGroup) {
-                                        newBlock.setDepth(prevBlock.getChildDepth());
+                                    if (!(blockState && blockState.depth != undefined) && prevBlock != null && !newBlock.isGroup) {
+                                        let newDepth = prevBlock.getChildDepth();
+                                        if (tmpState && tmpState.relativeDepth) {
+                                            newDepth = parentBlock.getChildDepth() + tmpState.relativeDepth;
+                                        }
+                                        newBlock.setDepth(newDepth);
                                     }
                                 }
+                                vpLog.display(VP_LOG_TYPE.DEVELOP, 'new block ' + position + ' with depth ' + newBlock.depth);
                                 prevBlock = newBlock;
                             } else {
                                 // add to task list
@@ -485,10 +495,41 @@ define([
                         }
                     ]
                     break;
+                case 'lgCtrl_try':
+                    childBlocks = [
+                        { 
+                            menuId: 'lgCtrl_pass', 
+                            menuState: { 
+                                blockState: {
+                                    isGroup: false
+                                }
+                            }
+                        },
+                        { 
+                            menuId: 'lgCtrl_except', 
+                            menuState: { 
+                                blockState: {
+                                    isGroup: false
+                                },
+                                tmpState: {
+                                    relativeDepth: -1
+                                }
+                            }
+                        },
+                        { 
+                            menuId: 'lgCtrl_pass', 
+                            menuState: { 
+                                blockState: {
+                                    isGroup: false
+                                }
+                            }
+                        }
+
+                    ];
+                    break;
                 case 'lgCtrl_for':
                 case 'lgCtrl_while':
                 case 'lgCtrl_if':
-                case 'lgCtrl_try':
                 case 'lgCtrl_elif':
                 case 'lgCtrl_except':
                 case 'lgCtrl_else':

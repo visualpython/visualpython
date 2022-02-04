@@ -17,6 +17,13 @@ define([
         return Jupyter.notebook.get_selected_index();
     }
 
+    /**
+     * 
+     * @param {String} type code / markdown 
+     * @param {String} command 
+     * @param {boolean} exec true(default) / false
+     * @param {int} sigNum 
+     */
     var insertCell = function(type, command, exec=true, sigNum=-1) {
         var selectedIndex = getSelectedCell();
         var targetCell = Jupyter.notebook.insert_cell_below(type, selectedIndex);

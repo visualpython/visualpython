@@ -89,8 +89,7 @@
                     'help': com_Const.TOOLBAR_BTN_INFO.HELP
                     , 'icon': com_Const.TOOLBAR_BTN_INFO.ICON
                     , 'handler': function () {
-                        // Extension 버튼 클릭 시 실행
-                        // _toggleVp(cfg);
+                        // on clicking extension button
                         vpFrame.toggleVp();
                     }
                 }, com_Const.TOOLBAR_BTN_INFO.NAME, com_Const.TOOLBAR_BTN_INFO.PREFIX)
@@ -139,29 +138,6 @@
         });
     };
 
-    /**
-     * Declare background vp functions
-     */
-    var _readKernelFunction = function() {
-        var libraryList = [ 
-            'printCommand.py',
-            'fileNaviCommand.py',
-            'pandasCommand.py',
-            'variableCommand.py'
-        ];
-        libraryList.forEach(libName => {
-            var libPath = com_Const.PYTHON_PATH + libName
-            $.get(libPath).done(function(data) {
-                var code_init = data;
-                Jupyter.notebook.kernel.execute(code_init, { iopub: { output: function(data) {
-                    console.log('visualpython - loaded library', data);
-                } } }, { silent: false });
-            }).fail(function() {
-                console.log('visualpython - failed to load getPath library');
-            });
-        })
-    }
-
     var _setGlobalVariables = function() {
         /**
          * visualpython log util
@@ -183,6 +159,38 @@
          * visualpython kernel
          */
         window.vpKernel = new com_Kernel();
+    }
+
+    var _checkVersion = function() {
+        // check version timestamp
+        let nowDate = new Date();
+        vpConfig.getData('version_timestamp', 'vpcfg').then(function(data) {
+            let doCheckVersion = false;
+            if (data == undefined) {
+                // no timestamp, check version
+                doCheckVersion = true;
+            } else if (data != '') {
+                let lastCheck = new Date(parseInt(data));
+                let diffCheck_now = new Date(nowDate.getFullYear(), nowDate.getMonth() + 1, nowDate.getDate());
+                let diffCheck_last = new Date(lastCheck.getFullYear(), lastCheck.getMonth() + 1, lastCheck.getDate());
+
+                let diff = Math.abs(diffCheck_now.getTime() - diffCheck_last.getTime());
+                diff = Math.ceil(diff / (1000 * 3600 * 24));
+
+                if (diff >= 1) {
+                    // if More than 1 day passed, check version
+                    doCheckVersion = true;
+                }
+            }
+
+            // check version and update version_timestamp
+            if (doCheckVersion == true) {
+                vpConfig.checkVpVersion(true);
+            }
+
+        }).catch(function(err) {
+            vpLog.display(VP_LOG_TYPE.ERROR, err);
+        })
     }
 
     //========================================================================
@@ -231,9 +239,10 @@
 
         let cfg = readConfig();
 
-        _readKernelFunction();
+        vpConfig.readKernelFunction();
         _addToolBarVpButton();
         _loadVpResource(cfg);
+        _checkVersion();
 
         if (cfg.vp_section_display && vpFrame) {
             vpFrame.openVp();
@@ -243,7 +252,7 @@
         events.on('kernel_ready.Kernel', function (evt, info) {
             vpLog.display(VP_LOG_TYPE.LOG, 'vp operations for kernel ready...');
             // read vp functions
-            _readKernelFunction();
+            vpConfig.readKernelFunction();
         });
     }
 

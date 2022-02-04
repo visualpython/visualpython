@@ -19,13 +19,20 @@
             <div id="vp_headerExtraMenuBtn" class="vp-menu-header-button vp-close-on-blur-btn">
                 <div id="vp_headerExtraMenu" class="vp-no-selection vp-close-on-blur">
                     <ul class="vp-header-extra-menu-list">
-                        <li id="vp_extraMenuAbout">
+                        <li id="vp_restart" data-menu="restart">
+                            Restart visualpython
+                        </li>
+                        <li id="vp_checkVersion" data-menu="check-version">
+                            Check version
+                        </li>
+                        <hr class="vp-extra-menu-line"/>
+                        <li id="vp_extraMenuAbout" data-menu="about">
                             About Visual Python 
                             <a href="https://visualpython.ai/about" target="_blank">
                                 <img src="/nbextensions/visualpython/img/snippets/export.svg">
                             </a>
                         </li>
-                        <li id="vp_extraMenuVPNote">
+                        <li id="vp_extraMenuVPNote" data-menu="vpnote">
                             VP Note 
                             <a href="https://visualpython.ai/vpnotes" target="_blank">
                                 <img src="/nbextensions/visualpython/img/snippets/export.svg">
@@ -33,6 +40,10 @@
                         </li>
                     </ul>
                 </div>
+            </div>
+
+            <div id="vp_versionUpdater" class="vp-version-updater">
+                <span class="fa fa-circle"></span>
             </div>
         </div>
         <!-- Menu Body -->

@@ -57,7 +57,6 @@ define([
             let that = this;
             // delete lib
             $(document).on("click", this.wrapSelector('.vp-remove-option'), function() {
-                // X 아이콘과 동일한 행 삭제
                 $(this).closest('tr').remove();
             });
 
@@ -139,7 +138,6 @@ define([
             // save import packages
             vpConfig.setData(importMeta, 'vpimport');
 
-            // TODO: 전체에게 해당 함수 리턴 요청
             this.generatedCode = sbCode.toString();
             return sbCode.toString();
         }

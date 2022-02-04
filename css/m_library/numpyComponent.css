@@ -104,3 +104,36 @@
     user-select: none; /* Non-prefixed version, currently
                                 supported by Chrome, Edge, Opera and Firefox */
 }
+
+/*
+ *  numpy style
+*/
+.vp-numpy-style-flex-row-center {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.vp-numpy-style-flex-row-wrap {
+    display: flex;
+    flex-direction: row;
+    flex-flow: wrap;
+}
+.vp-numpy-style-flex-row {
+    display: flex;
+    flex-direction: row;
+}
+.vp-numpy-style-flex-column {
+    display: flex;
+    flex-direction: column;
+}
+.vp-numpy-style-flex-column-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.vp-numpy-box-border {
+    border: 1px solid #E4E4E4;
+    border-radius: 5px;
+    box-sizing: border-box;
+    padding: 10px;
+}
