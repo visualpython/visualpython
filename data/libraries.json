@@ -3096,7 +3096,7 @@
                 "type" : "package",
                 "level": 0,
                 "name" : "Machine Learning",
-                "path" : "visualpython - machine learning",
+                "path" : "visualpython - machine_learning",
                 "desc" : "Machine learning modules",
                 "open" : true,
                 "grid" : true,
@@ -3107,7 +3107,7 @@
                         "level": 1,
                         "name" : "Data Split",
                         "tag"  : "DATA SPLIT,MACHINE LEARNING,ML",
-                        "path" : "visualpython - machine learning - data split",
+                        "path" : "visualpython - machine_learning - data split",
                         "desc" : "Data split for machine learning",
                         "file" : "m_ml/dataSplit",
                         "apps" : {
@@ -3121,7 +3121,7 @@
                         "level": 1,
                         "name" : "Model Creating & Fitting",
                         "tag"  : "MODEL CREATE,FIT,MACHINE LEARNING,ML",
-                        "path" : "visualpython - machine learning - model selection",
+                        "path" : "visualpython - machine_learning - model selection",
                         "desc" : "Model creating & fitting for machine learning",
                         "file" : "m_ml/modelSelection",
                         "apps" : {
@@ -3135,7 +3135,7 @@
                         "level": 1,
                         "name" : "Prediction",
                         "tag"  : "PREDICTION,MACHINE LEARNING,ML",
-                        "path" : "visualpython - machine learning - prediction",
+                        "path" : "visualpython - machine_learning - prediction",
                         "desc" : "Prediction for machine learning",
                         "file" : "m_ml/prediction",
                         "apps" : {
@@ -3149,7 +3149,7 @@
                         "level": 1,
                         "name" : "Evaluation",
                         "tag"  : "PERFORMANCE EVALUATION,MACHINE LEARNING,ML",
-                        "path" : "visualpython - machine learning - evaluation",
+                        "path" : "visualpython - machine_learning - evaluation",
                         "desc" : "Performance evaluation for machine learning",
                         "file" : "m_ml/evaluation",
                         "apps" : {
