@@ -23,213 +23,6 @@
                 "file" : "file_io/pip"
             },
             {
-                "id"   : "pkg_apps",
-                "type" : "package",
-                "level": 0,
-                "name" : "Apps",
-                "path" : "visualpython - apps",
-                "desc" : "Application modules",
-                "open" : true,
-                "item" : [
-                    {
-                        "id"   : "apps_import",
-                        "type" : "function",
-                        "level": 1,
-                        "name" : "Import",
-                        "tag"  : "IMPORT,APPS",
-                        "path" : "visualpython - apps - import",
-                        "desc" : "Import",
-                        "file" : "m_apps/Import",
-                        "apps" : {
-                            "color": 1,
-                            "icon": "apps/apps_import.svg"
-                        }
-                    },
-                    {
-                        "id"   : "apps_file",
-                        "type" : "function",
-                        "level": 1,
-                        "name" : "File",
-                        "tag"  : "FILE,APPS",
-                        "path" : "visualpython - apps - file",
-                        "desc" : "File",
-                        "file" : "m_apps/File",
-                        "apps" : {
-                            "color": 1,
-                            "icon": "apps/apps_file.svg"
-                        }
-                    },
-                    {
-                        "id"   : "apps_variable",
-                        "type" : "function",
-                        "level": 1,
-                        "name" : "Variable",
-                        "tag"  : "VARIABLE,APPS",
-                        "path" : "visualpython - apps - variable",
-                        "desc" : "Variable",
-                        "file" : "m_apps/Variable",
-                        "apps" : {
-                            "color": 1,
-                            "icon": "apps/apps_variable.svg"
-                        }
-                    },
-                    {
-                        "id"   : "apps_snippets",
-                        "type" : "function",
-                        "level": 1,
-                        "name" : "Snippets",
-                        "tag"  : "SNIPPETS,APPS",
-                        "path" : "visualpython - apps - snippets",
-                        "desc" : "Snippets",
-                        "file" : "m_apps/Snippets",
-                        "apps" : {
-                            "color": 1,
-                            "icon": "apps/apps_snippets.svg"
-                        }
-                    },
-                    {
-                        "id"   : "apps_frame",
-                        "type" : "function",
-                        "level": 1,
-                        "name" : "Frame",
-                        "tag"  : "FRAME,APPS",
-                        "path" : "visualpython - apps - frame",
-                        "desc" : "Frame",
-                        "file" : "m_apps/Frame",
-                        "apps" : {
-                            "color": 2,
-                            "icon": "apps/apps_frame.svg"
-                        }
-                    },
-                    {
-                        "id"   : "apps_subset",
-                        "type" : "function",
-                        "level": 1,
-                        "name" : "Subset",
-                        "tag"  : "SUBSET,APPS",
-                        "path" : "visualpython - apps - subset",
-                        "desc" : "Subset",
-                        "file" : "m_apps/Subset",
-                        "apps" : {
-                            "color": 2,
-                            "icon": "apps/apps_subset.svg"
-                        }
-                    },
-                    {
-                        "id"   : "apps_instance",
-                        "type" : "function",
-                        "level": 1,
-                        "name" : "Instance",
-                        "tag"  : "INSTANCE,APPS",
-                        "path" : "visualpython - apps - instance",
-                        "desc" : "Instance",
-                        "file" : "m_apps/Instance",
-                        "apps" : {
-                            "color": 2,
-                            "icon": "apps/apps_instance.svg"
-                        }
-                    },
-                    {
-                        "id"   : "apps_groupby",
-                        "type" : "function",
-                        "level": 1,
-                        "name" : "Groupby",
-                        "tag"  : "GROUPBY,APPS",
-                        "path" : "visualpython - apps - groupby",
-                        "desc" : "Groupby",
-                        "file" : "m_apps/Groupby",
-                        "apps" : {
-                            "color": 2,
-                            "icon": "apps/apps_groupby.svg"
-                        }
-                    },
-                    {
-                        "id"   : "apps_bind",
-                        "type" : "function",
-                        "level": 1,
-                        "name" : "Bind",
-                        "tag"  : "BIND,APPS",
-                        "path" : "visualpython - apps - bind",
-                        "desc" : "Concat & Merge",
-                        "file" : "m_apps/Bind",
-                        "apps" : {
-                            "color": 3,
-                            "icon": "apps/apps_bind.svg"
-                        }
-                    },
-                    {
-                        "id"   : "apps_reshape",
-                        "type" : "function",
-                        "level": 1,
-                        "name" : "Reshape",
-                        "tag"  : "RESHAPE,APPS",
-                        "path" : "visualpython - apps - reshape",
-                        "desc" : "Reshape",
-                        "file" : "m_apps/Reshape",
-                        "apps" : {
-                            "color": 3,
-                            "icon": "apps/apps_reshape.svg"
-                        }
-                    },
-                    {
-                        "id"   : "apps_chart",
-                        "type" : "function",
-                        "level": 1,
-                        "name" : "Chart",
-                        "tag"  : "CHART,APPS",
-                        "path" : "visualpython - apps - chart",
-                        "desc" : "Chart",
-                        "file" : "m_apps/Chart",
-                        "apps" : {
-                            "color": 3,
-                            "icon": "apps/apps_chart.svg"
-                        }
-                    },
-                    {
-                        "id"   : "apps_markdown",
-                        "type" : "function",
-                        "level": 1,
-                        "name" : "Markdown",
-                        "tag"  : "MARKDOWN,APPS",
-                        "path" : "visualpython - apps - markdown",
-                        "desc" : "Markdown",
-                        "file" : "m_apps/Markdown",
-                        "apps" : {
-                            "color": 3,
-                            "icon": "apps/apps_markdown.svg"
-                        }
-                    },
-                    {
-                        "id"   : "apps_pdf",
-                        "type" : "function",
-                        "level": 1,
-                        "name" : "PDF",
-                        "tag"  : "PDF,PYMUPDF,APPS",
-                        "path" : "visualpython - apps - pdf",
-                        "desc" : "PDF",
-                        "file" : "m_apps/PDF",
-                        "apps" : {
-                            "color": 4,
-                            "icon": "apps/apps_pymupdf.svg"
-                        }
-                    },
-                    {
-                        "id"   : "apps_profiling",
-                        "type" : "function",
-                        "level": 1,
-                        "name" : "Profiling",
-                        "tag"  : "PROFILING,PANDAS PROFILING,APPS",
-                        "path" : "visualpython - apps - profiling",
-                        "desc" : "Pandas Profiling",
-                        "file" : "m_apps/Profiling",
-                        "apps" : {
-                            "color": 4,
-                            "icon": "apps/apps_profiling.svg"
-                        }
-                    }
-                ]
-            },
-            {
                 "id"   : "pkg_logic",
                 "type" : "package",
                 "level": 0,
@@ -3087,6 +2880,282 @@
                                 "file": "m_matplotlib/figure"
                             }
                         ]
+                    }
+                ]
+            },
+            {
+                "id"   : "pkg_apps",
+                "type" : "package",
+                "level": 0,
+                "name" : "Application",
+                "path" : "visualpython - apps",
+                "desc" : "Application modules",
+                "open" : true,
+                "grid" : true,
+                "item" : [
+                    {
+                        "id"   : "apps_import",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Import",
+                        "tag"  : "IMPORT,APPS",
+                        "path" : "visualpython - apps - import",
+                        "desc" : "Import",
+                        "file" : "m_apps/Import",
+                        "apps" : {
+                            "color": 1,
+                            "icon": "apps/apps_import.svg"
+                        }
+                    },
+                    {
+                        "id"   : "apps_file",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "File",
+                        "tag"  : "FILE,APPS",
+                        "path" : "visualpython - apps - file",
+                        "desc" : "File",
+                        "file" : "m_apps/File",
+                        "apps" : {
+                            "color": 1,
+                            "icon": "apps/apps_file.svg"
+                        }
+                    },
+                    {
+                        "id"   : "apps_variable",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Variable",
+                        "tag"  : "VARIABLE,APPS",
+                        "path" : "visualpython - apps - variable",
+                        "desc" : "Variable",
+                        "file" : "m_apps/Variable",
+                        "apps" : {
+                            "color": 1,
+                            "icon": "apps/apps_variable.svg"
+                        }
+                    },
+                    {
+                        "id"   : "apps_snippets",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Snippets",
+                        "tag"  : "SNIPPETS,APPS",
+                        "path" : "visualpython - apps - snippets",
+                        "desc" : "Snippets",
+                        "file" : "m_apps/Snippets",
+                        "apps" : {
+                            "color": 1,
+                            "icon": "apps/apps_snippets.svg"
+                        }
+                    },
+                    {
+                        "id"   : "apps_frame",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Frame",
+                        "tag"  : "FRAME,APPS",
+                        "path" : "visualpython - apps - frame",
+                        "desc" : "Frame",
+                        "file" : "m_apps/Frame",
+                        "apps" : {
+                            "color": 2,
+                            "icon": "apps/apps_frame.svg"
+                        }
+                    },
+                    {
+                        "id"   : "apps_subset",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Subset",
+                        "tag"  : "SUBSET,APPS",
+                        "path" : "visualpython - apps - subset",
+                        "desc" : "Subset",
+                        "file" : "m_apps/Subset",
+                        "apps" : {
+                            "color": 2,
+                            "icon": "apps/apps_subset.svg"
+                        }
+                    },
+                    {
+                        "id"   : "apps_instance",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Instance",
+                        "tag"  : "INSTANCE,APPS",
+                        "path" : "visualpython - apps - instance",
+                        "desc" : "Instance",
+                        "file" : "m_apps/Instance",
+                        "apps" : {
+                            "color": 2,
+                            "icon": "apps/apps_instance.svg"
+                        }
+                    },
+                    {
+                        "id"   : "apps_groupby",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Groupby",
+                        "tag"  : "GROUPBY,APPS",
+                        "path" : "visualpython - apps - groupby",
+                        "desc" : "Groupby",
+                        "file" : "m_apps/Groupby",
+                        "apps" : {
+                            "color": 2,
+                            "icon": "apps/apps_groupby.svg"
+                        }
+                    },
+                    {
+                        "id"   : "apps_bind",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Bind",
+                        "tag"  : "BIND,APPS",
+                        "path" : "visualpython - apps - bind",
+                        "desc" : "Concat & Merge",
+                        "file" : "m_apps/Bind",
+                        "apps" : {
+                            "color": 3,
+                            "icon": "apps/apps_bind.svg"
+                        }
+                    },
+                    {
+                        "id"   : "apps_reshape",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Reshape",
+                        "tag"  : "RESHAPE,APPS",
+                        "path" : "visualpython - apps - reshape",
+                        "desc" : "Reshape",
+                        "file" : "m_apps/Reshape",
+                        "apps" : {
+                            "color": 3,
+                            "icon": "apps/apps_reshape.svg"
+                        }
+                    },
+                    {
+                        "id"   : "apps_chart",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Chart",
+                        "tag"  : "CHART,APPS",
+                        "path" : "visualpython - apps - chart",
+                        "desc" : "Chart",
+                        "file" : "m_apps/Chart",
+                        "apps" : {
+                            "color": 3,
+                            "icon": "apps/apps_chart.svg"
+                        }
+                    },
+                    {
+                        "id"   : "apps_markdown",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Markdown",
+                        "tag"  : "MARKDOWN,APPS",
+                        "path" : "visualpython - apps - markdown",
+                        "desc" : "Markdown",
+                        "file" : "m_apps/Markdown",
+                        "apps" : {
+                            "color": 3,
+                            "icon": "apps/apps_markdown.svg"
+                        }
+                    },
+                    {
+                        "id"   : "apps_pdf",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "PDF",
+                        "tag"  : "PDF,PYMUPDF,APPS",
+                        "path" : "visualpython - apps - pdf",
+                        "desc" : "PDF",
+                        "file" : "m_apps/PDF",
+                        "apps" : {
+                            "color": 4,
+                            "icon": "apps/apps_pymupdf.svg"
+                        }
+                    },
+                    {
+                        "id"   : "apps_profiling",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Profiling",
+                        "tag"  : "PROFILING,PANDAS PROFILING,APPS",
+                        "path" : "visualpython - apps - profiling",
+                        "desc" : "Pandas Profiling",
+                        "file" : "m_apps/Profiling",
+                        "apps" : {
+                            "color": 4,
+                            "icon": "apps/apps_profiling.svg"
+                        }
+                    }
+                ]
+            },
+            {
+                "id"   : "pkg_ml",
+                "type" : "package",
+                "level": 0,
+                "name" : "Machine Learning",
+                "path" : "visualpython - machine learning",
+                "desc" : "Machine learning modules",
+                "open" : true,
+                "grid" : true,
+                "item" : [
+                    {
+                        "id"   : "ml_split",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Data Split",
+                        "tag"  : "DATA SPLIT,MACHINE LEARNING,ML",
+                        "path" : "visualpython - machine learning - data split",
+                        "desc" : "Data split for machine learning",
+                        "file" : "m_ml/dataSplit",
+                        "apps" : {
+                            "color": 1,
+                            "icon": "apps/apps_white.svg"
+                        }
+                    },
+                    {
+                        "id"   : "ml_modelSelection",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Model Creating & Fitting",
+                        "tag"  : "MODEL CREATE,FIT,MACHINE LEARNING,ML",
+                        "path" : "visualpython - machine learning - model selection",
+                        "desc" : "Model creating & fitting for machine learning",
+                        "file" : "m_ml/modelSelection",
+                        "apps" : {
+                            "color": 1,
+                            "icon": "apps/apps_white.svg"
+                        }
+                    },
+                    {
+                        "id"   : "ml_prediction",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Prediction",
+                        "tag"  : "PREDICTION,MACHINE LEARNING,ML",
+                        "path" : "visualpython - machine learning - prediction",
+                        "desc" : "Prediction for machine learning",
+                        "file" : "m_ml/prediction",
+                        "apps" : {
+                            "color": 1,
+                            "icon": "apps/apps_white.svg"
+                        }
+                    },
+                    {
+                        "id"   : "ml_evaluation",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Evaluation",
+                        "tag"  : "PERFORMANCE EVALUATION,MACHINE LEARNING,ML",
+                        "path" : "visualpython - machine learning - evaluation",
+                        "desc" : "Performance evaluation for machine learning",
+                        "file" : "m_ml/evaluation",
+                        "apps" : {
+                            "color": 1,
+                            "icon": "apps/apps_white.svg"
+                        }
                     }
                 ]
             }
