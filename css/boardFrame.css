@@ -234,6 +234,13 @@
 .vp-block.apps.vp-focus-child .vp-block-header {
     background-color: rgb(253, 177, 133);
 }
+.vp-block.machine_learning .vp-block-header {
+    background-color: rgb(249, 227, 214);
+}
+.vp-block.machine_learning.vp-focus .vp-block-header,
+.vp-block.machine_learning.vp-focus-child .vp-block-header {
+    background-color: rgb(253, 177, 133);
+}
 .vp-block.logic-define .vp-block-header {
     background-color: rgb(213, 231, 222);
 }
