@@ -6,7 +6,7 @@
 ![Python: 3.x](https://img.shields.io/badge/Python-3.x-yellowgreen)
 [![License: GPLv3](https://img.shields.io/badge/License-GPLv3-brightgreen)](https://github.com/visualpython/visualpython/blob/main/LICENSE)
 [![Code of Conduct: Contributor Covenant](https://img.shields.io/badge/Code%20of%20Conduct-Contributor%20Covenant-pink)](https://github.com/visualpython/visualpython/blob/main/CODE_OF_CONDUCT.md)
-[![Downloads: ](https://img.shields.io/pypi/dm/visualpython?color=orange)](https://pypistats.org/packages/visualpython)
+[![Downloads](https://static.pepy.tech/personalized-badge/visualpython?period=total&units=international_system&left_color=grey&right_color=orange&left_text=Downloads)](https://pepy.tech/project/visualpython)
 [![Issues: ](https://img.shields.io/github/issues/visualpython/visualpython?color=%23FF6347)](https://github.com/visualpython/visualpython/issues)
 
 ## Introduction
@@ -97,7 +97,7 @@ To support technology and education so that anyone can leverage big data analyti
 To create an environment where everyone can learn and use big data analytics skills easily.
 
 ## Support Visual Python
-Love Visual Python? Caffeine keeps us awake and do the work ☕
-THANK YOU for your support! 👍
+Love Visual Python? <br>
+Your support will help us continue to actively develop and improve Visual Python.☕
 
 <a href="https://www.buymeacoffee.com/visualpython" target="_blank"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=visualpython&button_colour=ffa238&font_colour=000000&font_family=Comic&outline_colour=000000&coffee_colour=FFDD00"></a>
