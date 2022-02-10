@@ -265,7 +265,8 @@
 	box-sizing: border-box;
 }
 /* popup frame input, select */
-.vp-popup-frame input[type=text] {
+.vp-popup-frame input[type=text],
+.vp-popup-frame input[type=number] {
     width: 160px;
     font-size: 13px;
     line-height: 16px;
@@ -277,7 +278,8 @@
     border: 0.25px solid var(--border-gray-color);
     box-sizing: border-box;
 }
-.vp-popup-frame input[type=text]::placeholder {
+.vp-popup-frame input[type=text]::placeholder,
+.vp-popup-frame input[type=number]::placeholder {
 	color: var(--gray-color);
 }
 

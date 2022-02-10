@@ -13,11 +13,14 @@
 // [CLASS] Data split
 //============================================================================
 define([
+    'text!vp_base/html/m_ml/dataSplit.html!strip',
+    'css!vp_base/css/m_ml/dataSplit.css',
     'vp_base/js/com/com_util',
+    'vp_base/js/com/com_interface',
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/component/PopupComponent'
-], function(com_util, com_Const, com_String, PopupComponent) {
+], function(dsHtml, dsCss, com_util, com_interface, com_Const, com_String, PopupComponent) {
 
     /**
      * Data split
@@ -25,33 +28,74 @@ define([
     class DataSplit extends PopupComponent {
         _init() {
             super._init();
-            /** Write codes executed before rendering */
+            this.config.sizeLevel = 2;
+            this.config.dataview = false;
+
+            this.state = {
+                testSize: 0.25,
+                trainFeatures: 'X_train',
+                trainTarget: 'y_train',
+                testFeatures: 'X_test',
+                testTarget: 'y_test',
+                ...this.state
+            }
         }
 
         _bindEvent() {
             super._bindEvent();
-            /** Implement binding events */
             var that = this;
-            this.$target.on('click', function(evt) {
-                var target = evt.target;
-                if ($(that.wrapSelector()).find(target).length > 0) {
-                    // Sample : getDataList from Kernel
-                    vpKernel.getDataList().then(function(resultObj) {
-                        vpLog.display(VP_LOG_TYPE.DEVELOP, resultObj);
-                    }).catch(function(err) {
-                        vpLog.display(VP_LOG_TYPE.DEVELOP, err);
-                    });
-                }
+            
+            // import library
+            $(this.wrapSelector('#vp_libaryImport')).on('click', function() {
+                com_interface.insertCell('code', 'from sklearn.model_selection import train_test_split');
             });
         }
 
         templateForBody() {
-            /** Implement generating template */
-            return 'This is sample.';
+            let page = $(dsHtml);
+
+            // test size generating
+            let sizeOptions = '';
+            for (let i=5; i<95; i+=5) {
+                sizeOptions += `<option value="0.${i}" ${this.state.testSize==('0.'+i)?'selected':''}>${i}%</option>`;
+            }
+            $(page).find('#testSize').html(sizeOptions);
+            return page;
+        }
+
+        render() {
+            super.render();
+
+            
+            
         }
 
         generateCode() {
-            return "print('sample code')";
+            let { 
+                trainFeatures, trainTarget, testFeatures, testTarget,
+                dataType, featureData, targetData,
+                testSize, randomState, shuffle, startify
+            } = this.state;
+
+            let options = new com_String();
+            if (testSize != '0.25') {
+                options.appendFormat(', test_size={0}', testSize);
+            }
+            if (randomState && randomState != '') {
+                options.appendFormat(', random_state={0}', randomState);
+            }
+            if (shuffle && shuffle != '') {
+                options.appendFormat(', shuffle={0}', shuffle);
+            }
+            if (startify && startify != '') {
+                options.appendFormat(', startify={0}', startify);
+            }
+
+            let code = new com_String();
+            code.appendFormat('{0}, {1}, {2}, {3} = train_test_split({4}, {5}{6})', 
+                            trainFeatures, testFeatures, trainTarget, testTarget, 
+                            featureData, targetData, options.toString());
+            return code.toString();
         }
 
     }
