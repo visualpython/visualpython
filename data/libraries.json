@@ -3156,6 +3156,20 @@
                             "color": 1,
                             "icon": "apps/apps_white.svg"
                         }
+                    },
+                    {
+                        "id"   : "ml_addData",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Add data",
+                        "tag"  : "ADD PREDICTED DATA,MACHINE LEARNING,ML",
+                        "path" : "visualpython - machine_learning - add data",
+                        "desc" : "Add predicted data for machine learning",
+                        "file" : "m_ml/addData",
+                        "apps" : {
+                            "color": 1,
+                            "icon": "apps/apps_white.svg"
+                        }
                     }
                 ]
             }

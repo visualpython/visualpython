@@ -192,6 +192,15 @@ body {
     cursor: not-allowed;
 }
 
+.vp-checkbox {
+    display: inline-block;
+    position: relative !important;
+    width: 13px;
+    height: 13px;
+    border: 1px solid #828282;
+    margin: 0px 15px;
+}
+
 /* Scrollbar */
 .vp-scrollbar {
     overflow-y: auto;
