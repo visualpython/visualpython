@@ -1,0 +1,54 @@
+<body>
+    <div class="vp-ds-grid-box">
+        <div class="vp-grid-border-box vp-grid-col-p50">
+            <label class="vp-orange-text">Import Library</label>
+            <button class="vp-button vp-import-btn" id="vp_importLibrary">Import</button>
+        </div>
+        <div class="vp-grid-border-box vp-grid-col-95">
+            <label for="dataType" class="vp-orange-text">Data type</label>
+            <select id="dataType" class="vp-select vp-state">
+                <option value="with_target_value">with Target values</option>
+            </select>
+            <label for="featureData" class="vp-orange-text">Feature data</label>
+            <input type="text" class="vp-input vp-state" id="featureData" placeholder="Select feature data"/>
+            <label for="targetData" class="vp-orange-text">Target data</label>
+            <input type="text" class="vp-input vp-state" id="targetData" placeholder="Select target data"/>
+        </div>
+        <div class="vp-grid-border-box vp-grid-col-95">
+            <label for="testSize">Test size</label>
+            <select id="testSize" class="vp-select vp-state">
+                <!-- Auto Crate -->
+            </select>
+            <label for="randomState">Random state</label>
+            <input type="number" class="vp-input vp-state" id="randomState" placeholder="1234"/>
+            <label for="shuffle">Shuffle</label>
+            <select id="shuffle" class="vp-select vp-state">
+                <option value="True">True</option>
+                <option value="False">False</option>
+            </select>
+            <label for="startify">Startify</label>
+            <select id="startify" class="vp-select vp-state">
+                
+            </select>
+        </div>
+        <div class="vp-grid-border-box vp-grid-col-p50">
+            <label for="vp_pfReturn" class="vp-orange-text">Allocate to</label><label></label>
+            <div class="vp-grid-col-95">
+                <label for="trainFeatures">Train_features</label>
+                <input type="text" id="trainFeatures" class="vp-input" placeholder="New variable name" value="X_train">
+            </div>
+            <div class="vp-grid-col-95">
+                <label for="trainTarget">Train_target</label>
+                <input type="text" id="trainTarget" class="vp-input" placeholder="New variable name" value="y_train">
+            </div>
+            <div class="vp-grid-col-95">
+                <label for="testFeatures">Test_features</label>
+                <input type="text" id="testFeatures" class="vp-input" placeholder="New variable name" value="X_test">
+            </div>
+            <div class="vp-grid-col-95">
+                <label for="testTarget">Test_target</label>
+                <input type="text" id="testTarget" class="vp-input" placeholder="New variable name" value="y_test">
+            </div>
+        </div>
+    </div>
+</body>

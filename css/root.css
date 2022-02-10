@@ -325,7 +325,35 @@ hr.vp-extra-menu-line {
 .mr5 {
     margin-right: 5px;
 }
-/* table style */
+/* Layout */
+/* Grid style */
+.vp-grid-box {
+    display: grid;
+}
+.vp-grid-border-box {
+    display: grid;
+    align-items: baseline;
+    align-content: center;
+    border: 1px solid var(--border-gray-color);
+    border-radius: 5px;
+    box-sizing: border-box;
+    padding: 15px;
+}
+.vp-grid-col-p50 {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-row-gap: 3px;
+    align-items: baseline;
+    align-content: center;
+}
+.vp-grid-col-95 {
+    display: grid;
+    grid-template-columns: 95px auto;
+    grid-row-gap: 3px;
+    align-items: baseline;
+    align-content: space-evenly;
+}
+/* Table style */
 .vp-tbl-gap5 {
     border-spacing: 5px;
     border-collapse: separate;
