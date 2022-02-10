@@ -1,0 +1,10 @@
+.vp-tab-button {
+    display: inline-block;
+    border: 0.24px solid var(--border-gray-color);
+    padding: 5px;
+    cursor: pointer;
+}
+.vp-tab-button.vp-tab-selected {
+    color: var(--highlight-color);
+    border-bottom: 2px solid var(--highlight-color);
+}
