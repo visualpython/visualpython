@@ -15,10 +15,11 @@
 define([
     'text!vp_base/html/m_ml/evaluation.html!strip',
     'vp_base/js/com/com_util',
+    'vp_base/js/com/com_interface',
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/component/PopupComponent'
-], function(evalHTML, com_util, com_Const, com_String, PopupComponent) {
+], function(evalHTML, com_util, com_interface, com_Const, com_String, PopupComponent) {
 
     /**
      * Evaluation
