@@ -46,7 +46,7 @@ define([
             var that = this;
             
             // import library
-            $(this.wrapSelector('#vp_libaryImport')).on('click', function() {
+            $(this.wrapSelector('#vp_importLibrary')).on('click', function() {
                 com_interface.insertCell('code', 'from sklearn.model_selection import train_test_split');
             });
         }
