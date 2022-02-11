@@ -1,0 +1,42 @@
+<body>
+    <div class="vp-grid-box">
+        <div class="vp-grid-border-box vp-grid-col-p50">
+            <label class="vp-orange-text">Import Library</label>
+            <button class="vp-button vp-import-btn" id="vp_importLibrary">Import</button>
+        </div>
+        <div class="vp-grid-border-box vp-grid-col-95">
+            <label for="modelType" class="vp-orange-text">Model Type</label>
+            <select id="modelType" class="vp-select vp-state">
+                <option value="clf">Classfication</option>
+                <option value="rgs">Regression</option>
+                <!-- <option value="cls">Clustering</option>
+                <option value="pca">PCA</option> -->
+            </select>
+            <label for="predictData" class="vp-orange-text">Predict Data</label>
+            <input type="text" class="vp-input vp-state" id="predictData" placeholder="Input predict data" value="pred"/>
+            <label for="targetData" class="vp-orange-text">Target Data</label>
+            <input type="text" class="vp-input vp-state" id="targetData" placeholder="Input target data" value="y_test"/>
+        </div>
+        <div class="vp-grid-border-box">
+            <label for="featureData" class="vp-orange-text">Evaluation Metrics</label>
+            <div class="vp-grid-box vp-eval-box vp-eval-clf">
+                <input type="checkbox" id="confusion_matrix" class="vp-state" checked><label for="confusion_matrix">Confusion Matrix</label>
+                <input type="checkbox" id="report" class="vp-state" checked><label for="report">Report (Accuracy/Precision/Recall/F1-score)</label>
+                <label class="vp-gray-text vp-italic">* You can select individually</label>
+                <input type="checkbox" id="accuracy" class="vp-state"><label for="accuracy">Accuracy</label>
+                <input type="checkbox" id="precision" class="vp-state"><label for="precision">Precision</label>
+                <input type="checkbox" id="recall" class="vp-state"><label for="recall">Recall</label>
+                <input type="checkbox" id="f1_score" class="vp-state"><label for="f1_score">F1-score</label>
+            </div>
+            <div class="vp-grid-box vp-eval-box vp-eval-rgs">
+                <input type="checkbox" id="coefficient" class="vp-state"><label for="coefficient">Coefficient</label>
+                <input type="checkbox" id="intercept" class="vp-state"><label for="intercept">Intercept</label>
+                <input type="checkbox" id="r_squared" class="vp-state" checked><label for="r_squared">R squared</label>
+                <input type="checkbox" id="mae" class="vp-state"><label for="mae">Mean Absolute Error</label>
+                <input type="checkbox" id="mape" class="vp-state"><label for="mape">Mean Absolute Percentage Error</label>
+                <input type="checkbox" id="rmse" class="vp-state" checked><label for="rmse">Root Mean Squared Error</label>
+                <input type="checkbox" id="scatter_plot" class="vp-state"><label for="scatter_plot">Scatter plot</label>
+            </div>
+        </div>
+    </div>  
+</body>

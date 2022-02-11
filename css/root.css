@@ -44,6 +44,12 @@
 .vp-orange-text {
     color: var(--font-hightlight);
 }
+.vp-gray-text {
+    color: var(--gray-color);
+}
+.vp-italic {
+    font-style: italic;
+}
 .vp-bold {
     font-weight: bold;
 }
