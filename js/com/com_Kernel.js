@@ -247,6 +247,25 @@ define([
         }
 
         //====================================================================
+        // Machine Learning
+        //====================================================================
+        getModelList() {
+            // use function command to get variable list of selected data types
+            var cmdSB = `_vp_print(_vp_get_variables_list(${JSON.stringify(vpConfig.getMLDataTypes())}))`;
+            
+            var that = this;
+            return new Promise(function(resolve, reject) {
+                that.execute(cmdSB).then(function(resultObj) {
+                    // resolve
+                    resolve(resultObj);
+                }).catch(function(err) {
+                    // reject
+                    reject(err);
+                })
+            })
+        }
+
+        //====================================================================
         // Configuration api
         //====================================================================
         loadConfig() {
