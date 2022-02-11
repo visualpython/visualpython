@@ -141,11 +141,17 @@ define([
              * model.fit(X_train, y_train)
              */
             let code = new com_String();
-            let { model, allocateTo } = this.state;
+            let { model, featureData, targetData, allocateTo } = this.state;
             let config = this.modelConfig[model];
             code.appendLine(config.import);
             code.appendLine();
             code.appendFormat('{0} = {1}', allocateTo, config.code);
+
+            // fit
+            code.appendLine();
+            code.appendLine('%%time');
+            code.appendLine('# Model fitting');
+            code.appendFormat('{0}.fit({1}, {2})', allocateTo, featureData, targetData);
             return code.toString();
         }
 
