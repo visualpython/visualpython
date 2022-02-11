@@ -438,6 +438,10 @@ define([
             })
         }
 
+        getMLDataTypes() {
+            return Config.ML_DATA_TYPES;
+        }
+
     }
 
     //========================================================================
@@ -467,6 +471,12 @@ define([
     Config.BOARD_MIN_WIDTH = 263;
     Config.MENU_BOARD_SPACING = 5;
     Config.VP_MIN_WIDTH = Config.MENU_MIN_WIDTH + Config.BOARD_MIN_WIDTH + Config.MENU_BOARD_SPACING; // = MENU_MIN_WIDTH + BOARD_MIN_WIDTH + MENU_BOARD_SPACING
+    
+    /**
+     * Data types
+     */
+    Config.ML_DATA_TYPES = ['RandomForestClassifier', 'TPOTClassifier', 'SVC', 'LinearRegression', 'LogisticRegression', 'RandomForestRegression', 'TPOTRegression']
+
 
     return Config;
 });
