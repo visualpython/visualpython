@@ -13,11 +13,13 @@
 // [CLASS] Model selection
 //============================================================================
 define([
+    'text!vp_base/html/m_ml/modelSelection.html!strip',
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
+    'vp_base/js/com/com_generatorV2',
     'vp_base/js/com/component/PopupComponent'
-], function(com_util, com_Const, com_String, PopupComponent) {
+], function(msHtml, com_util, com_Const, com_String, com_generator, PopupComponent) {
 
     /**
      * Model selection
@@ -25,33 +27,117 @@ define([
     class ModelSelection extends PopupComponent {
         _init() {
             super._init();
-            /** Write codes executed before rendering */
+            this.config.sizeLevel = 2;
+            this.config.dataview = false;
+
+            this.state = {
+                model: 'rf-clf',
+                ...this.state
+            }
+
+            this.modelTypes = {
+                'Classfication': ['rf-clf', 'tpot-clf', 'sv-clf'],
+                'Regression': ['ln-rgs', 'lg-rgs', 'rf-rgs', 'tpot-rgs'],
+                'Clustering': [], //TODO:
+                'PCA': [] //TODO:
+            }
+
+            this.modelConfig = {
+                /** Classification */
+                'rf-clf': {
+                    name: 'RandomForestClassifier',
+                    import: 'from sklearn.ensemble import RandomForestClassifier',
+                    code: 'RandomForestClassifier(...)',
+                },
+                'tpot-clf': {
+                    name: 'TPOTClassifier',
+                    import: 'from tpot import TPOTClassifier',
+                    code: 'TPOTClassifier(...)'
+                },
+                'sv-clf': {
+                    name: 'SupportVectorClassifier',
+                    import: 'from sklearn.svm import SVC',
+                    code: 'SVC(...)',
+                },
+                /** Regression */
+                'ln-rgs': {
+                    name: 'LinearRegression',
+                    import: 'from sklearn.linear_model import LinearRegression',
+                    code: 'LinearRegression(...)'
+                },
+                'lg-rgs': {
+                    name: 'LogisticRegression',
+                    import: 'from sklearn.linear_model import LogisticRegression',
+                    code: 'LogisticRegression(...)'
+                },
+                'rf-rgs': {
+                    name: 'RandomForestRegressor',
+                    import: 'from sklearn.ensemble import RandomForestRegressor',
+                    code: 'RandomForestRegressor(...)',
+                },
+                'tpot-rgs': {
+                    name: 'TPOTRegressor',
+                    import: 'from tpot import TPOTRegressor',
+                    code: 'TPOTRegressor(...)',
+                }
+                /** Clustering */
+
+                /** PCA */
+
+            }
         }
 
         _bindEvent() {
             super._bindEvent();
             /** Implement binding events */
             var that = this;
-            this.$target.on('click', function(evt) {
-                var target = evt.target;
-                if ($(that.wrapSelector()).find(target).length > 0) {
-                    // Sample : getDataList from Kernel
-                    vpKernel.getDataList().then(function(resultObj) {
-                        vpLog.display(VP_LOG_TYPE.DEVELOP, resultObj);
-                    }).catch(function(err) {
-                        vpLog.display(VP_LOG_TYPE.DEVELOP, err);
-                    });
-                }
+            // select model
+            $(this.wrapSelector('#model')).on('click', function() {
+                let model = $(this).val();
+                that.state.model = model;
+                $(that.wrapSelector('.vp-model-option-box')).hide();
+                $(that.wrapSelector('.vp-model-' + model)).show();
             });
+
         }
 
         templateForBody() {
-            /** Implement generating template */
-            return 'This is sample.';
+            let page = $(msHtml);
+            
+            let that = this;
+            // model types
+            let modelTypeTag = new com_String();
+            Object.keys(this.modelTypes).forEach(modelCategory => {
+                let modelOptionTag = new com_String();
+                that.modelTypes[modelCategory].forEach(opt => {
+                    let optConfig = that.modelConfig[opt];
+                    let selectedFlag = '';
+                    if (opt == that.state.model) {
+                        selectedFlag = 'selected';
+                    }
+                    modelOptionTag.appendFormatLine('<option value="{0}" {1}>{2}</option>',
+                                    opt, selectedFlag, optConfig.name);
+                })
+                modelTypeTag.appendFormatLine('<optgroup label="{0}">{1}</optgroup>', 
+                    modelCategory, modelOptionTag.toString());
+            });
+            $(page).find('#model').html(modelTypeTag.toString());
+
+            // option page
+            $(page).find('.vp-model-option-box').hide();
+            $(page).find('.vp-model-' + this.state.model).show();
+            return page;
         }
 
         generateCode() {
-            return "print('sample code')";
+            /**
+             * from module import model_function
+             * model = Model(key=value, ...)
+             * ---
+             * %%time
+             * model.fit(X_train, y_train)
+             */
+            return this.modelConfig[this.state.model].code;
         }
 
     }

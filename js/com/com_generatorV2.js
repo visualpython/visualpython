@@ -1246,6 +1246,7 @@ define([
 
     return {
         vp_showInterfaceOnPage: vp_showInterfaceOnPage,
+        renderContent: renderContent,
         vp_codeGenerator: vp_codeGenerator,
         vp_generateVarSelect: vp_generateVarSelect,
         vp_getTagValue: vp_getTagValue,
