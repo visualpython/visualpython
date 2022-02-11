@@ -32,6 +32,9 @@ define([
 
             this.state = {
                 model: 'rf-clf',
+                featureData: 'X_train',
+                targetData: 'y_train',
+                allocateTo: 'model',
                 ...this.state
             }
 
@@ -137,7 +140,13 @@ define([
              * %%time
              * model.fit(X_train, y_train)
              */
-            return this.modelConfig[this.state.model].code;
+            let code = new com_String();
+            let { model, allocateTo } = this.state;
+            let config = this.modelConfig[model];
+            code.appendLine(config.import);
+            code.appendLine();
+            code.appendFormat('{0} = {1}', allocateTo, config.code);
+            return code.toString();
         }
 
     }
