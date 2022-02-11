@@ -329,6 +329,7 @@ hr.vp-extra-menu-line {
 /* Grid style */
 .vp-grid-box {
     display: grid;
+    grid-row-gap: 5px;
 }
 .vp-grid-border-box {
     display: grid;
@@ -338,18 +339,19 @@ hr.vp-extra-menu-line {
     border-radius: 5px;
     box-sizing: border-box;
     padding: 15px;
+    grid-row-gap: 5px;
 }
 .vp-grid-col-p50 {
     display: grid;
     grid-template-columns: 50% 50%;
-    grid-row-gap: 3px;
+    grid-row-gap: 5px;
     align-items: baseline;
     align-content: center;
 }
 .vp-grid-col-95 {
     display: grid;
     grid-template-columns: 95px auto;
-    grid-row-gap: 3px;
+    grid-row-gap: 5px;
     align-items: baseline;
     align-content: space-evenly;
 }
