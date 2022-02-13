@@ -32,6 +32,8 @@ define([
             this.config.dataview = false;
 
             this.state = {
+                featureData: '',
+                targetData: '',
                 testSize: 0.25,
                 trainFeatures: 'X_train',
                 trainTarget: 'y_train',
@@ -60,6 +62,35 @@ define([
                 sizeOptions += `<option value="0.${i}" ${this.state.testSize==('0.'+i)?'selected':''}>${i}%</option>`;
             }
             $(page).find('#testSize').html(sizeOptions);
+            
+            // load state
+            let that = this;
+            Object.keys(this.state).forEach(key => {
+                let tag = $(page).find('#' + key);
+                let tagName = $(tag).prop('tagName'); // returns with UpperCase
+                let value = that.state[key];
+                if (value == undefined) {
+                    return;
+                }
+                switch(tagName) {
+                    case 'INPUT':
+                        let inputType = $(tag).prop('type');
+                        if (inputType == 'text' || inputType == 'number') {
+                            $(tag).val(value);
+                            break;
+                        }
+                        if (inputType == 'checkbox') {
+                            $(tag).prop('checked', value);
+                            break;
+                        }
+                        break;
+                    case 'TEXTAREA':
+                    case 'SELECT':
+                    default:
+                        $(tag).val(value);
+                        break;
+                }
+            })
             return page;
         }
 
