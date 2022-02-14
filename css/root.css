@@ -429,3 +429,30 @@ hr.vp-extra-menu-line {
 .ui-autocomplete {
     z-index: 999;
 }
+.vp-vs-box {
+    position: relative;
+}
+.vp-vs-filter {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    right: 25px;
+    cursor: pointer;
+}
+.vp-vs-filter-box {
+    display: none;
+    position: absolute;
+    width: 101px;
+    height: 105px;
+    background: #FFFFFF;
+    border: 0.25px solid #C4C4C4;
+    box-sizing: border-box;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+    right: -40px;
+    top: 0px;
+}
+.vp-vs-item:hover {
+    background: var(--light-gray-color);
+    color: var(--font-hightlight);
+    cursor: pointer;
+}

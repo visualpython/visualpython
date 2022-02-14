@@ -18,8 +18,9 @@ define([
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_generatorV2',
-    'vp_base/js/com/component/PopupComponent'
-], function(msHtml, com_util, com_Const, com_String, com_generator, PopupComponent) {
+    'vp_base/js/com/component/PopupComponent',
+    'vp_base/js/com/component/VarSelector2'
+], function(msHtml, com_util, com_Const, com_String, com_generator, PopupComponent, VarSelector2) {
 
     /**
      * Model selection
@@ -129,6 +130,20 @@ define([
             // option page
             $(page).find('.vp-model-option-box').hide();
             $(page).find('.vp-model-' + this.state.model).show();
+
+
+            let varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'List', 'string']);
+            varSelector.setComponentID('featureData');
+            varSelector.addClass('vp-state vp-input');
+            varSelector.setValue(this.state.featureData);
+            $(page).find('#featureData').replaceWith(varSelector.toTagString());
+
+            varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'List', 'string']);
+            varSelector.setComponentID('targetData');
+            varSelector.addClass('vp-state vp-input');
+            varSelector.setValue(this.state.targetData);
+            $(page).find('#targetData').replaceWith(varSelector.toTagString());
+
             return page;
         }
 
