@@ -14,13 +14,13 @@
 //============================================================================
 define([
     'text!vp_base/html/m_ml/dataSplit.html!strip',
-    'css!vp_base/css/m_ml/dataSplit.css',
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_interface',
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
-    'vp_base/js/com/component/PopupComponent'
-], function(dsHtml, dsCss, com_util, com_interface, com_Const, com_String, PopupComponent) {
+    'vp_base/js/com/component/PopupComponent',
+    'vp_base/js/com/component/VarSelector2'
+], function(dsHtml, com_util, com_interface, com_Const, com_String, PopupComponent, VarSelector2) {
 
     /**
      * Data split
@@ -32,6 +32,7 @@ define([
             this.config.dataview = false;
 
             this.state = {
+                inputData: 'with_target_data',
                 featureData: '',
                 targetData: '',
                 testSize: 0.25,
@@ -46,10 +47,32 @@ define([
         _bindEvent() {
             super._bindEvent();
             var that = this;
-            
-            // import library
-            $(this.wrapSelector('#vp_importLibrary')).on('click', function() {
-                com_interface.insertCell('code', 'from sklearn.model_selection import train_test_split');
+
+            // change input data
+            $(this.wrapSelector('#inputData')).on('change', function() {
+                let inputData = $(this).val();
+                if (inputData == 'with_target_data') {
+                    // with target data
+                    $(that.wrapSelector('.vp-target-data-box')).show();
+                    // set label
+                    $(that.wrapSelector('label[for=featureData]')).text('Feature data');
+                    $(that.wrapSelector('label[for=trainFeatures]')).text('Train features');
+                    $(that.wrapSelector('label[for=testFeatures]')).text('Test features');
+                    // set value
+                    $(that.wrapSelector('#trainFeatures')).val('X_train').trigger('change');
+                    $(that.wrapSelector('#testFeatures')).val('X_test').trigger('change');
+                } else {
+                    // without target data
+                    // with target data
+                    $(that.wrapSelector('.vp-target-data-box')).hide();
+                    // set label
+                    $(that.wrapSelector('label[for=featureData]')).text('Data');
+                    $(that.wrapSelector('label[for=trainFeatures]')).text('Train data');
+                    $(that.wrapSelector('label[for=testFeatures]')).text('Test data');
+                    // set value
+                    $(that.wrapSelector('#trainFeatures')).val('train').trigger('change');
+                    $(that.wrapSelector('#testFeatures')).val('test').trigger('change');
+                }
             });
         }
 
@@ -59,9 +82,33 @@ define([
             // test size generating
             let sizeOptions = '';
             for (let i=5; i<95; i+=5) {
-                sizeOptions += `<option value="0.${i}" ${this.state.testSize==('0.'+i)?'selected':''}>${i}%</option>`;
+                sizeOptions += `<option value="0.${i}" ${this.state.testSize==('0.'+i)?'selected':''}>
+                    ${i}%${i==25?' (default)':''}
+                </option>`;
             }
             $(page).find('#testSize').html(sizeOptions);
+
+            // varselector TEST:
+            let varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'List', 'string']);
+            varSelector.setComponentID('featureData');
+            varSelector.addClass('vp-state vp-input');
+            varSelector.setValue(this.state.featureData);
+            varSelector.setPlaceholder('Select feature data');
+            $(page).find('#featureData').replaceWith(varSelector.toTagString());
+
+            varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'List', 'string']);
+            varSelector.setComponentID('targetData');
+            varSelector.addClass('vp-state vp-input');
+            varSelector.setValue(this.state.targetData);
+            varSelector.setPlaceholder('Select target data');
+            $(page).find('#targetData').replaceWith(varSelector.toTagString());
+
+            varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'List', 'string']);
+            varSelector.setComponentID('stratify');
+            varSelector.addClass('vp-state vp-input');
+            varSelector.setValue(this.state.targetData);
+            varSelector.setPlaceholder('None');
+            $(page).find('#stratify').replaceWith(varSelector.toTagString());
             
             // load state
             let that = this;
@@ -104,7 +151,7 @@ define([
         generateCode() {
             let { 
                 trainFeatures, trainTarget, testFeatures, testTarget,
-                dataType, featureData, targetData,
+                inputData, featureData, targetData,
                 testSize, randomState, shuffle, startify
             } = this.state;
 
@@ -123,9 +170,16 @@ define([
             }
 
             let code = new com_String();
-            code.appendFormat('{0}, {1}, {2}, {3} = train_test_split({4}, {5}{6})', 
-                            trainFeatures, testFeatures, trainTarget, testTarget, 
-                            featureData, targetData, options.toString());
+            code.appendLine('from sklearn.model_selection import train_test_split');
+            code.appendLine();
+            if (inputData == 'with_target_data') {
+                code.appendFormat('{0}, {1}, {2}, {3} = train_test_split({4}, {5}{6})', 
+                                trainFeatures, testFeatures, trainTarget, testTarget, 
+                                featureData, targetData, options.toString());
+            } else {
+                code.appendFormat('{0}, {1} = train_test_split({2}{3})',
+                    trainFeatures, testFeatures, featureData, options.toString());
+            }
             return code.toString();
         }
 

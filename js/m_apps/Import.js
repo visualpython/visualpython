@@ -50,7 +50,7 @@ define([
 
             let savedData = vpConfig.getDataSimple('', 'vpimport');
             // Reset abnormal data
-            if (savedData.tabType == undefined) {
+            if (savedData == undefined || savedData.tabType == undefined) {
                 savedData = {};
                 vpConfig.setData(null, 'vpimport');
             }

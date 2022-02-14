@@ -17,8 +17,9 @@ define([
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
-    'vp_base/js/com/component/PopupComponent'
-], function(predHTML, com_util, com_Const, com_String, PopupComponent) {
+    'vp_base/js/com/component/PopupComponent',
+    'vp_base/js/com/component/VarSelector2'
+], function(predHTML, com_util, com_Const, com_String, PopupComponent, VarSelector2) {
 
     /**
      * Prediction
@@ -67,6 +68,14 @@ define([
                     that.state.model = $(that.wrapSelector('#model')).val();
                 }
             });
+
+            // feature data
+            let varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'List', 'string']);
+            varSelector.setComponentID('featureData');
+            varSelector.addClass('vp-state vp-input');
+            varSelector.setValue(this.state.featureData);
+            $(page).find('#featureData').replaceWith(varSelector.toTagString());
+            
             return page;
         }
 

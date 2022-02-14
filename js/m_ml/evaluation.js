@@ -18,8 +18,9 @@ define([
     'vp_base/js/com/com_interface',
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
-    'vp_base/js/com/component/PopupComponent'
-], function(evalHTML, com_util, com_interface, com_Const, com_String, PopupComponent) {
+    'vp_base/js/com/component/PopupComponent',
+    'vp_base/js/com/component/VarSelector2'
+], function(evalHTML, com_util, com_interface, com_Const, com_String, PopupComponent, VarSelector2) {
 
     /**
      * Evaluation
@@ -68,6 +69,19 @@ define([
 
             $(page).find('.vp-eval-box').hide();
             $(page).find('.vp-eval-'+this.state.modelType).show();
+
+            // varselector TEST:
+            let varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'List', 'string']);
+            varSelector.setComponentID('predictData');
+            varSelector.addClass('vp-state vp-input');
+            varSelector.setValue(this.state.predictData);
+            $(page).find('#predictData').replaceWith(varSelector.toTagString());
+
+            varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'List', 'string']);
+            varSelector.setComponentID('targetData');
+            varSelector.addClass('vp-state vp-input');
+            varSelector.setValue(this.state.targetData);
+            $(page).find('#targetData').replaceWith(varSelector.toTagString());
 
             return page;
         }
