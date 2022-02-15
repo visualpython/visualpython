@@ -51,8 +51,11 @@ define([
             let that = this;
 
             $(this._parentTag).on('click', this.wrapSelector('.vp-vs-filter'), function() {
-                // toggle filter box
-                $(that.wrapSelector('.vp-vs-filter-box')).toggle();
+                // check disabled
+                if (!$(this).parent().find('input').is(':disabled')) {
+                    // toggle filter box
+                    $(that.wrapSelector('.vp-vs-filter-box')).toggle();
+                }
             });
         }
 

@@ -36,6 +36,7 @@ define([
                 featureData: '',
                 targetData: '',
                 testSize: 0.25,
+                shuffle: 'True',
                 trainFeatures: 'X_train',
                 trainTarget: 'y_train',
                 testFeatures: 'X_test',
@@ -74,6 +75,18 @@ define([
                     $(that.wrapSelector('#testFeatures')).val('test').trigger('change');
                 }
             });
+
+            // Stratify depends on Shuffle
+            $(this.wrapSelector('#shuffle')).on('change', function() {
+                let shuffle = $(this).val();
+                if (shuffle == 'True') {
+                    // enable stratify
+                    $(that.wrapSelector('#stratify')).prop('disabled', false);
+                } else {
+                    // disable stratify
+                    $(that.wrapSelector('#stratify')).prop('disabled', true);
+                }
+            });
         }
 
         templateForBody() {
@@ -82,7 +95,7 @@ define([
             // test size generating
             let sizeOptions = '';
             for (let i=5; i<95; i+=5) {
-                sizeOptions += `<option value="0.${i}" ${this.state.testSize==('0.'+i)?'selected':''}>
+                sizeOptions += `<option value="${i / 100}" ${parseFloat(this.state.testSize)==(i / 100)?'selected':''}>
                     ${i}%${i==25?' (default)':''}
                 </option>`;
             }
@@ -106,7 +119,7 @@ define([
             varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'List', 'string']);
             varSelector.setComponentID('stratify');
             varSelector.addClass('vp-state vp-input');
-            varSelector.setValue(this.state.targetData);
+            varSelector.setValue(this.state.stratify);
             varSelector.setPlaceholder('None');
             $(page).find('#stratify').replaceWith(varSelector.toTagString());
             
@@ -152,7 +165,7 @@ define([
             let { 
                 trainFeatures, trainTarget, testFeatures, testTarget,
                 inputData, featureData, targetData,
-                testSize, randomState, shuffle, startify
+                testSize, randomState, shuffle, stratify
             } = this.state;
 
             let options = new com_String();
@@ -162,11 +175,11 @@ define([
             if (randomState && randomState != '') {
                 options.appendFormat(', random_state={0}', randomState);
             }
-            if (shuffle && shuffle != '') {
+            if (shuffle && shuffle != 'True') {
                 options.appendFormat(', shuffle={0}', shuffle);
             }
-            if (startify && startify != '') {
-                options.appendFormat(', startify={0}', startify);
+            if (shuffle != 'False' && stratify && stratify != '') {
+                options.appendFormat(', startify={0}', stratify);
             }
 
             let code = new com_String();

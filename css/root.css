@@ -439,6 +439,9 @@ hr.vp-extra-menu-line {
     right: 25px;
     cursor: pointer;
 }
+.vp-vs-box input:disabled + .vp-vs-filter {
+    cursor: not-allowed;
+}
 .vp-vs-filter-box {
     display: none;
     position: absolute;
