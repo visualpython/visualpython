@@ -282,6 +282,11 @@
 .vp-popup-frame input[type=number]::placeholder {
 	color: var(--gray-color);
 }
+.vp-popup-frame input[type=text]:disabled,
+.vp-popup-frame input[type=number]:disabled {
+    background: var(--light-gray-color);
+    cursor: not-allowed;
+}
 
 .vp-popup-frame select {
     width: 160px;
@@ -291,7 +296,7 @@
 	font-size: 14px;
 	line-height: 16px;
 	padding: 5px 16px 3px 9px;
-	background: url(../img/unfold_more.svg), #F5F5F5;
+	background: url(../img/unfold_more.svg), var(--light-gray-color);
 	background-position: 97% 50%;
 	background-size: 11px 11px;
 	background-repeat: no-repeat;
