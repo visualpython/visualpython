@@ -57,7 +57,7 @@ define([
             /** Implement binding events */
             var that = this;
             // select model
-            $(this.wrapSelector('#model')).on('click', function() {
+            $(this.wrapSelector('#model')).on('change', function() {
                 let model = $(this).val();
                 that.state.model = model;
                 $(that.wrapSelector('.vp-model-option-box')).html(that.templateForOption(model));
@@ -102,6 +102,16 @@ define([
             });
             $(page).find('#model').html(modelTypeTag.toString());
 
+            // show install button
+            if (this.modelConfig[this.state.model].install != undefined) {
+                $(page).find('#vp_installLibrary').show();
+            } else {
+                $(page).find('#vp_installLibrary').hide();
+            }
+
+            // render option page
+            $(page).find('.vp-model-option-box').html(this.templateForOption(this.state.model));
+
             let varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'List', 'string']);
             varSelector.setComponentID('featureData');
             varSelector.addClass('vp-state vp-input');
@@ -113,9 +123,6 @@ define([
             varSelector.addClass('vp-state vp-input');
             varSelector.setValue(this.state.targetData);
             $(page).find('#targetData').replaceWith(varSelector.toTagString());
-
-            // render option page
-            $(page).find('.vp-model-option-box').html(this.templateForOption(this.state.model));
 
             return page;
         }
