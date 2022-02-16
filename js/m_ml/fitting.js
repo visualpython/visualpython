@@ -1,38 +1,39 @@
 /*
  *    Project Name    : Visual Python
  *    Description     : GUI-based Python code generator
- *    File Name       : prediction.js
+ *    File Name       : fitting.js
  *    Author          : Black Logic
- *    Note            : Prediction
+ *    Note            : Fitting
  *    License         : GNU GPLv3 with Visual Python special exception
  *    Date            : 2022. 02. 07
  *    Change Date     :
  */
 
 //============================================================================
-// [CLASS] Prediction
+// [CLASS] Fitting
 //============================================================================
 define([
-    'text!vp_base/html/m_ml/prediction.html!strip',
+    'text!vp_base/html/m_ml/fitting.html!strip',
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/VarSelector2'
-], function(predHTML, com_util, com_Const, com_String, PopupComponent, VarSelector2) {
+], function(fitHTML, com_util, com_Const, com_String, PopupComponent, VarSelector2) {
 
     /**
-     * Prediction
+     * Fitting
      */
-    class Prediction extends PopupComponent {
+    class Fitting extends PopupComponent {
         _init() {
             super._init();
             this.config.dataview = false;
 
             this.state = {
                 model: '',
-                featureData: 'X_test',
-                allocateTo: 'pred',
+                method: 'fit',
+                featureData: 'X_train',
+                targetData: 'y_train',
                 ...this.state
             }
         }
@@ -45,7 +46,7 @@ define([
         }
 
         templateForBody() {
-            let page = $(predHTML);
+            let page = $(fitHTML);
 
             let that = this;
             // set model list
@@ -75,15 +76,28 @@ define([
             varSelector.addClass('vp-state vp-input');
             varSelector.setValue(this.state.featureData);
             $(page).find('#featureData').replaceWith(varSelector.toTagString());
+
+            // target data
+            varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'List', 'string']);
+            varSelector.setComponentID('targetData');
+            varSelector.addClass('vp-state vp-input');
+            varSelector.setValue(this.state.featureData);
+            $(page).find('#targetData').replaceWith(varSelector.toTagString());
             
             return page;
         }
 
         generateCode() {
-            let { model, featureData, allocateTo } = this.state;
+            let { model, method, featureData, targetData, allocateTo } = this.state;
 
             let code = new com_String();
-            code.appendFormat('{0} = {1}.predict({2})', allocateTo, model, featureData);
+
+            code.appendLine('%%time');
+            if (allocateTo && allocateTo != '') {
+                code.appendFormat('{0} = ', allocateTo);
+            }
+
+            code.appendFormat('{0}.{1}({2}, {3})', model, method, featureData, targetData);
 
             if (allocateTo && allocateTo != '') {
                 code.appendLine();
@@ -94,5 +108,5 @@ define([
 
     }
 
-    return Prediction;
+    return Fitting;
 });
