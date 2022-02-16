@@ -361,6 +361,13 @@ hr.vp-extra-menu-line {
     align-items: baseline;
     align-content: space-evenly;
 }
+.vp-grid-col-110 {
+    display: grid;
+    grid-template-columns: 110px auto;
+    grid-row-gap: 5px;
+    align-items: baseline;
+    align-content: space-evenly;
+}
 /* Table style */
 .vp-tbl-gap5 {
     border-spacing: 5px;

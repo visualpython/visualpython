@@ -1,16 +1,16 @@
 /*
  *    Project Name    : Visual Python
  *    Description     : GUI-based Python code generator
- *    File Name       : prediction.js
+ *    File Name       : transformation.js
  *    Author          : Black Logic
- *    Note            : Prediction
+ *    Note            : Transformation
  *    License         : GNU GPLv3 with Visual Python special exception
  *    Date            : 2022. 02. 07
  *    Change Date     :
  */
 
 //============================================================================
-// [CLASS] Prediction
+// [CLASS] Transformation
 //============================================================================
 define([
     'text!vp_base/html/m_ml/prediction.html!strip',
@@ -22,9 +22,9 @@ define([
 ], function(predHTML, com_util, com_Const, com_String, PopupComponent, VarSelector2) {
 
     /**
-     * Prediction
+     * Transformation
      */
-    class Prediction extends PopupComponent {
+    class Transformation extends PopupComponent {
         _init() {
             super._init();
             this.config.dataview = false;
@@ -83,7 +83,7 @@ define([
             let { model, featureData, allocateTo } = this.state;
 
             let code = new com_String();
-            code.appendFormat('{0} = {1}.predict({2})', allocateTo, model, featureData);
+            code.appendFormat('{0} = {1}.transform({2})', allocateTo, model, featureData);
 
             if (allocateTo && allocateTo != '') {
                 code.appendLine();
@@ -94,5 +94,5 @@ define([
 
     }
 
-    return Prediction;
+    return Transformation;
 });

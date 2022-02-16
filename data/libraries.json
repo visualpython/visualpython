@@ -3112,21 +3112,49 @@
                         "file" : "m_ml/dataSplit",
                         "apps" : {
                             "color": 1,
-                            "icon": "apps/apps_white.svg"
+                            "icon": "apps/apps_datasplit.svg"
                         }
                     },
                     {
                         "id"   : "ml_modelSelection",
                         "type" : "function",
                         "level": 1,
-                        "name" : "Model Creating & Fitting",
-                        "tag"  : "MODEL CREATE,FIT,MACHINE LEARNING,ML",
+                        "name" : "Model Creating",
+                        "tag"  : "MODEL CREATE,MACHINE LEARNING,ML",
                         "path" : "visualpython - machine_learning - model selection",
-                        "desc" : "Model creating & fitting for machine learning",
+                        "desc" : "Model creating for machine learning",
                         "file" : "m_ml/modelSelection",
                         "apps" : {
                             "color": 1,
-                            "icon": "apps/apps_white.svg"
+                            "icon": "apps/apps_model.svg"
+                        }
+                    },
+                    {
+                        "id"   : "ml_fitting",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Fitting",
+                        "tag"  : "FITTING,MACHINE LEARNING,ML",
+                        "path" : "visualpython - machine_learning - fitting",
+                        "desc" : "Fitting for machine learning",
+                        "file" : "m_ml/fitting",
+                        "apps" : {
+                            "color": 1,
+                            "icon": "apps/apps_fit.svg"
+                        }
+                    },
+                    {
+                        "id"   : "ml_transformation",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Transform",
+                        "tag"  : "TRANSFORMATION,MACHINE LEARNING,ML",
+                        "path" : "visualpython - machine_learning - transformation",
+                        "desc" : "Transformation for machine learning",
+                        "file" : "m_ml/transformation",
+                        "apps" : {
+                            "color": 1,
+                            "icon": "apps/apps_transform.svg"
                         }
                     },
                     {
@@ -3140,7 +3168,7 @@
                         "file" : "m_ml/prediction",
                         "apps" : {
                             "color": 1,
-                            "icon": "apps/apps_white.svg"
+                            "icon": "apps/apps_predict.svg"
                         }
                     },
                     {
@@ -3154,21 +3182,7 @@
                         "file" : "m_ml/evaluation",
                         "apps" : {
                             "color": 1,
-                            "icon": "apps/apps_white.svg"
-                        }
-                    },
-                    {
-                        "id"   : "ml_addData",
-                        "type" : "function",
-                        "level": 1,
-                        "name" : "Add data",
-                        "tag"  : "ADD PREDICTED DATA,MACHINE LEARNING,ML",
-                        "path" : "visualpython - machine_learning - add data",
-                        "desc" : "Add predicted data for machine learning",
-                        "file" : "m_ml/addData",
-                        "apps" : {
-                            "color": 1,
-                            "icon": "apps/apps_white.svg"
+                            "icon": "apps/apps_evaluate.svg"
                         }
                     }
                 ]
