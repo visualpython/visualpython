@@ -236,17 +236,23 @@ define([
         'tpot-rgs': {
             name: 'TPOTRegressor',
             import: 'from tpot import TPOTRegressor',
-            code: 'TPOTRegressor(...${etc})',
+            code: 'TPOTRegressor(${generation}${population_size}${cv}${random_state}${etc})',
             options: [
-
+                { name: 'generation', component: ['input_number'], default: 100, usePair: true },
+                { name: 'population_size', component: ['input_number'], default: 100, usePair: true },
+                { name: 'cv', component: ['input_number'], default: 5, usePair: true },
+                { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true }
             ]
         },
         'tpot-clf': {
             name: 'TPOTClassifier',
             import: 'from tpot import TPOTClassifier',
-            code: 'TPOTClassifier(...${etc})',
+            code: 'TPOTClassifier(${generation}${population_size}${cv}${random_state}${etc})',
             options: [
-                
+                { name: 'generation', component: ['input_number'], default: 100, usePair: true },
+                { name: 'population_size', component: ['input_number'], default: 100, usePair: true },
+                { name: 'cv', component: ['input_number'], default: 5, usePair: true },
+                { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true }
             ]
         },
         /** Clustering */

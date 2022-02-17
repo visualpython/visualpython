@@ -41,6 +41,8 @@ define([
             }
 
             this.reload();
+            this.bindAutocomplete();
+            this.bindEvent();
         }
 
         render() {
@@ -54,8 +56,20 @@ define([
                 // check disabled
                 if (!$(this).parent().find('input').is(':disabled')) {
                     // toggle filter box
-                    $(that.wrapSelector('.vp-vs-filter-box')).toggle();
+                    $(that.wrapSelector('.vp-vs-filter-box')).toggleClass('vp-inline-block');
                 }
+            });
+
+            $(this._parentTag).on('change', this.wrapSelector('.vp-vs-filter-select-all'), function() {
+                // check all
+                $(that.wrapSelector('.vp-vs-filter-type')).prop('checked', true);
+                // reload
+                that.reload();
+            });
+
+            $(this._parentTag).on('change', this.wrapSelector('.vp-vs-filter-type'), function() {
+                // TODO: 
+
             });
         }
 
@@ -145,14 +159,31 @@ define([
                             dtype: obj.varType
                         }; 
                     });
-                    console.log(varList);
 
                     // save variable list as state
                     that.state.varList = varList;
                     that._suggestList = varList;
                     
                     let idx = 0; // use to Add variable
-                    that.bindAutocomplete();
+                    $(com_util.formatString(".{0} input", that.uuid)).autocomplete('option', 'source', function (req, res) {
+                        var srcList = typeof that._suggestList == "function" ? that._suggestList() : that._suggestList;
+                        var returlList = new Array();
+                        if (that._normalFilter) {
+                            for (var idx = 0; idx < srcList.length; idx++) {
+                                // srcList as object array
+                                if (typeof srcList[idx] == "object") {
+                                    // { label: string, value: string } format
+                                    if (srcList[idx].label.toString().toLowerCase().includes(req.term.trim().toLowerCase())) {
+                                        returlList.push(srcList[idx]);
+                                    }
+                                } else if (srcList[idx].toString().toLowerCase().includes(req.term.trim().toLowerCase()))
+                                    returlList.push(srcList[idx]);
+                            }
+                        } else {
+                            returlList = srcList;
+                        }
+                        res(returlList);
+                    });
 
                 } catch (ex) {
                     // console.log(ex);
@@ -169,6 +200,10 @@ define([
 
                 $(com_util.formatString(".{0} .{1}", that.uuid, 'vp-vs-uninit')).removeClass('vp-vs-uninit').addClass('vp-vs-init');
 
+                // if ($(com_util.formatString(".{0} input", that.uuid)).data('ui-autocomplete') != undefined) {
+                //     $(com_util.formatString(".{0} input", that.uuid)).autocomplete('destroy');
+                //     $(com_util.formatString(".{0} input", that.uuid)).removeData('autocomplete');
+                // }
                 $(com_util.formatString(".{0} input", that.uuid)).autocomplete({
                     autoFocus: true,
                     minLength: minLength,
@@ -206,7 +241,6 @@ define([
                         return true;
                     }
                 }).autocomplete('instance')._renderItem = function(ul, item) {
-                    console.log(ul, item);
                     return $('<li>').append(`<div class="vp-vs-item">${item.label}<label class="vp-gray-text">&nbsp;| ${item.dtype}</label></div>`).appendTo(ul);
                 };
                 
@@ -219,8 +253,6 @@ define([
                     $(com_util.formatString(".{0} input", that.uuid)).autocomplete('search', $(com_util.formatString(".{0} input", that.uuid)).val());
                 });
             });
-
-            this.bindEvent();
         }
 
         /**
@@ -241,7 +273,15 @@ define([
             sbTagString.appendFormatLine('<span class="{0}"><img src="{1}"/></span>', 'vp-vs-filter vp-close-on-blur-btn', '/nbextensions/visualpython/img/filter.svg');
             // filter box
             sbTagString.appendFormatLine('<div class="{0} vp-close-on-blur">', 'vp-vs-filter-box');
-
+            sbTagString.appendLine('<div class="vp-grid-box">');
+            sbTagString.appendFormatLine('<input type="checkbox" id="{0}" class="{1}" checked><label for="{2}">{3}</label>', 
+                this.uuid + '_vsSelectAll', 'vp-vs-filter-select-all', this.uuid + '_vsSelectAll', 'Select All');
+            this._dataTypes && this._dataTypes.forEach(dt => {
+                let tmpId = that.uuid + '_' + dt;
+                sbTagString.appendFormatLine('<input type="checkbox" id="{0}" class="{1}" data-dtype="{2}" checked><label for="{3}">{4}</label>', 
+                tmpId, 'vp-vs-filter-type', dt, tmpId, dt);
+            });
+            sbTagString.appendLine('</div>'); // end of vp-grid-box
             sbTagString.appendLine('</div>'); // end of vp-vs-filter-box
             sbTagString.appendLine('</div>');
 

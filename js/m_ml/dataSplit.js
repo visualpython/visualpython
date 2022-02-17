@@ -150,7 +150,8 @@ define([
                         $(tag).val(value);
                         break;
                 }
-            })
+            });
+            
             return page;
         }
 

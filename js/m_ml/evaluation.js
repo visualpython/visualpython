@@ -40,6 +40,8 @@ define([
                 // regression
                 coefficient: false, intercept: false, r_squared: true, 
                 mae: false, mape: false, rmse: true, scatter_plot: false,
+                // clustering
+                sizeOfClusters: true, silhouetteScore: true,
                 ...this.state
             }
         }
@@ -59,8 +61,8 @@ define([
                 let modelType = $(this).val();
                 that.state.modelType = modelType;
 
-                $(page).find('.vp-eval-box').hide();
-                $(page).find('.vp-eval-'+modelType).show();  
+                $(that.wrapSelector('.vp-eval-box')).hide();
+                $(that.wrapSelector('.vp-eval-'+modelType)).show();  
             })
         }
 
@@ -83,6 +85,35 @@ define([
             varSelector.setValue(this.state.targetData);
             $(page).find('#targetData').replaceWith(varSelector.toTagString());
 
+            // load state
+            let that = this;
+            Object.keys(this.state).forEach(key => {
+                let tag = $(page).find('#' + key);
+                let tagName = $(tag).prop('tagName'); // returns with UpperCase
+                let value = that.state[key];
+                if (value == undefined) {
+                    return;
+                }
+                switch(tagName) {
+                    case 'INPUT':
+                        let inputType = $(tag).prop('type');
+                        if (inputType == 'text' || inputType == 'number') {
+                            $(tag).val(value);
+                            break;
+                        }
+                        if (inputType == 'checkbox') {
+                            $(tag).prop('checked', value);
+                            break;
+                        }
+                        break;
+                    case 'TEXTAREA':
+                    case 'SELECT':
+                    default:
+                        $(tag).val(value);
+                        break;
+                }
+            });
+
             return page;
         }
 
@@ -93,7 +124,9 @@ define([
                 // classification
                 confusion_matrix, report, accuracy, precision, recall, f1_score,
                 // regression
-                coefficient, intercept, r_squared, mae, mape, rmse, scatter_plot
+                coefficient, intercept, r_squared, mae, mape, rmse, scatter_plot,
+                // clustering
+                sizeOfClusters, silhouetteScore
             } = this.state;
 
             //====================================================================
@@ -163,6 +196,19 @@ define([
                     code.appendFormatLine("plt.xlabel('{0}')", targetData);
                     code.appendFormatLine("plt.ylabel('{1}')", predictData);
                     code.appendLine('plt.show()');
+                }
+            }
+            //====================================================================
+            // Clustering
+            //====================================================================
+            if (modelType == 'cls') {
+                if (sizeOfClusters) {
+                    code.appendLine("# Size of clusters");
+                    code.appendFormatLine("print(f'Size of clusters: {np.bincount({0})}')", predictData);
+                }
+                if (silhouetteScore) {
+                    code.appendLine("# Silhouette score");
+                    code.appendFormatLine("print(f'Silhouette score: {silhouette_score({0}, {1})}')", targetData, predictData);
                 }
             }
             // FIXME: as seperated cells

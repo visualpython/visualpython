@@ -9,6 +9,7 @@
             <select id="modelType" class="vp-select vp-state">
                 <option value="clf">Classfication</option>
                 <option value="rgs">Regression</option>
+                <option value="cls">Clustering</option>
                 <!-- <option value="cls">Clustering</option>
                 <option value="pca">PCA</option> -->
             </select>
@@ -36,6 +37,10 @@
                 <input type="checkbox" id="mape" class="vp-state"><label for="mape">Mean Absolute Percentage Error</label>
                 <input type="checkbox" id="rmse" class="vp-state" checked><label for="rmse">Root Mean Squared Error</label>
                 <input type="checkbox" id="scatter_plot" class="vp-state"><label for="scatter_plot">Scatter plot</label>
+            </div>
+            <div class="vp-grid-box vp-eval-box vp-eval-cls">
+                <input type="checkbox" id="sizeOfClusters" class="vp-state" checked><label for="sizeOfClusters">Size of clusters</label>
+                <input type="checkbox" id="silhouetteScore" class="vp-state" checked><label for="silhouetteScore">Silhouette score</label>
             </div>
         </div>
     </div>  
