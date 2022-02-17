@@ -208,7 +208,7 @@ define([
                 }
                 if (silhouetteScore) {
                     code.appendLine("# Silhouette score");
-                    code.appendFormatLine("print(f'Silhouette score: {silhouette_score({0}, {1})}')", targetData, predictData);
+                    code.appendFormatLine("print(f'Silhouette score: {metrics.cluster.silhouette_score({0}, {1})}')", targetData, predictData);
                 }
             }
             // FIXME: as seperated cells
