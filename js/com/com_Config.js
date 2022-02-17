@@ -438,6 +438,10 @@ define([
             })
         }
 
+        getMLDataDict() {
+            return Config.ML_DATA_DICT;
+        }
+
         getMLDataTypes() {
             return Config.ML_DATA_TYPES;
         }
@@ -475,8 +479,31 @@ define([
     /**
      * Data types
      */
-    Config.ML_DATA_TYPES = ['RandomForestClassifier', 'TPOTClassifier', 'SVC', 'LinearRegression', 'LogisticRegression', 'RandomForestRegression', 'TPOTRegression']
+    Config.ML_DATA_DICT = {
+        'Regression': [
+            'LinearRegression', 'SVR', 'DecisionTreeRegressor', 'RandomForestRegression', 'GradientBoostingRegressor', 'XGBRegressor', 'LGBMRegressor', 'CatBoostRegressor',
+        ],
+        'Classification': [
+            'LogisticRegression', 'SVC', 'DecisionTreeClassifier', 'RandomForestClassifier', 'GradientBoostingClassifier', 'XGBClassifier', 'LGBMClassifier', 'CatBoostClassifier',
+        ],
+        'Auto ML': [
+            'TPOTRegression', 'TPOTClassifier'
+        ],
+        'Clustering': [
+            'KMeans', 'AgglomerativeClustering', 'GaussianMixture', 'DBSCAN',
+        ],
+        'Dimension Reduction': [
+            'PCA', 'LinearDiscriminantAnalysis', 'TruncatedSVD', 'NMF'
+        ]
+    };
 
+    Config.ML_DATA_TYPES = [
+        ...Config.ML_DATA_DICT['Regression'],
+        ...Config.ML_DATA_DICT['Classification'],
+        ...Config.ML_DATA_DICT['Auto ML'],
+        ...Config.ML_DATA_DICT['Clustering'],
+        ...Config.ML_DATA_DICT['Dimension Reduction']
+    ];
 
     return Config;
 });

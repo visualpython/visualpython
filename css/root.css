@@ -332,6 +332,9 @@ hr.vp-extra-menu-line {
     margin-right: 5px;
 }
 /* Layout */
+.vp-inline-block {
+    display: inline-block !important;
+}
 /* Grid style */
 .vp-grid-box {
     display: grid;
@@ -364,6 +367,13 @@ hr.vp-extra-menu-line {
 .vp-grid-col-110 {
     display: grid;
     grid-template-columns: 110px auto;
+    grid-row-gap: 5px;
+    align-items: baseline;
+    align-content: space-evenly;
+}
+.vp-grid-col-130 {
+    display: grid;
+    grid-template-columns: 130px auto;
     grid-row-gap: 5px;
     align-items: baseline;
     align-content: space-evenly;
@@ -453,13 +463,11 @@ hr.vp-extra-menu-line {
     display: none;
     position: absolute;
     width: 101px;
-    height: 105px;
     background: #FFFFFF;
     border: 0.25px solid #C4C4C4;
     box-sizing: border-box;
-    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
-    right: -40px;
-    top: 0px;
+    box-shadow: 2px 2px 8px rgb(0 0 0 / 10%);
+    z-index: 10;
 }
 .vp-vs-item:hover {
     background: var(--light-gray-color);

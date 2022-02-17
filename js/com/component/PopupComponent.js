@@ -281,6 +281,9 @@ define([
                     case 'SELECT':
                     default:
                         newValue = $(this).val();
+                        if (!newValue) {
+                            newValue = '';
+                        }
                         break;
                 }
                 
@@ -545,6 +548,9 @@ define([
                     case 'SELECT':
                     default:
                         newValue = $(tag).val();
+                        if (!newValue) {
+                            newValue = '';
+                        }
                         break;
                 }
                 
