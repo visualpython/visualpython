@@ -282,11 +282,6 @@
 .vp-popup-frame input[type=number]::placeholder {
 	color: var(--gray-color);
 }
-.vp-popup-frame input[type=text]:disabled,
-.vp-popup-frame input[type=number]:disabled {
-    background: var(--light-gray-color);
-    cursor: not-allowed;
-}
 
 .vp-popup-frame select {
     width: 160px;

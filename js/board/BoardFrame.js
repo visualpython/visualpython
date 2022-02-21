@@ -397,6 +397,7 @@ define([
             // show note area
             $(this.wrapSelector()).show();
             $('#vp_toggleBoard').removeClass('vp-hide');
+            $('#vp_toggleBoard').attr('title', 'Hide VP Note');
             // set width 
             let boardWidth = com_Config.BOARD_MIN_WIDTH;
             $(this.wrapSelector()).width(boardWidth);
@@ -410,6 +411,7 @@ define([
             if (!$('#vp_toggleBoard').hasClass('vp-hide')) {
                 $('#vp_toggleBoard').addClass('vp-hide');
             }
+            $('#vp_toggleBoard').attr('title', 'Show VP Note');
             // set width
             let boardWidth = 0;
             $(this.wrapSelector()).width(boardWidth);

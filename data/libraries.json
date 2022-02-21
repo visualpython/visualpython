@@ -2887,9 +2887,9 @@
                 "id"   : "pkg_apps",
                 "type" : "package",
                 "level": 0,
-                "name" : "Data Preprocessing",
+                "name" : "Data Analysis",
                 "path" : "visualpython - apps",
-                "desc" : "Data preprocessing modules",
+                "desc" : "Data analysis modules",
                 "open" : true,
                 "grid" : true,
                 "item" : [

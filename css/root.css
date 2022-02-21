@@ -456,6 +456,10 @@ hr.vp-extra-menu-line {
     right: 25px;
     cursor: pointer;
 }
+.vp-vs-box input:disabled {
+    background: var(--light-gray-color) !important;
+    cursor: not-allowed;
+}
 .vp-vs-box input:disabled + .vp-vs-filter {
     cursor: not-allowed;
 }
