@@ -376,9 +376,10 @@ define([
             this.getPackageVersion().then(function(latestVersion) {
                 if (nowVersion === latestVersion) {
                     // if it's already up to date
+                    // hide version update icon
+                    $('#vp_versionUpdater').hide();
                     if (background) {
-                        // hide version update icon
-                        $('#vp_versionUpdater').hide();
+                        ;
                     } else {
                         let msg = com_util.formatString('Visual Python is up to date. ({0})', latestVersion);
                         com_util.renderInfoModal(msg);
@@ -389,45 +390,42 @@ define([
                     let msg = com_util.formatString('Visual Python updates are available.<br/>(Latest version: {0} / Your version: {1})', 
                                     latestVersion, nowVersion);
                     // show version update icon
-                    $('#vp_versionUpdater').attr('title', msg);
+                    $('#vp_versionUpdater').attr('title', msg.replace('<br/>', ''));
                     $('#vp_versionUpdater').data('version', latestVersion);
                     $('#vp_versionUpdater').show();
-                    if (background) {
-                        ;
-                    } else {
-                        // render update modal (same as menu/MenuFrame.js:_bindEvent()-Click version updater)
-                        com_util.renderModal({
-                            title: 'Update version', 
-                            message: msg,
-                            buttons: ['Cancel', 'Update'],
-                            defaultButtonIdx: 0,
-                            buttonClass: ['cancel', 'activated'],
-                            finish: function(clickedBtnIdx) {
-                                switch (clickedBtnIdx) {
-                                    case 0:
-                                        // cancel
-                                        break;
-                                    case 1:
-                                        // update
-                                        let info = [
-                                            '## Visual Python Upgrade',
-                                            'NOTE: ',
-                                            '- Refresh your web browser to start a new version.',
-                                            '- Save VP Note before refreshing the page.'
-                                        ];
-                                        com_interface.insertCell('markdown', info.join('\n'));
-                                        com_interface.insertCell('code', '!pip install visualpython --upgrade');
-                                        com_interface.insertCell('code', '!visualpy install');
+                    
+                    // render update modal
+                    com_util.renderModal({
+                        title: 'Update version', 
+                        message: msg,
+                        buttons: ['Cancel', 'Update'],
+                        defaultButtonIdx: 0,
+                        buttonClass: ['cancel', 'activated'],
+                        finish: function(clickedBtnIdx) {
+                            switch (clickedBtnIdx) {
+                                case 0:
+                                    // cancel
+                                    break;
+                                case 1:
+                                    // update
+                                    let info = [
+                                        '## Visual Python Upgrade',
+                                        'NOTE: ',
+                                        '- Refresh your web browser to start a new version.',
+                                        '- Save VP Note before refreshing the page.'
+                                    ];
+                                    com_interface.insertCell('markdown', info.join('\n'));
+                                    com_interface.insertCell('code', '!pip install visualpython --upgrade');
+                                    com_interface.insertCell('code', '!visualpy install');
 
-                                        // update version_timestamp
-                                        that.setData({ 'version_timestamp': new Date().getTime() }, 'vpcfg');
-                                        // hide updater
-                                        $('#vp_versionUpdater').hide();
-                                        break;
-                                }
+                                    // update version_timestamp
+                                    that.setData({ 'version_timestamp': new Date().getTime() }, 'vpcfg');
+                                    // hide updater
+                                    $('#vp_versionUpdater').hide();
+                                    break;
                             }
-                        })
-                    }
+                        }
+                    });
                 }
             }).catch(function(err) {
                 if (background) {
