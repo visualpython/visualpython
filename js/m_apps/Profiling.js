@@ -39,7 +39,9 @@ define([
         _init() {
             super._init();
             /** Write codes executed before rendering */
-            this.config.footer = false;
+            this.config.codeview = false;
+            this.config.dataview = false;
+            this.config.runButton = false;
             this.config.size = { width: 500, height: 430 };
 
             this.selectedReport = '';

@@ -380,13 +380,13 @@ define([
                         // hide version update icon
                         $('#vp_versionUpdater').hide();
                     } else {
-                        let msg = com_util.formatString('Visualpython is up to date. ({0})', latestVersion);
+                        let msg = com_util.formatString('Visual Python is up to date. ({0})', latestVersion);
                         com_util.renderInfoModal(msg);
                     }
                     // update version_timestamp
                     that.setData({ 'version_timestamp': new Date().getTime() }, 'vpcfg');
                 } else {
-                    let msg = com_util.formatString('Visualpython updates are available.<br/>(Latest version: {0} / Your version: {1})', 
+                    let msg = com_util.formatString('Visual Python updates are available.<br/>(Latest version: {0} / Your version: {1})', 
                                     latestVersion, nowVersion);
                     // show version update icon
                     $('#vp_versionUpdater').attr('title', msg);
