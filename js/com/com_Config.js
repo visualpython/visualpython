@@ -160,7 +160,8 @@ define([
                 'printCommand.py',
                 'fileNaviCommand.py',
                 'pandasCommand.py',
-                'variableCommand.py'
+                'variableCommand.py',
+                'userCommand.py'
             ];
             let promiseList = [];
             libraryList.forEach(libName => {
