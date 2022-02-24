@@ -71,14 +71,14 @@ define([
             });
 
             // feature data
-            let varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'List', 'string']);
+            let varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'list', 'str']);
             varSelector.setComponentID('featureData');
             varSelector.addClass('vp-state vp-input');
             varSelector.setValue(this.state.featureData);
             $(page).find('#featureData').replaceWith(varSelector.toTagString());
 
             // target data
-            varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'List', 'string']);
+            varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'list', 'str']);
             varSelector.setComponentID('targetData');
             varSelector.addClass('vp-state vp-input');
             varSelector.setValue(this.state.featureData);
