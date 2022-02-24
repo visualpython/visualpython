@@ -96,12 +96,13 @@ define([
             });
         }
 
-        getDataList(dataTypeList=[]) {
+        getDataList(dataTypeList=[], excludeList=[]) {
             // use function command to get variable list of selected data types
             var cmdSB = '_vp_print(_vp_get_variables_list(None))';
-            if (dataTypeList && dataTypeList.length > 0) {
-                cmdSB = com_util.formatString('_vp_print(_vp_get_variables_list({0}))', JSON.stringify(dataTypeList));
+            if (!dataTypeList || dataTypeList.length <= 0) {
+                dataTypeList = [];
             }
+            cmdSB = com_util.formatString('_vp_print(_vp_get_variables_list({0}, {1}))', JSON.stringify(dataTypeList), JSON.stringify(excludeList));
             
             var that = this;
             return new Promise(function(resolve, reject) {

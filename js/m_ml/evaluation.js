@@ -73,13 +73,13 @@ define([
             $(page).find('.vp-eval-'+this.state.modelType).show();
 
             // varselector TEST:
-            let varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'List', 'string']);
+            let varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'list', 'str']);
             varSelector.setComponentID('predictData');
             varSelector.addClass('vp-state vp-input');
             varSelector.setValue(this.state.predictData);
             $(page).find('#predictData').replaceWith(varSelector.toTagString());
 
-            varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'List', 'string']);
+            varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'list', 'str']);
             varSelector.setComponentID('targetData');
             varSelector.addClass('vp-state vp-input');
             varSelector.setValue(this.state.targetData);
