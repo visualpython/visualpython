@@ -285,6 +285,11 @@ define([
         reload(callback = undefined) {
             var that = this;
             var variable = $(this.pageThis.wrapSelector('#' + this.targetId)).val();
+            if (variable == null) {
+                this.isFirstPage = false;
+                this.renderPage();
+                return;
+            }
             this.state.code = variable;
 
             if (variable == '') {

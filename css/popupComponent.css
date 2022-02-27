@@ -308,6 +308,14 @@
 .vp-popup-frame select::-ms-expand {
     display: none;
 }
+/* Big Selector */
+.vp-popup-frame .vp-big-select {
+    border: 2px solid #FFCF73;
+    width: 100%;
+    height: 35px;
+    background-position: 97% 50%;
+    cursor: pointer;
+}
 /* accordian for popup component */
 .vp-popup-frame .vp-accordian {
     cursor: pointer;

@@ -20,6 +20,98 @@ define([
      * ]
      */
     var ML_LIBRARIES = {
+        /** Data Preparation - Encoding */
+        'prep-onehot': {
+            name: 'OneHotEncoder',
+            import: 'from sklearn.preprocessing import OneHotEncoder',
+            code: 'OneHotEncoder()',
+            options: [
+
+            ]
+        },
+        'prep-label': {
+            name: 'LabelEncoder',
+            import: 'from sklearn.preprocessing import LabelEncoder',
+            code: 'LabelEncoder()',
+            options: [
+                
+            ]
+        },
+        'prep-ordinal': {
+            name: 'OrdinalEncoder',
+            import: 'from sklearn.preprocessing import OrdinalEncoder',
+            code: 'OrdinalEncoder()',
+            options: [
+                
+            ]
+        },
+        'prep-target': {
+            name: 'TargetEncoder',
+            install: '!pip install category_encoders',
+            import: 'from category_encoders.target_encoder import TargetEncoder',
+            code: 'TargetEncoder()',
+            options: [
+                
+            ]
+        },
+        'prep-smote': {
+            name: 'SMOTE',
+            install: '!pip install imblearn',
+            import: 'from imlearn.over_sampling import SMOTE',
+            code: 'SMOTE()',
+            options: [
+                
+            ]
+        },
+        /** Data Preparation - Scaling */
+        'prep-standard': {
+            name: 'StandardScaler',
+            import: 'from sklearn.preprocessing import StandardScaler',
+            code: 'StandardScaler()',
+            options: [
+
+            ]
+        },
+        'prep-robust': {
+            name: 'RobustScaler',
+            import: 'from sklearn.preprocessing import RobustScaler',
+            code: 'RobustScaler()',
+            options: [
+
+            ]
+        },
+        'prep-minmax': {
+            name: 'MinMaxScaler',
+            import: 'from sklearn.preprocessing import MinMaxScaler',
+            code: 'MinMaxScaler()',
+            options: [
+
+            ]
+        },
+        'prep-normalizer': {
+            name: 'Normalizer',
+            import: 'from sklearn.preprocessing import Normalizer',
+            code: 'Normalizer()',
+            options: [
+
+            ]
+        },
+        'prep-func-trsfrm-log': {
+            name: 'Log Scaling',
+            import: 'from sklearn.preprocessing import FunctionTransformer',
+            code: 'FunctionTransformer(np.log1p)',
+            options: [
+
+            ]
+        },
+        'prep-func-trsfrm-exp': {
+            name: 'Exponential Scaling',
+            import: 'from sklearn.preprocessing import FunctionTransformer',
+            code: 'FunctionTransformer(np.expm1)',
+            options: [
+
+            ]
+        },
         /** Regression */
         'ln-rgs': {
             name: 'LinearRegression',

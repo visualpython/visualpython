@@ -250,10 +250,12 @@ define([
         //====================================================================
         // Machine Learning
         //====================================================================
-        getModelList() {
+        getModelList(modelCategory='') {
             // use function command to get variable list of selected data types
             var cmdSB = `_vp_print(_vp_get_variables_list(${JSON.stringify(vpConfig.getMLDataTypes())}))`;
-            
+            if (modelCategory != '') {
+                cmdSB = `_vp_print(_vp_get_variables_list(${JSON.stringify(vpConfig.getMLDataDict(modelCategory))}))`;
+            }
             var that = this;
             return new Promise(function(resolve, reject) {
                 that.execute(cmdSB).then(function(resultObj) {
