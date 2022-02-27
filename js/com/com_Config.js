@@ -437,8 +437,11 @@ define([
             })
         }
 
-        getMLDataDict() {
-            return Config.ML_DATA_DICT;
+        getMLDataDict(key = '') {
+            if (key == '') {
+                return Config.ML_DATA_DICT;
+            }
+            return Config.ML_DATA_DICT[key];
         }
 
         getMLDataTypes() {
@@ -493,6 +496,12 @@ define([
         ],
         'Dimension Reduction': [
             'PCA', 'LinearDiscriminantAnalysis', 'TruncatedSVD', 'NMF'
+        ],
+        'Data Preparation': [
+            /** Encoding */
+            'OneHotEncoder', 'LabelEncoder', 'OrdinalEncoder', 'TargetEncoder', 'SMOTE',
+            /** Scaling */
+            'StandardScaler', 'RobustScaler', 'MinMaxScaler', 'Normalizer', 'FunctionTransformer'
         ]
     };
 
@@ -501,7 +510,8 @@ define([
         ...Config.ML_DATA_DICT['Classification'],
         ...Config.ML_DATA_DICT['Auto ML'],
         ...Config.ML_DATA_DICT['Clustering'],
-        ...Config.ML_DATA_DICT['Dimension Reduction']
+        ...Config.ML_DATA_DICT['Dimension Reduction'],
+        ...Config.ML_DATA_DICT['Data Preparation']
     ];
 
     return Config;

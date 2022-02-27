@@ -3102,7 +3102,35 @@
                 "grid" : true,
                 "item" : [
                     {
-                        "id"   : "ml_split",
+                        "id"   : "ml_dataSet",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Data Sets",
+                        "tag"  : "DATA SETS,MACHINE LEARNING,ML",
+                        "path" : "visualpython - machine_learning - data sets",
+                        "desc" : "Data sets for machine learning",
+                        "file" : "m_ml/DataSets",
+                        "apps" : {
+                            "color": 1,
+                            "icon": "apps/apps_white.svg"
+                        }
+                    },
+                    {
+                        "id"   : "ml_dataPrep",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Data Prep",
+                        "tag"  : "DATA PREPARATION,MACHINE LEARNING,ML",
+                        "path" : "visualpython - machine_learning - data prep",
+                        "desc" : "Data preparation for machine learning",
+                        "file" : "m_ml/DataPrep",
+                        "apps" : {
+                            "color": 1,
+                            "icon": "apps/apps_white.svg"
+                        }
+                    },
+                    {
+                        "id"   : "ml_dataSplit",
                         "type" : "function",
                         "level": 1,
                         "name" : "Data Split",
@@ -3116,59 +3144,73 @@
                         }
                     },
                     {
-                        "id"   : "ml_modelSelection",
+                        "id"   : "ml_regression",
                         "type" : "function",
                         "level": 1,
-                        "name" : "Model Creating",
-                        "tag"  : "MODEL CREATE,MACHINE LEARNING,ML",
-                        "path" : "visualpython - machine_learning - model selection",
-                        "desc" : "Model creating for machine learning",
-                        "file" : "m_ml/modelSelection",
+                        "name" : "Regression",
+                        "tag"  : "REGRESSION,MODEL,MACHINE LEARNING,ML",
+                        "path" : "visualpython - machine_learning - regression",
+                        "desc" : "Regression model for machine learning",
+                        "file" : "m_ml/Regression",
                         "apps" : {
                             "color": 1,
                             "icon": "apps/apps_model.svg"
                         }
                     },
                     {
-                        "id"   : "ml_fitting",
+                        "id"   : "ml_classification",
                         "type" : "function",
                         "level": 1,
-                        "name" : "Fitting",
-                        "tag"  : "FITTING,MACHINE LEARNING,ML",
-                        "path" : "visualpython - machine_learning - fitting",
-                        "desc" : "Fitting for machine learning",
-                        "file" : "m_ml/fitting",
+                        "name" : "Classification",
+                        "tag"  : "CLASSIFICATION,MODEL,MACHINE LEARNING,ML",
+                        "path" : "visualpython - machine_learning - classification",
+                        "desc" : "Classification model for machine learning",
+                        "file" : "m_ml/Classification",
                         "apps" : {
                             "color": 1,
-                            "icon": "apps/apps_fit.svg"
+                            "icon": "apps/apps_model.svg"
                         }
                     },
                     {
-                        "id"   : "ml_transformation",
+                        "id"   : "ml_clustering",
                         "type" : "function",
                         "level": 1,
-                        "name" : "Transform",
-                        "tag"  : "TRANSFORMATION,MACHINE LEARNING,ML",
-                        "path" : "visualpython - machine_learning - transformation",
-                        "desc" : "Transformation for machine learning",
-                        "file" : "m_ml/transformation",
+                        "name" : "Clustering",
+                        "tag"  : "CLUSTERING,MODEL,MACHINE LEARNING,ML",
+                        "path" : "visualpython - machine_learning - clustering",
+                        "desc" : "Clustering model for machine learning",
+                        "file" : "m_ml/Clustering",
                         "apps" : {
                             "color": 1,
-                            "icon": "apps/apps_transform.svg"
+                            "icon": "apps/apps_model.svg"
                         }
                     },
                     {
-                        "id"   : "ml_prediction",
+                        "id"   : "ml_dimensionReduction",
                         "type" : "function",
                         "level": 1,
-                        "name" : "Prediction",
-                        "tag"  : "PREDICTION,MACHINE LEARNING,ML",
-                        "path" : "visualpython - machine_learning - prediction",
-                        "desc" : "Prediction for machine learning",
-                        "file" : "m_ml/prediction",
+                        "name" : "Dimension Reduction",
+                        "tag"  : "DIMENSION REDUCTION,MODEL,MACHINE LEARNING,ML",
+                        "path" : "visualpython - machine_learning - dimension_reduction",
+                        "desc" : "Dimension reduction model for machine learning",
+                        "file" : "m_ml/DimensionReduction",
                         "apps" : {
                             "color": 1,
-                            "icon": "apps/apps_predict.svg"
+                            "icon": "apps/apps_model.svg"
+                        }
+                    },
+                    {
+                        "id"   : "ml_autoML",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "AutoML",
+                        "tag"  : "AUTO ML,MODEL,MACHINE LEARNING,ML",
+                        "path" : "visualpython - machine_learning - automl",
+                        "desc" : "AutoML model for machine learning",
+                        "file" : "m_ml/AutoML",
+                        "apps" : {
+                            "color": 1,
+                            "icon": "apps/apps_model.svg"
                         }
                     },
                     {

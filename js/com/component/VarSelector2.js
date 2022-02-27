@@ -8,8 +8,8 @@ define([
      * @constructor
      */
      class VarSelector extends Component{
-        constructor(parentTag, dataTypes=[], defaultType='', showOthers = true) {
-            super(null, {parentTag: parentTag, dataTypes: dataTypes, defaultType: defaultType, showOthers: showOthers});
+        constructor(parentTag, dataTypes=[], defaultType='', showOthers=true, showFilterbox=true) {
+            super(null, {parentTag: parentTag, dataTypes: dataTypes, defaultType: defaultType, showOthers: showOthers, showFilterbox: showFilterbox});
         }
 
         _init() {
@@ -27,6 +27,7 @@ define([
             this._dataTypes = this.state.dataTypes;
             this._defaultType = this.state.defaultType;
             this._showOthers = this.state.showOthers;
+            this._showFilterbox = this.state.showFilterbox;
             if (this._defaultType == '') {
                 if (this._dataTypes.length > 0) {
                     this._defaultType = this._dataTypes[0];
@@ -339,25 +340,27 @@ define([
             sbTagString.appendFormatLine('<div class="{0} {1}">', this.uuid, 'vp-vs-box vp-vs-uninit');
             sbTagString.appendFormatLine(`<input type="text" class="vp-vs-blur-btn {0} {1}" {2} placeholder="{3}" value="{4}" {5}/>`,
                 'vp-vs-input', that._additionalClass, that._compID == "" ? "" : com_util.formatString('id="{0}"', that._compID), that._placeholder, that._value, attributes);
-            // filter icon
-            sbTagString.appendFormatLine('<span class="vp-vs-blur-btn {0}"><img src="{1}"/></span>', 'vp-vs-filter', '/nbextensions/visualpython/img/filter.svg');
-            // filter box
-            sbTagString.appendFormatLine('<div class="vp-vs-blur-btn vp-vs-blur {0}">', 'vp-vs-filter-box');
-            sbTagString.appendLine('<div class="vp-grid-box">');
-            sbTagString.appendFormatLine('<input type="checkbox" id="{0}" class="{1}" checked><label for="{2}">{3}</label>', 
-                this.uuid + '_vsSelectAll', 'vp-vs-filter-select-all', this.uuid + '_vsSelectAll', 'Select All');
-            this._dataTypes && this._dataTypes.forEach(dt => {
-                let tmpId = that.uuid + '_' + dt;
-                sbTagString.appendFormatLine('<input type="checkbox" id="{0}" class="{1}" data-dtype="{2}" checked><label for="{3}">{4}</label>', 
-                    tmpId, 'vp-vs-filter-type', dt, tmpId, dt);
-            });
-            if (this._showOthers) {
-                let tmpId = that.uuid + '_others';
-                sbTagString.appendFormatLine('<input type="checkbox" id="{0}" class="{1}" data-dtype="{2}" checked><label for="{3}">{4}</label>', 
-                    tmpId, 'vp-vs-filter-type', 'others', tmpId, 'Others');
+            if (this._showFilterbox) {
+                // filter icon
+                sbTagString.appendFormatLine('<span class="vp-vs-blur-btn {0}"><img src="{1}"/></span>', 'vp-vs-filter', '/nbextensions/visualpython/img/filter.svg');
+                // filter box
+                sbTagString.appendFormatLine('<div class="vp-vs-blur-btn vp-vs-blur {0}">', 'vp-vs-filter-box');
+                sbTagString.appendLine('<div class="vp-grid-box">');
+                sbTagString.appendFormatLine('<input type="checkbox" id="{0}" class="{1}" checked><label for="{2}">{3}</label>', 
+                    this.uuid + '_vsSelectAll', 'vp-vs-filter-select-all', this.uuid + '_vsSelectAll', 'Select All');
+                this._dataTypes && this._dataTypes.forEach(dt => {
+                    let tmpId = that.uuid + '_' + dt;
+                    sbTagString.appendFormatLine('<input type="checkbox" id="{0}" class="{1}" data-dtype="{2}" checked><label for="{3}">{4}</label>', 
+                        tmpId, 'vp-vs-filter-type', dt, tmpId, dt);
+                });
+                if (this._showOthers) {
+                    let tmpId = that.uuid + '_others';
+                    sbTagString.appendFormatLine('<input type="checkbox" id="{0}" class="{1}" data-dtype="{2}" checked><label for="{3}">{4}</label>', 
+                        tmpId, 'vp-vs-filter-type', 'others', tmpId, 'Others');
+                }
+                sbTagString.appendLine('</div>'); // end of vp-grid-box
+                sbTagString.appendLine('</div>'); // end of vp-vs-filter-box
             }
-            sbTagString.appendLine('</div>'); // end of vp-grid-box
-            sbTagString.appendLine('</div>'); // end of vp-vs-filter-box
             sbTagString.appendLine('</div>'); // end of vp-vs-box
 
             return sbTagString.toString();

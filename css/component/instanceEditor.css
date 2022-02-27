@@ -22,7 +22,7 @@
 }
 .vp-ins-select-box {
     margin-top: 5px;
-    border: 0.25px solid #C4C4C4;
+    border: 0.25px solid var(--border-gray-color);
 }
 .vp-ins-select-list {
     height: 145px;
