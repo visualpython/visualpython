@@ -14,7 +14,6 @@
         <div class='fileNavigationPage-container center-1rem-gray' >
             <div class="fileNavigationPage-sidebar">
                 <div class="fnp-sidebar-menu" data-path="/">Jupyter Home</div>
-                <hr style="border: 0.25px solid #DDD;"/>
                 <div class="fnp-sidebar-menu" data-path="desktop">Desktop</div>
                 <div class="fnp-sidebar-menu" data-path="documents">Documents</div>
                 <div class="fnp-sidebar-menu" data-path="downloads">Downloads</div>
@@ -29,19 +28,13 @@
                                 flex-direction: column;
                                 justify-content: center;'>
                         <div class="wp60">
-                            <button class='btn btn-default fileNavigationPage-btn-prev'
-                                    style='padding: 2px 8px;'>
-                                <i class="fa fa-chevron-left" aria-hidden="true"></i>
-                            </button>
-                            <button class='btn btn-default fileNavigationPage-btn-next'
-                                    style='padding: 2px 8px;'>
-                                <i class="fa fa-chevron-right" aria-hidden="true"></i>
-                            </button>
+                            <img class="fileNavigationPage-btn-prev" src="/nbextensions/visualpython/img/arrow_backward.svg">
+                            <img class="fileNavigationPage-btn-next" src="/nbextensions/visualpython/img/arrow_forward.svg">
                         </div>
                     </div>
 
                     <div class='fileNavigationPage-menu-inner'
-                         style='font-weight: 700;'>
+                         style='font-weight: normal;'>
                         <i class="item_icon 
                                   folder_icon 
                                   icon-fixed-width"

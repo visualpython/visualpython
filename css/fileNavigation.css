@@ -25,7 +25,7 @@
 /* Sidebar Menu */
 .fileNavigationPage-sidebar {
     float: left;
-    width: 20%;
+    width: 25%;
     height: 100%;
     background: #F5F5F5;
     padding-top: 10px;
@@ -34,24 +34,34 @@
     color: var(--font-hightlight)
 }
 .fnp-sidebar-menu {
-    padding: 10px 0px 10px 14px;
+    padding: 5px 0px 5px 15px;
     font-family: AppleSDGothicNeo;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 16px;
-    line-height: 17px;
+    font-weight: normal;
+    font-size: 15px;
     color: #696969;
     cursor: pointer;
     margin-top: 10px;
 }
+
+/* Path Bar */
 .fileNavigationPage-inner {
     float: right;
     display: grid;
-    /* grid-template-rows: 30px auto min-content; */
     grid-template-rows: min-content auto min-content;
-    width: 80%;
+    width: 75%;
     height: 100%; 
 }
+.fileNavigationPage-btn-prev:hover{
+    cursor: pointer;
+    transition: 0.7s;
+}
+
+.fileNavigationPage-btn-next:hover{
+    cursor: pointer;
+    transition: 0.7s;
+}
+
+/* Directory List */
 .fileNavigationPage-directory-container {
     overflow-y: auto;
     display: flex;
@@ -107,8 +117,7 @@
     display: none;
 }
 .fileNavigationPage-menu {
-    min-height: 30px;
-    /* height: 6%; */
+    min-height: 35px;
     height: fit-content;
     padding-left: 10px;
     background-color: #EEE;
@@ -127,12 +136,15 @@
     display: flex;
     flex-direction: column;
     justify-content: center; 
+    padding-top: 5px;
 }
 .fileNavigationPage-menu-block {
-    padding: 0 35px 0 10px;
+    padding: 5px 35px 0 10px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    font-family: AppleSDGothicNeo;
+    font-weight: normal;
 }
 .fileNavigationPage-btn-move-to-folder {
     position: absolute;
@@ -180,6 +192,7 @@
     margin-left:5px;
     white-space: nowrap;
     color: var(--font-primary);
+    font-size: 13px;
 }
 .fileNavigationPage-dir-text:hover {
     transition: 0.7s;
@@ -195,11 +208,7 @@
     position: fixed;
     z-index: 3;
     right: 10px;
-    width: 20px;
-    height: 20px;
-    line-height: 20px;
-    top: 3px;
-    text-align: center;
+    top: 5px;
 }
 .fileNavigationPage-closedBtn:hover {
     cursor: pointer;
@@ -213,16 +222,17 @@
 }
 .fileNavigationPage-button {
     padding: 5px;
-    /* height: fit-content;
-    min-height: 6%; */
     background: #EEE;
     border: 1px solid #DDD;
 }
 #vp_fileNavigationInput {
     width: calc(100% - 170px);
+    font-size: 13px;
 }
 #vp_fileNavigationExt {
     width: 80px;
+    color: var(--font-primary);
+    font-family: 'AppleSDGothicNeo';
 }
 .fileNavigationPage-style-flex-column-center {
     display: flex;

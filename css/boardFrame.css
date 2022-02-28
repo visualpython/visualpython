@@ -83,8 +83,11 @@
 }
 .vp-board-footer-buttons {
     position: absolute;
-    right: 15px;
+    right: 5px;
     z-index: 2;
+}
+.vp-board-buttons {
+    margin-right: 5px;
 }
 .vp-board-loading {
     display: none;
@@ -312,7 +315,7 @@
 .vp-block-menu-box {
     position: fixed;
     background: #FFFFFF;
-    width: 100px;
+    width: 125px;
     border: 0.25px solid #E4E4E4;
     padding: 5px;
     z-index: 50;
@@ -320,6 +323,7 @@
 .vp-block-menu-item {
     color: var(--font-primary);
     padding: 5px;
+    font-size: 14px;
 }
 .vp-block-menu-item:hover {
     color: var(--font-hightlight);

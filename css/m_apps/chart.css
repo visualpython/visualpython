@@ -9,6 +9,7 @@
     grid-template-rows: 30px;
     grid-row-gap: 5px;
     border: 1px solid var(--border-gray-color);
+    border-radius: 5px;
     padding: 10px 0px;
 }
 .vp-import-box label {

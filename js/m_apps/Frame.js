@@ -667,9 +667,9 @@ define([
             // tab 4. apply
             content.appendFormatLine('<div class="{0} {1}" style="display: none;">', 'vp-inner-popup-tab', 'apply');
             content.appendLine('<table class="vp-tbl-gap5"><colgroup><col width="80px"><col width="*"></colgroup>');
-            content.appendLine('<tr><th><label>column</label></th>');
+            content.appendLine('<tr><th><label>Column</label></th>');
             content.appendFormatLine('<td>{0}</td></tr>', this.renderColumnList(this.state.columnList));
-            content.appendLine('<tr><th><label>function</label></th>');
+            content.appendLine('<tr><th><label>Function</label></th>');
             content.appendFormatLine('<td><input type="text" id="{0}" class="{1}" placeholder="{2}"/></td>'
                                     , 'vp_popupAddApply', 'vp-input vp-inner-popup-apply-lambda', 'Type code manually');
             content.appendLine('</tr></table>');
@@ -768,11 +768,11 @@ define([
             switch (parseInt(type)) {
                 case FRAME_EDIT_TYPE.ADD_COL:
                     title = 'Add Column';
-                    content = this.renderAddPage('column', 'New column');
+                    content = this.renderAddPage('column', 'Column Name');
                     break;
                 case FRAME_EDIT_TYPE.ADD_ROW:
                     title = 'Add Row';
-                    content = this.renderAddPage('row', 'New row');
+                    content = this.renderAddPage('row', 'Row Name');
                     break;
                 case FRAME_EDIT_TYPE.RENAME:
                     title = 'Rename';

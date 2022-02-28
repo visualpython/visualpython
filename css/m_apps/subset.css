@@ -198,6 +198,7 @@
     background: #FFFFFF;
     border: 0.25px solid #E4E4E4;
     grid-row-gap: 5px;
+    margin-top: 5px;
 }
 .vp-ds-btn-add-condition {
     width: 95px;
