@@ -479,7 +479,7 @@ define([
     Config.VP_MIN_WIDTH = Config.MENU_MIN_WIDTH + Config.BOARD_MIN_WIDTH + Config.MENU_BOARD_SPACING; // = MENU_MIN_WIDTH + BOARD_MIN_WIDTH + MENU_BOARD_SPACING
     
     /**
-     * Data types
+     * Data types using for searching model variables
      */
     Config.ML_DATA_DICT = {
         'Regression': [
