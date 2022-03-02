@@ -363,7 +363,7 @@ define([
         renderSaveBox() {
             let page = new com_String();
             page.appendFormatLine('<input id="{0}" type="text" class="vp-input" placeholder="{1}" value="{2}"/>'
-                                , 'vp_fileNavigationInput', 'Input file name', this.state.fileName);
+                                , 'vp_fileNavigationInput', 'New File Name', this.state.fileName);
             page.appendFormatLine('<select id="{0}" class="vp-select">', 'vp_fileNavigationExt');
             this.state.extensions.forEach(ext => {
                 page.appendFormatLine('<option value="{0}">{1}</option>', ext, ext);
