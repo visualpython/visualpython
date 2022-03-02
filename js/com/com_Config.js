@@ -160,7 +160,8 @@ define([
                 'printCommand.py',
                 'fileNaviCommand.py',
                 'pandasCommand.py',
-                'variableCommand.py'
+                'variableCommand.py',
+                'userCommand.py'
             ];
             let promiseList = [];
             libraryList.forEach(libName => {
@@ -376,58 +377,56 @@ define([
             this.getPackageVersion().then(function(latestVersion) {
                 if (nowVersion === latestVersion) {
                     // if it's already up to date
+                    // hide version update icon
+                    $('#vp_versionUpdater').hide();
                     if (background) {
-                        // hide version update icon
-                        $('#vp_versionUpdater').hide();
+                        ;
                     } else {
-                        let msg = com_util.formatString('Visualpython is up to date. ({0})', latestVersion);
+                        let msg = com_util.formatString('Visual Python is up to date. ({0})', latestVersion);
                         com_util.renderInfoModal(msg);
                     }
                     // update version_timestamp
                     that.setData({ 'version_timestamp': new Date().getTime() }, 'vpcfg');
                 } else {
-                    let msg = com_util.formatString('Visualpython updates are available.<br/>(Latest version: {0} / Your version: {1})', 
+                    let msg = com_util.formatString('Visual Python updates are available.<br/>(Latest version: {0} / Your version: {1})', 
                                     latestVersion, nowVersion);
                     // show version update icon
-                    $('#vp_versionUpdater').attr('title', msg);
+                    $('#vp_versionUpdater').attr('title', msg.replace('<br/>', ''));
                     $('#vp_versionUpdater').data('version', latestVersion);
                     $('#vp_versionUpdater').show();
-                    if (background) {
-                        ;
-                    } else {
-                        // render update modal (same as menu/MenuFrame.js:_bindEvent()-Click version updater)
-                        com_util.renderModal({
-                            title: 'Update version', 
-                            message: msg,
-                            buttons: ['Cancel', 'Update'],
-                            defaultButtonIdx: 0,
-                            buttonClass: ['cancel', 'activated'],
-                            finish: function(clickedBtnIdx) {
-                                switch (clickedBtnIdx) {
-                                    case 0:
-                                        // cancel
-                                        break;
-                                    case 1:
-                                        // update
-                                        let info = [
-                                            '## Visual Python Upgrade',
-                                            'NOTE: ',
-                                            '- Refresh your web browser to start a new version.',
-                                            '- Save VP Note before refreshing the page.'
-                                        ];
-                                        com_interface.insertCell('markdown', info.join('\n'));
-                                        com_interface.insertCell('code', '!pip install visualpython --upgrade');
-                                        com_interface.insertCell('code', '!visualpy install');
+                    
+                    // render update modal
+                    com_util.renderModal({
+                        title: 'Update version', 
+                        message: msg,
+                        buttons: ['Cancel', 'Update'],
+                        defaultButtonIdx: 0,
+                        buttonClass: ['cancel', 'activated'],
+                        finish: function(clickedBtnIdx) {
+                            switch (clickedBtnIdx) {
+                                case 0:
+                                    // cancel
+                                    break;
+                                case 1:
+                                    // update
+                                    let info = [
+                                        '## Visual Python Upgrade',
+                                        'NOTE: ',
+                                        '- Refresh your web browser to start a new version.',
+                                        '- Save VP Note before refreshing the page.'
+                                    ];
+                                    com_interface.insertCell('markdown', info.join('\n'));
+                                    com_interface.insertCell('code', '!pip install visualpython --upgrade');
+                                    com_interface.insertCell('code', '!visualpy install');
 
-                                        // update version_timestamp
-                                        that.setData({ 'version_timestamp': new Date().getTime() }, 'vpcfg');
-                                        // hide updater
-                                        $('#vp_versionUpdater').hide();
-                                        break;
-                                }
+                                    // update version_timestamp
+                                    that.setData({ 'version_timestamp': new Date().getTime() }, 'vpcfg');
+                                    // hide updater
+                                    $('#vp_versionUpdater').hide();
+                                    break;
                             }
-                        })
-                    }
+                        }
+                    });
                 }
             }).catch(function(err) {
                 if (background) {
@@ -436,6 +435,17 @@ define([
                     com_util.renderAlertModal(err);
                 }
             })
+        }
+
+        getMLDataDict(key = '') {
+            if (key == '') {
+                return Config.ML_DATA_DICT;
+            }
+            return Config.ML_DATA_DICT[key];
+        }
+
+        getMLDataTypes() {
+            return Config.ML_DATA_TYPES;
         }
 
     }
@@ -467,6 +477,42 @@ define([
     Config.BOARD_MIN_WIDTH = 263;
     Config.MENU_BOARD_SPACING = 5;
     Config.VP_MIN_WIDTH = Config.MENU_MIN_WIDTH + Config.BOARD_MIN_WIDTH + Config.MENU_BOARD_SPACING; // = MENU_MIN_WIDTH + BOARD_MIN_WIDTH + MENU_BOARD_SPACING
+    
+    /**
+     * Data types using for searching model variables
+     */
+    Config.ML_DATA_DICT = {
+        'Regression': [
+            'LinearRegression', 'SVR', 'DecisionTreeRegressor', 'RandomForestRegression', 'GradientBoostingRegressor', 'XGBRegressor', 'LGBMRegressor', 'CatBoostRegressor',
+        ],
+        'Classification': [
+            'LogisticRegression', 'SVC', 'DecisionTreeClassifier', 'RandomForestClassifier', 'GradientBoostingClassifier', 'XGBClassifier', 'LGBMClassifier', 'CatBoostClassifier',
+        ],
+        'Auto ML': [
+            'TPOTRegression', 'TPOTClassifier'
+        ],
+        'Clustering': [
+            'KMeans', 'AgglomerativeClustering', 'GaussianMixture', 'DBSCAN',
+        ],
+        'Dimension Reduction': [
+            'PCA', 'LinearDiscriminantAnalysis', 'TruncatedSVD', 'NMF'
+        ],
+        'Data Preparation': [
+            /** Encoding */
+            'OneHotEncoder', 'LabelEncoder', 'OrdinalEncoder', 'TargetEncoder', 'SMOTE',
+            /** Scaling */
+            'StandardScaler', 'RobustScaler', 'MinMaxScaler', 'Normalizer', 'FunctionTransformer'
+        ]
+    };
+
+    Config.ML_DATA_TYPES = [
+        ...Config.ML_DATA_DICT['Regression'],
+        ...Config.ML_DATA_DICT['Classification'],
+        ...Config.ML_DATA_DICT['Auto ML'],
+        ...Config.ML_DATA_DICT['Clustering'],
+        ...Config.ML_DATA_DICT['Dimension Reduction'],
+        ...Config.ML_DATA_DICT['Data Preparation']
+    ];
 
     return Config;
 });

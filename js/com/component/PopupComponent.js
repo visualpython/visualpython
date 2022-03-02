@@ -56,6 +56,7 @@ define([
                 codeview: true, 
                 dataview: true,
                 // show footer
+                runButton: true,
                 footer: true,
                 position: { right: 10, top: 120 },
                 size: { width: 400, height: 550 },
@@ -281,6 +282,9 @@ define([
                     case 'SELECT':
                     default:
                         newValue = $(this).val();
+                        if (!newValue) {
+                            newValue = '';
+                        }
                         break;
                 }
                 
@@ -435,7 +439,7 @@ define([
         render(inplace=false) {
             super.render(inplace);
 
-            let {codeview, dataview, footer, sizeLevel, position} = this.config;
+            let {codeview, dataview, runButton, footer, sizeLevel, position} = this.config;
 
             // codeview & dataview button hide/show
             if (!codeview) {
@@ -443,6 +447,11 @@ define([
             } 
             if (!dataview) {
                 $(this.wrapSelector('.vp-popup-button[data-type="data"]')).hide();
+            }
+
+            // run button
+            if (!runButton) {
+                $(this.wrapSelector('.vp-popup-runadd-box')).hide();
             }
 
             // footer
@@ -545,6 +554,9 @@ define([
                     case 'SELECT':
                     default:
                         newValue = $(tag).val();
+                        if (!newValue) {
+                            newValue = '';
+                        }
                         break;
                 }
                 

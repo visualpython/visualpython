@@ -14,7 +14,7 @@ define([
      *              - 1darr / 2darr / ndarr / scalar / param / dtype / tabblock
      *          default
      *          required
-     *          asParam
+     *          usePair
      *          code
      *      }
      * ]

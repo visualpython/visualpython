@@ -63,6 +63,12 @@ define([], function() {
                             && $('.vp-close-on-blur').find(target).length == 0) {
                             $('.vp-close-on-blur').hide();
                         }
+                        // VarSelector filter box
+                        if ($('.vp-vs-blur-btn').find(target).length == 0 
+                            && !$(target).hasClass('vp-vs-blur-btn')
+                            && $('.vp-vs-blur-btn').find(target).length == 0) {
+                            $('.vp-vs-blur').removeClass('vp-inline-block');
+                        }
                     }
                 },
                 { 

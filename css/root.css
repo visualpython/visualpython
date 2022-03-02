@@ -44,6 +44,12 @@
 .vp-orange-text {
     color: var(--font-hightlight);
 }
+.vp-gray-text {
+    color: var(--gray-color);
+}
+.vp-italic {
+    font-style: italic;
+}
 .vp-bold {
     font-weight: bold;
 }
@@ -192,6 +198,15 @@ body {
     cursor: not-allowed;
 }
 
+.vp-checkbox {
+    display: inline-block;
+    position: relative !important;
+    width: 13px;
+    height: 13px;
+    border: 1px solid #828282;
+    margin: 0px 15px;
+}
+
 /* Scrollbar */
 .vp-scrollbar {
     overflow-y: auto;
@@ -316,7 +331,54 @@ hr.vp-extra-menu-line {
 .mr5 {
     margin-right: 5px;
 }
-/* table style */
+/* Layout */
+.vp-inline-block {
+    display: inline-block !important;
+}
+/* Grid style */
+.vp-grid-box {
+    display: grid;
+    grid-row-gap: 5px;
+}
+.vp-grid-border-box {
+    display: grid;
+    align-items: baseline;
+    align-content: center;
+    border: 1px solid var(--border-gray-color);
+    border-radius: 5px;
+    box-sizing: border-box;
+    padding: 15px;
+    grid-row-gap: 5px;
+}
+.vp-grid-col-p50 {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-row-gap: 5px;
+    align-items: baseline;
+    align-content: center;
+}
+.vp-grid-col-95 {
+    display: grid;
+    grid-template-columns: 95px auto;
+    grid-row-gap: 5px;
+    align-items: baseline;
+    align-content: space-evenly;
+}
+.vp-grid-col-110 {
+    display: grid;
+    grid-template-columns: 110px auto;
+    grid-row-gap: 5px;
+    align-items: baseline;
+    align-content: space-evenly;
+}
+.vp-grid-col-130 {
+    display: grid;
+    grid-template-columns: 130px auto;
+    grid-row-gap: 5px;
+    align-items: baseline;
+    align-content: space-evenly;
+}
+/* Table style */
 .vp-tbl-gap5 {
     border-spacing: 5px;
     border-collapse: separate;
@@ -383,4 +445,36 @@ hr.vp-extra-menu-line {
 /* jquery auto-complete */
 .ui-autocomplete {
     z-index: 999;
+}
+.vp-vs-box {
+    position: relative;
+}
+.vp-vs-filter {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    right: 25px;
+    cursor: pointer;
+}
+.vp-vs-box input:disabled {
+    background: var(--light-gray-color) !important;
+    cursor: not-allowed;
+}
+.vp-vs-box input:disabled + .vp-vs-filter {
+    cursor: not-allowed;
+}
+.vp-vs-filter-box {
+    display: none;
+    position: absolute;
+    width: 101px;
+    background: #FFFFFF;
+    border: 0.25px solid #C4C4C4;
+    box-sizing: border-box;
+    box-shadow: 2px 2px 8px rgb(0 0 0 / 10%);
+    z-index: 10;
+}
+.vp-vs-item:hover {
+    background: var(--light-gray-color);
+    color: var(--font-hightlight);
+    cursor: pointer;
 }

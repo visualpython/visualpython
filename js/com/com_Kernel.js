@@ -96,12 +96,13 @@ define([
             });
         }
 
-        getDataList(dataTypeList=[]) {
+        getDataList(dataTypeList=[], excludeList=[]) {
             // use function command to get variable list of selected data types
             var cmdSB = '_vp_print(_vp_get_variables_list(None))';
-            if (dataTypeList && dataTypeList.length > 0) {
-                cmdSB = com_util.formatString('_vp_print(_vp_get_variables_list({0}))', JSON.stringify(dataTypeList));
+            if (!dataTypeList || dataTypeList.length <= 0) {
+                dataTypeList = [];
             }
+            cmdSB = com_util.formatString('_vp_print(_vp_get_variables_list({0}, {1}))', JSON.stringify(dataTypeList), JSON.stringify(excludeList));
             
             var that = this;
             return new Promise(function(resolve, reject) {
@@ -244,6 +245,27 @@ define([
                     vpLog.display(VP_LOG_TYPE.ERROR, err);
                 });
             });
+        }
+
+        //====================================================================
+        // Machine Learning
+        //====================================================================
+        getModelList(modelCategory='') {
+            // use function command to get variable list of selected data types
+            var cmdSB = `_vp_print(_vp_get_variables_list(${JSON.stringify(vpConfig.getMLDataTypes())}))`;
+            if (modelCategory != '') {
+                cmdSB = `_vp_print(_vp_get_variables_list(${JSON.stringify(vpConfig.getMLDataDict(modelCategory))}))`;
+            }
+            var that = this;
+            return new Promise(function(resolve, reject) {
+                that.execute(cmdSB).then(function(resultObj) {
+                    // resolve
+                    resolve(resultObj);
+                }).catch(function(err) {
+                    // reject
+                    reject(err);
+                })
+            })
         }
 
         //====================================================================

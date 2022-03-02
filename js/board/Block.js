@@ -95,7 +95,7 @@ define([
                 }
             });
             // right click event - blockMenu
-            $(this.wrapSelector()).on('contextmenu', function(evt) {
+            $(this.wrapSelector('.vp-block-header')).on('contextmenu', function(evt) {
                 that.prop.parent.showMenu(that, evt.pageX, evt.pageY);
                 evt.preventDefault();
             });

@@ -1,0 +1,63 @@
+<body>
+    <div class="vp-grid-box">
+        <div class="vp-grid-border-box">
+            <div class="vp-grid-col-95">
+                <label for="inputData" class="vp-orange-text">Input data</label>
+                <select id="inputData" class="vp-select vp-state">
+                    <option value="with_target_data">with Target data</option>
+                    <option value="without_target_data">without Target data</option>
+                </select>
+            </div>
+            <div class="vp-grid-col-95">
+                <label for="featureData" class="vp-orange-text">Feature data</label>
+                <input type="text" class="vp-input vp-state" id="featureData" placeholder="Select feature data"/>
+            </div>
+            <div class="vp-grid-col-95 vp-target-data-box">
+                <label for="targetData" class="vp-orange-text">Target data</label>
+                <input type="text" class="vp-input vp-state" id="targetData" placeholder="Select target data"/>
+            </div>
+        </div>
+        <div class="vp-grid-border-box">
+            <div class="vp-grid-col-95">
+                <label for="testSize">Test size</label>
+                <select id="testSize" class="vp-select vp-state">
+                    <!-- Auto Crate -->
+                </select>
+            </div>
+            <div class="vp-grid-col-95">
+                <label for="randomState">Random state</label>
+                <input type="number" class="vp-input vp-state" id="randomState" placeholder="123"/>
+            </div>
+            <div class="vp-grid-col-95">
+                <label for="shuffle">Shuffle</label>
+                <select id="shuffle" class="vp-select vp-state">
+                    <option value="True">True (default)</option>
+                    <option value="False">False</option>
+                </select>
+            </div>
+            <div class="vp-grid-col-95">
+                <label for="stratify">Stratify</label>
+                <input type="text" id="stratify" class="vp-input vp-state" placeholder="None"/>
+            </div>
+        </div>
+        <div class="vp-grid-border-box vp-grid-col-p50">
+            <label for="vp_pfReturn" class="vp-orange-text">Allocate to</label><label></label>
+            <div class="vp-grid-col-95">
+                <label for="trainFeatures">Train features</label>
+                <input type="text" id="trainFeatures" class="vp-input vp-state" placeholder="New variable name" value="X_train">
+            </div>
+            <div class="vp-grid-col-95">
+                <label for="testFeatures">Test features</label>
+                <input type="text" id="testFeatures" class="vp-input vp-state" placeholder="New variable name" value="X_test">
+            </div>
+            <div class="vp-grid-col-95 vp-target-data-box">
+                <label for="trainTarget">Train target</label>
+                <input type="text" id="trainTarget" class="vp-input vp-state" placeholder="New variable name" value="y_train">
+            </div>
+            <div class="vp-grid-col-95 vp-target-data-box">
+                <label for="testTarget">Test target</label>
+                <input type="text" id="testTarget" class="vp-input vp-state" placeholder="New variable name" value="y_test">
+            </div>
+        </div>
+    </div>
+</body>

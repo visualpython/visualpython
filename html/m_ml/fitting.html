@@ -1,0 +1,24 @@
+<body>
+    <div class="vp-grid-box">
+        <div class="vp-grid-border-box vp-grid-col-130">
+            <label for="model" class="vp-orange-text">Model</label>
+            <select id="model" class="vp-select vp-state">
+                <!-- Auto Create -->
+            </select>
+        </div>
+        <div class="vp-grid-border-box vp-grid-col-130">
+            <label for="method" class="vp-orange-text">Fit/Transform/Predict</label>
+            <select id="method" class="vp-select vp-state">
+                <option value="fit">fit</option>
+                <option value="fit_transform">fit_transform</option>
+                <option value="fit_predict">fit_predict</option>
+            </select>
+        </div>
+        <div class="vp-grid-border-box vp-grid-col-130">
+            <label for="featureData" class="vp-orange-text">Feature data</label>
+            <input type="text" class="vp-input vp-state" id="featureData" placeholder="Select feature data" value="X_train"/>
+            <label for="targetData" class="vp-orange-text">Target data</label>
+            <input type="text" class="vp-input vp-state" id="targetData" placeholder="Select target data" value="y_train"/>
+        </div>
+    </div>  
+</body>

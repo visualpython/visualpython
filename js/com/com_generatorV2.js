@@ -41,9 +41,9 @@ define([
     }
 
     const _VP_BOOL_OPTIONS = [
-        { name: 'Default', value: '' },
-        { name: 'True', value: 'True' },
-        { name: 'False', value: 'False' }
+        { label: 'Default', value: '' },
+        { label: 'True', value: 'True' },
+        { label: 'False', value: 'False' }
     ]
 
     const _VP_NP_DTYPES = [
@@ -626,14 +626,6 @@ define([
             // prevent code: no allocation variable ( = pd.DataFrame())
             if (code.startsWith(' = ')) {
                 code = code.substr(3);
-            }
-
-            // show_result 
-            if (_VP_SHOW_RESULT && package.output && package.output.length > 0) {
-                var outputVariable = vp_getTagValue(pageThis, package.output[0]);
-                if (outputVariable != '') {
-                    code += '\n'+ outputVariable
-                }
             }
 
         } catch (e) {
@@ -1246,6 +1238,7 @@ define([
 
     return {
         vp_showInterfaceOnPage: vp_showInterfaceOnPage,
+        renderContent: renderContent,
         vp_codeGenerator: vp_codeGenerator,
         vp_generateVarSelect: vp_generateVarSelect,
         vp_getTagValue: vp_getTagValue,
