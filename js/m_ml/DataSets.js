@@ -34,7 +34,9 @@ define([
             }
         }
 
-
+        templateForBody() {
+            return 'Data Set test';
+        }
 
     }
 
