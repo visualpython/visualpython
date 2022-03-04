@@ -13,11 +13,14 @@
 // [CLASS] DataSets
 //============================================================================
 define([
+    'text!vp_base/html/m_ml/dataSets.html!strip',
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/component/PopupComponent',
-], function(com_util, com_Const, com_String, PopupComponent) {
+    'vp_base/js/com/com_generatorV2',
+    'vp_base/data/m_ml/mlLibrary',
+], function(dsHTML, com_util, com_Const, com_String, PopupComponent, com_generator, ML_LIBRARIES) {
 
     /**
      * DataSets
@@ -29,15 +32,126 @@ define([
             this.config.dataview = false;
 
             this.state = {
-                
+                loadType: 'load_boston',
+                userOption: '',
+                allocateTo: 'ldata',
                 ...this.state
             }
+            
+            this.mlConfig = ML_LIBRARIES;
+            this.loadTypeList = {
+                'Load Data': [
+                    'load_boston', 'load_iris', 'load_diabetes', 'load_digits', 'load_linnerud', 'load_wine', 'load_breast_cancer'
+                ],
+                'Create Data': [
+                    'make_classification', 'make_blobs', 'make_circles', 'make_moons'
+                ]
+            }
+
+        }
+
+        _bindEvent() {
+            super._bindEvent();
+            let that = this;
+
+            // select model
+            $(this.wrapSelector('#loadType')).on('change', function() {
+                let loadType = $(this).val();
+                that.state.loadType = loadType;
+                $(that.wrapSelector('.vp-data-option-box')).html(that.templateForOption(loadType));
+
+                // change allocateTo default variable name
+                if (that.loadTypeList['Load Data'].includes(loadType)) {
+                    $(that.wrapSelector('#allocateTo')).val('ldata');
+                    that.state.allocateTo = 'ldata';
+                } else {
+                    $(that.wrapSelector('#allocateTo')).val('df');
+                    that.state.allocateTo = 'df';
+                }
+            });
         }
 
         templateForBody() {
-            return 'Data Set test';
+            let page = $(dsHTML);
+
+            let that = this;
+            // load types
+            let loadTypeTag = new com_String();
+            Object.keys(this.loadTypeList).forEach(category => {
+                let optionTag = new com_String();
+                that.loadTypeList[category].forEach(opt => {
+                    let optConfig = that.mlConfig[opt];
+                    let selectedFlag = '';
+                    if (opt == that.state.modelType) {
+                        selectedFlag = 'selected';
+                    }
+                    optionTag.appendFormatLine('<option value="{0}" {1}>{2}</option>',
+                                    opt, selectedFlag, optConfig.name);
+                })
+                loadTypeTag.appendFormatLine('<optgroup label="{0}">{1}</optgroup>', 
+                    category, optionTag.toString());
+            });
+            $(page).find('#loadType').html(loadTypeTag.toString());
+
+            // render option page
+            $(page).find('.vp-data-option-box').html(this.templateForOption(this.state.loadType));
+
+            return page;
         }
 
+        templateForOption(loadType) {
+            let config = this.mlConfig[loadType];
+            let state = this.state;
+
+            let optBox = new com_String();
+            // render tag
+            config.options.forEach(opt => {
+                optBox.appendFormatLine('<label for="{0}" title="{1}">{2}</label>'
+                    , opt.name, opt.name, opt.name);
+                let content = com_generator.renderContent(this, opt.component[0], opt, state);
+                optBox.appendLine(content[0].outerHTML);
+            });
+
+            // show user option
+            if (config.code.includes('${etc}')) {
+                // render user option
+                optBox.appendFormatLine('<label for="{0}">{1}</label>', 'userOption', 'User option');
+                optBox.appendFormatLine('<input type="text" class="vp-input vp-state" id="{0}" placeholder="{1}" value="{2}"/>',
+                                            'userOption', 'key=value, ...', this.state.userOption);
+            }
+            return optBox.toString();
+        }
+
+        generateCode() {
+            let { loadType, userOption, allocateTo } = this.state;
+            let code = new com_String();
+            let config = this.mlConfig[loadType];
+            code.appendLine(config.import);
+            code.appendLine();
+
+            // model code
+            let modelCode = config.code;
+            modelCode = com_generator.vp_codeGenerator(this, config, this.state, userOption);
+
+            if (this.loadTypeList['Load Data'].includes(loadType)) {
+                code.appendFormatLine('{0} = {1}', allocateTo, modelCode);
+                // FIXME: decide between 2 codes
+                // code.appendFormat("df_{0} = pd.concat([pd.DataFrame({1}.data, columns={2}.feature_names), pd.DataFrame({3}.target, columns=['target'])], axis=1)", allocateTo, allocateTo, allocateTo, allocateTo);
+                code.appendFormat("df_{0} = pd.DataFrame(np.hstack(({1}.data, {2}.target.reshape(-1,1))), columns=np.hstack(({3}.feature_names, ['target'])))", allocateTo, allocateTo, allocateTo, allocateTo);
+            } else {
+                code.appendFormatLine("_X, _y = {0}", modelCode);
+                code.appendLine("_columns = np.hstack((['X{}'.format(i+1) for i in range(len(_X[0]))],['target']))");
+                code.appendFormat("{0} = pd.DataFrame(np.hstack((_X, _y.reshape(-1,1))), columns=_columns)", allocateTo);
+            }
+
+            if (allocateTo != '') {
+                code.appendLine();
+                code.append(allocateTo);
+            }
+
+            
+            return code.toString();
+        }
     }
 
     return DataSets;
