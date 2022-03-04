@@ -20,6 +20,110 @@ define([
      * ]
      */
     var ML_LIBRARIES = {
+        /** Data Sets */
+        'load_boston': {
+            name: 'load_boston',
+            import: 'from sklearn.datasets import load_boston',
+            code: 'load_boston()',
+            options: [
+
+            ]
+        },
+        'load_iris': {
+            name: 'load_iris',
+            import: 'from sklearn.datasets import load_iris',
+            code: 'load_iris()',
+            options: [
+
+            ]
+        },
+        'load_diabetes': {
+            name: 'load_diabetes',
+            import: 'from sklearn.datasets import load_diabetes',
+            code: 'load_diabetes()',
+            options: [
+
+            ]
+        },
+        'load_digits': {
+            name: 'load_digits',
+            import: 'from sklearn.datasets import load_digits',
+            code: 'load_digits(${n_class})',
+            options: [
+                { name: 'n_class', component: ['input_number'], default: 10, usePair: true },
+            ]
+        },
+        'load_linnerud': {
+            name: 'load_linnerud',
+            import: 'from sklearn.datasets import load_linnerud',
+            code: 'load_linnerud()',
+            options: [
+
+            ]
+        },
+        'load_wine': {
+            name: 'load_wine',
+            import: 'from sklearn.datasets import load_wine',
+            code: 'load_wine()',
+            options: [
+
+            ]
+        },
+        'load_breast_cancer': {
+            name: 'load_breast_cancer',
+            import: 'from sklearn.datasets import load_breast_cancer',
+            code: 'load_breast_cancer()',
+            options: [
+
+            ]
+        },
+        'make_classification': {
+            name: 'make_classification',
+            import: 'from sklearn.datasets import make_classification',
+            code: 'make_classification(${n_samples}${n_features}${n_repeated}${n_classes}${shuffle}${random_state}${etc})',
+            options: [
+                { name: 'n_samples', component: ['input_number'], default: 100, usePair: true },
+                { name: 'n_features', component: ['input_number'], default: 20, usePair: true },
+                { name: 'n_repeated', component: ['input_number'], default: 0, usePair: true },
+                { name: 'n_classes', component: ['input_number'], default: 2, usePair: true },
+                { name: 'shuffle', component: ['bool_select'], default: 'True', usePair: true },
+                { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true }
+            ]
+        },
+        'make_blobs': {
+            name: 'make_blobs',
+            import: 'from sklearn.datasets import make_blobs',
+            code: 'make_blobs(${n_samples}${n_features}${shuffle}${random_state}${etc})',
+            options: [
+                { name: 'n_samples', component: ['input_number'], default: 100, usePair: true },
+                { name: 'n_features', component: ['input_number'], default: 20, usePair: true },
+                { name: 'shuffle', component: ['bool_select'], default: 'True', usePair: true },
+                { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true }
+            ]
+        },
+        'make_circles': {
+            name: 'make_circles',
+            import: 'from sklearn.datasets import make_circles',
+            code: 'make_circles(${n_samples}${shuffle}${noise}${random_state}${factor}${etc})',
+            options: [
+                { name: 'n_samples', component: ['input_number'], default: 100, usePair: true },
+                { name: 'shuffle', component: ['bool_select'], default: 'True', usePair: true },
+                { name: 'noise', component: ['input_number'], usePair: true },
+                { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true },
+                { name: 'factor', component: ['input_number'], default: 0.8, usePair: true }
+            ]
+        },
+        'make_moons': {
+            name: 'make_moons',
+            import: 'from sklearn.datasets import make_moons',
+            code: 'make_moons(${n_samples}${shuffle}${noise}${random_state}${etc})',
+            options: [
+                { name: 'n_samples', component: ['input_number'], default: 100, usePair: true },
+                { name: 'shuffle', component: ['bool_select'], default: 'True', usePair: true },
+                { name: 'noise', component: ['input_number'], usePair: true },
+                { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true }
+            ]
+        },
         /** Data Preparation - Encoding */
         'prep-onehot': {
             name: 'OneHotEncoder',
