@@ -128,9 +128,10 @@ define([
         'prep-onehot': {
             name: 'OneHotEncoder',
             import: 'from sklearn.preprocessing import OneHotEncoder',
-            code: 'OneHotEncoder()',
+            code: 'OneHotEncoder(${handle_unknown}${etc})',
             options: [
-
+                { name: 'handle_unknown', component: ['option_suggest'], usePair: true, 
+                    options: ['error', 'ignore'], default: 'error' },
             ]
         },
         'prep-label': {
@@ -144,66 +145,77 @@ define([
         'prep-ordinal': {
             name: 'OrdinalEncoder',
             import: 'from sklearn.preprocessing import OrdinalEncoder',
-            code: 'OrdinalEncoder()',
+            code: 'OrdinalEncoder(${handle_unknown}${unknown_values}${etc})',
             options: [
-                
+                { name: 'handle_unknown', component: ['option_suggest'], usePair: true, 
+                    options: ['error', 'use_encoded_value'], default: 'error' },
+                { name: 'unknown_values', component: ['input'], usePair: true }
             ]
         },
         'prep-target': {
             name: 'TargetEncoder',
             install: '!pip install category_encoders',
             import: 'from category_encoders.target_encoder import TargetEncoder',
-            code: 'TargetEncoder()',
+            code: 'TargetEncoder(${cols}${handle_missing}${handle_unknown}${smoothing}${etc})',
             options: [
-                
+                { name: 'cols', component: ['var_suggest', '1darr'], usePair: true },
+                { name: 'handle_missing', component: ['option_suggest'], usePair: true,
+                    options: ['error', 'return_nan', 'value'], default: 'value' },
+                { name: 'handle_unknown', component: ['option_suggest'], usePair: true,
+                    options: ['error', 'return_nan', 'value'], default: 'value' },
+                { name: 'smoothing', component: ['input_number'], default: 1.0, usePair: true }
             ]
         },
         'prep-smote': {
             name: 'SMOTE',
             install: '!pip install imblearn',
-            import: 'from imlearn.over_sampling import SMOTE',
-            code: 'SMOTE()',
+            import: 'from imblearn.over_sampling import SMOTE',
+            code: 'SMOTE(${random_state}${k_neighbors}${etc})',
             options: [
-                
+                { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true },
+                { name: 'k_neighbors', component: ['input_number'], default: 5, usePair: true }
             ]
         },
         /** Data Preparation - Scaling */
         'prep-standard': {
             name: 'StandardScaler',
             import: 'from sklearn.preprocessing import StandardScaler',
-            code: 'StandardScaler()',
+            code: 'StandardScaler(${with_mean}${with_std}${etc})',
             options: [
-
+                { name: 'with_mean', component: ['bool_select'], default: 'True', usePair: true },
+                { name: 'with_std', component: ['bool_select'], default: 'True', usePair: true }
             ]
         },
         'prep-robust': {
             name: 'RobustScaler',
             import: 'from sklearn.preprocessing import RobustScaler',
-            code: 'RobustScaler()',
+            code: 'RobustScaler(${with_centering}${with_scaling}${etc})',
             options: [
-
+                { name: 'with_centering', component: ['bool_select'], default: 'True', usePair: true },
+                { name: 'with_scaling', component: ['bool_select'], default: 'True', usePair: true }
             ]
         },
         'prep-minmax': {
             name: 'MinMaxScaler',
             import: 'from sklearn.preprocessing import MinMaxScaler',
-            code: 'MinMaxScaler()',
+            code: 'MinMaxScaler(${feature_range}${etc})',
             options: [
-
+                { name: 'feature_range', component: ['input'], placeholder: '(min, max)', default: '(0, 1)', usePair: true }
             ]
         },
         'prep-normalizer': {
             name: 'Normalizer',
             import: 'from sklearn.preprocessing import Normalizer',
-            code: 'Normalizer()',
+            code: 'Normalizer(${norm}${etc})',
             options: [
-
+                { name: 'norm', component: ['option_suggest'], usePair: true,
+                    options: ['l1', 'l2', 'max'], default: 'l2' },
             ]
         },
         'prep-func-trsfrm-log': {
             name: 'Log Scaling',
             import: 'from sklearn.preprocessing import FunctionTransformer',
-            code: 'FunctionTransformer(np.log1p)',
+            code: 'FunctionTransformer(np.log1p${etc})',
             options: [
 
             ]
@@ -211,7 +223,7 @@ define([
         'prep-func-trsfrm-exp': {
             name: 'Exponential Scaling',
             import: 'from sklearn.preprocessing import FunctionTransformer',
-            code: 'FunctionTransformer(np.expm1)',
+            code: 'FunctionTransformer(np.expm1${etc})',
             options: [
 
             ]
@@ -220,7 +232,7 @@ define([
         'ln-rgs': {
             name: 'LinearRegression',
             import: 'from sklearn.linear_model import LinearRegression',
-            code: 'LinearRegression(${fit_intercept})',
+            code: 'LinearRegression(${fit_intercept}${etc})',
             options: [
                 { name: 'fit_intercept', component: ['bool_select'], default: 'True', usePair: true }
             ]
@@ -429,8 +441,19 @@ define([
             ]
         },
         /** Auto ML */
+        'auto-sklearn-rgs': {
+            name: 'AutoSklearnRegressor (Linux only)',
+            install: 'pip install auto-sklearn',
+            import: 'from autosklearn import AutoSklearnRegressor',
+            link: 'https://automl.github.io/auto-sklearn/master/api.html#regression',
+            code: 'AutoSklearnRegressor(${etc})',
+            options: [
+                
+            ]
+        },
         'tpot-rgs': {
             name: 'TPOTRegressor',
+            install: 'pip install tpot',
             import: 'from tpot import TPOTRegressor',
             code: 'TPOTRegressor(${generation}${population_size}${cv}${random_state}${etc})',
             options: [
@@ -440,8 +463,19 @@ define([
                 { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true }
             ]
         },
+        'auto-sklearn-clf': {
+            name: 'AutoSklearnClassifier (Linux only)',
+            install: 'pip install auto-sklearn',
+            import: 'from autosklearn import AutoSklearnClassifier',
+            link: 'https://automl.github.io/auto-sklearn/master/api.html#classification',
+            code: 'AutoSklearnClassifier(${etc})',
+            options: [
+                
+            ]
+        },
         'tpot-clf': {
             name: 'TPOTClassifier',
+            install: 'pip install tpot',
             import: 'from tpot import TPOTClassifier',
             code: 'TPOTClassifier(${generation}${population_size}${cv}${random_state}${etc})',
             options: [

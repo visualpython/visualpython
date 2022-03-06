@@ -17,12 +17,13 @@ define([
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
+    'vp_base/js/com/com_interface',
     'vp_base/js/com/com_generatorV2',
     'vp_base/data/m_ml/mlLibrary',
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/VarSelector2',
     'vp_base/js/com/component/InstanceEditor'
-], function(msHtml, com_util, com_Const, com_String, com_generator, ML_LIBRARIES, PopupComponent, VarSelector2, InstanceEditor) {
+], function(msHtml, com_util, com_Const, com_String, com_interface, com_generator, ML_LIBRARIES, PopupComponent, VarSelector2, InstanceEditor) {
 
     /**
      * DataPrep
@@ -222,10 +223,13 @@ define([
                 let content = com_generator.renderContent(this, opt.component[0], opt, state);
                 optBox.appendLine(content[0].outerHTML);
             });
-            // render user option
-            optBox.appendFormatLine('<label for="{0}">{1}</label>', 'userOption', 'User option');
-            optBox.appendFormatLine('<input type="text" class="vp-input vp-state" id="{0}" placeholder="{1}" value="{2}"/>',
-                                        'userOption', 'key=value, ...', this.state.userOption);
+            // show user option
+            if (config.code.includes('${etc}')) {
+                // render user option
+                optBox.appendFormatLine('<label for="{0}">{1}</label>', 'userOption', 'User option');
+                optBox.appendFormatLine('<input type="text" class="vp-input vp-state" id="{0}" placeholder="{1}" value="{2}"/>',
+                                            'userOption', 'key=value, ...', this.state.userOption);
+            }
             return optBox.toString();
         }
 

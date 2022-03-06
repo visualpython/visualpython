@@ -37,7 +37,8 @@ define([
         'col_select': 'Select Column',
         'textarea': 'Input textarea',
         'input_number': 'Input number',
-        'input': 'Input text'
+        'input_text': 'Input text', 
+        'input': 'Input value'
     }
 
     const _VP_BOOL_OPTIONS = [
