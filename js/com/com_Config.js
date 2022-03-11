@@ -483,13 +483,13 @@ define([
      */
     Config.ML_DATA_DICT = {
         'Regression': [
-            'LinearRegression', 'SVR', 'DecisionTreeRegressor', 'RandomForestRegression', 'GradientBoostingRegressor', 'XGBRegressor', 'LGBMRegressor', 'CatBoostRegressor',
+            'LinearRegression', 'SVR', 'DecisionTreeRegressor', 'RandomForestRegressor', 'GradientBoostingRegressor', 'XGBRegressor', 'LGBMRegressor', 'CatBoostRegressor',
         ],
         'Classification': [
             'LogisticRegression', 'SVC', 'DecisionTreeClassifier', 'RandomForestClassifier', 'GradientBoostingClassifier', 'XGBClassifier', 'LGBMClassifier', 'CatBoostClassifier',
         ],
         'Auto ML': [
-            'TPOTRegression', 'TPOTClassifier'
+            'AutoSklearnRegressor', 'AutoSklearnClassifier', 'TPOTRegression', 'TPOTClassifier'
         ],
         'Clustering': [
             'KMeans', 'AgglomerativeClustering', 'GaussianMixture', 'DBSCAN',
