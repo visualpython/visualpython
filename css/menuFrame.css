@@ -229,6 +229,15 @@
 .vp-menuitem.apps.vp-color-apps4 {
     background: #E56139;
 }
+.vp-menuitem.apps.vp-color-apps5 {
+    background: #BEB727;
+}
+.vp-menuitem.apps.vp-color-apps6 {
+    background: #91A541;
+}
+.vp-menuitem.apps.vp-color-apps7 {
+    background: #718E41;
+}
 .vp-menuitem.apps.vp-color-preparing {
     background: var(--gray-color);
 }
