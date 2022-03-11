@@ -31,7 +31,7 @@ define([
             this.config.dataview = false;
 
             this.state = {
-                modelType: 'clf',
+                modelType: 'rgs',
                 predictData: 'pred',
                 targetData: 'y_test',
                 // classification

@@ -21,8 +21,8 @@ define([
     'vp_base/data/m_ml/mlLibrary',
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/VarSelector2',
-    'vp_base/js/com/component/InstanceEditor'
-], function(msHtml, com_util, com_Const, com_String, com_generator, ML_LIBRARIES, PopupComponent, VarSelector2, InstanceEditor) {
+    'vp_base/js/com/component/ModelEditor'
+], function(msHtml, com_util, com_Const, com_String, com_generator, ML_LIBRARIES, PopupComponent, VarSelector2, ModelEditor) {
 
     /**
      * AutoML
@@ -40,7 +40,7 @@ define([
                 userOption: '',
                 featureData: 'X_train',
                 targetData: 'y_train',
-                allocateTo: 'model',
+                allocateToCreation: 'model',
                 // model selection
                 model: '',
                 method: '',
@@ -91,6 +91,11 @@ define([
                     com_interface.insertCell('code', config.install);
                 }
             });
+            
+            // change model
+            $(this.wrapSelector('#model')).on('change', function() {
+                that.modelEditor.show();
+            })
         }
 
         templateForBody() {
@@ -168,7 +173,7 @@ define([
                     that.state.model = $(that.wrapSelector('#model')).val();
                 }
 
-                that.insEditor.show();
+                that.modelEditor.show();
             });
 
             //================================================================
@@ -226,13 +231,13 @@ define([
         render() {
             super.render();
 
-            // Instance Editor
-            this.insEditor = new InstanceEditor(this, "model", "instanceEditor");
-            this.insEditor.show();
+            // Model Editor
+            this.modelEditor = new ModelEditor(this, "model", "instanceEditor");
+            this.modelEditor.show();
         }
 
         generateCode() {
-            let { modelControlType, modelType, userOption, featureData, targetData, allocateTo } = this.state;
+            let { modelControlType, modelType, userOption, featureData, targetData, allocateToCreation } = this.state;
             let code = new com_String();
             if (modelControlType == 'creation') {
                 /**
@@ -248,14 +253,16 @@ define([
                 // model code
                 let modelCode = config.code;
                 modelCode = com_generator.vp_codeGenerator(this, config, this.state, userOption);
-                code.appendFormat('{0} = {1}', allocateTo, modelCode);                
+                code.appendFormat('{0} = {1}', allocateToCreation, modelCode);                
             } else {
                 /**
                  * Model Selection
                  * ---
                  * ...
                  */
-
+                let modelCode = this.modelEditor.getCode();
+                modelCode = modelCode.replace('${model}', model);
+                code.append(modelCode);
 
             }
 
