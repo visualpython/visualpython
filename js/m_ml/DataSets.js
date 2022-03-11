@@ -133,20 +133,24 @@ define([
             let modelCode = config.code;
             modelCode = com_generator.vp_codeGenerator(this, config, this.state, userOption);
 
+            let allocateToVar = allocateTo;
             if (this.loadTypeList['Load Data'].includes(loadType)) {
                 code.appendFormatLine('{0} = {1}', allocateTo, modelCode);
-                // FIXME: decide between 2 codes
-                // code.appendFormat("df_{0} = pd.concat([pd.DataFrame({1}.data, columns={2}.feature_names), pd.DataFrame({3}.target, columns=['target'])], axis=1)", allocateTo, allocateTo, allocateTo, allocateTo);
-                code.appendFormat("df_{0} = pd.DataFrame(np.hstack(({1}.data, {2}.target.reshape(-1,1))), columns=np.hstack(({3}.feature_names, ['target'])))", allocateTo, allocateTo, allocateTo, allocateTo);
+                code.appendLine("# Create DataFrame");
+                code.appendFormatLine("df_{0} = pd.DataFrame(data={1}.data, columns={2}.feature_names)", allocateTo, allocateTo, allocateTo);
+                code.appendFormat("df_{0}['target'] = {1}.target", allocateTo, allocateTo);
+                allocateToVar = 'df_' + allocateTo;
             } else {
                 code.appendFormatLine("_X, _y = {0}", modelCode);
-                code.appendLine("_columns = np.hstack((['X{}'.format(i+1) for i in range(len(_X[0]))],['target']))");
-                code.appendFormat("{0} = pd.DataFrame(np.hstack((_X, _y.reshape(-1,1))), columns=_columns)", allocateTo);
+                code.appendLine("# Create DataFrame");
+                code.appendLine("_feature_names = ['X{}'.format(i+1) for i in range(len(_X[0]))]");
+                code.appendFormatLine("{0} = pd.DataFrame(data=_X, columns=_feature_names)", allocateTo);
+                code.appendFormat("{0}['target'] = _y", allocateTo);
             }
 
-            if (allocateTo != '') {
+            if (allocateToVar != '') {
                 code.appendLine();
-                code.append(allocateTo);
+                code.append(allocateToVar);
             }
 
             
