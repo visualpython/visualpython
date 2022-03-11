@@ -11,8 +11,9 @@
 define([
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_makeDom',
-    'vp_base/js/com/component/SuggestInput'
-], function (com_util, com_makeDom, SuggestInput) {
+    'vp_base/js/com/component/SuggestInput',
+    'vp_base/js/com/component/VarSelector2'
+], function (com_util, com_makeDom, SuggestInput, VarSelector2) {
     /**
      * show result after code executed
      */
