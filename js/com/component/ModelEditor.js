@@ -20,10 +20,6 @@ define([
     const VP_INS_PARAMETER_BOX = 'vp-ins-parameter-box';
     const VP_INS_PARAMETER = 'vp-ins-parameter';
 
-    const VP_CREATE_VAR_BOX = 'vp-create-var-box';
-    const VP_CREATE_VAR = 'vp-create-var';
-    const VP_CREATE_VAR_BTN = 'vp-create-var-btn';
-
     class ModelEditor extends Component {
         constructor(pageThis, targetId, containerId='vp_wrapper') {
             super(null, { pageThis: pageThis, targetId: targetId, containerId: containerId });
@@ -69,29 +65,29 @@ define([
                     name: 'fit',
                     code: '${model}.fit(${featureData}, ${targetData})',
                     options: [
-                        { name: 'featureData', component: ['var_select'], var_type: ['DataFrame'], default: 'X_train' },
-                        { name: 'targetData', component: ['var_select'], var_type: ['DataFrame'], default: 'y_train' }
+                        { name: 'featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'X_train' },
+                        { name: 'targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'y_train' }
                     ]
                 },
                 'predict': {
                     name: 'predict',
                     code: '${model}.predict(${featureData})',
                     options: [
-                        { name: 'featureData', component: ['var_select'], var_type: ['DataFrame'], default: 'X_train' }
+                        { name: 'featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'X_train' }
                     ]
                 },
                 'predict_proba': {
                     name: 'predict_proba',
                     code: '${model}.predict_proba(${featureData})',
                     options: [
-                        { name: 'featureData', component: ['var_select'], var_type: ['DataFrame'], default: 'X_train' }
+                        { name: 'featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'X_train' }
                     ]
                 },
                 'transform': {
                     name: 'transform',
                     code: '${model}.transform(${featureData})',
                     options: [
-                        { name: 'featureData', component: ['var_select'], var_type: ['DataFrame'], default: 'X_train' }
+                        { name: 'featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'X_train' }
                     ]
                 }
             };
@@ -138,19 +134,37 @@ define([
             let defaultInfos = {
                 'score': {
                     name: 'score',
-                    code: '${model}.score()',
+                    code: '${model}.score(${featureData}, {targetData})',
                     options: [
-
+                        { name: 'featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'X' },
+                        { name: 'targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'y' }
+                    ]
+                },
+                'cross_val_score': {
+                    name: 'cross_val_score',
+                    import: 'from sklearn.model_selection import cross_val_score',
+                    code: '${allocateScore} = cross_val_score(${model}, ${featureData}, ${targetData}${scoring}${cv})',
+                    options: [
+                        { name: 'featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'X' },
+                        { name: 'targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'y' },
+                        { name: 'scoring', component: ['input'], usePair: true },
+                        { name: 'cv', component: ['input'], usePair: true },
+                        { name: 'allocateScore', label: 'Allocate to', component: ['input'], placeholder: 'New variable' }
                     ]
                 }
             }
             switch (category) {
                 case 'Regression':
                     infos = {
-                        'score': defaultInfos['score']
+                        'score': defaultInfos['score'],
+                        'cross_val_score': defaultInfos['cross_val_score']
                     }
                     break;
                 case 'Classification':
+                    infos = {
+                        'score': defaultInfos['score'],
+                        'cross_val_score': defaultInfos['cross_val_score']
+                    }
                     break;
                 case 'Auto ML':
                     break;
@@ -197,11 +211,7 @@ define([
             tag.appendLine('</div>'); // VP_INS_SELECT_CONTAINER
 
             tag.appendFormatLine('<div class="vp-multilang {0}">Options</div>', VP_INS_SELECT_TITLE);
-            tag.appendFormatLine('<div class="{0} vp-grid-col-95">', VP_INS_PARAMETER_BOX);
-            // TODO: option box
-
-            tag.appendLine('</div>'); // VP_INS_PARAMETER
-
+            tag.appendFormatLine('<div class="{0} vp-grid-col-95"></div>', VP_INS_PARAMETER_BOX);
             tag.appendLine('</div>'); // VP_INS_BOX END
 
             $(this.pageThis.wrapSelector('#' + this.containerId)).html(tag.toString());
@@ -294,8 +304,12 @@ define([
                 let optBox = new com_String();
                 // render tag
                 config.options.forEach(opt => {
+                    let label = opt.name;
+                    if (opt.label != undefined) {
+                        label = opt.label;
+                    }
                     optBox.appendFormatLine('<label for="{0}" title="{1}">{2}</label>'
-                        , opt.name, opt.name, opt.name);
+                        , opt.name, opt.name, label);
                     let content = com_generator.renderContent(that, opt.component[0], opt, that.pageThis.state);
                     optBox.appendLine(content[0].outerHTML);
                 });
@@ -303,6 +317,10 @@ define([
                 $(that.wrapSelector('.' + VP_INS_PARAMETER_BOX)).html(optBox.toString());
 
                 that.state.config = config;
+
+                // add selection
+                $(that.wrapSelector('.' + VP_INS_SELECT_ITEM)).removeClass('selected');
+                $(this).addClass('selected');
             });
         }
 
@@ -315,8 +333,18 @@ define([
             $(this.wrapSelector()).hide();
         }
 
-        getCode() {
-            return com_generator.vp_codeGenerator(this.pageThis, this.state.config, this.pageThis.state);
+        getCode(replaceDict={}) {
+            let code = new com_String();
+            if (this.state.config.import != undefined) {
+                code.appendLine(this.state.config.import);
+                code.appendLine();
+            }
+            let modelCode = com_generator.vp_codeGenerator(this.pageThis, this.state.config, this.pageThis.state);
+            Object.keys(replaceDict).forEach(key => {
+                modelCode = modelCode.replace(key, replaceDict[key]);
+            });
+            code.append(modelCode);
+            return code.toString();
         }
     }
 

@@ -260,10 +260,7 @@ define([
                  * ---
                  * ...
                  */
-                let modelCode = this.modelEditor.getCode();
-                modelCode = modelCode.replace('${model}', model);
-                code.append(modelCode);
-
+                code.append(this.modelEditor.getCode({'${model}': model}));
             }
 
             return code.toString();

@@ -74,6 +74,10 @@
 .vp-ins-parameter-box {
     grid-column: 1/3;
 }
+.vp-ins-parameter-box:empty::after {
+    content: '(Empty)';
+    color: var(--gray-color);
+}
 .vp-ins-parameter {
     width: 100% !important;
 }
