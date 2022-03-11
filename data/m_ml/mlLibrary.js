@@ -228,6 +228,14 @@ define([
 
             ]
         },
+        'prep-poly-feat': {
+            name: 'Polynomial Features',
+            import: 'from sklearn.preprocessing import PolynomialFeatures',
+            code: 'PolynomialFeatures(${etc})',
+            options: [
+
+            ]
+        },
         /** Regression */
         'ln-rgs': {
             name: 'LinearRegression',
@@ -235,6 +243,30 @@ define([
             code: 'LinearRegression(${fit_intercept}${etc})',
             options: [
                 { name: 'fit_intercept', component: ['bool_select'], default: 'True', usePair: true }
+            ]
+        },
+        'ridge': {
+            name: 'Ridge',
+            import: 'from sklearn.linear_model import Ridge',
+            code: 'Ridge(${etc})',
+            options: [
+                //TODO:
+            ]
+        },
+        'lasso': {
+            name: 'Lasso',
+            import: 'from sklearn.linear_model import Lasso',
+            code: 'Lasso(${etc})',
+            options: [
+                //TODO:
+            ]
+        },
+        'elasticnet': {
+            name: 'ElasticNet',
+            import: 'from sklearn.linear_model import ElasticNet',
+            code: 'ElasticNet(${etc})',
+            options: [
+                //TODO:
             ]
         },
         'sv-rgs': {
@@ -342,6 +374,30 @@ define([
                 { name: 'penalty', component: ['option_select'], default: 'l2', usePair: true, options: ['l1', 'l2', 'elasticnet', 'none']},
                 { name: 'C', component: ['input_number'], placeholder: '1.0', usePair: true },
                 { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true }
+            ]
+        },
+        'bern-nb': {
+            name: 'BernoulliNB',
+            import: 'from sklearn.naive_bayes import BernoulliNB',
+            code: 'BernoulliNB(${etc})',
+            options: [
+                //TODO:
+            ]
+        },
+        'mulnom-nb': {
+            name: 'MultinomialNB',
+            import: 'from sklearn.naive_bayes import MultinomialNB',
+            code: 'MultinomialNB(${etc})',
+            options: [
+                //TODO:
+            ]
+        },
+        'gaus-nb': {
+            name: 'GaussianNB',
+            import: 'from sklearn.naive_bayes import GaussianNB',
+            code: 'GaussianNB(${etc})',
+            options: [
+                //TODO:
             ]
         },
         'sv-clf': {
@@ -524,7 +580,7 @@ define([
         },
         /** Dimension Reduction */
         'pca': {
-            name: 'Principal Component Analysis',
+            name: 'PCA(Principal Component Analysis)',
             import: 'from sklearn.decomposition import PCA',
             code: 'PCA(${n_components}${random_state}${etc})',
             options: [
@@ -533,7 +589,7 @@ define([
             ]
         },
         'lda': {
-            name: 'Linear Discriminant Analysis',
+            name: 'LDA(Linear Discriminant Analysis)',
             import: 'from sklearn.discriminant_analysis import LinearDiscriminantAnalysis',
             code: 'LinearDiscriminantAnalysis(${n_components}${etc})',
             options: [
@@ -550,11 +606,21 @@ define([
             ]
         },
         'nmf': {
-            name: 'Non-Negative Matrix Factorization',
+            name: 'NMF(Non-Negative Matrix Factorization)',
             import: 'from sklearn.decomposition import NMF',
             code: 'NMF(${n_components}${random_state}${etc})',
             options: [
                 { name: 'n_components', component: ['input_number'], placeholder: 'None', usePair: true },
+                { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true }
+            ]
+        },
+        'tsne': {
+            name: 'TSNE(T-distributed Stochastic Neighbor Embedding)',
+            import: 'from sklearn.manifold import TSNE',
+            code: 'TSNE(${n_components}${learning_rate}${random_state}${etc})',
+            options: [
+                { name: 'n_components', component: ['input_number'], placeholder: 'None', usePair: true },
+                { name: 'learning_rate', component: ['input_number'], default: 200.0, usePair: true },
                 { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true }
             ]
         }
