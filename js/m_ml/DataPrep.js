@@ -52,13 +52,7 @@ define([
 
             this.modelTypeList = {
                 'Encoding': ['prep-onehot', 'prep-label', 'prep-ordinal', 'prep-target', 'prep-smote'],
-                'Scaling': ['prep-standard', 'prep-robust', 'prep-minmax', 'prep-normalizer', 'prep-func-trsfrm-log', 'prep-func-trsfrm-exp']
-
-                // 'Regression': ['ln-rgs', 'sv-rgs', 'dt-rgs', 'rf-rgs', 'gbm-rgs', 'xgb-rgs', 'lgbm-rgs', 'cb-rgs'],
-                // 'Classfication': ['lg-rgs', 'sv-clf', 'dt-clf', 'rf-clf', 'gbm-clf', 'xgb-clf', 'lgbm-clf', 'cb-clf'],
-                // 'Auto ML': ['tpot-rgs', 'tpot-clf'],
-                // 'Clustering': ['k-means', 'agg-cls', 'gaus-mix', 'dbscan'], 
-                // 'Dimension Reduction': ['pca', 'lda', 'svd', 'nmf'] 
+                'Scaling': ['prep-standard', 'prep-robust', 'prep-minmax', 'prep-normalizer', 'prep-func-trsfrm-log', 'prep-func-trsfrm-exp', 'prep-poly-feat']
             }
 
 
