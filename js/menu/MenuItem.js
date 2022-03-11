@@ -55,10 +55,7 @@ define([
                 switch(color) {
                     case 0:
                         return 'vp-color-preparing';
-                    case 1:
-                    case 2:
-                    case 3:
-                    case 4:
+                    default:
                         return 'vp-color-apps' + color;
                 }
             } else {
