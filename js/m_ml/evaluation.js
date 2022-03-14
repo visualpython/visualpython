@@ -161,11 +161,13 @@ define([
                     code.appendLine("# ROC Curve");
                     code.appendFormatLine("fpr, tpr, thresholds = roc_curve({0}, svc.decision_function({1}}))", predictData, targetData);
                     code.appendLine("plt.plot(fpr, tpr, label='ROC Curve')");
-                    code.appendLine("plt. xlabel('Sensitivity') ");
-                    code.appendLine("plt. ylabel('Specificity') ")
+                    code.appendLine("plt.xlabel('Sensitivity') ");
+                    code.appendLine("plt.ylabel('Specificity') ")
                 }
                 if (auc) {
-                    // FIXME:
+                    code.appendLine("# AUC");
+                    code.appendFormatLine("fpr, tpr, thresholds = roc_curve({0}, svc.decision_function({1}}))", predictData, targetData);
+                    code.appendLine("metrics.auc(fpr, tpr)");
                 }
             }
 
@@ -221,11 +223,11 @@ define([
                     code.appendFormatLine("print(f'Silhouette score: {metrics.cluster.silhouette_score({0}, {1})}')", targetData, predictData);
                 }
                 if (ari) {
-                    code.appendLine("# ARI"); // FIXME:
+                    code.appendLine("# ARI");
                     code.appendFormatLine("print(f'ARI: {metrics.cluster.adjusted_rand_score({0}, {1})}')", targetData, predictData);
                 }
                 if (nm) {
-                    code.appendLine("# NM"); // FIXME:
+                    code.appendLine("# NM");
                     code.appendFormatLine("print(f'NM: {metrics.cluster.normalized_mutual_info_score({0}, {1})}')", targetData, predictData);
                 }
             }

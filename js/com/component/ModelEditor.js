@@ -85,18 +85,20 @@ define([
                 },
                 'predict': {
                     name: 'predict',
-                    code: '${model}.predict(${featureData})',
+                    code: '${allocatePredict} = ${model}.predict(${featureData})',
                     description: 'Predict the closest target data X belongs to.',
                     options: [
-                        { name: 'featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'X_train' }
+                        { name: 'featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'X_test' },
+                        { name: 'allocatePredict', label: 'Allocate to', component: ['input'], placeholder: 'New variable', default: 'pred' }
                     ]
                 },
                 'predict_proba': {
                     name: 'predict_proba',
-                    code: '${model}.predict_proba(${featureData})',
+                    code: '${allocatePredict} = ${model}.predict_proba(${featureData})',
                     description: 'Predict class probabilities for X.',
                     options: [
-                        { name: 'featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'X_train' }
+                        { name: 'featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'X_test' },
+                        { name: 'allocatePredict', label: 'Allocate to', component: ['input'], placeholder: 'New variable', default: 'pred' }
                     ]
                 },
                 'transform': {
@@ -104,7 +106,7 @@ define([
                     code: '${allocateTransform} = ${model}.transform(${featureData})',
                     description: 'Apply dimensionality reduction to X.',
                     options: [
-                        { name: 'featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'X_train' },
+                        { name: 'featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'X' },
                         { name: 'allocateTransform', label: 'Allocate to', component: ['input'], placeholder: 'New variable' }
                     ]
                 }
@@ -113,7 +115,23 @@ define([
             switch (category) {
                 case 'Data Preparation':
                     actions = {
-                        'fit': defaultActions['fit'],
+                        'fit': {
+                            name: 'fit',
+                            code: '${model}.fit(${featureData})',
+                            description: 'Fit Encoder/Scaler to X.',
+                            options: [
+                                { name: 'featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'X' }
+                            ]
+                        },
+                        'fit_transform': {
+                            name: 'fit_transform',
+                            code: '${allocateTransform} = ${model}.fit_transform(${featureData})',
+                            description: 'Fit Encoder/Scaler to X, then transform X.',
+                            options: [
+                                { name: 'featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'X' },
+                                { name: 'allocateTransform', label: 'Allocate to', component: ['input'], placeholder: 'New variable' }
+                            ]
+                        },
                         'transform': {
                             ...defaultActions['transform'],
                             description: 'Transform labels to normalized encoding.'
@@ -141,11 +159,31 @@ define([
                         'predict': defaultActions['predict'],
                         'predict_proba': defaultActions['predict_proba'],
                     }
+                    if (['LogisticRegression', 'SVC', 'GradientBoostingClassifier'].includes(modelType)) {
+                        actions = {
+                            ...actions,
+                            'decision_function': {
+                                name: 'decision_function',
+                                code: '${allocateScore} = ${model}.decision_function(${featureData})',
+                                description: 'Compute the decision function of X.',
+                                options: [
+                                    { name: 'featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'X' },
+                                    { name: 'allocateScore', label: 'Allocate to', component: ['input'], placeholder: 'New variable' }
+                                ]
+                            }
+                        }
+                    }
                     break;
                 case 'Auto ML':
                     actions = {
                         'fit': defaultActions['fit'],
-                        'predict': defaultActions['predict'],
+                        'predict': defaultActions['predict']
+                    }
+                    if (modelType == 'TPOTClassifier') {
+                        actions = {
+                            ...actions,
+                            'predict_proba': defaultActions['predict_proba']
+                        }
                     }
                     break;
                 case 'Clustering':
@@ -155,10 +193,11 @@ define([
                             'fit': defaultActions['fit'],
                             'fit_predict': {
                                 name: 'fit_predict',
-                                code: '${model}.fit_predict(${featureData})',
+                                code: '${allocatePredict} = ${model}.fit_predict(${featureData})',
                                 description: 'Compute clusters from a data or distance matrix and predict labels.',
                                 options: [
-                                    { name: 'featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'X_train' }
+                                    { name: 'featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'X' },
+                                    { name: 'allocatePredict', label: 'Allocate to', component: ['input'], placeholder: 'New variable', default: 'pred' }
                                 ]
                             }
                         }
@@ -167,6 +206,37 @@ define([
                     actions = {
                         'fit': defaultActions['fit'],
                         'predict': defaultActions['predict'],
+                        'fit_predict': {
+                            name: 'fit_predict',
+                            code: '${allocatePredict} = ${model}.fit_predict(${featureData})',
+                            description: 'Compute cluster centers and predict cluster index for each sample.',
+                            options: [
+                                { name: 'featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'X' },
+                                { name: 'allocatePredict', label: 'Allocate to', component: ['input'], placeholder: 'New variable', default: 'pred' }
+                            ]
+                        }
+                    }
+                    if (modelType == 'KMeans') {
+                        actions = {
+                            ...actions,
+                            'fit_transform': {
+                                name: 'fit_transform',
+                                code: '${model}.fit_transform(${featureData})',
+                                description: 'Compute clustering and transform X to cluster-distance space.', 
+                                options: [
+                                    { name: 'featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'X_train' }
+                                ]
+                            },
+                            'transform': {
+                                name: 'transform',
+                                code: '${allocateTransform} = ${model}.transform(${featureData})',
+                                description: 'Transform X to a cluster-distance space.',
+                                options: [
+                                    { name: 'featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'X' },
+                                    { name: 'allocateTransform', label: 'Allocate to', component: ['input'], placeholder: 'New variable' }
+                                ]
+                            }
+                        }
                     }
                     break;
                 case 'Dimension Reduction':
@@ -302,15 +372,6 @@ define([
                                 description: 'Coordinates of cluster centers.', 
                                 options: [
                                     { name: 'allocateCenters', label: 'Allocate to', component: ['input'], placeholder: 'New variable' }
-                                ]
-                            },
-                            'transform': {
-                                name: 'transform',
-                                code: '${allocateTransform} = ${model}.transform(${featureData})',
-                                description: 'Transform X to a cluster-distance space.',
-                                options: [
-                                    { name: 'featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'X' },
-                                    { name: 'allocateTransform', label: 'Allocate to', component: ['input'], placeholder: 'New variable' }
                                 ]
                             }
                         }
