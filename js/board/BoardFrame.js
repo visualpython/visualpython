@@ -90,7 +90,7 @@ define([
                 let menu = $(this).data('menu');
                 switch (menu) {
                     case 'new':
-                        that.createNewNote();
+                        that.createNewNoteWithChecking();
                         break;
                     case 'open':
                         that.openNote();
@@ -111,7 +111,7 @@ define([
                         that.exportCode();
                         break;
                     case 'clear':
-                        that.clearBoard();
+                        that.clearBoardWithChecking();
                         break;
                 }
             });
@@ -429,9 +429,51 @@ define([
         //========================================================================
         // Note control
         //========================================================================
-        createNewNote() {
-            // TODO: alert before closing
+        /**
+         * Check if note has changes to save
+         */
+        checkNote() {
+            if (this.blockList.length > 0) {
+                return true;
+            }
+            return false;
+        }
+        createNewNoteWithChecking() {
+            // alert before closing
+            let that = this;
+            if (this.checkNote()) {
+                // render update modal
+                com_util.renderModal({
+                    title: 'Save changes', 
+                    message: 'Do you want to save changes?',
+                    buttons: ['Cancel', "No", 'Save'],
+                    defaultButtonIdx: 0,
+                    buttonClass: ['cancel', '', 'activated'],
+                    finish: function(clickedBtnIdx) {
+                        switch (clickedBtnIdx) {
+                            case 0:
+                                // cancel - do nothing
+                                return;
+                            case 1:
+                                // don't save
+                                that.createNewNote();
+                                break;
+                            case 2:
+                                // save
+                                that.saveAsNote(function() {
+                                    that.createNewNote();
+                                });
+                                break;
+                        }
+                    }
+                });
 
+                return;
+            }
+
+            this.createNewNote();
+        }
+        createNewNote() {
             // clear board before create new note
             this.clearBoard();
 
@@ -502,7 +544,7 @@ define([
 
             this.saveAsNote();
         }
-        saveAsNote() {
+        saveAsNote(callback) {
             let that = this;
             // save file navigation
             let fileNavi = new FileNavigation({ 
@@ -525,6 +567,8 @@ define([
                     that.tmpState.boardTitle = boardTitle;
                     that.tmpState.boardPath = boardPath;
                     $('#vp_boardTitle').val(boardTitle);
+
+                    callback();
                 }
             });
             fileNavi.open();
@@ -625,6 +669,41 @@ define([
         //     // reloadBlockList
         //     this.reloadBlockList();
         // }
+        clearBoardWithChecking() {
+            // alert before closing
+            let that = this;
+            if (this.checkNote()) {
+                // render update modal
+                com_util.renderModal({
+                    title: 'Save changes', 
+                    message: 'Do you want to save changes?',
+                    buttons: ['Cancel', "No", 'Save'],
+                    defaultButtonIdx: 0,
+                    buttonClass: ['cancel', '', 'activated'],
+                    finish: function(clickedBtnIdx) {
+                        switch (clickedBtnIdx) {
+                            case 0:
+                                // cancel - do nothing
+                                return;
+                            case 1:
+                                // don't save
+                                that.clearBoard();
+                                break;
+                            case 2:
+                                // save
+                                that.saveAsNote(function() {
+                                    that.clearBoard();
+                                });
+                                break;
+                        }
+                    }
+                });
+
+                return;
+            }
+
+            this.clearBoard();
+        }
         clearBoard() {
             // TODO: alert before clearing
             let that = this;
