@@ -13,11 +13,30 @@
 // [CLASS] Import
 //============================================================================
 define([
+    'css!vp_base/css/m_apps/import.css',
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/component/PopupComponent'
-], function(com_util, com_Const, com_String, PopupComponent) {
+], function(importCss, com_util, com_Const, com_String, PopupComponent) {
+
+    const importTemplates = {
+        'pre-processing': [
+            { i0: 'numpy',  i1: 'np', type: 'module'},
+            { i0: 'pandas',  i1: 'pd', type: 'module'},
+            { 
+                i0: 'matplotlib.pyplot', i1: 'plt', type: 'module'
+                , include: [
+                    '%matplotlib inline'
+                ]
+            },
+            { i0: 'seaborn', i1: 'sns', type: 'module'}
+        ],
+        'machine-learning': [
+            { i0: 'sklearn.model_selection',  i1: 'train_test_split', type: 'function' },
+            { i0: 'sklearn',  i1: 'metrics', type: 'function' }
+        ]
+    }
 
     /**
      * Import
@@ -29,76 +48,173 @@ define([
             this.config.dataview = false;
             this.config.sizeLevel = 1;
 
-            this.packageList = [
-                { library: 'numpy',     alias:'np'}
-                , { library: 'pandas',  alias:'pd'}
-                , { 
-                    library: 'matplotlib.pyplot', alias:'plt' 
-                    , include: [
-                        '%matplotlib inline'
-                    ]
-                }
-                , { library: 'seaborn', alias:'sns'}
-            ];
+            let savedData = vpConfig.getDataSimple('', 'vpimport');
+            // Reset abnormal data
+            if (savedData == undefined || savedData.tabType == undefined) {
+                savedData = {};
+                vpConfig.setData(null, 'vpimport');
+            }
 
             this.state = {
-                importMeta: vpConfig.getDataSimple('', 'vpimport'),
+                tabType: 'pre-processing',
+                importMeta: [],
+                ...savedData,
                 ...this.state
             }
 
             if (!this.state.importMeta || this.state.importMeta.length <= 0) {
-                this.state.importMeta = this.packageList;
+                this.state.importMeta = JSON.parse(JSON.stringify(importTemplates[this.state.tabType]));
             }
         }
 
         _bindEvent() {
             super._bindEvent();
-            /** Implement binding events */
             let that = this;
-            // delete lib
-            $(document).on("click", this.wrapSelector('.vp-remove-option'), function() {
-                $(this).closest('tr').remove();
+
+            // select tab
+            $(this.wrapSelector('.vp-tab-button')).on('click', function() {
+                let tabType = $(this).data('tab');
+                // set button selected
+                that.state.tabType = tabType;
+                $(that.wrapSelector('.vp-tab-button')).removeClass('vp-tab-selected');
+                $(this).addClass('vp-tab-selected');
+                // replace libraries
+                that.state.importMeta = importTemplates[tabType];
+                $(that.wrapSelector('#vp_tblImport')).replaceWith(function() {
+                    return that.templateTable(that.state.importMeta);
+                });
             });
 
-            // add lib
-            $(this.wrapSelector('#vp_addLibrary')).click(function() {
+            // delete lib
+            $(this.wrapSelector()).on("click", '.vp-remove-option', function() {
+                $(this).closest('tr').remove();
+
+                that.checkAll();
+            });
+            // check/uncheck all
+            $(this.wrapSelector()).on('change', '#vp_libraryCheckAll', function() {
+                var checked = $(this).prop('checked');
+                $(that.wrapSelector('.vp-item-check')).prop('checked', checked);
+            }); 
+            // check item
+            $(this.wrapSelector()).on('change', '.vp-item-check', function() {
+                var checked = $(this).prop('checked');
+                // if unchecked at least one item, uncheck check-all
+                if (!checked) {
+                    $(that.wrapSelector('.vp-check-all')).prop('checked', false);
+                } else {
+                    // if all checked, check check-all
+                    that.checkAll();
+                }
+            });
+
+            // add module
+            $(this.wrapSelector('#vp_addModule')).click(function() {
                 var libsLength = $(that.wrapSelector("#vp_tblImport tbody tr")).length;
-                var tagTr = $(that.templateForLibrary(libsLength, '', ''));
+                var tagTr = $(that.templateForModule(libsLength, '', ''));
+
+                $(that.wrapSelector("#vp_tblImport tr:last")).after(tagTr);
+            });
+            // add function
+            $(this.wrapSelector('#vp_addFunction')).click(function() {
+                var libsLength = $(that.wrapSelector("#vp_tblImport tbody tr")).length;
+                var tagTr = $(that.templateForFunction(libsLength, '', ''));
 
                 $(that.wrapSelector("#vp_tblImport tr:last")).after(tagTr);
             });
         }
 
+        checkAll() {
+            // check if all checked
+            // if all checked, check check-all
+            var allLength = $(this.wrapSelector('.vp-item-check')).length;
+            var checkedLength = $(this.wrapSelector('.vp-item-check:checked')).length;
+            if (allLength == checkedLength) {
+                $(this.wrapSelector('.vp-check-all')).prop('checked', true);
+            } else {
+                $(this.wrapSelector('.vp-check-all')).prop('checked', false);
+            }
+        }
+
         templateForBody() {
             /** Implement generating template */
             var page = new com_String();
-            page.appendFormatLine('<input type="hidden" id="vp_importMeta" value="{0}"/>', '');
-            page.appendLine('<table id="vp_tblImport" class="vp-tbl-basic w90">');
-            page.appendLine('<colgroup><col width="40%"/><col width="40%"/><col width="*"/></colgroup>');
-            page.appendLine('<thead><tr>');
-            page.appendLine('<th>Library Name</th><th>Alias</th><th></th>');
-            page.appendLine('</tr></thead>');
-            page.appendLine('<tbody>');
-            let that = this;
-            this.state.importMeta && this.state.importMeta.forEach((lib, idx) => {
-                page.appendLine(that.templateForLibrary(idx, lib.library, lib.alias));
-            });
-            page.appendLine('</tbody>');
-            page.appendLine('</table>');
-            page.appendLine('<input type="button" id="vp_addLibrary" value="+ Library" class="vp-button"/>');
+            // tab buttons
+            page.appendLine('<div class="vp-tab-box">');
+            page.appendFormatLine('<div class="vp-tab-button {0}" data-tab="{1}">{2}</div>'
+                                , this.state.tabType=='pre-processing'?'vp-tab-selected':'', 'pre-processing', 'Pre-processing');
+            page.appendFormatLine('<div class="vp-tab-button {0}" data-tab="{1}">{2}</div>'
+                                , this.state.tabType=='machine-learning'?'vp-tab-selected':'', 'machine-learning', 'Machine Learning');
+            page.appendLine('</div>');
+            // import table
+            page.appendLine(this.templateTable(this.state.importMeta));
+            page.appendLine('<input type="button" id="vp_addModule" value="+ Module" class="vp-button" title="import...as"/>');
+            page.appendLine('<input type="button" id="vp_addFunction" value="+ Function" class="vp-button" title="from...import"/>');
             return page.toString();
         }
 
-        templateForLibrary(idx, libraryName, aliasName) {
+        templateTable(libraries) {
+            var page = new com_String();
+            page.appendLine('<table id="vp_tblImport" class="vp-tbl-basic w90 vp-tbl-gap5">');
+            page.appendLine('<colgroup><col width="10px"/><col width="10%"/><col width="30%"/><col width="10%"/><col width="30%"/><col width="*"/></colgroup>');
+            page.appendLine('<thead><tr>');
+            page.appendFormat('<th><input id="{0}" type="checkbox" class="vp-checkbox vp-check-all" checked/></th>', 'vp_libraryCheckAll');
+            page.appendLine('<th></th><th></th><th></th><th></th><th></th>');
+            page.appendLine('</tr></thead>');
+            page.appendLine('<tbody>');
+            let that = this;
+            libraries && libraries.forEach((lib, idx) => {
+                if (lib.type == 'function') {
+                    page.appendLine(that.templateForFunction(idx, lib.i0, lib.i1, lib.checked));
+                } else {
+                    page.appendLine(that.templateForModule(idx, lib.i0, lib.i1, lib.checked));
+                }
+            });
+            page.appendLine('</tbody>');
+            page.appendLine('</table>');
+            return page.toString();
+        }
+
+        templateForModule(idx, moduleName, aliasName, checked=true) {
             var tag = new com_String();
-            tag.append('<tr>');
+            tag.append('<tr data-type="module">');
+            // checkbox
+            tag.appendFormat('<td><input id="{0}" type="checkbox" class="vp-checkbox vp-item-check" {1}/></td>'
+                            , 'vp_libraryCheck' + idx, checked?'checked':'');
+            // inputs
+            tag.appendFormat('<td style="{0}">import</td>', 'text-align="center";');
             tag.appendFormat('<td><input id="{0}" type="text" class="{1}" placeholder="{2}" required value="{3}"/></td>'
-                            , 'vp_library' + idx, 'vp-input m vp-add-library', 'Type library name', libraryName);
+                            , 'vp_i0_' + idx, 'vp-input m vp-add-i0', 'Type module', moduleName);
+            tag.appendFormat('<td style="{0}">as</td>', 'text-align="center";');
             tag.appendFormat('<td><input id="{0}" type="text" class="{1}" placeholder="{2}" value="{3}"/></td>'
-                            , 'vp_alias' + idx, 'vp-input m vp-add-alias', 'Type alias', aliasName);
+                            , 'vp_i1_' + idx, 'vp-input m vp-add-i1', 'Type alias', aliasName);
             tag.appendFormat('<td class="{0}"><img src="{1}"/></td>', 'vp-remove-option w100 vp-cursor', '/nbextensions/visualpython/img/close_small.svg');
             tag.append('</tr>');
             return tag.toString();
+        }
+
+        templateForFunction(idx, moduleName, functionName, checked=true) {
+            var tag = new com_String();
+            tag.append('<tr data-type="function">');
+            // checkbox
+            tag.appendFormat('<td><input id="{0}" type="checkbox" class="vp-checkbox vp-item-check" {1}/></td>'
+                            , 'vp_libraryCheck' + idx, checked?'checked':'');
+            // inputs
+            tag.appendFormat('<td style="{0}">from</td>', 'text-align="center";');
+            tag.appendFormat('<td><input id="{0}" type="text" class="{1}" placeholder="{2}" required value="{3}"/></td>'
+                            , 'vp_i0_' + idx, 'vp-input m vp-add-i0', 'Type module', moduleName);
+            tag.appendFormat('<td style="{0}">import</td>', 'text-align="center";');
+            tag.appendFormat('<td><input id="{0}" type="text" class="{1}" placeholder="{2}" value="{3}"/></td>'
+                            , 'vp_i1_' + idx, 'vp-input m vp-add-i1', 'Type function', functionName);
+            tag.appendFormat('<td class="{0}"><img src="{1}"/></td>', 'vp-remove-option w100 vp-cursor', '/nbextensions/visualpython/img/close_small.svg');
+            tag.append('</tr>');
+            return tag.toString();
+        }
+
+        render() {
+            super.render();
+
+            this.checkAll();
         }
 
         generateCode() {
@@ -108,19 +224,29 @@ define([
             var importMeta = [];
             var libraryList = $(this.wrapSelector("#vp_tblImport tbody tr"));
             for (var idx = 0; idx < libraryList.length; idx++) {
-                var pacName = $(libraryList[idx]).find('.vp-add-library').val();
-                var pacAlias = $(libraryList[idx]).find('.vp-add-alias').val().trim();
+                var pacType = $(libraryList[idx]).data('type');
+                var pacI0 = $(libraryList[idx]).find('.vp-add-i0').val();
+                var pacI1 = $(libraryList[idx]).find('.vp-add-i1').val().trim();
+                var pacChecked = $(libraryList[idx]).find('.vp-item-check').prop('checked');
 
-                if (pacName == "") {
+                if (pacI0 == "") {
                     continue;
                 }
-                if (sbCode.toString().trim().length > 0) {
-                    sbCode.appendLine();
+                if (pacChecked) {
+                    if (sbCode.toString().trim().length > 0) {
+                        sbCode.appendLine();
+                    }
+                    if (pacType == 'function') {
+                        // function
+                        sbCode.appendFormat("from {0} import {1}", pacI0, pacI1); 
+                    } else {
+                        // module
+                        sbCode.appendFormat("import {0}{1}", pacI0, ((pacI1 === undefined || pacI1 === "") ? "" : (" as " + pacI1)));
+                    }
                 }
-                sbCode.appendFormat("import {0}{1}", pacName, ((pacAlias === undefined || pacAlias === "") ? "" : (" as " + pacAlias)));
 
-                this.packageList.forEach(pack => {
-                    if (pack.library == pacName) {
+                this.state.importMeta && this.state.importMeta.forEach(pack => {
+                    if (pack.i0 == pacI0) {
                         // if include code exists?
                         if (pack.include != undefined) {
                             pack.include.forEach(code => {
@@ -131,12 +257,12 @@ define([
                     }
                 })
 
-                importMeta.push({ library: pacName, alias: pacAlias });
+                importMeta.push({ i0: pacI0, i1: pacI1, type: pacType, checked: pacChecked });
             }
             this.state.importMeta = importMeta;
 
             // save import packages
-            vpConfig.setData(importMeta, 'vpimport');
+            vpConfig.setData({ tabType: this.state.tabType, importMeta: importMeta }, 'vpimport');
 
             this.generatedCode = sbCode.toString();
             return sbCode.toString();

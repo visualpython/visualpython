@@ -3,7 +3,7 @@
     width: 100%;
     height: 100%;
     grid-row-gap: 5px;
-    grid-template-rows: 60px 140px 150px;
+    grid-template-rows: 60px 100px 100px;
 }
 .vp-pdf-prepare-box {
     display: grid;
@@ -35,13 +35,13 @@
     border-radius: 5px;
     box-sizing: border-box;
     padding: 15px;
+    align-content: space-evenly;
 }
 .vp-pdf-df-box {
     display: grid;
     grid-template-columns: 95px auto;
-    grid-row-gap: 3px;
+    grid-row-gap: 5px;
     align-items: baseline;
-    align-content: space-evenly;
 }
 .vp-pdf #vp_pdfVariable { 
     width: 62%;

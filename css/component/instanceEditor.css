@@ -17,12 +17,12 @@
 .vp-ins-select-container .vp-ins-search-icon {
     position: absolute;
     color: #C4C4C4;
-    right: 5px;
-    top: 5px;
+    right: 7px;
+    top: 7px;
 }
 .vp-ins-select-box {
     margin-top: 5px;
-    border: 0.25px solid #C4C4C4;
+    border: 0.25px solid var(--border-gray-color);
 }
 .vp-ins-select-list {
     height: 145px;
@@ -73,6 +73,10 @@
 }
 .vp-ins-parameter-box {
     grid-column: 1/3;
+}
+.vp-ins-parameter-box:empty::after {
+    content: '(Empty)';
+    color: var(--gray-color);
 }
 .vp-ins-parameter {
     width: 100% !important;

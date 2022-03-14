@@ -46,19 +46,19 @@ define([
         }
 
         template() {
-            var { id, name, desc, level, open } = this.state;
+            var { id, name, desc, level, open, grid } = this.state;
             // open menu group on default?
             var openItemsAttribute = open && open==true? '': 'style="display:none;"'
-            var isApps = (id == 'pkg_apps');
+            var isGrid = (grid == true);
 
             var page = new com_String();
-            page.appendFormatLine('<div class="{0} {1}">', this.uuid, isApps?'apps':'');
+            page.appendFormatLine('<div class="{0} {1}">', this.uuid, isGrid?'apps':'');
             if (level == 0) {
                 // render root group
                 page.appendFormatLine('<div class="{0}" data-category="{1}" title="{2}">{3}</div>'
                                     , 'vp-menugroup-root vp-no-selection', id, desc, name);
                 page.appendFormatLine('<div class="{0}" {1}>', 'vp-menugroup-box', openItemsAttribute);
-                if (isApps) {
+                if (isGrid) {
                     // add grid template if it's apps
                     page.appendFormatLine('<div class="{0}"></div>', 'vp-menugroup-grid');
                 }
@@ -92,7 +92,7 @@ define([
          */
         getBody() {
             var queryString = '.' + this.uuid;
-            if (this.state.id == 'pkg_apps') {
+            if (this.state.grid == true) {
                 return this.$target.find(queryString + ' .vp-menugroup-grid');
             }
             return this.$target.find(queryString + ' .vp-menugroup-box');

@@ -1,5 +1,3 @@
-const { param } = require("jquery");
-
 define([
     'css!vp_base/css/component/instanceEditor.css',
     'vp_base/js/com/com_String',
@@ -139,7 +137,7 @@ define([
             tag.appendFormatLine('<div class="vp-multilang {0}">Attribute</div>', VP_INS_SELECT_TITLE);
 
             tag.appendFormatLine('<div style="{0}">', 'position: relative;');
-            tag.appendFormatLine('<input class="vp-input {0} {1}" type="text" placeholder="search attribute" />', VP_INS_SEARCH, 'attr');
+            tag.appendFormatLine('<input class="vp-input {0} {1}" type="text" placeholder="Search Attribute"/>', VP_INS_SEARCH, 'attr');
             tag.appendFormatLine('<input class="{0} {1}" type="hidden"/>', VP_INS_TYPE, 'attr');
             tag.appendFormatLine('<i class="{0} {1}"></i>', 'fa fa-search', 'vp-ins-search-icon');
             tag.appendLine('</div>');
@@ -154,7 +152,7 @@ define([
             tag.appendFormatLine('<div class="vp-multilang {0}">Method</div>', VP_INS_SELECT_TITLE);
 
             tag.appendFormatLine('<div style="{0}">', 'position: relative;');
-            tag.appendFormatLine('<input class="vp-input {0} {1}" type="text" placeholder="search method" />', VP_INS_SEARCH, 'method');
+            tag.appendFormatLine('<input class="vp-input {0} {1}" type="text" placeholder="Search Method"/>', VP_INS_SEARCH, 'method');
             tag.appendFormatLine('<input class="{0} {1}" type="hidden"/>', VP_INS_TYPE, 'method');
             tag.appendFormatLine('<i class="{0} {1}"></i>', 'fa fa-search', 'vp-ins-search-icon');
             tag.appendLine('</div>');
@@ -285,6 +283,11 @@ define([
         reload(callback = undefined) {
             var that = this;
             var variable = $(this.pageThis.wrapSelector('#' + this.targetId)).val();
+            if (variable == null) {
+                this.isFirstPage = false;
+                this.renderPage();
+                return;
+            }
             this.state.code = variable;
 
             if (variable == '') {
@@ -365,7 +368,7 @@ define([
                     var suggestInput = new SuggestInput();
                     suggestInput.addClass('vp-input attr');
                     suggestInput.addClass(VP_INS_SEARCH);
-                    suggestInput.setPlaceholder("search attribute");
+                    suggestInput.setPlaceholder("Search Attribute");
                     suggestInput.setSuggestList(function () { return attrList; });
                     suggestInput.setSelectEvent(function (value, item) {
                         $(this.wrapSelector()).val(value);
@@ -386,7 +389,7 @@ define([
                     suggestInput = new SuggestInput();
                     suggestInput.addClass('vp-input method');
                     suggestInput.addClass(VP_INS_SEARCH);
-                    suggestInput.setPlaceholder("search method");
+                    suggestInput.setPlaceholder("Search Method");
                     suggestInput.setSuggestList(function () { return methodList; });
                     suggestInput.setSelectEvent(function (value, item) {
                         $(this.wrapSelector()).val(value);

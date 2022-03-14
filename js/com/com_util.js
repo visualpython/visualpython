@@ -230,6 +230,12 @@ define([
         return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
+    var optionToLabel = function(label) {
+        label = label.replaceAll('_', ' ');
+        label = label.charAt(0).toUpperCase() + label.slice(1);
+        return label;
+    }
+
     return {
         getUUID: getUUID,
         loadCss: loadCss,
@@ -238,6 +244,7 @@ define([
         addVariable: addVariable,
         formatString: formatString,
         convertToStr: convertToStr,
+        optionToLabel: optionToLabel,
 
         removeHeadScript: removeHeadScript,
         renderModal: renderModal,

@@ -56,6 +56,7 @@ define([
                 codeview: true, 
                 dataview: true,
                 // show footer
+                runButton: true,
                 footer: true,
                 position: { right: 10, top: 120 },
                 size: { width: 400, height: 550 },
@@ -268,7 +269,7 @@ define([
                 switch(tagName) {
                     case 'INPUT':
                         let inputType = $(this).prop('type');
-                        if (inputType == 'text' || inputType == 'number') {
+                        if (inputType == 'text' || inputType == 'number' || inputType == 'hidden') {
                             newValue = $(this).val();
                             break;
                         }
@@ -281,6 +282,9 @@ define([
                     case 'SELECT':
                     default:
                         newValue = $(this).val();
+                        if (!newValue) {
+                            newValue = '';
+                        }
                         break;
                 }
                 
@@ -435,7 +439,7 @@ define([
         render(inplace=false) {
             super.render(inplace);
 
-            let {codeview, dataview, footer, sizeLevel, position} = this.config;
+            let {codeview, dataview, runButton, footer, sizeLevel, position} = this.config;
 
             // codeview & dataview button hide/show
             if (!codeview) {
@@ -443,6 +447,11 @@ define([
             } 
             if (!dataview) {
                 $(this.wrapSelector('.vp-popup-button[data-type="data"]')).hide();
+            }
+
+            // run button
+            if (!runButton) {
+                $(this.wrapSelector('.vp-popup-runadd-box')).hide();
             }
 
             // footer
@@ -532,7 +541,7 @@ define([
                 switch(tagName) {
                     case 'INPUT':
                         let inputType = $(tag).prop('type');
-                        if (inputType == 'text' || inputType == 'number') {
+                        if (inputType == 'text' || inputType == 'number' || inputType == 'hidden') {
                             newValue = $(tag).val();
                             break;
                         }
@@ -545,6 +554,9 @@ define([
                     case 'SELECT':
                     default:
                         newValue = $(tag).val();
+                        if (!newValue) {
+                            newValue = '';
+                        }
                         break;
                 }
                 
@@ -574,7 +586,12 @@ define([
                 blockNumber = block.blockNumber;
             }
             if (addcell) {
-                com_interface.insertCell(mode, code, execute, blockNumber);
+                if (Array.isArray(code)) {
+                    // insert cells if it's array of codes
+                    com_interface.insertCells(mode, code, execute, blockNumber);
+                } else {
+                    com_interface.insertCell(mode, code, execute, blockNumber);
+                }
             }
             return code;
         }
@@ -681,7 +698,13 @@ define([
         openView(viewType) {
             if (viewType == 'code') {
                 var code = this.generateCode();
-                this.cmCodeview.setValue(code);
+                let codeText = '';
+                if (Array.isArray(code)) {
+                    codeText = code.join('\n');
+                } else {
+                    codeText = code;
+                }
+                this.cmCodeview.setValue(codeText);
                 this.cmCodeview.save();
                 
                 var that = this;

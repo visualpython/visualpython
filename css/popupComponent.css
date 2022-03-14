@@ -19,7 +19,8 @@
     height: 400px;
     background: white;
     border: 1px solid var(--border-gray-color);
-    box-shadow: 2px 2px 1px rgb(0 0 0 / 10%);
+    border-top: 3px solid var(--border-gray-color);
+    box-shadow: 1px 1px 2px rgb(0 0 0 / 10%);
     z-index: 200;
     font-family: AppleSDGothicNeo;
     font-size: 14px;
@@ -41,7 +42,8 @@
     display: none;
 }
 .vp-popup-frame.vp-focused {
-    border: 1px solid var(--highlight-color);
+    border-top: 3px solid var(--highlight-color);
+    box-shadow: 2px 2px 8px rgb(0 0 0 / 15%);
 }
 .vp-popup-header {
     position: relative;
@@ -56,7 +58,6 @@
     padding-left: 10px;
     font-family: 'AppleSDGothicNeo';
     font-size: 15px;
-    /* font-weight: 700; */
     color: var(--font-primary);
     cursor: pointer;
 }
@@ -181,7 +182,7 @@
 /* writable codemirror style*/
 /* Code Option Codemirror */
 .vp-popup-frame .CodeMirror.vp-writable-codemirror {
-    border: 1px solid silver; 
+    border: 1px solid var(--border-gray-color); 
 }
 .vp-popup-frame .CodeMirror.vp-writable-codemirror .CodeMirror-empty { 
     outline: 1px solid #c22; 
@@ -200,7 +201,7 @@
     padding: 1px 8px 0 5px;
 }
 /* checkbox */
-.vp-popup-frame input[type=checkbox] {
+.vp-popup-frame input[type=checkbox]:not(.vp-checkbox) {
 	position: absolute;
 	width: 1px;
 	height: 1px;
@@ -210,19 +211,19 @@
 	clip: rect(0, 0, 0, 0);
 	border: 0;
 }
-.vp-popup-frame input[type=checkbox] + label,
-.vp-popup-frame label input[type=checkbox] + span {
+.vp-popup-frame input[type=checkbox]:not(.vp-checkbox) + label,
+.vp-popup-frame label input[type=checkbox]:not(.vp-checkbox) + span {
 	display: inline-block;
 	position: relative;
 	padding-left: 18px;
 	cursor: pointer;
 }
-.vp-popup-frame input[type=checkbox]:disabled + label,
-.vp-popup-frame label input[type=checkbox]:disabled + span {
+.vp-popup-frame input[type=checkbox]:not(.vp-checkbox):disabled + label,
+.vp-popup-frame label input[type=checkbox]:not(.vp-checkbox):disabled + span {
 	color: var(--gray-color);
 }
-.vp-popup-frame input[type=checkbox] + label::before,
-.vp-popup-frame label input[type=checkbox] + span::before {
+.vp-popup-frame input[type=checkbox]:not(.vp-checkbox) + label::before,
+.vp-popup-frame label input[type=checkbox]:not(.vp-checkbox) + span::before {
 	content: '';
 	position: absolute;
 	left: 0;
@@ -236,8 +237,8 @@
 	border: none;
 	box-sizing: border-box;
 }
-.vp-popup-frame input[type=checkbox]:checked + label::before,
-.vp-popup-frame label input[type=checkbox]:checked + span::before {
+.vp-popup-frame input[type=checkbox]:not(.vp-checkbox):checked + label::before,
+.vp-popup-frame label input[type=checkbox]:not(.vp-checkbox):checked + span::before {
 	content: '';
 	position: absolute;
 	left: 0;
@@ -250,8 +251,8 @@
 	border: none;
 	box-sizing: border-box;
 }
-.vp-popup-frame input[type=checkbox]:disabled + label::before,
-.vp-popup-frame label input[type=checkbox]:disabled + span::before {
+.vp-popup-frame input[type=checkbox]:not(.vp-checkbox):disabled + label::before,
+.vp-popup-frame label input[type=checkbox]:not(.vp-checkbox):disabled + span::before {
 	content: '';
 	position: absolute;
 	left: 0;
@@ -265,7 +266,8 @@
 	box-sizing: border-box;
 }
 /* popup frame input, select */
-.vp-popup-frame input[type=text] {
+.vp-popup-frame input[type=text],
+.vp-popup-frame input[type=number] {
     width: 160px;
     font-size: 13px;
     line-height: 16px;
@@ -277,7 +279,8 @@
     border: 0.25px solid var(--border-gray-color);
     box-sizing: border-box;
 }
-.vp-popup-frame input[type=text]::placeholder {
+.vp-popup-frame input[type=text]::placeholder,
+.vp-popup-frame input[type=number]::placeholder {
 	color: var(--gray-color);
 }
 
@@ -289,7 +292,7 @@
 	font-size: 14px;
 	line-height: 16px;
 	padding: 5px 16px 3px 9px;
-	background: url(../img/unfold_more.svg), #F5F5F5;
+	background: url(../img/unfold_more.svg), var(--light-gray-color);
 	background-position: 97% 50%;
 	background-size: 11px 11px;
 	background-repeat: no-repeat;
@@ -305,6 +308,14 @@
 }
 .vp-popup-frame select::-ms-expand {
     display: none;
+}
+/* Big Selector */
+.vp-popup-frame .vp-big-select {
+    border: 2px solid #FFCF73;
+    width: 100%;
+    height: 35px;
+    background-position: 97% 50%;
+    cursor: pointer;
 }
 /* accordian for popup component */
 .vp-popup-frame .vp-accordian {
@@ -350,8 +361,8 @@
     top: calc(50% - 200px);
     min-width: 400px;
     min-height: 150px;
-    width: 400px;
-    height: 400px;
+    width: 450px;
+    height: 450px;
     background-color: white;
     z-index: 200;
     border: 0.25px solid var(--border-gray-color);

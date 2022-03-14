@@ -78,6 +78,8 @@ define([
                 , 'ndarray'
                 // Python variable
                 , 'str', 'int', 'float', 'bool', 'dict', 'list', 'tuple'
+                // ML Data types
+                , ...vpConfig.getMLDataTypes()
             ];
     
             var tagTable = this.wrapSelector('#vp_var_variableBox table tbody');

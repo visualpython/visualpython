@@ -11,8 +11,9 @@
 define([
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_makeDom',
-    'vp_base/js/com/component/SuggestInput'
-], function (com_util, com_makeDom, SuggestInput) {
+    'vp_base/js/com/component/SuggestInput',
+    'vp_base/js/com/component/VarSelector2'
+], function (com_util, com_makeDom, SuggestInput, VarSelector2) {
     /**
      * show result after code executed
      */
@@ -37,13 +38,13 @@ define([
         'col_select': 'Select Column',
         'textarea': 'Input textarea',
         'input_number': 'Input number',
-        'input': 'Input text'
+        'input_text': 'Input text', 
+        'input': 'Input value'
     }
 
     const _VP_BOOL_OPTIONS = [
-        { name: 'Default', value: '' },
-        { name: 'True', value: 'True' },
-        { name: 'False', value: 'False' }
+        { label: 'True', value: 'True' },
+        { label: 'False', value: 'False' }
     ]
 
     const _VP_NP_DTYPES = [
@@ -214,6 +215,8 @@ define([
         let value = state[obj.name];
         if (value == undefined) {
             value = '';
+        } else {
+            obj.value = value;
         }
         // create as component type
         switch (componentType) {
@@ -248,23 +251,15 @@ define([
                 content = renderTabBlock(pageThis, obj, state);
                 break;
             case 'bool_checkbox':
-                // True False select box
-                var select = $(`<select id="${obj.name}" class="vp-select vp-state"><option value="">Default</option></select>`);
-                select.append($('<option value="True">True</option>'))
-                    .append($('<option value="False">False</option>'));
-                content = select;
-                break;
             case 'bool_select':
-                var optSlct = $('<select></select>').attr({
-                    'class':'vp-select option-select vp-state',
-                    'id':obj.name
-                });
+                // True False select box
+                var optSlct = $(`<select id="${obj.name}" class="vp-select vp-state"></select>`);
                 _VP_BOOL_OPTIONS.forEach((opt, idx) => {
-                    var option = $(`<option>${opt.label}</option>`).attr({
+                    var option = $(`<option>${opt.label}${obj.default==opt.value?' (default)':''}</option>`).attr({
                         // 'id':opt,
                         'index':obj.index,
                         'name':obj.name,
-                        'value':opt.value
+                        'value':(obj.default==opt.value?'':opt.value)
                     });
                     // cell metadata test
                     if (value != undefined) {
@@ -284,26 +279,26 @@ define([
                     'class':'vp-select option-select vp-state',
                     'id':obj.name
                 });
-                // if required, no default option
-                if (obj.required != true) {
-                    $(optSlct).append($('<option value="">Default</option>'));
-                }
                 obj.options.forEach((opt, idx, arr) => {
                     var label = (obj.options_label != undefined? obj.options_label[idx]:opt);
+                    let isDefault = false;
+                    if (obj.required != true && obj.default != undefined && obj.default == opt) {
+                        isDefault = true;
+                        label += ' (default)';
+                    }
                     var option = $(`<option>${label}</option>`).attr({
                         // 'id':opt,
                         'index':obj.index,
                         'name':obj.name,
-                        'value':opt
+                        'value':(isDefault? '': opt)
                     });
-                    // cell metadata test
-                    if (value != undefined) {
+                    // saved data
+                    if ((value == opt)
+                        || ((value == undefined || value == '') && isDefault)) {
                         // set as saved value
-                        if (value == opt) {
-                            $(option).attr({
-                                'selected':'selected'
-                            });
-                        }
+                        $(option).attr({
+                            'selected':'selected'
+                        });
                     }
                     optSlct.append(option);
                 });
@@ -322,7 +317,7 @@ define([
                 suggestInput.addClass('vp-input vp-state');
                 suggestInput.setSuggestList(function() { return obj.options; });
                 suggestInput.setNormalFilter(false);
-                suggestInput.setValue($(pageThis.wrapSelector('#' + obj.name)).val());
+                suggestInput.setValue(value);
                 suggestInput.setSelectEvent(function(selectedValue) {
                     // trigger change
                     $(pageThis.wrapSelector('#' + obj.name)).val(selectedValue);
@@ -452,7 +447,7 @@ define([
             suggestInput.addClass('vp-input vp-state');
             suggestInput.setSuggestList(function() { return varList; });
             suggestInput.setNormalFilter(false);
-            suggestInput.setValue($(divTag + ' #' + obj.name).val());
+            suggestInput.setValue(defaultValue);
             suggestInput.setSelectEvent(function(selectedValue) {
                 // trigger change
                 $(divTag + ' #' + obj.name).val(selectedValue);
@@ -626,14 +621,6 @@ define([
             // prevent code: no allocation variable ( = pd.DataFrame())
             if (code.startsWith(' = ')) {
                 code = code.substr(3);
-            }
-
-            // show_result 
-            if (_VP_SHOW_RESULT && package.output && package.output.length > 0) {
-                var outputVariable = vp_getTagValue(pageThis, package.output[0]);
-                if (outputVariable != '') {
-                    code += '\n'+ outputVariable
-                }
             }
 
         } catch (e) {
@@ -1246,6 +1233,7 @@ define([
 
     return {
         vp_showInterfaceOnPage: vp_showInterfaceOnPage,
+        renderContent: renderContent,
         vp_codeGenerator: vp_codeGenerator,
         vp_generateVarSelect: vp_generateVarSelect,
         vp_getTagValue: vp_getTagValue,
