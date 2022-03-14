@@ -17,6 +17,7 @@ define([
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_interface',
     'vp_base/js/com/com_String',
+    'vp_base/js/com/com_interface',
     'vp_base/js/com/com_generatorV2',
     'vp_base/data/m_ml/mlLibrary',
     'vp_base/js/com/component/PopupComponent',
