@@ -217,7 +217,7 @@ define([
             // render tag
             config.options.forEach(opt => {
                 optBox.appendFormatLine('<label for="{0}" title="{1}">{2}</label>'
-                    , opt.name, opt.name, opt.name);
+                    , opt.name, opt.name, com_util.optionToLabel(opt.name));
                 let content = com_generator.renderContent(this, opt.component[0], opt, state);
                 optBox.appendLine(content[0].outerHTML);
             });
