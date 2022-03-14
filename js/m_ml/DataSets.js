@@ -138,7 +138,11 @@ define([
                 code.appendFormatLine('{0} = {1}', allocateTo, modelCode);
                 code.appendLine("# Create DataFrame");
                 code.appendFormatLine("df_{0} = pd.DataFrame(data={1}.data, columns={2}.feature_names)", allocateTo, allocateTo, allocateTo);
-                code.appendFormat("df_{0}['target'] = {1}.target", allocateTo, allocateTo);
+                if (loadType == 'load_linnerud') {
+                    code.appendFormat("df_{0}[{1}.target_names] = {2}.target", allocateTo, allocateTo, allocateTo);
+                } else {
+                    code.appendFormat("df_{0}['target'] = {1}.target", allocateTo, allocateTo);
+                }
                 allocateToVar = 'df_' + allocateTo;
             } else {
                 code.appendFormatLine("_X, _y = {0}", modelCode);
