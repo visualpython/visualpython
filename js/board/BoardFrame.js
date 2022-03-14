@@ -586,9 +586,22 @@ define([
                 let prevNewLine = idx > 0?'\n':'';
                 let indent = ' '.repeat((groupBlock.depth - rootBlockDepth) * indentCount);
                 let thisBlockCode = groupBlock.popup.generateCode();
-                // set indent to every line of thisblockcode
-                thisBlockCode = thisBlockCode.replaceAll('\n', '\n' + indent);
-                code.appendFormat('{0}{1}{2}', prevNewLine, indent, thisBlockCode);
+                if (Array.isArray(thisBlockCode)) {
+                    for (let i = 0; i < thisBlockCode.length; i++) {
+                        thisBlockCode[i] = thisBlockCode[i].replaceAll('\n', '\n' + indent);
+                    }
+                    if (addcell) {
+                        // insert single cell using prev code
+                        com_interface.insertCell('code', code.toString(), execute, block.blockNumber);
+                        code = new com_String();
+                        // insert cells using this block code list
+                        com_interface.insertCells('code', thisBlockCode, execute, block.blockNumber);
+                    }
+                } else {
+                    // set indent to every line of thisblockcode
+                    thisBlockCode = thisBlockCode.replaceAll('\n', '\n' + indent);
+                    code.appendFormat('{0}{1}{2}', prevNewLine, indent, thisBlockCode);
+                }
             });
             if (addcell) {
                 com_interface.insertCell('code', code.toString(), execute, block.blockNumber);

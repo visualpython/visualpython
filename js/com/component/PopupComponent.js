@@ -586,7 +586,12 @@ define([
                 blockNumber = block.blockNumber;
             }
             if (addcell) {
-                com_interface.insertCell(mode, code, execute, blockNumber);
+                if (Array.isArray(code)) {
+                    // insert cells if it's array of codes
+                    com_interface.insertCells(mode, code, execute, blockNumber);
+                } else {
+                    com_interface.insertCell(mode, code, execute, blockNumber);
+                }
             }
             return code;
         }
@@ -693,7 +698,13 @@ define([
         openView(viewType) {
             if (viewType == 'code') {
                 var code = this.generateCode();
-                this.cmCodeview.setValue(code);
+                let codeText = '';
+                if (Array.isArray(code)) {
+                    codeText = code.join('\n');
+                } else {
+                    codeText = code;
+                }
+                this.cmCodeview.setValue(codeText);
                 this.cmCodeview.save();
                 
                 var that = this;
