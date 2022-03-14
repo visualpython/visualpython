@@ -499,8 +499,8 @@ define([
         /** Auto ML */
         'auto-sklearn-rgs': {
             name: 'AutoSklearnRegressor (Linux only)',
-            install: 'pip install auto-sklearn',
-            import: 'from autosklearn import AutoSklearnRegressor',
+            install: '!pip install auto-sklearn',
+            import: 'from autosklearn.regression import AutoSklearnRegressor',
             link: 'https://automl.github.io/auto-sklearn/master/api.html#regression',
             code: 'AutoSklearnRegressor(${etc})',
             options: [
@@ -509,7 +509,7 @@ define([
         },
         'tpot-rgs': {
             name: 'TPOTRegressor',
-            install: 'pip install tpot',
+            install: '!pip install tpot',
             import: 'from tpot import TPOTRegressor',
             code: 'TPOTRegressor(${generation}${population_size}${cv}${random_state}${etc})',
             options: [
@@ -521,8 +521,8 @@ define([
         },
         'auto-sklearn-clf': {
             name: 'AutoSklearnClassifier (Linux only)',
-            install: 'pip install auto-sklearn',
-            import: 'from autosklearn import AutoSklearnClassifier',
+            install: '!pip install auto-sklearn',
+            import: 'from autosklearn.classification import AutoSklearnClassifier',
             link: 'https://automl.github.io/auto-sklearn/master/api.html#classification',
             code: 'AutoSklearnClassifier(${etc})',
             options: [
@@ -531,7 +531,7 @@ define([
         },
         'tpot-clf': {
             name: 'TPOTClassifier',
-            install: 'pip install tpot',
+            install: '!pip install tpot',
             import: 'from tpot import TPOTClassifier',
             code: 'TPOTClassifier(${generation}${population_size}${cv}${random_state}${etc})',
             options: [

@@ -551,6 +551,8 @@ define([
                     if (opt.label != undefined) {
                         label = opt.label;
                     }
+                    // fix label
+                    label = com_util.optionToLabel(label);
                     optBox.appendFormatLine('<label for="{0}" title="{1}">{2}</label>'
                         , opt.name, opt.name, label);
                     let content = com_generator.renderContent(this, opt.component[0], opt, this.pageThis.state);
