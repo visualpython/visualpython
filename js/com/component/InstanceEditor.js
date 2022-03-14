@@ -1,5 +1,3 @@
-const { param } = require("jquery");
-
 define([
     'css!vp_base/css/component/instanceEditor.css',
     'vp_base/js/com/com_String',

@@ -3111,8 +3111,8 @@
                         "desc" : "Data sets for machine learning",
                         "file" : "m_ml/DataSets",
                         "apps" : {
-                            "color": 1,
-                            "icon": "apps/apps_white.svg"
+                            "color": 5,
+                            "icon": "apps/apps_dataset.svg"
                         }
                     },
                     {
@@ -3125,8 +3125,8 @@
                         "desc" : "Data preparation for machine learning",
                         "file" : "m_ml/DataPrep",
                         "apps" : {
-                            "color": 1,
-                            "icon": "apps/apps_white.svg"
+                            "color": 5,
+                            "icon": "apps/apps_dataprep.svg"
                         }
                     },
                     {
@@ -3139,7 +3139,7 @@
                         "desc" : "Data split for machine learning",
                         "file" : "m_ml/dataSplit",
                         "apps" : {
-                            "color": 1,
+                            "color": 5,
                             "icon": "apps/apps_datasplit.svg"
                         }
                     },
@@ -3147,28 +3147,28 @@
                         "id"   : "ml_regression",
                         "type" : "function",
                         "level": 1,
-                        "name" : "Regression",
+                        "name" : "Regressor",
                         "tag"  : "REGRESSION,MODEL,MACHINE LEARNING,ML",
                         "path" : "visualpython - machine_learning - regression",
                         "desc" : "Regression model for machine learning",
                         "file" : "m_ml/Regression",
                         "apps" : {
-                            "color": 1,
-                            "icon": "apps/apps_model.svg"
+                            "color": 5,
+                            "icon": "apps/apps_regression.svg"
                         }
                     },
                     {
                         "id"   : "ml_classification",
                         "type" : "function",
                         "level": 1,
-                        "name" : "Classification",
+                        "name" : "Classifier",
                         "tag"  : "CLASSIFICATION,MODEL,MACHINE LEARNING,ML",
                         "path" : "visualpython - machine_learning - classification",
                         "desc" : "Classification model for machine learning",
                         "file" : "m_ml/Classification",
                         "apps" : {
-                            "color": 1,
-                            "icon": "apps/apps_model.svg"
+                            "color": 6,
+                            "icon": "apps/apps_classification.svg"
                         }
                     },
                     {
@@ -3181,22 +3181,22 @@
                         "desc" : "Clustering model for machine learning",
                         "file" : "m_ml/Clustering",
                         "apps" : {
-                            "color": 1,
-                            "icon": "apps/apps_model.svg"
+                            "color": 6,
+                            "icon": "apps/apps_clustering.svg"
                         }
                     },
                     {
                         "id"   : "ml_dimensionReduction",
                         "type" : "function",
                         "level": 1,
-                        "name" : "Dimension Reduction",
+                        "name" : "Dimension",
                         "tag"  : "DIMENSION REDUCTION,MODEL,MACHINE LEARNING,ML",
                         "path" : "visualpython - machine_learning - dimension_reduction",
                         "desc" : "Dimension reduction model for machine learning",
                         "file" : "m_ml/DimensionReduction",
                         "apps" : {
-                            "color": 1,
-                            "icon": "apps/apps_model.svg"
+                            "color": 6,
+                            "icon": "apps/apps_dimension.svg"
                         }
                     },
                     {
@@ -3209,8 +3209,8 @@
                         "desc" : "AutoML model for machine learning",
                         "file" : "m_ml/AutoML",
                         "apps" : {
-                            "color": 1,
-                            "icon": "apps/apps_model.svg"
+                            "color": 6,
+                            "icon": "apps/apps_automl.svg"
                         }
                     },
                     {
@@ -3223,7 +3223,7 @@
                         "desc" : "Performance evaluation for machine learning",
                         "file" : "m_ml/evaluation",
                         "apps" : {
-                            "color": 1,
+                            "color": 7,
                             "icon": "apps/apps_evaluate.svg"
                         }
                     }

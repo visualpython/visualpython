@@ -31,7 +31,7 @@ define([
             this.config.dataview = false;
 
             this.state = {
-                modelType: 'clf',
+                modelType: 'rgs',
                 predictData: 'pred',
                 targetData: 'y_test',
                 // classification
@@ -97,7 +97,7 @@ define([
                 switch(tagName) {
                     case 'INPUT':
                         let inputType = $(tag).prop('type');
-                        if (inputType == 'text' || inputType == 'number') {
+                        if (inputType == 'text' || inputType == 'number' || inputType == 'hidden') {
                             $(tag).val(value);
                             break;
                         }
@@ -118,15 +118,16 @@ define([
         }
 
         generateCode() {
+            let codeCells = [];
             let code = new com_String();
             let { 
                 modelType, predictData, targetData,
                 // classification
-                confusion_matrix, report, accuracy, precision, recall, f1_score,
+                confusion_matrix, report, accuracy, precision, recall, f1_score, roc_curve, auc,
                 // regression
                 coefficient, intercept, r_squared, mae, mape, rmse, scatter_plot,
                 // clustering
-                sizeOfClusters, silhouetteScore
+                sizeOfClusters, silhouetteScore, ari, nm
             } = this.state;
 
             //====================================================================
@@ -134,28 +135,56 @@ define([
             //====================================================================
             if (modelType == 'clf') {
                 if (confusion_matrix) {
+                    code = new com_String();
                     code.appendLine("# Confusion Matrix");
-                    code.appendFormatLine('pd.crosstab({0}, {1}, margins=True)', targetData, predictData);
+                    code.appendFormat('pd.crosstab({0}, {1}, margins=True)', targetData, predictData);
+                    codeCells.push(code.toString());
                 }
                 if (report) {
+                    code = new com_String();
                     code.appendLine("# Classification report");
-                    code.appendFormatLine('print(metrics.classification_report({0}, {1}))', targetData, predictData);
+                    code.appendFormat('print(metrics.classification_report({0}, {1}))', targetData, predictData);
+                    codeCells.push(code.toString());
                 }
                 if (accuracy) {
+                    code = new com_String();
                     code.appendLine("# Accuracy");
-                    code.appendFormatLine('metrics.accuracy_score({0}, {1})', targetData, predictData);
+                    code.appendFormat('metrics.accuracy_score({0}, {1})', targetData, predictData);
+                    codeCells.push(code.toString());
                 }
                 if (precision) {
+                    code = new com_String();
                     code.appendLine("# Precision");
-                    code.appendFormatLine("metrics.precision_score({0}, {1}, average='weighted')", targetData, predictData);
+                    code.appendFormat("metrics.precision_score({0}, {1}, average='weighted')", targetData, predictData);
+                    codeCells.push(code.toString());
                 }
                 if (recall) {
+                    code = new com_String();
                     code.appendLine("# Recall");
-                    code.appendFormatLine("metrics.recall_score({0}, {1}, average='weighted')", targetData, predictData);
+                    code.appendFormat("metrics.recall_score({0}, {1}, average='weighted')", targetData, predictData);
+                    codeCells.push(code.toString());
                 }
                 if (f1_score) {
+                    code = new com_String();
                     code.appendLine("# F1-score");
-                    code.appendFormatLine("metrics.f1_score({0}, {1}, average='weighted')", targetData, predictData);
+                    code.appendFormat("metrics.f1_score({0}, {1}, average='weighted')", targetData, predictData);
+                    codeCells.push(code.toString());
+                }
+                if (roc_curve) {
+                    code = new com_String();
+                    code.appendLine("# ROC Curve");
+                    code.appendFormatLine("fpr, tpr, thresholds = roc_curve({0}, svc.decision_function({1}}))", predictData, targetData);
+                    code.appendLine("plt.plot(fpr, tpr, label='ROC Curve')");
+                    code.appendLine("plt.xlabel('Sensitivity') ");
+                    code.append("plt.ylabel('Specificity') ")
+                    codeCells.push(code.toString());
+                }
+                if (auc) {
+                    code = new com_String();
+                    code.appendLine("# AUC");
+                    code.appendFormatLine("fpr, tpr, thresholds = roc_curve({0}, svc.decision_function({1}}))", predictData, targetData);
+                    code.append("metrics.auc(fpr, tpr)");
+                    codeCells.push(code.toString());
                 }
             }
 
@@ -163,56 +192,80 @@ define([
             // Regression
             //====================================================================
             if (modelType == 'rgs') {
-                if (coefficient) {
-                    code.appendLine("# Coefficient (scikit-learn only)");
-                    code.appendFormatLine('model.coef_');
-                }
-                if (intercept) {
-                    code.appendLine("# Intercept (scikit-learn only)");
-                    code.appendFormatLine('model.intercept_');
-                }
+                // if (coefficient) {
+                //     code.appendLine("# Coefficient (scikit-learn only)");
+                //     code.appendFormatLine('model.coef_');
+                // }
+                // if (intercept) {
+                //     code.appendLine("# Intercept (scikit-learn only)");
+                //     code.appendFormatLine('model.intercept_');
+                // }
                 if (r_squared) {
+                    code = new com_String();
                     code.appendLine("# R square");
-                    code.appendFormatLine('metrics.r2_score({0}, {1})', targetData, predictData);
+                    code.appendFormat('metrics.r2_score({0}, {1})', targetData, predictData);
+                    codeCells.push(code.toString());
                 }
                 if (mae) {
+                    code = new com_String();
                     code.appendLine("# MAE(Mean Absolute Error)");
-                    code.appendFormatLine('metrics.mean_absolute_error({0}, {1})', targetData, predictData);
+                    code.appendFormat('metrics.mean_absolute_error({0}, {1})', targetData, predictData);
+                    codeCells.push(code.toString());
                 }
                 if (mape) {
+                    code = new com_String();
                     code.appendLine("# MAPE(Mean Absolute Percentage Error)");
                     code.appendLine('def MAPE(y_test, y_pred):');
                     code.appendLine('   return np.mean(np.abs((y_test - pred) / y_test)) * 100');
                     code.appendLine();
-                    code.appendFormatLine('MAPE({0}, {1})', targetData, predictData);
+                    code.appendFormat('MAPE({0}, {1})', targetData, predictData);
+                    codeCells.push(code.toString());
                 }
                 if (rmse) {
+                    code = new com_String();
                     code.appendLine("# RMSE(Root Mean Squared Error)");
-                    code.appendFormatLine('metrics.mean_squared_error({0}, {1})**0.5', targetData, predictData);
+                    code.appendFormat('metrics.mean_squared_error({0}, {1})**0.5', targetData, predictData);
+                    codeCells.push(code.toString());
                 }
                 if (scatter_plot) {
+                    code = new com_String();
                     code.appendLine('# Regression plot');
                     code.appendFormatLine('plt.scatter({0}, {1})', targetData, predictData);
                     code.appendFormatLine("plt.xlabel('{0}')", targetData);
                     code.appendFormatLine("plt.ylabel('{1}')", predictData);
-                    code.appendLine('plt.show()');
+                    code.append('plt.show()');
+                    codeCells.push(code.toString());
                 }
             }
             //====================================================================
             // Clustering
             //====================================================================
             if (modelType == 'cls') {
-                if (sizeOfClusters) {
-                    code.appendLine("# Size of clusters");
-                    code.appendFormatLine("print(f'Size of clusters: {np.bincount({0})}')", predictData);
-                }
+                // if (sizeOfClusters) {
+                //     code.appendLine("# Size of clusters");
+                //     code.appendFormatLine("print(f'Size of clusters: {np.bincount({0})}')", predictData);
+                // }
                 if (silhouetteScore) {
+                    code = new com_String();
                     code.appendLine("# Silhouette score");
-                    code.appendFormatLine("print(f'Silhouette score: {metrics.cluster.silhouette_score({0}, {1})}')", targetData, predictData);
+                    code.appendFormat("print(f'Silhouette score: {metrics.cluster.silhouette_score({0}, {1})}')", targetData, predictData);
+                    codeCells.push(code.toString());
+                }
+                if (ari) {
+                    code = new com_String();
+                    code.appendLine("# ARI");
+                    code.appendFormat("print(f'ARI: {metrics.cluster.adjusted_rand_score({0}, {1})}')", targetData, predictData);
+                    codeCells.push(code.toString());
+                }
+                if (nm) {
+                    code = new com_String();
+                    code.appendLine("# NM");
+                    code.appendFormat("print(f'NM: {metrics.cluster.normalized_mutual_info_score({0}, {1})}')", targetData, predictData);
+                    codeCells.push(code.toString());
                 }
             }
-            // FIXME: as seperated cells
-            return code.toString();
+            // return as seperated cells
+            return codeCells;
         }
 
     }

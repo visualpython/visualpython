@@ -483,25 +483,25 @@ define([
      */
     Config.ML_DATA_DICT = {
         'Regression': [
-            'LinearRegression', 'SVR', 'DecisionTreeRegressor', 'RandomForestRegression', 'GradientBoostingRegressor', 'XGBRegressor', 'LGBMRegressor', 'CatBoostRegressor',
+            'LinearRegression', 'Ridge', 'Lasso', 'ElasticNet', 'SVR', 'DecisionTreeRegressor', 'RandomForestRegressor', 'GradientBoostingRegressor', 'XGBRegressor', 'LGBMRegressor', 'CatBoostRegressor',
         ],
         'Classification': [
-            'LogisticRegression', 'SVC', 'DecisionTreeClassifier', 'RandomForestClassifier', 'GradientBoostingClassifier', 'XGBClassifier', 'LGBMClassifier', 'CatBoostClassifier',
+            'LogisticRegression', 'BernoulliNB', 'MultinomialNB', 'GaussianNB', 'SVC', 'DecisionTreeClassifier', 'RandomForestClassifier', 'GradientBoostingClassifier', 'XGBClassifier', 'LGBMClassifier', 'CatBoostClassifier',
         ],
         'Auto ML': [
-            'TPOTRegression', 'TPOTClassifier'
+            'AutoSklearnRegressor', 'AutoSklearnClassifier', 'TPOTRegressor', 'TPOTClassifier'
         ],
         'Clustering': [
             'KMeans', 'AgglomerativeClustering', 'GaussianMixture', 'DBSCAN',
         ],
         'Dimension Reduction': [
-            'PCA', 'LinearDiscriminantAnalysis', 'TruncatedSVD', 'NMF'
+            'PCA', 'LinearDiscriminantAnalysis', 'TruncatedSVD', 'NMF', 'TSNE'
         ],
         'Data Preparation': [
             /** Encoding */
             'OneHotEncoder', 'LabelEncoder', 'OrdinalEncoder', 'TargetEncoder', 'SMOTE',
             /** Scaling */
-            'StandardScaler', 'RobustScaler', 'MinMaxScaler', 'Normalizer', 'FunctionTransformer'
+            'StandardScaler', 'RobustScaler', 'MinMaxScaler', 'Normalizer', 'FunctionTransformer', 'PolynomialFeatures'
         ]
     };
 

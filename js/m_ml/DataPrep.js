@@ -15,14 +15,14 @@
 define([
     'text!vp_base/html/m_ml/model.html!strip',
     'vp_base/js/com/com_util',
-    'vp_base/js/com/com_Const',
+    'vp_base/js/com/com_interface',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_generatorV2',
     'vp_base/data/m_ml/mlLibrary',
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/VarSelector2',
-    'vp_base/js/com/component/InstanceEditor'
-], function(msHtml, com_util, com_Const, com_String, com_generator, ML_LIBRARIES, PopupComponent, VarSelector2, InstanceEditor) {
+    'vp_base/js/com/component/ModelEditor'
+], function(msHtml, com_util, com_interface, com_String, com_generator, ML_LIBRARIES, PopupComponent, VarSelector2, ModelEditor) {
 
     /**
      * DataPrep
@@ -40,7 +40,7 @@ define([
                 userOption: '',
                 featureData: 'X_train',
                 targetData: 'y_train',
-                allocateTo: 'model',
+                allocateToCreation: 'model',
                 // model selection
                 model: '',
                 method: '',
@@ -51,13 +51,7 @@ define([
 
             this.modelTypeList = {
                 'Encoding': ['prep-onehot', 'prep-label', 'prep-ordinal', 'prep-target', 'prep-smote'],
-                'Scaling': ['prep-standard', 'prep-robust', 'prep-minmax', 'prep-normalizer', 'prep-func-trsfrm-log', 'prep-func-trsfrm-exp']
-
-                // 'Regression': ['ln-rgs', 'sv-rgs', 'dt-rgs', 'rf-rgs', 'gbm-rgs', 'xgb-rgs', 'lgbm-rgs', 'cb-rgs'],
-                // 'Classfication': ['lg-rgs', 'sv-clf', 'dt-clf', 'rf-clf', 'gbm-clf', 'xgb-clf', 'lgbm-clf', 'cb-clf'],
-                // 'Auto ML': ['tpot-rgs', 'tpot-clf'],
-                // 'Clustering': ['k-means', 'agg-cls', 'gaus-mix', 'dbscan'], 
-                // 'Dimension Reduction': ['pca', 'lda', 'svd', 'nmf'] 
+                'Scaling': ['prep-standard', 'prep-robust', 'prep-minmax', 'prep-normalizer', 'prep-func-trsfrm-log', 'prep-func-trsfrm-exp', 'prep-poly-feat']
             }
 
 
@@ -96,6 +90,11 @@ define([
                     // insert install code
                     com_interface.insertCell('code', config.install);
                 }
+            });
+
+            // change model
+            $(this.wrapSelector('#model')).on('change', function() {
+                that.modelEditor.reload();
             });
         }
 
@@ -174,7 +173,7 @@ define([
                     that.state.model = $(that.wrapSelector('#model')).val();
                 }
 
-                that.insEditor.show();
+                that.modelEditor.show();
             });
 
             //================================================================
@@ -190,7 +189,7 @@ define([
                 switch(tagName) {
                     case 'INPUT':
                         let inputType = $(tag).prop('type');
-                        if (inputType == 'text' || inputType == 'number') {
+                        if (inputType == 'text' || inputType == 'number' || inputType == 'hidden') {
                             $(tag).val(value);
                             break;
                         }
@@ -218,14 +217,17 @@ define([
             // render tag
             config.options.forEach(opt => {
                 optBox.appendFormatLine('<label for="{0}" title="{1}">{2}</label>'
-                    , opt.name, opt.name, opt.name);
+                    , opt.name, opt.name, com_util.optionToLabel(opt.name));
                 let content = com_generator.renderContent(this, opt.component[0], opt, state);
                 optBox.appendLine(content[0].outerHTML);
             });
-            // render user option
-            optBox.appendFormatLine('<label for="{0}">{1}</label>', 'userOption', 'User option');
-            optBox.appendFormatLine('<input type="text" class="vp-input vp-state" id="{0}" placeholder="{1}" value="{2}"/>',
-                                        'userOption', 'key=value, ...', this.state.userOption);
+            // show user option
+            if (config.code.includes('${etc}')) {
+                // render user option
+                optBox.appendFormatLine('<label for="{0}">{1}</label>', 'userOption', 'User option');
+                optBox.appendFormatLine('<input type="text" class="vp-input vp-state" id="{0}" placeholder="{1}" value="{2}"/>',
+                                            'userOption', 'key=value, ...', this.state.userOption);
+            }
             return optBox.toString();
         }
 
@@ -233,12 +235,11 @@ define([
             super.render();
 
             // Instance Editor
-            this.insEditor = new InstanceEditor(this, "model", "instanceEditor");
-            this.insEditor.show();
+            this.modelEditor = new ModelEditor(this, "model", "instanceEditor");
         }
 
         generateCode() {
-            let { modelControlType, modelType, userOption, featureData, targetData, allocateTo } = this.state;
+            let { modelControlType, modelType, userOption, allocateToCreation, model } = this.state;
             let code = new com_String();
             if (modelControlType == 'creation') {
                 /**
@@ -254,15 +255,14 @@ define([
                 // model code
                 let modelCode = config.code;
                 modelCode = com_generator.vp_codeGenerator(this, config, this.state, userOption);
-                code.appendFormat('{0} = {1}', allocateTo, modelCode);                
+                code.appendFormat('{0} = {1}', allocateToCreation, modelCode);                
             } else {
                 /**
                  * Model Selection
                  * ---
                  * ...
                  */
-
-
+                code.append(this.modelEditor.getCode({'${model}': model}));
             }
 
             return code.toString();

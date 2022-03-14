@@ -135,7 +135,7 @@ define([
                 switch(tagName) {
                     case 'INPUT':
                         let inputType = $(tag).prop('type');
-                        if (inputType == 'text' || inputType == 'number') {
+                        if (inputType == 'text' || inputType == 'number' || inputType == 'hidden') {
                             $(tag).val(value);
                             break;
                         }
