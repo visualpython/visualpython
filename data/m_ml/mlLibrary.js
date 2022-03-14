@@ -275,7 +275,7 @@ define([
             code: 'SVR(${C}${kernel}${gamma}${random_state}${etc})',
             options: [
                 { name: 'C', component: ['input_number'], placeholder: '1.0', usePair: true },
-                { name: 'kernel', component: ['option_select'], default: 'rbf', type:'text', usePair: true,
+                { name: 'kernel', component: ['option_select'], type: 'text', default: 'rbf', type:'text', usePair: true,
                     options: ['linear', 'poly', 'rbf', 'sigmoid', 'precomputed'] },
                 { name: 'gamma', component: ['option_suggest'], default: 'scale', type:'text', usePair: true,
                     options: ['scale', 'auto'] },
@@ -287,7 +287,7 @@ define([
             import: 'from sklearn.tree import DecisionTreeRegressor',
             code: 'DecisionTreeRegressor(${criterion}${max_depth}${min_samples_split}${random_state}${etc})',
             options: [
-                { name: 'criterion', component: ['option_select'], default: 'squared_error', type:'text',
+                { name: 'criterion', component: ['option_select'], type: 'text', default: 'squared_error', type:'text',
                     options: ['squared_error', 'friedman_mse', 'absolute_error', 'poisson'] },
                 { name: 'max_depth', component: ['input_number'], placeholder: 'None', usePair: true },
                 { name: 'min_samples_split', component: ['input_number'], default: 2, usePair: true },
@@ -300,7 +300,7 @@ define([
             code: 'RandomForestRegressor(${n_estimators}${criterion}${max_depth}${min_samples_split}${n_jobs}${random_state}${etc})',
             options: [
                 { name: 'n_estimators', component: ['input_number'], default: 100, usePair: true },
-                { name: 'criterion', component: ['option_select'], default: 'squared_error', type:'text', usePair: true,
+                { name: 'criterion', component: ['option_select'], type: 'text', default: 'squared_error', type:'text', usePair: true,
                     options: ['squared_error', 'absolute_error', 'poisson'] },
                 { name: 'max_depth', component: ['input_number'], placeholder: 'None', usePair: true },
                 { name: 'min_samples_split', component: ['input_number'], default: 2, usePair: true },
@@ -313,11 +313,11 @@ define([
             import: 'from sklearn.ensemble import GradientBoostingRegressor',
             code: 'GradientBoostingRegressor(${loss}${learning_rate}${n_estimators}${criterion}${random_state}${etc})',
             options: [
-                { name: 'loss', component: ['option_select'], default: 'squared_error', type:'text', usePair: true,
+                { name: 'loss', component: ['option_select'], type: 'text', default: 'squared_error', type:'text', usePair: true,
                     options: ['squared_error', 'absolute_error', 'huber', 'quantile'] },
                 { name: 'learning_rate', component: ['input_number'], default: 0.1, usePair: true },
                 { name: 'n_estimators', component: ['input_number'], default: 100, usePair: true },
-                { name: 'criterion', component: ['option_select'], default: 'friedman_mse', type:'text', usePair: true,
+                { name: 'criterion', component: ['option_select'], type: 'text', default: 'friedman_mse', type:'text', usePair: true,
                     options: ['friedman_mse', 'squared_error', 'mse', 'mae'] },
                 { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true }
             ]
@@ -341,7 +341,7 @@ define([
             import: 'from lightgbm import LGBMRegressor',
             code: 'LGBMRegressor(${boosting_type}${max_depth}${learning_rate}${n_estimators}${random_state}${etc})',
             options: [
-                { name: 'boosting_type', component: ['option_select'], default: 'gbdt', type: 'text', usePair: true,
+                { name: 'boosting_type', component: ['option_select'], type: 'text', default: 'gbdt', type: 'text', usePair: true,
                     options: ['gbdt', 'dart', 'goss', 'rf']},
                 { name: 'max_depth', component: ['input_number'], placeholder: '-1', usePair: true },
                 { name: 'learning_rate', component: ['input_number'], default: 0.1, usePair: true },
@@ -356,9 +356,9 @@ define([
             code: 'CatBoostRegressor(${learning_rate}${loss_function}${task_type}${max_depth}${n_estimators}${random_state}${etc})',
             options: [
                 { name: 'learning_rate', component: ['input_number'], placeholder: 'None', usePair: true },
-                { name: 'loss_function', component: ['option_select'], default: 'RMSE', type:'text', usePair: true,
+                { name: 'loss_function', component: ['option_select'], type: 'text', default: 'RMSE', type:'text', usePair: true,
                     options: ['RMSE', 'absolute_error', 'huber', 'quantile'] },
-                { name: 'task_type', component: ['option_select'], default: 'CPU', usePair: true,
+                { name: 'task_type', component: ['option_select'], type: 'text', default: 'CPU', usePair: true,
                     options: ['CPU', 'GPU'] },
                 { name: 'max_depth', component: ['input_number'], placeholder: 'None', usePair: true },
                 { name: 'n_estimators', component: ['input_number'], placeholder: 'None', usePair: true },
@@ -371,7 +371,7 @@ define([
             import: 'from sklearn.linear_model import LogisticRegression',
             code: 'LogisticRegression(${penalty}${C}${random_state}${etc})',
             options: [
-                { name: 'penalty', component: ['option_select'], default: 'l2', usePair: true, options: ['l1', 'l2', 'elasticnet', 'none']},
+                { name: 'penalty', component: ['option_select'], type: 'text', default: 'l2', usePair: true, options: ['l1', 'l2', 'elasticnet', 'none']},
                 { name: 'C', component: ['input_number'], placeholder: '1.0', usePair: true },
                 { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true }
             ]
@@ -406,7 +406,7 @@ define([
             code: 'SVC(${C}${kernel}${gamma}${random_state}${etc})',
             options: [
                 { name: 'C', component: ['input_number'], placeholder: '1.0', usePair: true },
-                { name: 'kernel', component: ['option_select'], usePair: true, 
+                { name: 'kernel', component: ['option_select'], type: 'text', usePair: true, 
                     options: ['linear', 'poly', 'rbf', 'sigmoid', 'precomputed'], default: 'rbf' },
                 { name: 'gamma', component: ['option_suggest'], usePair: true, 
                     options: ['scale', 'auto'], default: 'scale' },
@@ -418,7 +418,7 @@ define([
             import: 'from sklearn.tree import DecisionTreeClassifier',
             code: 'DecisionTreeClassifier(${criterion}${max_depth}${min_samples_split}${random_state}${etc})',
             options: [
-                { name: 'criterion', component: ['option_select'], default: 'squared_error', type:'text',
+                { name: 'criterion', component: ['option_select'], type: 'text', default: 'squared_error', type:'text',
                     options: ['squared_error', 'friedman_mse', 'absolute_error', 'poisson'], usePair: true },
                 { name: 'max_depth', component: ['input_number'], placeholder: 'None', usePair: true },
                 { name: 'min_samples_split', component: ['input_number'], default: 2, usePair: true },
@@ -431,7 +431,7 @@ define([
             code: 'RandomForestClassifier(${n_estimators}${criterion}${max_depth}${min_samples_split}${n_jobs}${random_state}${etc})',
             options: [
                 { name: 'n_estimators', component: ['input_number'], default: 100, usePair: true },
-                { name: 'criterion', component: ['option_select'], default: 'gini', type:'text', usePair: true,
+                { name: 'criterion', component: ['option_select'], type: 'text', default: 'gini', type:'text', usePair: true,
                     options: ['gini', 'entropy'] },
                 { name: 'max_depth', component: ['input_number'], placeholder: 'None', usePair: true },
                 { name: 'min_samples_split', component: ['input_number'], default: 2, usePair: true },
@@ -444,11 +444,11 @@ define([
             import: 'from sklearn.ensemble import GradientBoostingClassifier',
             code: 'GradientBoostingClassifier(${loss}${learning_rate}${n_estimators}${criterion}${random_state}${etc})',
             options: [
-                { name: 'loss', component: ['option_select'], default: 'deviance', type: 'text', usePair: true,
+                { name: 'loss', component: ['option_select'], type: 'text', default: 'deviance', type: 'text', usePair: true,
                     options: ['deviance', 'exponential'] },
                 { name: 'learning_rate', component: ['input_number'], default: 0.1, usePair: true },
                 { name: 'n_estimators', component: ['input_number'], default: 100, usePair: true },
-                { name: 'criterion', component: ['option_select'], default: 'friedman_mse', type:'text', usePair: true,
+                { name: 'criterion', component: ['option_select'], type: 'text', default: 'friedman_mse', type:'text', usePair: true,
                     options: ['friedman_mse', 'squared_error', 'mse', 'mae'] },
                 { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true }
             ]
@@ -472,7 +472,7 @@ define([
             import: 'from lightgbm import LGBMClassifier',
             code: 'LGBMClassifier(${boosting_type}${max_depth}${learning_rate}${n_estimators}${random_state}${etc})',
             options: [
-                { name: 'boosting_type', component: ['option_select'], default: 'gbdt', type: 'text', usePair: true,
+                { name: 'boosting_type', component: ['option_select'], type: 'text', default: 'gbdt', type: 'text', usePair: true,
                     options: ['gbdt', 'dart', 'goss', 'rf']},
                 { name: 'max_depth', component: ['input_number'], placeholder: '-1', usePair: true },
                 { name: 'learning_rate', component: ['input_number'], default: 0.1, usePair: true },
@@ -487,9 +487,9 @@ define([
             code: 'CatBoostClassifier(${learning_rate}${loss_function}${task_type}${max_depth}${n_estimators}${random_state}${etc})',
             options: [
                 { name: 'learning_rate', component: ['input_number'], placeholder: 'None', usePair: true },
-                { name: 'loss_function', component: ['option_select'], default: 'RMSE', type:'text', usePair: true,
+                { name: 'loss_function', component: ['option_select'], type: 'text', default: 'RMSE', type:'text', usePair: true,
                     options: ['RMSE', 'absolute_error', 'huber', 'quantile'] },
-                { name: 'task_type', component: ['option_select'], default: 'CPU', usePair: true,
+                { name: 'task_type', component: ['option_select'], type: 'text', default: 'CPU', usePair: true,
                     options: ['CPU', 'GPU'] },
                 { name: 'max_depth', component: ['input_number'], placeholder: 'None', usePair: true },
                 { name: 'n_estimators', component: ['input_number'], placeholder: 'None', usePair: true },

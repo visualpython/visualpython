@@ -18,6 +18,15 @@
         </div>
         <div class="vp-grid-border-box">
             <label for="featureData" class="vp-orange-text">Evaluation Metrics</label>
+            <div class="vp-grid-box vp-eval-box vp-eval-rgs">
+                <!-- <input type="checkbox" id="coefficient" class="vp-state"><label for="coefficient">Coefficient</label> -->
+                <!-- <input type="checkbox" id="intercept" class="vp-state"><label for="intercept">Intercept</label> -->
+                <input type="checkbox" id="r_squared" class="vp-state" checked><label for="r_squared">R squared</label>
+                <input type="checkbox" id="mae" class="vp-state"><label for="mae">Mean Absolute Error</label>
+                <input type="checkbox" id="mape" class="vp-state"><label for="mape">Mean Absolute Percentage Error</label>
+                <input type="checkbox" id="rmse" class="vp-state" checked><label for="rmse">Root Mean Squared Error</label>
+                <input type="checkbox" id="scatter_plot" class="vp-state"><label for="scatter_plot">Scatter plot</label>
+            </div>
             <div class="vp-grid-box vp-eval-box vp-eval-clf">
                 <input type="checkbox" id="confusion_matrix" class="vp-state" checked><label for="confusion_matrix">Confusion Matrix</label>
                 <input type="checkbox" id="report" class="vp-state" checked><label for="report">Report (Accuracy/Precision/Recall/F1-score)</label>
@@ -26,19 +35,14 @@
                 <input type="checkbox" id="precision" class="vp-state"><label for="precision">Precision</label>
                 <input type="checkbox" id="recall" class="vp-state"><label for="recall">Recall</label>
                 <input type="checkbox" id="f1_score" class="vp-state"><label for="f1_score">F1-score</label>
-            </div>
-            <div class="vp-grid-box vp-eval-box vp-eval-rgs">
-                <input type="checkbox" id="coefficient" class="vp-state"><label for="coefficient">Coefficient</label>
-                <input type="checkbox" id="intercept" class="vp-state"><label for="intercept">Intercept</label>
-                <input type="checkbox" id="r_squared" class="vp-state" checked><label for="r_squared">R squared</label>
-                <input type="checkbox" id="mae" class="vp-state"><label for="mae">Mean Absolute Error</label>
-                <input type="checkbox" id="mape" class="vp-state"><label for="mape">Mean Absolute Percentage Error</label>
-                <input type="checkbox" id="rmse" class="vp-state" checked><label for="rmse">Root Mean Squared Error</label>
-                <input type="checkbox" id="scatter_plot" class="vp-state"><label for="scatter_plot">Scatter plot</label>
+                <input type="checkbox" id="roc_curve" class="vp-state" ><label for="roc_curve">ROC Curve</label>
+                <input type="checkbox" id="auc" class="vp-state" ><label for="auc">AUC</label>
             </div>
             <div class="vp-grid-box vp-eval-box vp-eval-cls">
-                <input type="checkbox" id="sizeOfClusters" class="vp-state" checked><label for="sizeOfClusters">Size of clusters</label>
+                <!-- <input type="checkbox" id="sizeOfClusters" class="vp-state" checked><label for="sizeOfClusters">Size of clusters</label> -->
                 <input type="checkbox" id="silhouetteScore" class="vp-state" checked><label for="silhouetteScore">Silhouette score</label>
+                <input type="checkbox" id="ari" class="vp-state" ><label for="ari">ARI</label>
+                <input type="checkbox" id="nm" class="vp-state" ><label for="nm">NM</label>
             </div>
         </div>
     </div>  

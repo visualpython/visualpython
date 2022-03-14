@@ -15,14 +15,14 @@
 define([
     'text!vp_base/html/m_ml/model.html!strip',
     'vp_base/js/com/com_util',
-    'vp_base/js/com/com_Const',
+    'vp_base/js/com/com_interface',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_generatorV2',
     'vp_base/data/m_ml/mlLibrary',
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/VarSelector2',
     'vp_base/js/com/component/ModelEditor'
-], function(msHtml, com_util, com_Const, com_String, com_generator, ML_LIBRARIES, PopupComponent, VarSelector2, ModelEditor) {
+], function(msHtml, com_util, com_interface, com_String, com_generator, ML_LIBRARIES, PopupComponent, VarSelector2, ModelEditor) {
 
     /**
      * Classification
@@ -93,7 +93,7 @@ define([
             
             // change model
             $(this.wrapSelector('#model')).on('change', function() {
-                that.modelEditor.show();
+                that.modelEditor.reload();
             })
         }
 
@@ -188,7 +188,7 @@ define([
                 switch(tagName) {
                     case 'INPUT':
                         let inputType = $(tag).prop('type');
-                        if (inputType == 'text' || inputType == 'number') {
+                        if (inputType == 'text' || inputType == 'number' || inputType == 'hidden') {
                             $(tag).val(value);
                             break;
                         }
@@ -232,11 +232,10 @@ define([
 
             // Model Editor
             this.modelEditor = new ModelEditor(this, "model", "instanceEditor");
-            this.modelEditor.show();
         }
 
         generateCode() {
-            let { modelControlType, modelType, userOption, featureData, targetData, allocateToCreation } = this.state;
+            let { modelControlType, modelType, userOption, allocateToCreation, model } = this.state;
             let code = new com_String();
             if (modelControlType == 'creation') {
                 /**

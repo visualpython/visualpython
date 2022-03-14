@@ -489,7 +489,7 @@ define([
             'LogisticRegression', 'BernoulliNB', 'MultinomialNB', 'GaussianNB', 'SVC', 'DecisionTreeClassifier', 'RandomForestClassifier', 'GradientBoostingClassifier', 'XGBClassifier', 'LGBMClassifier', 'CatBoostClassifier',
         ],
         'Auto ML': [
-            'AutoSklearnRegressor', 'AutoSklearnClassifier', 'TPOTRegression', 'TPOTClassifier'
+            'AutoSklearnRegressor', 'AutoSklearnClassifier', 'TPOTRegressor', 'TPOTClassifier'
         ],
         'Clustering': [
             'KMeans', 'AgglomerativeClustering', 'GaussianMixture', 'DBSCAN',

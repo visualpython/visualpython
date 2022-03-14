@@ -97,7 +97,7 @@ define([
                 switch(tagName) {
                     case 'INPUT':
                         let inputType = $(tag).prop('type');
-                        if (inputType == 'text' || inputType == 'number') {
+                        if (inputType == 'text' || inputType == 'number' || inputType == 'hidden') {
                             $(tag).val(value);
                             break;
                         }
@@ -122,11 +122,11 @@ define([
             let { 
                 modelType, predictData, targetData,
                 // classification
-                confusion_matrix, report, accuracy, precision, recall, f1_score,
+                confusion_matrix, report, accuracy, precision, recall, f1_score, roc_curve, auc,
                 // regression
                 coefficient, intercept, r_squared, mae, mape, rmse, scatter_plot,
                 // clustering
-                sizeOfClusters, silhouetteScore
+                sizeOfClusters, silhouetteScore, ari, nm
             } = this.state;
 
             //====================================================================
@@ -157,20 +157,30 @@ define([
                     code.appendLine("# F1-score");
                     code.appendFormatLine("metrics.f1_score({0}, {1}, average='weighted')", targetData, predictData);
                 }
+                if (roc_curve) {
+                    code.appendLine("# ROC Curve");
+                    code.appendFormatLine("fpr, tpr, thresholds = roc_curve({0}, svc.decision_function({1}}))", predictData, targetData);
+                    code.appendLine("plt.plot(fpr, tpr, label='ROC Curve')");
+                    code.appendLine("plt. xlabel('Sensitivity') ");
+                    code.appendLine("plt. ylabel('Specificity') ")
+                }
+                if (auc) {
+                    // FIXME:
+                }
             }
 
             //====================================================================
             // Regression
             //====================================================================
             if (modelType == 'rgs') {
-                if (coefficient) {
-                    code.appendLine("# Coefficient (scikit-learn only)");
-                    code.appendFormatLine('model.coef_');
-                }
-                if (intercept) {
-                    code.appendLine("# Intercept (scikit-learn only)");
-                    code.appendFormatLine('model.intercept_');
-                }
+                // if (coefficient) {
+                //     code.appendLine("# Coefficient (scikit-learn only)");
+                //     code.appendFormatLine('model.coef_');
+                // }
+                // if (intercept) {
+                //     code.appendLine("# Intercept (scikit-learn only)");
+                //     code.appendFormatLine('model.intercept_');
+                // }
                 if (r_squared) {
                     code.appendLine("# R square");
                     code.appendFormatLine('metrics.r2_score({0}, {1})', targetData, predictData);
@@ -202,13 +212,21 @@ define([
             // Clustering
             //====================================================================
             if (modelType == 'cls') {
-                if (sizeOfClusters) {
-                    code.appendLine("# Size of clusters");
-                    code.appendFormatLine("print(f'Size of clusters: {np.bincount({0})}')", predictData);
-                }
+                // if (sizeOfClusters) {
+                //     code.appendLine("# Size of clusters");
+                //     code.appendFormatLine("print(f'Size of clusters: {np.bincount({0})}')", predictData);
+                // }
                 if (silhouetteScore) {
                     code.appendLine("# Silhouette score");
                     code.appendFormatLine("print(f'Silhouette score: {metrics.cluster.silhouette_score({0}, {1})}')", targetData, predictData);
+                }
+                if (ari) {
+                    code.appendLine("# ARI"); // FIXME:
+                    code.appendFormatLine("print(f'ARI: {metrics.cluster.adjusted_rand_score({0}, {1})}')", targetData, predictData);
+                }
+                if (nm) {
+                    code.appendLine("# NM"); // FIXME:
+                    code.appendFormatLine("print(f'NM: {metrics.cluster.normalized_mutual_info_score({0}, {1})}')", targetData, predictData);
                 }
             }
             // FIXME: as seperated cells
