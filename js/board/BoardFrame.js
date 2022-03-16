@@ -508,19 +508,23 @@ define([
                 
                         file.text().then(function(data) {
                             // var parsedData = decodeURIComponent(data);
-                            var jsonList = JSON.parse(data);
-                            // load blocks
-                            that.jsonToBlock(jsonList);
-
-                            var indexVp = vpFileName.indexOf('.vp');
-                            var saveFileName = vpFileName.slice(0,indexVp);
-            
-                            // show title of board and path
-                            $('#vp_boardTitle').val(saveFileName);
-                            that.tmpState.boardTitle = saveFileName;
-                            that.tmpState.boardPath = vpFilePath;
-
-                            com_util.renderSuccessMessage('Successfully opened file. (' + vpFileName + ')');
+                            try {
+                                var jsonList = JSON.parse(data);
+                                // load blocks
+                                that.jsonToBlock(jsonList);
+    
+                                var indexVp = vpFileName.indexOf('.vp');
+                                var saveFileName = vpFileName.slice(0,indexVp);
+                
+                                // show title of board and path
+                                $('#vp_boardTitle').val(saveFileName);
+                                that.tmpState.boardTitle = saveFileName;
+                                that.tmpState.boardPath = vpFilePath;
+    
+                                com_util.renderSuccessMessage('Successfully opened file. (' + vpFileName + ')');
+                            } catch (ex) {
+                                com_util.renderAlertModal('Not applicable file contents with vp format! (JSON)');
+                            }
                         });
                     });
                 }

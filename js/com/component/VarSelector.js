@@ -84,6 +84,9 @@ define([
             this.attributes.push({ [key]: value });
         }
         setValue(value) {
+            if (value == null || value == undefined) {
+                value = '';
+            }
             this.defaultValue = value;
             if (value.includes('[') && value.includes(']') ) {
                 // divide it to variable / column
