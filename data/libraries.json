@@ -3088,6 +3088,20 @@
                             "color": 4,
                             "icon": "apps/apps_profiling.svg"
                         }
+                    },
+                    {
+                        "id"   : "apps_chartTest",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Chart Test",
+                        "tag"  : "CHART TEST,APPS",
+                        "path" : "visualpython - apps - charttest",
+                        "desc" : "Chart Test",
+                        "file" : "m_apps/ChartTest",
+                        "apps" : {
+                            "color": 4,
+                            "icon": "apps/apps_chart.svg"
+                        }
                     }
                 ]
             },

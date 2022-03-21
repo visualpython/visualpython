@@ -635,12 +635,13 @@ define([
      * @param {string} selector thisWrapSelector 
      * @param {object} target 
      * @param {array} columnInputIdList 
+     * @param {string} tagType input / select (tag type)
      * Usage : 
      *  $(document).on('change', this.wrapSelector('#dataframe_tag_id'), function() {
      *      pdGen.vp_bindColumnSource(that.wrapSelector(), this, ['column_input_id']);
      *  });
      */
-    var vp_bindColumnSource = function(selector, target, columnInputIdList) {
+    var vp_bindColumnSource = function(selector, target, columnInputIdList, tagType="input") {
         var varName = '';
         if ($(target).length > 0) {
             varName = $(target).val();
@@ -648,14 +649,29 @@ define([
         if (varName === '') {
             // reset with no source
             columnInputIdList && columnInputIdList.forEach(columnInputId => {
-                var suggestInputX = new SuggestInput();
-                suggestInputX.setComponentID(columnInputId);
-                suggestInputX.addClass('vp-input vp-state');
-                suggestInputX.setNormalFilter(false);
-                suggestInputX.setValue($(selector + ' #' + columnInputId).val());
-                $(selector + ' #' + columnInputId).replaceWith(function() {
-                    return suggestInputX.toTagString();
-                });
+                let defaultValue = $(selector + ' #' + columnInputId).val();
+                if (defaultValue == null || defaultValue == undefined) {
+                    defaultValue = '';
+                }
+                if (tagType == 'input') {
+                    var suggestInputX = new SuggestInput();
+                    suggestInputX.setComponentID(columnInputId);
+                    suggestInputX.addClass('vp-input vp-state');
+                    suggestInputX.setNormalFilter(false);
+                    suggestInputX.setValue(defaultValue);
+                    $(selector + ' #' + columnInputId).replaceWith(function() {
+                        return suggestInputX.toTagString();
+                    });
+                } else {
+                    // option tags
+                    var tag = $('<select></select>').attr({
+                        'id': columnInputId,
+                        'class': 'vp-select vp-state'
+                    });
+                    $(selector + ' #' + columnInputId).replaceWith(function() {
+                        return $(tag);
+                    });
+                }
             });
             return ;
         }
@@ -667,17 +683,48 @@ define([
 
                 // columns using suggestInput
                 columnInputIdList && columnInputIdList.forEach(columnInputId => {
-                    var suggestInputX = new SuggestInput();
-                    suggestInputX.setComponentID(columnInputId);
-                    suggestInputX.addClass('vp-input vp-state');
-                    suggestInputX.setPlaceholder("column name");
-                    suggestInputX.setSuggestList(function() { return varResult; }); //FIXME:
-                    suggestInputX.setNormalFilter(false);
-                    suggestInputX.setValue($(selector + ' #' + columnInputId).val());
-                    $(selector + ' #' + columnInputId).replaceWith(function() {
-                        return suggestInputX.toTagString();
-                    });
+                    let defaultValue = $(selector + ' #' + columnInputId).val();
+                    if (defaultValue == null || defaultValue == undefined) {
+                        defaultValue = '';
+                    }
+                    // create tag
+                    if (tagType == 'input') {
+                        var suggestInputX = new SuggestInput();
+                        suggestInputX.setComponentID(columnInputId);
+                        suggestInputX.addClass('vp-input vp-state');
+                        suggestInputX.setPlaceholder("column name");
+                        suggestInputX.setSuggestList(function() { return varResult; }); //FIXME:
+                        suggestInputX.setNormalFilter(false);
+                        suggestInputX.setValue(defaultValue);
+                        $(selector + ' #' + columnInputId).replaceWith(function() {
+                            return suggestInputX.toTagString();
+                        });
+                    } else {
+                        var tag = $('<select></select>').attr({
+                            'id': columnInputId,
+                            'class': 'vp-select vp-state'
+                        });
+                        varResult.forEach(listVar => {
+                            var option = document.createElement('option');
+                            $(option).attr({
+                                'value':listVar.value,
+                                'text':listVar.label,
+                                'data-type':listVar.dtype
+                            });
+                            // cell metadata test : defaultValue as selected
+                            if (listVar.value == defaultValue) {
+                                $(option).prop('selected', true);
+                            }
+                            option.append(document.createTextNode(listVar.label));
+                            $(tag).append(option);
+                        });
+                        $(selector + ' #' + columnInputId).replaceWith(function() {
+                            return $(tag);
+                        });
+                    }
                 });
+                
+                
             } catch (e) {
                 vpLog.display(VP_LOG_TYPE.ERROR, 'com_generator - bindColumnSource: not supported data type. ', e);
             }
