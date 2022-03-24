@@ -3034,20 +3034,6 @@
                         }
                     },
                     {
-                        "id"   : "apps_chart",
-                        "type" : "function",
-                        "level": 1,
-                        "name" : "Chart",
-                        "tag"  : "CHART,APPS",
-                        "path" : "visualpython - apps - chart",
-                        "desc" : "Chart",
-                        "file" : "m_apps/Chart",
-                        "apps" : {
-                            "color": 3,
-                            "icon": "apps/apps_chart.svg"
-                        }
-                    },
-                    {
                         "id"   : "apps_markdown",
                         "type" : "function",
                         "level": 1,
@@ -3071,7 +3057,7 @@
                         "desc" : "PDF",
                         "file" : "m_apps/PDF",
                         "apps" : {
-                            "color": 4,
+                            "color": 3,
                             "icon": "apps/apps_pymupdf.svg"
                         }
                     },
@@ -3088,18 +3074,72 @@
                             "color": 4,
                             "icon": "apps/apps_profiling.svg"
                         }
-                    },
+                    }
+                ]
+            },
+            {
+                "id"   : "pkg_visualize",
+                "type" : "package",
+                "level": 0,
+                "name" : "Visualization",
+                "path" : "visualpython - visualization",
+                "desc" : "Visualization modules",
+                "open" : true,
+                "grid" : true,
+                "item" : [
                     {
-                        "id"   : "apps_chartTest",
+                        "id"   : "visualize_setting",
                         "type" : "function",
                         "level": 1,
-                        "name" : "Chart Test",
-                        "tag"  : "CHART TEST,APPS",
-                        "path" : "visualpython - apps - charttest",
-                        "desc" : "Chart Test",
-                        "file" : "m_apps/ChartTest",
+                        "name" : "Setting",
+                        "tag"  : "CHART SETTING,IMPORT CHART,VISUALIZATION,VISUALIZE",
+                        "path" : "visualpython - visualization - chartsetting",
+                        "desc" : "Chart setting",
+                        "file" : "m_visualize/ChartSetting",
                         "apps" : {
-                            "color": 4,
+                            "color": 1,
+                            "icon": "apps/apps_chart.svg"
+                        }
+                    },
+                    {
+                        "id"   : "visualize_chart",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Matplotlib",
+                        "tag"  : "MATPLOTLIB,CHART,VISUALIZATION,VISUALIZE",
+                        "path" : "visualpython - visualization - matplotlib",
+                        "desc" : "Matplotlib chart creation",
+                        "file" : "m_apps/Chart",
+                        "apps" : {
+                            "color": 1,
+                            "icon": "apps/apps_chart.svg"
+                        }
+                    },
+                    {
+                        "id"   : "pd_plot",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Pandas Plot",
+                        "tag"  : "PANDAS PLOT,PANDAS",
+                        "path" : "visualpython - library - pandas - plot",
+                        "desc" : "Pandas plot creation",
+                        "file" : "m_library/m_pandas/plot",
+                        "apps" : {
+                            "color": 1,
+                            "icon": "apps/apps_chart.svg"
+                        }
+                    },
+                    {
+                        "id"   : "visualize_seaborn",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Seaborn",
+                        "tag"  : "SEABORN,CHART,VISUALIZATION,VISUALIZE",
+                        "path" : "visualpython - visualization - seaborn",
+                        "desc" : "Seaborn chart creation",
+                        "file" : "m_visualize/Seaborn",
+                        "apps" : {
+                            "color": 1,
                             "icon": "apps/apps_chart.svg"
                         }
                     }

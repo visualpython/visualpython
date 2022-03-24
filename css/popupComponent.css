@@ -402,3 +402,36 @@
     text-align: center;
     cursor: pointer;
 }
+/* body top-bar */
+.vp-popup-body-top-bar {
+    text-align: right;
+}
+.vp-popup-body-top-bar-item {
+    margin-bottom: 5px;
+}
+.vp-popup-body-top-bar-item:hover {
+    color: var(--font-hightlight);
+}
+.vp-popup-body-top-bar-item img {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 22px; /* Width of new image */
+    height: 22px; /* Height of new image */
+    padding-left: 22px; /* Equal to width of new image */
+    margin-bottom: 5px;
+}
+.vp-popup-body-top-bar-item[data-type="import"] img {
+    background: url(../../visualpython/img/import.svg) no-repeat;
+}  
+.vp-popup-body-top-bar-item[data-type="import"]:hover img {
+    background: url(../../visualpython/img/import_activated.svg) no-repeat;
+}   
+.vp-popup-body-top-bar-item[data-type="package"] {
+    margin-left: 10px;
+}
+.vp-popup-body-top-bar-item[data-type="package"] img {
+    background: url(../../visualpython/img/setting.svg) no-repeat;
+}
+.vp-popup-body-top-bar-item[data-type="package"]:hover img {
+    background: url(../../visualpython/img/setting_activated.svg) no-repeat;
+}

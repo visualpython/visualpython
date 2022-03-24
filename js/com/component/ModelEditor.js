@@ -269,7 +269,7 @@ define([
             let defaultInfos = {
                 'score': {
                     name: 'score',
-                    code: '${model}.score(${featureData}, {targetData})',
+                    code: '${model}.score(${featureData}, ${targetData})',
                     description: '',
                     options: [
                         { name: 'featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'X' },

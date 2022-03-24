@@ -70,18 +70,6 @@ define([
                 { name: 'allocateTo', label: 'Allocate To', component: ['input'], usePair: true }
             ]
         },
-        'ecdfplot': {
-            name: 'Empirical Cumulative Distribution Plot',
-            code: '${allocateTo} = sns.ecdfplot(${data}${x}${y}${hue}${etc})',
-            description: 'Plot empirical cumulative distribution functions.',
-            options: [
-                { name: 'data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'list'], usePair: true },
-                { name: 'x', component: ['col_select'], usePair: true },
-                { name: 'y', component: ['col_select'], usePair: true },
-                { name: 'hue', component: ['col_select'], usePair: true },
-                { name: 'allocateTo', label: 'Allocate To', component: ['input'], usePair: true }
-            ]
-        },
         'rugplot': {
             name: 'Rug Plot',
             code: '${allocateTo} = sns.rugplot(${data}${x}${y}${hue}${etc})',

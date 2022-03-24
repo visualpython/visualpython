@@ -1,30 +1,30 @@
 /*
  *    Project Name    : Visual Python
  *    Description     : GUI-based Python code generator
- *    File Name       : ChartTest.js
+ *    File Name       : Seaborn.js
  *    Author          : Black Logic
- *    Note            : Apps > ChartTest
+ *    Note            : Visualization > Seaborn
  *    License         : GNU GPLv3 with Visual Python special exception
- *    Date            : 2021. 11. 18
+ *    Date            : 2022. 03. 21
  *    Change Date     :
  */
 
 //============================================================================
-// [CLASS] Chart Test
+// [CLASS] Seaborn
 //============================================================================
 define([
-    'text!vp_base/html/m_apps/chartTest.html!strip',
-    'css!vp_base/css/m_apps/chartTest.css',
+    'text!vp_base/html/m_visualize/seaborn.html!strip',
+    'css!vp_base/css/m_visualize/seaborn.css',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_generatorV2',
     'vp_base/js/com/com_util',
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/SuggestInput',
     'vp_base/js/com/component/VarSelector2',
-    'vp_base/data/m_apps/chartLibrary'
+    'vp_base/data/m_visualize/chartLibrary'
 ], function(chartHTml, chartCss, com_String, com_generator, com_util, PopupComponent, SuggestInput, VarSelector2, CHART_LIBRARIES) {
 
-    class ChartTest extends PopupComponent {
+    class Seaborn extends PopupComponent {
         _init() {
             super._init();
 
@@ -287,7 +287,7 @@ define([
             let convertedData = data;
             if (useSampling) {
                 // FIXME: sampling code confirm needed, count confirm
-                convertedData = data + '.sample(n=30, random_state=1)';
+                convertedData = data + '.sample(n=30, random_state=0)';
             }
 
             // replace pre-defined options
@@ -301,5 +301,5 @@ define([
         
     }
 
-    return ChartTest;
+    return Seaborn;
 });
