@@ -17,8 +17,8 @@
     transform:translate(-50%, -50%);
     min-width: 600px;
     min-height: 400px;
-    width: 50%;
-    height: 70%;
+    width: 70%;
+    height: 55%;
     background-color: white;
 }
 
@@ -226,13 +226,18 @@
     border: 1px solid #DDD;
 }
 #vp_fileNavigationInput {
-    width: calc(100% - 170px);
+    width: calc(100% - 220px);
     font-size: 13px;
+    border-radius: 3px;
+    vertical-align: middle;
 }
 #vp_fileNavigationExt {
-    width: 80px;
+    width: 130px;
+    vertical-align: middle;
     color: var(--font-primary);
     font-family: 'AppleSDGothicNeo';
+    font-size: 13px;
+    border-radius: 3px;
 }
 .fileNavigationPage-style-flex-column-center {
     display: flex;

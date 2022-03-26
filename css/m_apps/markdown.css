@@ -42,7 +42,7 @@
 	background-position: center;
 }
 .vp-markdown-editor-toolbar .vp-markdown-editor-toolbar-btn-code {
-	background-image: url(../../img/code-fill.svg);
+	background-image: url(../../img/code.svg);
 	cursor: pointer;
 	display: inline-block;
     width: 20px;

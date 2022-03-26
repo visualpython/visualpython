@@ -139,7 +139,6 @@ define([
             tag.appendFormatLine('<div style="{0}">', 'position: relative;');
             tag.appendFormatLine('<input class="vp-input {0} {1}" type="text" placeholder="Search Attribute"/>', VP_INS_SEARCH, 'attr');
             tag.appendFormatLine('<input class="{0} {1}" type="hidden"/>', VP_INS_TYPE, 'attr');
-            tag.appendFormatLine('<i class="{0} {1}"></i>', 'fa fa-search', 'vp-ins-search-icon');
             tag.appendLine('</div>');
 
             tag.appendFormatLine('<div class="{0} {1}">', VP_INS_SELECT_BOX, 'attr');
@@ -154,7 +153,6 @@ define([
             tag.appendFormatLine('<div style="{0}">', 'position: relative;');
             tag.appendFormatLine('<input class="vp-input {0} {1}" type="text" placeholder="Search Method"/>', VP_INS_SEARCH, 'method');
             tag.appendFormatLine('<input class="{0} {1}" type="hidden"/>', VP_INS_TYPE, 'method');
-            tag.appendFormatLine('<i class="{0} {1}"></i>', 'fa fa-search', 'vp-ins-search-icon');
             tag.appendLine('</div>');
 
             tag.appendFormatLine('<div class="{0} {1}">', VP_INS_SELECT_BOX, 'method');

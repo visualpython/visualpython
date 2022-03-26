@@ -60,6 +60,7 @@
     height: 24px;
     background: #FFFFFF;
     border: 0.25px solid #E4E4E4;
+    border-radius: 3px;
 }
 .vp-cs-select-btn-box button:not(:nth-child(1)) {
     margin-top: 5px;
