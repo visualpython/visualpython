@@ -430,7 +430,6 @@ define([
             tag.appendLine('<div class="vp-icon-btn vp-del-col"></div>');
 
             var varList = this.state.dataList;
-            tag.appendLine(this.templateForConditionVariableInput(varList, this.state.pandasObject, this.state.dataType));
 
             tag.appendLine('<div class="vp-td-line">');
             tag.appendLine(this.templateForConditionColumnInput(colList));
@@ -1330,51 +1329,6 @@ define([
                 that.generateCode();
             });
 
-            // typing on condition variable
-            $(document).on('change var_changed', this.wrapSelector('.vp-ds-cond-tbl .vp-cond-var'), function () {
-                var varType = $(this).attr('data-type');
-                var colTag = $(this).closest('td').find('.vp-col-list');
-                if (varType == 'DataFrame') {
-                    // pd Object selected
-                    var varName = $(this).val();
-                    if (varName == '') {
-                        $(colTag).attr('disabled', true);
-                        $(colTag).replaceWith(function () {
-                            return that.templateForConditionColumnInput([]);
-                        });
-                        that.generateCode();
-                        return;
-                    }
-                    // dataframe column search
-                    var colCode = com_util.formatString('_vp_print(_vp_get_columns_list({0}))', varName);
-                    // get result and load column list
-                    vpKernel.execute(colCode).then(function (resultObj) {
-                        let { result } = resultObj;
-                        var colList = JSON.parse(result);
-                        colList = colList.map(function (x) {
-                            return {
-                                ...x,
-                                value: x.label,
-                                code: x.value
-                            };
-                        });
-                        $(colTag).replaceWith(function () {
-                            return that.templateForConditionColumnInput(colList);
-                        });
-                        $(colTag).attr('disabled', false);
-                        that.generateCode();
-                    });
-                } else {
-                    $(colTag).val('');
-                    $(colTag).attr('placeholder', '');
-                    $(colTag).attr('disabled', true);
-                    $(colTag).replaceWith(function () {
-                        return that.templateForConditionColumnInput([]);
-                    });
-                    that.generateCode();
-                }
-            });
-
             $(document).on('change', this.wrapSelector('.vp-ds-cond-tbl .vp-col-list'), function () {
                 var thisTag = $(this);
                 var varName = $(this).closest('td').find('.vp-cond-var').val();
@@ -1492,8 +1446,8 @@ define([
                 var useCondition = false;
                 for (var i = 0; i < condList.length; i++) {
                     var colTag = $(condList[i]);
-                    var varName = colTag.find('.vp-cond-var').val();
-                    var varType = colTag.find('.vp-cond-var').data('type');
+                    var varName = this.state.pandasObject;
+                    var varType = this.state.dataType;
                     var colName = colTag.find('.vp-col-list').find('option:selected').data('code');
                     colName = colName ? colName : '';
                     var oper = colTag.find('.vp-oper-list').val();

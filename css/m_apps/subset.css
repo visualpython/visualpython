@@ -116,6 +116,9 @@
 .vp-ds-rowtype-box.condition .vp-td-line {
     padding-bottom: 5px;
 }
+.vp-ds-rowtype-box.condition table {
+    width: 100%;
+}
 .vp-ds-rowtype-box.condition table td {
     padding-bottom: 20px;
 }
