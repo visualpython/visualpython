@@ -3088,17 +3088,17 @@
                 "grid" : true,
                 "item" : [
                     {
-                        "id"   : "visualize_setting",
+                        "id"   : "visualize_chartStyle",
                         "type" : "function",
                         "level": 1,
-                        "name" : "Setting",
-                        "tag"  : "CHART SETTING,IMPORT CHART,VISUALIZATION,VISUALIZE",
-                        "path" : "visualpython - visualization - chartsetting",
-                        "desc" : "Chart setting",
+                        "name" : "Chart Style",
+                        "tag"  : "CHART STYLE SETTING,IMPORT CHART,VISUALIZATION,VISUALIZE",
+                        "path" : "visualpython - visualization - chartsstyle",
+                        "desc" : "Chart style setting",
                         "file" : "m_visualize/ChartSetting",
                         "apps" : {
                             "color": 1,
-                            "icon": "apps/apps_chart.svg"
+                            "icon": "apps/apps_style.svg"
                         }
                     },
                     {
