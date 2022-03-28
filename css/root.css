@@ -202,6 +202,28 @@ body {
     cursor: not-allowed;
 }
 
+.vp-checkbox-label {
+    display: inline-block;
+	position: relative;
+    padding-left: 18px;
+	cursor: pointer;
+}
+.vp-checkbox-label span {
+    width: 15px;
+    height: 15px;
+    text-align: center;
+    background: url(../img/checkbox.svg);
+    background-size: 15px 15px;
+    background-repeat: no-repeat;
+    border: none;
+    box-sizing: border-box;
+}
+.vp-checkbox-label input[type=checkbox]:disabled + span {
+    background: url(../img/checkbox_gray.svg);
+}
+.vp-checkbox-label input[type=checkbox]:checked + span {
+    background: url(../img/checkbox_square.svg);
+}
 .vp-checkbox {
     display: inline-block;
     position: relative !important;

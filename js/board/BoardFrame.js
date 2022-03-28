@@ -572,7 +572,9 @@ define([
                     that.tmpState.boardPath = boardPath;
                     $('#vp_boardTitle').val(boardTitle);
 
-                    callback();
+                    if (callback != undefined && typeof callback === 'function') {
+                        callback();
+                    }
                 }
             });
             fileNavi.open();
