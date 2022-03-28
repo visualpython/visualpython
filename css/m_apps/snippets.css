@@ -163,7 +163,7 @@
 .vp-sn-export-mode .vp-sn-item-menu {
     display: none;
 }
-.vp-sn-export-mode input.vp-sn-checkbox {
+.vp-sn-export-mode input[type=checkbox].vp-sn-checkbox {
     display: inline-block;
     position: relative !important;
     width: 13px;
