@@ -402,6 +402,54 @@
     text-align: center;
     cursor: pointer;
 }
+/* variable popup */
+.vp-variable-popup-box {
+    position: absolute;
+    left: calc(50% - 135px);
+    top: calc(50% - 135px);
+    min-width: 370px;
+    min-height: 370px;
+    width: 370px;
+    height: 370px;
+    background-color: white;
+    z-index: 200;
+    border: 0.25px solid var(--border-gray-color);
+    box-shadow: 1px 1px 2px rgb(0 0 0 / 10%);
+}
+.vp-variable-popup-header {
+    position: relative;
+    height: 30px;
+    background: var(--light-gray-color);
+    border-bottom: 1px solid var(--border-gray-color);
+}
+.vp-variable-popup-title {
+    line-height: 33px;
+    width: calc(100% - 30px);
+    height: 30px;
+    padding-left: 10px;
+    font-size: 15px;
+    color: var(--font-primary);
+    cursor: pointer;
+}
+.vp-variable-popup-body {
+    height: calc(100% - 70px);
+    padding: 10px;
+}
+.vp-variable-popup-button-box {
+    float: right;
+    margin: 0 10px 10px 0;
+}
+.vp-variable-popup-close {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 4px;
+    right: 5px;
+    z-index: 3;
+    line-height: 20px;
+    text-align: center;
+    cursor: pointer;
+}
 /* body top-bar */
 .vp-popup-body-top-bar {
     text-align: right;

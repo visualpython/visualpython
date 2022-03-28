@@ -20,6 +20,7 @@ define([
     '../com_String',
     '../com_interface',
     './Component',
+    './DataSelector',
 
     /** codemirror */
     'codemirror/lib/codemirror',
@@ -28,7 +29,7 @@ define([
     'codemirror/addon/display/placeholder',
     'codemirror/addon/display/autorefresh'
 ], function(popupComponentHtml, popupComponentCss
-    , com_util, com_Const, com_String, com_interface, Component, codemirror
+    , com_util, com_Const, com_String, com_interface, Component, DataSelector, codemirror
 ) {
     'use strict';
 
@@ -404,6 +405,16 @@ define([
                         that.handleInnerOk();
                         break;
                 }
+            });
+
+            // focus on data selector input
+            $(this.wrapSelector('.vp-data-selector')).on('focus', function(evt) {
+                
+            });
+
+            // click on data selector input filter
+            $(this.wrapSelector('.vp-data-selector ')).on('click', function(evt) {
+
             });
         }
 
