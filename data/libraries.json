@@ -3102,20 +3102,6 @@
                         }
                     },
                     {
-                        "id"   : "visualize_chart",
-                        "type" : "function",
-                        "level": 1,
-                        "name" : "Matplotlib",
-                        "tag"  : "MATPLOTLIB,CHART,VISUALIZATION,VISUALIZE",
-                        "path" : "visualpython - visualization - matplotlib",
-                        "desc" : "Matplotlib chart creation",
-                        "file" : "m_apps/Chart",
-                        "apps" : {
-                            "color": 1,
-                            "icon": "apps/apps_chart.svg"
-                        }
-                    },
-                    {
                         "id"   : "pd_plot",
                         "type" : "function",
                         "level": 1,
@@ -3124,6 +3110,20 @@
                         "path" : "visualpython - library - pandas - plot",
                         "desc" : "Pandas plot creation",
                         "file" : "m_library/m_pandas/plot",
+                        "apps" : {
+                            "color": 1,
+                            "icon": "apps/apps_chart.svg"
+                        }
+                    },
+                    {
+                        "id"   : "visualize_chart",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Matplotlib",
+                        "tag"  : "MATPLOTLIB,CHART,VISUALIZATION,VISUALIZE",
+                        "path" : "visualpython - visualization - matplotlib",
+                        "desc" : "Matplotlib chart creation",
+                        "file" : "m_apps/Chart",
                         "apps" : {
                             "color": 1,
                             "icon": "apps/apps_chart.svg"
