@@ -118,7 +118,7 @@ define([
                 if (menu == 'import') {
                     let fileNavi = new FileNavigation({
                         type: 'open',
-                        extensions: ['Snippet(*.sn)'],
+                        extensions: ['sn'],
                         finish: function(filesPath, status, error) {
                             // import sn file
                             filesPath.forEach(fileObj => {
@@ -282,7 +282,7 @@ define([
         
                     let fileNavi = new FileNavigation({
                         type: 'save',
-                        extensions: ['Snippet(*.sn)'],
+                        extensions: ['sn'],
                         finish: function(filesPath, status, error) {
                             let fileObj = filesPath[0];
                             var fileName = fileObj.file;

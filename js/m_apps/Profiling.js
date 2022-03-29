@@ -113,7 +113,7 @@ define([
                     case LIST_MENU_ITEM.SAVE:
                         let fileNavi = new FileNavigation({
                             type: 'save',
-                            extensions: ['HTML(*.html)'],
+                            extensions: ['html'],
                             fileName: 'report',
                             finish: function(filesPath, status, error) {
                                 filesPath.forEach( fileObj => {

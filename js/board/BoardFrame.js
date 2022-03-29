@@ -492,7 +492,7 @@ define([
             // open file navigation
             let fileNavi = new FileNavigation({ 
                 type: 'open',
-                extensions: ['VP Note(*.vp)'],
+                extensions: ['vp'],
                 finish: function(filesPath, status, error) {
                     // clear board before open note
                     that.clearBoard();
@@ -554,7 +554,7 @@ define([
             let fileNavi = new FileNavigation({ 
                 type: 'save',
                 fileName: this.tmpState.boardTitle,
-                extensions: ['VP Note(*.vp)'],
+                extensions: ['vp'],
                 finish: function(filesPath, status, error) {
                     let boardTitle = filesPath[0].file;
                     let boardPath = filesPath[0].path;
@@ -661,7 +661,7 @@ define([
             let fileNavi = new FileNavigation({
                 type: 'save',
                 fileName: this.tmpState.boardTitle,
-                extensions: ['Python(*.py)'],
+                extensions: ['py'],
                 finish: function(filesPath, status, error) {
                     let fileName = filesPath[0].file;
                     let filePath = filesPath[0].path;
