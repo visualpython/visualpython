@@ -131,7 +131,7 @@ define([
 
             // model code
             let modelCode = config.code;
-            modelCode = com_generator.vp_codeGenerator(this, config, this.state, userOption);
+            modelCode = com_generator.vp_codeGenerator(this, config, this.state, (userOption != ''? ', ' + userOption : ''));
 
             let allocateToVar = allocateTo;
             if (this.loadTypeList['Load Data'].includes(loadType)) {

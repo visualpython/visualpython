@@ -76,6 +76,7 @@ define([
             let defaultActions = {
                 'fit': {
                     name: 'fit',
+                    label: 'Fit',
                     code: '${model}.fit(${fit_featureData}, ${fit_targetData})',
                     description: 'Perform modeling from features, or distance matrix.',
                     options: [
@@ -85,6 +86,7 @@ define([
                 },
                 'predict': {
                     name: 'predict',
+                    label: 'Predict',
                     code: '${pred_allocate} = ${model}.predict(${pred_featureData})',
                     description: 'Predict the closest target data X belongs to.',
                     options: [
@@ -94,6 +96,7 @@ define([
                 },
                 'predict_proba': {
                     name: 'predict_proba',
+                    label: 'Predict probability',
                     code: '${pred_prob_allocate} = ${model}.predict_proba(${pred_prob_featureData})',
                     description: 'Predict class probabilities for X.',
                     options: [
@@ -103,11 +106,12 @@ define([
                 },
                 'transform': {
                     name: 'transform',
+                    label: 'Transform',
                     code: '${trans_allocate} = ${model}.transform(${trans_featureData})',
                     description: 'Apply dimensionality reduction to X.',
                     options: [
                         { name: 'trans_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'X' },
-                        { name: 'trans_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable' }
+                        { name: 'trans_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', default: 'trans' }
                     ]
                 }
             };
@@ -117,6 +121,7 @@ define([
                     actions = {
                         'fit': {
                             name: 'fit',
+                            label: 'Fit',
                             code: '${model}.fit(${fit_featureData})',
                             description: 'Fit Encoder/Scaler to X.',
                             options: [
@@ -125,6 +130,7 @@ define([
                         },
                         'fit_transform': {
                             name: 'fit_transform',
+                            label: 'Fit and transform',
                             code: '${fit_trans_allocate} = ${model}.fit_transform(${fit_trans_featureData})',
                             description: 'Fit Encoder/Scaler to X, then transform X.',
                             options: [
@@ -138,10 +144,11 @@ define([
                         },
                         'inverse_transform': {
                             name: 'inverse_transform',
+                            label: 'Inverse transform',
                             code: '${inverse_allocate} = ${model}.inverse_transform(${inverse_featureData})',
                             description: 'Transform binary labels back to multi-class labels.',
                             options: [
-                                { name: 'inverse_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'X_train' },
+                                { name: 'inverse_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'X' },
                                 { name: 'inverse_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable' }
                             ]
                         }
@@ -150,7 +157,7 @@ define([
                 case 'Regression':
                     actions = {
                         'fit': defaultActions['fit'],
-                        'predict': defaultActions['predict'],
+                        'predict': defaultActions['predict']
                     }
                     break;
                 case 'Classification':
@@ -164,6 +171,7 @@ define([
                             ...actions,
                             'decision_function': {
                                 name: 'decision_function',
+                                label: 'Decision function',
                                 code: '${dec_allocate} = ${model}.decision_function(${dec_featureData})',
                                 description: 'Compute the decision function of X.',
                                 options: [
@@ -180,8 +188,9 @@ define([
                         'predict': defaultActions['predict'],
                         'fit_predict': {
                             name: 'fit_predict',
+                            label: 'Fit and predict',
                             code: '${fit_pred_allocate} = ${model}.fit_predict(${fit_pred_featureData})',
-                            description: '',
+                            description: 'Fit and predict.',
                             options: [
                                 { name: 'fit_pred_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'X' },
                                 { name: 'fit_pred_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', default: 'pred' }
@@ -197,6 +206,7 @@ define([
                             'fit': defaultActions['fit'],
                             'fit_predict': {
                                 name: 'fit_predict',
+                                label: 'Fit and predict',
                                 code: '${fit_pred_allocate} = ${model}.fit_predict(${fit_pred_featureData})',
                                 description: 'Compute clusters from a data or distance matrix and predict labels.',
                                 options: [
@@ -212,6 +222,7 @@ define([
                         'predict': defaultActions['predict'],
                         'fit_predict': {
                             name: 'fit_predict',
+                            label: 'Fit and predict',
                             code: '${fit_pred_allocate} = ${model}.fit_predict(${fit_pred_featureData})',
                             description: 'Compute cluster centers and predict cluster index for each sample.',
                             options: [
@@ -225,20 +236,22 @@ define([
                             ...actions,
                             'fit_transform': {
                                 name: 'fit_transform',
+                                label: 'Fit and transform',
                                 code: '${fit_trans_allocate} = ${model}.fit_transform(${fit_trans_featureData})',
                                 description: 'Compute clustering and transform X to cluster-distance space.', 
                                 options: [
                                     { name: 'fit_trans_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'X_train' },
-                                    { name: 'fit_trans_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable' }
+                                    { name: 'fit_trans_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', default: 'trans' }
                                 ]
                             },
                             'transform': {
                                 name: 'transform',
+                                label: 'Transform',
                                 code: '${trans_allocate} = ${model}.transform(${trans_featureData})',
                                 description: 'Transform X to a cluster-distance space.',
                                 options: [
                                     { name: 'trans_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'X' },
-                                    { name: 'trans_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable' }
+                                    { name: 'trans_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', default: 'trans' }
                                 ]
                             }
                         }
@@ -250,11 +263,12 @@ define([
                             'fit': defaultActions['fit'],
                             'fit_transform': {
                                 name: 'fit_transform',
+                                label: 'Fit and transform',
                                 code: '${fit_trans_allocate} = ${model}.fit_transform(${fit_trans_featureData})',
                                 description: 'Fit X into an embedded space and return that transformed output.', 
                                 options: [
                                     { name: 'fit_trans_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'X_train' },
-                                    { name: 'fit_trans_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable' }
+                                    { name: 'fit_trans_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', default: 'trans' }
                                 ]
                             }
                         }
@@ -275,38 +289,28 @@ define([
             let defaultInfos = {
                 'score': {
                     name: 'score',
+                    label: 'Score',
                     code: '${score_allocate} = ${model}.score(${score_featureData}, ${score_targetData})',
                     description: '',
                     options: [
                         { name: 'score_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'X' },
                         { name: 'score_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'y' },
-                        { name: 'score_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable' }
-                    ]
-                },
-                'cross_val_score': {
-                    name: 'cross_val_score',
-                    import: 'from sklearn.model_selection import cross_val_score',
-                    code: '${cvs_allocate} = cross_val_score(${model}, ${cvs_featureData}, ${cvs_targetData}${scoring}${cv})',
-                    description: 'Evaluate a score by cross-validation.',
-                    options: [
-                        { name: 'cvs_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'X' },
-                        { name: 'cvs_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'y' },
-                        { name: 'scoring', component: ['input'], usePair: true },
-                        { name: 'cv', component: ['input'], usePair: true },
-                        { name: 'cvs_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable' }
+                        { name: 'score_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', default: 'scores' }
                     ]
                 },
                 'get_params': {
                     name: 'get_params',
-                    code: '${allocateParam} = ${model}.get_params(${deep})',
+                    label: 'Get parameters',
+                    code: '${param_allocate} = ${model}.get_params(${deep})',
                     description: 'Get parameters for this estimator.',
                     options: [
                         { name: 'deep', component: ['bool_select'], default: 'True', usePair: true },
-                        { name: 'allocateParam', component: ['input'] }
+                        { name: 'param_allocate', label: 'Allocate to', component: ['input'], default: 'params' }
                     ]  
                 },
                 'permutation_importance': {
                     name: 'permutation_importance',
+                    label: 'Permutation importance',
                     import: 'from sklearn.inspection import permutation_importance',
                     code: '${importance_allocate} = permutation_importance(${model}, ${importance_featureData}, ${importance_targetData}${scoring}${random_state}${etc})',
                     description: 'Permutation importance for feature evaluation.',
@@ -315,13 +319,62 @@ define([
                         { name: 'importance_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'y_train' },
                         { name: 'scoring', component: ['input'], usePair: true },
                         { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true },
-                        { name: 'importance_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable' }
+                        { name: 'importance_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', default: 'importances' }
                     ]
                 }
             }
             switch (category) {
                 case 'Data Preparation':
+                    if (modelType == 'OneHotEncoder') {
+                        infos = {
+                            'categories_': { // TODO:
+                                name: 'categories_',
+                                label: 'Categories',
+                                code: '${categories_allocate} = ${model}.categories_',
+                                description: 'The categories of each feature determined during fitting',
+                                options: [
+                                    { name: 'categories_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', default: 'categories' }
+                                ]
+                            },
+                            'get_feature_names_out': {
+                                name: 'get_feature_names_out',
+                                label: 'Get feature names',
+                                code: '${feature_names_allocate} = ${model}.get_feature_names_out()',
+                                description: 'Get output feature names.',
+                                options: [
+                                    { name: 'feature_names_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', default: 'features' }
+                                ]
+                            }
+                        }
+                    }
+                    if (modelType == 'LabelEncoder') {
+                        infos = {
+                            'classes_': {
+                                name: 'classes_',
+                                label: 'Classes',
+                                code: '${classes_allocate} = ${model}.classes_',
+                                description: 'Holds the label for each class.',
+                                options: [
+                                    { name: 'classes_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', default: 'classes' }
+                                ]
+                            }
+                        }
+                    }
+                    if (modelType == 'KBinsDiscretizer') {
+                        infos = {
+                            'bin_edges': { // TODO:
+                                name: 'bin_edges',
+                                label: 'Bin edges',
+                                code: '${bin_edges_allocate} = ${model}.bin_edges_',
+                                description: 'The edges of each bin. Contain arrays of varying shapes',
+                                options: [
+                                    { name: 'bin_edges_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', default: 'bin_edges' }
+                                ]
+                            }
+                        }
+                    }
                     infos = {
+                        ...infos,
                         'get_params': defaultInfos['get_params']
                     }
                     break;
@@ -331,20 +384,43 @@ define([
                             ...defaultInfos['score'],
                             description: 'Return the coefficient of determination of the prediction.'
                         },
-                        'cross_val_score': defaultInfos['cross_val_score'],
+                        'cross_val_score': {
+                            name: 'cross_val_score',
+                            label: 'Cross validation score',
+                            import: 'from sklearn.model_selection import cross_val_score',
+                            code: '${cvs_allocate} = cross_val_score(${model}, ${cvs_featureData}, ${cvs_targetData}${scoring}${cv})',
+                            description: 'Evaluate a score by cross-validation.',
+                            options: [
+                                { name: 'cvs_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'X' },
+                                { name: 'cvs_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'y' },
+                                { name: 'scoring', component: ['option_select'], usePair: true, type: 'text',
+                                    options: [
+                                        '',
+                                        'explained_variance', 'max_error', 'neg_mean_absolute_error', 'neg_mean_squared_error', 'neg_root_mean_squared_error',
+                                        'neg_mean_squared_log_error', 'neg_median_absolute_error', 'r2', 'neg_mean_poisson_deviance', 'neg_mean_gamma_deviance',
+                                        'neg_mean_absolute_percentage_error'
+                                    ] },
+                                { name: 'cv', label: 'Cross Validation', component: ['input_number'], placeholder: '1 ~ 10', default: 5, usePair: true },
+                                { name: 'cvs_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', default: 'scores' }
+                            ]
+                        },
                         'permutation_importance': defaultInfos['permutation_importance'],
                         'Coefficient': {
-                            name: 'Coefficient',
+                            name: 'coef_',
+                            label: 'Coefficient',
                             code: '${coef_allocate} = ${model}.coef_',
+                            description: 'Weights assigned to the features.',
                             options: [
-                                { name: 'coef_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable' }
+                                { name: 'coef_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', default: 'coef' }
                             ]
                         },
                         'Intercept': {
-                            name: 'Intercept',
+                            name: 'intercept_',
+                            label: 'Intercept',
                             code: '${intercept_allocate} = ${model}.intercept_',
+                            description: 'Constants in decision function.',
                             options: [
-                                { name: 'intercept_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable' }
+                                { name: 'intercept_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', default: 'intercepts' }
                             ]
                         }
                     }
@@ -355,7 +431,26 @@ define([
                             ...defaultInfos['score'],
                             description: 'Return the mean accuracy on the given test data and labels.'
                         },
-                        'cross_val_score': defaultInfos['cross_val_score'],
+                        'cross_val_score': {
+                            name: 'cross_val_score',
+                            label: 'Cross validation score',
+                            import: 'from sklearn.model_selection import cross_val_score',
+                            code: '${cvs_allocate} = cross_val_score(${model}, ${cvs_featureData}, ${cvs_targetData}${scoring}${cv})',
+                            description: 'Evaluate a score by cross-validation.',
+                            options: [
+                                { name: 'cvs_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'X' },
+                                { name: 'cvs_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'y' },
+                                { name: 'scoring', component: ['option_select'], usePair: true, type: 'text', 
+                                    options: [
+                                        '',
+                                        'accuracy', 'balanced_accuracy', 'top_k_accuracy', 'average_precision', 'neg_brier_score',
+                                        'f1', 'f1_micro', 'f1_macro', 'f1_weighted', 'f1_samples', 'neg_log_loss', 'precision', 'recall', 'jaccard', 
+                                        'roc_auc', 'roc_auc_ovr', 'roc_auc_ovo', 'roc_auc_ovr_weighted', 'roc_auc_ovo_weighted'
+                                    ] },
+                                { name: 'cv', label: 'Cross Validation', component: ['input_number'], placeholder: '1 ~ 10', default: 5, usePair: true },
+                                { name: 'cvs_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', default: 'scores' }
+                            ]
+                        },
                         'permutation_importance': defaultInfos['permutation_importance']
                     }
                     break;
@@ -384,10 +479,11 @@ define([
                             ...infos,
                             'cluster_centers_': {
                                 name: 'cluster_centers',
+                                label: 'Cluster centers',
                                 code: '${centers_allocate} = ${model}.cluster_centers_',
                                 description: 'Coordinates of cluster centers.', 
                                 options: [
-                                    { name: 'centers_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable' }
+                                    { name: 'centers_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', default: 'cluster_centers' }
                                 ]
                             }
                         }
@@ -397,11 +493,12 @@ define([
                         infos = {
                             ...infos,
                             'Dendrogram': { // FIXME:
-                                name: 'Dendrogram',
+                                name: 'dendrogram',
+                                label: 'Dendrogram',
                                 code: "# import\nfrom scipy.cluster.hierarchy import dendrogram, ward\n\nlinkage_array = ward(${dendro_data})\ndendrogram(linkage_array, p=3, truncate_mode='level', no_labels=True)\nplt.show()",
                                 description: 'Draw a dendrogram',
                                 options: [
-                                    { name: 'dendro_data', label: 'Data', component: ['var_select'], var_type: ['DataFrame']}
+                                    { name: 'dendro_data', label: 'Data', component: ['var_select'], var_type: ['DataFrame'] }
                                 ]
                             }
                         }
@@ -412,10 +509,11 @@ define([
                         infos = {
                             'explained_variance_ratio_': {
                                 name: 'explained_variance_ratio_',
+                                label: 'Explained variance ratio',
                                 code: '${ratio_allocate} = ${model}.explained_variance_ratio_',
                                 description: 'Percentage of variance explained by each of the selected components.',
                                 options: [
-                                    { name: 'ratio_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable' }
+                                    { name: 'ratio_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', default: 'ratio' }
                                 ]
                             }
                         }
@@ -449,7 +547,7 @@ define([
             tag.appendLine('</div>'); // VP_INS_SELECT_CONTAINER
 
             tag.appendFormatLine('<div class="{0} {1}">', VP_INS_SELECT_CONTAINER, 'info');
-            tag.appendFormatLine('<div class="vp-multilang {0}">Info</div>', VP_INS_SELECT_TITLE);
+            tag.appendFormatLine('<div class="vp-multilang {0}">Information</div>', VP_INS_SELECT_TITLE);
 
             tag.appendFormatLine('<div style="{0}">', 'position: relative;');
             tag.appendFormatLine('<input class="vp-input {0} {1}" type="text" placeholder="Search Info"/>', VP_INS_SEARCH, 'method');
@@ -488,12 +586,20 @@ define([
             var infoListTag = new com_String();
             
             Object.keys(actions).forEach(actKey => {
+                let titleText = actions[actKey].description;
+                if (actions[actKey].name != actions[actKey].label) {   
+                    titleText = actions[actKey].name + ': ' + titleText;
+                }
                 actListTag.appendFormatLine('<li class="{0}" data-var-name="{1}" data-var-type="{2}" title="{3}">{4}</li>',
-                VP_INS_SELECT_ITEM, actKey, 'action', actions[actKey].description, actKey);
+                VP_INS_SELECT_ITEM, actKey, 'action', titleText, actions[actKey].label);
             });
             Object.keys(infos).forEach(infoKey => {
+                let titleText = infos[infoKey].description;
+                if (infos[infoKey].name != infos[infoKey].label) {   
+                    titleText = infos[infoKey].name + ': ' + titleText;
+                }
                 infoListTag.appendFormatLine('<li class="{0}" data-var-name="{1}" data-var-type="{2}" title="{3}">{4}</li>',
-                VP_INS_SELECT_ITEM, infoKey, 'info', infos[infoKey].description, infoKey);
+                VP_INS_SELECT_ITEM, infoKey, 'info', titleText, infos[infoKey].label);
             });
             
             $(this.wrapSelector('.' + VP_INS_SELECT_LIST + '.action')).html(actListTag.toString());
@@ -624,6 +730,14 @@ define([
                 modelCode = modelCode.replace(key, replaceDict[key]);
             });
             code.append(modelCode);
+
+            let allocateIdx = modelCode.indexOf(' = ');
+            if (allocateIdx >= 0) {
+                let allocateCode = modelCode.substr(0, allocateIdx);
+                code.appendLine();
+                code.append(allocateCode);
+            }
+
             return code.toString();
         }
     }

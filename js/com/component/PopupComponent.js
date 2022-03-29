@@ -759,6 +759,7 @@ define([
          */
         openView(viewType) {
             if (viewType == 'code') {
+                this.saveState();
                 var code = this.generateCode();
                 let codeText = '';
                 if (Array.isArray(code)) {

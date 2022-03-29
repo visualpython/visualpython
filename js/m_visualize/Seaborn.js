@@ -282,7 +282,7 @@ define([
             let code = new com_String();
             let config = this.chartConfig[chartType];
 
-            let chartCode = com_generator.vp_codeGenerator(this, config, this.state, userOption);
+            let chartCode = com_generator.vp_codeGenerator(this, config, this.state, (userOption != ''? ', ' + userOption : ''));
 
             let convertedData = data;
             if (useSampling) {

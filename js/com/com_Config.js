@@ -501,7 +501,9 @@ define([
             /** Encoding */
             'OneHotEncoder', 'LabelEncoder', 'OrdinalEncoder', 'TargetEncoder', 'SMOTE',
             /** Scaling */
-            'StandardScaler', 'RobustScaler', 'MinMaxScaler', 'Normalizer', 'FunctionTransformer', 'PolynomialFeatures'
+            'StandardScaler', 'RobustScaler', 'MinMaxScaler', 'Normalizer', 'FunctionTransformer', 'PolynomialFeatures', 'KBinsDiscretizer',
+            /** ETC */
+            'ColumnTransformer'
         ]
     };
 

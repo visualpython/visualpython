@@ -51,7 +51,8 @@ define([
 
             this.modelTypeList = {
                 'Encoding': ['prep-onehot', 'prep-label', 'prep-ordinal', 'prep-target', 'prep-smote'],
-                'Scaling': ['prep-standard', 'prep-robust', 'prep-minmax', 'prep-normalizer', 'prep-func-trsfrm-log', 'prep-func-trsfrm-exp', 'prep-poly-feat']
+                'Scaling': ['prep-standard', 'prep-robust', 'prep-minmax', 'prep-normalizer', 'prep-func-trsfrm-log', 'prep-func-trsfrm-exp', 'prep-poly-feat', 'prep-kbins-discretizer'],
+                'ETC': ['make-column-transformer']
             }
 
 
@@ -69,7 +70,7 @@ define([
                 $(that.wrapSelector(`.vp-model-box[data-type="${modelControlType}"]`)).show();
             });
 
-            // select model
+            // select model type
             $(this.wrapSelector('#modelType')).on('change', function() {
                 let modelType = $(this).val();
                 that.state.modelType = modelType;
@@ -212,21 +213,25 @@ define([
         templateForOption(modelType) {
             let config = this.modelConfig[modelType];
             let state = this.state;
-
             let optBox = new com_String();
-            // render tag
-            config.options.forEach(opt => {
-                optBox.appendFormatLine('<label for="{0}" title="{1}">{2}</label>'
-                    , opt.name, opt.name, com_util.optionToLabel(opt.name));
-                let content = com_generator.renderContent(this, opt.component[0], opt, state);
-                optBox.appendLine(content[0].outerHTML);
-            });
-            // show user option
-            if (config.code.includes('${etc}')) {
-                // render user option
-                optBox.appendFormatLine('<label for="{0}">{1}</label>', 'userOption', 'User option');
-                optBox.appendFormatLine('<input type="text" class="vp-input vp-state" id="{0}" placeholder="{1}" value="{2}"/>',
-                                            'userOption', 'key=value, ...', this.state.userOption);
+            if (modelType == 'make-column-transformer') {
+                // render tag
+                optBox.append('Test'); // TODO:
+            } else {
+                // render tag
+                config.options.forEach(opt => {
+                    optBox.appendFormatLine('<label for="{0}" title="{1}">{2}</label>'
+                        , opt.name, opt.name, com_util.optionToLabel(opt.name));
+                    let content = com_generator.renderContent(this, opt.component[0], opt, state);
+                    optBox.appendLine(content[0].outerHTML);
+                });
+                // show user option
+                if (config.code.includes('${etc}')) {
+                    // render user option
+                    optBox.appendFormatLine('<label for="{0}">{1}</label>', 'userOption', 'User option');
+                    optBox.appendFormatLine('<input type="text" class="vp-input vp-state" id="{0}" placeholder="{1}" value="{2}"/>',
+                                                'userOption', 'key=value, ...', this.state.userOption);
+                }
             }
             return optBox.toString();
         }
@@ -254,7 +259,7 @@ define([
     
                 // model code
                 let modelCode = config.code;
-                modelCode = com_generator.vp_codeGenerator(this, config, this.state, userOption);
+                modelCode = com_generator.vp_codeGenerator(this, config, this.state, (userOption != ''? ', ' + userOption : ''));
                 code.appendFormat('{0} = {1}', allocateToCreation, modelCode);                
             } else {
                 /**

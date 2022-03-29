@@ -214,7 +214,11 @@ define([
         let content = '';
         let value = state[obj.name];
         if (value == undefined) {
-            value = '';
+            if (obj.default != undefined) {
+                value = obj.default;
+            } else {
+                value = '';
+            }
         } else {
             obj.value = value;
         }
@@ -269,6 +273,13 @@ define([
                                 'selected':'selected'
                             });
                         }
+                    } else {
+                        // set default value
+                        if (value == opt.default) {
+                            $(option).attr({
+                                'selected':'selected'
+                            });
+                        }
                     }
                     optSlct.append(option);
                 });
@@ -306,27 +317,19 @@ define([
                 break;
             case 'option_suggest':
                 // suggest input tag
-                var tag = $('<input/>').attr({
-                    'type': 'text',
-                    'id': obj.name,
-                    'class': 'vp-input vp-state'
-                });
                 // 1. Target Variable
                 var suggestInput = new SuggestInput();
                 suggestInput.setComponentID(obj.name);
                 suggestInput.addClass('vp-input vp-state');
                 suggestInput.setSuggestList(function() { return obj.options; });
-                suggestInput.setNormalFilter(false);
+                suggestInput.setNormalFilter(true);
                 suggestInput.setValue(value);
                 suggestInput.setSelectEvent(function(selectedValue) {
                     // trigger change
                     $(pageThis.wrapSelector('#' + obj.name)).val(selectedValue);
                     $(pageThis.wrapSelector('#' + obj.name)).trigger('change');
                 });
-                $(pageThis.wrapSelector('#' + obj.name)).replaceWith(function() {
-                    return suggestInput.toTagString();
-                });
-                content = tag;
+                content = $(suggestInput.toTagString());
                 break;
             case 'var_select':
                 // suggest input tag
@@ -419,6 +422,9 @@ define([
     var vp_generateVarSuggestInput = function(divTag, obj) {
         var types = obj.var_type;
         var defaultValue = obj.value;
+        if (obj.value == undefined && obj.default != undefined) {
+            defaultValue = obj.default;
+        }
 
         if (types == undefined) {
             types = [];
@@ -539,7 +545,6 @@ define([
                 value = value.substr(0, value.length-1);
                 break;
             case 'input_multi':
-            case 'input_number':
             case 'option_suggest':
             case 'bool_select':
             case 'var_select':
@@ -551,6 +556,7 @@ define([
             case 'table':
             case 'file':
             case 'option_select':
+            case 'input_number':
             default:
                 var input = $(pageThis.wrapSelector('#'+obj.name)).val();
                 // same as default
@@ -577,7 +583,7 @@ define([
                     val = vp_getTagValue(pageThis, v);
                 }
                 var id = '${' + v.name + '}';
-                if (val == undefined || val.trim() == ''){
+                if (val == undefined || val.trim() == '') {
                     if (v.required == true) {
                         // throw new Error("'" + v.label + "' is required.");
                     }
