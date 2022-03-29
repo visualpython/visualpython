@@ -250,7 +250,7 @@ define([
     
                 // model code
                 let modelCode = config.code;
-                modelCode = com_generator.vp_codeGenerator(this, config, this.state, userOption);
+                modelCode = com_generator.vp_codeGenerator(this, config, this.state, (userOption != ''? ', ' + userOption : ''));
                 code.appendFormat('{0} = {1}', allocateToCreation, modelCode);                
             } else {
                 /**

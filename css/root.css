@@ -129,13 +129,17 @@ body {
 }
 
 /* Input & Select Design - width m&s */
+.vp-input.l,
+.vp-select.l {
+    width: 232px !important;
+}
 .vp-input.m,
 .vp-select.m {
-    width: 116px;
+    width: 116px !important;
 }
 .vp-input.s,
 .vp-select.s {
-    width: 55px;
+    width: 55px !important;
 }
 
 /* Buttons */
@@ -197,7 +201,6 @@ body {
     color: #696969;
     cursor: not-allowed;
 }
-
 .vp-checkbox {
     display: inline-block;
     position: relative !important;

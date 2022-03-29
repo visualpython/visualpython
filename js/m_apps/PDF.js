@@ -73,7 +73,7 @@ nltk.download('punkt')`;
             $(this.wrapSelector('#vp_openFileNavigationBtn')).on('click', function() {
                 let fileNavi = new FileNavigation({
                     type: 'open',
-                    extensions: ['PDF(*.pdf)'],
+                    extensions: ['pdf'],
                     finish: function(filesPath, status, error) {
                         let pathList = filesPath.map(obj => obj.path);
                         let pathStr = "'" + pathList.join("', '") + "'";

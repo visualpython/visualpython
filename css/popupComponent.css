@@ -402,3 +402,84 @@
     text-align: center;
     cursor: pointer;
 }
+/* variable popup */
+.vp-variable-popup-box {
+    position: absolute;
+    left: calc(50% - 135px);
+    top: calc(50% - 135px);
+    min-width: 370px;
+    min-height: 370px;
+    width: 370px;
+    height: 370px;
+    background-color: white;
+    z-index: 200;
+    border: 0.25px solid var(--border-gray-color);
+    box-shadow: 1px 1px 2px rgb(0 0 0 / 10%);
+}
+.vp-variable-popup-header {
+    position: relative;
+    height: 30px;
+    background: var(--light-gray-color);
+    border-bottom: 1px solid var(--border-gray-color);
+}
+.vp-variable-popup-title {
+    line-height: 33px;
+    width: calc(100% - 30px);
+    height: 30px;
+    padding-left: 10px;
+    font-size: 15px;
+    color: var(--font-primary);
+    cursor: pointer;
+}
+.vp-variable-popup-body {
+    height: calc(100% - 70px);
+    padding: 10px;
+}
+.vp-variable-popup-button-box {
+    float: right;
+    margin: 0 10px 10px 0;
+}
+.vp-variable-popup-close {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 4px;
+    right: 5px;
+    z-index: 3;
+    line-height: 20px;
+    text-align: center;
+    cursor: pointer;
+}
+/* body top-bar */
+.vp-popup-body-top-bar {
+    text-align: right;
+}
+.vp-popup-body-top-bar-item {
+    margin-bottom: 5px;
+}
+.vp-popup-body-top-bar-item:hover {
+    color: var(--font-hightlight);
+}
+.vp-popup-body-top-bar-item img {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 22px; /* Width of new image */
+    height: 22px; /* Height of new image */
+    padding-left: 22px; /* Equal to width of new image */
+    margin-bottom: 5px;
+}
+.vp-popup-body-top-bar-item[data-type="import"] img {
+    background: url(../../visualpython/img/import.svg) no-repeat;
+}  
+.vp-popup-body-top-bar-item[data-type="import"]:hover img {
+    background: url(../../visualpython/img/import_activated.svg) no-repeat;
+}   
+.vp-popup-body-top-bar-item[data-type="package"] {
+    margin-left: 10px;
+}
+.vp-popup-body-top-bar-item[data-type="package"] img {
+    background: url(../../visualpython/img/setting.svg) no-repeat;
+}
+.vp-popup-body-top-bar-item[data-type="package"]:hover img {
+    background: url(../../visualpython/img/setting_activated.svg) no-repeat;
+}

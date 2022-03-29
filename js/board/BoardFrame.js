@@ -492,7 +492,7 @@ define([
             // open file navigation
             let fileNavi = new FileNavigation({ 
                 type: 'open',
-                extensions: ['VP Note(*.vp)'],
+                extensions: ['vp'],
                 finish: function(filesPath, status, error) {
                     // clear board before open note
                     that.clearBoard();
@@ -508,19 +508,23 @@ define([
                 
                         file.text().then(function(data) {
                             // var parsedData = decodeURIComponent(data);
-                            var jsonList = JSON.parse(data);
-                            // load blocks
-                            that.jsonToBlock(jsonList);
-
-                            var indexVp = vpFileName.indexOf('.vp');
-                            var saveFileName = vpFileName.slice(0,indexVp);
-            
-                            // show title of board and path
-                            $('#vp_boardTitle').val(saveFileName);
-                            that.tmpState.boardTitle = saveFileName;
-                            that.tmpState.boardPath = vpFilePath;
-
-                            com_util.renderSuccessMessage('Successfully opened file. (' + vpFileName + ')');
+                            try {
+                                var jsonList = JSON.parse(data);
+                                // load blocks
+                                that.jsonToBlock(jsonList);
+    
+                                var indexVp = vpFileName.indexOf('.vp');
+                                var saveFileName = vpFileName.slice(0,indexVp);
+                
+                                // show title of board and path
+                                $('#vp_boardTitle').val(saveFileName);
+                                that.tmpState.boardTitle = saveFileName;
+                                that.tmpState.boardPath = vpFilePath;
+    
+                                com_util.renderSuccessMessage('Successfully opened file. (' + vpFileName + ')');
+                            } catch (ex) {
+                                com_util.renderAlertModal('Not applicable file contents with vp format! (JSON)');
+                            }
                         });
                     });
                 }
@@ -550,7 +554,7 @@ define([
             let fileNavi = new FileNavigation({ 
                 type: 'save',
                 fileName: this.tmpState.boardTitle,
-                extensions: ['VP Note(*.vp)'],
+                extensions: ['vp'],
                 finish: function(filesPath, status, error) {
                     let boardTitle = filesPath[0].file;
                     let boardPath = filesPath[0].path;
@@ -568,7 +572,9 @@ define([
                     that.tmpState.boardPath = boardPath;
                     $('#vp_boardTitle').val(boardTitle);
 
-                    callback();
+                    if (callback != undefined && typeof callback === 'function') {
+                        callback();
+                    }
                 }
             });
             fileNavi.open();
@@ -655,7 +661,7 @@ define([
             let fileNavi = new FileNavigation({
                 type: 'save',
                 fileName: this.tmpState.boardTitle,
-                extensions: ['Python(*.py)'],
+                extensions: ['py'],
                 finish: function(filesPath, status, error) {
                     let fileName = filesPath[0].file;
                     let filePath = filesPath[0].path;

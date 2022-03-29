@@ -1,0 +1,86 @@
+<body>
+    <div class="vp-grid-col-p50" style="height:270px;">
+        <!-- Chart & Data Selection Box-->
+        <div class="vp-chart-left-box">
+            <div class="vp-bold">
+                Chart Type
+                <span id="chartSetting" class="vp-chart-setting vp-no-selection">
+                    <i class="fa fa-gear"></i> Setting
+                </span>
+            </div>
+            <div class="vp-grid-border-box vp-grid-col-95">
+                <label for="chartType" class="vp-orange-text">Type of Chart</label>
+                <select id="chartType" class="vp-select vp-state">
+
+                </select>
+            </div>
+            <div class="vp-bold">Data Selection</div>
+            <div class="vp-grid-border-box vp-grid-col-95">
+                <label for="data" class="vp-orange-text">Variable</label>
+                <input type="text" id="data" class="vp-input vp-state" />
+                <label for="x" class="vp-orange-text">X Value</label>
+                <select id="x" class="vp-select">
+
+                </select>
+                <label for="y" class="vp-orange-text">Y Value</label>
+                <select id="y" class="vp-select">
+
+                </select>
+            </div>
+        </div>
+        <!-- Tab Option Box -->
+        <div class="vp-chart-right-box">
+            <div class="vp-tab-bar">
+                <div class="vp-tab-item vp-focus" data-type="info">Info</div>
+                <div class="vp-tab-item" data-type="element">Element</div>
+                <div class="vp-tab-item" data-type="figure">Figure</div>
+            </div>
+            <div class="vp-tab-page-box vp-grid-border-box vp-scrollbar">
+                <div class="vp-tab-page vp-grid-col-95" data-type="info">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" class="vp-input vp-state" placeholder="Title for the chart" />
+                    <label for="x_label">X Label</label>
+                    <input type="text" id="x_label" class="vp-input vp-state" placeholder="X Label" />
+                    <label for="y_label">Y Label</label>
+                    <input type="text" id="y_label" class="vp-input vp-state" placeholder="Y Label" />
+                    <label for="x_limit_from">X Limit</label>
+                    <div class="vp-grid-col-p50">
+                        <input type="text" id="x_limit_from" class="vp-input m vp-state" placeholder="From" />
+                        <input type="text" id="x_limit_to" class="vp-input m vp-state placeholder="To" />
+                    </div>
+                    <label for="y_limit_from">Y Limit</label>
+                    <div class="vp-grid-col-p50">
+                        <input type="text" id="y_limit_from" class="vp-input m vp-state" placeholder="From" />
+                        <input type="text" id="y_limit_to" class="vp-input m vp-state" placeholder="To" />
+                    </div>
+                    <label for="useLegend">Legend</label>
+                    <div class="vp-grid-col-p50">
+                        <select id="useLegend" class="vp-select m vp-state">
+                            <option value="False">False</option>
+                            <option value="True">True</option>
+                        </select>
+                        <select id="legendPos" class="vp-select m vp-state">
+                            <!-- Legend Position FIXME: -->
+
+                        </select>
+                    </div>
+                </div>
+                <div class="vp-tab-page vp-grid-col-95" data-type="element" style="display: none;">
+                    ELEMENT
+                </div>
+                <div class="vp-tab-page vp-grid-col-95" data-type="figure" style="display: none;">
+                    FIGURE
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="vp-bold">Chart Preview <button id="previewTest" class="vp-button activated">Preview Test</button></div>
+        <div class="vp-chart-preview-box vp-grid-border-box">
+            <span></span>
+            <div id="chartPreview" class="vp-center">
+
+            </div>
+        </div>
+    </div>
+</body>

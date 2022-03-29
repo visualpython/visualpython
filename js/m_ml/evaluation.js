@@ -216,7 +216,7 @@ define([
                     code = new com_String();
                     code.appendLine("# MAPE(Mean Absolute Percentage Error)");
                     code.appendLine('def MAPE(y_test, y_pred):');
-                    code.appendLine('   return np.mean(np.abs((y_test - pred) / y_test)) * 100');
+                    code.appendLine('    return np.mean(np.abs((y_test - pred) / y_test)) * 100');
                     code.appendLine();
                     code.appendFormat('MAPE({0}, {1})', targetData, predictData);
                     codeCells.push(code.toString());

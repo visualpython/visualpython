@@ -1,0 +1,43 @@
+.vp-chart-setting {
+    float: right;
+    color: var(--gray-color);
+    padding-right: 5px;
+    cursor: pointer;
+}
+.vp-tab-bar {
+    width: 100%;
+    overflow-y: hidden;
+}
+.vp-tab-item {
+    display: inline-block;
+    position: relative;
+    width: 85px;
+    height: 30px;
+    line-height: 30px;
+    background: var(--light-gray-color);
+    cursor: pointer;
+    border: 0.24px solid #E4E4E4;
+    box-sizing: border-box;
+    border-radius: 2px 2px 0px 0px;
+    font-weight: bold;
+    text-align: center;
+}
+.vp-tab-item.vp-focus {
+    color: var(--font-hightlight);
+    background: white;
+    border-bottom: 3px solid #FFCF73;
+}
+.vp-tab-page {
+    width: 100%;
+    height: 180px;
+}
+
+.vp-chart-left-box, 
+.vp-chart-right-box {
+    padding: 3px;
+    height: 250px;
+}
+
+.vp-chart-preview-box {
+    min-height: 150px;
+}

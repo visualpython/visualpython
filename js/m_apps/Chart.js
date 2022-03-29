@@ -122,7 +122,7 @@ define([
             $(this.wrapSelector('#vp_openFileNavigationBtn')).click(function() {
                 let fileNavi = new FileNavigation({
                     type: 'save',
-                    extensions: ['PNG(*.png)'],
+                    extensions: ['png'],
                     finish: function(filesPath, status, error) {
                         if (filesPath.length > 0) {
                             let { file, path } = filesPath[0];
