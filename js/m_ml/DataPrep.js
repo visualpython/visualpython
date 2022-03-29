@@ -21,8 +21,9 @@ define([
     'vp_base/data/m_ml/mlLibrary',
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/VarSelector2',
-    'vp_base/js/com/component/ModelEditor'
-], function(msHtml, com_util, com_interface, com_String, com_generator, ML_LIBRARIES, PopupComponent, VarSelector2, ModelEditor) {
+    'vp_base/js/com/component/ModelEditor',
+    'vp_base/js/com/component/MultiSelector'
+], function(msHtml, com_util, com_interface, com_String, com_generator, ML_LIBRARIES, PopupComponent, VarSelector2, ModelEditor, MultiSelector) {
 
     /**
      * DataPrep
@@ -47,6 +48,12 @@ define([
                 ...this.state
             }
 
+            this.popup = {
+                type: '',
+                targetSelector: '',
+                colSelector: undefined // multi column selector
+            }
+
             this.modelConfig = ML_LIBRARIES;
 
             this.modelTypeList = {
@@ -55,6 +62,10 @@ define([
                 'ETC': ['make-column-transformer']
             }
 
+            this.mctEstimator = {
+                'Encoding': ['prep-onehot', 'prep-label', 'prep-ordinal', 'prep-target', 'prep-smote'],
+                'Scaling': ['prep-standard', 'prep-robust', 'prep-minmax', 'prep-normalizer', 'prep-func-trsfrm-log', 'prep-func-trsfrm-exp', 'prep-poly-feat', 'prep-kbins-discretizer'],
+            }
 
         }
 
@@ -82,6 +93,12 @@ define([
                 } else {
                     $(that.wrapSelector('#vp_installLibrary')).hide();
                 }
+
+                if (modelType == 'make-column-transformer') {
+                    // load mct-targetData
+                    that.loadVariableList();
+                    that.bindMCT();
+                }
             });
 
             // install library
@@ -97,6 +114,47 @@ define([
             $(this.wrapSelector('#model')).on('change', function() {
                 that.modelEditor.reload();
             });
+        }
+
+        bindMCT() {
+            let that = this;
+            // mct : click column selector 1
+            $(this.wrapSelector('#mct_columns1btn')).on('click', function() {
+                that.openColumnSelector($(that.wrapSelector('#mct_columns1')), 'Select columns to transform');
+            });
+
+            // mct : click column selector 2
+            $(this.wrapSelector('#mct_columns2btn')).on('click', function() {
+                that.openColumnSelector($(that.wrapSelector('#mct_columns2')), 'Select columns to transform');
+            });
+        }
+
+        /**
+         * Open Inner popup page for column selection
+         * @param {Object} targetSelector 
+         * @param {string} title 
+         * @param {Array<string>} includeList 
+         */
+         openColumnSelector(targetSelector, title='Select columns', includeList=[]) {
+            this.popup.type = 'column';
+            this.popup.targetSelector = targetSelector;
+            var previousList = targetSelector.data('list');
+            if (previousList) {
+                previousList = previousList.map(col => col.code)
+            }
+            this.renderMultiSelector(previousList, includeList);
+            this.openInnerPopup(title);
+        }   
+
+        /**
+         * Render column selector using MultiSelector module
+         * @param {Array<string>} previousList previous selected columns
+         * @param {Array<string>} includeList columns to include 
+         */
+         renderMultiSelector(previousList, includeList) {
+            this.popup.colSelector = new MultiSelector(this.wrapSelector('.vp-inner-popup-body'),
+                { mode: 'columns', parent: [this.state.mct_targetData], selectedList: previousList, includeList: includeList }
+            );
         }
 
         templateForBody() {
@@ -215,8 +273,63 @@ define([
             let state = this.state;
             let optBox = new com_String();
             if (modelType == 'make-column-transformer') {
+                let that = this;
                 // render tag
-                optBox.append('Test'); // TODO:
+                // DataFrame selection
+                optBox.appendLine('<label for="mct_targetData" class="vp-orange-text">DataFrame</label>');
+                optBox.appendLine('<select id="mct_targetData" class="vp-state vp-select"></select>');
+                // Estimator 1 selection
+                optBox.appendLine('<label for="">Estimator 1</label>');
+                optBox.appendLine('<select id="mct_estimator1" class="vp-state vp-select">');
+                optBox.appendFormatLine('<option value="{0}">{1}</option>', '', 'None');
+                Object.keys(this.mctEstimator).forEach(modelCategory => {
+                    let modelOptionTag = new com_String();
+                    that.mctEstimator[modelCategory].forEach(opt => {
+                        let optConfig = that.modelConfig[opt];
+                        let selectedFlag = '';
+                        if (opt == that.state.mct_estimator1) {
+                            selectedFlag = 'selected';
+                        }
+                        modelOptionTag.appendFormatLine('<option value="{0}" {1}>{2}</option>',
+                                        opt, selectedFlag, optConfig.name);
+                    })
+                    optBox.appendFormatLine('<optgroup label="{0}">{1}</optgroup>', 
+                        modelCategory, modelOptionTag.toString());
+                });
+                optBox.appendLine('</select>');
+                // Estimator 1 column selection
+                optBox.appendLine('<label for="mct_columns1">Columns 1</label>');
+                optBox.appendLine('<div>');
+                optBox.appendLine('<input type="text" id="mct_columns1" class="vp-input vp-state" placeholder="Estimator 1 columns" disabled="">');
+                optBox.appendLine('<button id="mct_columns1btn" class="vp-button w50">Edit</button>');
+                optBox.appendLine('</div>');
+
+                // Estimator 2 selection
+                optBox.appendLine('<label for="">Estimator 2</label>');
+                optBox.appendLine('<select id="mct_estimator2" class="vp-state vp-select">');
+                optBox.appendFormatLine('<option value="{0}">{1}</option>', '', 'None');
+                Object.keys(this.mctEstimator).forEach(modelCategory => {
+                    let modelOptionTag = new com_String();
+                    that.mctEstimator[modelCategory].forEach(opt => {
+                        let optConfig = that.modelConfig[opt];
+                        let selectedFlag = '';
+                        if (opt == that.state.mct_estimator2) {
+                            selectedFlag = 'selected';
+                        }
+                        modelOptionTag.appendFormatLine('<option value="{0}" {1}>{2}</option>',
+                                        opt, selectedFlag, optConfig.name);
+                    })
+                    optBox.appendFormatLine('<optgroup label="{0}">{1}</optgroup>', 
+                        modelCategory, modelOptionTag.toString());
+                });
+                optBox.appendLine('</select>');
+                // Estimator 2 column selection
+                optBox.appendLine('<label for="mct_columns1">Columns 2</label>');
+                optBox.appendLine('<div>');
+                optBox.appendLine('<input type="text" id="mct_columns2" class="vp-input vp-state" placeholder="Estimator 2 columns" disabled="">');
+                optBox.appendLine('<button id="mct_columns2btn" class="vp-button w50">Edit</button>');
+                optBox.appendLine('</div>');
+                
             } else {
                 // render tag
                 config.options.forEach(opt => {
@@ -236,8 +349,57 @@ define([
             return optBox.toString();
         }
 
+        /**
+         * Load variable list (dataframe)
+         */
+        loadVariableList() {
+            var that = this;
+            // load using kernel
+            var dataTypes = ['DataFrame'];
+            vpKernel.getDataList(dataTypes).then(function(resultObj) {
+                let { result } = resultObj;
+                try {
+                    var varList = JSON.parse(result);
+                    // render variable list
+                    // get prevvalue
+                    var prevValue = that.state.mct_targetData;
+                    // replace
+                    $(that.wrapSelector('#mct_targetData')).replaceWith(function() {
+                        var tag = new com_String();
+                        tag.appendFormatLine('<select id="{0}" class="vp-select vp-state">', 'mct_targetData');
+                        varList.forEach(vObj => {
+                            // varName, varType
+                            var label = vObj.varName;
+                            tag.appendFormatLine('<option value="{0}" data-type="{1}" {2}>{3}</option>'
+                                                , vObj.varName, vObj.varType
+                                                , prevValue == vObj.varName?'selected':''
+                                                , label);
+                        });
+                        tag.appendLine('</select>'); // VP_VS_VARIABLES
+                        return tag.toString();
+                    });
+                    $(that.wrapSelector('#mct_targetData')).trigger('change');
+                } catch (ex) {
+                    vpLog.display(VP_LOG_TYPE.ERROR, 'DataPrep:', result);
+                }
+            });
+        }
+
+        handleInnerOk() {
+            // ok input popup
+            var dataList = this.popup.colSelector.getDataList();
+
+            $(this.popup.targetSelector).val(dataList.map(col => { return col.code }).join(','));
+            $(this.popup.targetSelector).data('list', dataList);
+            $(this.popup.targetSelector).trigger({ type: 'change', dataList: dataList });
+            this.closeInnerPopup();
+        }
+
         render() {
             super.render();
+
+            this.loadVariableList();
+            this.bindMCT();
 
             // Instance Editor
             this.modelEditor = new ModelEditor(this, "model", "instanceEditor");
@@ -255,11 +417,29 @@ define([
                  */
                 let config = this.modelConfig[modelType];
                 code.appendLine(config.import);
-                code.appendLine();
-    
+
                 // model code
                 let modelCode = config.code;
                 modelCode = com_generator.vp_codeGenerator(this, config, this.state, (userOption != ''? ', ' + userOption : ''));
+
+                // generate mct code
+                if (modelType == 'make-column-transformer') {
+                    let mctCodes = [];
+                    let { mct_estimator1, mct_columns1, mct_estimator2, mct_columns2 } = this.state;
+                    if (mct_estimator1 != undefined && mct_estimator1 != '') {
+                        code.appendLine(this.modelConfig[mct_estimator1].import);
+                        let estimator1code = com_generator.vp_codeGenerator(this, this.modelConfig[mct_estimator1], this.state, (userOption != ''? ', ' + userOption : ''));
+                        mctCodes.push(com_util.formatString('({0}, [{1}])', estimator1code, mct_columns1));
+                    }
+                    if (mct_estimator2 != undefined && mct_estimator2 != '') {
+                        code.appendLine(this.modelConfig[mct_estimator2].import);
+                        let estimator2code = com_generator.vp_codeGenerator(this, this.modelConfig[mct_estimator2], this.state, (userOption != ''? ', ' + userOption : ''));
+                        mctCodes.push(com_util.formatString('({0}, [{1}])', estimator2code, mct_columns2));
+                    }
+                    modelCode = modelCode.replace('${mct_code}', mctCodes.join(', '));
+                }
+
+                code.appendLine();
                 code.appendFormat('{0} = {1}', allocateToCreation, modelCode);                
             } else {
                 /**

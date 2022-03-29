@@ -250,7 +250,7 @@ define([
             ]
         },
         'make-column-transformer': {
-            name: 'Make Column Transformer',
+            name: 'MakeColumnTransformer',
             import: 'from sklearn.compose import make_column_transformer',
             code: 'make_column_transformer(${mct_code})',
             options: [

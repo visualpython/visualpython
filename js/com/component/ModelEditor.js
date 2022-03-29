@@ -141,16 +141,22 @@ define([
                         'transform': {
                             ...defaultActions['transform'],
                             description: 'Transform labels to normalized encoding.'
-                        },
-                        'inverse_transform': {
-                            name: 'inverse_transform',
-                            label: 'Inverse transform',
-                            code: '${inverse_allocate} = ${model}.inverse_transform(${inverse_featureData})',
-                            description: 'Transform binary labels back to multi-class labels.',
-                            options: [
-                                { name: 'inverse_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'X' },
-                                { name: 'inverse_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable' }
-                            ]
+                        }
+                    }
+
+                    if (modelType != 'ColumnTransformer') {
+                        actions = {
+                            ...actions,
+                            'inverse_transform': {
+                                name: 'inverse_transform',
+                                label: 'Inverse transform',
+                                code: '${inverse_allocate} = ${model}.inverse_transform(${inverse_featureData})',
+                                description: 'Transform binary labels back to multi-class labels.',
+                                options: [
+                                    { name: 'inverse_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], default: 'X' },
+                                    { name: 'inverse_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable' }
+                                ]
+                            }
                         }
                     }
                     break;
@@ -369,6 +375,28 @@ define([
                                 description: 'The edges of each bin. Contain arrays of varying shapes',
                                 options: [
                                     { name: 'bin_edges_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', default: 'bin_edges' }
+                                ]
+                            }
+                        }
+                    }
+                    if (modelType == 'ColumnTransformer') {
+                        infos = {
+                            'transformers_': {
+                                name: 'transformers_',
+                                label: 'Transformers_',
+                                code: '${transformers_allocate} = ${model}.transformers_',
+                                description: 'The collection of fitted transformers as tuples of (name, fitted_transformer, column).',
+                                options: [
+                                    { name: 'transformers_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', default: 'classes' }
+                                ]
+                            },
+                            'get_feature_names_out': {
+                                name: 'get_feature_names_out',
+                                label: 'Get feature names',
+                                code: '${feature_names_allocate} = ${model}.get_feature_names_out()',
+                                description: 'Get output feature names.',
+                                options: [
+                                    { name: 'feature_names_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', default: 'features' }
                                 ]
                             }
                         }
