@@ -8,7 +8,7 @@
     margin-top: 15px;
     border: 1px solid transparent;
     border-radius: 4px;
-    transition: all 0.1s linear;
+    transition: all 0.8s linear;
     box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
     display: -webkit-box;
     display: -webkit-flex;
@@ -21,12 +21,12 @@
     z-index: 1000;
 }
 .vp-successMessage-icon {
-    font-size: 20px;
-    margin-right: 15px;
+    margin-left: 15px;
     color: var(--font-hightlight);
 }
 #vp_successMessage {
     position: absolute;
+    font-size: 14px;
     top: 20px;
     right: 20px;
 }  

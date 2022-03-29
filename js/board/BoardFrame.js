@@ -444,9 +444,9 @@ define([
             if (this.checkNote()) {
                 // render update modal
                 com_util.renderModal({
-                    title: 'Save changes', 
-                    message: 'Do you want to save changes?',
-                    buttons: ['Cancel', "No", 'Save'],
+                    title: 'Unsaved changes', 
+                    message: 'Do you want to save?',
+                    buttons: ['Cancel', 'No', 'Save'],
                     defaultButtonIdx: 0,
                     buttonClass: ['cancel', '', 'activated'],
                     finish: function(clickedBtnIdx) {
@@ -492,7 +492,7 @@ define([
             // open file navigation
             let fileNavi = new FileNavigation({ 
                 type: 'open',
-                extensions: ['vp'],
+                extensions: ['VP Note(*.vp)'],
                 finish: function(filesPath, status, error) {
                     // clear board before open note
                     that.clearBoard();
@@ -550,7 +550,7 @@ define([
             let fileNavi = new FileNavigation({ 
                 type: 'save',
                 fileName: this.tmpState.boardTitle,
-                extensions: ['vp'],
+                extensions: ['VP Note(*.vp)'],
                 finish: function(filesPath, status, error) {
                     let boardTitle = filesPath[0].file;
                     let boardPath = filesPath[0].path;
@@ -655,7 +655,7 @@ define([
             let fileNavi = new FileNavigation({
                 type: 'save',
                 fileName: this.tmpState.boardTitle,
-                extensions: ['py'],
+                extensions: ['Python(*.py)'],
                 finish: function(filesPath, status, error) {
                     let fileName = filesPath[0].file;
                     let filePath = filesPath[0].path;
@@ -688,8 +688,8 @@ define([
             if (this.checkNote()) {
                 // render update modal
                 com_util.renderModal({
-                    title: 'Save changes', 
-                    message: 'Do you want to save changes?',
+                    title: 'Unsaved changes', 
+                    message: 'Do you want to save?',
                     buttons: ['Cancel', "No", 'Save'],
                     defaultButtonIdx: 0,
                     buttonClass: ['cancel', '', 'activated'],

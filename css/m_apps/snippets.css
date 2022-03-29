@@ -77,6 +77,7 @@
     top: 23px;
     right: 0px;
     border: 0.25px solid var(--border-gray-color);
+    border-radius: 3px;
     background: #FFFFFF;
     padding: 5px;
     z-index: 5;

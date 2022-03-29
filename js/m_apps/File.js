@@ -102,7 +102,7 @@ define([
                     input: [
                         {
                             name:'vp_sampleFile',
-                            label: 'Sample File',
+                            label: 'Sample Data',
                             component: 'option_select',
                             options: [
                                 'iris.csv', 'titanic.csv', 'fish.csv', 'campusRecruitment.csv', 
