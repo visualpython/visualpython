@@ -54,22 +54,21 @@
     font-weight: bold;
     font-size: 14px;
     text-align: left;
-    padding: 2px 5px 2px 16px;
+    padding: 2px 5px 2px 2px;
 }
 
 /* Color Style Select */
 .vp-plot-cmap {
-    width: 176px;
-    height: 25px;
-    border: 0.25px solid var(--color);
-    /* box-shadow: 1px 1px 3px 1px var(--color);
-    border-radius: 5px; */
+    width: 160px;
+    height: 30px;
+    border: 0.25px solid var(--border-gray-color);
+    border-radius: 3px;
     margin-top: 5px;
     position: relative;
     display: flex;
     z-index: 1500;
     cursor: pointer;
-    padding: 0px 5px 0px 5px;
+    padding: 2px 5px 0px 5px;
     background-image: url("data:image/svg+xml;utf8,<svg fill='darkgray' height='14' viewBox='0 0 24 24' width='14' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
     background-repeat: no-repeat;
     background-position-x: 100%;
@@ -178,7 +177,8 @@
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center center;
-    border: 0.25px solid #c4c4c4;
+    border: 0.25px solid var(--border-gray-color);
+    border-radius: 3px;
 }
 .vp-plot-item .vp-plot-thumb.plot {
     background-image: url(../../img/chart/plot.png);

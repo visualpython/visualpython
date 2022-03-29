@@ -20,6 +20,7 @@ define([
     '../com_String',
     '../com_interface',
     './Component',
+    './DataSelector',
 
     /** codemirror */
     'codemirror/lib/codemirror',
@@ -28,7 +29,7 @@ define([
     'codemirror/addon/display/placeholder',
     'codemirror/addon/display/autorefresh'
 ], function(popupComponentHtml, popupComponentCss
-    , com_util, com_Const, com_String, com_interface, Component, codemirror
+    , com_util, com_Const, com_String, com_interface, Component, DataSelector, codemirror
 ) {
     'use strict';
 
@@ -52,6 +53,9 @@ define([
             this.config = {
                 sizeLevel: 0,          // 0: 400x400 / 1: 500x500 / 2: 600x500 / 3: 750x500
                 executeMode: 'code',   // cell execute mode
+                // show header bar buttons
+                importButton: false,  // import library button (#popupImport)
+                packageButton: false, // package manager button (#popupPackage)
                 // show view box
                 codeview: true, 
                 dataview: true,
@@ -252,6 +256,27 @@ define([
                     component: that
                 });
             });
+
+            // Click import library
+            $(this.wrapSelector('#popupImport')).on('click', function() {
+                // add import codes
+                var code = that.generateImportCode();
+                // create block and run it
+                $('#vp_wrapper').trigger({
+                    type: 'create_option_page', 
+                    blockType: 'block',
+                    menuId: 'lgExe_code',
+                    menuState: { taskState: { code: code } },
+                    afterAction: 'run'
+                });
+            });
+
+            // Click package manager
+            $(this.wrapSelector('#popupPackage')).on('click', function() {
+                // TODO:
+            });
+
+
             // Focus recognization
             $(this.wrapSelector()).on('click', function() {
                 $(that.eventTarget).trigger({
@@ -381,6 +406,16 @@ define([
                         break;
                 }
             });
+
+            // focus on data selector input
+            $(this.wrapSelector('.vp-data-selector')).on('focus', function(evt) {
+                
+            });
+
+            // click on data selector input filter
+            $(this.wrapSelector('.vp-data-selector ')).on('click', function(evt) {
+
+            });
         }
 
         _unbindEvent() {
@@ -428,7 +463,7 @@ define([
             // set title
             this.$pageDom.find('.vp-popup-title').text(this.state.config.name);
             // set body
-            this.$pageDom.find('.vp-popup-body').html(this.templateForBody());
+            this.$pageDom.find('.vp-popup-content').html(this.templateForBody());
             return this.$pageDom;
         }
 
@@ -439,7 +474,19 @@ define([
         render(inplace=false) {
             super.render(inplace);
 
-            let {codeview, dataview, runButton, footer, sizeLevel, position} = this.config;
+            let { 
+                importButton, packageButton, 
+                codeview, dataview, runButton, footer, 
+                sizeLevel, position
+            } = this.config;
+
+            // import & package manager button hide/show
+            if (!importButton) {
+                $(this.wrapSelector('#popupImport')).hide();
+            }
+            if (!packageButton) {
+                $(this.wrapSelector('#popupPackage')).hide();
+            }
 
             // codeview & dataview button hide/show
             if (!codeview) {
@@ -458,7 +505,7 @@ define([
             if(!footer) {
                 $(this.wrapSelector('.vp-popup-footer')).hide();
                 // set body wider
-                $(this.wrapSelector('.vp-popup-body')).css({
+                $(this.wrapSelector('.vp-popup-content')).css({
                     'height': 'calc(100% - 30px)'
                 })
             }
@@ -505,6 +552,16 @@ define([
          */
         renderInnerPopup() {
             $(this.wrapSelector('.vp-inner-popup-body')).html(this.templateForInnerPopup());
+
+
+            // set position to center
+            let width = $(this.wrapSelector('.vp-inner-popup-box')).width();
+            let height = $(this.wrapSelector('.vp-inner-popup-box')).height();
+
+            $(this.wrapSelector('.vp-inner-popup-box')).css({
+                left: 'calc(50% - ' + parseInt(width/2) + 'px)',
+                top: 'calc(50% - ' + parseInt(height/2) + 'px)',
+            })
         }
 
         templateForDataView() {
@@ -515,6 +572,11 @@ define([
         renderDataView() {
             $('.vp-popup-dataview-box').html('');
             $('.vp-popup-dataview-box').html(this.templateForDataView());
+        }
+
+        generateImportCode() {
+            /** Implementation needed - Generated on clicking Import Library button */
+            return '';
         }
 
         generateCode() {
@@ -697,6 +759,7 @@ define([
          */
         openView(viewType) {
             if (viewType == 'code') {
+                this.saveState();
                 var code = this.generateCode();
                 let codeText = '';
                 if (Array.isArray(code)) {

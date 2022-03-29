@@ -48,7 +48,8 @@
     display: inline-block;
     width: calc(100% - 55px);
     height: 30px;
-    border: 1px solid silver;
+    border: 1px solid var(--gray-color);
+    border-radius: 3px;
     overflow: hidden;
 }
 .vp-instance-box .CodeMirror.selected {

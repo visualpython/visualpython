@@ -444,9 +444,9 @@ define([
             if (this.checkNote()) {
                 // render update modal
                 com_util.renderModal({
-                    title: 'Save changes', 
-                    message: 'Do you want to save changes?',
-                    buttons: ['Cancel', "No", 'Save'],
+                    title: 'Unsaved changes', 
+                    message: 'Do you want to save?',
+                    buttons: ['Cancel', 'No', 'Save'],
                     defaultButtonIdx: 0,
                     buttonClass: ['cancel', '', 'activated'],
                     finish: function(clickedBtnIdx) {
@@ -508,19 +508,23 @@ define([
                 
                         file.text().then(function(data) {
                             // var parsedData = decodeURIComponent(data);
-                            var jsonList = JSON.parse(data);
-                            // load blocks
-                            that.jsonToBlock(jsonList);
-
-                            var indexVp = vpFileName.indexOf('.vp');
-                            var saveFileName = vpFileName.slice(0,indexVp);
-            
-                            // show title of board and path
-                            $('#vp_boardTitle').val(saveFileName);
-                            that.tmpState.boardTitle = saveFileName;
-                            that.tmpState.boardPath = vpFilePath;
-
-                            com_util.renderSuccessMessage('Successfully opened file. (' + vpFileName + ')');
+                            try {
+                                var jsonList = JSON.parse(data);
+                                // load blocks
+                                that.jsonToBlock(jsonList);
+    
+                                var indexVp = vpFileName.indexOf('.vp');
+                                var saveFileName = vpFileName.slice(0,indexVp);
+                
+                                // show title of board and path
+                                $('#vp_boardTitle').val(saveFileName);
+                                that.tmpState.boardTitle = saveFileName;
+                                that.tmpState.boardPath = vpFilePath;
+    
+                                com_util.renderSuccessMessage('Successfully opened file. (' + vpFileName + ')');
+                            } catch (ex) {
+                                com_util.renderAlertModal('Not applicable file contents with vp format! (JSON)');
+                            }
                         });
                     });
                 }
@@ -568,7 +572,9 @@ define([
                     that.tmpState.boardPath = boardPath;
                     $('#vp_boardTitle').val(boardTitle);
 
-                    callback();
+                    if (callback != undefined && typeof callback === 'function') {
+                        callback();
+                    }
                 }
             });
             fileNavi.open();
@@ -688,8 +694,8 @@ define([
             if (this.checkNote()) {
                 // render update modal
                 com_util.renderModal({
-                    title: 'Save changes', 
-                    message: 'Do you want to save changes?',
+                    title: 'Unsaved changes', 
+                    message: 'Do you want to save?',
                     buttons: ['Cancel', "No", 'Save'],
                     defaultButtonIdx: 0,
                     buttonClass: ['cancel', '', 'activated'],

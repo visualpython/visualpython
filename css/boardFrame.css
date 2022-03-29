@@ -111,7 +111,8 @@
     width: 150px;
     float: right;
     background: #FFFFFF;
-    border: 0.25px solid #C4C4C4;
+    border: 0.25px solid var(--border-gray-color);
+    border-radius: 3px;
     box-sizing: border-box;
     box-shadow: 1px 1px 2px rgb(0 0 0 / 10%);
 }
@@ -181,7 +182,7 @@
     word-wrap: normal;
     overflow: hidden;
     border: 2px solid transparent;
-    border-radius: 2px;
+    border-radius: 3px;
     cursor: pointer;
 }
 .vp-block-left-holder {
@@ -235,6 +236,13 @@
 }
 .vp-block.apps.vp-focus .vp-block-header,
 .vp-block.apps.vp-focus-child .vp-block-header {
+    background-color: rgb(253, 177, 133);
+}
+.vp-block.visualization .vp-block-header {
+    background-color: rgb(249, 227, 214);
+}
+.vp-block.visualization.vp-focus .vp-block-header,
+.vp-block.visualization.vp-focus-child .vp-block-header {
     background-color: rgb(253, 177, 133);
 }
 .vp-block.machine_learning .vp-block-header {
@@ -323,7 +331,9 @@
     position: fixed;
     background: #FFFFFF;
     width: 125px;
-    border: 0.25px solid #E4E4E4;
+    line-height: 15px;
+    border: 0.25px solid var(--border-gray-color);
+    border-radius: 3px;
     padding: 5px;
     z-index: 50;
 }

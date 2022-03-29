@@ -462,7 +462,7 @@ define([
     /**
      * Version
      */
-    Config.version = "2.1.0";
+    Config.version = "2.1.1";
 
     /**
      * Type of mode
@@ -501,7 +501,9 @@ define([
             /** Encoding */
             'OneHotEncoder', 'LabelEncoder', 'OrdinalEncoder', 'TargetEncoder', 'SMOTE',
             /** Scaling */
-            'StandardScaler', 'RobustScaler', 'MinMaxScaler', 'Normalizer', 'FunctionTransformer', 'PolynomialFeatures'
+            'StandardScaler', 'RobustScaler', 'MinMaxScaler', 'Normalizer', 'FunctionTransformer', 'PolynomialFeatures', 'KBinsDiscretizer',
+            /** ETC */
+            'ColumnTransformer'
         ]
     };
 

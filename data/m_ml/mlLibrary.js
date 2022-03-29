@@ -128,8 +128,9 @@ define([
         'prep-onehot': {
             name: 'OneHotEncoder',
             import: 'from sklearn.preprocessing import OneHotEncoder',
-            code: 'OneHotEncoder(${handle_unknown}${etc})',
+            code: 'OneHotEncoder(${sparse}${handle_unknown}${etc})',
             options: [
+                { name: 'sparse', component: ['bool_select'], default: 'False', usePair: true },
                 { name: 'handle_unknown', component: ['option_suggest'], usePair: true, 
                     options: ['error', 'ignore'], default: 'error' },
             ]
@@ -232,6 +233,26 @@ define([
             name: 'Polynomial Features',
             import: 'from sklearn.preprocessing import PolynomialFeatures',
             code: 'PolynomialFeatures(${etc})',
+            options: [
+
+            ]
+        },
+        'prep-kbins-discretizer': {
+            name: 'KBins Discretizer',
+            import: 'from sklearn.preprocessing import KBinsDiscretizer',
+            code: 'KBinsDiscretizer(${n_bins}${strategy}${encode}${etc})',
+            options: [
+                { name: 'n_bins', component: ['input_number'], default: 5, usePair: true },
+                { name: 'strategy', component: ['option_select'], type: 'text', default: 'quantile', usePair: true,
+                    options: ['uniform', 'quantiile', 'kmeans'] },
+                { name: 'encode', component: ['option_select'], type: 'text', default: 'onehot', usePair: true,
+                    options: ['onehot', 'onehot-dense', 'ordinal'] }
+            ]
+        },
+        'make-column-transformer': {
+            name: 'MakeColumnTransformer',
+            import: 'from sklearn.compose import make_column_transformer',
+            code: 'make_column_transformer(${mct_code})',
             options: [
 
             ]

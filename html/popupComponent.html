@@ -26,6 +26,21 @@
                 </div>
             </div>
         </div>
+        <div class="vp-variable-popup-box" style="display: none; width: 400px; height: 300px;">
+            <div class="vp-variable-popup-header">
+                <label class="vp-variable-popup-title">Title</label>
+                <img class="vp-variable-popup-close" src="/nbextensions/visualpython/img/close_big.svg" title="Close inner popup"/>
+            </div>
+            <div class="vp-variable-popup-body vp-scrollbar">
+                <!-- Variable popup body -->
+            </div>
+            <div class="vp-variable-popup-footer">
+                <div class="vp-variable-preview">
+                    <textarea id="vp_previewCode" name="code"></textarea>
+                </div>
+                <button type="button" class="vp-button activated vp-variable-popup-button" data-type="ok">OK</button>
+            </div>
+        </div>
         <div class="vp-popup-header">
             <label class="vp-popup-title">
                 <!-- Title -->
@@ -34,7 +49,20 @@
             <img class="vp-popup-close" src="/nbextensions/visualpython/img/close_big.svg" title="Close popup"/>
         </div>
         <div class="vp-popup-body vp-scrollbar">
+            <div class="vp-popup-body-top-bar vp-italic vp-gray-text vp-no-selection vp-cursor">
+                <span id="popupImport" class="vp-popup-body-top-bar-item" data-type="import">
+                    Import Library
+                    <img src="/nbextensions/visualpython/img/import.svg"/>
+                </span>
+                <span id="popupPackage" class="vp-popup-body-top-bar-item" data-type="package">
+                    Package Manager
+                    <img src="/nbextensions/visualpython/img/setting.svg"/>
+                </span>
+            </div>
             <!-- Body -->
+            <div class="vp-popup-content">
+
+            </div>
         </div>
         <div class="vp-popup-footer">
             <!-- Footer -->

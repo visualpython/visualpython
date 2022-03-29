@@ -1,10 +1,13 @@
 .vp-tab-button {
+    width: 120px;
+    text-align: center;
     display: inline-block;
     border: 0.24px solid var(--border-gray-color);
+    border-radius: 3px;
     padding: 5px;
     cursor: pointer;
 }
 .vp-tab-button.vp-tab-selected {
-    color: var(--highlight-color);
+    color: var(--font-hightlight);
     border-bottom: 2px solid var(--highlight-color);
 }

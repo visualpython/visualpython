@@ -47,7 +47,7 @@ define([
         // move to executed cell
         Jupyter.notebook.scroll_to_cell(Jupyter.notebook.get_selected_index());
 
-        com_util.renderSuccessMessage('Your code has been executed');
+        com_util.renderSuccessMessage('Your code is successfully generated.');
     }
 
     /**
@@ -86,7 +86,7 @@ define([
         // move to executed cell
         Jupyter.notebook.scroll_to_cell(Jupyter.notebook.get_selected_index());
 
-        com_util.renderSuccessMessage('Your code has been executed');
+        com_util.renderSuccessMessage('Your code is successfully generated.');
     }
     
     var enableOtherShortcut = function() {

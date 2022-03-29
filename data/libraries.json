@@ -3034,20 +3034,6 @@
                         }
                     },
                     {
-                        "id"   : "apps_chart",
-                        "type" : "function",
-                        "level": 1,
-                        "name" : "Chart",
-                        "tag"  : "CHART,APPS",
-                        "path" : "visualpython - apps - chart",
-                        "desc" : "Chart",
-                        "file" : "m_apps/Chart",
-                        "apps" : {
-                            "color": 3,
-                            "icon": "apps/apps_chart.svg"
-                        }
-                    },
-                    {
                         "id"   : "apps_markdown",
                         "type" : "function",
                         "level": 1,
@@ -3059,6 +3045,20 @@
                         "apps" : {
                             "color": 3,
                             "icon": "apps/apps_markdown.svg"
+                        }
+                    },
+                    {
+                        "id"   : "visualize_chart",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Chart",
+                        "tag"  : "MATPLOTLIB,CHART,VISUALIZATION,VISUALIZE",
+                        "path" : "visualpython - visualization - matplotlib",
+                        "desc" : "Matplotlib chart creation",
+                        "file" : "m_apps/Chart",
+                        "apps" : {
+                            "color": 3,
+                            "icon": "apps/apps_chart.svg"
                         }
                     },
                     {

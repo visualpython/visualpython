@@ -148,8 +148,8 @@ define([
             page.appendLine('</div>');
             // import table
             page.appendLine(this.templateTable(this.state.importMeta));
-            page.appendLine('<input type="button" id="vp_addModule" value="+ Module" class="vp-button" title="import...as"/>');
-            page.appendLine('<input type="button" id="vp_addFunction" value="+ Function" class="vp-button" title="from...import"/>');
+            page.appendLine('<input type="button" id="vp_addModule" value="+ Module" class="vp-button" title="import (module) as"/>');
+            page.appendLine('<input type="button" id="vp_addFunction" value="+ Function" class="vp-button" title="from (module) import (function)"/>');
             return page.toString();
         }
 

@@ -129,13 +129,17 @@ body {
 }
 
 /* Input & Select Design - width m&s */
+.vp-input.l,
+.vp-select.l {
+    width: 232px !important;
+}
 .vp-input.m,
 .vp-select.m {
-    width: 116px;
+    width: 116px !important;
 }
 .vp-input.s,
 .vp-select.s {
-    width: 55px;
+    width: 55px !important;
 }
 
 /* Buttons */
@@ -146,7 +150,7 @@ body {
     border: 0.25px solid #E4E4E4;
     box-sizing: border-box;
     box-shadow: 0.5px 0.5px 0.5px rgb(0 0 0 / 10%);
-    border-radius: 2px;
+    border-radius: 3px;
     line-height: 30px;
     vertical-align: middle;
     font-family: 'AppleSDGothicNeo';
@@ -197,7 +201,6 @@ body {
     color: #696969;
     cursor: not-allowed;
 }
-
 .vp-checkbox {
     display: inline-block;
     position: relative !important;
@@ -352,7 +355,7 @@ hr.vp-extra-menu-line {
 }
 .vp-grid-col-p50 {
     display: grid;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: 52% 48%;
     grid-row-gap: 5px;
     align-items: baseline;
     align-content: center;

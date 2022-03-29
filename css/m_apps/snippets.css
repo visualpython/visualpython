@@ -77,6 +77,7 @@
     top: 23px;
     right: 0px;
     border: 0.25px solid var(--border-gray-color);
+    border-radius: 3px;
     background: #FFFFFF;
     padding: 5px;
     z-index: 5;
@@ -162,7 +163,7 @@
 .vp-sn-export-mode .vp-sn-item-menu {
     display: none;
 }
-.vp-sn-export-mode input.vp-sn-checkbox {
+.vp-sn-export-mode input[type=checkbox].vp-sn-checkbox {
     display: inline-block;
     position: relative !important;
     width: 13px;
