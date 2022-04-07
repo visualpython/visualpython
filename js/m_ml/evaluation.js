@@ -28,20 +28,21 @@ define([
     class Evaluation extends PopupComponent {
         _init() {
             super._init();
+            this.config.importButton = true;
             this.config.dataview = false;
 
             this.state = {
                 modelType: 'rgs',
                 predictData: 'pred',
                 targetData: 'y_test',
+                // regression
+                r_squared: true, mae: true, mape: false, rmse: true, scatter_plot: false,
                 // classification
                 confusion_matrix: true, report: true, 
                 accuracy: false, precision: false, recall: false, f1_score: false,
-                // regression
-                coefficient: false, intercept: false, r_squared: true, 
-                mae: false, mape: false, rmse: true, scatter_plot: false,
+                roc_curve: false, auc: false,
                 // clustering
-                sizeOfClusters: true, silhouetteScore: true,
+                silhouetteScore: true, ari: false, nm: false,
                 ...this.state
             }
         }
@@ -63,7 +64,39 @@ define([
 
                 $(that.wrapSelector('.vp-eval-box')).hide();
                 $(that.wrapSelector('.vp-eval-'+modelType)).show();  
-            })
+
+                if (modelType == 'clf') {
+                    // Classification - model selection
+                    if (that.checkToShowModel() == true) {
+                        $(that.wrapSelector('.vp-ev-model')).show();
+                    }
+                }
+            });
+
+            // open model selection show
+            $(this.wrapSelector('.vp-eval-check')).on('change', function() {
+                let checked = $(this).prop('checked');
+
+                if (checked) {
+                    $(that.wrapSelector('.vp-ev-model')).show();
+                } else {
+                    if (that.checkToShowModel() == false) {
+                        $(that.wrapSelector('.vp-ev-model')).hide();
+                    }
+                }
+            });
+        }
+
+        /**
+         * Check if anything checked available ( > 0)
+         * @returns 
+         */
+        checkToShowModel() {
+            let checked = $(this.wrapSelector('.vp-eval-check:checked')).length;
+            if (checked > 0) { 
+                return true;
+            }
+            return false;
         }
 
         templateForBody() {
@@ -72,7 +105,7 @@ define([
             $(page).find('.vp-eval-box').hide();
             $(page).find('.vp-eval-'+this.state.modelType).show();
 
-            // varselector TEST:
+            // varselector
             let varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'list', 'str']);
             varSelector.setComponentID('predictData');
             varSelector.addClass('vp-state vp-input');
@@ -84,6 +117,28 @@ define([
             varSelector.addClass('vp-state vp-input');
             varSelector.setValue(this.state.targetData);
             $(page).find('#targetData').replaceWith(varSelector.toTagString());
+
+            // model
+            // set model list
+            let modelOptionTag = new com_String();
+            vpKernel.getModelList('Classification').then(function(resultObj) {
+                let { result } = resultObj;
+                var modelList = JSON.parse(result);
+                modelList && modelList.forEach(model => {
+                    let selectFlag = '';
+                    if (model.varName == that.state.model) {
+                        selectFlag = 'selected';
+                    }
+                    modelOptionTag.appendFormatLine('<option value="{0}" data-type="{1}" {2}>{3} ({4})</option>', 
+                        model.varName, model.varType, selectFlag, model.varName, model.varType);
+                });
+                $(page).find('#model').html(modelOptionTag.toString());
+                $(that.wrapSelector('#model')).html(modelOptionTag.toString());
+
+                if (!that.state.model || that.state.model == '') {
+                    that.state.model = $(that.wrapSelector('#model')).val();
+                }
+            });
 
             // load state
             let that = this;
@@ -114,7 +169,21 @@ define([
                 }
             });
 
+            if (this.state.modelType == 'clf') {
+                if (this.state.roc_curve == true || this.state.auc == true) {
+                    $(page).find('.vp-ev-model').show();
+                } else {
+                    $(page).find('.vp-ev-model').hide();
+                }
+            } else {
+                $(page).find('.vp-ev-model').hide();
+            }
+
             return page;
+        }
+        
+        generateImportCode() {
+            return 'from sklearn import metrics';
         }
 
         generateCode() {
@@ -124,6 +193,7 @@ define([
                 modelType, predictData, targetData,
                 // classification
                 confusion_matrix, report, accuracy, precision, recall, f1_score, roc_curve, auc,
+                model,
                 // regression
                 coefficient, intercept, r_squared, mae, mape, rmse, scatter_plot,
                 // clustering
@@ -173,7 +243,7 @@ define([
                 if (roc_curve) {
                     code = new com_String();
                     code.appendLine("# ROC Curve");
-                    code.appendFormatLine("fpr, tpr, thresholds = roc_curve({0}, svc.decision_function({1}}))", predictData, targetData);
+                    code.appendFormatLine("fpr, tpr, thresholds = metrics.roc_curve({0}, {1}.decision_function({2}))", predictData, model, targetData);
                     code.appendLine("plt.plot(fpr, tpr, label='ROC Curve')");
                     code.appendLine("plt.xlabel('Sensitivity') ");
                     code.append("plt.ylabel('Specificity') ")
@@ -182,8 +252,7 @@ define([
                 if (auc) {
                     code = new com_String();
                     code.appendLine("# AUC");
-                    code.appendFormatLine("fpr, tpr, thresholds = roc_curve({0}, svc.decision_function({1}}))", predictData, targetData);
-                    code.append("metrics.auc(fpr, tpr)");
+                    code.appendFormat("metrics.roc_auc_score({0}, {1}.decision_function({2}))", predictData, model, targetData);
                     codeCells.push(code.toString());
                 }
             }
@@ -232,7 +301,7 @@ define([
                     code.appendLine('# Regression plot');
                     code.appendFormatLine('plt.scatter({0}, {1})', targetData, predictData);
                     code.appendFormatLine("plt.xlabel('{0}')", targetData);
-                    code.appendFormatLine("plt.ylabel('{1}')", predictData);
+                    code.appendFormatLine("plt.ylabel('{0}')", predictData);
                     code.append('plt.show()');
                     codeCells.push(code.toString());
                 }
