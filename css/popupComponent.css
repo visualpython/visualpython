@@ -217,6 +217,8 @@
 	position: relative;
 	padding-left: 20px;
 	cursor: pointer;
+    height: 15px;
+    vertical-align: middle;
 }
 .vp-popup-frame input[type=checkbox]:not(.vp-checkbox):disabled + label,
 .vp-popup-frame label input[type=checkbox]:not(.vp-checkbox):disabled + span {
