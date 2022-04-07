@@ -209,6 +209,9 @@ define([
             marked(text, { renderer: renderer }, function (err, html) {
                 html = mathjaxutils.replace_math(html, math);
                 let preview = `<div>${html}</div>`;
+                if (html == '') {
+                    preview = '';
+                }
                 that.state.preview = preview;
                 document.getElementById("vp_markdownPreview").innerHTML = preview;
 
