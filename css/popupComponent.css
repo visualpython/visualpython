@@ -470,6 +470,15 @@
     padding-left: 22px; /* Equal to width of new image */
     margin-bottom: 5px;
 }
+.vp-popup-body-top-bar-item[data-type="install"] img {
+    background: url(../../visualpython/img/import.svg) no-repeat;
+}  
+.vp-popup-body-top-bar-item[data-type="install"]:hover img {
+    background: url(../../visualpython/img/import_activated.svg) no-repeat;
+}   
+.vp-popup-body-top-bar-item[data-type="import"] {
+    margin-left: 10px;
+}
 .vp-popup-body-top-bar-item[data-type="import"] img {
     background: url(../../visualpython/img/import.svg) no-repeat;
 }  
