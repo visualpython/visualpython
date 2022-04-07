@@ -75,7 +75,7 @@ define([
                 ...this.state
             };
 
-            this._addCodemirror('previewCode', this.wrapSelector('#vp_previewCode'), 'readonly');
+            this._addCodemirror('previewCode', this.wrapSelector('#vp_ssPreviewCode'), 'readonly');
         }
 
         render() {
@@ -1331,14 +1331,13 @@ define([
 
             $(document).on('change', this.wrapSelector('.vp-ds-cond-tbl .vp-col-list'), function () {
                 var thisTag = $(this);
-                var varName = $(this).closest('td').find('.vp-cond-var').val();
+                var varName = that.state.pandasObject;
                 var colName = $(this).find('option:selected').attr('data-code');
 
                 var condTag = $(this).closest('td').find('.vp-condition');
 
-                var code = com_util.formatString('_vp_print(_vp_get_column_category({0}, {1}))', varName, colName);
                 // get result and load column list
-                vpKernel.execute(code).then(function (resultObj) {
+                vpKernel.getColumnCategory(varName, colName).then(function (resultObj) {
                     let { result } = resultObj;
                     var category = JSON.parse(result);
                     if (category && category.length > 0) {
