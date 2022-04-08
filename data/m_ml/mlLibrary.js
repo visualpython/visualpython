@@ -269,37 +269,40 @@ define([
         'ridge': {
             name: 'Ridge',
             import: 'from sklearn.linear_model import Ridge',
-            code: 'Ridge(${etc})',
+            code: 'Ridge(${alpha}${etc})',
             options: [
-                //TODO:
+                { name: 'alpha', component: ['input_number'], default: 1.0, usePair: true }
             ]
         },
         'lasso': {
             name: 'Lasso',
             import: 'from sklearn.linear_model import Lasso',
-            code: 'Lasso(${etc})',
+            code: 'Lasso(${alpha}${etc})',
             options: [
-                //TODO:
+                { name: 'alpha', component: ['input_number'], default: 1.0, usePair: true }
             ]
         },
         'elasticnet': {
             name: 'ElasticNet',
             import: 'from sklearn.linear_model import ElasticNet',
-            code: 'ElasticNet(${etc})',
+            code: 'ElasticNet(${alpha}${l1_ratio}${etc})',
             options: [
-                //TODO:
+                { name: 'alpha', component: ['input_number'], default: 1.0, usePair: true },
+                { name: 'l1_ratio', component: ['input_number'], default: 0.5, usePair: true }
             ]
         },
         'sv-rgs': {
             name: 'SVR',
             import: 'from sklearn.svm import SVR',
-            code: 'SVR(${C}${kernel}${gamma}${random_state}${etc})',
+            code: 'SVR(${C}${kernel}${degree}${gamma}${coef0}${random_state}${etc})',
             options: [
                 { name: 'C', component: ['input_number'], placeholder: '1.0', usePair: true },
-                { name: 'kernel', component: ['option_select'], type: 'text', default: 'rbf', type:'text', usePair: true,
-                    options: ['linear', 'poly', 'rbf', 'sigmoid', 'precomputed'] },
-                { name: 'gamma', component: ['option_suggest'], default: 'scale', type:'text', usePair: true,
-                    options: ['scale', 'auto'] },
+                { name: 'kernel', component: ['option_select'], type: 'text', usePair: true, 
+                    options: ['linear', 'poly', 'rbf', 'sigmoid', 'precomputed'], default: 'rbf' },
+                { name: 'degree', component: ['input_number'], placeholder: '3', usePair: true },
+                { name: 'gamma', component: ['option_suggest'], usePair: true,
+                    options: ["'scale'", "'auto'"], default: "'scale'" },
+                { name: 'coef0', component: ['input_number'], placeholder: '0.0', usePair: true },
                 { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true }
             ]
         },
@@ -422,15 +425,17 @@ define([
             ]
         },
         'sv-clf': {
-            name: 'SupportVectorClassifier',
+            name: 'SVC',
             import: 'from sklearn.svm import SVC',
-            code: 'SVC(${C}${kernel}${gamma}${random_state}${etc})',
+            code: 'SVC(${C}${kernel}${degree}${gamma}${coef0}${random_state}${etc})',
             options: [
                 { name: 'C', component: ['input_number'], placeholder: '1.0', usePair: true },
                 { name: 'kernel', component: ['option_select'], type: 'text', usePair: true, 
                     options: ['linear', 'poly', 'rbf', 'sigmoid', 'precomputed'], default: 'rbf' },
-                { name: 'gamma', component: ['option_suggest'], usePair: true, 
-                    options: ['scale', 'auto'], default: 'scale' },
+                { name: 'degree', component: ['input_number'], placeholder: '3', usePair: true },
+                { name: 'gamma', component: ['option_suggest'], usePair: true,
+                    options: ["'scale'", "'auto'"], default: "'scale'" },
+                { name: 'coef0', component: ['input_number'], placeholder: '0.0', usePair: true },
                 { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true }
             ]
         },
