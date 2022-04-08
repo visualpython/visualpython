@@ -78,7 +78,7 @@ define([
             $(document).off('change', this.wrapSelector('#vp_bdType'));
 
             $(document).off('change', this.wrapSelector('#vp_bdVariable'));
-            $(document).off('click', this.wrapSelector('#vp_bdVariableSelect'));
+            $(document).off('click', this.wrapSelector('#vp_bdVariable'));
             $(document).off('change', this.wrapSelector('#vp_bdJoin'));
             $(document).off('change', this.wrapSelector('#vp_bdAxis'));
             $(document).off('change', this.wrapSelector('#vp_bdSort'));
@@ -88,12 +88,12 @@ define([
             $(document).off('click', this.wrapSelector('.vp-bd-df-refresh'));
             $(document).off('change', this.wrapSelector('#vp_bdHow'));
             $(document).off('change', this.wrapSelector('#vp_bdOn'));
-            $(document).off('click', this.wrapSelector('#vp_bdOnSelect'));
+            $(document).off('click', this.wrapSelector('#vp_bdOn'));
             $(document).off('change', this.wrapSelector('#vp_bdLeftOn'));
-            $(document).off('click', this.wrapSelector('#vp_bdLeftOnSelect'));
+            $(document).off('click', this.wrapSelector('#vp_bdLeftOn'));
             $(document).off('change', this.wrapSelector('#vp_gbLeftIndex'));
             $(document).off('change', this.wrapSelector('#vp_bdRightOn'));
-            $(document).off('click', this.wrapSelector('#vp_bdRightOnSelect'));
+            $(document).off('click', this.wrapSelector('#vp_bdRightOn'));
             $(document).off('change', this.wrapSelector('#vp_gbRightIndex'));
             $(document).off('change', this.wrapSelector('#vp_bdLeftSuffix'));
             $(document).off('change', this.wrapSelector('#vp_bdRightSuffix'));
@@ -133,7 +133,7 @@ define([
             });
 
             // variable select button event
-            $(document).on('click', this.wrapSelector('#vp_bdVariableSelect'), function() {
+            $(document).on('click', this.wrapSelector('#vp_bdVariable'), function() {
                 that.openVariablePopup($(that.wrapSelector('#vp_bdVariable')));
             });
 
@@ -196,20 +196,20 @@ define([
                 that.state.merge.on = colList;
                 
                 if (colList && colList.length > 0) {
-                    $(that.wrapSelector('#vp_bdLeftOnSelect')).attr('disabled', true);
-                    $(that.wrapSelector('#vp_bdRightOnSelect')).attr('disabled', true);
+                    $(that.wrapSelector('#vp_bdLeftOn')).attr('disabled', true);
+                    $(that.wrapSelector('#vp_bdRightOn')).attr('disabled', true);
                     $(that.wrapSelector('#vp_bdLeftIndex')).attr('disabled', true);
                     $(that.wrapSelector('#vp_bdRightIndex')).attr('disabled', true);
                 } else {
-                    $(that.wrapSelector('#vp_bdLeftOnSelect')).attr('disabled', false);
-                    $(that.wrapSelector('#vp_bdRightOnSelect')).attr('disabled', false);
+                    $(that.wrapSelector('#vp_bdLeftOn')).attr('disabled', false);
+                    $(that.wrapSelector('#vp_bdRightOn')).attr('disabled', false);
                     $(that.wrapSelector('#vp_bdLeftIndex')).attr('disabled', false);
                     $(that.wrapSelector('#vp_bdRightIndex')).attr('disabled', false);
                 }
             });
 
             // on select button event
-            $(document).on('click', this.wrapSelector('#vp_bdOnSelect'), function() {
+            $(document).on('click', this.wrapSelector('#vp_bdOn'), function() {
                 var targetVariable = [ that.state.merge.left.variable, that.state.merge.right.variable ];
                 that.openColumnPopup(targetVariable, $(that.wrapSelector('#vp_bdOn')), 'Select columns from both dataframe');
             });
@@ -221,14 +221,14 @@ define([
                 
                 if ((colList && colList.length > 0)
                     || that.state.merge.right.on && that.state.merge.right.on.length > 0) {
-                    $(that.wrapSelector('#vp_bdOnSelect')).attr('disabled', true);
+                    $(that.wrapSelector('#vp_bdOn')).attr('disabled', true);
                 } else {
-                    $(that.wrapSelector('#vp_bdOnSelect')).attr('disabled', false);
+                    $(that.wrapSelector('#vp_bdOn')).attr('disabled', false);
                 }
             });
 
             // Left on select button event
-            $(document).on('click', this.wrapSelector('#vp_bdLeftOnSelect'), function() {
+            $(document).on('click', this.wrapSelector('#vp_bdLeftOn'), function() {
                 var targetVariable = [ that.state.merge.left.variable ];
                 that.openColumnPopup(targetVariable, $(that.wrapSelector('#vp_bdLeftOn')), 'Select columns from left dataframe');
             });
@@ -239,9 +239,9 @@ define([
                 that.state.merge.left.useIndex = useIndex;
 
                 if (useIndex || that.state.merge.right.useIndex) {
-                    $(that.wrapSelector('#vp_bdOnSelect')).attr('disabled', true);
+                    $(that.wrapSelector('#vp_bdOn')).attr('disabled', true);
                 } else {
-                    $(that.wrapSelector('#vp_bdOnSelect')).attr('disabled', false);
+                    $(that.wrapSelector('#vp_bdOn')).attr('disabled', false);
                 }
             });
 
@@ -252,14 +252,14 @@ define([
                 
                 if ((colList && colList.length > 0)
                     || that.state.merge.left.on && that.state.merge.left.on.length > 0) {
-                    $(that.wrapSelector('#vp_bdOnSelect')).attr('disabled', true);
+                    $(that.wrapSelector('#vp_bdOn')).attr('disabled', true);
                 } else {
-                    $(that.wrapSelector('#vp_bdOnSelect')).attr('disabled', false);
+                    $(that.wrapSelector('#vp_bdOn')).attr('disabled', false);
                 }
             });
 
             // Right on select button event
-            $(document).on('click', this.wrapSelector('#vp_bdRightOnSelect'), function() {
+            $(document).on('click', this.wrapSelector('#vp_bdRightOn'), function() {
                 var targetVariable = [ that.state.merge.right.variable ];
                 that.openColumnPopup(targetVariable, $(that.wrapSelector('#vp_bdRightOn')), 'Select columns from right dataframe');
             });
@@ -270,9 +270,9 @@ define([
                 that.state.merge.right.useIndex = useIndex;
 
                 if (useIndex || that.state.merge.left.useIndex) {
-                    $(that.wrapSelector('#vp_bdOnSelect')).attr('disabled', true);
+                    $(that.wrapSelector('#vp_bdOn')).attr('disabled', true);
                 } else {
-                    $(that.wrapSelector('#vp_bdOnSelect')).attr('disabled', false);
+                    $(that.wrapSelector('#vp_bdOn')).attr('disabled', false);
                 }
             });
 
@@ -574,8 +574,8 @@ define([
                 $(this.wrapSelector('#vp_bdHow')).val(merge.how);
                 this._loadSelectorInput(this.wrapSelector('#vp_bdOn'), merge.on);
                 if (merge.on && merge.on.length > 0) {
-                    $(this.wrapSelector('#vp_bdLeftOnSelect')).attr('disabled', true);
-                    $(this.wrapSelector('#vp_bdRightOnSelect')).attr('disabled', true);
+                    $(this.wrapSelector('#vp_bdLeftOn')).attr('disabled', true);
+                    $(this.wrapSelector('#vp_bdRightOn')).attr('disabled', true);
                     $(this.wrapSelector('#vp_bdLeftIndex')).attr('disabled', true);
                     $(this.wrapSelector('#vp_bdRightIndex')).attr('disabled', true);
                 }
@@ -583,7 +583,7 @@ define([
                 this._loadSelectorInput(this.wrapSelector('#vp_bdRightOn'), merge.right.on);
                 if (merge.left.on.length > 0 || merge.right.on.length > 0 
                     || merge.left.useIndex || merge.right.useIndex) {
-                    $(this.wrapSelector('#vp_bdOnSelect')).attr('disabled', true);
+                    $(this.wrapSelector('#vp_bdOn')).attr('disabled', true);
                 }
     
                 $(this.wrapSelector('#vp_bdLeftIndex')).prop('checked', merge.left.useIndex);
