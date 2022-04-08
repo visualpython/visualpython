@@ -322,8 +322,11 @@ define([
                 suggestInput.setComponentID(obj.name);
                 suggestInput.addClass('vp-input vp-state');
                 suggestInput.setSuggestList(function() { return obj.options; });
-                suggestInput.setNormalFilter(true);
+                suggestInput.setNormalFilter(obj.useFilter == undefined?false:obj.useFilter);
                 suggestInput.setValue(value);
+                if (obj.placeholder != undefined) {
+                    suggestInput.setPlaceholder(obj.placeholder);
+                }
                 suggestInput.setSelectEvent(function(selectedValue) {
                     // trigger change
                     $(pageThis.wrapSelector('#' + obj.name)).val(selectedValue);
@@ -454,6 +457,9 @@ define([
             suggestInput.setSuggestList(function() { return varList; });
             suggestInput.setNormalFilter(false);
             suggestInput.setValue(defaultValue);
+            if (obj.placeholder != undefined) {
+                suggestInput.setPlaceholder(obj.placeholder);
+            }
             suggestInput.setSelectEvent(function(selectedValue) {
                 // trigger change
                 $(divTag + ' #' + obj.name).val(selectedValue);
@@ -529,7 +535,13 @@ define([
      */
     var vp_getTagValue = function(pageThis, obj) {
         var value = '';
-        switch (obj.component) {
+        let componentType = 'input';
+        if (obj.component && obj.component.length == 1) {
+            componentType = obj.component[0];
+        } else {
+            componentType = $(pageThis.wrapSelector('#' + obj.name + '_type')).val();
+        }
+        switch (componentType) {
             case 'option_radio':
                 var input = $(pageThis.wrapSelector("input[name='"+obj.name+"']:checked")).val();
                 // same as default
@@ -545,7 +557,6 @@ define([
                 value = value.substr(0, value.length-1);
                 break;
             case 'input_multi':
-            case 'option_suggest':
             case 'bool_select':
             case 'var_select':
             case 'var_multi':
@@ -556,6 +567,7 @@ define([
             case 'table':
             case 'file':
             case 'option_select':
+            case 'option_suggest':
             case 'input_number':
             default:
                 var input = $(pageThis.wrapSelector('#'+obj.name)).val();
@@ -581,6 +593,9 @@ define([
                 var val = state[v.name];
                 if (val == undefined || val == '') {
                     val = vp_getTagValue(pageThis, v);
+                }
+                if (val == v.default) {
+                    val = '';
                 }
                 var id = '${' + v.name + '}';
                 if (val == undefined || val.trim() == '') {

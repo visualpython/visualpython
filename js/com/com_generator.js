@@ -249,6 +249,9 @@ define([
             suggestInput.setSuggestList(function() { return varList; });
             suggestInput.setNormalFilter(false);
             suggestInput.setValue($(divTag + ' #' + obj.name).val());
+            if (obj.placeholder != undefined) {
+                suggestInput.setPlaceholder(obj.placeholder);
+            }
             suggestInput.setSelectEvent(function(selectedValue) {
                 // trigger change
                 $(divTag + ' #' + obj.name).val(selectedValue);

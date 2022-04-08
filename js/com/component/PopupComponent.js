@@ -485,12 +485,15 @@ define([
             super.render(inplace);
 
             let { 
-                importButton, packageButton, 
+                installButton, importButton, packageButton, 
                 codeview, dataview, runButton, footer, 
                 sizeLevel, position
             } = this.config;
 
             // import & package manager button hide/show
+            if (!installButton) { // FIXME: Deprecated after creating package manager
+                $(this.wrapSelector('#popupInstall')).hide();
+            }
             if (!importButton) {
                 $(this.wrapSelector('#popupImport')).hide();
             }
