@@ -630,12 +630,7 @@ define([
             // calc - variable 1
             content.appendLine('<tr>');
             content.appendLine('<th><label>Variable 1</label></th>');
-            var dataTypes = ['DataFrame', 'Series', 'nparray', 'list', 'str'];
-            var varSelector1 = new VarSelector(dataTypes, 'DataFrame', true, true);
-            varSelector1.addBoxClass('vp-inner-popup-var1box mb5');
-            varSelector1.addClass('vp-inner-popup-var1');
-            content.appendFormatLine('<td>{0}', varSelector1.render());
-            content.appendFormatLine('<select class="{0}"></select></td>', 'vp-inner-popup-var1col');
+            content.appendFormatLine('<td><select class="{0}"></select></td>', 'vp-inner-popup-var1col');
             content.appendLine('</tr>');
             // calc -operator
             content.appendLine('<tr>');
@@ -650,11 +645,7 @@ define([
             // calc - variable 2
             content.appendLine('<tr>');
             content.appendLine('<th><label>Variable 2</label></th>');
-            var varSelector2 = new VarSelector(dataTypes, 'DataFrame', true, true);
-            varSelector2.addBoxClass('vp-inner-popup-var2box mb5');
-            varSelector2.addClass('vp-inner-popup-var2');
-            content.appendFormatLine('<td>{0}', varSelector2.render());
-            content.appendFormatLine('<select class="{0}"></select></td>', 'vp-inner-popup-var2col');
+            content.appendFormatLine('<td><select class="{0}"></select></td>', 'vp-inner-popup-var2col');
             content.appendLine('</tr>');
             content.appendLine('</table>');
             content.appendLine('</div>'); // end of vp-inner-popup-tab calculation
@@ -802,6 +793,33 @@ define([
             
             // bindEventForAddPage
             this.bindEventForPopupPage();
+
+            let that = this;
+
+            // set column list
+            vpKernel.getColumnList(this.state.tempObj).then(function(resultObj) {
+                let { result } = resultObj;
+                var colList = JSON.parse(result);
+                var tag1 = new com_String();
+                var tag2 = new com_String();
+                tag1.appendFormatLine('<select class="{0}">', 'vp-inner-popup-var1col');
+                tag2.appendFormatLine('<select class="{0}">', 'vp-inner-popup-var2col');
+                colList && colList.forEach(col => {
+                    tag1.appendFormatLine('<option data-code="{0}" value="{1}">{2}</option>'
+                            , col.value, col.label, col.label);
+                    tag2.appendFormatLine('<option data-code="{0}" value="{1}">{2}</option>'
+                            , col.value, col.label, col.label);
+                });
+                tag1.appendLine('</select>');
+                tag2.appendLine('</select>');
+                // replace column list
+                $(that.wrapSelector('.vp-inner-popup-var1col')).replaceWith(function() {
+                    return tag1.toString();
+                });
+                $(that.wrapSelector('.vp-inner-popup-var2col')).replaceWith(function() {
+                    return tag2.toString();
+                });
+            });
     
             // show popup box
             this.openInnerPopup(title);
@@ -824,12 +842,8 @@ define([
                         content['value'] = $(this.wrapSelector('.vp-inner-popup-input2')).val();
                         content['valueastext'] = $(this.wrapSelector('.vp-inner-popup-istext2')).prop('checked');
                     } else if (tab == 'calculation') {
-                        content['var1type'] = $(this.wrapSelector('.vp-inner-popup-var1box .vp-vs-data-type')).val();
-                        content['var1'] = $(this.wrapSelector('.vp-inner-popup-var1')).val();
                         content['var1col'] = $(this.wrapSelector('.vp-inner-popup-var1col')).val();
                         content['oper'] = $(this.wrapSelector('.vp-inner-popup-oper')).val();
-                        content['var2type'] = $(this.wrapSelector('.vp-inner-popup-var2box .vp-vs-data-type')).val();
-                        content['var2'] = $(this.wrapSelector('.vp-inner-popup-var2')).val();
                         content['var2col'] = $(this.wrapSelector('.vp-inner-popup-var2col')).val();
                     } else if (tab == 'replace') {
                         var useregex = $(this.wrapSelector('.vp-inner-popup-use-regex')).prop('checked');
@@ -1052,6 +1066,11 @@ define([
                         code.appendFormat("{0}.drop_duplicates(subset=[{1}], inplace=True)", tempObj, selectedName);
                     }
                     break;
+                case FRAME_EDIT_TYPE.DROP_OUT:
+                    if (axis == FRAME_AXIS.COLUMN) {
+                        code.appendFormat("{0} = vp_drop_outlier({1}, {2})", tempObj, tempObj, selectedName);
+                    }
+                    break;
                 case FRAME_EDIT_TYPE.ONE_HOT_ENCODING:
                     if (axis == FRAME_AXIS.COLUMN) {
                         code.appendFormat("{0} = pd.get_dummies(data={1}, columns=[{2}])", tempObj, tempObj, selectedName);
@@ -1082,15 +1101,9 @@ define([
                         var value = com_util.convertToStr(content.value, content.valueastext);
                         code.appendFormat("{0}[{1}] = {2}", tempObj, name, value);
                     } else if (tab == 'calculation') {
-                        var { var1type, var1, var1col, oper, var2type, var2, var2col } = content;
-                        var var1code = var1;
-                        if (var1type == 'DataFrame') {
-                            var1code += "['" + var1col + "']";
-                        }
-                        var var2code = var2;
-                        if (var2type == 'DataFrame') {
-                            var2code += "['" + var2col + "']";
-                        }
+                        var { var1col, oper, var2col } = content;
+                        var var1code = tempObj + "['" + var1col + "']";
+                        var var2code = tempObj + "['" + var2col + "']";
                         code.appendFormat('{0}[{1}] = {2} {3} {4}', tempObj, name, var1code, oper, var2code);
                     } else if (tab == 'replace') {
                         var replaceStr = new com_String();
@@ -1368,6 +1381,8 @@ define([
         DROP: 3,
         DROP_NA: 4,
         DROP_DUP: 5,
+        DROP_OUT: 11, 
+
         ONE_HOT_ENCODING: 6,
         SET_IDX: 7,
         RESET_IDX: 8,

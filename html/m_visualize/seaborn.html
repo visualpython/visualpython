@@ -1,81 +1,148 @@
 <body>
-    <div class="vp-grid-col-p50" style="height:270px;">
-        <!-- Chart & Data Selection Box-->
-        <div class="vp-chart-left-box">
-            <div class="vp-bold">
-                Chart Type
-                <span id="chartSetting" class="vp-chart-setting vp-no-selection">
-                    <i class="fa fa-gear"></i> Setting
-                </span>
-            </div>
-            <div class="vp-grid-border-box vp-grid-col-95">
-                <label for="chartType" class="vp-orange-text">Type of Chart</label>
-                <select id="chartType" class="vp-select vp-state">
-
-                </select>
-            </div>
-            <div class="vp-bold">Data Selection</div>
-            <div class="vp-grid-border-box vp-grid-col-95">
-                <label for="data" class="vp-orange-text">Variable</label>
-                <input type="text" id="data" class="vp-input vp-state" />
-                <label for="x" class="vp-orange-text">X Value</label>
-                <select id="x" class="vp-select">
-
-                </select>
-                <label for="y" class="vp-orange-text">Y Value</label>
-                <select id="y" class="vp-select">
-
-                </select>
-            </div>
+    <!-- Creating Subplots -->
+    <div>
+        <div>
+            <label class="vp-bold">
+                Creating Subplots
+                <input type="checkbox" class="vp-state" id="createSubplots"/>
+                <span style="height: 15px;"></span>
+            </label>
+            <span id="chartSetting" class="vp-chart-setting vp-no-selection">
+                <i class="fa fa-gear"></i> Setting
+            </span>
         </div>
-        <!-- Tab Option Box -->
-        <div class="vp-chart-right-box">
-            <div class="vp-tab-bar">
-                <div class="vp-tab-item vp-focus" data-type="info">Info</div>
-                <div class="vp-tab-item" data-type="element">Element</div>
-                <div class="vp-tab-item" data-type="figure">Figure</div>
+        <div id="subplotBox" class="vp-grid-border-box vp-grid-col-p50" style="display: none;">
+            <div class="vp-grid-col-p50">
+                <div>
+                    <label class="vp-bold" for="figWidth">Figure Size</label><div></div>
+                    <input type="number" class="vp-input sm vp-state" id="figWidth" placeholder="Width"/>
+                    <input type="number" class="vp-input sm vp-state" id="figHeight" placeholder="Height"/>
+                </div>
+                <div>
+                    <label class="vp-bold vp-orange-text" for="figRow">Number of subplots</label><div></div>
+                    <input type="number" class="vp-input sm vp-state" id="figRow" placeholder="Row"/>
+                    <input type="number" class="vp-input sm vp-state" id="figColumn" placeholder="Column"/>
+                </div>
             </div>
-            <div class="vp-tab-page-box vp-grid-border-box vp-scrollbar">
-                <div class="vp-tab-page vp-grid-col-95" data-type="info">
-                    <label for="title">Title</label>
-                    <input type="text" id="title" class="vp-input vp-state" placeholder="Title for the chart" />
-                    <label for="x_label">X Label</label>
-                    <input type="text" id="x_label" class="vp-input vp-state" placeholder="X Label" />
-                    <label for="y_label">Y Label</label>
-                    <input type="text" id="y_label" class="vp-input vp-state" placeholder="Y Label" />
-                    <label for="x_limit_from">X Limit</label>
-                    <div class="vp-grid-col-p50">
-                        <input type="text" id="x_limit_from" class="vp-input m vp-state" placeholder="From" />
-                        <input type="text" id="x_limit_to" class="vp-input m vp-state placeholder="To" />
-                    </div>
-                    <label for="y_limit_from">Y Limit</label>
-                    <div class="vp-grid-col-p50">
-                        <input type="text" id="y_limit_from" class="vp-input m vp-state" placeholder="From" />
-                        <input type="text" id="y_limit_to" class="vp-input m vp-state" placeholder="To" />
-                    </div>
-                    <label for="useLegend">Legend</label>
-                    <div class="vp-grid-col-p50">
-                        <select id="useLegend" class="vp-select m vp-state">
-                            <option value="False">False</option>
-                            <option value="True">True</option>
-                        </select>
-                        <select id="legendPos" class="vp-select m vp-state">
-                            <!-- Legend Position FIXME: -->
-
-                        </select>
-                    </div>
+            <div>
+                <div>
+                    <label class="vp-bold">Sharing axes?</label>
                 </div>
-                <div class="vp-tab-page vp-grid-col-95" data-type="element" style="display: none;">
-                    ELEMENT
-                </div>
-                <div class="vp-tab-page vp-grid-col-95" data-type="figure" style="display: none;">
-                    FIGURE
+                <div>
+                    <label><input type="checkbox" class="vp-state" id="shareX" checked/><span>Share X-axis</span></label>
+                    <label><input type="checkbox" class="vp-state" id="shareY" checked/><span>Share Y-axis</span></label>
+                    <button class="vp-button activated vp-create-subplot-btn" id="createSubplotsBtn">Create</button>
                 </div>
             </div>
         </div>
     </div>
-    <div>
-        <div class="vp-bold">Chart Preview <button id="previewTest" class="vp-button activated">Preview Test</button></div>
+    <div class="vp-tab-bar figure" data-level="figure" style="margin-top:10px;">
+        <div class="vp-tab-item vp-focus" data-type="1">Plot 1</div>
+        <div class="vp-tab-item" data-type="2">Plot 2</div>
+        <div class="vp-tab-item" data-type="3">Plot 3</div>
+    </div>
+    <div class="vp-tab-page-box figure vp-grid-border-box">
+        <div class="vp-tab-page" data-type="1">
+            <div class="vp-chart-plot-box">
+                <!-- Chart & Data Selection Box-->
+                <div class="vp-chart-left-box">
+                    <div class="vp-italic">
+                        <span class="vp-orange-text">NOTE: </span>Options selected from this tab only apply to subplot 1.
+                    </div>
+                    <label for="chartType" class="vp-bold vp-orange-text">Chart Type</label>
+                    <select id="chartType" class="vp-select vp-state wp100">
+
+                    </select>
+                    <label for="data" class="vp-bold vp-orange-text">Variable</label>
+                    <input type="text" id="data" class="vp-input vp-state"/>
+                    <div class="vp-grid-col-p50">
+                        <div>
+                            <label for="x" class="vp-bold vp-orange-text">X-axis Value</label>
+                            <select id="x" class="vp-select vp-state">
+    
+                            </select>
+                        </div>
+                        <div>
+                            <label for="y" class="vp-bold">Y-axis Value</label>
+                            <select id="y" class="vp-select vp-state">
+    
+                            </select>
+                        </div>
+                    </div>
+                    <label for="hue" class="vp-bold">Hue</label>
+                    <select id="hue" class="vp-select vp-state wp100">
+
+                    </select>
+                </div>
+                <!-- Tab Option Box -->
+                <div class="vp-chart-right-box">
+                    <div class="vp-tab-bar plot" data-level="plot">
+                        <div class="vp-tab-item vp-focus" data-type="info">Info</div>
+                        <div class="vp-tab-item" data-type="style">Style</div>
+                        <div class="vp-tab-item" data-type="setting">Setting</div>
+                    </div>
+                    <div class="vp-tab-page-box plot vp-grid-border-box vp-scrollbar">
+                        <div class="vp-tab-page vp-grid-box" data-type="info">
+                            <label for="title">Title</label>
+                            <input type="text" id="title" class="vp-input vp-state wp100" placeholder="Title for the chart" />
+                            <div class="vp-grid-col-p50">
+                                <div>
+                                    <label for="x_label">X Label</label>
+                                    <input type="text" id="x_label" class="vp-input vp-state" placeholder="Type X Label" />
+                                </div>
+                                <div>
+                                    <label for="y_label">Y Label</label>
+                                    <input type="text" id="y_label" class="vp-input vp-state" placeholder="Type Y Label" />
+                                </div>
+                            </div>
+                            
+                            <label for="useLegend">Legend</label>
+                            <div class="vp-grid-col-p50">
+                                <select id="useLegend" class="vp-select vp-state">
+                                    <option value="False">False</option>
+                                    <option value="True">True</option>
+                                </select>
+                                <select id="legendPos" class="vp-select vp-state">
+                                    <!-- Legend Position FIXME: -->
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="vp-tab-page vp-grid-col-95" data-type="style" style="display: none;">
+                            STYLE : grid / marker / color
+                        </div>
+                        <div class="vp-tab-page vp-grid-col-95" data-type="setting" style="display: none;">
+                            <!-- SETTING : axis limit / tick interval / rotate tick labels ... -->
+                            <label for="x_limit_from">X Limit</label>
+                            <div class="vp-grid-col-p50">
+                                <input type="text" id="x_limit_from" class="vp-input m vp-state" placeholder="From" />
+                                <input type="text" id="x_limit_to" class="vp-input m vp-state" placeholder="To" />
+                            </div>
+                            <label for="y_limit_from">Y Limit</label>
+                            <div class="vp-grid-col-p50">
+                                <input type="text" id="y_limit_from" class="vp-input m vp-state" placeholder="From" />
+                                <input type="text" id="y_limit_to" class="vp-input m vp-state" placeholder="To" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="margin-top:10px;">
+        <div class="vp-bold">
+            <span class="vp-chart-preview-title">Chart Preview</span> 
+            <span class="vp-chart-preview-option vp-no-selection">
+                <label><input type="checkbox" id="useSampling" class="vp-state" checked><span>Sampling</span></label>
+                <select id="sampleCount" class="vp-select s vp-state">
+
+                </select>
+                <label><input type="checkbox" id="autoRefresh" class="vp-state" checked><span>Auto Refresh</span></label>
+                <span id="previewRefresh" class="vp-cursor">
+                    <img src="/nbextensions/visualpython/img/refresh.svg"/>
+                </span>
+            </span>
+        </div>
         <div class="vp-chart-preview-box vp-grid-border-box">
             <span></span>
             <div id="chartPreview" class="vp-center">

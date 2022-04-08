@@ -3,7 +3,7 @@
     width: 100%;
     height: 100%;
     grid-row-gap: 5px;
-    grid-template-rows: 60px 140px auto;
+    grid-template-rows: 140px auto;
 }
 .vp-pf-prepare-box {
     display: grid;

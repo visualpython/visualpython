@@ -33,10 +33,19 @@ define([
 
             this.state = {
                 chartType: 'scatterplot',
+                figWidth: '',
+                figHeight: '',
+                figRow: 0,
+                figColumn: 0,
+                shareX: false,
+                shareY: false,
                 data: '',
                 x: '',
                 y: '',
+                hue: '',
                 useSampling: true,
+                sampleCount: 30,
+                autoRefresh: true,
                 ...this.state
             }
             
@@ -44,7 +53,8 @@ define([
             this.chartTypeList = {
                 'Relational': [ 'scatterplot', 'lineplot' ],
                 'Distributions': [ 'histplot', 'kdeplot', 'ecdfplot', 'rugplot' ], // FIXME: ecdf : no module
-                'Categorical': [ 'stripplot', 'swarmplot', 'boxplot', 'violinplot', 'pointplot', 'barplot' ]
+                'Categorical': [ 'stripplot', 'swarmplot', 'boxplot', 'violinplot', 'pointplot', 'barplot' ],
+                'ETC': [ ]
             }
         }
 
@@ -52,38 +62,55 @@ define([
             super._bindEvent();
 
             let that = this;
+
             // setting popup
             $(this.wrapSelector('#chartSetting')).on('click', function() {
                 // show popup box
                 that.openInnerPopup('Chart Setting');
             });
 
+            // check create subplots
+            $(this.wrapSelector('#createSubplots')).on('change', function() {
+                let checked = $(this).prop('checked');
+                // toggle figure option box
+                if (checked) {
+                    $(that.wrapSelector('#subplotBox')).show();
+                } else {
+                    $(that.wrapSelector('#subplotBox')).hide();
+                }
+            });
+
+            // create subplots
+            $(this.wrapSelector('#createSubplotsBtn')).on('click', function() {
+                // TODO:
+            });
+
             // change tab
             $(this.wrapSelector('.vp-tab-item')).on('click', function() {
+                let level = $(this).parent().data('level');
                 let type = $(this).data('type'); // info / element / figure
 
-                $(that.wrapSelector('.vp-tab-item')).removeClass('vp-focus');
+                $(that.wrapSelector(com_util.formatString('.vp-tab-bar.{0} .vp-tab-item', level))).removeClass('vp-focus');
                 $(this).addClass('vp-focus');
 
-                $(that.wrapSelector('.vp-tab-page')).hide();
+                $(that.wrapSelector(com_util.formatString('.vp-tab-page-box.{0} .vp-tab-page', level))).hide();
                 $(that.wrapSelector(com_util.formatString('.vp-tab-page[data-type="{0}"]', type))).show();
-            })
+            });
 
             // bind column by dataframe
             $(document).on('change', this.wrapSelector('#data'), function() {
-                com_generator.vp_bindColumnSource(that.wrapSelector(), this, ['x', 'y'], 'select');
+                com_generator.vp_bindColumnSource(that.wrapSelector(), this, ['x', 'y', 'hue'], 'select');
             });
 
-            // chart preview FIXME: real-time preview, is it ok? ex/ violinplot ... too much time to load
-            $(this.wrapSelector('#previewTest')).on('click', function() {
+            // preview refresh
+            $(this.wrapSelector('#previewRefresh')).on('click', function() {
                 that.loadPreview();
             });
-            // $(this.wrapSelector('select')).on('change', function() {
-            //     that.loadPreview();
-            // });
-            // $(this.wrapSelector('input')).on('change', function() {
-            //     that.loadPreview();
-            // });
+            $(this.wrapSelector('.vp-state')).on('change', function() {
+                if (that.state.autoRefresh && that.state.data != '') {
+                    that.loadPreview();
+                }
+            });
 
         }
 
@@ -116,6 +143,19 @@ define([
             varSelector.addClass('vp-state vp-input');
             varSelector.setValue(this.state.featureData);
             $(page).find('#data').replaceWith(varSelector.toTagString());
+
+            // preview sample count
+            let sampleCountList = [30, 50, 100, 300, 500, 700, 1000];
+            let sampleCountTag = new com_String();
+            sampleCountList.forEach(cnt => {
+                let selectedFlag = '';
+                if (cnt == that.state.sampleCount) {
+                    selectedFlag = 'selected';
+                }
+                sampleCountTag.appendFormatLine('<option value="{0}" {1}>{2}</option>',
+                    cnt, selectedFlag, cnt);
+            });
+            $(page).find('#sampleCount').html(sampleCountTag.toString());
 
             return page;
         }
@@ -222,7 +262,7 @@ define([
 
         loadPreview() {
             let that = this;
-            let code = this.generateCode();
+            let code = this.generateCode(true);
 
             // show variable information on clicking variable
             vpKernel.execute(code).then(function(resultObj) {
@@ -277,7 +317,7 @@ define([
             return code.toString();
         }
 
-        generateCode() {
+        generateCode(preview=false) {
             let { chartType, data, x, y, userOption='', allocateTo='', useSampling } = this.state;
             let code = new com_String();
             let config = this.chartConfig[chartType];
@@ -285,9 +325,13 @@ define([
             let chartCode = com_generator.vp_codeGenerator(this, config, this.state, (userOption != ''? ', ' + userOption : ''));
 
             let convertedData = data;
-            if (useSampling) {
-                // FIXME: sampling code confirm needed, count confirm
-                convertedData = data + '.sample(n=30, random_state=0)';
+            if (preview) {
+                // set figure size for preview chart
+                code.appendLine('plt.figure(figsize=(6, 4))');
+                if (useSampling) {
+                    // data sampling code for preview
+                    convertedData = data + '.sample(n=30, random_state=0)';
+                }   
             }
 
             // replace pre-defined options

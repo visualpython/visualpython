@@ -315,6 +315,10 @@
 .vp-block-markdown.vp-focus .vp-block-header {
     border: 2px solid var(--highlight-color);
 }
+.vp-block-markdown .vp-block-header:empty::after {
+    content: 'Double click to edit.';
+    font-style: italic;
+}
 
 /* block sortable style */
 .vp-sortable-placeholder .vp-block-header {

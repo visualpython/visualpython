@@ -137,6 +137,10 @@ body {
 .vp-select.m {
     width: 116px !important;
 }
+.vp-input.sm,
+.vp-select.sm {
+    width: 70px !important;
+}
 .vp-input.s,
 .vp-select.s {
     width: 55px !important;
@@ -200,6 +204,10 @@ body {
     border: 0.25px solid #E4E4E4;
     color: #696969;
     cursor: not-allowed;
+}
+.vp-button.activated.disabled {
+    background: #FFC09A;
+    color: white;
 }
 .vp-checkbox {
     display: inline-block;
@@ -355,7 +363,7 @@ hr.vp-extra-menu-line {
 }
 .vp-grid-col-p50 {
     display: grid;
-    grid-template-columns: 52% 48%;
+    grid-template-columns: 50% 50%;
     grid-row-gap: 5px;
     align-items: baseline;
     align-content: center;

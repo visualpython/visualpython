@@ -54,6 +54,7 @@ define([
                 sizeLevel: 0,          // 0: 400x400 / 1: 500x500 / 2: 600x500 / 3: 750x500
                 executeMode: 'code',   // cell execute mode
                 // show header bar buttons
+                installButton: false, // install button (#popupInstall) // FIXME: after creating packagemanager, deprecate it
                 importButton: false,  // import library button (#popupImport)
                 packageButton: false, // package manager button (#popupPackage)
                 // show view box
@@ -254,6 +255,15 @@ define([
                 $(that.eventTarget).trigger({
                     type: 'close_option_page',
                     component: that
+                });
+            });
+
+            // Click install package
+            $(this.wrapSelector('#popupInstall')).on('click', function() {
+                // add install codes
+                var codes = that.generateInstallCode();
+                codes && codes.forEach(code => {
+                    com_interface.insertCell('code', code);
                 });
             });
 
@@ -475,12 +485,15 @@ define([
             super.render(inplace);
 
             let { 
-                importButton, packageButton, 
+                installButton, importButton, packageButton, 
                 codeview, dataview, runButton, footer, 
                 sizeLevel, position
             } = this.config;
 
             // import & package manager button hide/show
+            if (!installButton) { // FIXME: Deprecated after creating package manager
+                $(this.wrapSelector('#popupInstall')).hide();
+            }
             if (!importButton) {
                 $(this.wrapSelector('#popupImport')).hide();
             }
@@ -572,6 +585,15 @@ define([
         renderDataView() {
             $('.vp-popup-dataview-box').html('');
             $('.vp-popup-dataview-box').html(this.templateForDataView());
+        }
+
+        /**
+         * Generated on clicking Install Package button
+         * @returns Array of installment codes
+         */
+        generateInstallCode() {
+            /** Implementation needed - Generated on clicking Install Package button */
+            return [];
         }
 
         generateImportCode() {

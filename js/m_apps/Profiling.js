@@ -39,6 +39,8 @@ define([
         _init() {
             super._init();
             /** Write codes executed before rendering */
+            this.config.installButton = true;
+            this.config.importButton = true;
             this.config.codeview = false;
             this.config.dataview = false;
             this.config.runButton = false;
@@ -51,20 +53,6 @@ define([
             super._bindEvent();
             /** Implement binding events */
             let that = this;
-            // click install
-            $(this.wrapSelector('.vp-pf-install-btn:not(.disabled)')).on('click', function(event) {
-                com_interface.insertCell('code', '!pip install pandas-profiling');
-            });
-
-            // click check installed
-            $(this.wrapSelector('.vp-pf-check-btn')).on('click', function() {
-                that.checkInstalled();
-            });
-
-            // click import
-            $(this.wrapSelector('.vp-pf-import-btn')).on('click', function(event) {
-                com_interface.insertCell('code', 'from pandas_profiling import ProfileReport');
-            });
 
             // refresh df
             $(this.wrapSelector('.vp-pf-df-refresh')).on('click', function() {
@@ -150,6 +138,16 @@ define([
             this.loadVariableList();
             this.loadReportList();
             this.checkInstalled();
+        }
+
+        generateInstallCode() {
+            return [
+                '!pip install pandas-profiling'
+            ];
+        }
+
+        generateImportCode() {
+            return 'from pandas_profiling import ProfileReport';
         }
 
         generateCode() {

@@ -38,6 +38,8 @@ nltk.download('punkt')`;
         _init() {
             super._init();
             /** Write codes executed before rendering */
+            this.config.installButton = true;
+            this.config.importButton = true;
             this.config.dataview = false;
             this.config.size = { width: 500, height: 400 };
 
@@ -52,22 +54,6 @@ nltk.download('punkt')`;
             super._bindEvent();
             /** Implement binding events */
             let that = this;
-            // click install
-            $(this.wrapSelector('.vp-pdf-install-btn:not(.disabled)')).on('click', function () {
-                com_interface.insertCell('code', PDF_INSTALL1);
-                com_interface.insertCell('code', PDF_INSTALL2);
-
-            });
-
-            // click check installed
-            $(this.wrapSelector('.vp-pdf-check-btn')).on('click', function () {
-                that.checkInstalled();
-            });
-
-            // click import
-            $(this.wrapSelector('.vp-pdf-import-btn')).on('click', function () {
-                com_interface.insertCell('code', PDF_IMPORT);
-            });
 
             // click file navigation button
             $(this.wrapSelector('#vp_openFileNavigationBtn')).on('click', function() {
@@ -97,6 +83,17 @@ nltk.download('punkt')`;
             super.render();
 
             this.checkInstalled();
+        }
+
+        generateInstallCode() {
+            return [
+                PDF_INSTALL1,
+                PDF_INSTALL2
+            ];
+        }
+
+        generateImportCode() {
+            return PDF_IMPORT;
         }
 
         generateCode() {
