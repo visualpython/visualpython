@@ -141,7 +141,7 @@ define([
             });
 
             // groupby select button event
-            $(document).on('click', this.wrapSelector('#vp_gbBySelect'), function() {
+            $(document).on('click', this.wrapSelector('#vp_gbBy'), function() {
                 that.openColumnSelector($(that.wrapSelector('#vp_gbBy')), 'Select columns to group');
             });
 
@@ -180,7 +180,7 @@ define([
             });
 
             // display select button event
-            $(document).on('click', this.wrapSelector('#vp_gbDisplaySelect'), function() {
+            $(document).on('click', this.wrapSelector('#vp_gbDisplay'), function() {
                 that.openColumnSelector($(that.wrapSelector('#vp_gbDisplay')), 'Select columns to display');
             });
 
@@ -268,7 +268,7 @@ define([
             });
 
             // edit target columns
-            $(document).on('click', this.wrapSelector('.vp-gb-adv-col-selector'), function() {
+            $(document).on('click', this.wrapSelector('.vp-gb-adv-col'), function() {
                 var includeList = that.state.display;
                 if (includeList && includeList.length > 0) {
                     includeList = includeList.map(col => col.code);
@@ -309,7 +309,7 @@ define([
             });
 
             // edit columns naming
-            $(document).on('click', this.wrapSelector('.vp-gb-adv-naming-selector'), function() {
+            $(document).on('click', this.wrapSelector('.vp-gb-adv-naming'), function() {
                 var parentDiv = $(this).parent();
                 var columns = $(parentDiv).find('.vp-gb-adv-col').data('list');
                 if (columns && columns.length > 0) {
@@ -318,7 +318,7 @@ define([
                 var method = $(parentDiv).find('.vp-gb-adv-method').val();
                 if (!method || method == '' || method == "''") {
                     // set focus on selecting method tag
-                    $(parentDiv).find('.vp-gb-adv-method-selector').focus();
+                    $(parentDiv).find('.vp-gb-adv-method').focus();
                     return;
                 }
                 that.openNamingPopup($(parentDiv).find('.vp-gb-adv-naming'), columns, method);
@@ -341,12 +341,12 @@ define([
             $(document).off('change', this.wrapSelector('#vp_gbVariable'));
             $(document).off('click', this.wrapSelector('.vp-gb-df-refresh'));
             $(document).off('change', this.wrapSelector('#vp_gbBy'));
-            $(document).off('click', this.wrapSelector('#vp_gbBySelect'));
+            $(document).off('click', this.wrapSelector('#vp_gbBy'));
             $(document).off('change', this.wrapSelector('#vp_gbByGrouper'));
             $(document).off('change', this.wrapSelector('#vp_gbByGrouperNumber'));
             $(document).off('change', this.wrapSelector('#vp_gbByGrouperPeriod'));
             $(document).off('change', this.wrapSelector('#vp_gbDisplay'));
-            $(document).off('click', this.wrapSelector('#vp_gbDisplaySelect'));
+            $(document).off('click', this.wrapSelector('#vp_gbDisplay'));
             $(document).off('change', this.wrapSelector('#vp_gbMethodSelect'));
             $(document).off('change', this.wrapSelector('#vp_gbAdvanced'));
             $(document).off('change', this.wrapSelector('#vp_gbAllocateTo'));
@@ -355,11 +355,11 @@ define([
 
             $(document).off('click', this.wrapSelector('#vp_gbAdvAdd'));
             $(document).off('change', this.wrapSelector('.vp-gb-adv-col'));
-            $(document).off('click', this.wrapSelector('.vp-gb-adv-col-selector'));
+            $(document).off('click', this.wrapSelector('.vp-gb-adv-col'));
             $(document).off('change', this.wrapSelector('.vp-gb-adv-method-selector'));
             $(document).off('click', this.wrapSelector('.vp-gb-adv-method-return'));
             $(document).off('change', this.wrapSelector('.vp-gb-adv-naming'));
-            $(document).off('click', this.wrapSelector('.vp-gb-adv-naming-selector'));
+            $(document).off('click', this.wrapSelector('.vp-gb-adv-naming'));
             $(document).off('click', this.wrapSelector('.vp-gb-adv-item-delete'));
             $(document).off('click.' + this.uuid);
         }
@@ -396,9 +396,8 @@ define([
             var page = new com_String();
             page.appendFormatLine('<div class="{0}">', 'vp-gb-adv-item');
             // target columns
-            page.appendFormatLine('<input type="text" class="{0}" placeholder="{1}" title="{2}" disabled/>'
+            page.appendFormatLine('<input type="text" class="{0}" placeholder="{1}" title="{2}" readonly/>'
                                 , 'vp-gb-adv-col', 'Column list', 'Apply All columns, if not selected');
-            page.appendFormatLine('<button class="{0} {1}">{2}</button>', 'vp-gb-adv-col-selector', 'vp-button w50', 'Edit');
             // method select
             page.appendFormatLine('<select class="{0}">', 'vp-gb-adv-method-selector');
             var defaultMethod = '';
@@ -418,8 +417,7 @@ define([
                                 , '/nbextensions/visualpython/img/arrow_left.svg', 'vp-gb-adv-method-return', 'Return to select method');
             page.appendLine('</div>');
             // naming
-            page.appendFormatLine('<input type="text" class="{0}" placeholder="{1}" data-dict={} disabled/>', 'vp-gb-adv-naming', 'Display name');
-            page.appendFormatLine('<button class="{0} {1}">{2}</button>', 'vp-gb-adv-naming-selector', 'vp-button w50', 'Edit');
+            page.appendFormatLine('<input type="text" class="{0}" placeholder="{1}" data-dict={} readonly/>', 'vp-gb-adv-naming', 'Display name');
             // delete button
             page.appendFormatLine('<div class="{0} {1}"><img src="{2}"/></div>', 'vp-gb-adv-item-delete', 'vp-cursor', '/nbextensions/visualpython/img/close_small.svg');
             page.appendLine('</div>');

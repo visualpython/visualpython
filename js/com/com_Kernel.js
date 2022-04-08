@@ -141,6 +141,19 @@ define([
                 })
             });
         }
+
+        getColumnCategory(dataframe, columnName) {
+            var that = this;
+            return new Promise(function(resolve, reject) {
+                that.execute(com_util.formatString('_vp_print(_vp_get_column_category({0}, {1}))', dataframe, columnName))
+                .then(function(resultObj) {
+                    resolve(resultObj);
+                }).catch(function(err) {
+                    // reject
+                    reject(err);
+                })
+            });
+        }
     
         getRowList(dataframe) {
             var that = this;

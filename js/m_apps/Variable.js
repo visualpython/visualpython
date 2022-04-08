@@ -93,21 +93,23 @@ define([
             
             // HTML rendering
             vpKernel.getDataList(types).then(function(resultObj) {
-                // var jsonVars = result.replace(/'/gi, `"`);
-                // var varList = JSON.parse(jsonVars);
                 let varListStr = resultObj.result;
                 var varList = JSON.parse(varListStr);
     
                 // add variable list in table
-                varList.forEach(varObj => {
+                varList.forEach((varObj, idx) => {
                     if (types.includes(varObj.varType) && varObj.varName[0] !== '_') {
+                        let selected = false;
+                        if ((that.state.variable == varObj.varName)) {
+                            selected = true;
+                        }
                         var tagTr = document.createElement('tr');
                         var tagTdName = document.createElement('td');
                         var tagTdType = document.createElement('td');
                         $(tagTr).attr({
                             'data-var-name': varObj.varName,
                             'data-var-type': varObj.varType,
-                            'class': that.state.variable == varObj.varName?'vp-selected':''
+                            'class': selected?'vp-selected':''
                         });
                         tagTdName.innerText = varObj.varName;
                         tagTdType.innerText = varObj.varType;
@@ -150,6 +152,10 @@ define([
                         $(tagTable).append(tagTr);
                     }
                 });
+
+                if ($(that.wrapSelector('.vp-selected')).length == 0) {
+                    $(that.wrapSelector('#vp_var_variableBox tbody tr:nth(0)')).addClass('vp-selected');
+                }
 
                 // trigger click of selected variable
                 $(that.wrapSelector('.vp-selected')).click();

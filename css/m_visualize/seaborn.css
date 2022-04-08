@@ -4,6 +4,9 @@
     padding-right: 5px;
     cursor: pointer;
 }
+.vp-create-subplot-btn {
+    float: right;
+}
 .vp-tab-bar {
     width: 100%;
     overflow-y: hidden;
@@ -29,15 +32,38 @@
 }
 .vp-tab-page {
     width: 100%;
-    height: 180px;
 }
-
+.vp-tab-page-box.plot {
+    height: calc(100% - 30px);
+    align-content: baseline;
+}
+.vp-chart-plot-box {
+    display: grid;
+    grid-template-columns: calc(50% - 8px) calc(50% - 8px);
+    grid-row-gap: 5px;
+    grid-column-gap: 15px;
+    align-items: baseline;
+    align-content: center;
+}
+.vp-chart-left-box {
+    display: grid;
+    grid-row-gap: 3px;
+}
+.vp-chart-left-box > label {
+    margin-bottom: 0px;
+}
 .vp-chart-left-box, 
 .vp-chart-right-box {
-    padding: 3px;
-    height: 250px;
+    height: 100%;
 }
-
+.vp-chart-preview-title {
+    line-height: 30px;
+}
+.vp-chart-preview-option {
+    float: right;
+    padding-right: 5px;
+}
 .vp-chart-preview-box {
     min-height: 150px;
+    width: 100%;
 }

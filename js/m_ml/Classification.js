@@ -68,11 +68,12 @@ define([
                 $(that.wrapSelector(`.vp-model-box[data-type="${modelControlType}"]`)).show();
             });
 
-            // select model
+            // select model type
             $(this.wrapSelector('#modelType')).on('change', function() {
                 let modelType = $(this).val();
                 that.state.modelType = modelType;
                 $(that.wrapSelector('.vp-model-option-box')).html(that.templateForOption(modelType));
+                that.viewOption();
 
                 // show install button
                 if (that.modelConfig[modelType].install != undefined) {
@@ -94,7 +95,7 @@ define([
             // change model
             $(this.wrapSelector('#model')).on('change', function() {
                 that.modelEditor.reload();
-            })
+            });
         }
 
         templateForBody() {
@@ -227,8 +228,66 @@ define([
             return optBox.toString();
         }
 
+        viewOption() {
+            // SVC - kernel selection
+            if (this.state.modelType == 'sv-clf') {
+                let kernelType = this.state.kernel;
+                switch (kernelType) {
+                    case undefined: // default = rbf
+                    case '':
+                    case 'rbf': // gamma
+                        $(this.wrapSelector('label[for="gamma"]')).show();
+                        $(this.wrapSelector('#gamma')).show(); 
+                        // hide others
+                        $(this.wrapSelector('label[for="degree"]')).hide();
+                        $(this.wrapSelector('#degree')).hide();
+                        $(this.wrapSelector('label[for="coef0"]')).hide();
+                        $(this.wrapSelector('#coef0')).hide();
+                        break;
+                    case 'poly': // gamma / degree / coef0
+                        $(this.wrapSelector('label[for="gamma"]')).show();
+                        $(this.wrapSelector('#gamma')).show(); 
+                        $(this.wrapSelector('label[for="degree"]')).show();
+                        $(this.wrapSelector('#degree')).show(); 
+                        $(this.wrapSelector('label[for="coef0"]')).show();
+                        $(this.wrapSelector('#coef0')).show();
+                        break;
+                    case 'sigmoid': // gamma / coef0
+                        $(this.wrapSelector('label[for="gamma"]')).show();
+                        $(this.wrapSelector('#gamma')).show(); 
+                        $(this.wrapSelector('label[for="coef0"]')).show();
+                        $(this.wrapSelector('#coef0')).show();
+                        // hide others
+                        $(this.wrapSelector('label[for="degree"]')).hide();
+                        $(this.wrapSelector('#degree')).hide();
+                        break;
+                    default:
+                        // hide others
+                        $(this.wrapSelector('label[for="gamma"]')).hide();
+                        $(this.wrapSelector('#gamma')).hide(); 
+                        $(this.wrapSelector('label[for="degree"]')).hide();
+                        $(this.wrapSelector('#degree')).hide();
+                        $(this.wrapSelector('label[for="coef0"]')).hide();
+                        $(this.wrapSelector('#coef0')).hide();
+                        break;
+                }
+
+                // Model Creation - SVC kernel selection
+                let that = this;
+                $(this.wrapSelector('#kernel')).off('change');
+                $(this.wrapSelector('#kernel')).change(function() {
+                    that.state.kernel = $(this).val();
+                    that.viewOption();
+                });
+            }
+
+        }
+
         render() {
             super.render();
+
+            // Model Creation - dynamically view options
+            this.viewOption();
 
             // Model Editor
             this.modelEditor = new ModelEditor(this, "model", "instanceEditor");
