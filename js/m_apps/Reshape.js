@@ -62,15 +62,15 @@ define([
             $(document).off('click', this.wrapSelector('.vp-rs-df-refresh'));
             $(document).off('change', this.wrapSelector('#vp_rsType'));
             $(document).off('change', this.wrapSelector('#vp_rsIndex'));
-            $(document).off('click', this.wrapSelector('#vp_rsIndexSelect'));
+            $(document).off('click', this.wrapSelector('#vp_rsIndex'));
             $(document).off('change', this.wrapSelector('#vp_rsColumns'));
-            $(document).off('click', this.wrapSelector('#vp_rsColumnsSelect'));
+            $(document).off('click', this.wrapSelector('#vp_rsColumns'));
             $(document).off('change', this.wrapSelector('#vp_rsValues'));
-            $(document).off('click', this.wrapSelector('#vp_rsValuesSelect'));
+            $(document).off('click', this.wrapSelector('#vp_rsValues'));
             $(document).off('change', this.wrapSelector('#vp_rsIdVars'));
-            $(document).off('click', this.wrapSelector('#vp_rsIdVarsSelect'));
+            $(document).off('click', this.wrapSelector('#vp_rsIdVars'));
             $(document).off('change', this.wrapSelector('#vp_rsValueVars'));
-            $(document).off('click', this.wrapSelector('#vp_rsValueVarsSelect'));
+            $(document).off('click', this.wrapSelector('#vp_rsValueVars'));
             $(document).off('change', this.wrapSelector('#vp_rsUserOption'));
             $(document).off('change', this.wrapSelector('#vp_rsAllocateTo'));
             $(document).off('change', this.wrapSelector('#vp_rsResetIndex'));
@@ -135,7 +135,7 @@ define([
             });
 
             // index select button event
-            $(document).on('click', this.wrapSelector('#vp_rsIndexSelect'), function() {
+            $(document).on('click', this.wrapSelector('#vp_rsIndex'), function() {
                 var targetVariable = [ that.state.variable ];
                 var excludeList = [ ...that.state.pivot.columns, ...that.state.pivot.values ].map(obj => obj.code);
                 that.openColumnSelector(targetVariable, $(that.wrapSelector('#vp_rsIndex')), 'Select columns', excludeList);
@@ -148,7 +148,7 @@ define([
             });
 
             // columns select button event
-            $(document).on('click', this.wrapSelector('#vp_rsColumnsSelect'), function() {
+            $(document).on('click', this.wrapSelector('#vp_rsColumns'), function() {
                 var targetVariable = [ that.state.variable ];
                 var excludeList = [ ...that.state.pivot.index, ...that.state.pivot.values ].map(obj => obj.code);
                 that.openColumnSelector(targetVariable, $(that.wrapSelector('#vp_rsColumns')), 'Select columns', excludeList);
@@ -161,7 +161,7 @@ define([
             });
 
             // values select button event
-            $(document).on('click', this.wrapSelector('#vp_rsValuesSelect'), function() {
+            $(document).on('click', this.wrapSelector('#vp_rsValues'), function() {
                 var targetVariable = [ that.state.variable ];
                 var excludeList = [ ...that.state.pivot.index, ...that.state.pivot.columns ].map(obj => obj.code);
                 that.openColumnSelector(targetVariable, $(that.wrapSelector('#vp_rsValues')), 'Select columns', excludeList);
@@ -174,7 +174,7 @@ define([
             });
 
             // id vars select button event
-            $(document).on('click', this.wrapSelector('#vp_rsIdVarsSelect'), function() {
+            $(document).on('click', this.wrapSelector('#vp_rsIdVars'), function() {
                 var targetVariable = [ that.state.variable ];
                 var excludeList = that.state.melt.valueVars.map(obj => obj.code);
                 that.openColumnSelector(targetVariable, $(that.wrapSelector('#vp_rsIdVars')), 'Select columns', excludeList);
@@ -187,7 +187,7 @@ define([
             });
 
             // value vars select button event
-            $(document).on('click', this.wrapSelector('#vp_rsValueVarsSelect'), function() {
+            $(document).on('click', this.wrapSelector('#vp_rsValueVars'), function() {
                 var targetVariable = [ that.state.variable ];
                 var excludeList = that.state.melt.idVars.map(obj => obj.code);
                 that.openColumnSelector(targetVariable, $(that.wrapSelector('#vp_rsValueVars')), 'Select columns', excludeList);
