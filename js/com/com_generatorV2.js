@@ -214,7 +214,9 @@ define([
         let content = '';
         let value = state[obj.name];
         if (value == undefined) {
-            if (obj.default != undefined) {
+            if (obj.value != undefined) {
+                value = obj.value;
+            } else if (obj.default != undefined) {
                 value = obj.default;
             } else {
                 value = '';
@@ -591,11 +593,8 @@ define([
         try {
             package.options && package.options.forEach(function(v, i) {
                 var val = state[v.name];
-                if (val == undefined || val == '') {
+                if (val == undefined || val == '' || val == v.default) {
                     val = vp_getTagValue(pageThis, v);
-                }
-                if (val == v.default) {
-                    val = '';
                 }
                 var id = '${' + v.name + '}';
                 if (val == undefined || val.trim() == '') {
