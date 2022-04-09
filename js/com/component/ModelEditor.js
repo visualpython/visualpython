@@ -135,7 +135,7 @@ define([
                             description: 'Fit Encoder/Scaler to X, then transform X.',
                             options: [
                                 { name: 'fit_trans_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
-                                { name: 'fit_trans_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable' }
+                                { name: 'fit_trans_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'trans' }
                             ]
                         },
                         'transform': {
@@ -154,7 +154,7 @@ define([
                                 description: 'Transform binary labels back to multi-class labels.',
                                 options: [
                                     { name: 'inverse_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
-                                    { name: 'inverse_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable' }
+                                    { name: 'inverse_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'inv_trans' }
                                 ]
                             }
                         }
@@ -209,7 +209,15 @@ define([
                     if (modelType == 'AgglomerativeClustering' 
                         || modelType == 'DBSCAN') {
                         actions = {
-                            'fit': defaultActions['fit'],
+                            'fit': {
+                                name: 'fit',
+                                label: 'Fit',
+                                code: '${model}.fit(${fit_featureData})',
+                                description: 'Perform clustering from features, or distance matrix.',
+                                options: [
+                                    { name: 'fit_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' }
+                                ]
+                            },
                             'fit_predict': {
                                 name: 'fit_predict',
                                 label: 'Fit and predict',
@@ -224,8 +232,25 @@ define([
                         break;
                     }
                     actions = {
-                        'fit': defaultActions['fit'],
-                        'predict': defaultActions['predict'],
+                        'fit': {
+                            name: 'fit',
+                            label: 'Fit',
+                            code: '${model}.fit(${fit_featureData})',
+                            description: 'Compute clustering.',
+                            options: [
+                                { name: 'fit_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' }
+                            ]
+                        },
+                        'predict': {
+                            name: 'predict',
+                            label: 'Predict',
+                            code: '${pred_allocate} = ${model}.predict(${pred_featureData})',
+                            description: 'Predict the closest target data X belongs to.',
+                            options: [
+                                { name: 'pred_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
+                                { name: 'pred_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'pred' }
+                            ]
+                        },
                         'fit_predict': {
                             name: 'fit_predict',
                             label: 'Fit and predict',
@@ -246,7 +271,7 @@ define([
                                 code: '${fit_trans_allocate} = ${model}.fit_transform(${fit_trans_featureData})',
                                 description: 'Compute clustering and transform X to cluster-distance space.', 
                                 options: [
-                                    { name: 'fit_trans_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X_train' },
+                                    { name: 'fit_trans_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
                                     { name: 'fit_trans_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'trans' }
                                 ]
                             },
@@ -266,23 +291,114 @@ define([
                 case 'Dimension Reduction':
                     if (modelType == 'TSNE') {
                         actions = {
-                            'fit': defaultActions['fit'],
+                            'fit': {
+                                name: 'fit',
+                                label: 'Fit',
+                                code: '${model}.fit(${fit_featureData})',
+                                description: 'Fit X into an embedded space.',
+                                options: [
+                                    { name: 'fit_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' }
+                                ]
+                            },
                             'fit_transform': {
                                 name: 'fit_transform',
                                 label: 'Fit and transform',
                                 code: '${fit_trans_allocate} = ${model}.fit_transform(${fit_trans_featureData})',
                                 description: 'Fit X into an embedded space and return that transformed output.', 
                                 options: [
-                                    { name: 'fit_trans_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X_train' },
+                                    { name: 'fit_trans_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
                                     { name: 'fit_trans_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'trans' }
                                 ]
                             }
                         }
                         break;
                     }
+                    if (modelType == 'LinearDiscriminantAnalysis') { // LDA
+                        actions = {
+                            'fit': {
+                                name: 'fit',
+                                label: 'Fit',
+                                code: '${model}.fit(${fit_featureData}, ${fit_targetData})',
+                                description: 'Fit the Linear Discriminant Analysis model.',
+                                options: [
+                                    { name: 'fit_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
+                                    { name: 'fit_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'y' }
+                                ]
+                            },
+                            'fit_transform': {
+                                name: 'fit_transform',
+                                label: 'Fit and transform',
+                                code: '${fit_trans_allocate} = ${model}.fit_transform(${fit_trans_featureData}${fit_trans_targetData})',
+                                description: 'Fit to data, then transform it.', 
+                                options: [
+                                    { name: 'fit_trans_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
+                                    { name: 'fit_trans_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'y' },
+                                    { name: 'fit_trans_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'trans' }
+                                ]
+                            },
+                            'predict': {
+                                name: 'predict',
+                                label: 'Predict',
+                                code: '${pred_allocate} = ${model}.predict(${pred_featureData})',
+                                description: 'Predict class labels for samples in X.',
+                                options: [
+                                    { name: 'pred_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
+                                    { name: 'pred_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'pred' }
+                                ]
+                            },
+                            'transform': {
+                                name: 'transform',
+                                label: 'Transform',
+                                code: '${trans_allocate} = ${model}.transform(${trans_featureData})',
+                                description: 'Project data to maximize class separation.',
+                                options: [
+                                    { name: 'trans_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
+                                    { name: 'trans_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'trans' }
+                                ]
+                            }
+                        }
+                        break;
+                    }
                     actions = {
-                        'fit': defaultActions['fit'],
-                        'transform': defaultActions['transform'],
+                        'fit': {
+                            name: 'fit',
+                            label: 'Fit',
+                            code: '${model}.fit(${fit_featureData})',
+                            description: 'Fit X into an embedded space.',
+                            options: [
+                                { name: 'fit_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' }
+                            ]
+                        },
+                        'fit_transform': {
+                            name: 'fit_transform',
+                            label: 'Fit and transform',
+                            code: '${fit_trans_allocate} = ${model}.fit_transform(${fit_trans_featureData})',
+                            description: 'Fit the model with X and apply the dimensionality reduction on X.', 
+                            options: [
+                                { name: 'fit_trans_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
+                                { name: 'fit_trans_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'trans' }
+                            ]
+                        },
+                        'inverse_transform': {
+                            name: 'inverse_transform',
+                            label: 'Inverse transform',
+                            code: '${inverse_allocate} = ${model}.inverse_transform(${inverse_featureData})',
+                            description: 'Transform data back to its original space.',
+                            options: [
+                                { name: 'inverse_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
+                                { name: 'inverse_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'inv_trans' }
+                            ]
+                        },
+                        'transform': {
+                            name: 'transform',
+                            label: 'Transform',
+                            code: '${trans_allocate} = ${model}.transform(${trans_featureData})',
+                            description: 'Apply dimensionality reduction to X.',
+                            options: [
+                                { name: 'trans_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
+                                { name: 'trans_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'trans' }
+                            ]
+                        }
                     }
                     break;
             }
@@ -533,6 +649,22 @@ define([
                     }
                     break;
                 case 'Dimension Reduction':
+                    if (modelType == 'LDA') {
+                        infos = {
+                            'score': {
+                                name: 'score',
+                                label: 'Score',
+                                code: '${score_allocate} = ${model}.score(${score_featureData}, ${score_targetData})',
+                                description: 'Return the average log-likelihood of all samples.',
+                                options: [
+                                    { name: 'score_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
+                                    { name: 'score_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'y' },
+                                    { name: 'score_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'scores' }
+                                ]
+                            }
+                        }
+                        break;
+                    }
                     if (modelType == 'PCA') {
                         infos = {
                             'explained_variance_ratio_': {
@@ -544,6 +676,19 @@ define([
                                     { name: 'ratio_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'ratio' }
                                 ]
                             }
+                        }
+                    }
+                    infos = {
+                        ...infos,
+                        'score': {
+                            name: 'score',
+                            label: 'Score',
+                            code: '${score_allocate} = ${model}.score(${score_featureData})',
+                            description: 'Return the average log-likelihood of all samples.',
+                            options: [
+                                { name: 'score_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
+                                { name: 'score_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'scores' }
+                            ]
                         }
                     }
                     break;
