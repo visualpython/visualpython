@@ -3048,20 +3048,6 @@
                         }
                     },
                     {
-                        "id"   : "visualize_chart",
-                        "type" : "function",
-                        "level": 1,
-                        "name" : "Chart",
-                        "tag"  : "MATPLOTLIB,CHART,VISUALIZATION,VISUALIZE",
-                        "path" : "visualpython - visualization - matplotlib",
-                        "desc" : "Matplotlib chart creation",
-                        "file" : "m_apps/Chart",
-                        "apps" : {
-                            "color": 3,
-                            "icon": "apps/apps_chart.svg"
-                        }
-                    },
-                    {
                         "id"   : "apps_pdf",
                         "type" : "function",
                         "level": 1,
@@ -3071,7 +3057,7 @@
                         "desc" : "PDF",
                         "file" : "m_apps/PDF",
                         "apps" : {
-                            "color": 4,
+                            "color": 3,
                             "icon": "apps/apps_pymupdf.svg"
                         }
                     },
@@ -3087,6 +3073,74 @@
                         "apps" : {
                             "color": 4,
                             "icon": "apps/apps_profiling.svg"
+                        }
+                    }
+                ]
+            },
+            {
+                "id"   : "pkg_visualize",
+                "type" : "package",
+                "level": 0,
+                "name" : "Visualization",
+                "path" : "visualpython - visualization",
+                "desc" : "Visualization modules",
+                "open" : true,
+                "grid" : true,
+                "item" : [
+                    {
+                        "id"   : "visualize_chartStyle",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Chart Style",
+                        "tag"  : "CHART STYLE SETTING,IMPORT CHART,VISUALIZATION,VISUALIZE",
+                        "path" : "visualpython - visualization - chartsstyle",
+                        "desc" : "Chart style setting",
+                        "file" : "m_visualize/ChartSetting",
+                        "apps" : {
+                            "color": 5,
+                            "icon": "apps/apps_style.svg"
+                        }
+                    },
+                    {
+                        "id"   : "pd_plot",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Pandas",
+                        "tag"  : "PANDAS PLOT,PANDAS",
+                        "path" : "visualpython - library - pandas - plot",
+                        "desc" : "Pandas plot creation",
+                        "file" : "m_library/m_pandas/plot",
+                        "apps" : {
+                            "color": 5,
+                            "icon": "apps/apps_visualize.svg"
+                        }
+                    },
+                    {
+                        "id"   : "visualize_chart",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Matplotlib",
+                        "tag"  : "MATPLOTLIB,CHART,VISUALIZATION,VISUALIZE",
+                        "path" : "visualpython - visualization - matplotlib",
+                        "desc" : "Matplotlib chart creation",
+                        "file" : "m_apps/Chart",
+                        "apps" : {
+                            "color": 5,
+                            "icon": "apps/apps_visualize.svg"
+                        }
+                    },
+                    {
+                        "id"   : "visualize_seaborn",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Seaborn",
+                        "tag"  : "SEABORN,CHART,VISUALIZATION,VISUALIZE",
+                        "path" : "visualpython - visualization - seaborn",
+                        "desc" : "Seaborn chart creation",
+                        "file" : "m_visualize/Seaborn",
+                        "apps" : {
+                            "color": 5,
+                            "icon": "apps/apps_visualize.svg"
                         }
                     }
                 ]
@@ -3111,7 +3165,7 @@
                         "desc" : "Data sets for machine learning",
                         "file" : "m_ml/DataSets",
                         "apps" : {
-                            "color": 5,
+                            "color": 6,
                             "icon": "apps/apps_dataset.svg"
                         }
                     },
@@ -3125,7 +3179,7 @@
                         "desc" : "Data preparation for machine learning",
                         "file" : "m_ml/DataPrep",
                         "apps" : {
-                            "color": 5,
+                            "color": 6,
                             "icon": "apps/apps_dataprep.svg"
                         }
                     },
@@ -3139,8 +3193,22 @@
                         "desc" : "Data split for machine learning",
                         "file" : "m_ml/dataSplit",
                         "apps" : {
-                            "color": 5,
+                            "color": 6,
                             "icon": "apps/apps_datasplit.svg"
+                        }
+                    },
+                    {
+                        "id"   : "ml_evaluation",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Evaluation",
+                        "tag"  : "PERFORMANCE EVALUATION,MACHINE LEARNING,ML",
+                        "path" : "visualpython - machine_learning - evaluation",
+                        "desc" : "Performance evaluation for machine learning",
+                        "file" : "m_ml/evaluation",
+                        "apps" : {
+                            "color": 6,
+                            "icon": "apps/apps_evaluate.svg"
                         }
                     },
                     {
@@ -3153,7 +3221,7 @@
                         "desc" : "Regression model for machine learning",
                         "file" : "m_ml/Regression",
                         "apps" : {
-                            "color": 5,
+                            "color": 7,
                             "icon": "apps/apps_regression.svg"
                         }
                     },
@@ -3167,7 +3235,7 @@
                         "desc" : "Classification model for machine learning",
                         "file" : "m_ml/Classification",
                         "apps" : {
-                            "color": 6,
+                            "color": 7,
                             "icon": "apps/apps_classification.svg"
                         }
                     },
@@ -3181,7 +3249,7 @@
                         "desc" : "Clustering model for machine learning",
                         "file" : "m_ml/Clustering",
                         "apps" : {
-                            "color": 6,
+                            "color": 7,
                             "icon": "apps/apps_clustering.svg"
                         }
                     },
@@ -3195,7 +3263,7 @@
                         "desc" : "Dimension reduction model for machine learning",
                         "file" : "m_ml/DimensionReduction",
                         "apps" : {
-                            "color": 6,
+                            "color": 7,
                             "icon": "apps/apps_dimension.svg"
                         }
                     },
@@ -3209,22 +3277,8 @@
                         "desc" : "AutoML model for machine learning",
                         "file" : "m_ml/AutoML",
                         "apps" : {
-                            "color": 6,
+                            "color": 8,
                             "icon": "apps/apps_automl.svg"
-                        }
-                    },
-                    {
-                        "id"   : "ml_evaluation",
-                        "type" : "function",
-                        "level": 1,
-                        "name" : "Evaluation",
-                        "tag"  : "PERFORMANCE EVALUATION,MACHINE LEARNING,ML",
-                        "path" : "visualpython - machine_learning - evaluation",
-                        "desc" : "Performance evaluation for machine learning",
-                        "file" : "m_ml/evaluation",
-                        "apps" : {
-                            "color": 7,
-                            "icon": "apps/apps_evaluate.svg"
                         }
                     }
                 ]
