@@ -29,7 +29,7 @@ define([
             super._init();
 
             this.config.dataview = false;
-            this.config.sizeLevel = 3;
+            this.config.size = { width: 900, height: 550 };
 
             this.state = {
                 chartType: 'scatterplot',
@@ -88,7 +88,7 @@ define([
             // change tab
             $(this.wrapSelector('.vp-tab-item')).on('click', function() {
                 let level = $(this).parent().data('level');
-                let type = $(this).data('type'); // info / element / figure
+                let type = $(this).data('type'); // data / info / element / figure
 
                 $(that.wrapSelector(com_util.formatString('.vp-tab-bar.{0} .vp-tab-item', level))).removeClass('vp-focus');
                 $(this).addClass('vp-focus');

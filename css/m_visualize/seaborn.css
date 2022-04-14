@@ -34,7 +34,8 @@
     width: 100%;
 }
 .vp-tab-page-box.plot {
-    height: calc(100% - 30px);
+    /* height: calc(100% - 30px); */
+    min-height: 310px;
     align-content: baseline;
 }
 .vp-chart-plot-box {
@@ -47,7 +48,7 @@
 }
 .vp-chart-left-box {
     display: grid;
-    grid-row-gap: 3px;
+    grid-template-rows: 30px calc(100% - 30px);
 }
 .vp-chart-left-box > label {
     margin-bottom: 0px;
@@ -66,4 +67,9 @@
 .vp-chart-preview-box {
     min-height: 150px;
     width: 100%;
+    height: calc(100% - 30px);
+}
+
+.vp-tab-page label {
+    margin-bottom: 0px;
 }
