@@ -93,7 +93,7 @@ define([
                 $(that.wrapSelector(com_util.formatString('.vp-tab-bar.{0} .vp-tab-item', level))).removeClass('vp-focus');
                 $(this).addClass('vp-focus');
 
-                $(that.wrapSelector(com_util.formatString('.vp-tab-page-box.{0} .vp-tab-page', level))).hide();
+                $(that.wrapSelector(com_util.formatString('.vp-tab-page-box.{0} > .vp-tab-page', level))).hide();
                 $(that.wrapSelector(com_util.formatString('.vp-tab-page[data-type="{0}"]', type))).show();
             });
 
@@ -161,19 +161,26 @@ define([
         }
 
         templateForSettingBox() {
-            return `<div class="vp-grid-border-box vp-grid-col-95">
-                <label for="figureWidth" class="">Figure size</label>
-                <div>
-                    <input type="number" id="figureWidth" class="vp-input m" placeholder="width" value="12">
-                    <input type="number" id="figureHeight" class="vp-input m" placeholder="height" value="8">
+            return `<div class="vp-grid-border-box vp-grid-col-95 vp-chart-setting-body">
+                    <label for="figureWidth" class="">Figure size</label>
+                    <div>
+                        <input type="number" id="figureWidth" class="vp-input m" placeholder="width" value="12">
+                        <input type="number" id="figureHeight" class="vp-input m" placeholder="height" value="8">
+                    </div>
+                    <label for="styleSheet" class="">Style sheet</label>
+                    <input type="text" class="vp-input" id="styleSheet" placeholder="style name" value="">
+                    <label for="fontName" class="">System font</label>
+                    <input type="text" class="vp-input" id="fontName" placeholder="font name" value="">
+                    <label for="fontSize" class="">Font size</label>
+                    <input type="number" id="fontSize" class="vp-input" placeholder="size" value="10">
                 </div>
-                <label for="styleSheet" class="">Style sheet</label>
-                <input type="text" class="vp-input" id="styleSheet" placeholder="style name" value="">
-                <label for="fontName" class="">System font</label>
-                <input type="text" class="vp-input" id="fontName" placeholder="font name" value="">
-                <label for="fontSize" class="">Font size</label>
-                <input type="number" id="fontSize" class="vp-input" placeholder="size" value="10">
-            </div>`;
+                <div class="vp-chart-setting-footer">
+                    <label>
+                        <input type="checkbox" id="setDefault">
+                        <span title="Set chart setting to default.">Set Default</span>
+                    </label>
+                </div>
+            `;
         }
 
         render() {
@@ -191,10 +198,10 @@ define([
             // set size
             $(this.wrapSelector('.vp-inner-popup-box')).css({ width: 400, height: 260});
 
-            this.renderImportOptions();
+            this.bindImportOptions();
         }
 
-        renderImportOptions() {
+        bindImportOptions() {
             //====================================================================
             // Stylesheet suggestinput
             //====================================================================
@@ -242,6 +249,20 @@ define([
                 $(fontFamilyTag).replaceWith(function() {
                     return suggestInput.toTagString();
                 });
+            });
+
+            let that = this;
+            // setting popup - set default
+            $(this.wrapSelector('#setDefault')).on('change', function() {
+                let checked = $(this).prop('checked');
+
+                if (checked) {
+                    // disable input
+                    $(that.wrapSelector('.vp-chart-setting-body input')).prop('disabled', true);
+                } else {
+                    // enable input
+                    $(that.wrapSelector('.vp-chart-setting-body input')).prop('disabled', false);
+                }
             });
         }
 
@@ -292,27 +313,33 @@ define([
             var code = new com_String();
     
             // get parameters
-            var figWidth = $(this.wrapSelector('#figureWidth')).val();
-            var figHeight = $(this.wrapSelector('#figureHeight')).val();
-            var styleName = $(this.wrapSelector('#styleSheet')).val();
-            var fontName = $(this.wrapSelector('#fontName')).val();
-            var fontSize = $(this.wrapSelector('#fontSize')).val();
-    
-            code.appendLine('import matplotlib.pyplot as plt');
-            code.appendFormatLine("plt.rc('figure', figsize=({0}, {1}))", figWidth, figHeight);
-            if (styleName && styleName.length > 0) {
-                code.appendFormatLine("plt.style.use('{0}')", styleName);
+            let setDefault = $(this.wrapSelector('#setDefault')).prop('checked');
+            if (setDefault == true) {
+                code.appendLine('from matplotlib import rcParams, rcParamsDefault');
+                code.append('rcParams.update(rcParamsDefault)');
+            } else {
+                var figWidth = $(this.wrapSelector('#figureWidth')).val();
+                var figHeight = $(this.wrapSelector('#figureHeight')).val();
+                var styleName = $(this.wrapSelector('#styleSheet')).val();
+                var fontName = $(this.wrapSelector('#fontName')).val();
+                var fontSize = $(this.wrapSelector('#fontSize')).val();
+        
+                code.appendLine('import matplotlib.pyplot as plt');
+                code.appendFormatLine("plt.rc('figure', figsize=({0}, {1}))", figWidth, figHeight);
+                if (styleName && styleName.length > 0) {
+                    code.appendFormatLine("plt.style.use('{0}')", styleName);
+                }
+                code.appendLine();
+        
+                code.appendLine('from matplotlib import rcParams');
+                if (fontName && fontName.length > 0) {
+                    code.appendFormatLine("rcParams['font.family'] = '{0}'", fontName);
+                }
+                if (fontSize && fontSize.length > 0) {
+                    code.appendFormatLine("rcParams['font.size'] = {0}", fontSize);
+                }
+                code.append("rcParams['axes.unicode_minus'] = False");
             }
-            code.appendLine();
-    
-            code.appendLine('from matplotlib import rcParams');
-            if (fontName && fontName.length > 0) {
-                code.appendFormatLine("rcParams['font.family'] = '{0}'", fontName);
-            }
-            if (fontSize && fontSize.length > 0) {
-                code.appendFormatLine("rcParams['font.size'] = {0}", fontSize);
-            }
-            code.append("rcParams['axes.unicode_minus'] = False");
     
             return code.toString();
         }
@@ -327,7 +354,7 @@ define([
             let convertedData = data;
             if (preview) {
                 // set figure size for preview chart
-                code.appendLine('plt.figure(figsize=(6, 4))');
+                code.appendLine('plt.figure(figsize=(4, 3))');
                 if (useSampling) {
                     // data sampling code for preview
                     convertedData = data + '.sample(n=30, random_state=0)';

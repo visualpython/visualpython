@@ -39,6 +39,9 @@
     align-content: baseline;
 }
 .vp-chart-plot-box {
+    
+}
+.vp-chart-body {
     display: grid;
     grid-template-columns: calc(50% - 8px) calc(50% - 8px);
     grid-row-gap: 5px;
@@ -47,8 +50,7 @@
     align-content: center;
 }
 .vp-chart-left-box {
-    display: grid;
-    grid-template-rows: 30px calc(100% - 30px);
+
 }
 .vp-chart-left-box > label {
     margin-bottom: 0px;
@@ -72,4 +74,9 @@
 
 .vp-tab-page label {
     margin-bottom: 0px;
+}
+.vp-chart-setting-footer {
+    position: absolute;
+    left: 20px;
+    bottom: 15px;
 }
