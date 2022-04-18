@@ -199,10 +199,11 @@ define([
                 this.focusItem();
             }
 
+            // Deprecated: show markdown as other DA blocks
             // if markdown, set its height to fit-content
-            if (this.id == 'apps_markdown') {
-                $(this.wrapSelector()).addClass('vp-block-markdown');
-            }
+            // if (this.id == 'apps_markdown') {
+            //     $(this.wrapSelector()).addClass('vp-block-markdown');
+            // }
 
             // if viewDepthNumber, show it
             let viewDepthNumber = this.prop.parent.state.viewDepthNumber;
@@ -304,9 +305,10 @@ define([
             if (this._getMenuGroupRootType() == 'logic') {
                 header = this.task.generateCode();
             }
-            if (this.id == 'apps_markdown') {
-                header = this.task.getPreview();
-            }
+            // Deprecated: show markdown as other blocks
+            // if (this.id == 'apps_markdown') {
+            //     header = this.task.getPreview();
+            // }
             this.state.header = header;
             return header;
         }
