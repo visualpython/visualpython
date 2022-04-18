@@ -2860,14 +2860,14 @@
                                 "file": "m_matplotlib/import"
                             },
                             {
-                                "id": "mp_plot",
+                                "id": "mp_chart",
                                 "type": "function",
                                 "level": 2,
                                 "name": "Create chart",
                                 "path": "visualpython - library - matplotlib - plot",
                                 "desc": "",
                                 "tag": "MATPLOTLIB, PLOT, CHART",
-                                "file": "m_matplotlib/plot"
+                                "file": "m_visualize/Chart"
                             },
                             {
                                 "id": "mp_figure",
@@ -3102,34 +3102,6 @@
                         }
                     },
                     {
-                        "id"   : "pd_plot",
-                        "type" : "function",
-                        "level": 1,
-                        "name" : "Pandas",
-                        "tag"  : "PANDAS PLOT,PANDAS",
-                        "path" : "visualpython - library - pandas - plot",
-                        "desc" : "Pandas plot creation",
-                        "file" : "m_library/m_pandas/plot",
-                        "apps" : {
-                            "color": 5,
-                            "icon": "apps/apps_visualize.svg"
-                        }
-                    },
-                    {
-                        "id"   : "visualize_chart",
-                        "type" : "function",
-                        "level": 1,
-                        "name" : "Matplotlib",
-                        "tag"  : "MATPLOTLIB,CHART,VISUALIZATION,VISUALIZE",
-                        "path" : "visualpython - visualization - matplotlib",
-                        "desc" : "Matplotlib chart creation",
-                        "file" : "m_apps/Chart",
-                        "apps" : {
-                            "color": 5,
-                            "icon": "apps/apps_visualize.svg"
-                        }
-                    },
-                    {
                         "id"   : "visualize_seaborn",
                         "type" : "function",
                         "level": 1,
@@ -3170,20 +3142,6 @@
                         }
                     },
                     {
-                        "id"   : "ml_dataPrep",
-                        "type" : "function",
-                        "level": 1,
-                        "name" : "Data Prep",
-                        "tag"  : "DATA PREPARATION,MACHINE LEARNING,ML",
-                        "path" : "visualpython - machine_learning - data prep",
-                        "desc" : "Data preparation for machine learning",
-                        "file" : "m_ml/DataPrep",
-                        "apps" : {
-                            "color": 6,
-                            "icon": "apps/apps_dataprep.svg"
-                        }
-                    },
-                    {
                         "id"   : "ml_dataSplit",
                         "type" : "function",
                         "level": 1,
@@ -3198,17 +3156,31 @@
                         }
                     },
                     {
-                        "id"   : "ml_evaluation",
+                        "id"   : "ml_dataPrep",
                         "type" : "function",
                         "level": 1,
-                        "name" : "Evaluation",
-                        "tag"  : "PERFORMANCE EVALUATION,MACHINE LEARNING,ML",
-                        "path" : "visualpython - machine_learning - evaluation",
-                        "desc" : "Performance evaluation for machine learning",
-                        "file" : "m_ml/evaluation",
+                        "name" : "Data Prep",
+                        "tag"  : "DATA PREPARATION,MACHINE LEARNING,ML",
+                        "path" : "visualpython - machine_learning - data prep",
+                        "desc" : "Data preparation for machine learning",
+                        "file" : "m_ml/DataPrep",
                         "apps" : {
                             "color": 6,
-                            "icon": "apps/apps_evaluate.svg"
+                            "icon": "apps/apps_dataprep.svg"
+                        }
+                    },
+                    {
+                        "id"   : "ml_autoML",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "AutoML",
+                        "tag"  : "AUTO ML,MODEL,MACHINE LEARNING,ML",
+                        "path" : "visualpython - machine_learning - automl",
+                        "desc" : "AutoML model for machine learning",
+                        "file" : "m_ml/AutoML",
+                        "apps" : {
+                            "color": 6,
+                            "icon": "apps/apps_automl.svg"
                         }
                     },
                     {
@@ -3268,17 +3240,17 @@
                         }
                     },
                     {
-                        "id"   : "ml_autoML",
+                        "id"   : "ml_evaluation",
                         "type" : "function",
                         "level": 1,
-                        "name" : "AutoML",
-                        "tag"  : "AUTO ML,MODEL,MACHINE LEARNING,ML",
-                        "path" : "visualpython - machine_learning - automl",
-                        "desc" : "AutoML model for machine learning",
-                        "file" : "m_ml/AutoML",
+                        "name" : "Evaluation",
+                        "tag"  : "PERFORMANCE EVALUATION,MACHINE LEARNING,ML",
+                        "path" : "visualpython - machine_learning - evaluation",
+                        "desc" : "Performance evaluation for machine learning",
+                        "file" : "m_ml/evaluation",
                         "apps" : {
                             "color": 8,
-                            "icon": "apps/apps_automl.svg"
+                            "icon": "apps/apps_evaluate.svg"
                         }
                     }
                 ]
