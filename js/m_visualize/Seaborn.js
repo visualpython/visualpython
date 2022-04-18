@@ -39,6 +39,7 @@ define([
                 figColumn: 0,
                 shareX: false,
                 shareY: false,
+                useData: true, // FIXME: use data default?
                 data: '',
                 x: '',
                 y: '',
@@ -96,11 +97,51 @@ define([
                 $(that.wrapSelector(com_util.formatString('.vp-tab-page-box.{0} > .vp-tab-page', level))).hide();
                 $(that.wrapSelector(com_util.formatString('.vp-tab-page[data-type="{0}"]', type))).show();
             });
+            
+            // use data or not
+            $(this.wrapSelector('#useData')).on('change', function() {
+                let useData = $(this).prop('checked');
+                if (useData) {
+                    // use data
+                    $(that.wrapSelector('#data')).prop('disabled', false);
+
+                    $(that.wrapSelector('#x')).closest('.vp-vs-box').replaceWith('<select id="x"></select>');
+                    $(that.wrapSelector('#y')).closest('.vp-vs-box').replaceWith('<select id="y"></select>');
+                    $(that.wrapSelector('#hue')).closest('.vp-vs-box').replaceWith('<select id="hue"></select>');
+                } else {
+                    // not use data
+                    // disable data selection
+                    $(that.wrapSelector('#data')).prop('disabled', true);
+                    $(that.wrapSelector('#data')).val('');
+                    that.state.data = '';
+                    that.state.x = '';
+                    that.state.y = '';
+                    that.state.hue = '';
+
+                    let varSelectorX = new VarSelector2(that.wrapSelector(), ['DataFrame', 'Series', 'list']);
+                    varSelectorX.setComponentID('x');
+                    varSelectorX.addClass('vp-state vp-input');
+                    varSelectorX.setValue(that.state.x);
+                    $(that.wrapSelector('#x')).replaceWith(varSelectorX.toTagString());
+
+                    let varSelectorY = new VarSelector2(that.wrapSelector(), ['DataFrame', 'Series', 'list']);
+                    varSelectorY.setComponentID('y');
+                    varSelectorY.addClass('vp-state vp-input');
+                    varSelectorY.setValue(that.state.y);
+                    $(that.wrapSelector('#y')).replaceWith(varSelectorY.toTagString());
+
+                    let varSelectorHue = new VarSelector2(that.wrapSelector(), ['DataFrame', 'Series', 'list']);
+                    varSelectorHue.setComponentID('hue');
+                    varSelectorHue.addClass('vp-state vp-input');
+                    varSelectorHue.setValue(that.state.hue);
+                    $(that.wrapSelector('#hue')).replaceWith(varSelectorHue.toTagString());
+                }
+            });
 
             // bind column by dataframe
-            $(document).on('change', this.wrapSelector('#data'), function() {
-                com_generator.vp_bindColumnSource(that.wrapSelector(), this, ['x', 'y', 'hue'], 'select');
-            });
+            // $(this.wrapSelector('#data')).on('change', function() {
+            //     com_generator.vp_bindColumnSource(that.wrapSelector(), this, ['x', 'y', 'hue'], 'select');
+            // });
 
             // preview refresh
             $(this.wrapSelector('#previewRefresh')).on('click', function() {
@@ -108,6 +149,7 @@ define([
             });
             $(this.wrapSelector('.vp-state')).on('change', function() {
                 if (that.state.autoRefresh && that.state.data != '') {
+                    console.log('refresh');
                     that.loadPreview();
                 }
             });
@@ -142,7 +184,38 @@ define([
             varSelector.setComponentID('data');
             varSelector.addClass('vp-state vp-input');
             varSelector.setValue(this.state.featureData);
+            varSelector.setSelectEvent(function (value, item) {
+                $(this.wrapSelector()).val(value);
+
+                if (item.dtype == 'DataFrame') {
+                    $(that.wrapSelector('#x')).prop('disabled', false);
+                    $(that.wrapSelector('#y')).prop('disabled', false);
+                    $(that.wrapSelector('#hue')).prop('disabled', false);
+                    
+                    com_generator.vp_bindColumnSource(that.wrapSelector(), $(that.wrapSelector('#data')), ['x', 'y', 'hue'], 'select');
+                } else {
+                    $(that.wrapSelector('#x')).prop('disabled', true);
+                    $(that.wrapSelector('#y')).prop('disabled', true);
+                    $(that.wrapSelector('#hue')).prop('disabled', true);
+                }
+            });
             $(page).find('#data').replaceWith(varSelector.toTagString());
+
+            // legend position
+            let legendPosList = [
+                'best', 'upper right', 'upper left', 'lower left', 'lower right',
+                'center left', 'center right', 'lower center', 'upper center', 'center'
+            ];
+            let legendPosTag = new com_String();
+            legendPosList.forEach(pos => {
+                let selectedFlag = '';
+                if (pos == that.state.legendPos) {
+                    selectedFlag = 'selected';
+                }
+                legendPosTag.appendFormatLine('<option value="{0}" {1}>{2}{3}</option>',
+                    pos, selectedFlag, pos, pos == 'best'?' (default)':'');
+            });
+            $(page).find('#legendPos').html(legendPosTag.toString());
 
             // preview sample count
             let sampleCountList = [30, 50, 100, 300, 500, 700, 1000];
@@ -345,19 +418,26 @@ define([
         }
 
         generateCode(preview=false) {
-            let { chartType, data, x, y, userOption='', allocateTo='', useSampling } = this.state;
+            let { 
+                chartType, data, userOption='',
+                title, x_label, y_label, useLegend, legendPos,
+                useGrid, useMarker, markerStyle,
+                x_limit_from, x_limit_to, y_limit_from, y_limit_to,
+                useSampling, sampleCount 
+            } = this.state;
             let code = new com_String();
             let config = this.chartConfig[chartType];
+            let state = JSON.parse(JSON.stringify(this.state));
 
-            let chartCode = com_generator.vp_codeGenerator(this, config, this.state, (userOption != ''? ', ' + userOption : ''));
+            let chartCode = com_generator.vp_codeGenerator(this, config, state, (userOption != ''? ', ' + userOption : ''));
 
             let convertedData = data;
-            if (preview) {
+            if (preview && data != '') {
                 // set figure size for preview chart
-                code.appendLine('plt.figure(figsize=(4, 3))');
+                code.appendLine('plt.figure(figsize=(6, 5))');
                 if (useSampling) {
                     // data sampling code for preview
-                    convertedData = data + '.sample(n=30, random_state=0)';
+                    convertedData = data + '.sample(n=' + sampleCount + ', random_state=0)';
                 }   
             }
 
@@ -365,6 +445,28 @@ define([
             chartCode = chartCode.replace(data, convertedData);
 
             code.appendLine(chartCode);
+
+            // // Info
+            // if (title && title != '') {
+            //     code.appendFormatLine("plt.title('{0}')", title);
+            // }
+            // if (x_label && x_label != '') {
+            //     code.appendFormatLine("plt.xlabel('{0}')", x_label);
+            // }
+            // if (y_label && y_label != '') {
+            //     code.appendFormatLine("plt.ylabel('{0}')", y_label);
+            // }
+            // if (x_limit_from != '' && x_limit_to != '') {
+            //     code.appendFormatLine("plt.xlim(({0}, {1}))", x_limit_from, x_limit_to);
+            // }
+            // if (y_limit_from != '' && y_limit_to != '') {
+            //     code.appendFormatLine("plt.ylim(({0}, {1}))", y_limit_from, y_limit_to);
+            // }
+            // if (useLegend && legendPos != '') {
+            //     code.appendFormatLine("plt.legend(loc='{0}')", legendPos);
+            // }
+
+
             code.append('plt.show()');
 
             return code.toString();
