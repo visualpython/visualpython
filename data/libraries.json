@@ -3240,6 +3240,34 @@
                         }
                     },
                     {
+                        "id"   : "ml_fitPredict",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Fit/Predict",
+                        "tag"  : "FIT,PREDICT,MACHINE LEARNING,ML",
+                        "path" : "visualpython - machine_learning - fit_predict",
+                        "desc" : "Model fit/predict for machine learning",
+                        "file" : "m_ml/FitPredict",
+                        "apps" : {
+                            "color": 8,
+                            "icon": "apps/apps_evaluate.svg"
+                        }
+                    },
+                    {
+                        "id"   : "ml_modelInfo",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Model Info",
+                        "tag"  : "MODEL INFO,INFORMATION,MACHINE LEARNING,ML",
+                        "path" : "visualpython - machine_learning - model_info",
+                        "desc" : "Model information for machine learning",
+                        "file" : "m_ml/ModelInfo",
+                        "apps" : {
+                            "color": 8,
+                            "icon": "apps/apps_evaluate.svg"
+                        }
+                    },
+                    {
                         "id"   : "ml_evaluation",
                         "type" : "function",
                         "level": 1,
