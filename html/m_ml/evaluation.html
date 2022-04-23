@@ -1,20 +1,26 @@
 <body>
     <div class="vp-grid-box">
-        <div class="vp-grid-border-box vp-grid-col-95">
-            <label for="modelType" class="vp-orange-text">Model Type</label>
-            <select id="modelType" class="vp-select vp-state">
-                <option value="rgs">Regression</option>
-                <option value="clf">Classfication</option>
-                <option value="cls">Clustering</option>
-            </select>
-            <label for="targetData" class="vp-orange-text">Target Data</label>
-            <input type="text" class="vp-input vp-state" id="targetData" placeholder="Input target data" value="y_test"/>
-            <label for="predictData" class="vp-orange-text">Predict Data</label>
-            <input type="text" class="vp-input vp-state" id="predictData" placeholder="Input predict data" value="pred"/>
-            <label for="model" class="vp-ev-model vp-orange-text">Model</label>
-            <select id="model" class="vp-ev-model vp-select vp-state">
-                <!-- Auto create -->
-            </select>
+        <div class="vp-grid-border-box">
+            <div class="vp-grid-col-95">
+                <label for="modelType" class="vp-orange-text">Model Type</label>
+                <select id="modelType" class="vp-select vp-state">
+                    <option value="rgs">Regression</option>
+                    <option value="clf">Classfication</option>
+                    <option value="cls">Clustering</option>
+                </select>
+            </div>
+            <div class="vp-grid-col-95 vp-upper-box rgs clf">
+                <label for="targetData" class="vp-orange-text">Target Data</label>
+                <input type="text" class="vp-input vp-state" id="targetData" placeholder="Input target data" value="y_test"/>
+            </div>
+            <div class="vp-grid-col-95 vp-upper-box rgs clf">
+                <label for="predictData" class="vp-orange-text">Predict Data</label>
+                <input type="text" class="vp-input vp-state" id="predictData" placeholder="Input predict data" value="pred"/>
+            </div>
+            <div class="vp-grid-col-95 vp-upper-box cls">
+                <label for="clusteredIndex" class="vp-orange-text">Clustered Index</label>
+                <input type="text" class="vp-input vp-state" id="clusteredIndex" placeholder="Input predict data" value="clusters"/>
+            </div>
         </div>
         <div class="vp-grid-border-box">
             <label for="featureData" class="vp-orange-text">Evaluation Metrics</label>
@@ -33,13 +39,29 @@
                 <label><input type="checkbox" id="precision" class="vp-state"><span>Precision</span></label>
                 <label><input type="checkbox" id="recall" class="vp-state"><span>Recall</span></label>
                 <label><input type="checkbox" id="f1_score" class="vp-state"><span>F1-scorev</label>
+                <hr style="margin: 5px;"/>
                 <label><input type="checkbox" id="roc_curve" class="vp-eval-check vp-state"><span>ROC Curve</span></label>
                 <label><input type="checkbox" id="auc" class="vp-eval-check vp-state"><span>AUC</span></label>
+                <div class="vp-ev-model vp-grid-col-95">
+                    <label for="model" class="vp-orange-text">Model</label>
+                    <select id="model" class="vp-select vp-state">
+                        <!-- Auto create -->
+                    </select>
+                </div>
             </div>
             <div class="vp-grid-box vp-eval-box vp-eval-cls">
                 <label><input type="checkbox" id="silhouetteScore" class="vp-state" checked><span>Silhouette score</span></label>
-                <label><input type="checkbox" id="ari" class="vp-state"><span>ARI</span></label>
-                <label><input type="checkbox" id="nm" class="vp-state"><span>NM</span></label>
+                <div class="vp-ev-model vp-grid-col-95">
+                    <label for="featureData2">Feature Data</label>
+                    <input type="text" class="vp-input vp-state" id="featureData2" placeholder="Input feature data" value="X"/>
+                </div>
+                <hr style="margin: 5px;"/>
+                <label><input type="checkbox" id="ari" class="vp-state"><span>ARI (Adjusted Random Score)</span></label>
+                <label><input type="checkbox" id="nmi" class="vp-state"><span>NMI (Normalized Mutual Information)</span></label>
+                <div class="vp-ev-model vp-grid-col-95">
+                    <label for="targetData2">Target Data</label>
+                    <input type="text" class="vp-input vp-state" id="targetData2" placeholder="Input target data" value="y"/>
+                </div>
             </div>
         </div>
     </div>  

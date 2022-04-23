@@ -41,8 +41,12 @@ define([
                 confusion_matrix: true, report: true, 
                 accuracy: false, precision: false, recall: false, f1_score: false,
                 roc_curve: false, auc: false,
+                model: '',
                 // clustering
-                silhouetteScore: true, ari: false, nm: false,
+                clusteredIndex: 'clusters',
+                silhouetteScore: true, ari: false, nmi: false,
+                featureData2: 'X',
+                targetData2: 'y',
                 ...this.state
             }
         }
@@ -62,14 +66,23 @@ define([
                 let modelType = $(this).val();
                 that.state.modelType = modelType;
 
+                $(that.wrapSelector('.vp-upper-box')).hide();
+                $(that.wrapSelector('.vp-upper-box.' + modelType)).show();
+
                 $(that.wrapSelector('.vp-eval-box')).hide();
                 $(that.wrapSelector('.vp-eval-'+modelType)).show();  
 
-                if (modelType == 'clf') {
+                if (modelType == 'rgs') {
+                    // Regression
+
+                } else if (modelType == 'clf') {
                     // Classification - model selection
                     if (that.checkToShowModel() == true) {
                         $(that.wrapSelector('.vp-ev-model')).show();
                     }
+                } else {
+                    // Clustering
+
                 }
             });
 
@@ -117,6 +130,25 @@ define([
             varSelector.addClass('vp-state vp-input');
             varSelector.setValue(this.state.targetData);
             $(page).find('#targetData').replaceWith(varSelector.toTagString());
+
+            // Clustering - data selection
+            varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'list', 'str']);
+            varSelector.setComponentID('clusteredIndex');
+            varSelector.addClass('vp-state vp-input');
+            varSelector.setValue(this.state.clusteredIndex);
+            $(page).find('#clusteredIndex').replaceWith(varSelector.toTagString());
+
+            varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'list', 'str']);
+            varSelector.setComponentID('featureData2');
+            varSelector.addClass('vp-state vp-input');
+            varSelector.setValue(this.state.featureData2);
+            $(page).find('#featureData2').replaceWith(varSelector.toTagString());
+
+            varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'list', 'str']);
+            varSelector.setComponentID('targetData2');
+            varSelector.addClass('vp-state vp-input');
+            varSelector.setValue(this.state.targetData2);
+            $(page).find('#targetData2').replaceWith(varSelector.toTagString());
 
             // model
             // set model list
@@ -169,7 +201,12 @@ define([
                 }
             });
 
-            if (this.state.modelType == 'clf') {
+            $(page).find('.vp-upper-box').hide();
+            $(page).find('.vp-upper-box.' + this.state.modelType).show();
+
+            if (this.state.modelType == 'rgs') {
+                
+            } else if (this.state.modelType == 'clf') {
                 if (this.state.roc_curve == true || this.state.auc == true) {
                     $(page).find('.vp-ev-model').show();
                 } else {
@@ -197,7 +234,8 @@ define([
                 // regression
                 coefficient, intercept, r_squared, mae, mape, rmse, scatter_plot,
                 // clustering
-                sizeOfClusters, silhouetteScore, ari, nm
+                sizeOfClusters, silhouetteScore, ari, nmi,
+                clusteredIndex, featureData2, targetData2
             } = this.state;
 
             //====================================================================
@@ -317,19 +355,19 @@ define([
                 if (silhouetteScore) {
                     code = new com_String();
                     code.appendLine("# Silhouette score");
-                    code.appendFormat("print(f'Silhouette score: {metrics.cluster.silhouette_score({0}, {1})}')", targetData, predictData);
+                    code.appendFormat("print(f'Silhouette score: {metrics.cluster.silhouette_score({0}, {1})}')", featureData2, clusteredIndex);
                     codeCells.push(code.toString());
                 }
                 if (ari) {
                     code = new com_String();
-                    code.appendLine("# ARI");
-                    code.appendFormat("print(f'ARI: {metrics.cluster.adjusted_rand_score({0}, {1})}')", targetData, predictData);
+                    code.appendLine("# ARI(Adjusted Rand score)");
+                    code.appendFormat("print(f'ARI: {metrics.cluster.adjusted_rand_score({0}, {1})}')", targetData2, clusteredIndex);
                     codeCells.push(code.toString());
                 }
-                if (nm) {
+                if (nmi) {
                     code = new com_String();
-                    code.appendLine("# NM");
-                    code.appendFormat("print(f'NM: {metrics.cluster.normalized_mutual_info_score({0}, {1})}')", targetData, predictData);
+                    code.appendLine("# NMI(Normalized Mutual Info Score)");
+                    code.appendFormat("print(f'NM: {metrics.cluster.normalized_mutual_info_score({0}, {1})}')", targetData2, clusteredIndex);
                     codeCells.push(code.toString());
                 }
             }
