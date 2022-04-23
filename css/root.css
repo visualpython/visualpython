@@ -336,6 +336,9 @@ hr.vp-extra-menu-line {
     width: 10px !important;
 }
 /* temporary margin */
+.mt5 {
+    margin-top: 5px;
+}
 .mb5 {
     margin-bottom: 5px;
 }

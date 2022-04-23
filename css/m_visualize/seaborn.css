@@ -48,6 +48,7 @@
     grid-column-gap: 15px;
     align-items: baseline;
     align-content: center;
+    height: 100%;
 }
 .vp-chart-left-box {
 

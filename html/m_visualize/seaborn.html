@@ -1,6 +1,6 @@
 <body>
-    <!-- Creating Subplots -->
-    <div>
+    <!-- Creating Subplots : Hide for next version -->
+    <!-- <div>
         <div>
             <label class="vp-bold">
                 Creating Subplots
@@ -35,13 +35,14 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     <div class="vp-chart-body" style="margin-top:10px;">
         <div class="vp-chart-left-box">
             <div class="vp-tab-bar figure" data-level="figure">
-                <div class="vp-tab-item vp-focus" data-type="1">Plot 1</div>
-                <div class="vp-tab-item" data-type="2">Plot 2</div>
-                <div class="vp-tab-item" data-type="3">Plot 3</div>
+                <div class="vp-tab-item vp-focus" data-type="1">Plot</div>
+                <!-- Hide for next version -->
+                <!-- <div class="vp-tab-item" data-type="2">Plot 2</div>
+                <div class="vp-tab-item" data-type="3">Plot 3</div> -->
             </div>
             <div class="vp-tab-page-box figure vp-grid-border-box">
                 <div class="vp-tab-page" data-type="1">
@@ -68,13 +69,13 @@
                                         <label><input type="checkbox" id="useData" class="vp-state" checked><span>Use data</span></label>
                                     </div>
                                     <div class="vp-grid-col-p50">
-                                        <div>
+                                        <div class="vp-grid-box">
                                             <label for="x" class="vp-bold">X-axis Value</label>
                                             <select id="x" class="vp-select vp-state">
                     
                                             </select>
                                         </div>
-                                        <div>
+                                        <div class="vp-grid-box">
                                             <label for="y" class="vp-bold">Y-axis Value</label>
                                             <select id="y" class="vp-select vp-state">
                     
@@ -82,7 +83,7 @@
                                         </div>
                                     </div>
                                     <label for="hue" class="vp-bold">Hue</label>
-                                    <select id="hue" class="vp-select vp-state wp100">
+                                    <select id="hue" class="vp-select vp-state">
                 
                                     </select>
                                 </div>
@@ -171,6 +172,10 @@
                 <div id="chartPreview" class="vp-center">
     
                 </div>
+            </div>
+            <div class="vp-chart-preview-size-box vp-grid-col-95 mt5">
+                <label>Preview Size</label>
+                <input type="range" id="previewSize" max="5" min="-5" value="0"/>
             </div>
         </div>
     </div>

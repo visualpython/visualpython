@@ -153,6 +153,11 @@ define([
                     that.loadPreview();
                 }
             });
+            
+            // set preview size
+            $(this.wrapSelector('#previewSize')).on('change', function() {
+                that.loadPreview();
+            });
 
         }
 
@@ -434,7 +439,10 @@ define([
             let convertedData = data;
             if (preview && data != '') {
                 // set figure size for preview chart
-                code.appendLine('plt.figure(figsize=(6, 5))');
+                let defaultWidth = 5;
+                let defaultHeight = 4;
+                let previewSize = parseInt($(this.wrapSelector('#previewSize')).val());
+                code.appendFormatLine('plt.figure(figsize=({0}, {1}))', defaultWidth + previewSize, defaultHeight + previewSize);
                 if (useSampling) {
                     // data sampling code for preview
                     convertedData = data + '.sample(n=' + sampleCount + ', random_state=0)';
