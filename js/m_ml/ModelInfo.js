@@ -10,19 +10,19 @@
  */
 
 //============================================================================
-// [CLASS] FitPredict
+// [CLASS] ModelInfo
 //============================================================================
 define([
-    'text!vp_base/html/m_ml/fitPredict.html!strip',
+    'text!vp_base/html/m_ml/modelInfo.html!strip',
+    'css!vp_base/css/m_ml/modelInfo.css',
     'vp_base/js/com/com_util',
-    'vp_base/js/com/com_interface',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_generatorV2',
     'vp_base/data/m_ml/mlLibrary',
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/VarSelector2',
-    'vp_base/js/com/component/ModelEditor'
-], function(msHtml, com_util, com_interface, com_String, com_generator, ML_LIBRARIES, PopupComponent, VarSelector2, ModelEditor) {
+    'vp_base/js/com/component/SuggestInput'
+], function(msHtml, msCss, com_util, com_String, com_generator, ML_LIBRARIES, PopupComponent, VarSelector2, SuggestInput) {
 
     /**
      * ModelInfo
@@ -37,6 +37,9 @@ define([
                 // model selection
                 model: '',
                 method: '',
+                info: {},
+                config: {},
+                userOption: '',
                 ...this.state
             }
 
@@ -50,7 +53,15 @@ define([
             
             // change model
             $(this.wrapSelector('#model')).on('change', function() {
-                that.modelEditor.reload();
+                that.reload();
+            });
+
+            // click option
+            $(this.wrapSelector('.vp-ins-select-item')).on('click', function() {
+                let name = $(this).data('var-name');
+                let type = $(this).data('var-type');
+                
+                that.renderOptionPage(type, name);
             });
         }
 
@@ -82,7 +93,7 @@ define([
                     that.state.model = $(that.wrapSelector('#model')).val();
                 }
 
-                that.modelEditor.show();
+                that.reload();
             });
 
             //================================================================
@@ -140,16 +151,447 @@ define([
         render() {
             super.render();
 
-            // Model Editor
-            this.modelEditor = new ModelEditor(this, "model", "instanceEditor");
+            this.reload();
+        }
+
+        reload() {
+            let modelTag = $(this.wrapSelector('#model'));
+            let model = $(modelTag).val();
+            let modelType = $(modelTag).find('option:selected').data('type');
+            
+            let infos = this.getInfo(modelType);
+            this.state.info = { ...infos };
+            
+            var infoListTag = new com_String();
+            
+            Object.keys(infos).forEach(infoKey => {
+                let titleText = infos[infoKey].description;
+                if (infos[infoKey].name != infos[infoKey].label) {   
+                    titleText = infos[infoKey].name + ': ' + titleText;
+                }
+                infoListTag.appendFormatLine('<li class="{0}" data-var-name="{1}" data-var-type="{2}" title="{3}">{4}</li>',
+                'vp-ins-select-item', infoKey, 'info', titleText, infos[infoKey].label);
+            });
+            
+            // $(this.wrapSelector('.vp-ins-select-list.action')).html(actListTag.toString());
+            $(this.wrapSelector('.vp-ins-select-list.info')).html(infoListTag.toString());
+            
+            let that = this;
+            // action search suggest
+            // var suggestInput = new SuggestInput();
+            // suggestInput.addClass('vp-input');
+            // suggestInput.addClass('vp-ins-search');
+            // suggestInput.setPlaceholder("Search Action");
+            // suggestInput.setSuggestList(function () { return Object.keys(actions); });
+            // suggestInput.setSelectEvent(function (value, item) {
+            //     $(this.wrapSelector()).val(value);
+            //     $(that.wrapSelector('.vp-ins-type.action')).val(value);
+
+            //     $(that.wrapSelector('.vp-ins-select-item[data-var-name="' + value + '"]')).click();
+            // });
+            // $(that.wrapSelector('.vp-ins-search')).replaceWith(function () {
+            //     return suggestInput.toTagString();
+            // });
+
+            // info search suggest
+            let suggestInput = new SuggestInput();
+            suggestInput.addClass('vp-input');
+            suggestInput.addClass('vp-ins-search');
+            suggestInput.setPlaceholder("Search info");
+            suggestInput.setSuggestList(function () { return Object.keys(infos); });
+            suggestInput.setSelectEvent(function (value, item) {
+                $(this.wrapSelector()).val(value);
+                $(that.wrapSelector('.vp-ins-type.info')).val(value);
+
+                $(that.wrapSelector('.vp-ins-select-item[data-var-name="' + value + '"]')).click();
+            });
+            $(that.wrapSelector('.vp-ins-search')).replaceWith(function () {
+                return suggestInput.toTagString();
+            });
+
+            // bind event
+            this._bindEvent();
+
+            // load once on initializing page
+            if (this.loaded == false) {
+                let { modelEditorType, modelEditorName } = this.pageThis.state;
+                if (modelEditorType != '' && modelEditorName != '') {
+                    // render option page for saved state
+                    that.renderOptionPage(modelEditorType, modelEditorName);
+                }
+                // set loaded true
+                this.loaded = true;
+            }
+        }
+
+        /**
+         * Render option page for selected option
+         * @param {String} type action / info
+         * @param {String} name option name (ex. fit/predict/...)
+         */
+        renderOptionPage(type, name) {
+            if (this.state[type] != undefined && this.state[type][name] != undefined) {
+                let config = this.state[type][name];
+                let optBox = new com_String();
+                // render tag
+                config && config.options && config.options.forEach(opt => {
+                    let label = opt.name;
+                    if (opt.label != undefined) {
+                        label = opt.label;
+                    }
+                    // fix label
+                    label = com_util.optionToLabel(label);
+                    optBox.appendFormatLine('<label for="{0}" title="{1}">{2}</label>'
+                        , opt.name, opt.name, label);
+                    let content = com_generator.renderContent(this, opt.component[0], opt, this.state);
+                    optBox.appendLine(content[0].outerHTML);
+                });
+                // replace option box
+                $(this.wrapSelector('.vp-ins-parameter-box')).html(optBox.toString());
+    
+                this.state.config = config;
+    
+                // add selection
+                $(this.wrapSelector('.vp-ins-select-item')).removeClass('selected');
+                let typeClass = '.vp-ins-select-list.' + type;
+                let nameClass = '.vp-ins-select-item[data-var-name="' + name + '"]';
+                $(this.wrapSelector(typeClass + ' ' + nameClass)).addClass('selected');
+                // set state
+                $(this.wrapSelector('#modelEditorType')).val(type);
+                $(this.wrapSelector('#modelEditorName')).val(name);
+                this.state.modelEditorType = type;
+                this.state.modelEditorName = name;
+            }
         }
 
         generateCode() {
             let { model } = this.state;
             let code = new com_String();
-            code.append(this.modelEditor.getCode({'${model}': model}));
+            let replaceDict = {'${model}': model};
+
+            if (this.state.config.import != undefined) {
+                code.appendLine(this.state.config.import);
+                code.appendLine();
+            }
+            let modelCode = com_generator.vp_codeGenerator(this.pageThis, this.state.config, this.pageThis.state);
+            Object.keys(replaceDict).forEach(key => {
+                modelCode = modelCode.replace(key, replaceDict[key]);
+            });
+            code.append(modelCode);
+
+            let allocateIdx = modelCode.indexOf(' = ');
+            if (allocateIdx >= 0) {
+                let allocateCode = modelCode.substr(0, allocateIdx);
+                code.appendLine();
+                code.append(allocateCode);
+            }
 
             return code.toString();
+        }
+
+        getModelCategory(modelType) {
+            let mlDict = vpConfig.getMLDataDict();
+            let keys = Object.keys(mlDict);
+            let modelCategory = '';
+            for (let i = 0; i < keys.length; i++) {
+                let key = keys[i];
+                if (mlDict[key].includes(modelType)) {
+                    modelCategory = key;
+                    break;
+                }
+            }
+            return modelCategory;
+        }
+
+        getInfo(modelType) {
+            let category = this.getModelCategory(modelType);
+            let infos = {};
+            let defaultInfos = {
+                'score': {
+                    name: 'score',
+                    label: 'Score',
+                    code: '${score_allocate} = ${model}.score(${score_featureData}, ${score_targetData})',
+                    description: '',
+                    options: [
+                        { name: 'score_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
+                        { name: 'score_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'y' },
+                        { name: 'score_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'scores' }
+                    ]
+                },
+                'get_params': {
+                    name: 'get_params',
+                    label: 'Get parameters',
+                    code: '${param_allocate} = ${model}.get_params(${deep})',
+                    description: 'Get parameters for this estimator.',
+                    options: [
+                        { name: 'deep', component: ['bool_select'], default: 'True', usePair: true },
+                        { name: 'param_allocate', label: 'Allocate to', component: ['input'], value: 'params' }
+                    ]  
+                },
+                'permutation_importance': {
+                    name: 'permutation_importance',
+                    label: 'Permutation importance',
+                    import: 'from sklearn.inspection import permutation_importance',
+                    code: '${importance_allocate} = permutation_importance(${model}, ${importance_featureData}, ${importance_targetData}${scoring}${random_state}${etc})',
+                    description: 'Permutation importance for feature evaluation.',
+                    options: [
+                        { name: 'importance_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X_train' },
+                        { name: 'importance_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'y_train' },
+                        { name: 'scoring', component: ['input'], usePair: true },
+                        { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true },
+                        { name: 'importance_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'importances' }
+                    ]
+                }
+            }
+            switch (category) {
+                case 'Data Preparation':
+                    if (modelType == 'OneHotEncoder') {
+                        infos = {
+                            'categories_': { // TODO:
+                                name: 'categories_',
+                                label: 'Categories',
+                                code: '${categories_allocate} = ${model}.categories_',
+                                description: 'The categories of each feature determined during fitting',
+                                options: [
+                                    { name: 'categories_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'categories' }
+                                ]
+                            },
+                            'get_feature_names_out': {
+                                name: 'get_feature_names_out',
+                                label: 'Get feature names',
+                                code: '${feature_names_allocate} = ${model}.get_feature_names_out()',
+                                description: 'Get output feature names.',
+                                options: [
+                                    { name: 'feature_names_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'features' }
+                                ]
+                            }
+                        }
+                    }
+                    if (modelType == 'LabelEncoder') {
+                        infos = {
+                            'classes_': {
+                                name: 'classes_',
+                                label: 'Classes',
+                                code: '${classes_allocate} = ${model}.classes_',
+                                description: 'Holds the label for each class.',
+                                options: [
+                                    { name: 'classes_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'classes' }
+                                ]
+                            }
+                        }
+                    }
+                    if (modelType == 'KBinsDiscretizer') {
+                        infos = {
+                            'bin_edges': { // TODO:
+                                name: 'bin_edges',
+                                label: 'Bin edges',
+                                code: '${bin_edges_allocate} = ${model}.bin_edges_',
+                                description: 'The edges of each bin. Contain arrays of varying shapes',
+                                options: [
+                                    { name: 'bin_edges_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'bin_edges' }
+                                ]
+                            }
+                        }
+                    }
+                    if (modelType == 'ColumnTransformer') {
+                        infos = {
+                            'transformers_': {
+                                name: 'transformers_',
+                                label: 'Transformers_',
+                                code: '${transformers_allocate} = ${model}.transformers_',
+                                description: 'The collection of fitted transformers as tuples of (name, fitted_transformer, column).',
+                                options: [
+                                    { name: 'transformers_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'classes' }
+                                ]
+                            },
+                            'get_feature_names_out': {
+                                name: 'get_feature_names_out',
+                                label: 'Get feature names',
+                                code: '${feature_names_allocate} = ${model}.get_feature_names_out()',
+                                description: 'Get output feature names.',
+                                options: [
+                                    { name: 'feature_names_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'features' }
+                                ]
+                            }
+                        }
+                    }
+                    infos = {
+                        ...infos,
+                        'get_params': defaultInfos['get_params']
+                    }
+                    break;
+                case 'Regression':
+                    infos = {
+                        'score': {
+                            ...defaultInfos['score'],
+                            description: 'Return the coefficient of determination of the prediction.'
+                        },
+                        'cross_val_score': {
+                            name: 'cross_val_score',
+                            label: 'Cross validation score',
+                            import: 'from sklearn.model_selection import cross_val_score',
+                            code: '${cvs_allocate} = cross_val_score(${model}, ${cvs_featureData}, ${cvs_targetData}${scoring}${cv})',
+                            description: 'Evaluate a score by cross-validation.',
+                            options: [
+                                { name: 'cvs_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
+                                { name: 'cvs_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'y' },
+                                { name: 'scoring', component: ['option_select'], usePair: true, type: 'text',
+                                    options: [
+                                        '',
+                                        'explained_variance', 'max_error', 'neg_mean_absolute_error', 'neg_mean_squared_error', 'neg_root_mean_squared_error',
+                                        'neg_mean_squared_log_error', 'neg_median_absolute_error', 'r2', 'neg_mean_poisson_deviance', 'neg_mean_gamma_deviance',
+                                        'neg_mean_absolute_percentage_error'
+                                    ] },
+                                { name: 'cv', label: 'Cross Validation', component: ['input_number'], placeholder: '1 ~ 10', default: 5, usePair: true },
+                                { name: 'cvs_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'scores' }
+                            ]
+                        },
+                        'permutation_importance': defaultInfos['permutation_importance'],
+                        'Coefficient': {
+                            name: 'coef_',
+                            label: 'Coefficient',
+                            code: '${coef_allocate} = ${model}.coef_',
+                            description: 'Weights assigned to the features.',
+                            options: [
+                                { name: 'coef_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'coef' }
+                            ]
+                        },
+                        'Intercept': {
+                            name: 'intercept_',
+                            label: 'Intercept',
+                            code: '${intercept_allocate} = ${model}.intercept_',
+                            description: 'Constants in decision function.',
+                            options: [
+                                { name: 'intercept_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'intercepts' }
+                            ]
+                        }
+                    }
+                    break;
+                case 'Classification':
+                    infos = {
+                        'score': {
+                            ...defaultInfos['score'],
+                            description: 'Return the mean accuracy on the given test data and labels.'
+                        },
+                        'cross_val_score': {
+                            name: 'cross_val_score',
+                            label: 'Cross validation score',
+                            import: 'from sklearn.model_selection import cross_val_score',
+                            code: '${cvs_allocate} = cross_val_score(${model}, ${cvs_featureData}, ${cvs_targetData}${scoring}${cv})',
+                            description: 'Evaluate a score by cross-validation.',
+                            options: [
+                                { name: 'cvs_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
+                                { name: 'cvs_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'y' },
+                                { name: 'scoring', component: ['option_select'], usePair: true, type: 'text', 
+                                    options: [
+                                        '',
+                                        'accuracy', 'balanced_accuracy', 'top_k_accuracy', 'average_precision', 'neg_brier_score',
+                                        'f1', 'f1_micro', 'f1_macro', 'f1_weighted', 'f1_samples', 'neg_log_loss', 'precision', 'recall', 'jaccard', 
+                                        'roc_auc', 'roc_auc_ovr', 'roc_auc_ovo', 'roc_auc_ovr_weighted', 'roc_auc_ovo_weighted'
+                                    ] },
+                                { name: 'cv', label: 'Cross Validation', component: ['input_number'], placeholder: '1 ~ 10', default: 5, usePair: true },
+                                { name: 'cvs_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'scores' }
+                            ]
+                        },
+                        'permutation_importance': defaultInfos['permutation_importance']
+                    }
+                    break;
+                case 'Auto ML':
+                    infos = {
+                        'score': {
+                            ...defaultInfos['score'],
+                            description: 'Return the mean accuracy on the given test data and labels.'
+                        },
+                        'get_params': {
+                            ...defaultInfos['get_params']
+                        }
+                    }
+                    break;
+                case 'Clustering':
+                    infos = {
+                        // 'Size of clusters': {
+                        //     name: 'Size of clusters',
+                        //     code: "print(f'Size of clusters: {np.bincount(pred)}')", // FIXME: model.cluster_centers_ / use model info or hide it
+                        //     options: []
+                        // }
+                    }
+
+                    if (modelType == 'KMeans') {
+                        infos = {
+                            ...infos,
+                            'cluster_centers_': {
+                                name: 'cluster_centers',
+                                label: 'Cluster centers',
+                                code: '${centers_allocate} = ${model}.cluster_centers_',
+                                description: 'Coordinates of cluster centers.', 
+                                options: [
+                                    { name: 'centers_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'cluster_centers' }
+                                ]
+                            }
+                        }
+                    }
+
+                    if (modelType == 'AgglomerativeClustering') {
+                        infos = {
+                            ...infos,
+                            'Dendrogram': { // FIXME:
+                                name: 'dendrogram',
+                                label: 'Dendrogram',
+                                code: "# import\nfrom scipy.cluster.hierarchy import dendrogram, ward\n\nlinkage_array = ward(${dendro_data})\ndendrogram(linkage_array, p=3, truncate_mode='level', no_labels=True)\nplt.show()",
+                                description: 'Draw a dendrogram',
+                                options: [
+                                    { name: 'dendro_data', label: 'Data', component: ['var_select'], var_type: ['DataFrame'] }
+                                ]
+                            }
+                        }
+                    }
+                    break;
+                case 'Dimension Reduction':
+                    if (modelType == 'LDA') {
+                        infos = {
+                            'score': {
+                                name: 'score',
+                                label: 'Score',
+                                code: '${score_allocate} = ${model}.score(${score_featureData}, ${score_targetData})',
+                                description: 'Return the average log-likelihood of all samples.',
+                                options: [
+                                    { name: 'score_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
+                                    { name: 'score_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'y' },
+                                    { name: 'score_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'scores' }
+                                ]
+                            }
+                        }
+                        break;
+                    }
+                    if (modelType == 'PCA') {
+                        infos = {
+                            'explained_variance_ratio_': {
+                                name: 'explained_variance_ratio_',
+                                label: 'Explained variance ratio',
+                                code: '${ratio_allocate} = ${model}.explained_variance_ratio_',
+                                description: 'Percentage of variance explained by each of the selected components.',
+                                options: [
+                                    { name: 'ratio_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'ratio' }
+                                ]
+                            }
+                        }
+                    }
+                    infos = {
+                        ...infos,
+                        'score': {
+                            name: 'score',
+                            label: 'Score',
+                            code: '${score_allocate} = ${model}.score(${score_featureData})',
+                            description: 'Return the average log-likelihood of all samples.',
+                            options: [
+                                { name: 'score_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
+                                { name: 'score_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'scores' }
+                            ]
+                        }
+                    }
+                    break;
+            }
+            return infos;
         }
 
     }

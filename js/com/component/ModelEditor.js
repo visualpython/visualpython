@@ -887,15 +887,8 @@ define([
          * Show Model Editor
          * @param {*} showType all / action / info 
          */
-        show(showType='all') {
+        show() {
             $(this.wrapSelector()).show();
-
-            // show type
-            if (showType == 'action') {
-                $(this.wrapSelector(''))
-            } else if (showType == 'info') {
-
-            }
 
             this.reload();
         }
