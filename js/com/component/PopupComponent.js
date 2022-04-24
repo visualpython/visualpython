@@ -251,11 +251,38 @@ define([
             });
             // Toggle operation (minimize)
             $(this.wrapSelector('.vp-popup-toggle')).on('click', function(evt) {
-                // that.toggle();
                 $(that.eventTarget).trigger({
                     type: 'close_option_page',
                     component: that
                 });
+            });
+            // Maximize operation
+            $(this.wrapSelector('.vp-popup-maximize')).on('click', function(evt) {
+                // save position
+                that.config.position = $(that.wrapSelector()).position();
+                // maximize popup
+                $(that.wrapSelector()).css({
+                    width: '100%',
+                    height: '100%',
+                    top: 0,
+                    left: 0
+                });
+                // show / hide buttons
+                $(this).hide();
+                $(that.wrapSelector('.vp-popup-return')).show();
+            });
+            // Return operation
+            $(this.wrapSelector('.vp-popup-return')).on('click', function(evt) {
+                // return size
+                $(that.wrapSelector()).css({
+                    width: that.config.size.width + 'px',
+                    height: that.config.size.height + 'px',
+                    top: that.config.position.top,
+                    left: that.config.position.left
+                });
+                // show / hide buttons
+                $(this).hide();
+                $(that.wrapSelector('.vp-popup-maximize')).show();
             });
 
             // Click install package
@@ -420,8 +447,14 @@ define([
         }
 
         _bindResizable() {
+            let that = this;
             $(this.wrapSelector()).resizable({
-                handles: 'all'
+                handles: 'all',
+                start: function(evt, ui) {
+                    // show / hide buttons
+                    $(that.wrapSelector('.vp-popup-return')).hide();
+                    $(that.wrapSelector('.vp-popup-maximize')).show();
+                }
             });
         }
 
