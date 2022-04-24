@@ -155,6 +155,9 @@ define([
         }
 
         reload() {
+            // reset option page
+            $(this.wrapSelector('.vp-ins-parameter-box')).html('');
+            
             let modelTag = $(this.wrapSelector('#model'));
             let model = $(modelTag).val();
             let modelType = $(modelTag).find('option:selected').data('type');
