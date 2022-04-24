@@ -44,6 +44,22 @@ define([
                 x: '',
                 y: '',
                 hue: '',
+                // info options
+                title: '',
+                x_label: '',
+                y_label: '',
+                useLegend: 'False',
+                legendPos: '',
+                // style options
+                useGrid: 'False',
+                useMarker: 'False',
+                markerStyle: '',
+                // setting options
+                x_limit_from: '',
+                x_limit_to: '',
+                y_limit_from: '',
+                y_limit_to: '',
+                // preview options
                 useSampling: true,
                 sampleCount: 30,
                 autoRefresh: true,
@@ -60,9 +76,9 @@ define([
         }
 
         _bindEvent() {
-            super._bindEvent();
-
             let that = this;
+
+            super._bindEvent();
 
             // setting popup
             $(this.wrapSelector('#chartSetting')).on('click', function() {
@@ -147,18 +163,21 @@ define([
             $(this.wrapSelector('#previewRefresh')).on('click', function() {
                 that.loadPreview();
             });
-            $(this.wrapSelector('.vp-state')).on('change', function() {
-                if (that.state.autoRefresh && that.state.data != '') {
-                    console.log('refresh');
+            // auto refresh
+            $(document).off('change', this.wrapSelector('.vp-state'));
+            $(document).on('change', this.wrapSelector('.vp-state'), function(evt) {
+                that._saveSingleState($(this)[0]);
+                if (that.state.autoRefresh) {
                     that.loadPreview();
                 }
+                evt.stopPropagation();
             });
             
             // set preview size
             $(this.wrapSelector('#previewSize')).on('change', function() {
                 that.loadPreview();
             });
-
+            
         }
 
         templateForBody() {
@@ -438,6 +457,8 @@ define([
 
             let convertedData = data;
             if (preview && data != '') {
+                // set font for KR
+                code.appendLine("plt.rc('font', family='Gulim')"); // FIXME: is it ok for non-Korean?
                 // set figure size for preview chart
                 let defaultWidth = 5;
                 let defaultHeight = 4;
@@ -454,25 +475,33 @@ define([
 
             code.appendLine(chartCode);
 
-            // // Info
-            // if (title && title != '') {
-            //     code.appendFormatLine("plt.title('{0}')", title);
-            // }
-            // if (x_label && x_label != '') {
-            //     code.appendFormatLine("plt.xlabel('{0}')", x_label);
-            // }
-            // if (y_label && y_label != '') {
-            //     code.appendFormatLine("plt.ylabel('{0}')", y_label);
-            // }
-            // if (x_limit_from != '' && x_limit_to != '') {
-            //     code.appendFormatLine("plt.xlim(({0}, {1}))", x_limit_from, x_limit_to);
-            // }
-            // if (y_limit_from != '' && y_limit_to != '') {
-            //     code.appendFormatLine("plt.ylim(({0}, {1}))", y_limit_from, y_limit_to);
-            // }
-            // if (useLegend && legendPos != '') {
-            //     code.appendFormatLine("plt.legend(loc='{0}')", legendPos);
-            // }
+            // Info
+            if (title && title != '') {
+                code.appendFormatLine("plt.title('{0}')", title);
+            }
+            if (x_label && x_label != '') {
+                code.appendFormatLine("plt.xlabel('{0}')", x_label);
+            }
+            if (y_label && y_label != '') {
+                code.appendFormatLine("plt.ylabel('{0}')", y_label);
+            }
+            if (x_limit_from != '' && x_limit_to != '') {
+                code.appendFormatLine("plt.xlim(({0}, {1}))", x_limit_from, x_limit_to);
+            }
+            if (y_limit_from != '' && y_limit_to != '') {
+                code.appendFormatLine("plt.ylim(({0}, {1}))", y_limit_from, y_limit_to);
+            }
+            if (useLegend == 'True' && legendPos != '') {
+                code.appendFormatLine("plt.legend(loc='{0}')", legendPos);
+            }
+            if (useGrid == 'True') {
+                code.appendLine("plt.grid(True)");
+                // TODO: grid types
+                // plt.grid(True, axis='x', color='red', alpha=0.5, linestyle='--')
+            }
+            if (useMarker == 'True') {
+                // TODO: marker to seaborn argument (ex. marker='+' / markers={'Lunch':'s', 'Dinner':'X'})
+            }
 
 
             code.append('plt.show()');
