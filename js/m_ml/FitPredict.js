@@ -35,33 +35,44 @@ define([
 
             this.state = {
                 // model selection
+                category: 'All',
                 model: '',
+                modelType: '',
                 method: '',
                 action: {},
-                config: {},
+                optionConfig: {},
                 userOption: '',
                 ...this.state
             }
 
+            // categories : Data Preparation / Regression / Classification / Clustering / Dimension Reduction / Auto ML
+            this.modelCategories = [
+                'All',
+                ...vpConfig.getMLCategories()
+            ]
+
             this.modelConfig = ML_LIBRARIES;
+
+            this.loaded = false;
+
         }
 
         _bindEvent() {
             super._bindEvent();
             /** Implement binding events */
             var that = this;
-            
-            // change model
-            $(this.wrapSelector('#model')).on('change', function() {
-                that.reload();
-            });
+        
+            // click category
+            $(this.wrapSelector('.vp-ins-select-list.category .vp-ins-select-item')).on('click', function() {
+                let category = $(this).data('var-name');
 
-            // click option
-            $(this.wrapSelector('.vp-ins-select-item')).on('click', function() {
-                let name = $(this).data('var-name');
-                let type = $(this).data('var-type');
-                
-                that.renderOptionPage(type, name);
+                that.state.category = category;
+
+                $(that.wrapSelector('.vp-ins-select-list.category .vp-ins-select-item')).removeClass('selected');
+                $(this).addClass('selected');
+
+                // load model list for this category
+                that.loadModelList(category);
             });
         }
 
@@ -73,28 +84,17 @@ define([
             //================================================================
             // Model selection
             //================================================================
-            // set model list
-            let modelOptionTag = new com_String();
-            vpKernel.getModelList().then(function(resultObj) {
-                let { result } = resultObj;
-                var modelList = JSON.parse(result);
-                modelList && modelList.forEach(model => {
-                    let selectFlag = '';
-                    if (model.varName == that.state.model) {
-                        selectFlag = 'selected';
-                    }
-                    modelOptionTag.appendFormatLine('<option value="{0}" data-type="{1}" {2}>{3} ({4})</option>', 
-                        model.varName, model.varType, selectFlag, model.varName, model.varType);
-                });
-                $(page).find('#model').html(modelOptionTag.toString());
-                $(that.wrapSelector('#model')).html(modelOptionTag.toString());
-
-                if (!that.state.model || that.state.model == '') {
-                    that.state.model = $(that.wrapSelector('#model')).val();
+            // set model category list
+            let modelCategoryTag = new com_String();
+            this.modelCategories.forEach(category => {
+                let selected = '';
+                if (category == that.state.category) {
+                    selected = 'selected';
                 }
-
-                that.reload();
+                modelCategoryTag.appendFormatLine('<li class="{0} {1}" data-var-name="{2}" data-var-type="{3}" title="{4}">{5}</li>',
+                'vp-ins-select-item', selected, category, 'category', category, category);
             });
+            $(page).find('.vp-ins-select-list.category').html(modelCategoryTag.toString());
 
             //================================================================
             // Load state
@@ -130,12 +130,12 @@ define([
         }
 
         templateForOption(modelType) {
-            let config = this.modelConfig[modelType];
+            let optionConfig = this.modelConfig[modelType];
             let state = this.state;
 
             let optBox = new com_String();
             // render tag
-            config.options.forEach(opt => {
+            optionConfig.options.forEach(opt => {
                 optBox.appendFormatLine('<label for="{0}" title="{1}">{2}</label>'
                     , opt.name, opt.name, com_util.optionToLabel(opt.name));
                 let content = com_generator.renderContent(this, opt.component[0], opt, state);
@@ -151,24 +151,69 @@ define([
         render() {
             super.render();
 
+            this.loadModelList(this.state.category);
+
             this.reload();
+        }
+
+        loadModelList(category='') {
+            // reset page
+            try {
+                $(this.wrapSelector('.vp-ins-search')).autocomplete("destroy");
+            } catch { ; }
+            $(this.wrapSelector('.vp-ins-select-list.action')).html('');
+            $(this.wrapSelector('.vp-ins-parameter-box')).html('');
+
+            if (category == 'All') {
+                category = '';
+            }
+            // set model list
+            let that = this;
+            let modelOptionTag = new com_String();
+            vpKernel.getModelList(category).then(function(resultObj) {
+                let { result } = resultObj;
+                var modelList = JSON.parse(result);
+                modelList && modelList.forEach(model => {
+                    let selectFlag = '';
+                    if (model.varName == that.state.model) {
+                        selectFlag = 'selected';
+                    }
+                    modelOptionTag.appendFormatLine('<li class="{0} {1}" data-var-name="{2}" data-var-type="{3}" title="{4}">{5} ({6})</li>',
+                    'vp-ins-select-item', selectFlag, model.varName, model.varType, model.varName, model.varName, model.varType);
+                });
+                $(that.wrapSelector('.vp-ins-select-list.model')).html(modelOptionTag.toString());
+
+                // click model
+                $(that.wrapSelector('.vp-ins-select-list.model .vp-ins-select-item')).on('click', function() {
+                    let model = $(this).data('var-name');
+                    let modelType = $(this).data('var-type');
+
+                    that.state.model = model;
+                    that.state.modelType = modelType;
+                    
+                    $(that.wrapSelector('.vp-ins-select-list.model .vp-ins-select-item')).removeClass('selected');
+                    $(this).addClass('selected');
+
+                    that.reload();
+                });
+            });
         }
 
         reload() {
             // reset option page
+            try {
+                $(this.wrapSelector('.vp-ins-search')).autocomplete("destroy");
+            } catch { ; }
+            $(this.wrapSelector('.vp-ins-select-list.action')).html('');
             $(this.wrapSelector('.vp-ins-parameter-box')).html('');
             
-            let modelTag = $(this.wrapSelector('#model'));
-            let model = $(modelTag).val();
-            let modelType = $(modelTag).find('option:selected').data('type');
+            let model = this.state.model;
+            let modelType = this.state.modelType;
             
             let actions = this.getAction(modelType);
-            // let infos = this.getInfo(modelType);
             this.state.action = { ...actions };
-            // this.state.info = { ...infos };
             
             var actListTag = new com_String();
-            // var infoListTag = new com_String();
             
             Object.keys(actions).forEach(actKey => {
                 let titleText = actions[actKey].description;
@@ -178,17 +223,8 @@ define([
                 actListTag.appendFormatLine('<li class="{0}" data-var-name="{1}" data-var-type="{2}" title="{3}">{4}</li>',
                 'vp-ins-select-item', actKey, 'action', titleText, actions[actKey].label);
             });
-            // Object.keys(infos).forEach(infoKey => {
-            //     let titleText = infos[infoKey].description;
-            //     if (infos[infoKey].name != infos[infoKey].label) {   
-            //         titleText = infos[infoKey].name + ': ' + titleText;
-            //     }
-            //     infoListTag.appendFormatLine('<li class="{0}" data-var-name="{1}" data-var-type="{2}" title="{3}">{4}</li>',
-            //     'vp-ins-select-item', infoKey, 'info', titleText, infos[infoKey].label);
-            // });
             
             $(this.wrapSelector('.vp-ins-select-list.action')).html(actListTag.toString());
-            // $(this.wrapSelector('.vp-ins-select-list.info')).html(infoListTag.toString());
             
             let that = this;
             // action search suggest
@@ -207,28 +243,18 @@ define([
                 return suggestInput.toTagString();
             });
 
-            // info search suggest
-            // suggestInput = new SuggestInput();
-            // suggestInput.addClass('vp-input');
-            // suggestInput.addClass('vp-ins-search');
-            // suggestInput.setPlaceholder("Search info");
-            // suggestInput.setSuggestList(function () { return Object.keys(infos); });
-            // suggestInput.setSelectEvent(function (value, item) {
-            //     $(this.wrapSelector()).val(value);
-            //     $(that.wrapSelector('.vp-ins-type.info')).val(value);
-
-            //     $(that.wrapSelector('.vp-ins-select-item[data-var-name="' + value + '"]')).click();
-            // });
-            // $(that.wrapSelector('.vp-ins-search')).replaceWith(function () {
-            //     return suggestInput.toTagString();
-            // });
-
             // bind event
-            this._bindEvent();
+            // click option
+            $(this.wrapSelector('.vp-ins-select-list.action .vp-ins-select-item')).on('click', function() {
+                let name = $(this).data('var-name');
+                let type = $(this).data('var-type');
+                
+                that.renderOptionPage(type, name);
+            });
 
             // load once on initializing page
             if (this.loaded == false) {
-                let { modelEditorType, modelEditorName } = this.pageThis.state;
+                let { modelEditorType, modelEditorName } = this.state;
                 if (modelEditorType != '' && modelEditorName != '') {
                     // render option page for saved state
                     that.renderOptionPage(modelEditorType, modelEditorName);
@@ -245,10 +271,10 @@ define([
          */
         renderOptionPage(type, name) {
             if (this.state[type] != undefined && this.state[type][name] != undefined) {
-                let config = this.state[type][name];
+                let optionConfig = this.state[type][name];
                 let optBox = new com_String();
                 // render tag
-                config && config.options && config.options.forEach(opt => {
+                optionConfig && optionConfig.options && optionConfig.options.forEach(opt => {
                     let label = opt.name;
                     if (opt.label != undefined) {
                         label = opt.label;
@@ -263,12 +289,12 @@ define([
                 // replace option box
                 $(this.wrapSelector('.vp-ins-parameter-box')).html(optBox.toString());
     
-                this.state.config = config;
+                this.state.optionConfig = optionConfig;
     
                 // add selection
-                $(this.wrapSelector('.vp-ins-select-item')).removeClass('selected');
                 let typeClass = '.vp-ins-select-list.' + type;
                 let nameClass = '.vp-ins-select-item[data-var-name="' + name + '"]';
+                $(this.wrapSelector(typeClass + ' ' + '.vp-ins-select-item')).removeClass('selected');
                 $(this.wrapSelector(typeClass + ' ' + nameClass)).addClass('selected');
                 // set state
                 $(this.wrapSelector('#modelEditorType')).val(type);
@@ -283,21 +309,23 @@ define([
             let code = new com_String();
             let replaceDict = {'${model}': model};
 
-            if (this.state.config.import != undefined) {
-                code.appendLine(this.state.config.import);
+            if (this.state.optionConfig.import != undefined) {
+                code.appendLine(this.state.optionConfig.import);
                 code.appendLine();
             }
-            let modelCode = com_generator.vp_codeGenerator(this.pageThis, this.state.config, this.pageThis.state);
-            Object.keys(replaceDict).forEach(key => {
-                modelCode = modelCode.replace(key, replaceDict[key]);
-            });
-            code.append(modelCode);
-
-            let allocateIdx = modelCode.indexOf(' = ');
-            if (allocateIdx >= 0) {
-                let allocateCode = modelCode.substr(0, allocateIdx);
-                code.appendLine();
-                code.append(allocateCode);
+            let modelCode = com_generator.vp_codeGenerator(this, this.state.optionConfig, this.state);
+            if (modelCode) {
+                Object.keys(replaceDict).forEach(key => {
+                    modelCode = modelCode.replace(key, replaceDict[key]);
+                });
+                code.append(modelCode);
+    
+                let allocateIdx = modelCode.indexOf(' = ');
+                if (allocateIdx >= 0) {
+                    let allocateCode = modelCode.substr(0, allocateIdx);
+                    code.appendLine();
+                    code.append(allocateCode);
+                }
             }
 
             return code.toString();
