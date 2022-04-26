@@ -35,7 +35,7 @@
 }
 .vp-tab-page-box.plot {
     /* height: calc(100% - 30px); */
-    min-height: 310px;
+    min-height: 352px;
     align-content: baseline;
 }
 .vp-chart-plot-box {

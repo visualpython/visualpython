@@ -73,6 +73,39 @@ define([
                 'Categorical': [ 'stripplot', 'swarmplot', 'boxplot', 'violinplot', 'pointplot', 'barplot' ],
                 // 'ETC': [ ]
             }
+
+            this.legendPosList = [
+                'best', 'upper right', 'upper left', 'lower left', 'lower right',
+                'center left', 'center right', 'lower center', 'upper center', 'center'
+            ];
+
+            this.markerList = [
+                // 'custom': { label: 'Custom', value: 'marker' },
+                { label: ' ', value: ' ', title: 'select marker style'},
+                { label: '.', value: '.', title: 'point' }, 
+                { label: ',', value: ',', title: 'pixel' }, 
+                { label: 'o', value: 'o', title: 'circle' }, 
+                { label: '▼', value: 'v', title: 'triangle_down' }, 
+                { label: '▲', value: '^', title: 'triangle_up' }, 
+                { label: '◀', value: '<', title: 'triangle_left' }, 
+                { label: '▶', value: '>', title: 'triangle_right' }, 
+                { label: '┬', value: '1', title: 'tri_down' }, 
+                { label: '┵', value: '2', title: 'tri_up' }, 
+                { label: '┤', value: '3', title: 'tri_left' }, 
+                { label: '├', value: '4', title: 'tri_right' }, 
+                { label: 'octagon', value: '8', title: 'octagon' }, 
+                { label: 'square', value: 's', title: 'square' }, 
+                { label: 'pentagon', value: 'p', title: 'pentagon' }, 
+                { label: 'filled plus', value: 'P', title: 'plus (filled)' }, 
+                { label: 'star', value: '*', title: 'star' }, 
+                { label: 'hexagon1', value: 'h', title: 'hexagon1' }, 
+                { label: 'hexagon2', value: 'H', title: 'hexagon2' }, 
+                { label: 'plus', value: '+', title: 'plus' }, 
+                { label: 'x', value: 'x', title: 'x' }, 
+                { label: 'filled x', value: 'X', title: 'x (filled)' }, 
+                { label: 'diamond', value: 'D', title: 'diamond' }, 
+                { label: 'thin diamond', value: 'd', title: 'thin_diamond' }
+            ]
         }
 
         _bindEvent() {
@@ -202,9 +235,10 @@ define([
             let varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'Series', 'list']);
             varSelector.setComponentID('data');
             varSelector.addClass('vp-state vp-input');
-            varSelector.setValue(this.state.featureData);
+            varSelector.setValue(this.state.data);
             varSelector.setSelectEvent(function (value, item) {
                 $(this.wrapSelector()).val(value);
+                that.state.dtype = item.dtype;
 
                 if (item.dtype == 'DataFrame') {
                     $(that.wrapSelector('#x')).prop('disabled', false);
@@ -222,12 +256,8 @@ define([
             $(page).find('#data').replaceWith(varSelector.toTagString());
 
             // legend position
-            let legendPosList = [
-                'best', 'upper right', 'upper left', 'lower left', 'lower right',
-                'center left', 'center right', 'lower center', 'upper center', 'center'
-            ];
             let legendPosTag = new com_String();
-            legendPosList.forEach(pos => {
+            this.legendPosList.forEach(pos => {
                 let selectedFlag = '';
                 if (pos == that.state.legendPos) {
                     selectedFlag = 'selected';
@@ -236,6 +266,18 @@ define([
                     pos, selectedFlag, pos, pos == 'best'?' (default)':'');
             });
             $(page).find('#legendPos').html(legendPosTag.toString());
+
+            // marker style
+            let markerTag = new com_String();
+            this.markerList.forEach(marker => {
+                let selectedFlag = '';
+                if (marker.value == that.state.markerStyle) {
+                    selectedFlag = 'selected';
+                }
+                markerTag.appendFormatLine('<option value="{0}" title="{1}" {2}>{3}</option>',
+                    marker.value, marker.title, selectedFlag, marker.label);
+            });
+            $(page).find('#markerStyle').html(markerTag.toString());
 
             // preview sample count
             let sampleCountList = [30, 50, 100, 300, 500, 700, 1000];
@@ -249,6 +291,36 @@ define([
                     cnt, selectedFlag, cnt);
             });
             $(page).find('#sampleCount').html(sampleCountTag.toString());
+
+            //================================================================
+            // Load state
+            //================================================================
+            Object.keys(this.state).forEach(key => {
+                let tag = $(page).find('#' + key);
+                let tagName = $(tag).prop('tagName'); // returns with UpperCase
+                let value = that.state[key];
+                if (value == undefined) {
+                    return;
+                }
+                switch(tagName) {
+                    case 'INPUT':
+                        let inputType = $(tag).prop('type');
+                        if (inputType == 'text' || inputType == 'number' || inputType == 'hidden') {
+                            $(tag).val(value);
+                            break;
+                        }
+                        if (inputType == 'checkbox') {
+                            $(tag).prop('checked', value);
+                            break;
+                        }
+                        break;
+                    case 'TEXTAREA':
+                    case 'SELECT':
+                    default:
+                        $(tag).val(value);
+                        break;
+                }
+            });
 
             return page;
         }
@@ -454,7 +526,25 @@ define([
 
             let chartCode = new com_String();
 
-            let generatedCode = com_generator.vp_codeGenerator(this, config, state, (userOption != ''? ', ' + userOption : ''));
+            let etcOptionCode = []
+            if (useMarker == 'True') {
+                // TODO: marker to seaborn argument (ex. marker='+' / markers={'Lunch':'s', 'Dinner':'X'})
+                etcOptionCode.push(com_util.formatString("marker='{0}'", markerStyle));
+            }
+
+            // add user option
+            if (userOption != '') {
+                etcOptionCode.push(userOption);
+            }
+
+            if (etcOptionCode.length > 0) {
+                etcOptionCode = [
+                    '',
+                    ...etcOptionCode
+                ]
+            }
+
+            let generatedCode = com_generator.vp_codeGenerator(this, config, state, etcOptionCode.join(', '));
 
             // Info
             if (title && title != '') {
@@ -479,9 +569,6 @@ define([
                 chartCode.appendLine("plt.grid(True)");
                 // TODO: grid types
                 // plt.grid(True, axis='x', color='red', alpha=0.5, linestyle='--')
-            }
-            if (useMarker == 'True') {
-                // TODO: marker to seaborn argument (ex. marker='+' / markers={'Lunch':'s', 'Dinner':'X'})
             }
             chartCode.append('plt.show()');
 
