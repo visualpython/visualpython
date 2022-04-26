@@ -260,6 +260,11 @@ define([
             $(this.wrapSelector('.vp-popup-maximize')).on('click', function(evt) {
                 // save position
                 that.config.position = $(that.wrapSelector()).position();
+                // save size
+                that.config.size = {
+                    width: $(that.wrapSelector()).width(),
+                    height: $(that.wrapSelector()).height()
+                }
                 // maximize popup
                 $(that.wrapSelector()).css({
                     width: '100%',

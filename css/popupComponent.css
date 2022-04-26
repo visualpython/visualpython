@@ -119,6 +119,9 @@
     padding: 15px;
     overflow: auto;
 }
+.vp-popup-content {
+    min-height: calc(100% - 30px);
+}
 .vp-popup-footer {
     position: relative;
     height: 50px;
