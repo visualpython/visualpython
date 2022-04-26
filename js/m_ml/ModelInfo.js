@@ -551,16 +551,18 @@ define([
                     break;
                 case 'Clustering':
                     infos = {
-                        // 'Size of clusters': {
-                        //     name: 'Size of clusters',
-                        //     code: "print(f'Size of clusters: {np.bincount(pred)}')", // FIXME: model.cluster_centers_ / use model info or hide it
-                        //     options: []
-                        // }
+                        'get_params': {
+                            ...defaultInfos['get_params']
+                        }
                     }
 
                     if (modelType == 'KMeans') {
                         infos = {
                             ...infos,
+                            'score': {
+                                ...defaultInfos['score'],
+                                description: 'Return the mean accuracy on the given test data and labels.'
+                            },
                             'cluster_centers_': {
                                 name: 'cluster_centers',
                                 label: 'Cluster centers',
@@ -584,6 +586,16 @@ define([
                                 options: [
                                     { name: 'dendro_data', label: 'Data', component: ['var_select'], var_type: ['DataFrame'] }
                                 ]
+                            }
+                        }
+                    }
+
+                    if (modelType == 'GaussianMixture') {
+                        infos = {
+                            ...infos,
+                            'score': {
+                                ...defaultInfos['score'],
+                                description: 'Compute the per-sample average log-likelihood of the given data X.'
                             }
                         }
                     }
