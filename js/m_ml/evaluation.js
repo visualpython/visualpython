@@ -77,24 +77,36 @@ define([
 
                 } else if (modelType == 'clf') {
                     // Classification - model selection
-                    if (that.checkToShowModel() == true) {
-                        $(that.wrapSelector('.vp-ev-model')).show();
+                    if (that.checkToShowModel('roc-auc') == true) {
+                        $(that.wrapSelector('.vp-ev-model.roc-auc')).prop('disabled', false);
+                    } else {
+                        $(that.wrapSelector('.vp-ev-model.roc-auc')).prop('disabled', true);
                     }
                 } else {
                     // Clustering
-
+                    if (that.checkToShowModel('silhouette') == true) {
+                        $(that.wrapSelector('.vp-ev-model.silhouette')).prop('disabled', false);
+                    } else {
+                        $(that.wrapSelector('.vp-ev-model.silhouette')).prop('disabled', true);
+                    }
+                    if (that.checkToShowModel('ari-nmi') == true) {
+                        $(that.wrapSelector('.vp-ev-model.ari-nmi')).prop('disabled', false);
+                    } else {
+                        $(that.wrapSelector('.vp-ev-model.ari-nmi')).prop('disabled', true);
+                    }
                 }
             });
 
             // open model selection show
             $(this.wrapSelector('.vp-eval-check')).on('change', function() {
                 let checked = $(this).prop('checked');
+                let type = $(this).data('type');
 
                 if (checked) {
-                    $(that.wrapSelector('.vp-ev-model')).show();
+                    $(that.wrapSelector('.vp-ev-model.' + type)).prop('disabled', false);
                 } else {
-                    if (that.checkToShowModel() == false) {
-                        $(that.wrapSelector('.vp-ev-model')).hide();
+                    if (that.checkToShowModel(type) == false) {
+                        $(that.wrapSelector('.vp-ev-model.' + type)).prop('disabled', true);
                     }
                 }
             });
@@ -104,8 +116,8 @@ define([
          * Check if anything checked available ( > 0)
          * @returns 
          */
-        checkToShowModel() {
-            let checked = $(this.wrapSelector('.vp-eval-check:checked')).length;
+        checkToShowModel(type) {
+            let checked = $(this.wrapSelector('.vp-eval-check[data-type="' + type + '"]:checked')).length;
             if (checked > 0) { 
                 return true;
             }
@@ -140,13 +152,13 @@ define([
 
             varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'list', 'str']);
             varSelector.setComponentID('featureData2');
-            varSelector.addClass('vp-state vp-input');
+            varSelector.addClass('vp-state vp-input vp-ev-model silhouette');
             varSelector.setValue(this.state.featureData2);
             $(page).find('#featureData2').replaceWith(varSelector.toTagString());
 
             varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'list', 'str']);
             varSelector.setComponentID('targetData2');
-            varSelector.addClass('vp-state vp-input');
+            varSelector.addClass('vp-state vp-input vp-ev-model ari-nmi');
             varSelector.setValue(this.state.targetData2);
             $(page).find('#targetData2').replaceWith(varSelector.toTagString());
 
@@ -205,15 +217,21 @@ define([
             $(page).find('.vp-upper-box.' + this.state.modelType).show();
 
             if (this.state.modelType == 'rgs') {
-                
+                // Regression
+
             } else if (this.state.modelType == 'clf') {
-                if (this.state.roc_curve == true || this.state.auc == true) {
-                    $(page).find('.vp-ev-model').show();
-                } else {
-                    $(page).find('.vp-ev-model').hide();
+                // Classification
+                if (this.state.roc_curve == false && this.state.auc == false) {
+                    $(page).find('.vp-ev-model.roc-auc').prop('disabled', true);
                 }
             } else {
-                $(page).find('.vp-ev-model').hide();
+                // Clustering
+                if (this.state.silhouetteScore == false) {
+                    $(page).find('.vp-ev-model.silhouette').prop('disabled', true);
+                }
+                if (this.state.ari == false && this.state.nmi == false) {
+                    $(page).find('.vp-ev-model.ari-nmi').prop('disabled', true);
+                }
             }
 
             return page;
