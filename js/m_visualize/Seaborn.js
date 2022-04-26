@@ -69,9 +69,9 @@ define([
             this.chartConfig = CHART_LIBRARIES;
             this.chartTypeList = {
                 'Relational': [ 'scatterplot', 'lineplot' ],
-                'Distributions': [ 'histplot', 'kdeplot', 'ecdfplot', 'rugplot' ], // FIXME: ecdf : no module
+                'Distributions': [ 'histplot', 'kdeplot', 'rugplot' ], 
                 'Categorical': [ 'stripplot', 'swarmplot', 'boxplot', 'violinplot', 'pointplot', 'barplot' ],
-                'ETC': [ ]
+                // 'ETC': [ ]
             }
         }
 
@@ -212,7 +212,7 @@ define([
                     $(that.wrapSelector('#hue')).prop('disabled', false);
                     
                     // bind column source using selected dataframe
-                    com_generator.vp_bindColumnSource(that.wrapSelector(), $(that.wrapSelector('#data')), ['x', 'y', 'hue'], 'select');
+                    com_generator.vp_bindColumnSource(that.wrapSelector(), $(that.wrapSelector('#data')), ['x', 'y', 'hue'], 'select', true);
                 } else {
                     $(that.wrapSelector('#x')).prop('disabled', true);
                     $(that.wrapSelector('#y')).prop('disabled', true);

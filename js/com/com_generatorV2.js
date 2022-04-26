@@ -656,12 +656,13 @@ define([
      * @param {object} target 
      * @param {array} columnInputIdList 
      * @param {string} tagType input / select (tag type)
+     * @param {array/boolean} columnWithEmpty boolean array or value to decide whether select tag has empty space
      * Usage : 
      *  $(document).on('change', this.wrapSelector('#dataframe_tag_id'), function() {
-     *      pdGen.vp_bindColumnSource(that.wrapSelector(), this, ['column_input_id']);
+     *      pdGen.vp_bindColumnSource(that.wrapSelector(), this, ['column_input_id'], 'select', [true, true, true]);
      *  });
      */
-    var vp_bindColumnSource = function(selector, target, columnInputIdList, tagType="input") {
+    var vp_bindColumnSource = function(selector, target, columnInputIdList, tagType="input", columnWithEmpty=false) {
         var varName = '';
         if ($(target).length > 0) {
             varName = $(target).val();
@@ -701,8 +702,22 @@ define([
                 let { result, type, msg } = resultObj;
                 var varResult = JSON.parse(result);
 
+                // check if it needs to add empty option
+                let addEmpty = false;
+                if (Array.isArray(columnWithEmpty)) {
+                    addEmpty = columnWithEmpty[idx];
+                } else {
+                    addEmpty = columnWithEmpty;
+                }
+                if (addEmpty == true) {
+                    varResult = [
+                        {value: '', label: ''},
+                        ...varResult
+                    ]
+                }
+
                 // columns using suggestInput
-                columnInputIdList && columnInputIdList.forEach(columnInputId => {
+                columnInputIdList && columnInputIdList.forEach((columnInputId, idx) => {
                     let defaultValue = $(selector + ' #' + columnInputId).val();
                     if (defaultValue == null || defaultValue == undefined) {
                         defaultValue = '';
@@ -724,6 +739,7 @@ define([
                             'id': columnInputId,
                             'class': 'vp-select vp-state'
                         });
+                        // make tag
                         varResult.forEach(listVar => {
                             var option = document.createElement('option');
                             $(option).attr({
