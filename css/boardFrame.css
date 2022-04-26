@@ -239,39 +239,39 @@
     background-color: rgb(253, 177, 133);
 }
 .vp-block.visualization .vp-block-header {
-    background-color: rgb(249, 227, 214);
+    background-color: #E8ECD0;
 }
 .vp-block.visualization.vp-focus .vp-block-header,
 .vp-block.visualization.vp-focus-child .vp-block-header {
-    background-color: rgb(253, 177, 133);
+    background-color: #C6CE94;
 }
 .vp-block.machine_learning .vp-block-header {
-    background-color: #E8ECD0;
+    background-color: #E5EEF8;
 }
 .vp-block.machine_learning.vp-focus .vp-block-header,
 .vp-block.machine_learning.vp-focus-child .vp-block-header {
-    background-color: #C6CE94;
+    background-color: #BFD5F0;
 }
 .vp-block.logic-define .vp-block-header {
-    background-color: rgb(213, 231, 222);
+    /* background-color: rgb(213, 231, 222); */
 }
 .vp-block.logic-define.vp-focus .vp-block-header,
 .vp-block.logic-define.vp-focus-child .vp-block-header {
-    background-color: rgb(138, 214, 176);
+    /* background-color: rgb(138, 214, 176); */
 }
 .vp-block.logic-control .vp-block-header {
-    background-color: rgb(253, 239, 221);
+    /* background-color: rgb(253, 239, 221); */
 }
 .vp-block.logic-control.vp-focus .vp-block-header,
 .vp-block.logic-control.vp-focus-child .vp-block-header {
-    background-color: rgb(255, 207, 115);
+    /* background-color: rgb(255, 207, 115); */
 }
 .vp-block.library .vp-block-header {
-    background-color: rgb(249, 227, 214);
+    /* background-color: rgb(249, 227, 214); */
 }
 .vp-block.library.vp-focus .vp-block-header, 
 .vp-block.library.vp-focus-child .vp-block-header {
-    background-color: rgb(253, 177, 133);
+    /* background-color: rgb(253, 177, 133); */
 }
 /* block button group */
 .vp-block-button-group {

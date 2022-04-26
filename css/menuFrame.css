@@ -230,13 +230,16 @@
     background: #E56139;
 }
 .vp-menuitem.apps.vp-color-apps5 {
-    background: #BEB727;
+    background: #97AA4E;
 }
 .vp-menuitem.apps.vp-color-apps6 {
-    background: #91A541;
+    background: #88B4E9;
 }
 .vp-menuitem.apps.vp-color-apps7 {
-    background: #718E41;
+    background: #6C9BD1;
+}
+.vp-menuitem.apps.vp-color-apps8 {
+    background: #578BC7;
 }
 .vp-menuitem.apps.vp-color-preparing {
     background: var(--gray-color);
@@ -252,14 +255,14 @@
 }
 /* MenuItem - Logic */
 .vp-menuitem.logic-define {
-    background-color: rgb(213, 231, 222);
+    /* background-color: rgb(213, 231, 222); */
 }
 .vp-menuitem.logic-control {
-    background-color: rgb(253, 239, 221);
+    /* background-color: rgb(253, 239, 221); */
 }
 /* MenuItem - Library */
 .vp-menuitem.library {
-    background-color: rgb(249, 227, 214);
+    /* background-color: rgb(249, 227, 214); */
 }
 
 /* Task Bar */

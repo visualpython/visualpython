@@ -29,7 +29,7 @@ define([
             super._init();
 
             this.config.dataview = false;
-            this.config.sizeLevel = 3;
+            this.config.size = { width: 1064, height: 550 };
 
             this.state = {
                 chartType: 'scatterplot',
@@ -39,10 +39,27 @@ define([
                 figColumn: 0,
                 shareX: false,
                 shareY: false,
+                setXY: false,
                 data: '',
                 x: '',
                 y: '',
                 hue: '',
+                // info options
+                title: '',
+                x_label: '',
+                y_label: '',
+                useLegend: 'False',
+                legendPos: '',
+                // style options
+                useGrid: 'False',
+                useMarker: 'False',
+                markerStyle: '',
+                // setting options
+                x_limit_from: '',
+                x_limit_to: '',
+                y_limit_from: '',
+                y_limit_to: '',
+                // preview options
                 useSampling: true,
                 sampleCount: 30,
                 autoRefresh: true,
@@ -52,16 +69,49 @@ define([
             this.chartConfig = CHART_LIBRARIES;
             this.chartTypeList = {
                 'Relational': [ 'scatterplot', 'lineplot' ],
-                'Distributions': [ 'histplot', 'kdeplot', 'ecdfplot', 'rugplot' ], // FIXME: ecdf : no module
+                'Distributions': [ 'histplot', 'kdeplot', 'rugplot' ], 
                 'Categorical': [ 'stripplot', 'swarmplot', 'boxplot', 'violinplot', 'pointplot', 'barplot' ],
-                'ETC': [ ]
+                // 'ETC': [ ]
             }
+
+            this.legendPosList = [
+                'best', 'upper right', 'upper left', 'lower left', 'lower right',
+                'center left', 'center right', 'lower center', 'upper center', 'center'
+            ];
+
+            this.markerList = [
+                // 'custom': { label: 'Custom', value: 'marker' },
+                { label: ' ', value: ' ', title: 'select marker style'},
+                { label: '.', value: '.', title: 'point' }, 
+                { label: ',', value: ',', title: 'pixel' }, 
+                { label: 'o', value: 'o', title: 'circle' }, 
+                { label: '▼', value: 'v', title: 'triangle_down' }, 
+                { label: '▲', value: '^', title: 'triangle_up' }, 
+                { label: '◀', value: '<', title: 'triangle_left' }, 
+                { label: '▶', value: '>', title: 'triangle_right' }, 
+                { label: '┬', value: '1', title: 'tri_down' }, 
+                { label: '┵', value: '2', title: 'tri_up' }, 
+                { label: '┤', value: '3', title: 'tri_left' }, 
+                { label: '├', value: '4', title: 'tri_right' }, 
+                { label: 'octagon', value: '8', title: 'octagon' }, 
+                { label: 'square', value: 's', title: 'square' }, 
+                { label: 'pentagon', value: 'p', title: 'pentagon' }, 
+                { label: 'filled plus', value: 'P', title: 'plus (filled)' }, 
+                { label: 'star', value: '*', title: 'star' }, 
+                { label: 'hexagon1', value: 'h', title: 'hexagon1' }, 
+                { label: 'hexagon2', value: 'H', title: 'hexagon2' }, 
+                { label: 'plus', value: '+', title: 'plus' }, 
+                { label: 'x', value: 'x', title: 'x' }, 
+                { label: 'filled x', value: 'X', title: 'x (filled)' }, 
+                { label: 'diamond', value: 'D', title: 'diamond' }, 
+                { label: 'thin diamond', value: 'd', title: 'thin_diamond' }
+            ]
         }
 
         _bindEvent() {
-            super._bindEvent();
-
             let that = this;
+
+            super._bindEvent();
 
             // setting popup
             $(this.wrapSelector('#chartSetting')).on('click', function() {
@@ -88,30 +138,74 @@ define([
             // change tab
             $(this.wrapSelector('.vp-tab-item')).on('click', function() {
                 let level = $(this).parent().data('level');
-                let type = $(this).data('type'); // info / element / figure
+                let type = $(this).data('type'); // data / info / element / figure
 
                 $(that.wrapSelector(com_util.formatString('.vp-tab-bar.{0} .vp-tab-item', level))).removeClass('vp-focus');
                 $(this).addClass('vp-focus');
 
-                $(that.wrapSelector(com_util.formatString('.vp-tab-page-box.{0} .vp-tab-page', level))).hide();
+                $(that.wrapSelector(com_util.formatString('.vp-tab-page-box.{0} > .vp-tab-page', level))).hide();
                 $(that.wrapSelector(com_util.formatString('.vp-tab-page[data-type="{0}"]', type))).show();
             });
+            
+            // use data or not
+            $(this.wrapSelector('#setXY')).on('change', function() {
+                let setXY = $(this).prop('checked');
+                if (setXY == false) {
+                    // set Data
+                    $(that.wrapSelector('#data')).prop('disabled', false);
 
-            // bind column by dataframe
-            $(document).on('change', this.wrapSelector('#data'), function() {
-                com_generator.vp_bindColumnSource(that.wrapSelector(), this, ['x', 'y', 'hue'], 'select');
+                    $(that.wrapSelector('#x')).closest('.vp-vs-box').replaceWith('<select id="x"></select>');
+                    $(that.wrapSelector('#y')).closest('.vp-vs-box').replaceWith('<select id="y"></select>');
+                    $(that.wrapSelector('#hue')).closest('.vp-vs-box').replaceWith('<select id="hue"></select>');
+                } else {
+                    // set X Y indivisually
+                    // disable data selection
+                    $(that.wrapSelector('#data')).prop('disabled', true);
+                    $(that.wrapSelector('#data')).val('');
+                    that.state.data = '';
+                    that.state.x = '';
+                    that.state.y = '';
+                    that.state.hue = '';
+
+                    let varSelectorX = new VarSelector2(that.wrapSelector(), ['DataFrame', 'Series', 'list']);
+                    varSelectorX.setComponentID('x');
+                    varSelectorX.addClass('vp-state vp-input');
+                    varSelectorX.setValue(that.state.x);
+                    $(that.wrapSelector('#x')).replaceWith(varSelectorX.toTagString());
+
+                    let varSelectorY = new VarSelector2(that.wrapSelector(), ['DataFrame', 'Series', 'list']);
+                    varSelectorY.setComponentID('y');
+                    varSelectorY.addClass('vp-state vp-input');
+                    varSelectorY.setValue(that.state.y);
+                    $(that.wrapSelector('#y')).replaceWith(varSelectorY.toTagString());
+
+                    let varSelectorHue = new VarSelector2(that.wrapSelector(), ['DataFrame', 'Series', 'list']);
+                    varSelectorHue.setComponentID('hue');
+                    varSelectorHue.addClass('vp-state vp-input');
+                    varSelectorHue.setValue(that.state.hue);
+                    $(that.wrapSelector('#hue')).replaceWith(varSelectorHue.toTagString());
+                }
             });
 
             // preview refresh
             $(this.wrapSelector('#previewRefresh')).on('click', function() {
                 that.loadPreview();
             });
-            $(this.wrapSelector('.vp-state')).on('change', function() {
-                if (that.state.autoRefresh && that.state.data != '') {
+            // auto refresh
+            $(document).off('change', this.wrapSelector('.vp-state'));
+            $(document).on('change', this.wrapSelector('.vp-state'), function(evt) {
+                that._saveSingleState($(this)[0]);
+                if (that.state.autoRefresh) {
                     that.loadPreview();
                 }
+                evt.stopPropagation();
             });
-
+            
+            // set preview size
+            $(this.wrapSelector('#previewSize')).on('change', function() {
+                that.loadPreview();
+            });
+            
         }
 
         templateForBody() {
@@ -141,8 +235,49 @@ define([
             let varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'Series', 'list']);
             varSelector.setComponentID('data');
             varSelector.addClass('vp-state vp-input');
-            varSelector.setValue(this.state.featureData);
+            varSelector.setValue(this.state.data);
+            varSelector.setSelectEvent(function (value, item) {
+                $(this.wrapSelector()).val(value);
+                that.state.dtype = item.dtype;
+
+                if (item.dtype == 'DataFrame') {
+                    $(that.wrapSelector('#x')).prop('disabled', false);
+                    $(that.wrapSelector('#y')).prop('disabled', false);
+                    $(that.wrapSelector('#hue')).prop('disabled', false);
+                    
+                    // bind column source using selected dataframe
+                    com_generator.vp_bindColumnSource(that.wrapSelector(), $(that.wrapSelector('#data')), ['x', 'y', 'hue'], 'select', true);
+                } else {
+                    $(that.wrapSelector('#x')).prop('disabled', true);
+                    $(that.wrapSelector('#y')).prop('disabled', true);
+                    $(that.wrapSelector('#hue')).prop('disabled', true);
+                }
+            });
             $(page).find('#data').replaceWith(varSelector.toTagString());
+
+            // legend position
+            let legendPosTag = new com_String();
+            this.legendPosList.forEach(pos => {
+                let selectedFlag = '';
+                if (pos == that.state.legendPos) {
+                    selectedFlag = 'selected';
+                }
+                legendPosTag.appendFormatLine('<option value="{0}" {1}>{2}{3}</option>',
+                    pos, selectedFlag, pos, pos == 'best'?' (default)':'');
+            });
+            $(page).find('#legendPos').html(legendPosTag.toString());
+
+            // marker style
+            let markerTag = new com_String();
+            this.markerList.forEach(marker => {
+                let selectedFlag = '';
+                if (marker.value == that.state.markerStyle) {
+                    selectedFlag = 'selected';
+                }
+                markerTag.appendFormatLine('<option value="{0}" title="{1}" {2}>{3}</option>',
+                    marker.value, marker.title, selectedFlag, marker.label);
+            });
+            $(page).find('#markerStyle').html(markerTag.toString());
 
             // preview sample count
             let sampleCountList = [30, 50, 100, 300, 500, 700, 1000];
@@ -157,23 +292,60 @@ define([
             });
             $(page).find('#sampleCount').html(sampleCountTag.toString());
 
+            //================================================================
+            // Load state
+            //================================================================
+            Object.keys(this.state).forEach(key => {
+                let tag = $(page).find('#' + key);
+                let tagName = $(tag).prop('tagName'); // returns with UpperCase
+                let value = that.state[key];
+                if (value == undefined) {
+                    return;
+                }
+                switch(tagName) {
+                    case 'INPUT':
+                        let inputType = $(tag).prop('type');
+                        if (inputType == 'text' || inputType == 'number' || inputType == 'hidden') {
+                            $(tag).val(value);
+                            break;
+                        }
+                        if (inputType == 'checkbox') {
+                            $(tag).prop('checked', value);
+                            break;
+                        }
+                        break;
+                    case 'TEXTAREA':
+                    case 'SELECT':
+                    default:
+                        $(tag).val(value);
+                        break;
+                }
+            });
+
             return page;
         }
 
         templateForSettingBox() {
-            return `<div class="vp-grid-border-box vp-grid-col-95">
-                <label for="figureWidth" class="">Figure size</label>
-                <div>
-                    <input type="number" id="figureWidth" class="vp-input m" placeholder="width" value="12">
-                    <input type="number" id="figureHeight" class="vp-input m" placeholder="height" value="8">
+            return `<div class="vp-grid-border-box vp-grid-col-95 vp-chart-setting-body">
+                    <label for="figureWidth" class="">Figure size</label>
+                    <div>
+                        <input type="number" id="figureWidth" class="vp-input m" placeholder="width" value="12">
+                        <input type="number" id="figureHeight" class="vp-input m" placeholder="height" value="8">
+                    </div>
+                    <label for="styleSheet" class="">Style sheet</label>
+                    <input type="text" class="vp-input" id="styleSheet" placeholder="style name" value="">
+                    <label for="fontName" class="">System font</label>
+                    <input type="text" class="vp-input" id="fontName" placeholder="font name" value="">
+                    <label for="fontSize" class="">Font size</label>
+                    <input type="number" id="fontSize" class="vp-input" placeholder="size" value="10">
                 </div>
-                <label for="styleSheet" class="">Style sheet</label>
-                <input type="text" class="vp-input" id="styleSheet" placeholder="style name" value="">
-                <label for="fontName" class="">System font</label>
-                <input type="text" class="vp-input" id="fontName" placeholder="font name" value="">
-                <label for="fontSize" class="">Font size</label>
-                <input type="number" id="fontSize" class="vp-input" placeholder="size" value="10">
-            </div>`;
+                <div class="vp-chart-setting-footer">
+                    <label>
+                        <input type="checkbox" id="setDefault">
+                        <span title="Set chart setting to default.">Set Default</span>
+                    </label>
+                </div>
+            `;
         }
 
         render() {
@@ -191,10 +363,10 @@ define([
             // set size
             $(this.wrapSelector('.vp-inner-popup-box')).css({ width: 400, height: 260});
 
-            this.renderImportOptions();
+            this.bindSettingBox();
         }
 
-        renderImportOptions() {
+        bindSettingBox() {
             //====================================================================
             // Stylesheet suggestinput
             //====================================================================
@@ -213,6 +385,7 @@ define([
                 suggestInput.setComponentID('styleSheet');
                 suggestInput.setSuggestList(function() { return varList; });
                 suggestInput.setPlaceholder('style name');
+                suggestInput.setValue('seaborn-darkgrid'); // set default (seaborn-darkgrid)
                 // suggestInput.setNormalFilter(false);
                 $(stylesheetTag).replaceWith(function() {
                     return suggestInput.toTagString();
@@ -242,6 +415,20 @@ define([
                 $(fontFamilyTag).replaceWith(function() {
                     return suggestInput.toTagString();
                 });
+            });
+
+            let that = this;
+            // setting popup - set default
+            $(this.wrapSelector('#setDefault')).on('change', function() {
+                let checked = $(this).prop('checked');
+
+                if (checked) {
+                    // disable input
+                    $(that.wrapSelector('.vp-chart-setting-body input')).prop('disabled', true);
+                } else {
+                    // enable input
+                    $(that.wrapSelector('.vp-chart-setting-body input')).prop('disabled', false);
+                }
             });
         }
 
@@ -292,53 +479,128 @@ define([
             var code = new com_String();
     
             // get parameters
-            var figWidth = $(this.wrapSelector('#figureWidth')).val();
-            var figHeight = $(this.wrapSelector('#figureHeight')).val();
-            var styleName = $(this.wrapSelector('#styleSheet')).val();
-            var fontName = $(this.wrapSelector('#fontName')).val();
-            var fontSize = $(this.wrapSelector('#fontSize')).val();
-    
-            code.appendLine('import matplotlib.pyplot as plt');
-            code.appendFormatLine("plt.rc('figure', figsize=({0}, {1}))", figWidth, figHeight);
-            if (styleName && styleName.length > 0) {
-                code.appendFormatLine("plt.style.use('{0}')", styleName);
+            let setDefault = $(this.wrapSelector('#setDefault')).prop('checked');
+            if (setDefault == true) {
+                code.appendLine('from matplotlib import rcParams, rcParamsDefault');
+                code.append('rcParams.update(rcParamsDefault)');
+            } else {
+                var figWidth = $(this.wrapSelector('#figureWidth')).val();
+                var figHeight = $(this.wrapSelector('#figureHeight')).val();
+                var styleName = $(this.wrapSelector('#styleSheet')).val();
+                var fontName = $(this.wrapSelector('#fontName')).val();
+                var fontSize = $(this.wrapSelector('#fontSize')).val();
+        
+                code.appendLine('import matplotlib.pyplot as plt');
+                code.appendFormatLine("plt.rc('figure', figsize=({0}, {1}))", figWidth, figHeight);
+                if (styleName && styleName.length > 0) {
+                    code.appendFormatLine("plt.style.use('{0}')", styleName);
+                }
+                code.appendLine();
+        
+                code.appendLine('from matplotlib import rcParams');
+                if (fontName && fontName.length > 0) {
+                    code.appendFormatLine("rcParams['font.family'] = '{0}'", fontName);
+                }
+                if (fontSize && fontSize.length > 0) {
+                    code.appendFormatLine("rcParams['font.size'] = {0}", fontSize);
+                }
+                code.append("rcParams['axes.unicode_minus'] = False");
             }
-            code.appendLine();
-    
-            code.appendLine('from matplotlib import rcParams');
-            if (fontName && fontName.length > 0) {
-                code.appendFormatLine("rcParams['font.family'] = '{0}'", fontName);
-            }
-            if (fontSize && fontSize.length > 0) {
-                code.appendFormatLine("rcParams['font.size'] = {0}", fontSize);
-            }
-            code.append("rcParams['axes.unicode_minus'] = False");
     
             return code.toString();
         }
 
         generateCode(preview=false) {
-            let { chartType, data, x, y, userOption='', allocateTo='', useSampling } = this.state;
+            let { 
+                chartType, data, userOption='',
+                title, x_label, y_label, useLegend, legendPos,
+                useGrid, useMarker, markerStyle,
+                x_limit_from, x_limit_to, y_limit_from, y_limit_to,
+                useSampling, sampleCount 
+            } = this.state;
+
+            let indent = '';
             let code = new com_String();
             let config = this.chartConfig[chartType];
+            let state = JSON.parse(JSON.stringify(this.state));
 
-            let chartCode = com_generator.vp_codeGenerator(this, config, this.state, (userOption != ''? ', ' + userOption : ''));
+            let chartCode = new com_String();
+
+            let etcOptionCode = []
+            if (useMarker == 'True') {
+                // TODO: marker to seaborn argument (ex. marker='+' / markers={'Lunch':'s', 'Dinner':'X'})
+                etcOptionCode.push(com_util.formatString("marker='{0}'", markerStyle));
+            }
+
+            // add user option
+            if (userOption != '') {
+                etcOptionCode.push(userOption);
+            }
+
+            if (etcOptionCode.length > 0) {
+                etcOptionCode = [
+                    '',
+                    ...etcOptionCode
+                ]
+            }
+
+            let generatedCode = com_generator.vp_codeGenerator(this, config, state, etcOptionCode.join(', '));
+
+            // Info
+            if (title && title != '') {
+                chartCode.appendFormatLine("plt.title('{0}')", title);
+            }
+            if (x_label && x_label != '') {
+                chartCode.appendFormatLine("plt.xlabel('{0}')", x_label);
+            }
+            if (y_label && y_label != '') {
+                chartCode.appendFormatLine("plt.ylabel('{0}')", y_label);
+            }
+            if (x_limit_from != '' && x_limit_to != '') {
+                chartCode.appendFormatLine("plt.xlim(({0}, {1}))", x_limit_from, x_limit_to);
+            }
+            if (y_limit_from != '' && y_limit_to != '') {
+                chartCode.appendFormatLine("plt.ylim(({0}, {1}))", y_limit_from, y_limit_to);
+            }
+            if (useLegend == 'True' && legendPos != '') {
+                chartCode.appendFormatLine("plt.legend(loc='{0}')", legendPos);
+            }
+            if (useGrid == 'True') {
+                chartCode.appendLine("plt.grid(True)");
+                // TODO: grid types
+                // plt.grid(True, axis='x', color='red', alpha=0.5, linestyle='--')
+            }
+            chartCode.append('plt.show()');
 
             let convertedData = data;
             if (preview) {
+                // set indent
+                indent = ' '.repeat(4);
+
+                // Ignore warning
+                code.appendLine('import warnings');
+                code.appendLine('with warnings.catch_warnings():');
+                code.appendFormatLine("{0}warnings.simplefilter('ignore')", indent);
+
                 // set figure size for preview chart
-                code.appendLine('plt.figure(figsize=(6, 4))');
+                let defaultWidth = 5;
+                let defaultHeight = 4;
+                let previewSize = parseInt($(this.wrapSelector('#previewSize')).val());
+                code.appendFormatLine('{0}plt.figure(figsize=({1}, {2}))', indent, defaultWidth + previewSize, defaultHeight + previewSize);
                 if (useSampling) {
                     // data sampling code for preview
-                    convertedData = data + '.sample(n=30, random_state=0)';
+                    convertedData = data + '.sample(n=' + sampleCount + ', random_state=0)';
+                    // replace pre-defined options
+                    generatedCode = generatedCode.replace(data, convertedData);
                 }   
+
+                code.appendFormatLine("{0}{1}", indent, generatedCode);
+                code.appendFormatLine("{0}{1}", indent, chartCode.toString().replaceAll('\n', '\n' + indent));
+                
+            } else {
+                code.appendLine(generatedCode);
+                code.appendLine(chartCode.toString());
             }
-
-            // replace pre-defined options
-            chartCode = chartCode.replace(data, convertedData);
-
-            code.appendLine(chartCode);
-            code.append('plt.show()');
 
             return code.toString();
         }

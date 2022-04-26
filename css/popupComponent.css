@@ -65,12 +65,37 @@
     font-family: 'AppleSDGothicNeo';
     color: var(--font-hightlight);
 }
-.vp-popup-toggle {
+.vp-popup-maximize {
     position: absolute;
     width: 15px;
     height: 20px;
     top: 4px;
     right: 32px;
+    z-index: 3;
+    line-height: 20px;
+    text-align: center;
+    cursor: pointer;
+    color: var(--gray-color);
+}
+.vp-popup-return {
+    position: absolute;
+    width: 15px;
+    height: 20px;
+    top: 4px;
+    right: 32px;
+    z-index: 3;
+    line-height: 20px;
+    text-align: center;
+    cursor: pointer;
+    color: var(--gray-color);
+    display: none;
+}
+.vp-popup-toggle {
+    position: absolute;
+    width: 15px;
+    height: 20px;
+    top: 4px;
+    right: 58px;
     z-index: 3;
     line-height: 20px;
     text-align: center;
@@ -93,6 +118,9 @@
     height: calc(100% - 80px);
     padding: 15px;
     overflow: auto;
+}
+.vp-popup-content {
+    min-height: calc(100% - 30px);
 }
 .vp-popup-footer {
     position: relative;
