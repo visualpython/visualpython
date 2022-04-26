@@ -31,7 +31,7 @@ define([
             this.state = {
                 figureWidth: 12,
                 figureHeight: 8,
-                styleSheet: '',
+                styleSheet: 'seaborn-darkgrid',
                 fontName: '',
                 fontSize: 10,
                 ...this.state

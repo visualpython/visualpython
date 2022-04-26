@@ -29,7 +29,7 @@ define([
             super._init();
 
             this.config.dataview = false;
-            this.config.size = { width: 900, height: 550 };
+            this.config.size = { width: 1064, height: 550 };
 
             this.state = {
                 chartType: 'scatterplot',
@@ -39,7 +39,7 @@ define([
                 figColumn: 0,
                 shareX: false,
                 shareY: false,
-                useData: true, // FIXME: use data default?
+                setXY: false,
                 data: '',
                 x: '',
                 y: '',
@@ -115,17 +115,17 @@ define([
             });
             
             // use data or not
-            $(this.wrapSelector('#useData')).on('change', function() {
-                let useData = $(this).prop('checked');
-                if (useData) {
-                    // use data
+            $(this.wrapSelector('#setXY')).on('change', function() {
+                let setXY = $(this).prop('checked');
+                if (setXY == false) {
+                    // set Data
                     $(that.wrapSelector('#data')).prop('disabled', false);
 
                     $(that.wrapSelector('#x')).closest('.vp-vs-box').replaceWith('<select id="x"></select>');
                     $(that.wrapSelector('#y')).closest('.vp-vs-box').replaceWith('<select id="y"></select>');
                     $(that.wrapSelector('#hue')).closest('.vp-vs-box').replaceWith('<select id="hue"></select>');
                 } else {
-                    // not use data
+                    // set X Y indivisually
                     // disable data selection
                     $(that.wrapSelector('#data')).prop('disabled', true);
                     $(that.wrapSelector('#data')).val('');
@@ -153,11 +153,6 @@ define([
                     $(that.wrapSelector('#hue')).replaceWith(varSelectorHue.toTagString());
                 }
             });
-
-            // bind column by dataframe
-            // $(this.wrapSelector('#data')).on('change', function() {
-            //     com_generator.vp_bindColumnSource(that.wrapSelector(), this, ['x', 'y', 'hue'], 'select');
-            // });
 
             // preview refresh
             $(this.wrapSelector('#previewRefresh')).on('click', function() {
@@ -216,6 +211,7 @@ define([
                     $(that.wrapSelector('#y')).prop('disabled', false);
                     $(that.wrapSelector('#hue')).prop('disabled', false);
                     
+                    // bind column source using selected dataframe
                     com_generator.vp_bindColumnSource(that.wrapSelector(), $(that.wrapSelector('#data')), ['x', 'y', 'hue'], 'select');
                 } else {
                     $(that.wrapSelector('#x')).prop('disabled', true);
@@ -295,10 +291,10 @@ define([
             // set size
             $(this.wrapSelector('.vp-inner-popup-box')).css({ width: 400, height: 260});
 
-            this.bindImportOptions();
+            this.bindSettingBox();
         }
 
-        bindImportOptions() {
+        bindSettingBox() {
             //====================================================================
             // Stylesheet suggestinput
             //====================================================================
@@ -317,6 +313,7 @@ define([
                 suggestInput.setComponentID('styleSheet');
                 suggestInput.setSuggestList(function() { return varList; });
                 suggestInput.setPlaceholder('style name');
+                suggestInput.setValue('seaborn-darkgrid'); // set default (seaborn-darkgrid)
                 // suggestInput.setNormalFilter(false);
                 $(stylesheetTag).replaceWith(function() {
                     return suggestInput.toTagString();
@@ -449,62 +446,74 @@ define([
                 x_limit_from, x_limit_to, y_limit_from, y_limit_to,
                 useSampling, sampleCount 
             } = this.state;
+
+            let indent = '';
             let code = new com_String();
             let config = this.chartConfig[chartType];
             let state = JSON.parse(JSON.stringify(this.state));
 
-            let chartCode = com_generator.vp_codeGenerator(this, config, state, (userOption != ''? ', ' + userOption : ''));
+            let chartCode = new com_String();
 
-            let convertedData = data;
-            if (preview && data != '') {
-                // set font for KR
-                code.appendLine("plt.rc('font', family='Gulim')"); // FIXME: is it ok for non-Korean?
-                // set figure size for preview chart
-                let defaultWidth = 5;
-                let defaultHeight = 4;
-                let previewSize = parseInt($(this.wrapSelector('#previewSize')).val());
-                code.appendFormatLine('plt.figure(figsize=({0}, {1}))', defaultWidth + previewSize, defaultHeight + previewSize);
-                if (useSampling) {
-                    // data sampling code for preview
-                    convertedData = data + '.sample(n=' + sampleCount + ', random_state=0)';
-                }   
-            }
-
-            // replace pre-defined options
-            chartCode = chartCode.replace(data, convertedData);
-
-            code.appendLine(chartCode);
+            let generatedCode = com_generator.vp_codeGenerator(this, config, state, (userOption != ''? ', ' + userOption : ''));
 
             // Info
             if (title && title != '') {
-                code.appendFormatLine("plt.title('{0}')", title);
+                chartCode.appendFormatLine("plt.title('{0}')", title);
             }
             if (x_label && x_label != '') {
-                code.appendFormatLine("plt.xlabel('{0}')", x_label);
+                chartCode.appendFormatLine("plt.xlabel('{0}')", x_label);
             }
             if (y_label && y_label != '') {
-                code.appendFormatLine("plt.ylabel('{0}')", y_label);
+                chartCode.appendFormatLine("plt.ylabel('{0}')", y_label);
             }
             if (x_limit_from != '' && x_limit_to != '') {
-                code.appendFormatLine("plt.xlim(({0}, {1}))", x_limit_from, x_limit_to);
+                chartCode.appendFormatLine("plt.xlim(({0}, {1}))", x_limit_from, x_limit_to);
             }
             if (y_limit_from != '' && y_limit_to != '') {
-                code.appendFormatLine("plt.ylim(({0}, {1}))", y_limit_from, y_limit_to);
+                chartCode.appendFormatLine("plt.ylim(({0}, {1}))", y_limit_from, y_limit_to);
             }
             if (useLegend == 'True' && legendPos != '') {
-                code.appendFormatLine("plt.legend(loc='{0}')", legendPos);
+                chartCode.appendFormatLine("plt.legend(loc='{0}')", legendPos);
             }
             if (useGrid == 'True') {
-                code.appendLine("plt.grid(True)");
+                chartCode.appendLine("plt.grid(True)");
                 // TODO: grid types
                 // plt.grid(True, axis='x', color='red', alpha=0.5, linestyle='--')
             }
             if (useMarker == 'True') {
                 // TODO: marker to seaborn argument (ex. marker='+' / markers={'Lunch':'s', 'Dinner':'X'})
             }
+            chartCode.append('plt.show()');
 
+            let convertedData = data;
+            if (preview) {
+                // set indent
+                indent = ' '.repeat(4);
 
-            code.append('plt.show()');
+                // Ignore warning
+                code.appendLine('import warnings');
+                code.appendLine('with warnings.catch_warnings():');
+                code.appendFormatLine("{0}warnings.simplefilter('ignore')", indent);
+
+                // set figure size for preview chart
+                let defaultWidth = 5;
+                let defaultHeight = 4;
+                let previewSize = parseInt($(this.wrapSelector('#previewSize')).val());
+                code.appendFormatLine('{0}plt.figure(figsize=({1}, {2}))', indent, defaultWidth + previewSize, defaultHeight + previewSize);
+                if (useSampling) {
+                    // data sampling code for preview
+                    convertedData = data + '.sample(n=' + sampleCount + ', random_state=0)';
+                    // replace pre-defined options
+                    generatedCode = generatedCode.replace(data, convertedData);
+                }   
+
+                code.appendFormatLine("{0}{1}", indent, generatedCode);
+                code.appendFormatLine("{0}{1}", indent, chartCode.toString().replaceAll('\n', '\n' + indent));
+                
+            } else {
+                code.appendLine(generatedCode);
+                code.appendLine(chartCode.toString());
+            }
 
             return code.toString();
         }
