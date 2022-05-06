@@ -546,7 +546,7 @@ define([
                             name: 'roc_curve',
                             label: 'ROC Curve',
                             import: 'from sklearn import metrics',
-                            code: "fpr, tpr, thresholds = metrics.roc_curve(${roc_targetData}, ${model}.predict_proba(${roc_featureData}))\n\
+                            code: "fpr, tpr, thresholds = metrics.roc_curve(${roc_targetData}, ${model}.predict_proba(${roc_featureData})[:, 1])\n\
 plt.plot(fpr, tpr, label='ROC Curve')\n\
 plt.xlabel('Sensitivity')\n\
 plt.ylabel('Specificity')\n\
@@ -561,7 +561,7 @@ plt.show()",
                             name: 'auc',
                             label: 'AUC',
                             import: 'from sklearn import metrics',
-                            code: 'metrics.roc_auc_score(${auc_targetData}, ${model}.predict_proba(${auc_featureData}))',
+                            code: 'metrics.roc_auc_score(${auc_targetData}, ${model}.predict_proba(${auc_featureData})[:, 1])',
                             description: '',
                             options: [
                                 { name: 'auc_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y_test' },
