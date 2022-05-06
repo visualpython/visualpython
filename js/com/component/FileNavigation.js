@@ -75,7 +75,7 @@ define([
                 extensions: [],     // extensions list ex) png, jpg, gif
                 multiSelect: false, // multi selection
                 showAll: false,     // show other extension files also
-                finsh: null,        // callback after selection
+                finish: null,        // callback after selection
                 ...this.state
             };
             

@@ -3,6 +3,7 @@
 }
 .vp-ds-body > table {
     width: 100%;
+    table-layout: fixed;
 }
 .vp-ds-body > table tr td {
     padding-bottom: 5px;

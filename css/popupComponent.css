@@ -121,6 +121,7 @@
 }
 .vp-popup-content {
     min-height: calc(100% - 30px);
+    height: 100%;
 }
 .vp-popup-footer {
     position: relative;

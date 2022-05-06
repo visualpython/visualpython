@@ -1,7 +1,6 @@
 .vp-ins-select-title {
     font-weight: bold;
     color: var(--font-hightlight);
-    padding: 5px 5px 5px 0px;
 }
 .vp-ins-select-container input.vp-ins-search {
     width: 100%;
@@ -13,7 +12,6 @@
     top: 7px;
 }
 .vp-ins-select-box {
-    margin-top: 5px;
     border: 0.25px solid var(--border-gray-color);
 }
 .vp-ins-select-list {

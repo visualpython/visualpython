@@ -4,6 +4,9 @@
     padding-right: 5px;
     cursor: pointer;
 }
+.vp-chart-setting:hover {
+    color: var(--font-hightlight);
+}
 .vp-create-subplot-btn {
     float: right;
 }
@@ -68,9 +71,9 @@
     padding-right: 5px;
 }
 .vp-chart-preview-box {
-    min-height: 150px;
+    min-height: 352px;
     width: 100%;
-    height: calc(100% - 30px);
+    height: calc(100% - 70px);
 }
 
 .vp-tab-page label {
