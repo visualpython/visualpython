@@ -361,8 +361,8 @@ define([
                     code: '${model}.fit(${fit_featureData}, ${fit_targetData})',
                     description: 'Perform modeling from features, or distance matrix.',
                     options: [
-                        { name: 'fit_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X_train' },
-                        { name: 'fit_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'y_train' }
+                        { name: 'fit_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_train' },
+                        { name: 'fit_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y_train' }
                     ]
                 },
                 'predict': {
@@ -371,7 +371,7 @@ define([
                     code: '${pred_allocate} = ${model}.predict(${pred_featureData})',
                     description: 'Predict the closest target data X belongs to.',
                     options: [
-                        { name: 'pred_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X_test' },
+                        { name: 'pred_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_test' },
                         { name: 'pred_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'pred' }
                     ]
                 },
@@ -381,7 +381,7 @@ define([
                     code: '${pred_prob_allocate} = ${model}.predict_proba(${pred_prob_featureData})',
                     description: 'Predict class probabilities for X.',
                     options: [
-                        { name: 'pred_prob_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X_test' },
+                        { name: 'pred_prob_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_test' },
                         { name: 'pred_prob_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'pred' }
                     ]
                 },
@@ -391,7 +391,7 @@ define([
                     code: '${trans_allocate} = ${model}.transform(${trans_featureData})',
                     description: 'Apply dimensionality reduction to X.',
                     options: [
-                        { name: 'trans_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
+                        { name: 'trans_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
                         { name: 'trans_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'trans' }
                     ]
                 }
@@ -406,7 +406,7 @@ define([
                             code: '${model}.fit(${fit_featureData})',
                             description: 'Fit Encoder/Scaler to X.',
                             options: [
-                                { name: 'fit_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' }
+                                { name: 'fit_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' }
                             ]
                         },
                         'fit_transform': {
@@ -415,7 +415,7 @@ define([
                             code: '${fit_trans_allocate} = ${model}.fit_transform(${fit_trans_featureData})',
                             description: 'Fit Encoder/Scaler to X, then transform X.',
                             options: [
-                                { name: 'fit_trans_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
+                                { name: 'fit_trans_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
                                 { name: 'fit_trans_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'trans' }
                             ]
                         },
@@ -434,7 +434,7 @@ define([
                                 code: '${inverse_allocate} = ${model}.inverse_transform(${inverse_featureData})',
                                 description: 'Transform binary labels back to multi-class labels.',
                                 options: [
-                                    { name: 'inverse_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
+                                    { name: 'inverse_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
                                     { name: 'inverse_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'inv_trans' }
                                 ]
                             }
@@ -462,7 +462,7 @@ define([
                                 code: '${dec_allocate} = ${model}.decision_function(${dec_featureData})',
                                 description: 'Compute the decision function of X.',
                                 options: [
-                                    { name: 'dec_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
+                                    { name: 'dec_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
                                     { name: 'dec_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable' }
                                 ]
                             }
@@ -479,7 +479,7 @@ define([
                             code: '${fit_pred_allocate} = ${model}.fit_predict(${fit_pred_featureData})',
                             description: 'Fit and predict.',
                             options: [
-                                { name: 'fit_pred_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
+                                { name: 'fit_pred_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
                                 { name: 'fit_pred_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'pred' }
                             ]
                         },
@@ -496,7 +496,7 @@ define([
                                 code: '${model}.fit(${fit_featureData})',
                                 description: 'Perform clustering from features, or distance matrix.',
                                 options: [
-                                    { name: 'fit_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' }
+                                    { name: 'fit_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' }
                                 ]
                             },
                             'fit_predict': {
@@ -505,7 +505,7 @@ define([
                                 code: '${fit_pred_allocate} = ${model}.fit_predict(${fit_pred_featureData})',
                                 description: 'Compute clusters from a data or distance matrix and predict labels.',
                                 options: [
-                                    { name: 'fit_pred_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
+                                    { name: 'fit_pred_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
                                     { name: 'fit_pred_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'pred' }
                                 ]
                             }
@@ -519,7 +519,7 @@ define([
                             code: '${model}.fit(${fit_featureData})',
                             description: 'Compute clustering.',
                             options: [
-                                { name: 'fit_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' }
+                                { name: 'fit_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' }
                             ]
                         },
                         'predict': {
@@ -528,7 +528,7 @@ define([
                             code: '${pred_allocate} = ${model}.predict(${pred_featureData})',
                             description: 'Predict the closest target data X belongs to.',
                             options: [
-                                { name: 'pred_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
+                                { name: 'pred_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
                                 { name: 'pred_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'pred' }
                             ]
                         },
@@ -538,7 +538,7 @@ define([
                             code: '${fit_pred_allocate} = ${model}.fit_predict(${fit_pred_featureData})',
                             description: 'Compute cluster centers and predict cluster index for each sample.',
                             options: [
-                                { name: 'fit_pred_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
+                                { name: 'fit_pred_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
                                 { name: 'fit_pred_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'pred' }
                             ]
                         }
@@ -552,7 +552,7 @@ define([
                                 code: '${fit_trans_allocate} = ${model}.fit_transform(${fit_trans_featureData})',
                                 description: 'Compute clustering and transform X to cluster-distance space.', 
                                 options: [
-                                    { name: 'fit_trans_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
+                                    { name: 'fit_trans_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
                                     { name: 'fit_trans_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'trans' }
                                 ]
                             },
@@ -562,7 +562,7 @@ define([
                                 code: '${trans_allocate} = ${model}.transform(${trans_featureData})',
                                 description: 'Transform X to a cluster-distance space.',
                                 options: [
-                                    { name: 'trans_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
+                                    { name: 'trans_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
                                     { name: 'trans_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'trans' }
                                 ]
                             }
@@ -578,7 +578,7 @@ define([
                                 code: '${model}.fit(${fit_featureData})',
                                 description: 'Fit X into an embedded space.',
                                 options: [
-                                    { name: 'fit_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' }
+                                    { name: 'fit_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' }
                                 ]
                             },
                             'fit_transform': {
@@ -587,7 +587,7 @@ define([
                                 code: '${fit_trans_allocate} = ${model}.fit_transform(${fit_trans_featureData})',
                                 description: 'Fit X into an embedded space and return that transformed output.', 
                                 options: [
-                                    { name: 'fit_trans_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
+                                    { name: 'fit_trans_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
                                     { name: 'fit_trans_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'trans' }
                                 ]
                             }
@@ -602,8 +602,8 @@ define([
                                 code: '${model}.fit(${fit_featureData}, ${fit_targetData})',
                                 description: 'Fit the Linear Discriminant Analysis model.',
                                 options: [
-                                    { name: 'fit_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
-                                    { name: 'fit_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'y' }
+                                    { name: 'fit_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
+                                    { name: 'fit_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y' }
                                 ]
                             },
                             'fit_transform': {
@@ -612,8 +612,8 @@ define([
                                 code: '${fit_trans_allocate} = ${model}.fit_transform(${fit_trans_featureData}${fit_trans_targetData})',
                                 description: 'Fit to data, then transform it.', 
                                 options: [
-                                    { name: 'fit_trans_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
-                                    { name: 'fit_trans_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'y' },
+                                    { name: 'fit_trans_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
+                                    { name: 'fit_trans_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y' },
                                     { name: 'fit_trans_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'trans' }
                                 ]
                             },
@@ -623,7 +623,7 @@ define([
                                 code: '${pred_allocate} = ${model}.predict(${pred_featureData})',
                                 description: 'Predict class labels for samples in X.',
                                 options: [
-                                    { name: 'pred_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
+                                    { name: 'pred_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
                                     { name: 'pred_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'pred' }
                                 ]
                             },
@@ -633,7 +633,7 @@ define([
                                 code: '${trans_allocate} = ${model}.transform(${trans_featureData})',
                                 description: 'Project data to maximize class separation.',
                                 options: [
-                                    { name: 'trans_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
+                                    { name: 'trans_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
                                     { name: 'trans_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'trans' }
                                 ]
                             }
@@ -647,7 +647,7 @@ define([
                             code: '${model}.fit(${fit_featureData})',
                             description: 'Fit X into an embedded space.',
                             options: [
-                                { name: 'fit_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' }
+                                { name: 'fit_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' }
                             ]
                         },
                         'fit_transform': {
@@ -656,7 +656,7 @@ define([
                             code: '${fit_trans_allocate} = ${model}.fit_transform(${fit_trans_featureData})',
                             description: 'Fit the model with X and apply the dimensionality reduction on X.', 
                             options: [
-                                { name: 'fit_trans_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
+                                { name: 'fit_trans_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
                                 { name: 'fit_trans_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'trans' }
                             ]
                         },
@@ -666,7 +666,7 @@ define([
                             code: '${inverse_allocate} = ${model}.inverse_transform(${inverse_featureData})',
                             description: 'Transform data back to its original space.',
                             options: [
-                                { name: 'inverse_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
+                                { name: 'inverse_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
                                 { name: 'inverse_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'inv_trans' }
                             ]
                         },
@@ -676,7 +676,7 @@ define([
                             code: '${trans_allocate} = ${model}.transform(${trans_featureData})',
                             description: 'Apply dimensionality reduction to X.',
                             options: [
-                                { name: 'trans_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
+                                { name: 'trans_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
                                 { name: 'trans_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'trans' }
                             ]
                         }

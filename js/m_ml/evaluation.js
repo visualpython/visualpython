@@ -40,8 +40,6 @@ define([
                 // classification
                 confusion_matrix: true, report: true, 
                 accuracy: false, precision: false, recall: false, f1_score: false,
-                roc_curve: false, auc: false,
-                model: '',
                 // clustering
                 clusteredIndex: 'clusters',
                 silhouetteScore: true, ari: false, nmi: false,
@@ -77,19 +75,19 @@ define([
 
                 } else if (modelType == 'clf') {
                     // Classification - model selection
-                    if (that.checkToShowModel('roc-auc') == true) {
-                        $(that.wrapSelector('.vp-ev-model.roc-auc')).prop('disabled', false);
-                    } else {
-                        $(that.wrapSelector('.vp-ev-model.roc-auc')).prop('disabled', true);
-                    }
+                    // if (that.checkToShowSelector('roc-auc') == true) {
+                    //     $(that.wrapSelector('.vp-ev-model.roc-auc')).prop('disabled', false);
+                    // } else {
+                    //     $(that.wrapSelector('.vp-ev-model.roc-auc')).prop('disabled', true);
+                    // }
                 } else {
                     // Clustering
-                    if (that.checkToShowModel('silhouette') == true) {
+                    if (that.checkToShowSelector('silhouette') == true) {
                         $(that.wrapSelector('.vp-ev-model.silhouette')).prop('disabled', false);
                     } else {
                         $(that.wrapSelector('.vp-ev-model.silhouette')).prop('disabled', true);
                     }
-                    if (that.checkToShowModel('ari-nmi') == true) {
+                    if (that.checkToShowSelector('ari-nmi') == true) {
                         $(that.wrapSelector('.vp-ev-model.ari-nmi')).prop('disabled', false);
                     } else {
                         $(that.wrapSelector('.vp-ev-model.ari-nmi')).prop('disabled', true);
@@ -97,7 +95,7 @@ define([
                 }
             });
 
-            // open model selection show
+            // check to enable/disable selector
             $(this.wrapSelector('.vp-eval-check')).on('change', function() {
                 let checked = $(this).prop('checked');
                 let type = $(this).data('type');
@@ -105,7 +103,7 @@ define([
                 if (checked) {
                     $(that.wrapSelector('.vp-ev-model.' + type)).prop('disabled', false);
                 } else {
-                    if (that.checkToShowModel(type) == false) {
+                    if (that.checkToShowSelector(type) == false) {
                         $(that.wrapSelector('.vp-ev-model.' + type)).prop('disabled', true);
                     }
                 }
@@ -116,7 +114,7 @@ define([
          * Check if anything checked available ( > 0)
          * @returns 
          */
-        checkToShowModel(type) {
+        checkToShowSelector(type) {
             let checked = $(this.wrapSelector('.vp-eval-check[data-type="' + type + '"]:checked')).length;
             if (checked > 0) { 
                 return true;
@@ -162,28 +160,6 @@ define([
             varSelector.setValue(this.state.targetData2);
             $(page).find('#targetData2').replaceWith(varSelector.toTagString());
 
-            // model
-            // set model list
-            let modelOptionTag = new com_String();
-            vpKernel.getModelList('Classification').then(function(resultObj) {
-                let { result } = resultObj;
-                var modelList = JSON.parse(result);
-                modelList && modelList.forEach(model => {
-                    let selectFlag = '';
-                    if (model.varName == that.state.model) {
-                        selectFlag = 'selected';
-                    }
-                    modelOptionTag.appendFormatLine('<option value="{0}" data-type="{1}" {2}>{3} ({4})</option>', 
-                        model.varName, model.varType, selectFlag, model.varName, model.varType);
-                });
-                $(page).find('#model').html(modelOptionTag.toString());
-                $(that.wrapSelector('#model')).html(modelOptionTag.toString());
-
-                if (!that.state.model || that.state.model == '') {
-                    that.state.model = $(that.wrapSelector('#model')).val();
-                }
-            });
-
             // load state
             let that = this;
             Object.keys(this.state).forEach(key => {
@@ -221,9 +197,9 @@ define([
 
             } else if (this.state.modelType == 'clf') {
                 // Classification
-                if (this.state.roc_curve == false && this.state.auc == false) {
-                    $(page).find('.vp-ev-model.roc-auc').prop('disabled', true);
-                }
+                // if (this.state.roc_curve == false && this.state.auc == false) {
+                //     $(page).find('.vp-ev-model.roc-auc').prop('disabled', true);
+                // }
             } else {
                 // Clustering
                 if (this.state.silhouetteScore == false) {
@@ -249,8 +225,7 @@ define([
             let { 
                 modelType, predictData, targetData,
                 // classification
-                confusion_matrix, report, accuracy, precision, recall, f1_score, roc_curve, auc,
-                model,
+                confusion_matrix, report, accuracy, precision, recall, f1_score, 
                 // regression
                 coefficient, intercept, r_squared, mae, mape, rmse, scatter_plot,
                 // clustering
@@ -298,21 +273,21 @@ define([
                     code.appendFormat("metrics.f1_score({0}, {1}, average='weighted')", targetData, predictData);
                     codeCells.push(code.toString());
                 }
-                if (roc_curve) {
-                    code = new com_String();
-                    code.appendLine("# ROC Curve");
-                    code.appendFormatLine("fpr, tpr, thresholds = metrics.roc_curve({0}, {1}.decision_function({2}))", predictData, model, targetData);
-                    code.appendLine("plt.plot(fpr, tpr, label='ROC Curve')");
-                    code.appendLine("plt.xlabel('Sensitivity') ");
-                    code.append("plt.ylabel('Specificity') ")
-                    codeCells.push(code.toString());
-                }
-                if (auc) {
-                    code = new com_String();
-                    code.appendLine("# AUC");
-                    code.appendFormat("metrics.roc_auc_score({0}, {1}.decision_function({2}))", predictData, model, targetData);
-                    codeCells.push(code.toString());
-                }
+                // if (roc_curve) {
+                //     code = new com_String();
+                //     code.appendLine("# ROC Curve");
+                //     code.appendFormatLine("fpr, tpr, thresholds = metrics.roc_curve({0}, {1}.decision_function({2}))", predictData, model, targetData);
+                //     code.appendLine("plt.plot(fpr, tpr, label='ROC Curve')");
+                //     code.appendLine("plt.xlabel('Sensitivity') ");
+                //     code.append("plt.ylabel('Specificity') ")
+                //     codeCells.push(code.toString());
+                // }
+                // if (auc) {
+                //     code = new com_String();
+                //     code.appendLine("# AUC");
+                //     code.appendFormat("metrics.roc_auc_score({0}, {1}.decision_function({2}))", predictData, model, targetData);
+                //     codeCells.push(code.toString());
+                // }
             }
 
             //====================================================================
