@@ -49,7 +49,7 @@
 .vp-board-title input:focus {
     transition: 0.7s;
     border: 0.5px solid var(--highlight-color) !important;
-    color: var(--font-hightlight);
+    color: var(--font-highlight);
 }
 .vp-board-title input::selection {
 	background-color: #FDEFDD;
@@ -141,7 +141,7 @@
     float: none;
 }
 .vp-board-header-button-inner ul li:hover {
-    color: var(--font-hightlight);
+    color: var(--font-highlight);
     /* background-color: var(--light-gray-color); */
 }
 
@@ -164,7 +164,7 @@
     font-family: 'AppleSDGothicNeo';
     
 }
-.vp-block.vp-block-group {
+.vp-board-body .vp-block.vp-block-group:not(:first-child) {
     margin-top: 15px;
 }
 .vp-block-header {
@@ -253,25 +253,25 @@
     background-color: #BFD5F0;
 }
 .vp-block.logic-define .vp-block-header {
-    /* background-color: rgb(213, 231, 222); */
+    background-color: rgb(213, 231, 222);
 }
 .vp-block.logic-define.vp-focus .vp-block-header,
 .vp-block.logic-define.vp-focus-child .vp-block-header {
-    /* background-color: rgb(138, 214, 176); */
+    background-color: rgb(138, 214, 176);
 }
 .vp-block.logic-control .vp-block-header {
-    /* background-color: rgb(253, 239, 221); */
+    background-color: rgb(253, 239, 221);
 }
 .vp-block.logic-control.vp-focus .vp-block-header,
 .vp-block.logic-control.vp-focus-child .vp-block-header {
-    /* background-color: rgb(255, 207, 115); */
+    background-color: rgb(255, 207, 115);
 }
 .vp-block.library .vp-block-header {
-    /* background-color: rgb(249, 227, 214); */
+    background-color: rgb(249, 227, 214);
 }
 .vp-block.library.vp-focus .vp-block-header, 
 .vp-block.library.vp-focus-child .vp-block-header {
-    /* background-color: rgb(253, 177, 133); */
+    background-color: rgb(253, 177, 133);
 }
 /* block button group */
 .vp-block-button-group {
@@ -347,7 +347,7 @@
     font-size: 14px;
 }
 .vp-block-menu-item:hover {
-    color: var(--font-hightlight);
+    color: var(--font-highlight);
     cursor: pointer;
 }
 #vp_block_menu_delete:hover {    

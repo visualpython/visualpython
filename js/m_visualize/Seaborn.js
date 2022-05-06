@@ -48,11 +48,11 @@ define([
                 title: '',
                 x_label: '',
                 y_label: '',
-                useLegend: 'False',
                 legendPos: '',
                 // style options
-                useGrid: 'False',
-                useMarker: 'False',
+                color: '',
+                useGrid: '',
+                gridColor: '',
                 markerStyle: '',
                 // setting options
                 x_limit_from: '',
@@ -75,13 +75,22 @@ define([
             }
 
             this.legendPosList = [
-                'best', 'upper right', 'upper left', 'lower left', 'lower right',
-                'center left', 'center right', 'lower center', 'upper center', 'center'
+                {label: 'Select option...', value: ''},
+                {label: 'best', value: 'best'},
+                {label: 'upper right', value: 'upper right'},
+                {label: 'upper left', value: 'upper left'},
+                {label: 'lower left', value: 'lower left'},
+                {label: 'lower right', value: 'lower right'},
+                {label: 'center left', value: 'center left'},
+                {label: 'center right', value: 'center right'},
+                {label: 'lower center', value: 'lower center'},
+                {label: 'upper center', value: 'upper center'},
+                {label: 'center', value: 'center'},
             ];
 
             this.markerList = [
                 // 'custom': { label: 'Custom', value: 'marker' },
-                { label: ' ', value: ' ', title: 'select marker style'},
+                { label: 'Select option...', value: '', title: 'select marker style'},
                 { label: '.', value: '.', title: 'point' }, 
                 { label: ',', value: ',', title: 'pixel' }, 
                 { label: 'o', value: 'o', title: 'circle' }, 
@@ -200,12 +209,6 @@ define([
                 }
                 evt.stopPropagation();
             });
-            
-            // set preview size
-            $(this.wrapSelector('#previewSize')).on('change', function() {
-                that.loadPreview();
-            });
-            
         }
 
         templateForBody() {
@@ -232,7 +235,7 @@ define([
             $(page).find('#chartType').html(chartTypeTag.toString());
 
             // chart variable
-            let varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'Series', 'list']);
+            let varSelector = new VarSelector2(this.wrapSelector());
             varSelector.setComponentID('data');
             varSelector.addClass('vp-state vp-input');
             varSelector.setValue(this.state.data);
@@ -246,7 +249,7 @@ define([
                     $(that.wrapSelector('#hue')).prop('disabled', false);
                     
                     // bind column source using selected dataframe
-                    com_generator.vp_bindColumnSource(that.wrapSelector(), $(that.wrapSelector('#data')), ['x', 'y', 'hue'], 'select', true);
+                    com_generator.vp_bindColumnSource(that.wrapSelector(), $(that.wrapSelector('#data')), ['x', 'y', 'hue'], 'select', true, true);
                 } else {
                     $(that.wrapSelector('#x')).prop('disabled', true);
                     $(that.wrapSelector('#y')).prop('disabled', true);
@@ -259,11 +262,11 @@ define([
             let legendPosTag = new com_String();
             this.legendPosList.forEach(pos => {
                 let selectedFlag = '';
-                if (pos == that.state.legendPos) {
+                if (pos.value == that.state.legendPos) {
                     selectedFlag = 'selected';
                 }
                 legendPosTag.appendFormatLine('<option value="{0}" {1}>{2}{3}</option>',
-                    pos, selectedFlag, pos, pos == 'best'?' (default)':'');
+                    pos.value, selectedFlag, pos.label, pos.value == 'best'?' (default)':'');
             });
             $(page).find('#legendPos').html(legendPosTag.toString());
 
@@ -305,13 +308,11 @@ define([
                 switch(tagName) {
                     case 'INPUT':
                         let inputType = $(tag).prop('type');
-                        if (inputType == 'text' || inputType == 'number' || inputType == 'hidden') {
-                            $(tag).val(value);
-                            break;
-                        }
                         if (inputType == 'checkbox') {
                             $(tag).prop('checked', value);
-                            break;
+                        } else {
+                            // if (inputType == 'text' || inputType == 'number' || inputType == 'hidden') {
+                            $(tag).val(value);
                         }
                         break;
                     case 'TEXTAREA':
@@ -491,6 +492,7 @@ define([
                 var fontSize = $(this.wrapSelector('#fontSize')).val();
         
                 code.appendLine('import matplotlib.pyplot as plt');
+                code.appendLine('import seaborn as sns');
                 code.appendFormatLine("plt.rc('figure', figsize=({0}, {1}))", figWidth, figHeight);
                 if (styleName && styleName.length > 0) {
                     code.appendFormatLine("plt.style.use('{0}')", styleName);
@@ -507,14 +509,14 @@ define([
                 code.append("rcParams['axes.unicode_minus'] = False");
             }
     
-            return code.toString();
+            return [code.toString()];
         }
 
         generateCode(preview=false) {
             let { 
                 chartType, data, userOption='',
-                title, x_label, y_label, useLegend, legendPos,
-                useGrid, useMarker, markerStyle,
+                title, x_label, y_label, legendPos,
+                color, useGrid, gridColor, markerStyle,
                 x_limit_from, x_limit_to, y_limit_from, y_limit_to,
                 useSampling, sampleCount 
             } = this.state;
@@ -527,7 +529,10 @@ define([
             let chartCode = new com_String();
 
             let etcOptionCode = []
-            if (useMarker == 'True') {
+            if (color != '') {
+                etcOptionCode.push(com_util.formatString("color='{0}'", color));
+            }
+            if (markerStyle != '') {
                 // TODO: marker to seaborn argument (ex. marker='+' / markers={'Lunch':'s', 'Dinner':'X'})
                 etcOptionCode.push(com_util.formatString("marker='{0}'", markerStyle));
             }
@@ -562,13 +567,20 @@ define([
             if (y_limit_from != '' && y_limit_to != '') {
                 chartCode.appendFormatLine("plt.ylim(({0}, {1}))", y_limit_from, y_limit_to);
             }
-            if (useLegend == 'True' && legendPos != '') {
+            if (legendPos != '') {
                 chartCode.appendFormatLine("plt.legend(loc='{0}')", legendPos);
             }
-            if (useGrid == 'True') {
-                chartCode.appendLine("plt.grid(True)");
-                // TODO: grid types
-                // plt.grid(True, axis='x', color='red', alpha=0.5, linestyle='--')
+            // Style - Grid
+            // plt.grid(True, axis='x', color='red', alpha=0.5, linestyle='--')
+            let gridCodeList = [];
+            if (useGrid != '') {
+                gridCodeList.push(useGrid);
+            }
+            if (gridColor != '') {
+                gridCodeList.push(com_util.formatString("color='{0}'", gridColor));
+            }
+            if (gridCodeList.length > 0) {
+                chartCode.appendFormatLine("plt.grid({0})", gridCodeList.join(', '));
             }
             chartCode.append('plt.show()');
 
@@ -583,15 +595,14 @@ define([
                 code.appendFormatLine("{0}warnings.simplefilter('ignore')", indent);
 
                 // set figure size for preview chart
-                let defaultWidth = 5;
-                let defaultHeight = 4;
-                let previewSize = parseInt($(this.wrapSelector('#previewSize')).val());
-                code.appendFormatLine('{0}plt.figure(figsize=({1}, {2}))', indent, defaultWidth + previewSize, defaultHeight + previewSize);
+                let defaultWidth = 8;
+                let defaultHeight = 6;
+                code.appendFormatLine('{0}plt.figure(figsize=({1}, {2}))', indent, defaultWidth, defaultHeight);
                 if (useSampling) {
                     // data sampling code for preview
                     convertedData = data + '.sample(n=' + sampleCount + ', random_state=0)';
                     // replace pre-defined options
-                    generatedCode = generatedCode.replace(data, convertedData);
+                    generatedCode = generatedCode.replaceAll(data, convertedData);
                 }   
 
                 code.appendFormatLine("{0}{1}", indent, generatedCode);
@@ -602,7 +613,8 @@ define([
                 code.appendLine(chartCode.toString());
             }
 
-            return code.toString();
+            // remove last Enter(\n) from code and then run it
+            return code.toString().replace(/\n+$/, "");
         }
         
     }

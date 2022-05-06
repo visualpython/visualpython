@@ -90,7 +90,7 @@
     cursor: pointer;
 }
 .vp-sn-menu-item:hover {
-    color: var(--font-hightlight);
+    color: var(--font-highlight);
 }
 .vp-sn-search-box {
     position: relative;
@@ -138,7 +138,7 @@
     cursor: pointer;
 }
 .vp-sn-sort-menu-item:hover {
-    color: var(--font-hightlight);
+    color: var(--font-highlight);
 }
 .vp-sn-func-export-mode {
     display: none;
@@ -214,7 +214,7 @@
     cursor: pointer;
 }
 .vp-sn-item-header.selected input.vp-sn-item-title {
-    color: var(--font-hightlight);
+    color: var(--font-highlight);
 }
 .vp-sn-item-header input.vp-sn-item-title:focus {
     transition: 0.7s;

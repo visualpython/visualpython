@@ -152,8 +152,6 @@ define([
             super.render();
 
             this.loadModelList(this.state.category);
-
-            this.reload();
         }
 
         loadModelList(category='') {
@@ -173,17 +171,21 @@ define([
             vpKernel.getModelList(category).then(function(resultObj) {
                 let { result } = resultObj;
                 var modelList = JSON.parse(result);
-                modelList && modelList.forEach(model => {
+                modelList && modelList.forEach((model, idx) => {
                     let selectFlag = '';
-                    if (model.varName == that.state.model) {
+                    // if this item is pre-selected model or first item of model list
+                    if ((model.varName == that.state.model)
+                        || (that.state.model == '' && idx == 0)) {
                         selectFlag = 'selected';
+                        that.state.model = model.varName;
+                        that.state.modelType = model.varType;
                     }
                     modelOptionTag.appendFormatLine('<li class="{0} {1}" data-var-name="{2}" data-var-type="{3}" title="{4}">{5} ({6})</li>',
                     'vp-ins-select-item', selectFlag, model.varName, model.varType, model.varName, model.varName, model.varType);
                 });
                 $(that.wrapSelector('.vp-ins-select-list.model')).html(modelOptionTag.toString());
 
-                // click model
+                // click model event
                 $(that.wrapSelector('.vp-ins-select-list.model .vp-ins-select-item')).on('click', function() {
                     let model = $(this).data('var-name');
                     let modelType = $(this).data('var-type');
@@ -196,9 +198,14 @@ define([
 
                     that.reload();
                 });
+
+                that.reload();
             });
         }
 
+        /**
+         * Load options for selected model
+         */
         reload() {
             // reset option page
             try {
@@ -355,8 +362,8 @@ define([
                     code: '${score_allocate} = ${model}.score(${score_featureData}, ${score_targetData})',
                     description: '',
                     options: [
-                        { name: 'score_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
-                        { name: 'score_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'y' },
+                        { name: 'score_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
+                        { name: 'score_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y' },
                         { name: 'score_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'scores' }
                     ]
                 },
@@ -377,8 +384,8 @@ define([
                     code: '${importance_allocate} = permutation_importance(${model}, ${importance_featureData}, ${importance_targetData}${scoring}${random_state}${etc})',
                     description: 'Permutation importance for feature evaluation.',
                     options: [
-                        { name: 'importance_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X_train' },
-                        { name: 'importance_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'y_train' },
+                        { name: 'importance_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_train' },
+                        { name: 'importance_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y_train' },
                         { name: 'scoring', component: ['input'], usePair: true },
                         { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true },
                         { name: 'importance_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'importances' }
@@ -475,8 +482,8 @@ define([
                             code: '${cvs_allocate} = cross_val_score(${model}, ${cvs_featureData}, ${cvs_targetData}${scoring}${cv})',
                             description: 'Evaluate a score by cross-validation.',
                             options: [
-                                { name: 'cvs_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
-                                { name: 'cvs_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'y' },
+                                { name: 'cvs_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
+                                { name: 'cvs_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y' },
                                 { name: 'scoring', component: ['option_select'], usePair: true, type: 'text',
                                     options: [
                                         '',
@@ -522,8 +529,8 @@ define([
                             code: '${cvs_allocate} = cross_val_score(${model}, ${cvs_featureData}, ${cvs_targetData}${scoring}${cv})',
                             description: 'Evaluate a score by cross-validation.',
                             options: [
-                                { name: 'cvs_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
-                                { name: 'cvs_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'y' },
+                                { name: 'cvs_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
+                                { name: 'cvs_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y' },
                                 { name: 'scoring', component: ['option_select'], usePair: true, type: 'text', 
                                     options: [
                                         '',
@@ -535,7 +542,55 @@ define([
                                 { name: 'cvs_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'scores' }
                             ]
                         },
+                        'roc_curve': {
+                            name: 'roc_curve',
+                            label: 'ROC Curve',
+                            import: 'from sklearn import metrics',
+                            code: "fpr, tpr, thresholds = metrics.roc_curve(${roc_targetData}, ${model}.predict_proba(${roc_featureData})[:, 1])\n\
+plt.plot(fpr, tpr, label='ROC Curve')\n\
+plt.xlabel('Sensitivity')\n\
+plt.ylabel('Specificity')\n\
+plt.show()",
+                            description: '',
+                            options: [
+                                { name: 'roc_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y_test' },
+                                { name: 'roc_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_test' }
+                            ]
+                        },
+                        'auc': {
+                            name: 'auc',
+                            label: 'AUC',
+                            import: 'from sklearn import metrics',
+                            code: 'metrics.roc_auc_score(${auc_targetData}, ${model}.predict_proba(${auc_featureData})[:, 1])',
+                            description: '',
+                            options: [
+                                { name: 'auc_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y_test' },
+                                { name: 'auc_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_test' }
+                            ]
+                        },
                         'permutation_importance': defaultInfos['permutation_importance']
+                    }
+
+                    // use decision_function on ROC, AUC
+                    let decisionFunctionTypes = [
+                        'LogisticRegression', 'SVC', 'GradientBoostingClassifier'
+                    ];
+                    if (decisionFunctionTypes.includes(modelType)) {
+                        infos = {
+                            ...infos,
+                            'roc_curve': {
+                                ...infos['roc_curve'],
+                                code: "fpr, tpr, thresholds = metrics.roc_curve(${roc_targetData}, ${model}.decision_function(${roc_featureData}))\n\
+plt.plot(fpr, tpr, label='ROC Curve')\n\
+plt.xlabel('Sensitivity')\n\
+plt.ylabel('Specificity')\n\
+plt.show()"
+                            },
+                            'auc': {
+                                ...infos['auc'],
+                                code: 'metrics.roc_auc_score(${auc_targetData}, ${model}.decision_function(${auc_featureData}))',
+                            }
+                        }
                     }
                     break;
                 case 'Auto ML':
@@ -609,8 +664,8 @@ define([
                                 code: '${score_allocate} = ${model}.score(${score_featureData}, ${score_targetData})',
                                 description: 'Return the average log-likelihood of all samples.',
                                 options: [
-                                    { name: 'score_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
-                                    { name: 'score_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'y' },
+                                    { name: 'score_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
+                                    { name: 'score_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y' },
                                     { name: 'score_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'scores' }
                                 ]
                             }
@@ -638,7 +693,7 @@ define([
                             code: '${score_allocate} = ${model}.score(${score_featureData})',
                             description: 'Return the average log-likelihood of all samples.',
                             options: [
-                                { name: 'score_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series'], value: 'X' },
+                                { name: 'score_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
                                 { name: 'score_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'scores' }
                             ]
                         }

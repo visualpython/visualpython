@@ -13,8 +13,8 @@
 // [CLASS] PopupComponent
 //============================================================================
 define([
-    'text!vp_base/html/popupComponent.html!strip',
-    'css!vp_base/css/popupComponent.css',
+    'text!vp_base/html/component/popupComponent.html!strip',
+    'css!vp_base/css/component/popupComponent.css',
     '../com_util',
     '../com_Const',
     '../com_String',
@@ -302,14 +302,16 @@ define([
             // Click import library
             $(this.wrapSelector('#popupImport')).on('click', function() {
                 // add import codes
-                var code = that.generateImportCode();
-                // create block and run it
-                $('#vp_wrapper').trigger({
-                    type: 'create_option_page', 
-                    blockType: 'block',
-                    menuId: 'lgExe_code',
-                    menuState: { taskState: { code: code } },
-                    afterAction: 'run'
+                var codes = that.generateImportCode();
+                codes && codes.forEach(code => {
+                    // create block and run it
+                    $('#vp_wrapper').trigger({
+                        type: 'create_option_page', 
+                        blockType: 'block',
+                        menuId: 'lgExe_code',
+                        menuState: { taskState: { code: code } },
+                        afterAction: 'run'
+                    });
                 });
             });
 
@@ -598,7 +600,7 @@ define([
 
         generateImportCode() {
             /** Implementation needed - Generated on clicking Import Library button */
-            return '';
+            return [];
         }
 
         generateCode() {
@@ -631,13 +633,11 @@ define([
             switch(tagName) {
                 case 'INPUT':
                     let inputType = $(tag).prop('type');
-                    if (inputType == 'text' || inputType == 'number' || inputType == 'hidden') {
-                        newValue = $(tag).val();
-                        break;
-                    }
                     if (inputType == 'checkbox') {
                         newValue = $(tag).prop('checked');
-                        break;
+                    } else {
+                        // inputType == 'text' || inputType == 'number' || inputType == 'hidden' || inputType == 'color' || inputType == 'range'
+                        newValue = $(tag).val();
                     }
                     break;
                 case 'TEXTAREA':

@@ -3,6 +3,7 @@
 }
 .vp-ds-body > table {
     width: 100%;
+    table-layout: fixed;
 }
 .vp-ds-body > table tr td {
     padding-bottom: 5px;
@@ -71,7 +72,7 @@
     cursor: pointer;
 }
 .vp-ds-tab-selector-btn.selected {
-    color: var(--font-hightlight);
+    color: var(--font-highlight);
     background-color: white;
     border: 0.25px solid #E4E4E4;
     border-bottom: 2px solid #FFCF73;
@@ -179,7 +180,7 @@
     background-color: #E4E4E4;
 }
 .vp-ds-select-item.selected {
-    color:  var(--font-hightlight);
+    color:  var(--font-highlight);
     background-color: #F5F5F5;
 }
 /* Item Sorting FIXME: change span to class */

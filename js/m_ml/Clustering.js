@@ -141,13 +141,13 @@ define([
             // render option page
             $(page).find('.vp-model-option-box').html(this.templateForOption(this.state.modelType));
 
-            let varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'list', 'str']);
+            let varSelector = new VarSelector2(this.wrapSelector());
             varSelector.setComponentID('featureData');
             varSelector.addClass('vp-state vp-input');
             varSelector.setValue(this.state.featureData);
             $(page).find('#featureData').replaceWith(varSelector.toTagString());
 
-            varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'list', 'str']);
+            varSelector = new VarSelector2(this.wrapSelector());
             varSelector.setComponentID('targetData');
             varSelector.addClass('vp-state vp-input');
             varSelector.setValue(this.state.targetData);

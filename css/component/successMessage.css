@@ -1,7 +1,7 @@
 .vp-successMessage {
     position: relative;
     background-color: white;
-    color: var(--font-hightlight);
+    color: var(--font-highlight);
     min-width: 150px;
     padding: 15px;
     margin-bottom: 20px;
@@ -22,7 +22,7 @@
 }
 .vp-successMessage-icon {
     margin-left: 15px;
-    color: var(--font-hightlight);
+    color: var(--font-highlight);
 }
 #vp_successMessage {
     position: absolute;

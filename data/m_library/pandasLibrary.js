@@ -102,7 +102,7 @@ define([
                     type: 'bool',
                     label: 'Copy',
                     component: 'bool_checkbox',
-                    default: false
+                    default: 'False'
                 },
                 {
                     name: 'name',
@@ -113,7 +113,7 @@ define([
                     name: 'tupleize_cols',
                     type: 'bool',
                     label: 'Create Multiindex',
-                    default: true,
+                    default: 'True',
                     component: 'bool_checkbox'
                 }
             ],
@@ -176,7 +176,7 @@ define([
                 {
                     name:'header',
                     type:'int',
-                    label: 'Header Index'
+                    label: 'Header'
                 },
                 {
                     name: 'sep',
@@ -220,16 +220,17 @@ define([
             ],
             variable: [
                 {
-                    name:'header',
-                    type:['bool', 'list'],
-                    label: 'Header Index',
-                    default: 'True'
+                    name: 'header',
+                    type: ['bool', 'list'],
+                    label: 'Header',
+                    default: 'True',
+                    component: 'bool_checkbox'
                 },
                 {
                     name: 'index',
                     type: 'bool',
                     label: 'Show Index',
-                    default: true,
+                    default: 'True',
                     component: 'bool_checkbox'
                 },
                 {
@@ -458,14 +459,14 @@ define([
                     name:'ascending',
                     type:'bool',
                     label: 'Ascending Sort',
-                    default: true,
+                    default: 'True',
                     component: 'bool_checkbox'
                 },
                 {
                     name:'inplace',
                     type:'bool',
                     label: 'Inplace',
-                    default: false,
+                    default: 'False',
                     component: 'bool_checkbox'
                 },
                 {
@@ -528,7 +529,7 @@ define([
                     label: 'Remove Index',
                     help: 'same as reset_index()',
                     component: 'bool_checkbox',
-                    default: true
+                    default: 'True'
                 }
             ]
         },
@@ -1016,7 +1017,7 @@ define([
                     type: 'bool',
                     label: 'Skip Na Value',
                     component: 'bool_checkbox',
-                    default: true
+                    default: 'True'
                 },
                 {
                     name: 'level',
@@ -1061,7 +1062,7 @@ define([
                     type: 'bool',
                     label: 'Skip Na Value',
                     component: 'bool_checkbox',
-                    default: true
+                    default: 'True'
                 },
                 {
                     name: 'level',
@@ -1106,7 +1107,7 @@ define([
                     type: 'bool',
                     label: 'Skip Na Value',
                     component: 'bool_checkbox',
-                    default: true
+                    default: 'True'
                 },
                 {
                     name: 'level',
@@ -1151,7 +1152,7 @@ define([
                     type: 'bool',
                     label: 'Skip Na Value',
                     component: 'bool_checkbox',
-                    default: true
+                    default: 'True'
                 },
                 {
                     name: 'level',
@@ -1196,7 +1197,7 @@ define([
                     type: 'bool',
                     label: 'Skip Na Value',
                     component: 'bool_checkbox',
-                    default: true
+                    default: 'True'
                 },
                 {
                     name: 'level',
@@ -1241,7 +1242,7 @@ define([
                     type: 'bool',
                     label: 'Skip Na Value',
                     component: 'bool_checkbox',
-                    default: true
+                    default: 'True'
 
                 },
                 {
@@ -1296,7 +1297,7 @@ define([
                     type: 'bool',
                     label: 'Skip Na Value',
                     component: 'bool_checkbox',
-                    default: true
+                    default: 'True'
                 },
                 {
                     name: 'level',
@@ -1501,14 +1502,14 @@ define([
                     type:'bool',
                     label: 'Ascending',
                     component: 'bool_checkbox',
-                    default: true
+                    default: 'True'
                 },
                 {
                     name:'inplace',
                     type:'bool',
                     label: 'Inplace',
                     component: 'bool_checkbox',
-                    default: false
+                    default: 'False'
                 },
                 {
                     name: 'kind',
@@ -2226,7 +2227,7 @@ define([
                     name: 'allow_duplicates',
                     label: 'Allow Duplicates',
                     type: 'bool',
-                    default: false,
+                    default: 'False',
                     component: 'bool_checkbox'
                 }
             ],
@@ -2402,21 +2403,21 @@ define([
                     name: 'drop',
                     type: 'bool',
                     label: 'Drop',
-                    default: true,
+                    default: 'True',
                     component: 'bool_checkbox'
                 },
                 {
                     name: 'append',
                     type: 'bool',
                     label: 'Append',
-                    default: false,
+                    default: 'False',
                     component: 'bool_checkbox'
                 },
                 {
                     name: 'inplace',
                     type: 'bool',
                     label: 'Inplace',
-                    default: false,
+                    default: 'False',
                     component: 'bool_checkbox'
                 }
             ],
@@ -2454,14 +2455,14 @@ define([
                     name: 'drop',
                     type: 'bool',
                     label: 'Drop',
-                    default: false,
+                    default: 'False',
                     component: 'bool_checkbox'
                 },
                 {
                     name: 'inplace',
                     type: 'bool',
                     label: 'Inplace',
-                    default: false,
+                    default: 'False',
                     component: 'bool_checkbox'
                 }
             ],
@@ -2845,7 +2846,7 @@ define([
                     name: 'deep',
                     type: 'bool',
                     label: 'Deep',
-                    default: true,
+                    default: 'True',
                     component: 'bool_checkbox'
                 }
             ],
@@ -3067,7 +3068,7 @@ define([
                     name: 'dropna',
                     type: 'bool',
                     label: 'Drop Na',
-                    default: true,
+                    default: 'True',
                     component: 'bool_checkbox'
                 }
             ]
@@ -3282,7 +3283,7 @@ define([
                     name: 'raw',
                     type: 'bool',
                     label: 'Raw',
-                    default: false,
+                    default: 'False',
                     component: 'option_select',
                     options: ['False', 'True'],
                     options_label: ['Series', 'ndarray']
@@ -3354,7 +3355,7 @@ define([
                     name: 'right',
                     type: 'bool',
                     label: 'Include Right',
-                    default: true,
+                    default: 'True',
                     component: 'bool_checkbox'
                 },
                 {
@@ -3448,7 +3449,7 @@ define([
                     name: 'replace',
                     type: 'bool',
                     label: 'Replace Duplicates',
-                    default: false,
+                    default: 'False',
                     component: 'bool_checkbox'
                 },
                 {
@@ -3511,7 +3512,7 @@ define([
                     name: 'dummy_na',
                     type: 'bool',
                     label: 'Dummy NA',
-                    default: false,
+                    default: 'False',
                     component: 'bool_checkbox'
                 },
                 {
@@ -3523,7 +3524,7 @@ define([
                     name: 'drop_first',
                     type: 'bool',
                     label: 'Drop First Column',
-                    default: false,
+                    default: 'False',
                     component: 'bool_checkbox'
                 }
             ]
@@ -3587,7 +3588,7 @@ define([
                     name: 'skipna',
                     type: 'bool',
                     label: 'Skip Na',
-                    default: true,
+                    default: 'True',
                     component: 'bool_checkbox'
                 },
                 {
@@ -3647,7 +3648,7 @@ define([
                     name: 'skipna',
                     type: 'bool',
                     label: 'Skip Na',
-                    default: true,
+                    default: 'True',
                     component: 'bool_checkbox'
                 },
                 {
@@ -3865,14 +3866,14 @@ define([
                     name: 'margins',
                     type: 'bool',
                     label: 'Margins',
-                    default: false,
+                    default: 'False',
                     component: 'bool_checkbox'
                 },
                 {
                     name: 'dropna',
                     type: 'bool',
                     label: 'Drop Na',
-                    default: true,
+                    default: 'True',
                     component: 'bool_checkbox'
                 },
                 {
@@ -3938,7 +3939,7 @@ define([
                     name: 'margins',
                     type: 'bool',
                     label: 'Margins',
-                    default: false,
+                    default: 'False',
                     component: 'bool_checkbox'
                 },
                 {
@@ -3951,14 +3952,14 @@ define([
                     name: 'dropna',
                     type: 'bool',
                     label: 'Drop Na',
-                    default: true,
+                    default: 'True',
                     component: 'bool_checkbox'
                 },
                 {
                     name: 'normalize',
                     type: 'bool',
                     label: 'Normalize Rate',
-                    default: true,
+                    default: 'True',
                     component: 'bool_checkbox'
                 }
             ]
@@ -3999,14 +4000,14 @@ define([
                     name: 'dayfirst',
                     type: 'bool',
                     label: 'Day First',
-                    default: false,
+                    default: 'False',
                     component: 'bool_checkbox'
                 },
                 {
                     name: 'yearfirst',
                     type: 'bool',
                     label: 'Year First',
-                    default: false,
+                    default: 'False',
                     component: 'bool_checkbox'
                 },
                 {
@@ -4271,7 +4272,7 @@ define([
                     type: 'bool',
                     label: 'Copy',
                     component: 'bool_checkbox',
-                    default: true
+                    default: 'True'
                 }
             ]
         },
@@ -4329,7 +4330,7 @@ define([
                     type: 'bool',
                     label: 'Copy',
                     component: 'bool_checkbox',
-                    default: true
+                    default: 'True'
                 }
             ]
         },
@@ -4491,7 +4492,7 @@ define([
                     type: 'bool',
                     label: 'Normalize',
                     component: 'bool_checkbox',
-                    default: false
+                    default: 'False'
                 },
                 {
                     name: 'fill_value',
@@ -4545,7 +4546,7 @@ define([
                     type: 'bool',
                     label: 'Copy',
                     component: 'bool_checkbox',
-                    default: true
+                    default: 'True'
                 }
             ]
         },
@@ -4601,7 +4602,7 @@ define([
                     type: 'bool',
                     label: 'Copy',
                     component: 'bool_checkbox',
-                    default: true
+                    default: 'True'
                 }
             ]
         },
@@ -4632,7 +4633,7 @@ define([
                     type: 'bool',
                     label: 'Deep Copy',
                     component: 'bool_checkbox',
-                    default: false
+                    default: 'False'
                 },
                 {
                     name: 'freq',
@@ -4725,7 +4726,7 @@ define([
                     name: 'center',
                     type: 'bool',
                     label: 'Center',
-                    default: false,
+                    default: 'False',
                     component: 'bool_checkbox'
                 },
                 {
@@ -4805,14 +4806,14 @@ define([
                     name: 'adjust',
                     type: 'bool',
                     label: 'Adjust',
-                    default: true,
+                    default: 'True',
                     component: 'bool_checkbox'
                 },
                 {
                     name: 'ignore_na',
                     type: 'bool',
                     label: 'Ignore NA',
-                    default: false,
+                    default: 'False',
                     component: 'bool_checkbox'
                 },
                 {
@@ -4959,7 +4960,7 @@ define([
                     name: 'drop',
                     type: 'bool',
                     label: 'Drop Empty',
-                    default: false,
+                    default: 'False',
                     component: 'bool_checkbox'
                 },
                 {
@@ -5067,14 +5068,14 @@ define([
                     type: 'bool',
                     label: 'Show Grid',
                     component: 'bool_checkbox',
-                    default: false
+                    default: 'False'
                 },
                 {
                     name: 'legend',
                     type: 'bool',
                     label: 'Show Legend',
                     component: 'bool_checkbox',
-                    default: false
+                    default: 'False'
                 },
                 {
                     name: 'rot',
@@ -5136,7 +5137,7 @@ define([
                     name: 'subplots',
                     type: 'bool',
                     label: 'Subplots Per Column',
-                    default: false,
+                    default: 'False',
                     component: 'bool_checkbox'
                 },
                 {
@@ -5149,14 +5150,14 @@ define([
                     name: 'use_index',
                     type: 'bool',
                     label: 'Use Index On X Ticks',
-                    default: true,
+                    default: 'True',
                     component: 'bool_checkbox'
                 },
                 {
                     name: 'stacked',
                     type: 'bool',
                     label: 'Stacked',
-                    default: false,//true in area
+                    default: 'False',//true in area
                     component: 'bool_checkbox'
                 }
             ],

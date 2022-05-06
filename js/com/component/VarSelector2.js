@@ -8,7 +8,7 @@ define([
      * @constructor
      */
      class VarSelector extends Component{
-        constructor(parentTag, dataTypes=[], defaultType='', showOthers=true, showFilterbox=true) {
+        constructor(parentTag, dataTypes=['DataFrame', 'Series', 'ndarray', 'list', 'dict'], defaultType='', showOthers=true, showFilterbox=true) {
             super(null, {parentTag: parentTag, dataTypes: dataTypes, defaultType: defaultType, showOthers: showOthers, showFilterbox: showFilterbox});
         }
 
@@ -234,7 +234,11 @@ define([
                     }
                     
                 }
+            } else {
+                dataTypes = [];
             }
+
+            vpLog.display(VP_LOG_TYPE.DEVELOP, 'VarSelector2 - reload ', dataTypes, excludeTypes);
 
             return new Promise(function(resolve, reject) {
                 vpKernel.getDataList(dataTypes, excludeTypes).then(function (resultObj) {

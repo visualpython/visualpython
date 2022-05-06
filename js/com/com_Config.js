@@ -437,6 +437,10 @@ define([
             })
         }
 
+        getDataTypes() {
+            return Config.DATA_TYPES;
+        }
+
         getMLDataDict(key = '') {
             if (key == '') {
                 return Config.ML_DATA_DICT;
@@ -482,6 +486,24 @@ define([
     Config.MENU_BOARD_SPACING = 5;
     Config.VP_MIN_WIDTH = Config.MENU_MIN_WIDTH + Config.BOARD_MIN_WIDTH + Config.MENU_BOARD_SPACING; // = MENU_MIN_WIDTH + BOARD_MIN_WIDTH + MENU_BOARD_SPACING
     
+    /**
+     * Data types
+     */
+    Config.DATA_TYPES = [
+        // pandas object
+        'DataFrame', 'Series', 'Index', 'Period', 'GroupBy', 'Timestamp'
+        // Index type object
+        , 'RangeIndex', 'CategoricalIndex', 'MultiIndex', 'IntervalIndex', 'DatetimeIndex', 'TimedeltaIndex', 'PeriodIndex', 'Int64Index', 'UInt64Index', 'Float64Index'
+        // GroupBy type object
+        , 'DataFrameGroupBy', 'SeriesGroupBy'
+        // Plot type
+        , 'Figure', 'AxesSubplot'
+        // Numpy
+        , 'ndarray'
+        // Python variable
+        , 'str', 'int', 'float', 'bool', 'dict', 'list', 'tuple'
+    ]
+
     /**
      * Data types using for searching model variables
      */

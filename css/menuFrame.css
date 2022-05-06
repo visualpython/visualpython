@@ -146,7 +146,7 @@
     float: none;
 }
 #vp_headerExtraMenu .vp-header-extra-menu-list li:hover {
-    color: var(--font-hightlight);
+    color: var(--font-highlight);
 }
 /* resizing handle */
 .vp-menu-frame .ui-resizable-handle {
@@ -255,14 +255,14 @@
 }
 /* MenuItem - Logic */
 .vp-menuitem.logic-define {
-    /* background-color: rgb(213, 231, 222); */
+    background-color: rgb(213, 231, 222);
 }
 .vp-menuitem.logic-control {
-    /* background-color: rgb(253, 239, 221); */
+    background-color: rgb(253, 239, 221);
 }
 /* MenuItem - Library */
 .vp-menuitem.library {
-    /* background-color: rgb(249, 227, 214); */
+    background-color: rgb(249, 227, 214);
 }
 
 /* Task Bar */
@@ -288,7 +288,7 @@
     border-radius: 2px 2px 0px 0px;
 }
 .vp-menu-task-item.vp-focus{
-    color: var(--font-hightlight);
+    color: var(--font-highlight);
     background: white;
     border-bottom: 3px solid #FFCF73;
 }

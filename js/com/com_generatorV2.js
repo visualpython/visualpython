@@ -657,12 +657,13 @@ define([
      * @param {array} columnInputIdList 
      * @param {string} tagType input / select (tag type)
      * @param {array/boolean} columnWithEmpty boolean array or value to decide whether select tag has empty space
+     * @param {array/boolean} columnWithIndex boolean array or value to decide whether select tag has index option
      * Usage : 
      *  $(document).on('change', this.wrapSelector('#dataframe_tag_id'), function() {
      *      pdGen.vp_bindColumnSource(that.wrapSelector(), this, ['column_input_id'], 'select', [true, true, true]);
      *  });
      */
-    var vp_bindColumnSource = function(selector, target, columnInputIdList, tagType="input", columnWithEmpty=false) {
+    var vp_bindColumnSource = function(selector, target, columnInputIdList, tagType="input", columnWithEmpty=false, columnWithIndex=false) {
         var varName = '';
         if ($(target).length > 0) {
             varName = $(target).val();
@@ -702,6 +703,20 @@ define([
                 let { result, type, msg } = resultObj;
                 var varResult = JSON.parse(result);
 
+                // check if it needs to add index option
+                let addIndex = false;
+                if (Array.isArray(columnWithIndex)) {
+                    addIndex = columnWithIndex[idx];
+                } else {
+                    addIndex = columnWithIndex;
+                }
+                if (addIndex == true) {
+                    varResult = [
+                        {value: varName + '.index', label: 'index'},
+                        ...varResult
+                    ]
+                }
+
                 // check if it needs to add empty option
                 let addEmpty = false;
                 if (Array.isArray(columnWithEmpty)) {
@@ -711,7 +726,7 @@ define([
                 }
                 if (addEmpty == true) {
                     varResult = [
-                        {value: '', label: ''},
+                        {value: '', label: 'Select option...'},
                         ...varResult
                     ]
                 }

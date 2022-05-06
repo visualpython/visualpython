@@ -102,21 +102,21 @@ define([
             $(page).find('#testSize').html(sizeOptions);
 
             // varselector TEST:
-            let varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'list', 'str']);
+            let varSelector = new VarSelector2(this.wrapSelector());
             varSelector.setComponentID('featureData');
             varSelector.addClass('vp-state vp-input');
             varSelector.setValue(this.state.featureData);
             varSelector.setPlaceholder('Select feature data');
             $(page).find('#featureData').replaceWith(varSelector.toTagString());
 
-            varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'list', 'str']);
+            varSelector = new VarSelector2(this.wrapSelector());
             varSelector.setComponentID('targetData');
             varSelector.addClass('vp-state vp-input');
             varSelector.setValue(this.state.targetData);
             varSelector.setPlaceholder('Select target data');
             $(page).find('#targetData').replaceWith(varSelector.toTagString());
 
-            varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'list', 'str']);
+            varSelector = new VarSelector2(this.wrapSelector());
             varSelector.setComponentID('stratify');
             varSelector.addClass('vp-state vp-input');
             varSelector.setValue(this.state.stratify);

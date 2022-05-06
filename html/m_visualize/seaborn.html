@@ -49,7 +49,7 @@
                     <i class="fa fa-gear"></i> Setting
                 </span>
             </div>
-            <div class="vp-tab-page-box figure vp-grid-border-box">
+            <div class="vp-tab-page-box figure vp-grid-border-box vp-scrollbar">
                 <div class="vp-tab-page" data-type="1">
                     <div class="vp-chart-plot-box">
                         <!-- Chart & Data Selection & Tab option box -->
@@ -110,10 +110,6 @@
                                     
                                     <label for="useLegend" class="vp-bold">Legend</label>
                                     <div class="vp-grid-col-p50">
-                                        <select id="useLegend" class="vp-select vp-state">
-                                            <option value="False">False</option>
-                                            <option value="True">True</option>
-                                        </select>
                                         <select id="legendPos" class="vp-select vp-state">
                                             <!-- Legend Position FIXME: -->
 
@@ -122,17 +118,19 @@
                                 </div>
                                 <div class="vp-tab-page vp-grid-box" data-type="style" style="display: none;">
                                     <!-- STYLE: grid / marker / color -->
+                                    <label for="color" class="vp-bold">Color</label>
+                                    <input type="color" id="color" class="vp-state"/>
                                     <label for="useGrid" class="vp-bold">Grid</label>
-                                    <select id="useGrid" class="vp-select vp-state">
-                                        <option value="False">False</option>
-                                        <option value="True">True</option>
-                                    </select>
+                                    <div>
+                                        <select id="useGrid" class="vp-select vp-state">
+                                            <option value="">Select option...</option>
+                                            <option value="True">True</option>
+                                            <option value="False">False</option>
+                                        </select>
+                                        <input type="color" id="gridColor" class="vp-state"/>
+                                    </div>
                                     <label for="useMarker" class="vp-bold">Marker</label>
                                     <div class="vp-grid-col-p50">
-                                        <select id="useMarker" class="vp-select vp-state">
-                                            <option value="False">False</option>
-                                            <option value="True">True</option>
-                                        </select>
                                         <select id="markerStyle" class="vp-select vp-state">
                                             <!-- TODO: -->
                                             <option></option>
@@ -177,10 +175,10 @@
     
                 </div>
             </div>
-            <div class="vp-chart-preview-size-box vp-grid-col-95 mt5">
+            <!-- <div class="vp-chart-preview-size-box vp-grid-col-95 mt5">
                 <label>Preview Size</label>
                 <input type="range" id="previewSize" max="5" min="-5" value="0"/>
-            </div>
+            </div> -->
         </div>
     </div>
     
