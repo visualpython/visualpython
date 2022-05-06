@@ -246,7 +246,7 @@ define([
                     $(that.wrapSelector('#hue')).prop('disabled', false);
                     
                     // bind column source using selected dataframe
-                    com_generator.vp_bindColumnSource(that.wrapSelector(), $(that.wrapSelector('#data')), ['x', 'y', 'hue'], 'select', true);
+                    com_generator.vp_bindColumnSource(that.wrapSelector(), $(that.wrapSelector('#data')), ['x', 'y', 'hue'], 'select', true, true);
                 } else {
                     $(that.wrapSelector('#x')).prop('disabled', true);
                     $(that.wrapSelector('#y')).prop('disabled', true);
@@ -592,7 +592,7 @@ define([
                     // data sampling code for preview
                     convertedData = data + '.sample(n=' + sampleCount + ', random_state=0)';
                     // replace pre-defined options
-                    generatedCode = generatedCode.replace(data, convertedData);
+                    generatedCode = generatedCode.replaceAll(data, convertedData);
                 }   
 
                 code.appendFormatLine("{0}{1}", indent, generatedCode);
@@ -603,7 +603,8 @@ define([
                 code.appendLine(chartCode.toString());
             }
 
-            return code.toString();
+            // remove last Enter(\n) from code and then run it
+            return code.toString().replace(/\n+$/, "");
         }
         
     }
