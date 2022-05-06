@@ -232,7 +232,7 @@ define([
             $(page).find('#chartType').html(chartTypeTag.toString());
 
             // chart variable
-            let varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'Series', 'list']);
+            let varSelector = new VarSelector2(this.wrapSelector());
             varSelector.setComponentID('data');
             varSelector.addClass('vp-state vp-input');
             varSelector.setValue(this.state.data);

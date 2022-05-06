@@ -131,32 +131,32 @@ define([
             $(page).find('.vp-eval-'+this.state.modelType).show();
 
             // varselector
-            let varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'list', 'str']);
+            let varSelector = new VarSelector2(this.wrapSelector());
             varSelector.setComponentID('predictData');
             varSelector.addClass('vp-state vp-input');
             varSelector.setValue(this.state.predictData);
             $(page).find('#predictData').replaceWith(varSelector.toTagString());
 
-            varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'list', 'str']);
+            varSelector = new VarSelector2(this.wrapSelector());
             varSelector.setComponentID('targetData');
             varSelector.addClass('vp-state vp-input');
             varSelector.setValue(this.state.targetData);
             $(page).find('#targetData').replaceWith(varSelector.toTagString());
 
             // Clustering - data selection
-            varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'list', 'str']);
+            varSelector = new VarSelector2(this.wrapSelector());
             varSelector.setComponentID('clusteredIndex');
             varSelector.addClass('vp-state vp-input');
             varSelector.setValue(this.state.clusteredIndex);
             $(page).find('#clusteredIndex').replaceWith(varSelector.toTagString());
 
-            varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'list', 'str']);
+            varSelector = new VarSelector2(this.wrapSelector());
             varSelector.setComponentID('featureData2');
             varSelector.addClass('vp-state vp-input vp-ev-model silhouette');
             varSelector.setValue(this.state.featureData2);
             $(page).find('#featureData2').replaceWith(varSelector.toTagString());
 
-            varSelector = new VarSelector2(this.wrapSelector(), ['DataFrame', 'list', 'str']);
+            varSelector = new VarSelector2(this.wrapSelector());
             varSelector.setComponentID('targetData2');
             varSelector.addClass('vp-state vp-input vp-ev-model ari-nmi');
             varSelector.setValue(this.state.targetData2);
