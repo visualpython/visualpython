@@ -507,7 +507,7 @@ define([
                 code.append("rcParams['axes.unicode_minus'] = False");
             }
     
-            return code.toString();
+            return [code.toString()];
         }
 
         generateCode(preview=false) {

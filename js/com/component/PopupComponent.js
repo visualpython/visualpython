@@ -302,14 +302,16 @@ define([
             // Click import library
             $(this.wrapSelector('#popupImport')).on('click', function() {
                 // add import codes
-                var code = that.generateImportCode();
-                // create block and run it
-                $('#vp_wrapper').trigger({
-                    type: 'create_option_page', 
-                    blockType: 'block',
-                    menuId: 'lgExe_code',
-                    menuState: { taskState: { code: code } },
-                    afterAction: 'run'
+                var codes = that.generateImportCode();
+                codes && codes.forEach(code => {
+                    // create block and run it
+                    $('#vp_wrapper').trigger({
+                        type: 'create_option_page', 
+                        blockType: 'block',
+                        menuId: 'lgExe_code',
+                        menuState: { taskState: { code: code } },
+                        afterAction: 'run'
+                    });
                 });
             });
 
@@ -598,7 +600,7 @@ define([
 
         generateImportCode() {
             /** Implementation needed - Generated on clicking Import Library button */
-            return '';
+            return [];
         }
 
         generateCode() {

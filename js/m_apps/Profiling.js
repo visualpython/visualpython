@@ -147,7 +147,9 @@ define([
         }
 
         generateImportCode() {
-            return 'from pandas_profiling import ProfileReport';
+            return [
+                'from pandas_profiling import ProfileReport'
+            ];
         }
 
         generateCode() {

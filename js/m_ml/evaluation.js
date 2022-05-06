@@ -238,7 +238,7 @@ define([
         }
         
         generateImportCode() {
-            return 'from sklearn import metrics';
+            return ['from sklearn import metrics'];
         }
 
         generateCode() {

@@ -114,7 +114,7 @@ define([
             var code = new com_String();
             code.appendLine('import matplotlib.pyplot as plt');
             code.append('import seaborn as sns');
-            return code.toString();
+            return [code.toString()];
         }
 
         generateCode() {
