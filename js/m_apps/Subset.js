@@ -59,9 +59,7 @@ define([
 
                 useCopy: false,
                 toFrame: false,
-                subsetType: 'loc',
-
-                tabPage: 'subset',
+                subsetType: 'loc', // subset / loc / iloc / query
 
                 rowType: 'condition',
                 rowList: [],
@@ -139,6 +137,21 @@ define([
                 $(this.targetSelector).parent().append(buttonTag.toString());
             }
         }
+        renderSubsetType(dataType) {
+            var subsetType = this.state.subsetType;
+
+            var tag = new com_String();
+            tag.appendFormatLine('<select class="{0} {1}">', VP_DS_SUBSET_TYPE, 'vp-select');
+            tag.appendFormatLine('<option value="{0}" {1}>{2}</option>', 'subset', subsetType == 'subset'?'selected':'', 'subset');
+            tag.appendFormatLine('<option value="{0}" {1}>{2}</option>', 'loc', subsetType == 'loc'?'selected':'', 'loc');
+            tag.appendFormatLine('<option value="{0}" {1}>{2}</option>', 'iloc', subsetType == 'iloc'?'selected':'', 'iloc');
+            if (dataType == 'DataFrame') {
+                tag.appendFormatLine('<option value="{0}" {1}>{2}</option>', 'query', subsetType == 'query'?'selected':'', 'query');
+            }
+            tag.appendLine('</select>');
+
+            return tag.toString();
+        }
         renderRowSubsetType(subsetType, timestamp = false) {
             var tag = new com_String();
             tag.appendFormatLine('<select class="{0} {1}">', VP_DS_ROWTYPE, 'vp-select m');
@@ -146,7 +159,7 @@ define([
                 tag.appendFormatLine('<option value="{0}">{1}</option>', 'indexing', 'Indexing');
             }
             tag.appendFormatLine('<option value="{0}">{1}</option>', 'slicing', 'Slicing');
-            if (subsetType == 'subset' || subsetType == 'loc') {
+            if (subsetType == 'subset' || subsetType == 'loc' || subsetType == 'query') {
                 tag.appendFormatLine('<option value="{0}">{1}</option>', 'condition', 'Condition');
             }
             if ((subsetType == 'subset' || subsetType == 'loc') && timestamp) {
@@ -198,7 +211,7 @@ define([
             vpSearchSuggest.setNormalFilter(true);
             tag.appendLine(vpSearchSuggest.toTagString());
 
-            tag.appendFormatLine('<div class="{0} {1} {2} {3}"></div>', VP_DS_SELECT_BOX, 'left', VP_DS_DROPPABLE, 'no-selection');
+            tag.appendFormatLine('<div class="{0} {1} {2} {3}"></div>', VP_DS_SELECT_BOX, 'left', VP_DS_DROPPABLE, 'vp-scrollbar no-selection');
             tag.appendLine('</div>'); // VP_DS_SELECT_LEFT
 
             // row select - buttons
@@ -213,7 +226,7 @@ define([
 
             // row select - right
             tag.appendFormatLine('<div class="{0}">', VP_DS_SELECT_RIGHT);
-            tag.appendFormatLine('<div class="{0} {1} {2} {3}">', VP_DS_SELECT_BOX, 'right', VP_DS_DROPPABLE, 'no-selection');
+            tag.appendFormatLine('<div class="{0} {1} {2} {3}">', VP_DS_SELECT_BOX, 'right', VP_DS_DROPPABLE, 'vp-scrollbar no-selection');
             tag.appendLine('</div>'); // VP_DS_SELECT_BOX
             tag.appendLine('</div>'); // VP_DS_SELECT_RIGHT
             tag.appendLine('</div>'); // VP_DS_SELECT_CONTAINER
@@ -229,7 +242,7 @@ define([
          */
         renderRowSelectionBox(rowList) {
             var tag = new com_String();
-            tag.appendFormatLine('<div class="{0} {1} {2} {3}">', VP_DS_SELECT_BOX, 'left', VP_DS_DROPPABLE, 'no-selection');
+            tag.appendFormatLine('<div class="{0} {1} {2} {3}">', VP_DS_SELECT_BOX, 'left', VP_DS_DROPPABLE, 'vp-scrollbar no-selection');
 
             // get row data and make draggable items
             rowList.forEach((row, idx) => {
@@ -313,7 +326,7 @@ define([
             tag.appendLine(vpSearchSuggest.toTagString());
             tag.appendFormatLine('<i class="fa fa-search search-icon"></i>');
 
-            tag.appendFormatLine('<div class="{0} {1} {2} {3}"></div>', VP_DS_SELECT_BOX, 'left', VP_DS_DROPPABLE, 'no-selection');
+            tag.appendFormatLine('<div class="{0} {1} {2} {3}"></div>', VP_DS_SELECT_BOX, 'left', VP_DS_DROPPABLE, 'vp-scrollbar no-selection');
             tag.appendLine('</div>'); // VP_DS_SELECT_LEFT
 
             // col select - buttons
@@ -328,7 +341,7 @@ define([
 
             // col select - right
             tag.appendFormatLine('<div class="{0}">', VP_DS_SELECT_RIGHT);
-            tag.appendFormatLine('<div class="{0} {1} {2} {3}">', VP_DS_SELECT_BOX, 'right', VP_DS_DROPPABLE, 'no-selection');
+            tag.appendFormatLine('<div class="{0} {1} {2} {3}">', VP_DS_SELECT_BOX, 'right', VP_DS_DROPPABLE, 'vp-scrollbar no-selection');
             tag.appendLine('</div>'); // VP_DS_SELECT_BOX
             tag.appendLine('</div>'); // VP_DS_SELECT_RIGHT
             tag.appendLine('</div>'); // VP_DS_SELECT_CONTAINER
@@ -344,7 +357,7 @@ define([
          */
         renderColumnSelectionBox(colList) {
             var tag = new com_String();
-            tag.appendFormatLine('<div class="{0} {1} {2} {3}">', VP_DS_SELECT_BOX, 'left', VP_DS_DROPPABLE, 'no-selection');
+            tag.appendFormatLine('<div class="{0} {1} {2} {3}">', VP_DS_SELECT_BOX, 'left', VP_DS_DROPPABLE, 'vp-scrollbar no-selection');
             // get col data and make draggable items
             colList.forEach((col, idx) => {
                 // col.array parsing
@@ -638,12 +651,18 @@ define([
                 return that.renderSubsetType(dataType);
             });
         }
+        /**
+         * Load Row & Column option page based on subsetType
+         * @param {string} subsetType subset / loc / iloc / query
+         * @param {boolean} timestamp use timestamp? true / false
+         */
         loadRowColumnSubsetType(subsetType, timestamp = false) {
             var that = this;
             // get current subset type of row & column
             var rowSubset = this.state.rowType;
             var colSubset = this.state.colType;
 
+            // render row & column option page
             that.renderRowSubsetType(subsetType, timestamp);
             that.renderColumnSubsetType(subsetType);
 
@@ -997,7 +1016,7 @@ define([
                     return;
                 }
 
-                // that.loadSubsetType(that.state.dataType);
+                that.loadSubsetType(that.state.dataType);
                 if (that.state.dataType == 'DataFrame') {
                     // get result and load column list
                     vpKernel.getColumnList(varName).then(function (resultObj) {
@@ -1073,13 +1092,6 @@ define([
                 that.state.subsetType = subsetType;
 
                 that.reloadSubsetData();
-                // that.loadRowColumnSubsetType(subsetType, that.state.isTimestamp);
-                // // data page
-                // if (that.state.tabPage == 'data') {
-                //     that.loadDataPage();
-                // } else {
-                //     that.generateCode();
-                // }
             });
 
             // to frame
@@ -1398,6 +1410,7 @@ define([
          *  1) subset - rowSelection & colSelection using 'indexing' type
          *  2) loc - subset type 'loc'
          *  3) iloc - subset type 'iloc'
+         *  4) query - subset type 'query'
          * - consider use copy option
          */
         generateCodeForSubset(allocation = true, applyPreview = true) {
@@ -1461,13 +1474,16 @@ define([
                         rowSelection.append(connector);
                     }
 
-                    if (varType == 'DataFrame') {
-                        rowSelection.appendFormat('({0}', varName);
-                        if (colName && colName != '') {
-                            if (colName == '.index') {
-                                rowSelection.appendFormat('{0}', colName);
+                    if (this.state.subsetType == 'query') {
+                        if (condList.length > 1) {
+                            rowSelection.append('(');
+                        }
+                        let colValue = colTag.find('.vp-col-list').val();
+                        if (colValue && colValue != '') {
+                            if (colValue == '.index') {
+                                rowSelection.append('index');
                             } else {
-                                rowSelection.appendFormat('[{0}]', colName);
+                                rowSelection.appendFormat('{0}', colValue);
                             }
                         }
                         oper && rowSelection.appendFormat(' {0}', oper);
@@ -1479,23 +1495,45 @@ define([
                                 rowSelection.appendFormat(" {0}", cond);
                             }
                         }
-                        rowSelection.append(')');
+                        if (condList.length > 1) {
+                            rowSelection.append(')');
+                        }
                     } else {
-                        rowSelection.appendFormat('({0}', varName);
-                        oper && rowSelection.appendFormat(' {0}', oper);
-                        if (cond) {
-                            // condition value as text
-                            if (useText) {
-                                rowSelection.appendFormat(" '{0}'", cond);
-                            } else {
-                                rowSelection.appendFormat(" {0}", cond);
+                        if (varType == 'DataFrame') {
+                            rowSelection.appendFormat('({0}', varName);
+                            if (colName && colName != '') {
+                                if (colName == '.index') {
+                                    rowSelection.appendFormat('{0}', colName);
+                                } else {
+                                    rowSelection.appendFormat('[{0}]', colName);
+                                }
                             }
+                            oper && rowSelection.appendFormat(' {0}', oper);
+                            if (cond) {
+                                // condition value as text
+                                if (useText) {
+                                    rowSelection.appendFormat(" '{0}'", cond);
+                                } else {
+                                    rowSelection.appendFormat(" {0}", cond);
+                                }
+                            }
+                            rowSelection.append(')');
+                        } else {
+                            rowSelection.appendFormat('({0}', varName);
+                            oper && rowSelection.appendFormat(' {0}', oper);
+                            if (cond) {
+                                // condition value as text
+                                if (useText) {
+                                    rowSelection.appendFormat(" '{0}'", cond);
+                                } else {
+                                    rowSelection.appendFormat(" {0}", cond);
+                                }
+                            }
+                            rowSelection.append(')');
                         }
-                        rowSelection.append(')');
                     }
                     useCondition = true;
                 }
-
                 if (rowSelection.toString() == '') {
                     rowSelection.append(':');
                 }
@@ -1571,6 +1609,13 @@ define([
                     code.appendFormat('.iloc[{0}, {1}]', rowSelection.toString(), colSelection.toString());
                 } else {
                     code.appendFormat('.iloc[{0}]', rowSelection.toString());
+                }
+            } else if (this.state.subsetType == 'query') {
+                if (rowSelection.toString() != ':' && rowSelection.toString() != '') {
+                    code.appendFormat('.query("{0}")', rowSelection.toString());
+                }
+                if (colSelection.toString() != ':' && colSelection.toString() != '') {
+                    code.appendFormat('[{0}]', colSelection.toString());
                 }
             }
 
