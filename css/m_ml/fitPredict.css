@@ -3,7 +3,7 @@
 }
 .vp-ins-select-title {
     font-weight: bold;
-    color: var(--font-hightlight);
+    color: var(--font-highlight);
 }
 .vp-ins-select-container input.vp-ins-search {
     width: 100%;
@@ -33,7 +33,7 @@
     border-bottom: 0.25px solid var(--light-gray-color);
 }
 .vp-ins-select-item.selected {
-    color: var(--font-hightlight);
+    color: var(--font-highlight);
     background: var(--light-gray-color);
 }
 .vp-ins-select-item:hover {

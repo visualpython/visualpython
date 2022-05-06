@@ -8,6 +8,6 @@
     cursor: pointer;
 }
 .vp-tab-button.vp-tab-selected {
-    color: var(--font-hightlight);
+    color: var(--font-highlight);
     border-bottom: 2px solid var(--highlight-color);
 }

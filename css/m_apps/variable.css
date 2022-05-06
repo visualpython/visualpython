@@ -3,7 +3,7 @@
 }
 #vp_var_variableBox table tbody tr:hover,
 #vp_var_variableBox table tbody tr.vp-selected {
-    color: var(--font-hightlight);
+    color: var(--font-highlight);
     background-color: #F5F5F5;
 }
 #vp_var_variableBox table tbody tr td:hover {

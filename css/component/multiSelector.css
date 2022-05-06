@@ -39,7 +39,7 @@
     background-color: #E4E4E4;
 }
 .vp-cs-select-item.selected {
-    color:  var(--font-hightlight);
+    color:  var(--font-highlight);
     background-color: #F5F5F5;
 }
 /* Item Sorting FIXME: change span to class */

@@ -24,12 +24,12 @@
 }
 .vp-ds-var-item:hover {
     background: var(--light-gray-color);
-    color: var(--font-hightlight);
+    color: var(--font-highlight);
     cursor: pointer;
 }
 .vp-ds-var-item.selected {
     background: var(--light-gray-color);
-    color: var(--font-hightlight);
+    color: var(--font-highlight);
     font-weight: bold;
 }
 .vp-ds-var-data {
