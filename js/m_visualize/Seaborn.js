@@ -48,11 +48,9 @@ define([
                 title: '',
                 x_label: '',
                 y_label: '',
-                useLegend: 'False',
                 legendPos: '',
                 // style options
                 useGrid: 'False',
-                useMarker: 'False',
                 markerStyle: '',
                 // setting options
                 x_limit_from: '',
@@ -75,13 +73,22 @@ define([
             }
 
             this.legendPosList = [
-                'best', 'upper right', 'upper left', 'lower left', 'lower right',
-                'center left', 'center right', 'lower center', 'upper center', 'center'
+                {label: 'Select option...', value: ''},
+                {label: 'best', value: 'best'},
+                {label: 'upper right', value: 'upper right'},
+                {label: 'upper left', value: 'upper left'},
+                {label: 'lower left', value: 'lower left'},
+                {label: 'lower right', value: 'lower right'},
+                {label: 'center left', value: 'center left'},
+                {label: 'center right', value: 'center right'},
+                {label: 'lower center', value: 'lower center'},
+                {label: 'upper center', value: 'upper center'},
+                {label: 'center', value: 'center'},
             ];
 
             this.markerList = [
                 // 'custom': { label: 'Custom', value: 'marker' },
-                { label: ' ', value: ' ', title: 'select marker style'},
+                { label: 'Select option...', value: '', title: 'select marker style'},
                 { label: '.', value: '.', title: 'point' }, 
                 { label: ',', value: ',', title: 'pixel' }, 
                 { label: 'o', value: 'o', title: 'circle' }, 
@@ -259,11 +266,11 @@ define([
             let legendPosTag = new com_String();
             this.legendPosList.forEach(pos => {
                 let selectedFlag = '';
-                if (pos == that.state.legendPos) {
+                if (pos.value == that.state.legendPos) {
                     selectedFlag = 'selected';
                 }
                 legendPosTag.appendFormatLine('<option value="{0}" {1}>{2}{3}</option>',
-                    pos, selectedFlag, pos, pos == 'best'?' (default)':'');
+                    pos.value, selectedFlag, pos.label, pos.value == 'best'?' (default)':'');
             });
             $(page).find('#legendPos').html(legendPosTag.toString());
 
@@ -514,8 +521,8 @@ define([
         generateCode(preview=false) {
             let { 
                 chartType, data, userOption='',
-                title, x_label, y_label, useLegend, legendPos,
-                useGrid, useMarker, markerStyle,
+                title, x_label, y_label, legendPos,
+                useGrid, markerStyle,
                 x_limit_from, x_limit_to, y_limit_from, y_limit_to,
                 useSampling, sampleCount 
             } = this.state;
@@ -528,7 +535,7 @@ define([
             let chartCode = new com_String();
 
             let etcOptionCode = []
-            if (useMarker == 'True') {
+            if (markerStyle != '') {
                 // TODO: marker to seaborn argument (ex. marker='+' / markers={'Lunch':'s', 'Dinner':'X'})
                 etcOptionCode.push(com_util.formatString("marker='{0}'", markerStyle));
             }
@@ -563,11 +570,11 @@ define([
             if (y_limit_from != '' && y_limit_to != '') {
                 chartCode.appendFormatLine("plt.ylim(({0}, {1}))", y_limit_from, y_limit_to);
             }
-            if (useLegend == 'True' && legendPos != '') {
+            if (legendPos != '') {
                 chartCode.appendFormatLine("plt.legend(loc='{0}')", legendPos);
             }
-            if (useGrid == 'True') {
-                chartCode.appendLine("plt.grid(True)");
+            if (useGrid != '') {
+                chartCode.appendFormatLine("plt.grid({0})", useGrid);
                 // TODO: grid types
                 // plt.grid(True, axis='x', color='red', alpha=0.5, linestyle='--')
             }
