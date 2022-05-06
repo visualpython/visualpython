@@ -242,7 +242,9 @@ define([
         }
 
         generateCode() {
-            let codeCells = [];
+            let codeCells = [
+                ...this.generateImportCode() // run import codes
+            ];
             let code = new com_String();
             let { 
                 modelType, predictData, targetData,
