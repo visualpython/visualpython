@@ -152,8 +152,6 @@ define([
             super.render();
 
             this.loadModelList(this.state.category);
-
-            this.reload();
         }
 
         loadModelList(category='') {
@@ -173,17 +171,21 @@ define([
             vpKernel.getModelList(category).then(function(resultObj) {
                 let { result } = resultObj;
                 var modelList = JSON.parse(result);
-                modelList && modelList.forEach(model => {
+                modelList && modelList.forEach((model, idx) => {
                     let selectFlag = '';
-                    if (model.varName == that.state.model) {
+                    // if this item is pre-selected model or first item of model list
+                    if ((model.varName == that.state.model)
+                        || (that.state.model == '' && idx == 0)) {
                         selectFlag = 'selected';
+                        that.state.model = model.varName;
+                        that.state.modelType = model.varType;
                     }
                     modelOptionTag.appendFormatLine('<li class="{0} {1}" data-var-name="{2}" data-var-type="{3}" title="{4}">{5} ({6})</li>',
                     'vp-ins-select-item', selectFlag, model.varName, model.varType, model.varName, model.varName, model.varType);
                 });
                 $(that.wrapSelector('.vp-ins-select-list.model')).html(modelOptionTag.toString());
 
-                // click model
+                // click model event
                 $(that.wrapSelector('.vp-ins-select-list.model .vp-ins-select-item')).on('click', function() {
                     let model = $(this).data('var-name');
                     let modelType = $(this).data('var-type');
@@ -196,9 +198,14 @@ define([
 
                     that.reload();
                 });
+
+                that.reload();
             });
         }
 
+        /**
+         * Load options for selected model
+         */
         reload() {
             // reset option page
             try {
