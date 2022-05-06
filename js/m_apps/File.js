@@ -270,6 +270,7 @@ define([
             }
     
             // render interface
+            // pdGen.vp_showInterfaceOnPage(this.wrapSelector('#vp_file' + pageType), thisPkg);
             pdGen.vp_showInterfaceOnPage(this.wrapSelector('#vp_file' + pageType), thisPkg);
     
             // prepend file type selector

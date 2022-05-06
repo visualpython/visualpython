@@ -437,6 +437,10 @@ define([
             })
         }
 
+        getDataTypes() {
+            return Config.DATA_TYPES;
+        }
+
         getMLDataDict(key = '') {
             if (key == '') {
                 return Config.ML_DATA_DICT;
@@ -446,6 +450,10 @@ define([
 
         getMLDataTypes() {
             return Config.ML_DATA_TYPES;
+        }
+
+        getMLCategories() {
+            return Object.keys(Config.ML_DATA_DICT);
         }
 
     }
@@ -462,7 +470,7 @@ define([
     /**
      * Version
      */
-    Config.version = "2.1.3";
+    Config.version = "2.2.1";
 
     /**
      * Type of mode
@@ -479,24 +487,27 @@ define([
     Config.VP_MIN_WIDTH = Config.MENU_MIN_WIDTH + Config.BOARD_MIN_WIDTH + Config.MENU_BOARD_SPACING; // = MENU_MIN_WIDTH + BOARD_MIN_WIDTH + MENU_BOARD_SPACING
     
     /**
+     * Data types
+     */
+    Config.DATA_TYPES = [
+        // pandas object
+        'DataFrame', 'Series', 'Index', 'Period', 'GroupBy', 'Timestamp'
+        // Index type object
+        , 'RangeIndex', 'CategoricalIndex', 'MultiIndex', 'IntervalIndex', 'DatetimeIndex', 'TimedeltaIndex', 'PeriodIndex', 'Int64Index', 'UInt64Index', 'Float64Index'
+        // GroupBy type object
+        , 'DataFrameGroupBy', 'SeriesGroupBy'
+        // Plot type
+        , 'Figure', 'AxesSubplot'
+        // Numpy
+        , 'ndarray'
+        // Python variable
+        , 'str', 'int', 'float', 'bool', 'dict', 'list', 'tuple'
+    ]
+
+    /**
      * Data types using for searching model variables
      */
     Config.ML_DATA_DICT = {
-        'Regression': [
-            'LinearRegression', 'Ridge', 'Lasso', 'ElasticNet', 'SVR', 'DecisionTreeRegressor', 'RandomForestRegressor', 'GradientBoostingRegressor', 'XGBRegressor', 'LGBMRegressor', 'CatBoostRegressor',
-        ],
-        'Classification': [
-            'LogisticRegression', 'BernoulliNB', 'MultinomialNB', 'GaussianNB', 'SVC', 'DecisionTreeClassifier', 'RandomForestClassifier', 'GradientBoostingClassifier', 'XGBClassifier', 'LGBMClassifier', 'CatBoostClassifier',
-        ],
-        'Auto ML': [
-            'AutoSklearnRegressor', 'AutoSklearnClassifier', 'TPOTRegressor', 'TPOTClassifier'
-        ],
-        'Clustering': [
-            'KMeans', 'AgglomerativeClustering', 'GaussianMixture', 'DBSCAN',
-        ],
-        'Dimension Reduction': [
-            'PCA', 'LinearDiscriminantAnalysis', 'TruncatedSVD', 'NMF', 'TSNE'
-        ],
         'Data Preparation': [
             /** Encoding */
             'OneHotEncoder', 'LabelEncoder', 'OrdinalEncoder', 'TargetEncoder', 'SMOTE',
@@ -504,16 +515,31 @@ define([
             'StandardScaler', 'RobustScaler', 'MinMaxScaler', 'Normalizer', 'FunctionTransformer', 'PolynomialFeatures', 'KBinsDiscretizer',
             /** ETC */
             'ColumnTransformer'
+        ],
+        'Regression': [
+            'LinearRegression', 'Ridge', 'Lasso', 'ElasticNet', 'SVR', 'DecisionTreeRegressor', 'RandomForestRegressor', 'GradientBoostingRegressor', 'XGBRegressor', 'LGBMRegressor', 'CatBoostRegressor',
+        ],
+        'Classification': [
+            'LogisticRegression', 'BernoulliNB', 'MultinomialNB', 'GaussianNB', 'SVC', 'DecisionTreeClassifier', 'RandomForestClassifier', 'GradientBoostingClassifier', 'XGBClassifier', 'LGBMClassifier', 'CatBoostClassifier',
+        ],
+        'Clustering': [
+            'KMeans', 'AgglomerativeClustering', 'GaussianMixture', 'DBSCAN',
+        ],
+        'Dimension Reduction': [
+            'PCA', 'LinearDiscriminantAnalysis', 'TruncatedSVD', 'NMF', 'TSNE'
+        ],
+        'Auto ML': [
+            'AutoSklearnRegressor', 'AutoSklearnClassifier', 'TPOTRegressor', 'TPOTClassifier'
         ]
     };
 
     Config.ML_DATA_TYPES = [
+        ...Config.ML_DATA_DICT['Data Preparation'],
         ...Config.ML_DATA_DICT['Regression'],
         ...Config.ML_DATA_DICT['Classification'],
-        ...Config.ML_DATA_DICT['Auto ML'],
         ...Config.ML_DATA_DICT['Clustering'],
         ...Config.ML_DATA_DICT['Dimension Reduction'],
-        ...Config.ML_DATA_DICT['Data Preparation']
+        ...Config.ML_DATA_DICT['Auto ML']
     ];
 
     return Config;

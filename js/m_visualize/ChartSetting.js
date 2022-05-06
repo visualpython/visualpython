@@ -31,7 +31,7 @@ define([
             this.state = {
                 figureWidth: 12,
                 figureHeight: 8,
-                styleSheet: '',
+                styleSheet: 'seaborn-darkgrid',
                 fontName: '',
                 fontSize: 10,
                 ...this.state
@@ -42,7 +42,18 @@ define([
             super._bindEvent();
 
             let that = this;
-            
+            // setting popup - set default
+            $(this.wrapSelector('#setDefault')).on('change', function() {
+                let checked = $(this).prop('checked');
+
+                if (checked) {
+                    // disable input
+                    $(that.wrapSelector('.vp-chart-setting-body input')).prop('disabled', true);
+                } else {
+                    // enable input
+                    $(that.wrapSelector('.vp-chart-setting-body input')).prop('disabled', false);
+                }
+            });
         }
 
         templateForBody() {
@@ -113,31 +124,40 @@ define([
         generateImportCode() {
             var code = new com_String();
             code.appendLine('import matplotlib.pyplot as plt');
-            code.append('import seaborn as sns');
-            return code.toString();
+            code.appendLine('import seaborn as sns');
+            code.append('%matplotlib inline');
+            return [code.toString()];
         }
 
         generateCode() {
             var code = new com_String();
     
             // get parameters
-            let { figureWidth, figureHeight, styleSheet, fontName, fontSize } = this.state;
-    
-            code.appendLine('import matplotlib.pyplot as plt');
-            code.appendFormatLine("plt.rc('figure', figsize=({0}, {1}))", figureWidth, figureHeight);
-            if (styleSheet && styleSheet.length > 0) {
-                code.appendFormatLine("plt.style.use('{0}')", styleSheet);
+            let setDefault = $(this.wrapSelector('#setDefault')).prop('checked');
+            if (setDefault == true) {
+                code.appendLine('from matplotlib import rcParams, rcParamsDefault');
+                code.append('rcParams.update(rcParamsDefault)');
+            } else {
+                // get parameters
+                let { figureWidth, figureHeight, styleSheet, fontName, fontSize } = this.state;
+        
+                code.appendLine('import matplotlib.pyplot as plt');
+                code.appendLine('import seaborn as sns');
+                code.appendFormatLine("plt.rc('figure', figsize=({0}, {1}))", figureWidth, figureHeight);
+                if (styleSheet && styleSheet.length > 0) {
+                    code.appendFormatLine("plt.style.use('{0}')", styleSheet);
+                }
+                code.appendLine();
+        
+                code.appendLine('from matplotlib import rcParams');
+                if (fontName && fontName.length > 0) {
+                    code.appendFormatLine("rcParams['font.family'] = '{0}'", fontName);
+                }
+                if (fontSize && fontSize.length > 0) {
+                    code.appendFormatLine("rcParams['font.size'] = {0}", fontSize);
+                }
+                code.append("rcParams['axes.unicode_minus'] = False");
             }
-            code.appendLine();
-    
-            code.appendLine('from matplotlib import rcParams');
-            if (fontName && fontName.length > 0) {
-                code.appendFormatLine("rcParams['font.family'] = '{0}'", fontName);
-            }
-            if (fontSize && fontSize.length > 0) {
-                code.appendFormatLine("rcParams['font.size'] = {0}", fontSize);
-            }
-            code.append("rcParams['axes.unicode_minus'] = False");
     
             return code.toString();
         }

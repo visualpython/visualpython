@@ -16,8 +16,9 @@ define([
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
-    'vp_base/js/com/component/PopupComponent'
-], function(com_util, com_Const, com_String, PopupComponent) {
+    'vp_base/js/com/component/PopupComponent',
+    'vp_base/js/com/component/DataSelector'
+], function(com_util, com_Const, com_String, PopupComponent, DataSelector) {
 
     /**
      * SampleApp
@@ -32,22 +33,29 @@ define([
             super._bindEvent();
             /** Implement binding events */
             var that = this;
-            this.$target.on('click', function(evt) {
-                var target = evt.target;
-                if ($(that.wrapSelector()).find(target).length > 0) {
-                    // Sample : getDataList from Kernel
-                    vpKernel.getDataList().then(function(resultObj) {
-                        vpLog.display(VP_LOG_TYPE.DEVELOP, resultObj);
-                    }).catch(function(err) {
-                        vpLog.display(VP_LOG_TYPE.DEVELOP, err);
-                    });
-                }
+            
+            $(this.wrapSelector('#sample')).on('click', function() {
+                let dataSelector = new DataSelector({
+                    type: 'data',
+                    target: $(that.wrapSelector('#sample')),
+                    finish: function() {
+                        
+                    }
+                });
+                dataSelector.open();
             });
         }
 
         templateForBody() {
             /** Implement generating template */
-            return 'This is sample.';
+            return `This is sample.
+            <input type="text" id="sample" class="vp-state vp-input" placeholder="Click to edit" readonly="" />`;
+        }
+
+        render() {
+            super.render();
+
+
         }
 
         generateCode() {

@@ -13,8 +13,8 @@
 // [CLASS] PopupComponent
 //============================================================================
 define([
-    'text!vp_base/html/popupComponent.html!strip',
-    'css!vp_base/css/popupComponent.css',
+    'text!vp_base/html/component/popupComponent.html!strip',
+    'css!vp_base/css/component/popupComponent.css',
     '../com_util',
     '../com_Const',
     '../com_String',
@@ -251,11 +251,43 @@ define([
             });
             // Toggle operation (minimize)
             $(this.wrapSelector('.vp-popup-toggle')).on('click', function(evt) {
-                // that.toggle();
                 $(that.eventTarget).trigger({
                     type: 'close_option_page',
                     component: that
                 });
+            });
+            // Maximize operation
+            $(this.wrapSelector('.vp-popup-maximize')).on('click', function(evt) {
+                // save position
+                that.config.position = $(that.wrapSelector()).position();
+                // save size
+                that.config.size = {
+                    width: $(that.wrapSelector()).width(),
+                    height: $(that.wrapSelector()).height()
+                }
+                // maximize popup
+                $(that.wrapSelector()).css({
+                    width: '100%',
+                    height: '100%',
+                    top: 0,
+                    left: 0
+                });
+                // show / hide buttons
+                $(this).hide();
+                $(that.wrapSelector('.vp-popup-return')).show();
+            });
+            // Return operation
+            $(this.wrapSelector('.vp-popup-return')).on('click', function(evt) {
+                // return size
+                $(that.wrapSelector()).css({
+                    width: that.config.size.width + 'px',
+                    height: that.config.size.height + 'px',
+                    top: that.config.position.top,
+                    left: that.config.position.left
+                });
+                // show / hide buttons
+                $(this).hide();
+                $(that.wrapSelector('.vp-popup-maximize')).show();
             });
 
             // Click install package
@@ -270,14 +302,16 @@ define([
             // Click import library
             $(this.wrapSelector('#popupImport')).on('click', function() {
                 // add import codes
-                var code = that.generateImportCode();
-                // create block and run it
-                $('#vp_wrapper').trigger({
-                    type: 'create_option_page', 
-                    blockType: 'block',
-                    menuId: 'lgExe_code',
-                    menuState: { taskState: { code: code } },
-                    afterAction: 'run'
+                var codes = that.generateImportCode();
+                codes && codes.forEach(code => {
+                    // create block and run it
+                    $('#vp_wrapper').trigger({
+                        type: 'create_option_page', 
+                        blockType: 'block',
+                        menuId: 'lgExe_code',
+                        menuState: { taskState: { code: code } },
+                        afterAction: 'run'
+                    });
                 });
             });
 
@@ -297,45 +331,7 @@ define([
 
             // save state values
             $(document).on('change', this.wrapSelector('.vp-state'), function() {
-                let id = $(this)[0].id;
-                let customKey = $(this).data('key');
-                let tagName = $(this).prop('tagName'); // returns with UpperCase
-                let newValue = '';
-                switch(tagName) {
-                    case 'INPUT':
-                        let inputType = $(this).prop('type');
-                        if (inputType == 'text' || inputType == 'number' || inputType == 'hidden') {
-                            newValue = $(this).val();
-                            break;
-                        }
-                        if (inputType == 'checkbox') {
-                            newValue = $(this).prop('checked');
-                            break;
-                        }
-                        break;
-                    case 'TEXTAREA':
-                    case 'SELECT':
-                    default:
-                        newValue = $(this).val();
-                        if (!newValue) {
-                            newValue = '';
-                        }
-                        break;
-                }
-                
-                // if custom key is available, use it
-                if (customKey && customKey != '') {
-                    // allow custom key until level 2
-                    let customKeys = customKey.split('.');
-                    if (customKeys.length == 2) {
-                        that.state[customKeys[0]][customKeys[1]] = newValue;
-                    } else {
-                        that.state[customKey] = newValue;
-                    }
-                } else {
-                    that.state[id] = newValue;
-                }
-                vpLog.display(VP_LOG_TYPE.DEVELOP, 'saved state : ' + id+ '/'+tagName+'/'+newValue);
+                that._saveSingleState($(this)[0]);
             });
 
             // Click buttons
@@ -423,7 +419,7 @@ define([
             });
 
             // click on data selector input filter
-            $(this.wrapSelector('.vp-data-selector ')).on('click', function(evt) {
+            $(this.wrapSelector('.vp-data-selector')).on('click', function(evt) {
 
             });
         }
@@ -458,8 +454,14 @@ define([
         }
 
         _bindResizable() {
+            let that = this;
             $(this.wrapSelector()).resizable({
-                handles: 'all'
+                handles: 'all',
+                start: function(evt, ui) {
+                    // show / hide buttons
+                    $(that.wrapSelector('.vp-popup-return')).hide();
+                    $(that.wrapSelector('.vp-popup-maximize')).show();
+                }
             });
         }
 
@@ -598,7 +600,7 @@ define([
 
         generateImportCode() {
             /** Implementation needed - Generated on clicking Import Library button */
-            return '';
+            return [];
         }
 
         generateCode() {
@@ -618,46 +620,48 @@ define([
             /** Implementation needed */
             let that = this;
             $(this.wrapSelector('.vp-state')).each((idx, tag) => {
-                let id = tag.id;
-                let customKey = $(tag).data('key');
-                let tagName = $(tag).prop('tagName'); // returns with UpperCase
-                let newValue = '';
-                switch(tagName) {
-                    case 'INPUT':
-                        let inputType = $(tag).prop('type');
-                        if (inputType == 'text' || inputType == 'number' || inputType == 'hidden') {
-                            newValue = $(tag).val();
-                            break;
-                        }
-                        if (inputType == 'checkbox') {
-                            newValue = $(tag).prop('checked');
-                            break;
-                        }
-                        break;
-                    case 'TEXTAREA':
-                    case 'SELECT':
-                    default:
-                        newValue = $(tag).val();
-                        if (!newValue) {
-                            newValue = '';
-                        }
-                        break;
-                }
-                
-                // if custom key is available, use it
-                if (customKey && customKey != '') {
-                    // allow custom key until level 2
-                    let customKeys = customKey.split('.');
-                    if (customKeys.length == 2) {
-                        that.state[customKeys[0]][customKeys[1]] = newValue;
-                    } else {
-                        that.state[customKey] = newValue;
-                    }
-                } else {
-                    that.state[id] = newValue;
-                }
+                that._saveSingleState(tag);
             }); 
             vpLog.display(VP_LOG_TYPE.DEVELOP, 'savedState', that.state);   
+        }
+
+        _saveSingleState(tag) {
+            let id = tag.id;
+            let customKey = $(tag).data('key');
+            let tagName = $(tag).prop('tagName'); // returns with UpperCase
+            let newValue = '';
+            switch(tagName) {
+                case 'INPUT':
+                    let inputType = $(tag).prop('type');
+                    if (inputType == 'checkbox') {
+                        newValue = $(tag).prop('checked');
+                    } else {
+                        // inputType == 'text' || inputType == 'number' || inputType == 'hidden' || inputType == 'color' || inputType == 'range'
+                        newValue = $(tag).val();
+                    }
+                    break;
+                case 'TEXTAREA':
+                case 'SELECT':
+                default:
+                    newValue = $(tag).val();
+                    if (!newValue) {
+                        newValue = '';
+                    }
+                    break;
+            }
+            
+            // if custom key is available, use it
+            if (customKey && customKey != '') {
+                // allow custom key until level 2
+                let customKeys = customKey.split('.');
+                if (customKeys.length == 2) {
+                    this.state[customKeys[0]][customKeys[1]] = newValue;
+                } else {
+                    this.state[customKey] = newValue;
+                }
+            } else {
+                this.state[id] = newValue;
+            }
         }
 
         run(execute=true, addcell=true) {

@@ -883,8 +883,13 @@ define([
             });
         }
 
+        /**
+         * Show Model Editor
+         * @param {*} showType all / action / info 
+         */
         show() {
             $(this.wrapSelector()).show();
+
             this.reload();
         }
 

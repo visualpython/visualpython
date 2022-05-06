@@ -4,6 +4,9 @@
     padding-right: 5px;
     cursor: pointer;
 }
+.vp-chart-setting:hover {
+    color: var(--font-highlight);
+}
 .vp-create-subplot-btn {
     float: right;
 }
@@ -26,28 +29,39 @@
     text-align: center;
 }
 .vp-tab-item.vp-focus {
-    color: var(--font-hightlight);
+    color: var(--font-highlight);
     background: white;
     border-bottom: 3px solid #FFCF73;
 }
 .vp-tab-page {
     width: 100%;
+    height: 100%;
+}
+.vp-tab-page-box.figure {
+    height: calc(100% - 30px);
+    align-content: baseline;
+    grid-template-rows: 1fr;
 }
 .vp-tab-page-box.plot {
     height: calc(100% - 30px);
+    min-height: 352px;
     align-content: baseline;
 }
 .vp-chart-plot-box {
+    height: 100%;
+}
+.vp-chart-body {
     display: grid;
     grid-template-columns: calc(50% - 8px) calc(50% - 8px);
+    grid-template-rows: 1fr;
     grid-row-gap: 5px;
     grid-column-gap: 15px;
     align-items: baseline;
     align-content: center;
+    height: 100%;
 }
 .vp-chart-left-box {
-    display: grid;
-    grid-row-gap: 3px;
+
 }
 .vp-chart-left-box > label {
     margin-bottom: 0px;
@@ -64,6 +78,19 @@
     padding-right: 5px;
 }
 .vp-chart-preview-box {
-    min-height: 150px;
+    min-height: 352px;
     width: 100%;
+    height: calc(100% - 30px);
+}
+.vp-chart-preview-box img {
+    width: 100%;
+    height: 100%;
+}
+.vp-tab-page label {
+    margin-bottom: 0px;
+}
+.vp-chart-setting-footer {
+    position: absolute;
+    left: 20px;
+    bottom: 15px;
 }

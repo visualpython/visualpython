@@ -18,6 +18,11 @@ define([
      */
     var _VP_SHOW_RESULT = true;
 
+    const _VP_BOOL_OPTIONS = [
+        { label: 'True', value: 'True' },
+        { label: 'False', value: 'False' }
+    ]
+
      /**
      * Generate page interface based on package configuration
      * @param {*} package 
@@ -107,11 +112,31 @@ define([
         // create as component type
         switch (obj.component) {
             case 'bool_checkbox':
-                // FIXME: True False select box
-                var select = $(`<select id="${obj.name}" class="vp-select vp-state"><option value="">Default</option></select>`);
-                select.append($('<option value="True">True</option>'))
-                    .append($('<option value="False">False</option>'));
-                $(tblInput).append(select);
+                // True False select box
+                var optSlct = $(`<select id="${obj.name}" class="vp-select vp-state"></select>`);
+                _VP_BOOL_OPTIONS.forEach((opt, idx) => {
+                    var option = $(`<option>${opt.label}${obj.default==opt.value?' (default)':''}</option>`).attr({
+                        // 'id':opt,
+                        'index':obj.index,
+                        'name':obj.name,
+                        'value':(obj.default==opt.value?'':opt.value)
+                    });
+                    // cell metadata test
+                    if (getValue && obj.value != undefined) {
+                        // set as saved value
+                        if (obj.value == opt) {
+                            $(option).attr({
+                                'selected':'selected'
+                            });
+                        }
+                    } else if (obj.default == opt.value) {
+                        $(option).attr({
+                            'selected':'selected'
+                        });
+                    }
+                    optSlct.append(option);
+                });
+                $(tblInput).append(optSlct);
                 break;
             case 'option_select':
                 var optSlct = document.createElement('select');

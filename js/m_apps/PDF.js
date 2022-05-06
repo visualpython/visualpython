@@ -30,6 +30,37 @@ import fitz
 import nltk
 nltk.download('punkt')`;
 
+    const PDF_FUNC = `def vp_pdf_get_sentence(fname_lst):
+    '''
+    Get sentence from pdf file by PyMuPDF
+    '''
+    df = pd.DataFrame()
+    for fname in fname_lst:
+        if fname.split('.')[-1] != 'pdf': continue
+        try:
+            doc = fitz.open(fname)
+            sentence_lst = []
+            for page in doc:
+                block_lst = page.get_text('blocks')
+        
+                text_lst = [block[4] for block in block_lst if block[6] == 0]
+                text = '\\n'.join(text_lst)
+        
+                sentence_lst.extend([sentence for sentence in nltk.sent_tokenize(text)])
+                
+            doc.close()
+        except Exception as e:
+            print(e)
+            continue
+            
+        df_doc = pd.DataFrame({
+            'fname': fname.split('/')[-1],
+            'sentence': sentence_lst
+        })
+        df = pd.concat([df,df_doc])
+        
+    return df.reset_index().drop('index', axis=1)`;
+
     const PDF_CMD = 'df = vp_pdf_get_sentence(pdf_lst)\ndf'
     /**
      * PDF
@@ -93,7 +124,10 @@ nltk.download('punkt')`;
         }
 
         generateImportCode() {
-            return PDF_IMPORT;
+            return [
+                PDF_IMPORT,
+                PDF_FUNC
+            ];
         }
 
         generateCode() {

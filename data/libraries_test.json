@@ -2850,24 +2850,14 @@
                         "desc" : "Matplotlib Visualization",
                         "item" : [
                             {
-                                "id": "mp_importMatplotlib",
-                                "type": "function",
-                                "level": 2,
-                                "name": "import",
-                                "path": "visualpython - library - matplotlib - import matplotlib",
-                                "desc": "",
-                                "tag": "IMPORT MATPLOTLIB",
-                                "file": "m_matplotlib/import"
-                            },
-                            {
-                                "id": "mp_plot",
+                                "id": "mp_chart",
                                 "type": "function",
                                 "level": 2,
                                 "name": "Create chart",
                                 "path": "visualpython - library - matplotlib - plot",
                                 "desc": "",
                                 "tag": "MATPLOTLIB, PLOT, CHART",
-                                "file": "m_matplotlib/plot"
+                                "file": "m_visualize/Chart"
                             },
                             {
                                 "id": "mp_figure",
@@ -3074,6 +3064,20 @@
                             "color": 4,
                             "icon": "apps/apps_profiling.svg"
                         }
+                    },
+                    {
+                        "id"   : "apps_sample",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Sample",
+                        "tag"  : "SAMPLE,APPS",
+                        "path" : "visualpython - apps - sample",
+                        "desc" : "TODO: remove it (this is sample)",
+                        "file" : "m_apps/SampleApp",
+                        "apps" : {
+                            "color": 4,
+                            "icon": "apps/apps_white.svg"
+                        }
                     }
                 ]
             },
@@ -3097,36 +3101,8 @@
                         "desc" : "Chart style setting",
                         "file" : "m_visualize/ChartSetting",
                         "apps" : {
-                            "color": 1,
+                            "color": 5,
                             "icon": "apps/apps_style.svg"
-                        }
-                    },
-                    {
-                        "id"   : "pd_plot",
-                        "type" : "function",
-                        "level": 1,
-                        "name" : "Pandas Plot",
-                        "tag"  : "PANDAS PLOT,PANDAS",
-                        "path" : "visualpython - library - pandas - plot",
-                        "desc" : "Pandas plot creation",
-                        "file" : "m_library/m_pandas/plot",
-                        "apps" : {
-                            "color": 1,
-                            "icon": "apps/apps_chart.svg"
-                        }
-                    },
-                    {
-                        "id"   : "visualize_chart",
-                        "type" : "function",
-                        "level": 1,
-                        "name" : "Matplotlib",
-                        "tag"  : "MATPLOTLIB,CHART,VISUALIZATION,VISUALIZE",
-                        "path" : "visualpython - visualization - matplotlib",
-                        "desc" : "Matplotlib chart creation",
-                        "file" : "m_apps/Chart",
-                        "apps" : {
-                            "color": 1,
-                            "icon": "apps/apps_chart.svg"
                         }
                     },
                     {
@@ -3139,8 +3115,8 @@
                         "desc" : "Seaborn chart creation",
                         "file" : "m_visualize/Seaborn",
                         "apps" : {
-                            "color": 1,
-                            "icon": "apps/apps_chart.svg"
+                            "color": 5,
+                            "icon": "apps/apps_visualize.svg"
                         }
                     }
                 ]
@@ -3165,22 +3141,8 @@
                         "desc" : "Data sets for machine learning",
                         "file" : "m_ml/DataSets",
                         "apps" : {
-                            "color": 5,
+                            "color": 6,
                             "icon": "apps/apps_dataset.svg"
-                        }
-                    },
-                    {
-                        "id"   : "ml_dataPrep",
-                        "type" : "function",
-                        "level": 1,
-                        "name" : "Data Prep",
-                        "tag"  : "DATA PREPARATION,MACHINE LEARNING,ML",
-                        "path" : "visualpython - machine_learning - data prep",
-                        "desc" : "Data preparation for machine learning",
-                        "file" : "m_ml/DataPrep",
-                        "apps" : {
-                            "color": 5,
-                            "icon": "apps/apps_dataprep.svg"
                         }
                     },
                     {
@@ -3193,64 +3155,22 @@
                         "desc" : "Data split for machine learning",
                         "file" : "m_ml/dataSplit",
                         "apps" : {
-                            "color": 5,
+                            "color": 6,
                             "icon": "apps/apps_datasplit.svg"
                         }
                     },
                     {
-                        "id"   : "ml_regression",
+                        "id"   : "ml_dataPrep",
                         "type" : "function",
                         "level": 1,
-                        "name" : "Regressor",
-                        "tag"  : "REGRESSION,MODEL,MACHINE LEARNING,ML",
-                        "path" : "visualpython - machine_learning - regression",
-                        "desc" : "Regression model for machine learning",
-                        "file" : "m_ml/Regression",
-                        "apps" : {
-                            "color": 5,
-                            "icon": "apps/apps_regression.svg"
-                        }
-                    },
-                    {
-                        "id"   : "ml_classification",
-                        "type" : "function",
-                        "level": 1,
-                        "name" : "Classifier",
-                        "tag"  : "CLASSIFICATION,MODEL,MACHINE LEARNING,ML",
-                        "path" : "visualpython - machine_learning - classification",
-                        "desc" : "Classification model for machine learning",
-                        "file" : "m_ml/Classification",
+                        "name" : "Data Prep",
+                        "tag"  : "DATA PREPARATION,MACHINE LEARNING,ML",
+                        "path" : "visualpython - machine_learning - data prep",
+                        "desc" : "Data preparation for machine learning",
+                        "file" : "m_ml/DataPrep",
                         "apps" : {
                             "color": 6,
-                            "icon": "apps/apps_classification.svg"
-                        }
-                    },
-                    {
-                        "id"   : "ml_clustering",
-                        "type" : "function",
-                        "level": 1,
-                        "name" : "Clustering",
-                        "tag"  : "CLUSTERING,MODEL,MACHINE LEARNING,ML",
-                        "path" : "visualpython - machine_learning - clustering",
-                        "desc" : "Clustering model for machine learning",
-                        "file" : "m_ml/Clustering",
-                        "apps" : {
-                            "color": 6,
-                            "icon": "apps/apps_clustering.svg"
-                        }
-                    },
-                    {
-                        "id"   : "ml_dimensionReduction",
-                        "type" : "function",
-                        "level": 1,
-                        "name" : "Dimension",
-                        "tag"  : "DIMENSION REDUCTION,MODEL,MACHINE LEARNING,ML",
-                        "path" : "visualpython - machine_learning - dimension_reduction",
-                        "desc" : "Dimension reduction model for machine learning",
-                        "file" : "m_ml/DimensionReduction",
-                        "apps" : {
-                            "color": 6,
-                            "icon": "apps/apps_dimension.svg"
+                            "icon": "apps/apps_dataprep.svg"
                         }
                     },
                     {
@@ -3268,6 +3188,90 @@
                         }
                     },
                     {
+                        "id"   : "ml_regression",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Regressor",
+                        "tag"  : "REGRESSION,MODEL,MACHINE LEARNING,ML",
+                        "path" : "visualpython - machine_learning - regression",
+                        "desc" : "Regression model for machine learning",
+                        "file" : "m_ml/Regression",
+                        "apps" : {
+                            "color": 7,
+                            "icon": "apps/apps_regression.svg"
+                        }
+                    },
+                    {
+                        "id"   : "ml_classification",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Classifier",
+                        "tag"  : "CLASSIFICATION,MODEL,MACHINE LEARNING,ML",
+                        "path" : "visualpython - machine_learning - classification",
+                        "desc" : "Classification model for machine learning",
+                        "file" : "m_ml/Classification",
+                        "apps" : {
+                            "color": 7,
+                            "icon": "apps/apps_classification.svg"
+                        }
+                    },
+                    {
+                        "id"   : "ml_clustering",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Clustering",
+                        "tag"  : "CLUSTERING,MODEL,MACHINE LEARNING,ML",
+                        "path" : "visualpython - machine_learning - clustering",
+                        "desc" : "Clustering model for machine learning",
+                        "file" : "m_ml/Clustering",
+                        "apps" : {
+                            "color": 7,
+                            "icon": "apps/apps_clustering.svg"
+                        }
+                    },
+                    {
+                        "id"   : "ml_dimensionReduction",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Dimension",
+                        "tag"  : "DIMENSION REDUCTION,MODEL,MACHINE LEARNING,ML",
+                        "path" : "visualpython - machine_learning - dimension_reduction",
+                        "desc" : "Dimension reduction model for machine learning",
+                        "file" : "m_ml/DimensionReduction",
+                        "apps" : {
+                            "color": 7,
+                            "icon": "apps/apps_dimension.svg"
+                        }
+                    },
+                    {
+                        "id"   : "ml_fitPredict",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Fit/Predict",
+                        "tag"  : "FIT,PREDICT,MACHINE LEARNING,ML",
+                        "path" : "visualpython - machine_learning - fit_predict",
+                        "desc" : "Model fit/predict for machine learning",
+                        "file" : "m_ml/FitPredict",
+                        "apps" : {
+                            "color": 8,
+                            "icon": "apps/apps_fit.svg"
+                        }
+                    },
+                    {
+                        "id"   : "ml_modelInfo",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Model Info",
+                        "tag"  : "MODEL INFO,INFORMATION,MACHINE LEARNING,ML",
+                        "path" : "visualpython - machine_learning - model_info",
+                        "desc" : "Model information for machine learning",
+                        "file" : "m_ml/ModelInfo",
+                        "apps" : {
+                            "color": 8,
+                            "icon": "apps/apps_predict.svg"
+                        }
+                    },
+                    {
                         "id"   : "ml_evaluation",
                         "type" : "function",
                         "level": 1,
@@ -3277,7 +3281,7 @@
                         "desc" : "Performance evaluation for machine learning",
                         "file" : "m_ml/evaluation",
                         "apps" : {
-                            "color": 7,
+                            "color": 8,
                             "icon": "apps/apps_evaluate.svg"
                         }
                     }

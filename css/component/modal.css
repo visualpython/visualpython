@@ -33,7 +33,7 @@
 	overflow: hidden;
 }
 #vp_multiButtonModal .vp-multi-button-modal-message span {
-	color: var(--font-hightlight);
+	color: var(--font-highlight);
 }
 #vp_multiButtonModal .vp-multi-button-modal-message-inner {
 	display: flex;

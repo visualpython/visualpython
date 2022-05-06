@@ -31,7 +31,7 @@
     padding-top: 10px;
 }
 .fnp-sidebar-menu.selected {
-    color: var(--font-hightlight)
+    color: var(--font-highlight)
 }
 .fnp-sidebar-menu {
     padding: 5px 0px 5px 15px;

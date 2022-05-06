@@ -63,14 +63,39 @@
 }
 .vp-popup-frame.vp-focused .vp-popup-title {
     font-family: 'AppleSDGothicNeo';
-    color: var(--font-hightlight);
+    color: var(--font-highlight);
+}
+.vp-popup-maximize {
+    position: absolute;
+    width: 15px;
+    height: 20px;
+    top: 4px;
+    right: 32px;
+    z-index: 3;
+    line-height: 20px;
+    text-align: center;
+    cursor: pointer;
+    color: var(--gray-color);
+}
+.vp-popup-return {
+    position: absolute;
+    width: 15px;
+    height: 20px;
+    top: 4px;
+    right: 32px;
+    z-index: 3;
+    line-height: 20px;
+    text-align: center;
+    cursor: pointer;
+    color: var(--gray-color);
+    display: none;
 }
 .vp-popup-toggle {
     position: absolute;
     width: 15px;
     height: 20px;
     top: 4px;
-    right: 32px;
+    right: 58px;
     z-index: 3;
     line-height: 20px;
     text-align: center;
@@ -93,6 +118,10 @@
     height: calc(100% - 80px);
     padding: 15px;
     overflow: auto;
+}
+.vp-popup-content {
+    min-height: calc(100% - 30px);
+    height: 100%;
 }
 .vp-popup-footer {
     position: relative;
@@ -169,7 +198,7 @@
     color: var(--font-primary);
 }
 .vp-popup-detail-button:hover {
-    color: var(--font-hightlight);
+    color: var(--font-highlight);
     background: var(--light-gray-color);
 }
 .vp-popup-save-button {
@@ -233,7 +262,7 @@
 	width: 15px;
 	height: 15px;
 	text-align: center;
-	background: url(../img/checkbox_unchecked.svg);
+	background: url(../../img/checkbox_unchecked.svg);
 	background-size: 15px 15px;
 	background-repeat: no-repeat;
 	border: none;
@@ -247,7 +276,7 @@
 	top: 0;
 	width: 15px;
 	height: 15px;
-	background: url(../img/checkbox_checked.svg);
+	background: url(../../img/checkbox_checked.svg);
 	background-size: 14px 14px;
 	background-repeat: no-repeat;
 	border: none;
@@ -261,7 +290,7 @@
 	top: 0;
 	width: 15px;
 	height: 15px;
-	background: url(../img/checkbox_unchecked.svg);
+	background: url(../../img/checkbox_unchecked.svg);
 	background-size: 14px 14px;
 	background-repeat: no-repeat;
 	border: none;
@@ -295,7 +324,7 @@
 	font-size: 14px;
 	line-height: 16px;
 	padding: 5px 16px 3px 9px;
-	background: url(../img/unfold_more.svg), var(--light-gray-color);
+	background: url(../../img/unfold_more.svg), var(--light-gray-color);
 	background-position: 97% 50%;
 	background-size: 11px 11px;
 	background-repeat: no-repeat;
@@ -460,7 +489,7 @@
     margin-bottom: 5px;
 }
 .vp-popup-body-top-bar-item:hover {
-    color: var(--font-hightlight);
+    color: var(--font-highlight);
 }
 .vp-popup-body-top-bar-item img {
     -moz-box-sizing: border-box;
@@ -471,26 +500,26 @@
     margin-bottom: 5px;
 }
 .vp-popup-body-top-bar-item[data-type="install"] img {
-    background: url(../../visualpython/img/import.svg) no-repeat;
+    background: url(../../img/import.svg) no-repeat;
 }  
 .vp-popup-body-top-bar-item[data-type="install"]:hover img {
-    background: url(../../visualpython/img/import_activated.svg) no-repeat;
+    background: url(../../img/import_activated.svg) no-repeat;
 }   
 .vp-popup-body-top-bar-item[data-type="import"] {
     margin-left: 10px;
 }
 .vp-popup-body-top-bar-item[data-type="import"] img {
-    background: url(../../visualpython/img/import.svg) no-repeat;
+    background: url(../../img/import.svg) no-repeat;
 }  
 .vp-popup-body-top-bar-item[data-type="import"]:hover img {
-    background: url(../../visualpython/img/import_activated.svg) no-repeat;
+    background: url(../../img/import_activated.svg) no-repeat;
 }   
 .vp-popup-body-top-bar-item[data-type="package"] {
     margin-left: 10px;
 }
 .vp-popup-body-top-bar-item[data-type="package"] img {
-    background: url(../../visualpython/img/setting.svg) no-repeat;
+    background: url(../../img/setting.svg) no-repeat;
 }
 .vp-popup-body-top-bar-item[data-type="package"]:hover img {
-    background: url(../../visualpython/img/setting_activated.svg) no-repeat;
+    background: url(../../img/setting_activated.svg) no-repeat;
 }

@@ -13,8 +13,8 @@
 // [CLASS] FileNavigation
 //============================================================================
 define([
-    'text!vp_base/html/fileNavigation.html!strip',
-    'css!vp_base/css/fileNavigation.css',
+    'text!vp_base/html/component/fileNavigation.html!strip',
+    'css!vp_base/css/component/fileNavigation.css',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
     'vp_base/js/com/component/Component'
@@ -75,7 +75,7 @@ define([
                 extensions: [],     // extensions list ex) png, jpg, gif
                 multiSelect: false, // multi selection
                 showAll: false,     // show other extension files also
-                finsh: null,        // callback after selection
+                finish: null,        // callback after selection
                 ...this.state
             };
             
@@ -380,7 +380,7 @@ define([
                 if (filePath == '') {
                     filePath = './' + fileName;
                 }
-                that.setSelectedFile(fileName, filePath);
+                that.handleSelectFile(filePath, fileName);
             });
             // bind save cancel event
             $(this.wrapSelector('.vp-filenavi-btn')).on('click', function() {

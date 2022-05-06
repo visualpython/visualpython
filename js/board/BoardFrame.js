@@ -724,9 +724,6 @@ define([
             this.clearBoard();
         }
         clearBoard() {
-            // TODO: alert before clearing
-            let that = this;
-
             // clear board
             this.blockList.forEach(block => {
                 block.popup.remove();
