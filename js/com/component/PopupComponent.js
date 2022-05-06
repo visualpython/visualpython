@@ -13,8 +13,8 @@
 // [CLASS] PopupComponent
 //============================================================================
 define([
-    'text!vp_base/html/popupComponent.html!strip',
-    'css!vp_base/css/popupComponent.css',
+    'text!vp_base/html/component/popupComponent.html!strip',
+    'css!vp_base/css/component/popupComponent.css',
     '../com_util',
     '../com_Const',
     '../com_String',
