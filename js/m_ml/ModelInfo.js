@@ -546,7 +546,7 @@ define([
                             name: 'roc_curve',
                             label: 'ROC Curve',
                             import: 'from sklearn import metrics',
-                            code: "fpr, tpr, thresholds = metrics.roc_curve(${roc_targetData}, ${model}.decision_function(${roc_featureData}))\n\
+                            code: "fpr, tpr, thresholds = metrics.roc_curve(${roc_targetData}, ${model}.predict_proba(${roc_featureData}))\n\
 plt.plot(fpr, tpr, label='ROC Curve')\n\
 plt.xlabel('Sensitivity')\n\
 plt.ylabel('Specificity')\n\
@@ -561,7 +561,7 @@ plt.show()",
                             name: 'auc',
                             label: 'AUC',
                             import: 'from sklearn import metrics',
-                            code: 'metrics.roc_auc_score(${auc_targetData}, ${model}.decision_function(${auc_featureData}))',
+                            code: 'metrics.roc_auc_score(${auc_targetData}, ${model}.predict_proba(${auc_featureData}))',
                             description: '',
                             options: [
                                 { name: 'auc_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y_test' },
@@ -569,6 +569,28 @@ plt.show()",
                             ]
                         },
                         'permutation_importance': defaultInfos['permutation_importance']
+                    }
+
+                    // use decision_function on ROC, AUC
+                    let decisionFunctionTypes = [
+                        'LogisticRegression', 'SVC', 'GradientBoostingClassifier'
+                    ];
+                    if (decisionFunctionTypes.includes(modelType)) {
+                        infos = {
+                            ...infos,
+                            'roc_curve': {
+                                ...infos['roc_curve'],
+                                code: "fpr, tpr, thresholds = metrics.roc_curve(${roc_targetData}, ${model}.decision_function(${roc_featureData}))\n\
+plt.plot(fpr, tpr, label='ROC Curve')\n\
+plt.xlabel('Sensitivity')\n\
+plt.ylabel('Specificity')\n\
+plt.show()"
+                            },
+                            'auc': {
+                                ...infos['auc'],
+                                code: 'metrics.roc_auc_score(${auc_targetData}, ${model}.decision_function(${auc_featureData}))',
+                            }
+                        }
                     }
                     break;
                 case 'Auto ML':
