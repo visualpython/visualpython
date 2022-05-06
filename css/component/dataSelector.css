@@ -1,4 +1,47 @@
 /* Code Preview */
+.vp-dataselector {
+    position: absolute;
+    top: calc(50% - 200px);
+    left: calc(50% - 200px);
+    width: 400px;
+    height: 400px;
+    background: white;
+    border: 1px solid var(--border-gray-color);
+    z-index: 999;
+    /* font */
+    font-family: AppleSDGothicNeo;
+    font-size: 14px;
+    color: var(--font-primary);
+}
+.vp-ds-variable-box {
+    border: 1px solid var(--border-gray-color);
+    height: 100px;
+    grid-row-gap: 0px;
+}
+.vp-ds-var-item {
+    height: 25px;
+    border-bottom: 1px solid var(--border-gray-color);
+}
+.vp-ds-var-item:hover {
+    background: var(--light-gray-color);
+    color: var(--font-hightlight);
+    cursor: pointer;
+}
+.vp-ds-var-item.selected {
+    background: var(--light-gray-color);
+    color: var(--font-hightlight);
+    font-weight: bold;
+}
+.vp-ds-var-data {
+    padding-left: 5px;
+}
+.vp-ds-var-type {
+    border-left: 1px solid var(--border-gray-color);
+    padding-left: 5px;
+}
+.vp-ds-option-box {
+
+}
 .vp-ds-preview {
     width: 100%;
     height: 35px;
