@@ -465,7 +465,7 @@ define([
      * FIXME: before release, change it to _MODE_TYPE.RELEASE
      */
     // Config.serverMode = _MODE_TYPE.DEVELOP;
-    Config.serverMode = _MODE_TYPE.RELEASE;
+    Config.serverMode = _MODE_TYPE.RELEASE; 
 
     /**
      * Version
