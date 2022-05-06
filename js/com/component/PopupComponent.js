@@ -633,13 +633,11 @@ define([
             switch(tagName) {
                 case 'INPUT':
                     let inputType = $(tag).prop('type');
-                    if (inputType == 'text' || inputType == 'number' || inputType == 'hidden') {
-                        newValue = $(tag).val();
-                        break;
-                    }
                     if (inputType == 'checkbox') {
                         newValue = $(tag).prop('checked');
-                        break;
+                    } else {
+                        // inputType == 'text' || inputType == 'number' || inputType == 'hidden' || inputType == 'color' || inputType == 'range'
+                        newValue = $(tag).val();
                     }
                     break;
                 case 'TEXTAREA':

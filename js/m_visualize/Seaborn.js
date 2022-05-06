@@ -50,7 +50,9 @@ define([
                 y_label: '',
                 legendPos: '',
                 // style options
+                color: '',
                 useGrid: '',
+                gridColor: '',
                 markerStyle: '',
                 // setting options
                 x_limit_from: '',
@@ -207,12 +209,6 @@ define([
                 }
                 evt.stopPropagation();
             });
-            
-            // set preview size
-            $(this.wrapSelector('#previewSize')).on('change', function() {
-                that.loadPreview();
-            });
-            
         }
 
         templateForBody() {
@@ -522,7 +518,7 @@ define([
             let { 
                 chartType, data, userOption='',
                 title, x_label, y_label, legendPos,
-                useGrid, markerStyle,
+                color, useGrid, gridColor, markerStyle,
                 x_limit_from, x_limit_to, y_limit_from, y_limit_to,
                 useSampling, sampleCount 
             } = this.state;
@@ -535,6 +531,9 @@ define([
             let chartCode = new com_String();
 
             let etcOptionCode = []
+            if (color != '') {
+                etcOptionCode.push(com_util.formatString("color='{0}'", color));
+            }
             if (markerStyle != '') {
                 // TODO: marker to seaborn argument (ex. marker='+' / markers={'Lunch':'s', 'Dinner':'X'})
                 etcOptionCode.push(com_util.formatString("marker='{0}'", markerStyle));
@@ -573,10 +572,17 @@ define([
             if (legendPos != '') {
                 chartCode.appendFormatLine("plt.legend(loc='{0}')", legendPos);
             }
+            // Style - Grid
+            // plt.grid(True, axis='x', color='red', alpha=0.5, linestyle='--')
+            let gridCodeList = [];
             if (useGrid != '') {
-                chartCode.appendFormatLine("plt.grid({0})", useGrid);
-                // TODO: grid types
-                // plt.grid(True, axis='x', color='red', alpha=0.5, linestyle='--')
+                gridCodeList.push(useGrid);
+            }
+            if (gridColor != '') {
+                gridCodeList.push(com_util.formatString("color='{0}'", gridColor));
+            }
+            if (gridCodeList.length > 0) {
+                chartCode.appendFormatLine("plt.grid({0})", gridCodeList.join(', '));
             }
             chartCode.append('plt.show()');
 
@@ -591,10 +597,9 @@ define([
                 code.appendFormatLine("{0}warnings.simplefilter('ignore')", indent);
 
                 // set figure size for preview chart
-                let defaultWidth = 5;
-                let defaultHeight = 4;
-                let previewSize = parseInt($(this.wrapSelector('#previewSize')).val());
-                code.appendFormatLine('{0}plt.figure(figsize=({1}, {2}))', indent, defaultWidth + previewSize, defaultHeight + previewSize);
+                let defaultWidth = 8;
+                let defaultHeight = 6;
+                code.appendFormatLine('{0}plt.figure(figsize=({1}, {2}))', indent, defaultWidth, defaultHeight);
                 if (useSampling) {
                     // data sampling code for preview
                     convertedData = data + '.sample(n=' + sampleCount + ', random_state=0)';
