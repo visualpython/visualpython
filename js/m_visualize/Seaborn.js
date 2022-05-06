@@ -50,7 +50,7 @@ define([
                 y_label: '',
                 legendPos: '',
                 // style options
-                useGrid: 'False',
+                useGrid: '',
                 markerStyle: '',
                 // setting options
                 x_limit_from: '',
