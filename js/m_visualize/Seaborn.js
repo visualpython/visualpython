@@ -492,6 +492,7 @@ define([
                 var fontSize = $(this.wrapSelector('#fontSize')).val();
         
                 code.appendLine('import matplotlib.pyplot as plt');
+                code.appendLine('%matplotlib inline');
                 code.appendLine('import seaborn as sns');
                 code.appendFormatLine("plt.rc('figure', figsize=({0}, {1}))", figWidth, figHeight);
                 if (styleName && styleName.length > 0) {
