@@ -50,6 +50,7 @@ define([
                 y_label: '',
                 legendPos: '',
                 // style options
+                useColor: false,
                 color: '',
                 useGrid: '',
                 gridColor: '',
@@ -194,6 +195,11 @@ define([
                     varSelectorHue.setValue(that.state.hue);
                     $(that.wrapSelector('#hue')).replaceWith(varSelectorHue.toTagString());
                 }
+            });
+
+            // use color or not
+            $(this.wrapSelector('#useColor')).on('change', function() {
+                $(that.wrapSelector('#color')).prop('disabled', $(this).prop('checked') == false);
             });
 
             // preview refresh
@@ -517,7 +523,7 @@ define([
             let { 
                 chartType, data, userOption='',
                 title, x_label, y_label, legendPos,
-                color, useGrid, gridColor, markerStyle,
+                useColor, color, useGrid, gridColor, markerStyle,
                 x_limit_from, x_limit_to, y_limit_from, y_limit_to,
                 useSampling, sampleCount 
             } = this.state;
@@ -530,7 +536,7 @@ define([
             let chartCode = new com_String();
 
             let etcOptionCode = []
-            if (color != '') {
+            if (useColor == true && color != '') {
                 etcOptionCode.push(com_util.formatString("color='{0}'", color));
             }
             if (markerStyle != '') {
@@ -577,7 +583,7 @@ define([
             if (useGrid != '') {
                 gridCodeList.push(useGrid);
             }
-            if (gridColor != '') {
+            if (useGrid == 'True' && gridColor != '') {
                 gridCodeList.push(com_util.formatString("color='{0}'", gridColor));
             }
             if (gridCodeList.length > 0) {

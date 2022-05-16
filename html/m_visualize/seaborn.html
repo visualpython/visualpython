@@ -36,7 +36,8 @@
             </div>
         </div>
     </div> -->
-    <div class="vp-chart-body" style="margin-top:10px;">
+    <!-- <div class="vp-chart-body" style="margin-top:10px;"> -->
+    <div class="vp-chart-body" >
         <div class="vp-chart-left-box">
             <div class="vp-tab-bar figure" data-level="figure">
                 <div class="vp-tab-item vp-focus" data-type="1">Plot</div>
@@ -119,7 +120,10 @@
                                 <div class="vp-tab-page vp-grid-box" data-type="style" style="display: none;">
                                     <!-- STYLE: grid / marker / color -->
                                     <label for="color" class="vp-bold">Color</label>
-                                    <input type="color" id="color" class="vp-state"/>
+                                    <div>
+                                        <label><input type="checkbox" id="useColor" class="vp-state"/><span></span></label>
+                                        <input type="color" id="color" class="vp-state" disabled/>
+                                    </div>
                                     <label for="useGrid" class="vp-bold">Grid</label>
                                     <div>
                                         <select id="useGrid" class="vp-select vp-state">
