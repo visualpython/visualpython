@@ -43,6 +43,7 @@ define([
     }
 
     const _VP_BOOL_OPTIONS = [
+        { label: 'Select option...', value: ''},
         { label: 'True', value: 'True' },
         { label: 'False', value: 'False' }
     ]
@@ -265,7 +266,8 @@ define([
                         // 'id':opt,
                         'index':obj.index,
                         'name':obj.name,
-                        'value':(obj.default==opt.value?'':opt.value)
+                        // 'value':(obj.default==opt.value?'':opt.value)
+                        'value':opt.value
                     });
                     // cell metadata test
                     if (value != undefined) {
@@ -277,11 +279,11 @@ define([
                         }
                     } else {
                         // set default value
-                        if (value == opt.default) {
-                            $(option).attr({
-                                'selected':'selected'
-                            });
-                        }
+                        // if (value == opt.default) {
+                        //     $(option).attr({
+                        //         'selected':'selected'
+                        //     });
+                        // }
                     }
                     optSlct.append(option);
                 });
