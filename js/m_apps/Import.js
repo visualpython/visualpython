@@ -246,7 +246,7 @@ define([
                 }
 
                 // Need additional code?
-                if (pacI0 == 'matplotlib.pyplot' || pacIO == 'matplotlib') {
+                if (pacI0 == 'matplotlib.pyplot' || pacI0 == 'matplotlib') {
                     sbCode.appendLine();
                     sbCode.append('%matplotlib inline');
                 }
