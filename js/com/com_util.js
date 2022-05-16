@@ -140,7 +140,7 @@ define([
      */
     var removeHeadScript = function(scriptName) {
         for (let i = 0; i < document.querySelector('head').children.length; i++){
-            if (document.querySelector('head').children[i].outerHTML.includes(scriptName)) { 
+            if (document.querySelector('head') && document.querySelector('head').children[i].outerHTML.includes(scriptName)) { 
                 document.querySelector('head').removeChild(document.querySelector('head').children[i]);
             }
         }   
