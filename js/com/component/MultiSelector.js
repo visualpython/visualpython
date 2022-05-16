@@ -199,6 +199,7 @@ define([
             //                         , APP_SELECT_SEARCH, 'Search Column');
             var vpSearchSuggest = new SuggestInput();
             vpSearchSuggest.addClass(APP_SELECT_SEARCH);
+            vpSearchSuggest.addClass('vp-input');
             vpSearchSuggest.setPlaceholder('Search ' + this.mode);
             vpSearchSuggest.setSuggestList(function() { return that.dataList; });
             vpSearchSuggest.setSelectEvent(function(value) {
@@ -234,7 +235,7 @@ define([
 
         renderSelectionBox(dataList) {
             var tag = new com_String();
-            tag.appendFormatLine('<div class="{0} {1} {2} {3}">', APP_SELECT_BOX, 'left', APP_DROPPABLE, 'no-selection');
+            tag.appendFormatLine('<div class="{0} {1} {2} {3}">', APP_SELECT_BOX, 'left', APP_DROPPABLE, 'no-selection vp-scrollbar');
             // get data and make draggable items
             dataList && dataList.forEach((data, idx) => {
                 // for column : data.array parsing
@@ -254,7 +255,7 @@ define([
 
         renderSelectedBox(dataList) {
             var tag = new com_String();
-            tag.appendFormatLine('<div class="{0} {1} {2} {3}">', APP_SELECT_BOX, 'right', APP_DROPPABLE, 'no-selection');
+            tag.appendFormatLine('<div class="{0} {1} {2} {3}">', APP_SELECT_BOX, 'right', APP_DROPPABLE, 'no-selection vp-scrollbar');
             // get data and make draggable items
             dataList && dataList.forEach((data, idx) => {
                 // for column : data.array parsing
