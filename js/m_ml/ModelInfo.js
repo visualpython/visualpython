@@ -390,6 +390,24 @@ define([
                         { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true },
                         { name: 'importance_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'importances' }
                     ]
+                },
+                'plot_feature_importances': {
+                    name: 'plot_feature_importances',
+                    label: 'Plot feature importances',
+                    import: '',
+                    code: "def plot_feature_importances(model):\n\
+    n_features = len(model.feature_importances_)\n\
+    feature_names = [ 'X{}'.format(i) for i in range(n_features) ]\n\
+    plt.barh(np.arange(n_features), model.feature_importances_, align='center')\n\
+    plt.yticks(np.arange(n_features), feature_names)\n\
+    plt.xlabel('Feature importance')\n\
+    plt.ylabel('Features')\n\
+    plt.ylim(-1, n_features)\n\n\
+plot_feature_importances(${model})",
+                    description: '',
+                    options: [
+
+                    ]
                 }
             }
             switch (category) {
@@ -496,6 +514,7 @@ define([
                             ]
                         },
                         'permutation_importance': defaultInfos['permutation_importance'],
+                        'plot_feature_importances': defaultInfos['plot_feature_importances'],
                         'Coefficient': {
                             name: 'coef_',
                             label: 'Coefficient',
@@ -568,7 +587,8 @@ plt.show()",
                                 { name: 'auc_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_test' }
                             ]
                         },
-                        'permutation_importance': defaultInfos['permutation_importance']
+                        'permutation_importance': defaultInfos['permutation_importance'],
+                        'plot_feature_importances': defaultInfos['plot_feature_importances']
                     }
 
                     // use decision_function on ROC, AUC
