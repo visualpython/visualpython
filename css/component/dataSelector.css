@@ -1,10 +1,11 @@
 /* Code Preview */
 .vp-dataselector {
+    display: none;
     position: absolute;
-    top: calc(50% - 200px);
+    top: calc(50% - 225px);
     left: calc(50% - 200px);
     width: 400px;
-    height: 400px;
+    height: 450px;
     background: white;
     border: 1px solid var(--border-gray-color);
     z-index: 999;
@@ -40,7 +41,11 @@
     padding-left: 5px;
 }
 .vp-ds-option-box {
-
+    height: calc(100% - 140px);
+    margin-top: 10px;
+}
+.vp-ds-option-inner-box {
+    height: calc(100% - 30px);
 }
 .vp-ds-preview {
     width: 100%;

@@ -54,8 +54,6 @@ define([
 
         render() {
             super.render();
-
-
         }
 
         generateCode() {
