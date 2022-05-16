@@ -129,6 +129,12 @@
         $(document).on('blur', '#vp_fileNavigation input', function() {
             com_interface.enableOtherShortcut();
         });
+        $(document).on('focus', '.vp-dataselector input', function() {
+            com_interface.disableOtherShortcut();
+        });
+        $(document).on('blur', '.vp-dataselector input', function() {
+            com_interface.enableOtherShortcut();
+        });
         // textarea - hotkey control
         $(document).on('focus', com_util.wrapSelector('.vp-popup-frame textarea'), function() {
             com_interface.disableOtherShortcut();
