@@ -154,34 +154,34 @@ define([
                     label: 'Encoding'
                 },
                 {
-                    name:'names',
-                    type:'list',
-                    label: 'Columns'
-                },
-                {
-                    name:'usecols',
-                    type: 'list',
-                    label: 'Column List To Use'
-                },
-                {
-                    name:'index_col',
-                    type:'var',
-                    label: 'Column To Use As Index'
-                },
-                {
-                    name:'na_values',
-                    type:'list',
-                    label: 'Na Values'
-                },
-                {
-                    name:'header',
-                    type:'int',
+                    name: 'header',
+                    type: 'int',
                     label: 'Header'
                 },
                 {
                     name: 'sep',
                     type: 'text',
                     label: 'Seperator'
+                },
+                {
+                    name: 'names',
+                    type: 'list',
+                    label: 'Columns'
+                },
+                {
+                    name: 'usecols',
+                    type: 'list',
+                    label: 'Column List To Use'
+                },
+                {
+                    name: 'index_col',
+                    type: 'var',
+                    label: 'Column To Use As Index'
+                },
+                {
+                    name: 'na_values',
+                    type: 'list',
+                    label: 'Na Values'
                 },
                 {
                     name: 'skiprows',
@@ -220,6 +220,11 @@ define([
             ],
             variable: [
                 {
+                    name: 'encoding',
+                    type: 'text',
+                    label: 'Encoding'
+                },
+                {
                     name: 'header',
                     type: ['bool', 'list'],
                     label: 'Header',
@@ -229,7 +234,7 @@ define([
                 {
                     name: 'index',
                     type: 'bool',
-                    label: 'Show Index',
+                    label: 'Index',
                     default: 'True',
                     component: 'bool_checkbox'
                 },
