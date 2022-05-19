@@ -1,0 +1,269 @@
+/*
+ *    Project Name    : Visual Python
+ *    Description     : GUI-based Python code generator
+ *    File Name       : WordCloud.js
+ *    Author          : Black Logic
+ *    Note            : Visualization > WordCloud
+ *    License         : GNU GPLv3 with Visual Python special exception
+ *    Date            : 2022. 05. 16
+ *    Change Date     :
+ */
+
+//============================================================================
+// [CLASS] WordCloud
+//============================================================================
+define([
+    'text!vp_base/html/m_visualize/wordCloud.html!strip',
+    'css!vp_base/css/m_visualize/wordCloud.css',
+    'vp_base/js/com/com_String',
+    'vp_base/js/com/com_util',
+    'vp_base/js/com/component/PopupComponent',
+    'vp_base/js/com/component/SuggestInput',
+    'vp_base/js/com/component/FileNavigation',
+    'vp_base/js/com/component/DataSelector'
+], function(wcHTML, wcCss, com_String, com_util, PopupComponent, SuggestInput, FileNavigation, DataSelector) {
+
+    class WordCloud extends PopupComponent {
+        _init() {
+            super._init();
+
+            this.config.size = { width: 1064, height: 550 };
+            this.config.installButton = true;
+            this.config.importButton = true;
+            this.config.dataview = false;
+
+            this.state = {
+                data: '',
+                useFile: false,
+                encoding: '',
+                wordCount: 200,
+                stopWords: '',
+                fontPath: '',
+                userOption: '', 
+                figWidth: '8',
+                figHeight: '20',
+                autoRefresh: true,
+                ...this.state
+            }
+        }
+
+        _bindEvent() {
+            super._bindEvent();
+
+            let that = this;
+            // open file event for data
+            $(this.wrapSelector('#vp_wcOpenFile')).on('click', function() {
+                let fileNavi = new FileNavigation({
+                    type: 'open',
+                    extensions: [ 'txt' ],
+                    finish: function(filesPath, status, error) {
+                        let {file, path} = filesPath[0];
+                        that.state.data = path;
+                        that.state.useFile = true;
+
+                        // set text
+                        $(that.wrapSelector('#data')).val(path);
+                        $(that.wrapSelector('#useFile')).prop('checked', true);
+                        $(that.wrapSelector('#data')).trigger('change');
+                        $(that.wrapSelector('#useFile')).trigger('change');
+                    }
+                });
+                fileNavi.open();
+            });
+
+            // use file
+            $(this.wrapSelector('#useFile')).on('change', function() {
+                let checked = $(this).prop('checked');
+                if (checked) {
+                    $(that.wrapSelector('.vp-wc-file-option')).show();
+                } else {
+                    $(that.wrapSelector('.vp-wc-file-option')).hide();
+                }
+            })
+
+            // change tab
+            $(this.wrapSelector('.vp-tab-item')).on('click', function() {
+                let type = $(this).data('type'); // data / wordcloud / plot
+
+                $(that.wrapSelector('.vp-tab-bar .vp-tab-item')).removeClass('vp-focus');
+                $(this).addClass('vp-focus');
+
+                $(that.wrapSelector('.vp-tab-page-box > .vp-tab-page')).hide();
+                $(that.wrapSelector(com_util.formatString('.vp-tab-page[data-type="{0}"]', type))).show();
+            });
+
+            // load preview
+            $(document).off('change', this.wrapSelector('.vp-state'));
+            $(document).on('change', this.wrapSelector('.vp-state'), function(evt) {
+                that._saveSingleState($(this)[0]);
+                if (that.state.autoRefresh) {
+                    that.loadPreview();
+                }
+                evt.stopPropagation();
+            });
+
+        }
+
+        templateForBody() {
+            let page = $(wcHTML);
+
+            if (this.state.useFile == true) {
+                $(page).find('.vp-wc-file-option').show();
+            } else {
+                $(page).find('.vp-wc-file-option').hide();
+            }
+
+            return page;
+        }
+
+        render() {
+            super.render();
+
+            let that = this;
+
+            // TODO: bind dataSelector to #data
+    
+            // System font suggestinput
+            var fontFamilyTag = $(this.wrapSelector('#fontPath'));
+            // search system font list
+            var code = new com_String();
+            // FIXME: convert it to kernelApi
+            code.appendLine('import json'); 
+            code.appendLine("import matplotlib.font_manager as fm");
+            code.appendLine("_ttflist = fm.fontManager.ttflist");
+            code.append("print(json.dumps([{'label': f.name, 'value': f.fname } for f in _ttflist]))");
+            vpKernel.execute(code.toString()).then(function(resultObj) {
+                let { result } = resultObj;
+                // get available font list
+                var varList = JSON.parse(result);
+                var suggestInput = new SuggestInput();
+                suggestInput.setComponentID('fontPath');
+                suggestInput.addClass('vp-input vp-state');
+                suggestInput.setSuggestList(function() { return varList; });
+                suggestInput.setPlaceholder('font path');
+                suggestInput.setValue(that.state.fontPath);
+                // suggestInput.setNormalFilter(false);
+                $(fontFamilyTag).replaceWith(function() {
+                    return suggestInput.toTagString();
+                });
+            });
+
+            // encoding suggest input
+            $(this.wrapSelector('#encoding')).replaceWith(function() {
+                // encoding list : utf8 cp949 ascii
+                var encodingList = ['utf8', 'cp949', 'ascii'];
+                var suggestInput = new SuggestInput();
+                suggestInput.setComponentID('encoding');
+                suggestInput.addClass('vp-input vp-state');
+                suggestInput.setSuggestList(function() { return encodingList; });
+                suggestInput.setPlaceholder('encoding option');
+                return suggestInput.toTagString();
+            });
+        }
+
+        loadPreview() {
+            let that = this;
+            let code = this.generateCode(true);
+
+            // show variable information on clicking variable
+            vpKernel.execute(code).then(function(resultObj) {
+                let { result, type, msg } = resultObj;
+                var textResult = msg.content.data["text/plain"];
+                var htmlResult = msg.content.data["text/html"];
+                var imgResult = msg.content.data["image/png"];
+                
+                $(that.wrapSelector('#vp_wcPreview')).html('');
+                if (htmlResult != undefined) {
+                    // 1. HTML tag
+                    $(that.wrapSelector('#vp_wcPreview')).append(htmlResult);
+                } else if (imgResult != undefined) {
+                    // 2. Image data (base64)
+                    var imgTag = '<img src="data:image/png;base64, ' + imgResult + '">';
+                    $(that.wrapSelector('#vp_wcPreview')).append(imgTag);
+                } else if (textResult != undefined) {
+                    // 3. Text data
+                    var preTag = document.createElement('pre');
+                    $(preTag).text(textResult);
+                    $(that.wrapSelector('#vp_wcPreview')).html(preTag);
+                }
+            });
+        }
+
+        generateInstallCode() {
+            return ['!pip install wordcloud'];
+        }
+
+        generateImportCode() {
+            var code = new com_String();
+            code.appendLine('from wordcloud import WordCloud'); // need to be installed
+
+            code.appendLine('from collections import Counter');
+            code.appendLine('import matplotlib.pyplot as plt');
+            code.append('%matplotlib inline');
+            return [code.toString()];
+        }
+
+        generateCode(preview=false) {
+            let { 
+                data, useFile, encoding, wordCount, 
+                stopWords, fontPath, userOption, figWidth, figHeight 
+            } = this.state;
+            let code = new com_String();
+            
+            // preview option
+            if (preview) {
+                // Ignore warning
+                code.appendLine('import warnings');
+                code.appendLine('with warnings.catch_warnings():');
+                code.appendLine("    warnings.simplefilter('ignore')");
+            }
+
+            // counter for top limit
+            let dataVariable = data;
+            if (useFile) {
+                code.appendFormat("with open('{0}', 'rt'", data);
+                if (encoding && encoding != '') {
+                    code.appendFormat(", encoding='{0}'", encoding);
+                }
+                code.appendLine(") as fp:");
+                code.appendLine("    word_cloud_text = fp.read()");
+                code.appendLine();
+                dataVariable = 'word_cloud_text';
+            }
+            code.appendFormatLine("counts = Counter({0}.split())", dataVariable);
+            code.appendFormatLine("tags = counts.most_common({0})", wordCount);
+            code.appendLine();
+
+            // create wordcloud FIXME:
+            let options=[];
+            options.push("max_font_size=200");
+            options.push("background_color='white'");
+            options.push("width=1000, height=800");
+
+            if (stopWords && stopWords != '') {
+                options.push(com_util.formatString("stopwords=['{0}']", stopWords.split(',').join("','")));
+            }
+            if (fontPath && fontPath != '') {
+                options.push(com_util.formatString("font_path='{0}'", fontPath));
+            }
+            if (userOption && userOption != '') {
+                options.push(', ' + userOption);
+            }
+
+            code.appendFormatLine("wc = WordCloud({0})", options.join(', '));
+            code.appendLine("cloud = wc.generate_from_frequencies(dict(tags))");
+            code.appendLine();
+            
+            // use plot to show 
+            code.appendFormatLine("plt.figure(figsize=({0}, {1}))", figWidth, figHeight);
+            code.appendLine("plt.imshow(cloud)");
+            code.appendLine("plt.tight_layout(pad=0)");
+            code.appendLine("plt.axis('off')");
+            code.appendLine("plt.show()");
+    
+            return code.toString();
+        }
+    }
+
+    return WordCloud;
+});
