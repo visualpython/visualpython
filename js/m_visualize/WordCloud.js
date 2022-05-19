@@ -121,17 +121,26 @@ define([
 
             let that = this;
 
+            // Add style
+            $(this.wrapSelector('.vp-popup-body-top-bar')).css({
+                'position': 'absolute',
+                'left': 'calc(50% - 250px)'
+            });
+            $(this.wrapSelector('.vp-popup-codeview-box')).css({
+                'height': '200px'
+            });
+
             // TODO: bind dataSelector to #data
     
             // System font suggestinput
             var fontFamilyTag = $(this.wrapSelector('#fontPath'));
             // search system font list
-            var code = new com_String();
+            var code = new com_String(); 
             // FIXME: convert it to kernelApi
             code.appendLine('import json'); 
             code.appendLine("import matplotlib.font_manager as fm");
             code.appendLine("_ttflist = fm.fontManager.ttflist");
-            code.append("print(json.dumps([{'label': f.name, 'value': f.fname } for f in _ttflist]))");
+            code.append("print(json.dumps([{'label': f.name, 'value': f.fname.replace('\\\\', '/') } for f in _ttflist]))");
             vpKernel.execute(code.toString()).then(function(resultObj) {
                 let { result } = resultObj;
                 // get available font list
@@ -168,24 +177,41 @@ define([
             // show variable information on clicking variable
             vpKernel.execute(code).then(function(resultObj) {
                 let { result, type, msg } = resultObj;
-                var textResult = msg.content.data["text/plain"];
-                var htmlResult = msg.content.data["text/html"];
-                var imgResult = msg.content.data["image/png"];
-                
-                $(that.wrapSelector('#vp_wcPreview')).html('');
-                if (htmlResult != undefined) {
-                    // 1. HTML tag
-                    $(that.wrapSelector('#vp_wcPreview')).append(htmlResult);
-                } else if (imgResult != undefined) {
-                    // 2. Image data (base64)
-                    var imgTag = '<img src="data:image/png;base64, ' + imgResult + '">';
-                    $(that.wrapSelector('#vp_wcPreview')).append(imgTag);
-                } else if (textResult != undefined) {
-                    // 3. Text data
-                    var preTag = document.createElement('pre');
-                    $(preTag).text(textResult);
-                    $(that.wrapSelector('#vp_wcPreview')).html(preTag);
+                if (msg.content.data) {
+                    var textResult = msg.content.data["text/plain"];
+                    var htmlResult = msg.content.data["text/html"];
+                    var imgResult = msg.content.data["image/png"];
+                    
+                    $(that.wrapSelector('#vp_wcPreview')).html('');
+                    if (htmlResult != undefined) {
+                        // 1. HTML tag
+                        $(that.wrapSelector('#vp_wcPreview')).append(htmlResult);
+                    } else if (imgResult != undefined) {
+                        // 2. Image data (base64)
+                        var imgTag = '<img src="data:image/png;base64, ' + imgResult + '">';
+                        $(that.wrapSelector('#vp_wcPreview')).append(imgTag);
+                    } else if (textResult != undefined) {
+                        // 3. Text data
+                        var preTag = document.createElement('pre');
+                        $(preTag).text(textResult);
+                        $(that.wrapSelector('#vp_wcPreview')).html(preTag);
+                    }
+                } else {
+                    var errorContent = '';
+                    if (msg.content.ename) {
+                        errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
+                    }
+                    $(that.wrapSelector('#vp_wcPreview')).html(errorContent);
+                    vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
                 }
+            }).catch(function(resultObj) {
+                let { msg } = resultObj;
+                var errorContent = '';
+                if (msg.content.ename) {
+                    errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
+                }
+                $(that.wrapSelector('#vp_wcPreview')).html(errorContent);
+                vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
             });
         }
 

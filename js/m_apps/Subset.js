@@ -556,35 +556,21 @@ define([
                         that.renderDataPage('');
                     }
                 } else {
-                    var errorContent = new com_String();
+                    var errorContent = '';
                     if (msg.content.ename) {
-                        errorContent.appendFormatLine('<div class="{0}">', VP_DS_DATA_ERROR_BOX);
-                        errorContent.appendLine('<i class="fa fa-exclamation-triangle"></i>');
-                        errorContent.appendFormatLine('<label class="{0}">{1}</label>',
-                            VP_DS_DATA_ERROR_BOX_TITLE, msg.content.ename);
-                        if (msg.content.evalue) {
-                            // errorContent.appendLine('<br/>');
-                            errorContent.appendFormatLine('<pre>{0}</pre>', msg.content.evalue.split('\\n').join('<br/>'));
-                        }
-                        errorContent.appendLine('</div>');
+                        errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
                     }
                     that.renderDataPage(errorContent);
+                    vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
                 }
             }).catch(function(resultObj) {
                 let { msg } = resultObj;
-                var errorContent = new com_String();
+                var errorContent = '';
                 if (msg.content.ename) {
-                    errorContent.appendFormatLine('<div class="{0}">', VP_DS_DATA_ERROR_BOX);
-                    errorContent.appendLine('<i class="fa fa-exclamation-triangle"></i>');
-                    errorContent.appendFormatLine('<label class="{0}">{1}</label>',
-                        VP_DS_DATA_ERROR_BOX_TITLE, msg.content.ename);
-                    if (msg.content.evalue) {
-                        // errorContent.appendLine('<br/>');
-                        errorContent.appendFormatLine('<pre>{0}</pre>', msg.content.evalue.split('\\n').join('<br/>'));
-                    }
-                    errorContent.appendLine('</div>');
+                    errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
                 }
                 that.renderDataPage(errorContent);
+                vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
             });
         }
         /**
@@ -1769,8 +1755,6 @@ define([
     const VP_DS_DATA_VIEW_ALL_DIV = 'vp-ds-data-view-all-div';
     const VP_DS_DATA_VIEW_ALL = 'vp-ds-data-view-all';
     const VP_DS_DATA_VIEW_BOX = 'vp-ds-data-view-box';
-    const VP_DS_DATA_ERROR_BOX = 'vp-ds-data-error-box';
-    const VP_DS_DATA_ERROR_BOX_TITLE = 'vp-ds-data-error-box-title';
 
     return Subset;
 });

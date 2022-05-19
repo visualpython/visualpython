@@ -370,6 +370,11 @@ define([
             // set size
             $(this.wrapSelector('.vp-inner-popup-box')).css({ width: 400, height: 260});
 
+            // set code view size
+            $(this.wrapSelector('.vp-popup-codeview-box')).css({
+                'height': '200px'
+            });
+
             this.bindSettingBox();
         }
 
@@ -461,24 +466,41 @@ define([
             // show variable information on clicking variable
             vpKernel.execute(code).then(function(resultObj) {
                 let { result, type, msg } = resultObj;
-                var textResult = msg.content.data["text/plain"];
-                var htmlResult = msg.content.data["text/html"];
-                var imgResult = msg.content.data["image/png"];
-                
-                $(that.wrapSelector('#chartPreview')).html('');
-                if (htmlResult != undefined) {
-                    // 1. HTML tag
-                    $(that.wrapSelector('#chartPreview')).append(htmlResult);
-                } else if (imgResult != undefined) {
-                    // 2. Image data (base64)
-                    var imgTag = '<img src="data:image/png;base64, ' + imgResult + '">';
-                    $(that.wrapSelector('#chartPreview')).append(imgTag);
-                } else if (textResult != undefined) {
-                    // 3. Text data
-                    var preTag = document.createElement('pre');
-                    $(preTag).text(textResult);
-                    $(that.wrapSelector('#chartPreview')).html(preTag);
+                    if (msg.content.data) {
+                    var textResult = msg.content.data["text/plain"];
+                    var htmlResult = msg.content.data["text/html"];
+                    var imgResult = msg.content.data["image/png"];
+                    
+                    $(that.wrapSelector('#chartPreview')).html('');
+                    if (htmlResult != undefined) {
+                        // 1. HTML tag
+                        $(that.wrapSelector('#chartPreview')).append(htmlResult);
+                    } else if (imgResult != undefined) {
+                        // 2. Image data (base64)
+                        var imgTag = '<img src="data:image/png;base64, ' + imgResult + '">';
+                        $(that.wrapSelector('#chartPreview')).append(imgTag);
+                    } else if (textResult != undefined) {
+                        // 3. Text data
+                        var preTag = document.createElement('pre');
+                        $(preTag).text(textResult);
+                        $(that.wrapSelector('#chartPreview')).html(preTag);
+                    }
+                } else {
+                    var errorContent = '';
+                    if (msg.content.ename) {
+                        errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
+                    }
+                    $(that.wrapSelector('#chartPreview')).html(errorContent);
+                    vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
                 }
+            }).catch(function(resultObj) {
+                let { msg } = resultObj;
+                var errorContent = '';
+                if (msg.content.ename) {
+                    errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
+                }
+                $(that.wrapSelector('#chartPreview')).html(errorContent);
+                vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
             });
         }
 
@@ -593,18 +615,15 @@ define([
 
             let convertedData = data;
             if (preview) {
-                // set indent
-                indent = ' '.repeat(4);
-
                 // Ignore warning
                 code.appendLine('import warnings');
                 code.appendLine('with warnings.catch_warnings():');
-                code.appendFormatLine("{0}warnings.simplefilter('ignore')", indent);
+                code.appendLine("    warnings.simplefilter('ignore')");
 
                 // set figure size for preview chart
                 let defaultWidth = 8;
                 let defaultHeight = 6;
-                code.appendFormatLine('{0}plt.figure(figsize=({1}, {2}))', indent, defaultWidth, defaultHeight);
+                code.appendFormatLine('plt.figure(figsize=({0}, {1}))', defaultWidth, defaultHeight);
                 if (useSampling) {
                     // data sampling code for preview
                     convertedData = data + '.sample(n=' + sampleCount + ', random_state=0)';
@@ -612,8 +631,8 @@ define([
                     generatedCode = generatedCode.replaceAll(data, convertedData);
                 }   
 
-                code.appendFormatLine("{0}{1}", indent, generatedCode);
-                code.appendFormatLine("{0}{1}", indent, chartCode.toString().replaceAll('\n', '\n' + indent));
+                code.appendLine(generatedCode);
+                code.appendLine(chartCode.toString());
                 
             } else {
                 code.appendLine(generatedCode);

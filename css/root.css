@@ -493,3 +493,24 @@ hr.vp-extra-menu-line {
     color: var(--font-highlight);
     cursor: pointer;
 }
+/* Data error box */
+.vp-data-error-box {
+    margin: 7px;
+    padding: 10px;
+    background: #FFFFFF;
+    border: 0.25px solid #E4E4E4;
+    box-shadow: 1px 1px 2px rgb(0 0 0 / 10%);
+    border-radius: 2px;
+}
+.vp-data-error-box i.fa-exclamation-triangle {
+    color: #F37704;
+}
+.vp-data-error-box-title {
+    color: #F37704;
+    font-weight: bold;
+}
+.vp-data-error-box pre {
+    background: #eeeeee;
+    margin: 0px;
+    padding: 7px;
+}

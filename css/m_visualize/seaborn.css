@@ -1,6 +1,7 @@
 .vp-chart-setting {
     float: right;
     color: var(--gray-color);
+    padding-top: 5px;
     padding-right: 5px;
     cursor: pointer;
 }
@@ -60,9 +61,6 @@
     align-content: center;
     height: 100%;
 }
-.vp-chart-left-box {
-
-}
 .vp-chart-left-box > label {
     margin-bottom: 0px;
 }
@@ -81,6 +79,10 @@
     min-height: 352px;
     width: 100%;
     height: calc(100% - 30px);
+}
+.vp-chart-preview-content:empty::after {
+    content: 'No preview image';
+    color: var(--gray-color);
 }
 .vp-chart-preview-box img {
     width: 100%;
