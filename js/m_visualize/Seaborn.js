@@ -21,8 +21,8 @@ define([
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/SuggestInput',
     'vp_base/js/com/component/VarSelector2',
-    'vp_base/data/m_visualize/chartLibrary'
-], function(chartHTml, chartCss, com_String, com_generator, com_util, PopupComponent, SuggestInput, VarSelector2, CHART_LIBRARIES) {
+    'vp_base/data/m_visualize/seabornLibrary'
+], function(chartHTml, chartCss, com_String, com_generator, com_util, PopupComponent, SuggestInput, VarSelector2, SEABORN_LIBRARIES) {
 
     class Seaborn extends PopupComponent {
         _init() {
@@ -67,12 +67,12 @@ define([
                 ...this.state
             }
             
-            this.chartConfig = CHART_LIBRARIES;
+            this.chartConfig = SEABORN_LIBRARIES;
             this.chartTypeList = {
                 'Relational': [ 'scatterplot', 'lineplot' ],
                 'Distributions': [ 'histplot', 'kdeplot', 'rugplot' ], 
                 'Categorical': [ 'stripplot', 'swarmplot', 'boxplot', 'violinplot', 'pointplot', 'barplot' ],
-                // 'ETC': [ ]
+                'ETC': [ 'countplot' ]
             }
 
             this.legendPosList = [
