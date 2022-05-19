@@ -81,7 +81,7 @@
 /* Tab Page */
 .vp-ds-tab-page {
     width: 100%;
-    height: calc(100% - 150px);
+    height: calc(100% - 110px);
 }
 .vp-ds-tab-page.subset {
     display: grid;
