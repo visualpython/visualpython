@@ -152,9 +152,11 @@ define([
                         }
                         return true;
                     }
-                }).focus(function () {
+                }).focus(function() {
+                    $(this).val('');
                     $(com_util.formatString(".{0}", that.uuid)).autocomplete('search', $(com_util.formatString(".{0}", that.uuid)).val());
-                }).click(function () {
+                }).click(function() {
+                    $(this).val('');
                     $(com_util.formatString(".{0}", that.uuid)).autocomplete('search', $(com_util.formatString(".{0}", that.uuid)).val());
                 });
             });

@@ -182,10 +182,10 @@ define([
                     return true;
                 }
             }).focus(function () {
-                $(this).select();
+                $(this).val('');
                 $(this).autocomplete('search', $(this).val());
             }).click(function () {
-                $(this).select();
+                $(this).val('');
                 $(this).autocomplete('search', $(this).val());
             }).autocomplete('instance')._renderItem = function(ul, item) {
                 return $('<li>').attr('data-value', item.value)
