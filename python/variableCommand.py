@@ -68,4 +68,19 @@ def _vp_get_profiling_list():
         result.append({ 'varName': v['varName'], 'title': title })
 
     return result
-    
+
+import numpy as _vp_np
+import random as _vp_rd
+def _vp_sample(data, sample_cnt):
+    dataType = type(data).__name__
+    sample_cnt = len(data) if len(data) < sample_cnt else sample_cnt
+
+    if dataType == 'DataFrame':
+        return data.sample(sample_cnt)
+    elif dataType == 'Series':
+        return data.sample(sample_cnt)
+    elif dataType == 'ndarray':
+        return data[_vp_np.random.choice(data.shape[0], sample_cnt, replace=False)]
+    elif dataType == 'list':
+        return _vp_rd.choices(data, k=sample_cnt)
+    return data

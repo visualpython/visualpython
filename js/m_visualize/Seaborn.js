@@ -626,7 +626,8 @@ define([
                 code.appendFormatLine('plt.figure(figsize=({0}, {1}))', defaultWidth, defaultHeight);
                 if (useSampling) {
                     // data sampling code for preview
-                    convertedData = data + '.sample(n=' + sampleCount + ', random_state=0)';
+                    // convertedData = data + '.sample(n=' + sampleCount + ', random_state=0)';
+                    convertedData = com_util.formatString('_vp_sample({0}, {1})', data, sampleCount);
                     // replace pre-defined options
                     generatedCode = generatedCode.replaceAll(data, convertedData);
                 }   
