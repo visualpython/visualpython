@@ -6,7 +6,7 @@
     grid-row-gap: 5px;
     grid-column-gap: 15px;
     align-items: baseline;
-    align-content: center;
+    align-content: baseline;
     height: 100%;
 }
 .vp-wc-left-box label {
