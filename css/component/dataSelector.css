@@ -1,4 +1,27 @@
-/* Code Preview */
+/* DataSelector target*/
+.vp-ds-box {
+    display: inline-block;
+}
+.vp-ds-filter {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    right: 25px;
+    cursor: pointer;
+}
+.vp-ds-box input:disabled {
+    background: var(--light-gray-color) !important;
+    cursor: not-allowed;
+}
+.vp-ds-box input:disabled + .vp-ds-filter {
+    cursor: not-allowed;
+}
+.vp-ds-item:hover {
+    background: var(--light-gray-color);
+    color: var(--font-highlight);
+    cursor: pointer;
+}
+/* DataSelector popup */
 .vp-dataselector {
     display: none;
     position: absolute;
@@ -46,20 +69,4 @@
 }
 .vp-ds-option-inner-box {
     height: calc(100% - 30px);
-}
-.vp-ds-preview {
-    width: 100%;
-    height: 35px;
-    background-image: repeating-linear-gradient( to right, var(--grid-line-color) 0, var(--grid-line-color) 0.25px, transparent 1px, transparent 5px ), repeating-linear-gradient( to bottom, var(--grid-line-color) 0, var(--grid-line-color) 0.25px, transparent 1px, transparent 5px );
-    background-color: white;
-    border: 0.25px solid #E4E4E4;
-}
-.vp-ds-preview textarea {
-    display: none;
-}
-.vp-ds-preview .CodeMirror-code .cm-variable {
-    background-color: rgba(47, 133, 90, 0.2);
-}
-.vp-ds-preview .CodeMirror-code .cm-string {
-    background-color: rgba(246, 173, 85, 0.2);
 }

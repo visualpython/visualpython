@@ -19,54 +19,202 @@ define([
 ], function(dataHTML, dataCss, com_String, com_util, Component, SuggestInput, MultiSelector) {
     //========================================================================
     // [CLASS] DataSelector
+    // Usage:
+    // let dataSelector = new DataSelector({
+    //     type: 'data',
+    //     pageThis: this,
+    //     id: 'targetId',
+    //     finish: function() {
+    //         ;
+    //     }
+    // });
+    // $('#sample').replaceWith(dataSelector.toTagString());
     //========================================================================
     class DataSelector extends Component {
 
         /**
          * Constructor
-         * @param {Object} state  { type, ... }
+         * @param {Object} prop  { type, ... }
          */
-        constructor(state) {
-            super($('#site'), state);
+        constructor(prop) {
+            super($('#site'), {}, prop);
         }
 
         _init() {
             super._init();
 
-            this.state = {
+            this.prop = {
                 type: 'data',   // selector type : data / column
-                target: null,   // target jquery object
+                pageThis: null, // target's page object
+                id: '',         // target id
                 finish: null,   // callback after selection
+                select: null,   // callback after selection from suggestInput
+                allowDataType: [], // default allow data types (All)
+                // additional options
+                classes: '',
+                ...this.prop
+            }
+
+            this.state = {
                 data: '',
                 dataType: '',
+                slicingStart: '',
+                slicingEnd: '',
+                dictKey: '',
                 ...this.state
             }
 
-            this.columnSelector = null;
+            this._parentTag = null;
+            if (this.prop.pageThis) {
+                this._parentTag = $(this.prop.pageThis.wrapSelector());
+            }
+            this._target = null;
+            if (this.prop.pageThis) {
+                this._target = this.prop.pageThis.wrapSelector('#' + this.prop.id);
+            }
+
+            this._columnSelector = null;
+
+            this._varList = [];
+
+            this.loadVariables();
+            this.bindEvent();
+        }
+
+        /**
+         * Bind event for initializing DataSelector
+         */
+        bindEvent() {
+            let that = this;
+
+            // bind Event on focus/click box
+            $(document).on(com_util.formatString("focus.init-{0}", that.uuid), com_util.formatString(".vp-ds-box-{0}.{1}", that.uuid, 'vp-ds-uninit'), function () {
+                // unbind initial event
+                $(document).unbind(com_util.formatString(".init-{0}", that.uuid));
+                $(com_util.formatString(".vp-ds-box-{0}.{1}", that.uuid, 'vp-ds-uninit')).removeClass('vp-ds-uninit').addClass('vp-ds-init');
+
+                // bind autocomplete
+                that._bindAutocomplete(that._varList);
+
+                // bind Event for opening popup
+                $(that._parentTag).on('click', com_util.formatString('.vp-ds-box-{0} .vp-ds-filter', that.uuid), function(evt) {
+                    // check disabled
+                    if (!$(this).parent().find('input.vp-ds-target').is(':disabled')) {
+                        if (!$(that.wrapSelector()).length > 0) {
+                            // open popup box
+                            that.open();
+                        }
+                    }
+                    evt.stopPropagation();
+                });
+
+            });
+
+            // click filter -> open DataSelector popup
+            $(document).on(com_util.formatString("click.init-{0}", that.uuid), com_util.formatString(".vp-ds-box-{0}.{1}", that.uuid, 'vp-ds-uninit'), function () {
+                // unbind initial event
+                $(document).unbind(com_util.formatString(".init-{0}", that.uuid));
+                $(com_util.formatString(".vp-ds-box-{0}.{1}", that.uuid, 'vp-ds-uninit')).removeClass('vp-ds-uninit').addClass('vp-ds-init');
+
+                // bind autocomplete
+                that._bindAutocomplete(that._varList);
+
+                // bind Event for opening popup
+                $(that._parentTag).on('click', com_util.formatString('.vp-ds-box-{0} .vp-ds-filter', that.uuid), function(evt) {
+                    // check if it's disabled
+                    if (!$(this).parent().find('input.vp-ds-target').is(':disabled')) {
+                        if (!$(that.wrapSelector()).length > 0) {
+                            // open popup box
+                            that.open();
+                        }
+                    }
+                    evt.stopPropagation();
+                });
+
+                // do click event
+                // check if it's disabled
+                if (!$(this).find('input.vp-ds-target').is(':disabled')) {
+                    if (!$(that.wrapSelector()).length > 0) {
+                        // open popup box
+                        that.open();
+                    }
+                }
+            });
 
         }
 
-        _bindEvent() {
+        /**
+         * Bind autocomplete for target input tag
+         * @param {*} varList { label, value }
+         */
+        _bindAutocomplete(varList) {
+            let that = this;
+
+            $(com_util.formatString(".vp-ds-box-{0} input.vp-ds-target", that.uuid)).autocomplete({
+                autoFocus: true,
+                minLength: 0,
+                source: function (req, res) {
+                    var srcList = varList;
+                    var returlList = new Array();
+                    for (var idx = 0; idx < srcList.length; idx++) {
+                        // srcList as object array
+                        if (srcList[idx].label.toString().toLowerCase().includes(req.term.trim().toLowerCase())) {
+                            returlList.push(srcList[idx]);
+                        }
+                    }
+                    res(returlList);
+                },
+                select: function (evt, ui) {
+                    let result = true;
+                    // trigger change
+                    $(this).val(ui.item.value);
+                    $(this).trigger('change');
+
+                    // select event
+                    if (typeof that.prop.select == "function")
+                        result = that.prop.select(ui.item.value, ui.item);
+                    if (result != undefined) {
+                        return result;
+                    }
+                    return true;
+                },
+                search: function(evt, ui) {
+                    return true;
+                }
+            }).focus(function () {
+                $(this).select();
+                $(this).autocomplete('search', $(this).val());
+            }).click(function () {
+                $(this).select();
+                $(this).autocomplete('search', $(this).val());
+            }).autocomplete('instance')._renderItem = function(ul, item) {
+                return $('<li>').attr('data-value', item.value)
+                        .append(`<div class="vp-ds-item">${item.label}<label class="vp-gray-text vp-cursor">&nbsp;| ${item.dtype}</label></div>`)
+                        .appendTo(ul);
+            };
+        }
+
+        _bindEventForPopup() {
             let that = this;
 
             // Click X to close
-            $(that.wrapSelector('.vp-inner-popup-close')).on('click', function() {
+            $(this.wrapSelector('.vp-inner-popup-close')).on('click', function() {
                 that.close();
             });
 
             // Click cancel
-            $(that.wrapSelector('#vp_dsCancel')).on('click', function() {
+            $(this.wrapSelector('#vp_dsCancel')).on('click', function() {
                 that.close();
             });
 
             // Click ok
-            $(that.wrapSelector('#vp_dsOk')).on('click', function() {
-                // TODO: set target value
+            $(this.wrapSelector('#vp_dsOk')).on('click', function() {
+                // set target value
                 let newValue = that.generateCode();
 
-                $(that.state.target).val(newValue);
-                $(that.state.target).data('type', that.state.dataType);
-                that.state.finish(newValue);
+                $(that._target).val(newValue);
+                $(that._target).data('type', that.state.dataType);
+                that.prop.finish(newValue);
                 that.close();
             });
         }
@@ -101,9 +249,9 @@ define([
 
                 let newValue = that.generateCode();
 
-                $(that.state.target).val(newValue);
-                $(that.state.target).data('type', that.state.dataType);
-                that.state.finish(newValue);
+                $(that._target).val(newValue);
+                $(that._target).data('type', that.state.dataType);
+                that.prop.finish(newValue);
                 that.close();
             });
         }
@@ -119,18 +267,21 @@ define([
             
             vpKernel.getDataList(types).then(function(resultObj) {
                 var varList = JSON.parse(resultObj.result);
-
-                let varTags = new com_String();
-                varList && varList.forEach((varObj, idx) => {
-                    varTags.appendFormatLine('<div class="{0} {1}">', 'vp-ds-var-item', 'vp-grid-col-p50');
-                    varTags.appendFormatLine('<div class="{0}">{1}</div>', 'vp-ds-var-data', varObj.varName);
-                    varTags.appendFormatLine('<div class="{0}">{1}</div>', 'vp-ds-var-type', varObj.varType);
-                    varTags.appendLine('</div>');
+                // re-mapping variable list
+                varList = varList.map(obj => { 
+                    return {
+                        label: obj.varName, 
+                        value: obj.varName,
+                        dtype: obj.varType
+                    }; 
                 });
 
-                $(that.wrapSelector('.vp-ds-variable-box')).html(varTags.toString());
+                that._varList = varList;
 
-                that._bindEventForItem();
+
+
+                that.renderVariables(varList);
+                that._bindAutocomplete(varList);
 
             });
         }
@@ -139,33 +290,74 @@ define([
             return dataHTML;
         }
 
-        templateForSlicing() {
+        templateForTarget() {
             return `
-                <div>
-                    <label>Type start/end index for slicing.</label>
-                </div>
-                <div>
-                    <input type="number" class="vp-input" id="vp_dsStart" placeholder="Start value"/>
-                    <input type="number" class="vp-input" id="vp_dsEnd" placeholder="End value"/>
+                <div class="vp-ds-box vp-ds-box-${this.uuid} vp-ds-uninit">
+                    <input type="text" class="vp-ds-target vp-input ${this.prop.classes}" id="${this.prop.id}"/>
+                    <span class="vp-ds-filter"><img src="/nbextensions/visualpython/img/filter.svg"/></span>
                 </div>
             `;
         }
 
-        render() {
-            super.render();
+        templateForSlicing() {
+            return `
+                <div>
+                    <label for="slicingStart">Type start/end index for slicing.</label>
+                </div>
+                <div>
+                    <input type="number" class="vp-input vp-state" id="slicingStart" placeholder="Start value"/>
+                    <input type="number" class="vp-input vp-state" id="slicingEnd" placeholder="End value"/>
+                </div>
+            `;
+        }
 
+        templateForKeyPicker() {
+            return `
+                <div>
+                    <label>Type or select key from dictionary.</label>
+                </div>
+                <div>
+                    <input type="text" class="vp-input vp-state" id="dictKey" placeholder="Type key"/>
+                </div>
+            `
+        }
+
+        render() {
+            ;
+        }
+
+        /** Render popup on clicking filter button */
+        renderPopup() {
+            super.render();
             this.loadVariables();
+            this._bindEventForPopup();
+
+            //TODO:
+
+        }
+
+        renderVariables(varList) {
+            let varTags = new com_String();
+            varList && varList.forEach((obj, idx) => {
+                varTags.appendFormatLine('<div class="{0} {1}">', 'vp-ds-var-item', 'vp-grid-col-p50');
+                varTags.appendFormatLine('<div class="{0}">{1}</div>', 'vp-ds-var-data', obj.label);
+                varTags.appendFormatLine('<div class="{0}">{1}</div>', 'vp-ds-var-type', obj.dtype);
+                varTags.appendLine('</div>');
+            });
+            $(this.wrapSelector('.vp-ds-variable-box')).html(varTags.toString());
+
+            this._bindEventForItem();
         }
 
         renderOptionPage() {
             // initialize page and variables
             $(this.wrapSelector('.vp-ds-option-inner-box')).html('');
-            this.columnSelector = null;
+            this._columnSelector = null;
 
             switch (this.state.dataType) {
                 case 'DataFrame':
                     // column selecting
-                    this.columnSelector = new MultiSelector(this.wrapSelector('.vp-ds-option-inner-box'),
+                    this._columnSelector = new MultiSelector(this.wrapSelector('.vp-ds-option-inner-box'),
                         { mode: 'columns', parent: [this.state.data] }
                     );  
                     break;
@@ -175,9 +367,17 @@ define([
                     // slicing
                     $(this.wrapSelector('.vp-ds-option-inner-box')).html(this.templateForSlicing());
                     break;
+                case 'dict':
+                    // key picker
+                    $(this.wrapSelector('.vp-ds-option-inner-box')).html(this.templateForKeyPicker());
+                    break;
                 default:
                     break;
             }
+        }
+
+        toTagString() {
+            return this.templateForTarget();
         }
 
         generateCode() {
@@ -187,14 +387,14 @@ define([
             switch (dataType) {
                 case 'DataFrame':
                     code.append(data);
-                    if (this.columnSelector != null) {
-                        let result = this.columnSelector.getDataList();
+                    if (this._columnSelector != null) {
+                        let result = this._columnSelector.getDataList();
                         let columnList = [];
                         result && result.forEach(obj => {
                             columnList.push(obj.code);
                         });
                         if (columnList.length > 0) {
-                            code.appendFormat('[{0}]', columnList.join(', '));
+                            code.appendFormat('[[{0}]]', columnList.join(', '));
                         }
                     }
                     break;
@@ -203,10 +403,17 @@ define([
                 case 'ndarray':
                     code.append(data);
                     // start / end value
-                    let start = $(this.wrapSelector('#vp_dsStart')).val();
-                    let end = $(this.wrapSelector('#vp_dsEnd')).val();
+                    let start = $(this.wrapSelector('#slicingStart')).val();
+                    let end = $(this.wrapSelector('#slicingEnd')).val();
                     if ((start && start != '') || (end && end != '')) {
                         code.appendFormat('[{0}:{1}]', start, end);
+                    }
+                    break;
+                case 'dict':
+                    code.append(data);
+                    let dictKey = $(this.wrapSelector('#dictKey')).val();
+                    if (dictKey && dictKey != '') {
+                        code.appendFormat("['{0}']", dictKey);
                     }
                     break;
                 default:
@@ -217,6 +424,7 @@ define([
         }
 
         open() {
+            this.renderPopup();
             $(this.wrapSelector()).show();
         }
 
