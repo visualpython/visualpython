@@ -466,7 +466,7 @@ define([
             // show variable information on clicking variable
             vpKernel.execute(code).then(function(resultObj) {
                 let { result, type, msg } = resultObj;
-                    if (msg.content.data) {
+                if (msg.content.data) {
                     var textResult = msg.content.data["text/plain"];
                     var htmlResult = msg.content.data["text/html"];
                     var imgResult = msg.content.data["image/png"];

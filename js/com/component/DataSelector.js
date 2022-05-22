@@ -49,13 +49,14 @@ define([
                 id: '',         // target id
                 finish: null,   // callback after selection
                 select: null,   // callback after selection from suggestInput
-                allowDataType: [], // default allow data types (All)
+                allowDataType: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], // default allow data types
                 // additional options
                 classes: '',
                 ...this.prop
             }
 
             this.state = {
+                filterType: 'All',
                 data: '',
                 dataType: '',
                 slicingStart: '',
@@ -168,11 +169,13 @@ define([
                     let result = true;
                     // trigger change
                     $(this).val(ui.item.value);
+                    $(this).attr('data-type', ui.item.dtype);
                     $(this).trigger('change');
 
                     // select event
-                    if (typeof that.prop.select == "function")
+                    if (typeof that.prop.select == "function") {
                         result = that.prop.select(ui.item.value, ui.item);
+                    }
                     if (result != undefined) {
                         return result;
                     }
@@ -213,7 +216,7 @@ define([
                 let newValue = that.generateCode();
 
                 $(that._target).val(newValue);
-                $(that._target).data('type', that.state.dataType);
+                $(that._target).attr('data-type', that.state.dataType);
                 that.prop.finish(newValue);
                 that.close();
             });
@@ -225,6 +228,24 @@ define([
         _bindEventForItem() {
             let that = this;
 
+            // Click data type item
+            $(that.wrapSelector('.vp-ds-type-item')).off('click');
+            $(that.wrapSelector('.vp-ds-type-item')).on('click', function() {
+                $(that.wrapSelector('.vp-ds-type-item')).removeClass('selected');
+                $(this).addClass('selected');
+
+                let type = $(this).data('type');
+                if (type == 'All') {
+                    that.renderVariableBox(that._varList);
+                } else if (type == 'Others') {
+                    that.renderVariableBox(that._varList.filter(obj => !that.prop.allowDataType.includes(obj.dtype)));
+                } else {
+                    // filter variable list
+                    that.renderVariableBox(that._varList.filter(obj => obj.dtype == type));
+                }
+
+            });
+
             // Click variable item
             $(that.wrapSelector('.vp-ds-var-item')).off('click');
             // $(that.wrapSelector('.vp-ds-var-item')).on('click', function() {
@@ -233,8 +254,8 @@ define([
                 $(that.wrapSelector('.vp-ds-var-item')).removeClass('selected');
                 $(this).addClass('selected');
 
-                let data = $(this).find('.vp-ds-var-data').text();
-                let dataType = $(this).find('.vp-ds-var-type').text();
+                let data = $(this).text();
+                let dataType = $(this).data('type');
                 that.state.data = data;
                 that.state.dataType = dataType;
 
@@ -242,8 +263,8 @@ define([
                 that.renderOptionPage();
             }, function(evt) {
                 // double click to select directly
-                let data = $(this).find('.vp-ds-var-data').text();
-                let dataType = $(this).find('.vp-ds-var-type').text();
+                let data = $(this).text();
+                let dataType = $(this).data('type');
                 that.state.data = data;
                 that.state.dataType = dataType;
 
@@ -277,10 +298,8 @@ define([
                 });
 
                 that._varList = varList;
-
-
-
-                that.renderVariables(varList);
+                
+                that.renderDataBox(varList);
                 that._bindAutocomplete(varList);
 
             });
@@ -329,20 +348,36 @@ define([
         /** Render popup on clicking filter button */
         renderPopup() {
             super.render();
+
             this.loadVariables();
             this._bindEventForPopup();
-
-            //TODO:
-
         }
 
-        renderVariables(varList) {
+        renderDataBox(varList) {
+            let that = this;
             let varTags = new com_String();
+            let types = [
+                'All',
+                ...this.prop.allowDataType,
+                'Others'
+            ];
+            // Add Data Types to filter
+            types && types.forEach(type => {
+                varTags.appendFormatLine('<div class="{0} {1}" data-type="{2}">{3}</div>'
+                    , 'vp-ds-type-item', (that.state.filterType == type? 'selected': ''), type, type);
+            });
+            $(this.wrapSelector('.vp-ds-type-box')).html(varTags.toString());
+
+            this.renderVariableBox(varList);
+        }
+
+        renderVariableBox(varList) {
+            let that = this;
+            let varTags = new com_String();
+            varTags = new com_String();
             varList && varList.forEach((obj, idx) => {
-                varTags.appendFormatLine('<div class="{0} {1}">', 'vp-ds-var-item', 'vp-grid-col-p50');
-                varTags.appendFormatLine('<div class="{0}">{1}</div>', 'vp-ds-var-data', obj.label);
-                varTags.appendFormatLine('<div class="{0}">{1}</div>', 'vp-ds-var-type', obj.dtype);
-                varTags.appendLine('</div>');
+                varTags.appendFormatLine('<div class="{0} {1}" title="{2}" data-type="{3}">{4}</div>'
+                    , 'vp-ds-var-item', (that.state.data == obj.value?'selected':''), obj.dtype, obj.dtype, obj.label);
             });
             $(this.wrapSelector('.vp-ds-variable-box')).html(varTags.toString());
 

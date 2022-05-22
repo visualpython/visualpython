@@ -256,6 +256,11 @@ define([
                 code.appendLine();
                 dataVariable = 'word_cloud_text';
             }
+            // check data type and convert it to string
+            let dataType = $(this.wrapSelector('#data')).data('type');
+            if (dataType == 'DataFrame' || dataType == 'Series') {
+                dataVariable = data + '.to_string()';
+            }
             code.appendFormatLine("counts = Counter({0}.split())", dataVariable);
             code.appendFormatLine("tags = counts.most_common({0})", wordCount);
             code.appendLine();
