@@ -3092,6 +3092,20 @@
                         }
                     },
                     {
+                        "id": "visualize_chart",
+                        "type": "function",
+                        "level": 2,
+                        "name": "Matplotlib",
+                        "path": "visualpython - visualization - matplotlib",
+                        "desc": "",
+                        "tag": "MATPLOTLIB, PLOT, CHART",
+                        "file": "m_visualize/Chart",
+                        "apps" : {
+                            "color": 5,
+                            "icon": "apps/apps_chart.svg"
+                        }
+                    },
+                    {
                         "id"   : "visualize_seaborn",
                         "type" : "function",
                         "level": 1,
@@ -3103,6 +3117,20 @@
                         "apps" : {
                             "color": 5,
                             "icon": "apps/apps_visualize.svg"
+                        }
+                    },
+                    {
+                        "id"   : "visualize_wordcloud",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "WordCloud",
+                        "tag"  : "WORDCLOUD,VISUALIZATION,VISUALIZE",
+                        "path" : "visualpython - visualization - wordcloud",
+                        "desc" : "Word Cloud",
+                        "file" : "m_visualize/WordCloud",
+                        "apps" : {
+                            "color": 5,
+                            "icon": "apps/apps_wordcloud.svg"
                         }
                     }
                 ]
