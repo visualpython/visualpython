@@ -59,27 +59,17 @@ define([
                     finish: function(filesPath, status, error) {
                         let {file, path} = filesPath[0];
                         that.state.data = path;
+
                         that.state.useFile = true;
+                        $(that.wrapSelector('.vp-wc-file-option')).show();
 
                         // set text
                         $(that.wrapSelector('#data')).val(path);
-                        $(that.wrapSelector('#useFile')).prop('checked', true);
                         $(that.wrapSelector('#data')).trigger('change');
-                        $(that.wrapSelector('#useFile')).trigger('change');
                     }
                 });
                 fileNavi.open();
             });
-
-            // use file
-            $(this.wrapSelector('#useFile')).on('change', function() {
-                let checked = $(this).prop('checked');
-                if (checked) {
-                    $(that.wrapSelector('.vp-wc-file-option')).show();
-                } else {
-                    $(that.wrapSelector('.vp-wc-file-option')).hide();
-                }
-            })
 
             // change tab
             $(this.wrapSelector('.vp-tab-item')).on('click', function() {
@@ -136,7 +126,14 @@ define([
                 pageThis: this,
                 id: 'data',
                 classes: 'vp-state',
+                select: function() {
+                    that.state.useFile = false;
+                    $(that.wrapSelector('.vp-wc-file-option')).hide();
+                },
                 finish: function() {
+                    that.state.useFile = false;
+                    $(that.wrapSelector('.vp-wc-file-option')).hide();
+                    
                     $(that.wrapSelector('#data')).change();
                 }
             });
@@ -270,9 +267,6 @@ define([
             let dataType = $(this.wrapSelector('#data')).data('type');
             if (dataType == 'DataFrame' || dataType == 'Series') {
                 dataVariable = data + '.to_string()';
-            }
-            if (dataType == 'ndarray') {
-                dataVariable = data + '.tobytes()'; // FIXME: use tobytes instead?
             }
             code.appendFormatLine("counts = Counter({0}.split())", dataVariable);
             code.appendFormatLine("tags = counts.most_common({0})", wordCount);

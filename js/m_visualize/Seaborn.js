@@ -51,9 +51,9 @@ define([
                 legendPos: '',
                 // style options
                 useColor: false,
-                color: '',
+                color: '#000000',
                 useGrid: '',
-                gridColor: '',
+                gridColor: '#000000',
                 markerStyle: '',
                 // setting options
                 x_limit_from: '',
@@ -199,6 +199,7 @@ define([
 
             // use color or not
             $(this.wrapSelector('#useColor')).on('change', function() {
+                that.state.useColor = $(this).prop('checked');
                 $(that.wrapSelector('#color')).prop('disabled', $(this).prop('checked') == false);
             });
 
