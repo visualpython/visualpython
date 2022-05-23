@@ -20,7 +20,8 @@
     overflow-x: hidden;
 }
 .vp-cs-select-box.left {
-    width: 160px;
+    /* width: 160px; */
+    width: 100%;
     height: calc(100% - 32px);
 }
 .vp-cs-select-item {

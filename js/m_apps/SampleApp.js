@@ -63,7 +63,7 @@ define([
                     ;
                 }
             });
-            $('#sample').replaceWith(dataSelector.toTagString());
+            $(this.wrapSelector('#sample')).replaceWith(dataSelector.toTagString());
         }
 
         generateCode() {

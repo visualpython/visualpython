@@ -79,3 +79,7 @@
 .vp-ds-option-inner-box {
     height: calc(100% - 30px);
 }
+.vp-nd-row-box,
+.vp-nd-col-box {
+    height: 160px;
+}

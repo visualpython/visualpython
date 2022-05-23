@@ -130,7 +130,17 @@ define([
                 'height': '200px'
             });
 
-            // TODO: bind dataSelector to #data
+            // FIXME: bind dataSelector to #data
+            let dataSelector = new DataSelector({
+                type: 'data',
+                pageThis: this,
+                id: 'data',
+                classes: 'vp-state',
+                finish: function() {
+                    $(that.wrapSelector('#data')).change();
+                }
+            });
+            $(this.wrapSelector('#data')).replaceWith(dataSelector.toTagString());
     
             // System font suggestinput
             var fontFamilyTag = $(this.wrapSelector('#fontPath'));
@@ -260,6 +270,9 @@ define([
             let dataType = $(this.wrapSelector('#data')).data('type');
             if (dataType == 'DataFrame' || dataType == 'Series') {
                 dataVariable = data + '.to_string()';
+            }
+            if (dataType == 'ndarray') {
+                dataVariable = data + '.tobytes()'; // FIXME: use tobytes instead?
             }
             code.appendFormatLine("counts = Counter({0}.split())", dataVariable);
             code.appendFormatLine("tags = counts.most_common({0})", wordCount);

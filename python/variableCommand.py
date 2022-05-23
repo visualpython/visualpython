@@ -51,11 +51,19 @@ def _vp_get_variables_list(types, exclude_types=[]):
     varList = []
     searchList = globals()
     if (type(types) == list) and (len(types) > 0):
-        varList = [{'varName': v, 'varType': type(eval(v)).__name__} for v in searchList if (not v.startswith('_')) & (v not in _VP_NOT_USING_VAR) & (type(eval(v)).__name__ not in exclude_types) & (type(eval(v)).__name__ in types)]
+        varList = [{'varName': v, 'varType': type(eval(v)).__name__, 'varInfo': _vp_get_variable_info(eval(v))} for v in searchList if (not v.startswith('_')) & (v not in _VP_NOT_USING_VAR) & (type(eval(v)).__name__ not in exclude_types) & (type(eval(v)).__name__ in types)]
     else:
-        varList = [{'varName': v, 'varType': type(eval(v)).__name__} for v in searchList if (not v.startswith('_')) & (v not in _VP_NOT_USING_VAR) & (type(eval(v)).__name__ not in exclude_types) & (type(eval(v)).__name__ not in _VP_NOT_USING_TYPES)]
+        varList = [{'varName': v, 'varType': type(eval(v)).__name__, 'varInfo': _vp_get_variable_info(eval(v))} for v in searchList if (not v.startswith('_')) & (v not in _VP_NOT_USING_VAR) & (type(eval(v)).__name__ not in exclude_types) & (type(eval(v)).__name__ not in _VP_NOT_USING_TYPES)]
 
     return varList
+
+def _vp_get_variable_info(v):
+    """
+    Get Variable's detailed information
+    """
+    if type(v).__name__ == 'ndarray':
+        return {'ndim': v.ndim}
+    return {}
 
 def _vp_get_profiling_list():
     """

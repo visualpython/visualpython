@@ -62,7 +62,7 @@ define([
             this.config = this.state;
 
             var { mode, type, parent, selectedList=[], includeList=[], excludeList=[] } = this.config;
-            this.mode = mode;
+            this.mode = mode;   // variable / columns / index / ndarray0 / ndarray1
             this.parent = parent;
             this.selectedList = selectedList;
             this.includeList = includeList;
@@ -82,7 +82,22 @@ define([
                 case 'variable':
                     this._getVariableList(type, function(dataList) {
                         that._executeCallback(dataList);
-                    })
+                    });
+                    break;
+                case 'index':
+                    this._getRowList(parent, function(dataList) {
+                        that._executeCallback(dataList);
+                    });
+                    break;
+                case 'ndarray0':
+                    this._getNdarray(parent, 0, function(dataList) {
+                        that._executeCallback(dataList);
+                    });
+                    break;
+                case 'ndarray1':
+                    this._getNdarray(parent, 1, function(dataList) {
+                        that._executeCallback(dataList);
+                    });
                     break;
             }
         }
@@ -163,6 +178,55 @@ define([
                     }
                 });
             }
+        }
+
+        _getRowList(parent, callback) {
+            vpKernel.getRowList(parent).then(function(resultObj) {
+                let { result } = resultObj;
+                try {
+                    var rowList = JSON.parse(result);
+                    rowList = rowList.map(function(x) {
+                        return {
+                            ...x,
+                            value: x.label,
+                            code: x.value,
+                            type: x.dtype
+                        };
+                    });
+                    callback(rowList);
+                } catch (e) {
+                    callback([]);
+                }
+            });
+        }
+
+        _getNdarray(parent, dim, callback) {
+            let parentVar = '';
+            if (parent && parent.length > 0) {
+                parentVar = parent[0];
+
+                let cmd = com_util.formatString('{0}.shape[{1}]', parentVar, dim);
+                vpKernel.execute(cmd).then(function(resultObj) {
+                    let { result } = resultObj;
+                    try {
+                        let dimLength = parseInt(result);
+                        let ndList = [];
+                        for (let i = 0; i < dimLength; i++) {
+                            ndList.push({
+                                value: i,
+                                code: i,
+                                type: 'int'
+                            });
+                        }
+                        callback(ndList);
+                    } catch (e) {
+                        callback([]);
+                    }
+                });
+            } else {
+                callback([]);
+            }
+            
         }
 
         load() {

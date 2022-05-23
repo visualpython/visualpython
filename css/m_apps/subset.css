@@ -81,7 +81,7 @@
 /* Tab Page */
 .vp-ds-tab-page {
     width: 100%;
-    height: calc(100% - 110px);
+    height: calc(100% - 150px);
 }
 .vp-ds-tab-page.subset {
     display: grid;
@@ -94,8 +94,8 @@
 }
 .vp-ds-tab-page-box {
     display: grid;
-    grid-template-rows: 30px calc(100% - 50px);
-    grid-row-gap: 20px;
+    grid-template-rows: 30px calc(100% - 30px);
+    grid-row-gap: 5px;
     border: 0.25px solid #E4E4E4;
     padding: 15px;
 }

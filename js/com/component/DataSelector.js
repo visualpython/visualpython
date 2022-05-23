@@ -59,8 +59,13 @@ define([
                 filterType: 'All',
                 data: '',
                 dataType: '',
-                slicingStart: '',
-                slicingEnd: '',
+                dataInfo: '',
+                slicingStart1: '',
+                slicingEnd1: '',
+                slicingStart2: '',
+                slicingEnd2: '',
+                ndRowType: 'slicing',
+                ndColType: 'slicing',
                 dictKey: '',
                 ...this.state
             }
@@ -169,7 +174,7 @@ define([
                     let result = true;
                     // trigger change
                     $(this).val(ui.item.value);
-                    $(this).attr('data-type', ui.item.dtype);
+                    $(this).data('type', ui.item.dtype);
                     $(this).trigger('change');
 
                     // select event
@@ -216,7 +221,7 @@ define([
                 let newValue = that.generateCode();
 
                 $(that._target).val(newValue);
-                $(that._target).attr('data-type', that.state.dataType);
+                $(that._target).data('type', that.state.dataType);
                 that.prop.finish(newValue);
                 that.close();
             });
@@ -293,7 +298,8 @@ define([
                     return {
                         label: obj.varName, 
                         value: obj.varName,
-                        dtype: obj.varType
+                        dtype: obj.varType,
+                        info: obj.varInfo
                     }; 
                 });
 
@@ -321,13 +327,56 @@ define([
         templateForSlicing() {
             return `
                 <div>
-                    <label for="slicingStart">Type start/end index for slicing.</label>
+                    <label for="slicingStart1">Type start/end index for slicing.</label>
                 </div>
                 <div>
-                    <input type="number" class="vp-input vp-state" id="slicingStart" placeholder="Start value"/>
-                    <input type="number" class="vp-input vp-state" id="slicingEnd" placeholder="End value"/>
+                    <input type="number" class="vp-input vp-state" id="slicingStart1" placeholder="Start value"/>
+                    <input type="number" class="vp-input vp-state" id="slicingEnd1" placeholder="End value"/>
                 </div>
             `;
+        }
+
+        templateFor2darray() {
+            return `
+                <div class="vp-grid-col-p50" style="grid-column-gap: 5px;">
+                    <div>
+                        <label class="w50">Row</label>
+                        <select id="ndRowType" class="vp-select vp-state">
+                            <option value="slicing">Slicing</option>
+                            <option value="indexing">Indexing</option>
+                        </select>
+                        <div class="vp-nd-row-box slicing">
+                            <div>
+                                <label for="slicingStart1">Type start/end index for slicing.</label>
+                            </div>
+                            <div>
+                                <input type="number" class="vp-input m vp-state" id="slicingStart1" placeholder="Start value"/>
+                                <input type="number" class="vp-input m vp-state" id="slicingEnd1" placeholder="End value"/>
+                            </div>
+                        </div>
+                        <div class="vp-nd-row-box indexing">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w50">Column</label>
+                        <select id="ndColType" class="vp-select vp-state">
+                            <option value="slicing">Slicing</option>
+                            <option value="indexing">Indexing</option>
+                        </select>
+                        <div class="vp-nd-col-box slicing">
+                            <div>
+                                <label for="slicingStart2">Type start/end index for slicing.</label>
+                            </div>
+                            <div>
+                                <input type="number" class="vp-input m vp-state" id="slicingStart2" placeholder="Start value"/>
+                                <input type="number" class="vp-input m vp-state" id="slicingEnd2" placeholder="End value"/>
+                            </div>
+                        </div>
+                        <div class="vp-nd-col-box indexing">
+                        </div>
+                    </div>
+                </div>
+            `
         }
 
         templateForKeyPicker() {
@@ -385,22 +434,61 @@ define([
         }
 
         renderOptionPage() {
+            let that = this;
+
             // initialize page and variables
             $(this.wrapSelector('.vp-ds-option-inner-box')).html('');
             this._columnSelector = null;
 
-            switch (this.state.dataType) {
+            let { data, dataType } = this.state;
+
+            switch (dataType) {
                 case 'DataFrame':
                     // column selecting
                     this._columnSelector = new MultiSelector(this.wrapSelector('.vp-ds-option-inner-box'),
-                        { mode: 'columns', parent: [this.state.data] }
-                    );  
+                        { mode: 'columns', parent: [data] }
+                    );
                     break;
                 case 'Series':
                 case 'list':
                 case 'ndarray':
-                    // slicing
-                    $(this.wrapSelector('.vp-ds-option-inner-box')).html(this.templateForSlicing());
+                    // check it's ndim
+                    let ndim = 0;
+                    try {
+                        ndim = this._varList.filter(obj => obj.value==data)[0]['info']['ndim'];
+                    } catch { ; }
+                    if (ndim == 2) {
+                        // 1d 2d page
+                        $(this.wrapSelector('.vp-ds-option-inner-box')).html(this.templateFor2darray());
+                        $(this.wrapSelector('#ndRowType')).val(this.state.ndRowType);
+                        $(this.wrapSelector('#ndColType')).val(this.state.ndColType);
+                        this._ndRowSelector = new MultiSelector(this.wrapSelector('.vp-nd-row-box.indexing'),
+                            { mode: 'ndarray0', parent: [data] }
+                        );
+                        this._ndColSelector = new MultiSelector(this.wrapSelector('.vp-nd-col-box.indexing'),
+                            { mode: 'ndarray1', parent: [data] }
+                        );
+                        $(this.wrapSelector('.vp-nd-row-box')).hide();
+                        $(this.wrapSelector('.vp-nd-col-box')).hide();
+                        $(this.wrapSelector('.vp-nd-row-box.' + this.state.ndRowType)).show();
+                        $(this.wrapSelector('.vp-nd-col-box.' + this.state.ndColType)).show();
+
+                        // bind event
+                        $(this.wrapSelector('#ndRowType')).change(function() {
+                            that.state.ndRowType = $(this).val();
+                            $(that.wrapSelector('.vp-nd-row-box')).hide();
+                            $(that.wrapSelector('.vp-nd-row-box.' + that.state.ndRowType)).show();
+                        });
+                        $(this.wrapSelector('#ndColType')).change(function() {
+                            that.state.ndColType = $(this).val();
+                            $(that.wrapSelector('.vp-nd-col-box')).hide();
+                            $(that.wrapSelector('.vp-nd-col-box.' + that.state.ndColType)).show();
+                        });
+
+                    } else {
+                        // slicing
+                        $(this.wrapSelector('.vp-ds-option-inner-box')).html(this.templateForSlicing());
+                    }
                     break;
                 case 'dict':
                     // key picker
@@ -415,8 +503,51 @@ define([
             return this.templateForTarget();
         }
 
+        /**
+         * simple version of _saveSingleState()
+         */
+        _saveState() {
+            let that = this;
+            $(this.wrapSelector('.vp-state')).each((idx, tag) => {
+                let id = tag.id;
+                let tagName = $(tag).prop('tagName'); // returns with UpperCase
+                let newValue = '';
+                switch(tagName) {
+                    case 'INPUT':
+                        let inputType = $(tag).prop('type');
+                        if (inputType == 'checkbox') {
+                            newValue = $(tag).prop('checked');
+                        } else {
+                            // inputType == 'text' || inputType == 'number' || inputType == 'hidden' || inputType == 'color' || inputType == 'range'
+                            newValue = $(tag).val();
+                        }
+                        break;
+                    case 'TEXTAREA':
+                    case 'SELECT':
+                    default:
+                        newValue = $(tag).val();
+                        if (!newValue) {
+                            newValue = '';
+                        }
+                        break;
+                }
+
+                // save state
+                that.state[id] = newValue;
+            }); 
+        }
+
         generateCode() {
-            let { data, dataType } = this.state;
+            // save state
+            this._saveState();
+
+            // get states
+            let {
+                data, dataType,
+                slicingStart1, slicingEnd1,
+                slicingStart2, slicingEnd2,
+                ndRowType, ndColType
+            } = this.state;
             let code = new com_String();
 
             switch (dataType) {
@@ -435,13 +566,73 @@ define([
                     break;
                 case 'Series':
                 case 'list':
-                case 'ndarray':
                     code.append(data);
                     // start / end value
-                    let start = $(this.wrapSelector('#slicingStart')).val();
-                    let end = $(this.wrapSelector('#slicingEnd')).val();
-                    if ((start && start != '') || (end && end != '')) {
-                        code.appendFormat('[{0}:{1}]', start, end);
+                    if ((slicingStart1 && slicingStart1 != '') || (slicingEnd1 && slicingEnd1 != '')) {
+                        code.appendFormat('[{0}:{1}]', slicingStart1, slicingEnd1);
+                    }
+                    break;
+                case 'ndarray':
+                    code.append(data);
+                    let ndim = 0;
+                    try {
+                        ndim = this._varList.filter(obj => obj.value==data)[0]['info']['ndim'];
+                    } catch { ; }
+                    if (ndim == 2) {
+                        let rowCode = '';
+                        let colCode = '';
+                        if (ndRowType == 'slicing') {
+                            // slicing start / end value
+                            if ((slicingStart1 && slicingStart1 != '') || (slicingEnd1 && slicingEnd1 != '')) {
+                                rowCode = com_util.formatString('{0}:{1}', slicingStart1, slicingEnd1);
+                            }
+                        } else {
+                            // indexing
+                            let result = this._ndRowSelector.getDataList();
+                            let rowList = [];
+                            result && result.forEach(obj => {
+                                rowList.push(obj.code);
+                            });
+                            if (rowList.length > 0) {
+                                if (rowList.length == 1) {
+                                    rowCode = com_util.formatString('{0}', rowList.join(', '));
+                                } else {
+                                    rowCode = com_util.formatString('({0})', rowList.join(', '));
+                                }
+                            }
+                        }
+                        if (ndColType == 'slicing') {
+                            // slicing start / end value
+                            if ((slicingStart2 && slicingStart2 != '') || (slicingEnd2 && slicingEnd2 != '')) {
+                                colCode = com_util.formatString('{0}:{1}', slicingStart2, slicingEnd2);
+                            }
+                        } else {
+                            // indexing
+                            let result = this._ndColSelector.getDataList();
+                            let columnList = [];
+                            result && result.forEach(obj => {
+                                columnList.push(obj.code);
+                            });
+                            if (columnList.length > 0) {
+                                if (columnList.length == 1) {
+                                    colCode = com_util.formatString('{0}', columnList.join(', '));
+                                } else {
+                                    colCode = com_util.formatString('({0})', columnList.join(', '));
+                                }
+                            }
+                        }
+                        // merge rowCode and colCode
+                        if (rowCode != '' || colCode != '') {
+                            if (rowCode == '' && colCode != '') {
+                                rowCode = ':'
+                            }
+                            code.appendFormat('[{0},{1}]', rowCode, colCode);
+                        }
+                    } else {
+                        // start / end value
+                        if ((slicingStart1 && slicingStart1 != '') || (slicingEnd1 && slicingEnd1 != '')) {
+                            code.appendFormat('[{0}:{1}]', slicingStart1, slicingEnd1);
+                        }
                     }
                     break;
                 case 'dict':
