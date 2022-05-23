@@ -150,7 +150,7 @@ define([
                 });
                 // if required, no default option
                 if (required != true) {
-                    $(optSlct).append($('<option value="">Default</option>'));
+                    $(optSlct).append($('<option value="">Select option...</option>'));
                 }
                 obj.options.forEach((opt, idx, arr) => {
                     var label = (obj.options_label != undefined? obj.options_label[idx]:opt);
@@ -175,6 +175,27 @@ define([
                 });
                 tblInput.appendChild(optSlct);
                 break;
+            case 'option_suggest':
+                    // suggest input tag
+                    // 1. Target Variable
+                    var suggestInput = new SuggestInput();
+                    suggestInput.setComponentID(obj.name);
+                    suggestInput.addClass('vp-input vp-state');
+                    suggestInput.setSuggestList(function() { return obj.options; });
+                    suggestInput.setNormalFilter(obj.useFilter == undefined?false:obj.useFilter);
+                    suggestInput.setValue(obj.value);
+                    if (obj.placeholder != undefined) {
+                        suggestInput.setPlaceholder(obj.placeholder);
+                    } else {
+                        suggestInput.setPlaceholder('Type or Select value');
+                    }
+                    suggestInput.setSelectEvent(function(selectedValue) {
+                        // trigger change
+                        $(pageThis.wrapSelector('#' + obj.name)).val(selectedValue);
+                        $(pageThis.wrapSelector('#' + obj.name)).trigger('change');
+                    });
+                    tblInput.appendChild($(suggestInput.toTagString())[0]);
+                    break;
             case 'var_select':
                 // suggest input tag
                 var tag = document.createElement('input');
@@ -386,7 +407,7 @@ define([
             case 'option_select':
                 var input = $(vp_wrapSelector(pageId, '#'+obj.name)).val();
                 // same as default
-                if (input == obj.default) break;
+                // if (input == obj.default) break;
                 value = input;
                 break;
             case 'var_select':
@@ -400,6 +421,7 @@ define([
                 break;
             case 'table':
             case 'file':
+            case 'option_suggest':
             default:
                 var input = $(vp_wrapSelector(pageId, '#'+obj.name)).val();
                 // same as default

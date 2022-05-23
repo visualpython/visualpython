@@ -156,7 +156,9 @@ define([
                 {
                     name: 'header',
                     type: 'int',
-                    label: 'Header'
+                    label: 'Header',
+                    component: 'option_suggest',
+                    options: ['None', '0']
                 },
                 {
                     name: 'sep',
@@ -2897,6 +2899,7 @@ define([
                     name: 'orient',
                     type: 'text',
                     label: 'JSON Orient',
+                    component: 'option_select',
                     options: ['split', 'records', 'index', 'columns', 'values', 'table'],
                     default: 'columns' // if typ==series, index is default
                 },
@@ -2955,6 +2958,7 @@ define([
                     name: 'orient',
                     type: 'text',
                     label: 'Orient',
+                    component: 'option_select',
                     // options: series 0~3 / dataframe *
                     options: ['split', 'records', 'index', 'table', 'columns', 'values']
                 }
