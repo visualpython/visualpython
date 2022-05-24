@@ -1,10 +1,37 @@
-/* Code Preview */
+/* DataSelector target*/
+.vp-ds-box {
+    display: inline-block;
+}
+.vp-ds-filter {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    right: 25px;
+    cursor: pointer;
+}
+.vp-ds-box input.vp-ds-target {
+    padding-right: 23px;
+}
+.vp-ds-box input.vp-ds-target:disabled {
+    background: var(--light-gray-color) !important;
+    cursor: not-allowed;
+}
+.vp-ds-box input.vp-ds-target:disabled + .vp-ds-filter {
+    cursor: not-allowed;
+}
+.vp-ds-item:hover {
+    background: var(--light-gray-color);
+    color: var(--font-highlight);
+    cursor: pointer;
+}
+/* DataSelector popup */
 .vp-dataselector {
+    display: none;
     position: absolute;
-    top: calc(50% - 200px);
-    left: calc(50% - 200px);
-    width: 400px;
-    height: 400px;
+    top: calc(50% - 225px);
+    left: calc(50% - 300px);
+    width: 600px;
+    height: 450px;
     background: white;
     border: 1px solid var(--border-gray-color);
     z-index: 999;
@@ -13,48 +40,46 @@
     font-size: 14px;
     color: var(--font-primary);
 }
+.vp-ds-data-box {
+    width: 100%;
+    height: 100px;
+    align-content: baseline;
+    align-items: center;
+}
+.vp-ds-type-box,
 .vp-ds-variable-box {
-    border: 1px solid var(--border-gray-color);
+    border: 0.25px solid var(--border-gray-color);
     height: 100px;
     grid-row-gap: 0px;
+    align-content: baseline;
 }
+.vp-ds-type-item,
 .vp-ds-var-item {
+    padding-left: 5px;
     height: 25px;
+    line-height: 25px;
     border-bottom: 1px solid var(--border-gray-color);
 }
+.vp-ds-type-item:hover,
 .vp-ds-var-item:hover {
     background: var(--light-gray-color);
     color: var(--font-highlight);
     cursor: pointer;
 }
+.vp-ds-type-item.selected,
 .vp-ds-var-item.selected {
     background: var(--light-gray-color);
     color: var(--font-highlight);
     font-weight: bold;
 }
-.vp-ds-var-data {
-    padding-left: 5px;
-}
-.vp-ds-var-type {
-    border-left: 1px solid var(--border-gray-color);
-    padding-left: 5px;
-}
 .vp-ds-option-box {
-
+    height: calc(100% - 140px);
+    margin-top: 10px;
 }
-.vp-ds-preview {
-    width: 100%;
-    height: 35px;
-    background-image: repeating-linear-gradient( to right, var(--grid-line-color) 0, var(--grid-line-color) 0.25px, transparent 1px, transparent 5px ), repeating-linear-gradient( to bottom, var(--grid-line-color) 0, var(--grid-line-color) 0.25px, transparent 1px, transparent 5px );
-    background-color: white;
-    border: 0.25px solid #E4E4E4;
+.vp-ds-option-inner-box {
+    height: calc(100% - 30px);
 }
-.vp-ds-preview textarea {
-    display: none;
-}
-.vp-ds-preview .CodeMirror-code .cm-variable {
-    background-color: rgba(47, 133, 90, 0.2);
-}
-.vp-ds-preview .CodeMirror-code .cm-string {
-    background-color: rgba(246, 173, 85, 0.2);
+.vp-nd-row-box,
+.vp-nd-col-box {
+    height: 160px;
 }

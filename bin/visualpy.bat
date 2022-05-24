@@ -81,6 +81,10 @@ rem #=========================================================================
 rem # Install Visual Python
 rem #=========================================================================
 :f_install
+    if not exist "%PATH_DST%" (
+        mkdir "%PATH_DST%"
+    )
+
     call :f_check_extension RES
     rem # 1 = Jupyter Extension is not actived
     rem # 2 = visualpython does not exist

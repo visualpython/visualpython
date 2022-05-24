@@ -305,24 +305,24 @@ define([
             if (pageType == 'Write') {
                 if (selectedType == 'json') {
                     $(prefix + '#path_or_buf').parent().html(
-                        com_util.formatString('<input type="text" class="vp-input input-single" id="path_or_buf" index="0" placeholder="" value="" title=""><div id="vp_openFileNavigationBtn" class="{0}"></div>'
+                        com_util.formatString('<input type="text" class="vp-input vp-state" id="path_or_buf" index="0" placeholder="" value="" title=""><div id="vp_openFileNavigationBtn" class="{0}"></div>'
                         , 'vp-file-browser-button')
                     );
                 } else if (selectedType == 'pickle') {
                     $(prefix + '#path').parent().html(
-                        com_util.formatString('<input type="text" class="vp-input input-single" id="path" index="0" placeholder="" value="" title=""><div id="vp_openFileNavigationBtn" class="{0}"></div>'
+                        com_util.formatString('<input type="text" class="vp-input vp-state" id="path" index="0" placeholder="" value="" title=""><div id="vp_openFileNavigationBtn" class="{0}"></div>'
                         , 'vp-file-browser-button')
                     );
                 } else {
                     $(this.fileState[pageType]['fileResultState']['pathInputId']).parent().html(
-                        com_util.formatString('<input type="text" class="vp-input input-single" id="{0}" index="0" placeholder="" value="" title=""><div id="vp_openFileNavigationBtn" class="{1}"></div>'
+                        com_util.formatString('<input type="text" class="vp-input vp-state" id="{0}" index="0" placeholder="" value="" title=""><div id="vp_openFileNavigationBtn" class="{1}"></div>'
                             , 'i1'
                             , 'vp-file-browser-button')
                     );
                 }
             } else {
                 $(this.fileState[pageType]['fileResultState']['pathInputId']).parent().html(
-                    com_util.formatString('<input type="text" class="vp-input input-single" id="{0}" index="0" placeholder="" value="" title=""><div id="vp_openFileNavigationBtn" class="{1}"></div>'
+                    com_util.formatString('<input type="text" class="vp-input vp-state" id="{0}" index="0" placeholder="" value="" title=""><div id="vp_openFileNavigationBtn" class="{1}"></div>'
                         , 'i0'
                         , 'vp-file-browser-button')
                 );
@@ -334,7 +334,7 @@ define([
                 var encodingList = ['utf8', 'cp949', 'ascii'];
                 var suggestInput = new SuggestInput();
                 suggestInput.setComponentID('encoding');
-                suggestInput.addClass('vp-input');
+                suggestInput.addClass('vp-input vp-state');
                 suggestInput.setSuggestList(function() { return encodingList; });
                 suggestInput.setPlaceholder('encoding option');
                 return suggestInput.toTagString();

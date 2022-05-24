@@ -996,18 +996,11 @@ define([
                                     });
                                 }
                             } else {
-                                var errorContent = new com_String();
+                                var errorContent = '';
                                 if (msg.content.ename) {
-                                    errorContent.appendFormatLine('<div class="{0}">', VP_FE_INFO_ERROR_BOX);
-                                    errorContent.appendLine('<i class="fa fa-exclamation-triangle"></i>');
-                                    errorContent.appendFormatLine('<label class="{0}">{1}</label>'
-                                                                , VP_FE_INFO_ERROR_BOX_TITLE, msg.content.ename);
-                                    if (msg.content.evalue) {
-                                        // errorContent.appendLine('<br/>');
-                                        errorContent.appendFormatLine('<pre>{0}</pre>', msg.content.evalue.split('\\n').join('<br/>'));
-                                    }
-                                    errorContent.appendLine('</div>');
+                                    errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
                                 }
+                                vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
                                 $(that.wrapSelector('.' + VP_FE_INFO_CONTENT)).replaceWith(function() {
                                     return that.renderInfoPage(errorContent);
                                 });
@@ -1362,9 +1355,6 @@ define([
 
     const VP_FE_INFO = 'vp-fe-info';
     const VP_FE_INFO_CONTENT = 'vp-fe-info-content';
-
-    const VP_FE_INFO_ERROR_BOX = 'vp-fe-info-error-box';
-    const VP_FE_INFO_ERROR_BOX_TITLE = 'vp-fe-info-error-box-title';
 
     const VP_FE_PREVIEW_BOX = 'vp-fe-preview-box';
     const VP_FE_BUTTON_PREVIEW = 'vp-fe-btn-preview';

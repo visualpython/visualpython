@@ -140,7 +140,7 @@ define([
      */
     var removeHeadScript = function(scriptName) {
         for (let i = 0; i < document.querySelector('head').children.length; i++){
-            if (document.querySelector('head').children[i].outerHTML.includes(scriptName)) { 
+            if (document.querySelector('head') && document.querySelector('head').children[i].outerHTML.includes(scriptName)) { 
                 document.querySelector('head').removeChild(document.querySelector('head').children[i]);
             }
         }   
@@ -185,6 +185,25 @@ define([
         require(['vp_base/js/com/component/SuccessMessage'], function(SuccessMessage) {
             new SuccessMessage(titleStr);
         });
+    }
+
+    /**
+     * Template for error box
+     * @param {*} titleStr 
+     * @param {*} contentStr 
+     * @returns 
+     */
+    var templateForErrorBox = function(titleStr, contentStr='') {
+        let errorContent = new com_String();
+        errorContent.appendFormatLine('<div class="{0}">', 'vp-data-error-box');
+        errorContent.appendLine('<i class="fa fa-exclamation-triangle"></i>');
+        errorContent.appendFormatLine('<label class="{0}">{1}</label>',
+            'vp-data-error-box-title', titleStr);
+        if (contentStr && contentStr != '') {
+            errorContent.appendFormatLine('<pre>{0}</pre>', contentStr.split('\\n').join('<br/>'));
+        }
+        errorContent.appendLine('</div>');
+        return errorContent.toString();
     }
 
     /**
@@ -251,6 +270,8 @@ define([
         renderInfoModal: renderInfoModal,
         renderAlertModal: renderAlertModal,
         renderSuccessMessage: renderSuccessMessage,
+
+        templateForErrorBox: templateForErrorBox,
 
         setIsAPIListRunCode: setIsAPIListRunCode,
         getIsAPIListRunCode: getIsAPIListRunCode,

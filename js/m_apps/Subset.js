@@ -158,7 +158,9 @@ define([
             if (subsetType == 'loc' || subsetType == 'iloc' || this.state.dataType == 'Series') {
                 tag.appendFormatLine('<option value="{0}">{1}</option>', 'indexing', 'Indexing');
             }
-            tag.appendFormatLine('<option value="{0}">{1}</option>', 'slicing', 'Slicing');
+            if (subsetType == 'subset' || subsetType == 'loc' || subsetType == 'iloc') {
+                tag.appendFormatLine('<option value="{0}">{1}</option>', 'slicing', 'Slicing');
+            }
             if (subsetType == 'subset' || subsetType == 'loc' || subsetType == 'query') {
                 tag.appendFormatLine('<option value="{0}">{1}</option>', 'condition', 'Condition');
             }
@@ -447,7 +449,7 @@ define([
             tag.appendLine('<div class="vp-td-line">');
             tag.appendLine(this.templateForConditionColumnInput(colList));
             tag.appendFormatLine('<select class="{0} {1}">', 'vp-select s', 'vp-oper-list');
-            var operList = ['', '==', '!=', 'in', 'not in', '<', '<=', '>', '>='];
+            var operList = ['', '==', '!=', 'contains', 'not contains', '<', '<=', '>', '>=', 'starts with', 'ends with'];
             operList.forEach(oper => {
                 tag.appendFormatLine('<option value="{0}">{1}</option>', oper, oper);
             });
@@ -483,18 +485,18 @@ define([
             // .index
             tag.appendFormatLine('<option data-code="{0}" value="{1}">{2}</option>', '.index', '.index', 'index');
             colList.forEach(col => {
-                tag.appendFormatLine('<option data-code="{0}" value="{1}">{2}</option>',
-                    col.code, col.value, col.label);
+                tag.appendFormatLine('<option data-code="{0}" data-dtype="{1}" value="{2}">{3}</option>',
+                    col.code, col.dtype, col.value, col.label);
             });
             tag.appendLine('</select>');
             return tag.toString();
         }
-        templateForConditionCondInput(category) {
+        templateForConditionCondInput(category, dtype='object') {
             var vpCondSuggest = new SuggestInput();
             vpCondSuggest.addClass('vp-input m vp-condition');
 
             if (category && category.length > 0) {
-                vpCondSuggest.setPlaceholder("Categorical Dtype");
+                vpCondSuggest.setPlaceholder((dtype=='object'?'Categorical':dtype) + " dtype");
                 vpCondSuggest.setSuggestList(function () { return category; });
                 vpCondSuggest.setSelectEvent(function (value) {
                     $(this.wrapSelector()).val(value);
@@ -502,6 +504,7 @@ define([
                 });
                 vpCondSuggest.setNormalFilter(false);
             } else {
+                vpCondSuggest.setPlaceholder(dtype==''?'Value':(dtype + " dtype"));
             }
             return vpCondSuggest.toTagString();
         }
@@ -556,35 +559,21 @@ define([
                         that.renderDataPage('');
                     }
                 } else {
-                    var errorContent = new com_String();
+                    var errorContent = '';
                     if (msg.content.ename) {
-                        errorContent.appendFormatLine('<div class="{0}">', VP_DS_DATA_ERROR_BOX);
-                        errorContent.appendLine('<i class="fa fa-exclamation-triangle"></i>');
-                        errorContent.appendFormatLine('<label class="{0}">{1}</label>',
-                            VP_DS_DATA_ERROR_BOX_TITLE, msg.content.ename);
-                        if (msg.content.evalue) {
-                            // errorContent.appendLine('<br/>');
-                            errorContent.appendFormatLine('<pre>{0}</pre>', msg.content.evalue.split('\\n').join('<br/>'));
-                        }
-                        errorContent.appendLine('</div>');
+                        errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
                     }
                     that.renderDataPage(errorContent);
+                    vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
                 }
             }).catch(function(resultObj) {
                 let { msg } = resultObj;
-                var errorContent = new com_String();
+                var errorContent = '';
                 if (msg.content.ename) {
-                    errorContent.appendFormatLine('<div class="{0}">', VP_DS_DATA_ERROR_BOX);
-                    errorContent.appendLine('<i class="fa fa-exclamation-triangle"></i>');
-                    errorContent.appendFormatLine('<label class="{0}">{1}</label>',
-                        VP_DS_DATA_ERROR_BOX_TITLE, msg.content.ename);
-                    if (msg.content.evalue) {
-                        // errorContent.appendLine('<br/>');
-                        errorContent.appendFormatLine('<pre>{0}</pre>', msg.content.evalue.split('\\n').join('<br/>'));
-                    }
-                    errorContent.appendLine('</div>');
+                    errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
                 }
                 that.renderDataPage(errorContent);
+                vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
             });
         }
         /**
@@ -703,6 +692,7 @@ define([
                         label: x.location + '',
                         value: x.location + '',
                         code: x.location + '',
+                        dtype: 'int'
                     };
                 });
             }
@@ -1026,7 +1016,7 @@ define([
                             return {
                                 ...x,
                                 value: x.label,
-                                code: x.value
+                                code: x.value,
                             };
                         });
                         that.loadColumnList(colList);
@@ -1345,25 +1335,42 @@ define([
                 var thisTag = $(this);
                 var varName = that.state.pandasObject;
                 var colName = $(this).find('option:selected').attr('data-code');
+                var colDtype = $(this).find('option:selected').attr('data-dtype');
 
                 var condTag = $(this).closest('td').find('.vp-condition');
 
-                // get result and load column list
-                vpKernel.getColumnCategory(varName, colName).then(function (resultObj) {
-                    let { result } = resultObj;
-                    var category = JSON.parse(result);
-                    if (category && category.length > 0) {
-                        // if it's categorical column, check 'Text' as default
-                        $(thisTag).closest('td').find('.vp-cond-use-text').prop('checked', true);
-                    } else {
-                        $(thisTag).closest('td').find('.vp-cond-use-text').prop('checked', false);
-                    }
+                if (colName == '.index') {
+                    // index
+                    $(thisTag).closest('td').find('.vp-cond-use-text').prop('checked', false);
                     $(condTag).replaceWith(function () {
-                        return that.templateForConditionCondInput(category);
+                        return that.templateForConditionCondInput([], '');
                     });
                     that.generateCode();
-                });
-
+                } else {
+                    // get result and load column list
+                    vpKernel.getColumnCategory(varName, colName).then(function (resultObj) {
+                        let { result } = resultObj;
+                        try {
+                            var category = JSON.parse(result);
+                            if (category && category.length > 0 && colDtype == 'object') {
+                                // if it's categorical column and its dtype is object, check 'Text' as default
+                                $(thisTag).closest('td').find('.vp-cond-use-text').prop('checked', true);
+                            } else {
+                                $(thisTag).closest('td').find('.vp-cond-use-text').prop('checked', false);
+                            }
+                            $(condTag).replaceWith(function () {
+                                return that.templateForConditionCondInput(category, colDtype);
+                            });
+                            that.generateCode();
+                        } catch {
+                            $(thisTag).closest('td').find('.vp-cond-use-text').prop('checked', false);
+                            $(condTag).replaceWith(function () {
+                                return that.templateForConditionCondInput([], colDtype);
+                            });
+                            that.generateCode();
+                        }
+                    });
+                }
             });
 
             // use text
@@ -1444,7 +1451,12 @@ define([
                             rowList.push(rowValue);
                         }
                     }
-                    rowSelection.appendFormat('[{0}]', rowList.toString());
+                    if (rowList.length == 1) {
+                        // to Series when rowList's length is 1.
+                        rowSelection.appendFormat('{0}', rowList.toString());
+                    } else {
+                        rowSelection.appendFormat('[{0}]', rowList.toString());
+                    }
                 } else {
                     rowSelection.append(':');
                 }
@@ -1479,43 +1491,55 @@ define([
                             rowSelection.append('(');
                         }
                         let colValue = colTag.find('.vp-col-list').val();
-                        if (colValue && colValue != '') {
-                            if (colValue == '.index') {
-                                rowSelection.append('index');
-                            } else {
-                                rowSelection.appendFormat('{0}', colValue);
-                            }
+                        if (colValue && colValue == '.index') {
+                            colValue = 'index';
                         }
-                        oper && rowSelection.appendFormat(' {0}', oper);
-                        if (cond) {
-                            // condition value as text
-                            if (useText) {
-                                rowSelection.appendFormat(" '{0}'", cond);
-                            } else {
-                                rowSelection.appendFormat(" {0}", cond);
-                            }
+                        let condValue = cond;
+                        // condition value as text
+                        if (cond && useText) {
+                            condValue = com_util.formatString("'{0}'", cond);
+                        }
+                        if (oper == 'contains') {
+                            rowSelection.appendFormat('{0}.str.contains({1})', colValue, condValue);
+                        } else if (oper == 'not contains') {
+                            rowSelection.appendFormat('~{0}.str.contains({1})', colValue, condValue);
+                        } else if (oper == 'starts with') {
+                            rowSelection.appendFormat('{0}.str.startswith({1})', colValue, condValue);
+                        } else if (oper == 'ends with') {
+                            rowSelection.appendFormat('{0}.str.endswith({1})', colValue, condValue);
+                        } else {
+                            rowSelection.appendFormat('{0}{1}{2}', colValue, oper != ''?(' ' + oper):'', condValue != ''?(' ' + condValue):'');
                         }
                         if (condList.length > 1) {
                             rowSelection.append(')');
                         }
                     } else {
                         if (varType == 'DataFrame') {
-                            rowSelection.appendFormat('({0}', varName);
+                            rowSelection.append('(');
+
+                            let colValue = varName;
                             if (colName && colName != '') {
                                 if (colName == '.index') {
-                                    rowSelection.appendFormat('{0}', colName);
+                                    colValue += colName;
                                 } else {
-                                    rowSelection.appendFormat('[{0}]', colName);
+                                    colValue += com_util.formatString('[{0}]', colName);
                                 }
                             }
-                            oper && rowSelection.appendFormat(' {0}', oper);
-                            if (cond) {
-                                // condition value as text
-                                if (useText) {
-                                    rowSelection.appendFormat(" '{0}'", cond);
-                                } else {
-                                    rowSelection.appendFormat(" {0}", cond);
-                                }
+                            let condValue = cond;
+                            // condition value as text
+                            if (cond && useText) {
+                                condValue = com_util.formatString("'{0}'", cond);
+                            }
+                            if (oper == 'contains') {
+                                rowSelection.appendFormat('{0}.str.contains({1})', colValue, condValue);
+                            } else if (oper == 'not contains') {
+                                rowSelection.appendFormat('~{0}.str.contains({1})', colValue, condValue);
+                            } else if (oper == 'starts with') {
+                                rowSelection.appendFormat('{0}.str.startswith({1})', colValue, condValue);
+                            } else if (oper == 'ends with') {
+                                rowSelection.appendFormat('{0}.str.endswith({1})', colValue, condValue);
+                            } else {
+                                rowSelection.appendFormat('{0}{1}{2}', colValue, oper != ''?(' ' + oper):'', condValue != ''?(' ' + condValue):'');
                             }
                             rowSelection.append(')');
                         } else {
@@ -1769,8 +1793,6 @@ define([
     const VP_DS_DATA_VIEW_ALL_DIV = 'vp-ds-data-view-all-div';
     const VP_DS_DATA_VIEW_ALL = 'vp-ds-data-view-all';
     const VP_DS_DATA_VIEW_BOX = 'vp-ds-data-view-box';
-    const VP_DS_DATA_ERROR_BOX = 'vp-ds-data-error-box';
-    const VP_DS_DATA_ERROR_BOX_TITLE = 'vp-ds-data-error-box-title';
 
     return Subset;
 });

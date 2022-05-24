@@ -19,7 +19,7 @@ define([
      *      }
      * ]
      */
-    var CHART_LIBRARIES = {
+    var SEABORN_LIBRARIES = {
         /** Relational plots */
         'scatterplot': {
             name: 'Scatter Plot',
@@ -155,7 +155,19 @@ define([
                 { name: 'allocateTo', label: 'Allocate To', component: ['input'], usePair: true }
             ]
         },
+        'countplot': {
+            name: 'Count Plot',
+            code: '${allocateTo} = sns.countplot(${data}${x}${y}${hue}${etc})',
+            description: 'Show the counts of observations in each categorical bin using bars.',
+            options: [
+                { name: 'data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'list'], usePair: true },
+                { name: 'x', component: ['col_select'], usePair: true },
+                { name: 'y', component: ['col_select'], usePair: true },
+                { name: 'hue', component: ['col_select'], usePair: true },
+                { name: 'allocateTo', label: 'Allocate To', component: ['input'], usePair: true }
+            ]
+        }
     }
 
-    return CHART_LIBRARIES;
+    return SEABORN_LIBRARIES;
 });

@@ -245,17 +245,11 @@ define([
                     }
                 }
 
-                this.state.importMeta && this.state.importMeta.forEach(pack => {
-                    if (pack.i0 == pacI0) {
-                        // if include code exists?
-                        if (pack.include != undefined) {
-                            pack.include.forEach(code => {
-                                sbCode.appendLine();
-                                sbCode.append(code);
-                            });
-                        }
-                    }
-                })
+                // Need additional code?
+                if (pacI0 == 'matplotlib.pyplot' || pacI0 == 'matplotlib') {
+                    sbCode.appendLine();
+                    sbCode.append('%matplotlib inline');
+                }
 
                 importMeta.push({ i0: pacI0, i1: pacI1, type: pacType, checked: pacChecked });
             }
