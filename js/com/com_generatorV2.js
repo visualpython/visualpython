@@ -654,26 +654,23 @@ define([
 
     /**
      * Bind columns source function
-     * @param {string} selector thisWrapSelector 
-     * @param {object} target 
+     * @param {object} pageThis
+     * @param {object} targetId 
      * @param {array} columnInputIdList 
      * @param {string} tagType input / select (tag type)
      * @param {array/boolean} columnWithEmpty boolean array or value to decide whether select tag has empty space
      * @param {array/boolean} columnWithIndex boolean array or value to decide whether select tag has index option
      * Usage : 
      *  $(document).on('change', this.wrapSelector('#dataframe_tag_id'), function() {
-     *      pdGen.vp_bindColumnSource(that.wrapSelector(), this, ['column_input_id'], 'select', [true, true, true]);
+     *      pdGen.vp_bindColumnSource(that, 'dataframe_tag_id', ['column_input_id'], 'select', [true, true, true]);
      *  });
      */
-    var vp_bindColumnSource = function(selector, target, columnInputIdList, tagType="input", columnWithEmpty=false, columnWithIndex=false) {
-        var varName = '';
-        if ($(target).length > 0) {
-            varName = $(target).val();
-        }
+    var vp_bindColumnSource = function(pageThis, targetId, columnInputIdList, tagType="input", columnWithEmpty=false, columnWithIndex=false) {
+        var varName = pageThis.state[targetId];
         if (varName === '') {
             // reset with no source
             columnInputIdList && columnInputIdList.forEach(columnInputId => {
-                let defaultValue = $(selector + ' #' + columnInputId).val();
+                let defaultValue = pageThis.state[columnInputId];
                 if (defaultValue == null || defaultValue == undefined) {
                     defaultValue = '';
                 }
@@ -735,7 +732,7 @@ define([
 
                 // columns using suggestInput
                 columnInputIdList && columnInputIdList.forEach((columnInputId, idx) => {
-                    let defaultValue = $(selector + ' #' + columnInputId).val();
+                    let defaultValue = pageThis.state[columnInputId];
                     if (defaultValue == null || defaultValue == undefined) {
                         defaultValue = '';
                     }
@@ -771,7 +768,7 @@ define([
                             option.append(document.createTextNode(listVar.label));
                             $(tag).append(option);
                         });
-                        $(selector + ' #' + columnInputId).replaceWith(function() {
+                        $(pageThis.wrapSelector('#' + columnInputId)).replaceWith(function() {
                             return $(tag);
                         });
                     }

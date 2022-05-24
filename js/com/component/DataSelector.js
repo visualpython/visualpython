@@ -14,9 +14,8 @@ define([
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
     'vp_base/js/com/component/Component',
-    'vp_base/js/com/component/SuggestInput',
     'vp_base/js/com/component/MultiSelector'
-], function(dataHTML, dataCss, com_String, com_util, Component, SuggestInput, MultiSelector) {
+], function(dataHTML, dataCss, com_String, com_util, Component, MultiSelector) {
     //========================================================================
     // [CLASS] DataSelector
     // Usage:
@@ -24,7 +23,10 @@ define([
     //     type: 'data',
     //     pageThis: this,
     //     id: 'targetId',
-    //     finish: function() {
+    //     select: function(value, dtype) {
+    //         ;
+    //     }
+    //     finish: function(value, dtype) {
     //         ;
     //     }
     // });
@@ -59,6 +61,7 @@ define([
                 filterType: 'All',
                 data: '',
                 dataType: '',
+                returnDataType: '',
                 dataInfo: '',
                 slicingStart1: '',
                 slicingEnd1: '',
@@ -66,24 +69,25 @@ define([
                 slicingEnd2: '',
                 ndRowType: 'slicing',
                 ndColType: 'slicing',
+                indexing: [],
+                rowIndexing: [],
+                colIndexing: [],
                 dictKey: '',
                 ...this.state
             }
 
-            this._parentTag = null;
-            if (this.prop.pageThis) {
-                this._parentTag = $(this.prop.pageThis.wrapSelector());
-            }
             this._target = null;
             if (this.prop.pageThis) {
                 this._target = this.prop.pageThis.wrapSelector('#' + this.prop.id);
             }
 
             this._columnSelector = null;
+            this._ndRowSelector = null;
+            this._ndColSelector = null;
 
             this._varList = [];
 
-            this.loadVariables();
+            this.loadVariables(); 
             this.bindEvent();
         }
 
@@ -103,7 +107,7 @@ define([
                 that._bindAutocomplete(that._varList);
 
                 // bind Event for opening popup
-                $(that._parentTag).on('click', com_util.formatString('.vp-ds-box-{0} .vp-ds-filter', that.uuid), function(evt) {
+                $(that.prop.pageThis.wrapSelector()).on('click', com_util.formatString('.vp-ds-box-{0} .vp-ds-filter', that.uuid), function(evt) {
                     // check disabled
                     if (!$(this).parent().find('input.vp-ds-target').is(':disabled')) {
                         if (!$(that.wrapSelector()).length > 0) {
@@ -126,7 +130,7 @@ define([
                 that._bindAutocomplete(that._varList);
 
                 // bind Event for opening popup
-                $(that._parentTag).on('click', com_util.formatString('.vp-ds-box-{0} .vp-ds-filter', that.uuid), function(evt) {
+                $(that.prop.pageThis.wrapSelector()).on('click', com_util.formatString('.vp-ds-box-{0} .vp-ds-filter', that.uuid), function(evt) {
                     // check if it's disabled
                     if (!$(this).parent().find('input.vp-ds-target').is(':disabled')) {
                         if (!$(that.wrapSelector()).length > 0) {
@@ -175,11 +179,19 @@ define([
                     // trigger change
                     $(this).val(ui.item.value);
                     $(this).data('type', ui.item.dtype);
+
+                    that.state.filterType = 'All';
+                    that.state.data = ui.item.value;
+                    that.state.dataType = ui.item.dtype;
+                    that.state.returnDataType = ui.item.dtype;
+
+                    // that.prop.pageThis.state[that.prop.id + '_state'] = that.state;
+
                     $(this).trigger('change');
 
                     // select event
-                    if (typeof that.prop.select == "function") {
-                        result = that.prop.select(ui.item.value, ui.item);
+                    if (that.prop.select && typeof that.prop.select == 'function') {
+                        result = that.prop.select(ui.item.value, ui.item.dtype);
                     }
                     if (result != undefined) {
                         return result;
@@ -218,11 +230,7 @@ define([
             // Click ok
             $(this.wrapSelector('#vp_dsOk')).on('click', function() {
                 // set target value
-                let newValue = that.generateCode();
-
-                $(that._target).val(newValue);
-                $(that._target).data('type', that.state.dataType);
-                that.prop.finish(newValue);
+                that.setValue();
                 that.close();
             });
         }
@@ -240,6 +248,7 @@ define([
                 $(this).addClass('selected');
 
                 let type = $(this).data('type');
+                that.state.filterType = type;
                 if (type == 'All') {
                     that.renderVariableBox(that._varList);
                 } else if (type == 'Others') {
@@ -263,6 +272,7 @@ define([
                 let dataType = $(this).data('type');
                 that.state.data = data;
                 that.state.dataType = dataType;
+                that.state.returnDataType = dataType;
 
                 // render option page
                 that.renderOptionPage();
@@ -272,12 +282,9 @@ define([
                 let dataType = $(this).data('type');
                 that.state.data = data;
                 that.state.dataType = dataType;
+                that.state.returnDataType = dataType;
 
-                let newValue = that.generateCode();
-
-                $(that._target).val(newValue);
-                $(that._target).data('type', that.state.dataType);
-                that.prop.finish(newValue);
+                that.setValue();
                 that.close();
             });
         }
@@ -304,6 +311,11 @@ define([
                 });
 
                 that._varList = varList;
+                if (varList && varList.length > 0 && that.state.data == '') {
+                    that.state.data = varList[0].value;
+                    that.state.dataType = varList[0].dtype;
+                    that.state.returnDataType = varList[0].dtype;
+                }
                 
                 that.renderDataBox(varList);
                 that._bindAutocomplete(varList);
@@ -318,7 +330,7 @@ define([
         templateForTarget() {
             return `
                 <div class="vp-ds-box vp-ds-box-${this.uuid} vp-ds-uninit">
-                    <input type="text" class="vp-ds-target vp-input ${this.prop.classes}" id="${this.prop.id}"/>
+                    <input type="text" class="vp-ds-target vp-input vp-state ${this.prop.classes}" id="${this.prop.id}" value="${this.prop.pageThis.state[this.prop.id]}"/>
                     <span class="vp-ds-filter"><img src="/nbextensions/visualpython/img/filter.svg"/></span>
                 </div>
             `;
@@ -330,8 +342,8 @@ define([
                     <label for="slicingStart1">Type start/end index for slicing.</label>
                 </div>
                 <div>
-                    <input type="number" class="vp-input vp-state" id="slicingStart1" placeholder="Start value"/>
-                    <input type="number" class="vp-input vp-state" id="slicingEnd1" placeholder="End value"/>
+                    <input type="number" class="vp-input vp-state" id="slicingStart1" placeholder="Start value" value="${this.state.slicingStart1}"/>
+                    <input type="number" class="vp-input vp-state" id="slicingEnd1" placeholder="End value" value="${this.state.slicingEnd1}"/>
                 </div>
             `;
         }
@@ -350,8 +362,8 @@ define([
                                 <label for="slicingStart1">Type start/end index for slicing.</label>
                             </div>
                             <div>
-                                <input type="number" class="vp-input m vp-state" id="slicingStart1" placeholder="Start value"/>
-                                <input type="number" class="vp-input m vp-state" id="slicingEnd1" placeholder="End value"/>
+                                <input type="number" class="vp-input m vp-state" id="slicingStart1" placeholder="Start value" value="${this.state.slicingStart1}"/>
+                                <input type="number" class="vp-input m vp-state" id="slicingEnd1" placeholder="End value" value="${this.state.slicingEnd1}"/>
                             </div>
                         </div>
                         <div class="vp-nd-row-box indexing">
@@ -368,8 +380,8 @@ define([
                                 <label for="slicingStart2">Type start/end index for slicing.</label>
                             </div>
                             <div>
-                                <input type="number" class="vp-input m vp-state" id="slicingStart2" placeholder="Start value"/>
-                                <input type="number" class="vp-input m vp-state" id="slicingEnd2" placeholder="End value"/>
+                                <input type="number" class="vp-input m vp-state" id="slicingStart2" placeholder="Start value" value="${this.state.slicingStart2}"/>
+                                <input type="number" class="vp-input m vp-state" id="slicingEnd2" placeholder="End value" value="${this.state.slicingEnd2}"/>
                             </div>
                         </div>
                         <div class="vp-nd-col-box indexing">
@@ -396,10 +408,23 @@ define([
 
         /** Render popup on clicking filter button */
         renderPopup() {
+            // load state
+            let state = this.prop.pageThis.state[this.prop.id + '_state'];
+            if (state) {
+                this.state = {
+                    ...this.state,
+                    ...state
+                }
+            }
+
             super.render();
 
             this.loadVariables();
             this._bindEventForPopup();
+
+            // if (this.state.data != '') {
+            //     this.renderOptionPage();
+            // }
         }
 
         renderDataBox(varList) {
@@ -417,6 +442,10 @@ define([
             });
             $(this.wrapSelector('.vp-ds-type-box')).html(varTags.toString());
 
+            // focus on selected item
+            let selectedTag = $(this.wrapSelector('.vp-ds-type-item.selected')).get(0);
+            selectedTag && selectedTag.scrollIntoView();
+
             this.renderVariableBox(varList);
         }
 
@@ -430,6 +459,11 @@ define([
             });
             $(this.wrapSelector('.vp-ds-variable-box')).html(varTags.toString());
 
+            // focus on selected item
+            let selectedTag = $(this.wrapSelector('.vp-ds-var-item.selected')).get(0);
+            selectedTag && selectedTag.scrollIntoView();
+
+            this.renderOptionPage();
             this._bindEventForItem();
         }
 
@@ -446,7 +480,7 @@ define([
                 case 'DataFrame':
                     // column selecting
                     this._columnSelector = new MultiSelector(this.wrapSelector('.vp-ds-option-inner-box'),
-                        { mode: 'columns', parent: [data] }
+                        { mode: 'columns', parent: [data], selectedList: this.state.indexing }
                     );
                     break;
                 case 'Series':
@@ -463,10 +497,10 @@ define([
                         $(this.wrapSelector('#ndRowType')).val(this.state.ndRowType);
                         $(this.wrapSelector('#ndColType')).val(this.state.ndColType);
                         this._ndRowSelector = new MultiSelector(this.wrapSelector('.vp-nd-row-box.indexing'),
-                            { mode: 'ndarray0', parent: [data] }
+                            { mode: 'ndarray0', parent: [data], selectedList: this.state.rowIndexing }
                         );
                         this._ndColSelector = new MultiSelector(this.wrapSelector('.vp-nd-col-box.indexing'),
-                            { mode: 'ndarray1', parent: [data] }
+                            { mode: 'ndarray1', parent: [data], selectedList: this.state.colIndexing }
                         );
                         $(this.wrapSelector('.vp-nd-row-box')).hide();
                         $(this.wrapSelector('.vp-nd-col-box')).hide();
@@ -537,6 +571,19 @@ define([
             }); 
         }
 
+        setValue() {
+            let newValue = this.generateCode();
+            $(this._target).val(newValue);
+            $(this._target).data('type', this.state.returnDataType);
+            // set pageThis.state
+            this.prop.pageThis.state[this.prop.id + '_state'] = this.state;
+            $(this._target).change();
+
+            if (this.prop.finish && typeof this.prop.finish == 'function') {
+                this.prop.finish(newValue, this.state.returnDataType);
+            }            
+        }
+
         generateCode() {
             // save state
             this._saveState();
@@ -555,12 +602,20 @@ define([
                     code.append(data);
                     if (this._columnSelector != null) {
                         let result = this._columnSelector.getDataList();
+                        this.state.indexing = result.map(obj => obj.code); // save state
                         let columnList = [];
                         result && result.forEach(obj => {
                             columnList.push(obj.code);
                         });
                         if (columnList.length > 0) {
-                            code.appendFormat('[[{0}]]', columnList.join(', '));
+                            if (columnList.length == 1) {
+                                // return as Series
+                                code.appendFormat('[{0}]', columnList.join(', '));
+                                // change datatype to Series
+                                this.state.returnDataType = 'Series';
+                            } else {
+                                code.appendFormat('[[{0}]]', columnList.join(', '));
+                            }
                         }
                     }
                     break;
@@ -589,6 +644,7 @@ define([
                         } else {
                             // indexing
                             let result = this._ndRowSelector.getDataList();
+                            this.state.rowIndexing = result.map(obj => obj.code); // save state
                             let rowList = [];
                             result && result.forEach(obj => {
                                 rowList.push(obj.code);
@@ -609,6 +665,7 @@ define([
                         } else {
                             // indexing
                             let result = this._ndColSelector.getDataList();
+                            this.state.colIndexing = result.map(obj => obj.code); // save state
                             let columnList = [];
                             result && result.forEach(obj => {
                                 columnList.push(obj.code);
@@ -640,6 +697,8 @@ define([
                     let dictKey = $(this.wrapSelector('#dictKey')).val();
                     if (dictKey && dictKey != '') {
                         code.appendFormat("['{0}']", dictKey);
+                        // return datatype to ...
+                        this.state.returnDataType = 'str'; // FIXME: get dict's key value
                     }
                     break;
                 default:

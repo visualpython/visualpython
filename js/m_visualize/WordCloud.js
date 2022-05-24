@@ -125,7 +125,6 @@ define([
                 type: 'data',
                 pageThis: this,
                 id: 'data',
-                classes: 'vp-state',
                 select: function() {
                     that.state.useFile = false;
                     $(that.wrapSelector('.vp-wc-file-option')).hide();
@@ -175,6 +174,8 @@ define([
                 suggestInput.setPlaceholder('encoding option');
                 return suggestInput.toTagString();
             });
+
+            this.loadPreview();
         }
 
         loadPreview() {

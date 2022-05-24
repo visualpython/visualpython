@@ -21,8 +21,9 @@ define([
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/SuggestInput',
     'vp_base/js/com/component/VarSelector2',
-    'vp_base/data/m_visualize/seabornLibrary'
-], function(chartHTml, chartCss, com_String, com_generator, com_util, PopupComponent, SuggestInput, VarSelector2, SEABORN_LIBRARIES) {
+    'vp_base/data/m_visualize/seabornLibrary',
+    'vp_base/js/com/component/DataSelector'
+], function(chartHTml, chartCss, com_String, com_generator, com_util, PopupComponent, SuggestInput, VarSelector2, SEABORN_LIBRARIES, DataSelector) {
 
     class Seaborn extends PopupComponent {
         _init() {
@@ -164,9 +165,9 @@ define([
                     // set Data
                     $(that.wrapSelector('#data')).prop('disabled', false);
 
-                    $(that.wrapSelector('#x')).closest('.vp-vs-box').replaceWith('<select id="x"></select>');
-                    $(that.wrapSelector('#y')).closest('.vp-vs-box').replaceWith('<select id="y"></select>');
-                    $(that.wrapSelector('#hue')).closest('.vp-vs-box').replaceWith('<select id="hue"></select>');
+                    $(that.wrapSelector('#x')).closest('.vp-ds-box').replaceWith('<select id="x"></select>');
+                    $(that.wrapSelector('#y')).closest('.vp-ds-box').replaceWith('<select id="y"></select>');
+                    $(that.wrapSelector('#hue')).closest('.vp-ds-box').replaceWith('<select id="hue"></select>');
                 } else {
                     // set X Y indivisually
                     // disable data selection
@@ -177,23 +178,15 @@ define([
                     that.state.y = '';
                     that.state.hue = '';
 
-                    let varSelectorX = new VarSelector2(that.wrapSelector(), ['DataFrame', 'Series', 'list']);
-                    varSelectorX.setComponentID('x');
-                    varSelectorX.addClass('vp-state vp-input');
-                    varSelectorX.setValue(that.state.x);
-                    $(that.wrapSelector('#x')).replaceWith(varSelectorX.toTagString());
+                    let dataSelectorX = new DataSelector({ pageThis: that, id: 'x' });
+                    $(that.wrapSelector('#x')).replaceWith(dataSelectorX.toTagString());
 
-                    let varSelectorY = new VarSelector2(that.wrapSelector(), ['DataFrame', 'Series', 'list']);
-                    varSelectorY.setComponentID('y');
-                    varSelectorY.addClass('vp-state vp-input');
-                    varSelectorY.setValue(that.state.y);
-                    $(that.wrapSelector('#y')).replaceWith(varSelectorY.toTagString());
+                    let dataSelectorY = new DataSelector({ pageThis: that, id: 'y' });
+                    $(that.wrapSelector('#y')).replaceWith(dataSelectorY.toTagString());
 
-                    let varSelectorHue = new VarSelector2(that.wrapSelector(), ['DataFrame', 'Series', 'list']);
-                    varSelectorHue.setComponentID('hue');
-                    varSelectorHue.addClass('vp-state vp-input');
-                    varSelectorHue.setValue(that.state.hue);
-                    $(that.wrapSelector('#hue')).replaceWith(varSelectorHue.toTagString());
+                    let dataSelectorHue = new DataSelector({ pageThis: that, id: 'hue' });
+                    $(that.wrapSelector('#hue')).replaceWith(dataSelectorHue.toTagString());
+                    
                 }
             });
 
@@ -242,28 +235,44 @@ define([
             $(page).find('#chartType').html(chartTypeTag.toString());
 
             // chart variable
-            let varSelector = new VarSelector2(this.wrapSelector());
-            varSelector.setComponentID('data');
-            varSelector.addClass('vp-state vp-input');
-            varSelector.setValue(this.state.data);
-            varSelector.setSelectEvent(function (value, item) {
-                $(this.wrapSelector()).val(value);
-                that.state.dtype = item.dtype;
+            let dataSelector = new DataSelector({
+                type: 'data',
+                pageThis: this,
+                id: 'data',
+                select: function(value, dtype) {
+                    that.state.dtype = dtype;
 
-                if (item.dtype == 'DataFrame') {
-                    $(that.wrapSelector('#x')).prop('disabled', false);
-                    $(that.wrapSelector('#y')).prop('disabled', false);
-                    $(that.wrapSelector('#hue')).prop('disabled', false);
-                    
-                    // bind column source using selected dataframe
-                    com_generator.vp_bindColumnSource(that.wrapSelector(), $(that.wrapSelector('#data')), ['x', 'y', 'hue'], 'select', true, true);
-                } else {
-                    $(that.wrapSelector('#x')).prop('disabled', true);
-                    $(that.wrapSelector('#y')).prop('disabled', true);
-                    $(that.wrapSelector('#hue')).prop('disabled', true);
+                    if (dtype == 'DataFrame') {
+                        $(that.wrapSelector('#x')).prop('disabled', false);
+                        $(that.wrapSelector('#y')).prop('disabled', false);
+                        $(that.wrapSelector('#hue')).prop('disabled', false);
+                        
+                        // bind column source using selected dataframe
+                        com_generator.vp_bindColumnSource(that, 'data', ['x', 'y', 'hue'], 'select', true, true);
+                    } else {
+                        $(that.wrapSelector('#x')).prop('disabled', true);
+                        $(that.wrapSelector('#y')).prop('disabled', true);
+                        $(that.wrapSelector('#hue')).prop('disabled', true);
+                    }
+                },
+                finish: function(value, dtype) {
+                    that.state.dtype = dtype;
+
+                    if (dtype == 'DataFrame') {
+                        $(that.wrapSelector('#x')).prop('disabled', false);
+                        $(that.wrapSelector('#y')).prop('disabled', false);
+                        $(that.wrapSelector('#hue')).prop('disabled', false);
+                        
+                        // bind column source using selected dataframe
+                        com_generator.vp_bindColumnSource(that, 'data', ['x', 'y', 'hue'], 'select', true, true);
+                    } else {
+                        $(that.wrapSelector('#x')).prop('disabled', true);
+                        $(that.wrapSelector('#y')).prop('disabled', true);
+                        $(that.wrapSelector('#hue')).prop('disabled', true);
+                    }
                 }
             });
-            $(page).find('#data').replaceWith(varSelector.toTagString());
+            $(page).find('#data').replaceWith(dataSelector.toTagString());
 
             // legend position
             let legendPosTag = new com_String();
@@ -377,6 +386,36 @@ define([
             });
 
             this.bindSettingBox();
+
+            // Load chart options
+            if (this.state.setXY) {
+                // disable data selection
+                $(this.wrapSelector('#data')).prop('disabled', true);
+
+                let dataSelectorX = new DataSelector({ pageThis: this, id: 'x' });
+                $(this.wrapSelector('#x')).replaceWith(dataSelectorX.toTagString());
+
+                let dataSelectorY = new DataSelector({ pageThis: this, id: 'y' });
+                $(this.wrapSelector('#y')).replaceWith(dataSelectorY.toTagString());
+
+                let dataSelectorHue = new DataSelector({ pageThis: this, id: 'hue' });
+                $(this.wrapSelector('#hue')).replaceWith(dataSelectorHue.toTagString());
+            } else {
+                if (this.state.dtype == 'DataFrame') {
+                    $(this.wrapSelector('#x')).prop('disabled', false);
+                    $(this.wrapSelector('#y')).prop('disabled', false);
+                    $(this.wrapSelector('#hue')).prop('disabled', false);
+                    
+                    // bind column source using selected dataframe
+                    com_generator.vp_bindColumnSource(this, 'data', ['x', 'y', 'hue'], 'select', true, true);
+                } else {
+                    $(this.wrapSelector('#x')).prop('disabled', true);
+                    $(this.wrapSelector('#y')).prop('disabled', true);
+                    $(this.wrapSelector('#hue')).prop('disabled', true);
+                }
+            }
+            
+            this.loadPreview();
         }
 
         bindSettingBox() {
@@ -544,7 +583,7 @@ define([
 
         generateCode(preview=false) {
             let { 
-                chartType, data, userOption='',
+                chartType, data, x, y, hue, setXY, userOption='', 
                 title, x_label, y_label, legendPos,
                 useColor, color, useGrid, gridColor, markerStyle,
                 x_limit_from, x_limit_to, y_limit_from, y_limit_to,
@@ -578,6 +617,29 @@ define([
                     ...etcOptionCode
                 ]
             }
+
+            if (preview && useSampling) {
+                // data sampling code for preview
+                // convertedData = data + '.sample(n=' + sampleCount + ', random_state=0)';
+                // convertedData = com_util.formatString('_vp_sample({0}, {1})', data, sampleCount);
+                // replace pre-defined options
+                // generatedCode = generatedCode.replaceAll(data, convertedData);
+                if (setXY) {
+                    if (x && x != '') {
+                        state.x = com_util.formatString('_vp_sample({0}, {1})', x, sampleCount);
+                    }
+                    if (y && y != '') {
+                        state.y = com_util.formatString('_vp_sample({0}, {1})', y, sampleCount);
+                    }
+                    if (hue && hue != '') {
+                        state.hue = com_util.formatString('_vp_sample({0}, {1})', hue, sampleCount);
+                    }
+                } else {
+                    if (data && data != '') {
+                        state.data = com_util.formatString('_vp_sample({0}, {1})', data, sampleCount);
+                    }
+                }
+            }   
 
             let generatedCode = com_generator.vp_codeGenerator(this, config, state, etcOptionCode.join(', '));
 
@@ -625,17 +687,9 @@ define([
                 let defaultWidth = 8;
                 let defaultHeight = 6;
                 code.appendFormatLine('plt.figure(figsize=({0}, {1}))', defaultWidth, defaultHeight);
-                if (useSampling) {
-                    // data sampling code for preview
-                    // convertedData = data + '.sample(n=' + sampleCount + ', random_state=0)';
-                    convertedData = com_util.formatString('_vp_sample({0}, {1})', data, sampleCount);
-                    // replace pre-defined options
-                    generatedCode = generatedCode.replaceAll(data, convertedData);
-                }   
 
                 code.appendLine(generatedCode);
                 code.appendLine(chartCode.toString());
-                
             } else {
                 code.appendLine(generatedCode);
                 code.appendLine(chartCode.toString());

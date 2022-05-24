@@ -9,14 +9,14 @@
     right: 25px;
     cursor: pointer;
 }
-.vp-ds-box input {
+.vp-ds-box input.vp-ds-target {
     padding-right: 23px;
 }
-.vp-ds-box input:disabled {
+.vp-ds-box input.vp-ds-target:disabled {
     background: var(--light-gray-color) !important;
     cursor: not-allowed;
 }
-.vp-ds-box input:disabled + .vp-ds-filter {
+.vp-ds-box input.vp-ds-target:disabled + .vp-ds-filter {
     cursor: not-allowed;
 }
 .vp-ds-item:hover {
