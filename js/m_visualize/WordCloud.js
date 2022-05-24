@@ -36,7 +36,7 @@ define([
                 data: '',
                 useFile: false,
                 encoding: '',
-                wordCount: 200,
+                wordCount: '200',
                 stopWords: '',
                 fontPath: '',
                 userOption: '', 
@@ -103,6 +103,37 @@ define([
                 $(page).find('.vp-wc-file-option').hide();
             }
 
+            let that = this;
+            //================================================================
+            // Load state
+            //================================================================
+            Object.keys(this.state).forEach(key => {
+                let tag = $(page).find('#' + key);
+                let tagName = $(tag).prop('tagName'); // returns with UpperCase
+                let value = that.state[key];
+                if (value == undefined) {
+                    return;
+                }
+                switch(tagName) {
+                    case 'INPUT':
+                        let inputType = $(tag).prop('type');
+                        if (inputType == 'text' || inputType == 'number' || inputType == 'hidden') {
+                            $(tag).val(value);
+                            break;
+                        }
+                        if (inputType == 'checkbox') {
+                            $(tag).prop('checked', value);
+                            break;
+                        }
+                        break;
+                    case 'TEXTAREA':
+                    case 'SELECT':
+                    default:
+                        $(tag).val(value);
+                        break;
+                }
+            });
+
             return page;
         }
 
@@ -120,7 +151,7 @@ define([
                 'height': '200px'
             });
 
-            // FIXME: bind dataSelector to #data
+            // bind dataSelector to #data
             let dataSelector = new DataSelector({
                 type: 'data',
                 pageThis: this,
@@ -132,8 +163,6 @@ define([
                 finish: function() {
                     that.state.useFile = false;
                     $(that.wrapSelector('.vp-wc-file-option')).hide();
-                    
-                    $(that.wrapSelector('#data')).change();
                 }
             });
             $(this.wrapSelector('#data')).replaceWith(dataSelector.toTagString());
@@ -239,7 +268,7 @@ define([
 
         generateCode(preview=false) {
             let { 
-                data, useFile, encoding, wordCount, 
+                data, data_state, useFile, encoding, wordCount, 
                 stopWords, fontPath, userOption, figWidth, figHeight 
             } = this.state;
             let code = new com_String();
@@ -263,11 +292,16 @@ define([
                 code.appendLine("    word_cloud_text = fp.read()");
                 code.appendLine();
                 dataVariable = 'word_cloud_text';
-            }
-            // check data type and convert it to string
-            let dataType = $(this.wrapSelector('#data')).data('type');
-            if (dataType == 'DataFrame' || dataType == 'Series') {
-                dataVariable = data + '.to_string()';
+            } else {
+                // check data type and convert it to string
+                // let dataType = $(this.wrapSelector('#data')).data('type');
+                let dataType = '';
+                if (data_state) {
+                    dataType = data_state['returnDataType'];
+                }
+                if (dataType == 'DataFrame' || dataType == 'Series') {
+                    dataVariable = data + '.to_string()';
+                }
             }
             code.appendFormatLine("counts = Counter({0}.split())", dataVariable);
             code.appendFormatLine("tags = counts.most_common({0})", wordCount);

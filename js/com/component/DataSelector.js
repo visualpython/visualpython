@@ -185,7 +185,7 @@ define([
                     that.state.dataType = ui.item.dtype;
                     that.state.returnDataType = ui.item.dtype;
 
-                    // that.prop.pageThis.state[that.prop.id + '_state'] = that.state;
+                    that.prop.pageThis.state[that.prop.id + '_state'] = that.state;
 
                     $(this).trigger('change');
 
