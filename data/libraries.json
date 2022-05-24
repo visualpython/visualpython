@@ -2850,16 +2850,6 @@
                         "desc" : "Matplotlib Visualization",
                         "item" : [
                             {
-                                "id": "mp_importMatplotlib",
-                                "type": "function",
-                                "level": 2,
-                                "name": "import",
-                                "path": "visualpython - library - matplotlib - import matplotlib",
-                                "desc": "",
-                                "tag": "IMPORT MATPLOTLIB",
-                                "file": "m_matplotlib/import"
-                            },
-                            {
                                 "id": "mp_chart",
                                 "type": "function",
                                 "level": 2,
@@ -2877,7 +2867,7 @@
                                 "path": "visualpython - library - matplotlib - figure",
                                 "desc": "",
                                 "tag": "MATPLOTLIB FIGURE, FIGURE, SUBPLOTS",
-                                "file": "m_matplotlib/figure"
+                                "file": "m_library/m_matplotlib/figure"
                             }
                         ]
                     }
@@ -3088,17 +3078,17 @@
                 "grid" : true,
                 "item" : [
                     {
-                        "id"   : "visualize_chartStyle",
-                        "type" : "function",
-                        "level": 1,
-                        "name" : "Chart Style",
-                        "tag"  : "CHART STYLE SETTING,IMPORT CHART,VISUALIZATION,VISUALIZE",
-                        "path" : "visualpython - visualization - chartsstyle",
-                        "desc" : "Chart style setting",
-                        "file" : "m_visualize/ChartSetting",
+                        "id": "visualize_chart",
+                        "type": "function",
+                        "level": 2,
+                        "name": "Matplotlib",
+                        "path": "visualpython - visualization - matplotlib",
+                        "desc": "",
+                        "tag": "MATPLOTLIB, PLOT, CHART",
+                        "file": "m_visualize/Chart",
                         "apps" : {
                             "color": 5,
-                            "icon": "apps/apps_style.svg"
+                            "icon": "apps/apps_chart.svg"
                         }
                     },
                     {
@@ -3113,6 +3103,20 @@
                         "apps" : {
                             "color": 5,
                             "icon": "apps/apps_visualize.svg"
+                        }
+                    },
+                    {
+                        "id"   : "visualize_wordcloud",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "WordCloud",
+                        "tag"  : "WORDCLOUD,VISUALIZATION,VISUALIZE",
+                        "path" : "visualpython - visualization - wordcloud",
+                        "desc" : "Word Cloud",
+                        "file" : "m_visualize/WordCloud",
+                        "apps" : {
+                            "color": 5,
+                            "icon": "apps/apps_wordcloud.svg"
                         }
                     }
                 ]

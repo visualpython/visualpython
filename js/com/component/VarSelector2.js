@@ -320,12 +320,14 @@ define([
                     return false;
                 }
             }).focus(function () {
+                $(this).val('');
                 $(this).autocomplete('search', $(this).val());
             }).click(function () {
+                $(this).val('');
                 $(this).autocomplete('search', $(this).val());
             }).autocomplete('instance')._renderItem = function(ul, item) {
                 return $('<li>').attr('data-value', item.value)
-                        .append(`<div class="vp-vs-item">${item.label}<label class="vp-gray-text">&nbsp;| ${item.dtype}</label></div>`)
+                        .append(`<div class="vp-vs-item">${item.label}<label class="vp-gray-text vp-cursor">&nbsp;| ${item.dtype}</label></div>`)
                         .appendTo(ul);
             };
         }

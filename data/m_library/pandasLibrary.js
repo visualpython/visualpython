@@ -154,34 +154,36 @@ define([
                     label: 'Encoding'
                 },
                 {
-                    name:'names',
-                    type:'list',
-                    label: 'Columns'
-                },
-                {
-                    name:'usecols',
-                    type: 'list',
-                    label: 'Column List To Use'
-                },
-                {
-                    name:'index_col',
-                    type:'var',
-                    label: 'Column To Use As Index'
-                },
-                {
-                    name:'na_values',
-                    type:'list',
-                    label: 'Na Values'
-                },
-                {
-                    name:'header',
-                    type:'int',
-                    label: 'Header'
+                    name: 'header',
+                    type: 'int',
+                    label: 'Header',
+                    component: 'option_suggest',
+                    options: ['None', '0']
                 },
                 {
                     name: 'sep',
                     type: 'text',
                     label: 'Seperator'
+                },
+                {
+                    name: 'names',
+                    type: 'list',
+                    label: 'Columns'
+                },
+                {
+                    name: 'usecols',
+                    type: 'list',
+                    label: 'Column List To Use'
+                },
+                {
+                    name: 'index_col',
+                    type: 'var',
+                    label: 'Column To Use As Index'
+                },
+                {
+                    name: 'na_values',
+                    type: 'list',
+                    label: 'Na Values'
                 },
                 {
                     name: 'skiprows',
@@ -220,6 +222,11 @@ define([
             ],
             variable: [
                 {
+                    name: 'encoding',
+                    type: 'text',
+                    label: 'Encoding'
+                },
+                {
                     name: 'header',
                     type: ['bool', 'list'],
                     label: 'Header',
@@ -229,7 +236,7 @@ define([
                 {
                     name: 'index',
                     type: 'bool',
-                    label: 'Show Index',
+                    label: 'Index',
                     default: 'True',
                     component: 'bool_checkbox'
                 },
@@ -2892,6 +2899,7 @@ define([
                     name: 'orient',
                     type: 'text',
                     label: 'JSON Orient',
+                    component: 'option_select',
                     options: ['split', 'records', 'index', 'columns', 'values', 'table'],
                     default: 'columns' // if typ==series, index is default
                 },
@@ -2950,6 +2958,7 @@ define([
                     name: 'orient',
                     type: 'text',
                     label: 'Orient',
+                    component: 'option_select',
                     // options: series 0~3 / dataframe *
                     options: ['split', 'records', 'index', 'table', 'columns', 'values']
                 }

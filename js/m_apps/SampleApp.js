@@ -34,28 +34,36 @@ define([
             /** Implement binding events */
             var that = this;
             
-            $(this.wrapSelector('#sample')).on('click', function() {
-                let dataSelector = new DataSelector({
-                    type: 'data',
-                    target: $(that.wrapSelector('#sample')),
-                    finish: function() {
+            // $(this.wrapSelector('#sample')).on('click', function() {
+            //     let dataSelector = new DataSelector({
+            //         type: 'data',
+            //         target: $(that.wrapSelector('#sample')),
+            //         finish: function() {
                         
-                    }
-                });
-                dataSelector.open();
-            });
+            //         }
+            //     });
+            //     dataSelector.open();
+            // });
         }
 
         templateForBody() {
             /** Implement generating template */
             return `This is sample.
-            <input type="text" id="sample" class="vp-state vp-input" placeholder="Click to edit" readonly="" />`;
+            <input type="text" id="sample" class="vp-state vp-input" readonly="" />`;
         }
 
         render() {
             super.render();
 
-
+            let dataSelector = new DataSelector({
+                type: 'data',
+                pageThis: this,
+                id: 'sample',
+                finish: function() {
+                    ;
+                }
+            });
+            $(this.wrapSelector('#sample')).replaceWith(dataSelector.toTagString());
         }
 
         generateCode() {

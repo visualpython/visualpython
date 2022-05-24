@@ -74,12 +74,12 @@ f_main() {
 # Install Visual Python
 #=============================================================================
 f_install() {
+    mkdir -p ${PATH_DST}/${VP_NAME}
+
     RES=`f_check_extension`
     # 1 = Jupyter Extension is not actived
     # 2 = visualpython does not exist
     # 3 = visualpython exists
-
-    mkdir -p ${PATH_DST}/${VP_NAME}
 
     if [ ${RES} -eq 1 ]; then
         f_print_not_extension

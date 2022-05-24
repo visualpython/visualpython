@@ -1,15 +1,23 @@
-.vp-chart-setting {
-    float: right;
-    color: var(--gray-color);
-    padding-top: 5px;
-    padding-right: 5px;
-    cursor: pointer;
+/* word cloud styles */
+.vp-wc-body {
+    display: grid;
+    grid-template-columns: calc(50% - 8px) calc(50% - 8px);
+    grid-template-rows: 1fr;
+    grid-row-gap: 5px;
+    grid-column-gap: 15px;
+    align-items: baseline;
+    align-content: baseline;
+    height: 100%;
 }
-.vp-chart-setting:hover {
-    color: var(--font-highlight);
+.vp-wc-left-box label {
+    margin-bottom: 0px;
 }
-.vp-create-subplot-btn {
-    float: right;
+.vp-wc-left-box, 
+.vp-wc-right-box {
+    height: calc(100% - 10px);
+}
+.vp-wc-option-box {
+    height: calc(100% - 30px);
 }
 .vp-tab-bar {
     width: 100%;
@@ -38,60 +46,35 @@
     width: 100%;
     height: 100%;
 }
-.vp-tab-page-box.figure {
-    height: calc(100% - 30px);
-    align-content: baseline;
-    grid-template-rows: 1fr;
-}
-.vp-tab-page-box.plot {
+.vp-tab-page-box {
     height: calc(100% - 30px);
     min-height: 352px;
     align-content: baseline;
 }
-.vp-chart-plot-box {
-    height: 100%;
-}
-.vp-chart-body {
-    display: grid;
-    grid-template-columns: calc(50% - 8px) calc(50% - 8px);
-    grid-template-rows: 1fr;
-    grid-row-gap: 5px;
-    grid-column-gap: 15px;
-    align-items: baseline;
-    align-content: baseline;
-    height: 100%;
-}
-.vp-chart-left-box > label {
-    margin-bottom: 0px;
-}
-.vp-chart-left-box, 
-.vp-chart-right-box {
-    height: 100%;
-}
-.vp-chart-preview-title {
+.vp-wc-preview-title {
     line-height: 30px;
 }
-.vp-chart-preview-option {
+.vp-wc-preview-option {
     float: right;
     padding-right: 5px;
 }
-.vp-chart-preview-box {
+.vp-wc-preview-box {
     min-height: 352px;
     width: 100%;
     height: calc(100% - 30px);
 }
-.vp-chart-preview-content:empty::after {
+.vp-wc-preview-content:empty::after {
     content: 'No preview image';
     color: var(--gray-color);
 }
-.vp-chart-preview-box img {
+.vp-wc-preview-box img {
     width: 100%;
     height: 100%;
 }
 .vp-tab-page label {
     margin-bottom: 0px;
 }
-.vp-chart-setting-footer {
+.vp-wc-setting-footer {
     position: absolute;
     left: 20px;
     bottom: 15px;

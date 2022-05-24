@@ -1,5 +1,5 @@
-import pandas as pd
-import numpy as np
+import pandas as _vp_pd
+import numpy as _vp_np
 import fitz
 import nltk
 nltk.download('punkt')
@@ -8,7 +8,7 @@ def vp_pdf_get_sentence(fname_lst):
     '''
     Get sentence from pdf file by PyMuPDF
     '''
-    df = pd.DataFrame()
+    df = _vp_pd.DataFrame()
     for fname in fname_lst:
         if fname.split('.')[-1] != 'pdf': continue
         try:
@@ -27,19 +27,19 @@ def vp_pdf_get_sentence(fname_lst):
             print(e)
             continue
             
-        df_doc = pd.DataFrame({
+        df_doc = _vp_pd.DataFrame({
             'fname': fname.split('/')[-1],
             'sentence': sentence_lst
         })
-        df = pd.concat([df,df_doc])
+        df = _vp_pd.concat([df,df_doc])
         
     return df.reset_index().drop('index', axis=1)
 
 def vp_drop_outlier(df, col, weight=1.5):
     sr = df[col]
     
-    q25 = np.percentile(sr.values, 25)
-    q75 = np.percentile(sr.values, 75)
+    q25 = _vp_np.percentile(sr.values, 25)
+    q75 = _vp_np.percentile(sr.values, 75)
     
     iqr   = q75 - q25
     iqr_w = iqr * weight

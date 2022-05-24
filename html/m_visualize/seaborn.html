@@ -36,7 +36,8 @@
             </div>
         </div>
     </div> -->
-    <div class="vp-chart-body" style="margin-top:10px;">
+    <!-- <div class="vp-chart-body" style="margin-top:10px;"> -->
+    <div class="vp-chart-body" >
         <div class="vp-chart-left-box">
             <div class="vp-tab-bar figure" data-level="figure">
                 <div class="vp-tab-item vp-focus" data-type="1">Plot</div>
@@ -71,7 +72,7 @@
                                     <label for="data" class="vp-bold">Data</label>
                                     <div class="vp-grid-col-p50">
                                         <input type="text" id="data" class="vp-input vp-state"/>
-                                        <label><input type="checkbox" id="setXY" class="vp-state"><span>Set X and Y indivisually</span></label>
+                                        <label><input type="checkbox" id="setXY" class="vp-state"><span>Set X and Y individually</span></label>
                                     </div>
                                     <div class="vp-grid-col-p50">
                                         <div class="vp-grid-box">
@@ -119,7 +120,11 @@
                                 <div class="vp-tab-page vp-grid-box" data-type="style" style="display: none;">
                                     <!-- STYLE: grid / marker / color -->
                                     <label for="color" class="vp-bold">Color</label>
-                                    <input type="color" id="color" class="vp-state"/>
+                                    <div>
+                                        <label><input type="checkbox" id="useColor" class="vp-state"/><span>Use Color</span></label>
+                                        <input type="color" id="color" class="vp-state" disabled/>
+                                    </div>
+                                    <hr style="margin:5px;"/>
                                     <label for="useGrid" class="vp-bold">Grid</label>
                                     <div>
                                         <select id="useGrid" class="vp-select vp-state">
@@ -129,6 +134,7 @@
                                         </select>
                                         <input type="color" id="gridColor" class="vp-state"/>
                                     </div>
+                                    <hr style="margin:5px;"/>
                                     <label for="useMarker" class="vp-bold">Marker</label>
                                     <div class="vp-grid-col-p50">
                                         <select id="markerStyle" class="vp-select vp-state">
@@ -170,15 +176,8 @@
                 </span>
             </div>
             <div class="vp-chart-preview-box vp-grid-border-box">
-                <span></span>
-                <div id="chartPreview" class="vp-center">
-    
-                </div>
+                <div id="chartPreview" class="vp-chart-preview-content vp-center"></div>
             </div>
-            <!-- <div class="vp-chart-preview-size-box vp-grid-col-95 mt5">
-                <label>Preview Size</label>
-                <input type="range" id="previewSize" max="5" min="-5" value="0"/>
-            </div> -->
         </div>
     </div>
     

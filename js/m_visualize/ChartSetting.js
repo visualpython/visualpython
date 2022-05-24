@@ -31,7 +31,7 @@ define([
             this.state = {
                 figureWidth: 12,
                 figureHeight: 8,
-                styleSheet: 'seaborn-darkgrid',
+                styleSheet: '',
                 fontName: '',
                 fontSize: 10,
                 ...this.state
@@ -75,6 +75,7 @@ define([
             var code = new com_String(); 
             // FIXME: convert it to kernelApi
             code.appendLine('import matplotlib.pyplot as plt');
+            code.appendLine('%matplotlib inline');
             code.appendLine('import json');
             code.append(`print(json.dumps([{ 'label': s, 'value': s } for s in plt.style.available]))`);
             vpKernel.execute(code.toString()).then(function(resultObj) {

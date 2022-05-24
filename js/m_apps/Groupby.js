@@ -465,35 +465,21 @@ define([
                         that.renderDataPage('');
                     }
                 } else {
-                    var errorContent = new com_String();
+                    var errorContent = '';
                     if (msg.content.ename) {
-                        errorContent.appendFormatLine('<div class="{0}">', 'vp-popup-data-error-box');
-                        errorContent.appendLine('<i class="fa fa-exclamation-triangle"></i>');
-                        errorContent.appendFormatLine('<label class="{0}">{1}</label>',
-                            'vp-popup-data-error-box-title', msg.content.ename);
-                        if (msg.content.evalue) {
-                            // errorContent.appendLine('<br/>');
-                            errorContent.appendFormatLine('<pre>{0}</pre>', msg.content.evalue.split('\\n').join('<br/>'));
-                        }
-                        errorContent.appendLine('</div>');
+                        errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
                     }
                     that.renderDataPage(errorContent);
+                    vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
                 }
             }).catch(function(resultObj) {
                 let { msg } = resultObj;
-                var errorContent = new com_String();
+                var errorContent = '';
                 if (msg.content.ename) {
-                    errorContent.appendFormatLine('<div class="{0}">', 'vp-popup-data-error-box');
-                    errorContent.appendLine('<i class="fa fa-exclamation-triangle"></i>');
-                    errorContent.appendFormatLine('<label class="{0}">{1}</label>',
-                    'vp-popup-data-error-box-title', msg.content.ename);
-                    if (msg.content.evalue) {
-                        // errorContent.appendLine('<br/>');
-                        errorContent.appendFormatLine('<pre>{0}</pre>', msg.content.evalue.split('\\n').join('<br/>'));
-                    }
-                    errorContent.appendLine('</div>');
+                    errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
                 }
                 that.renderDataPage(errorContent);
+                vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
             });
         }
 

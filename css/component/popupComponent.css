@@ -363,28 +363,6 @@
     background-image: url('');
 }
 
-/* error box */
-.vp-popup-data-error-box {
-    margin: 7px;
-    padding: 10px;
-    background: #FFFFFF;
-    border: 0.25px solid #E4E4E4;
-    box-shadow: 1px 1px 2px rgb(0 0 0 / 10%);
-    border-radius: 2px;
-}
-.vp-popup-data-error-box i.fa-exclamation-triangle {
-    color: #F37704;
-}
-.vp-popup-data-error-box-title {
-    color: #F37704;
-    font-weight: bold;
-}
-.vp-popup-data-error-box pre {
-    background: #eeeeee;
-    margin: 0px;
-    padding: 7px;
-}
-
 /* inner popup */
 .vp-inner-popup-box {
     position: absolute;
