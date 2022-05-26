@@ -54,6 +54,7 @@ define([
                 allowDataType: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], // default allow data types
                 // additional options
                 classes: '',
+                placeholder: '',
                 ...this.prop
             }
 
@@ -330,7 +331,7 @@ define([
         templateForTarget() {
             return `
                 <div class="vp-ds-box vp-ds-box-${this.uuid} vp-ds-uninit">
-                    <input type="text" class="vp-ds-target vp-input vp-state ${this.prop.classes}" id="${this.prop.id}" value="${this.prop.pageThis.state[this.prop.id]}"/>
+                    <input type="text" class="vp-ds-target vp-input vp-state ${this.prop.classes}" id="${this.prop.id}" value="${this.prop.pageThis.state[this.prop.id]}" placeholder="${this.prop.placeholder}"/>
                     <span class="vp-ds-filter"><img src="/nbextensions/visualpython/img/filter.svg"/></span>
                 </div>
             `;
