@@ -44,15 +44,6 @@ We recommend installing Anaconda (virtual environment).
 ```
 pip install visualpython
 ```
-NOTE : Depending on your virtual environment settings, you may need to install Jupyter Extensions.<br>
-To install Jupyter Extension, use commands either:
-```
-pip install jupyter_contrib_nbextensions
-```
-or <br>
-```
-conda install -c conda-forge jupyter_contrib_nbextensions
-```
 
 **3)  Enable the package**
 ```
