@@ -1,0 +1,81 @@
+/* plotly styles */
+.vp-pt-body {
+    display: grid;
+    grid-template-columns: calc(50% - 8px) calc(50% - 8px);
+    grid-template-rows: 1fr;
+    grid-row-gap: 5px;
+    grid-column-gap: 15px;
+    align-items: baseline;
+    align-content: baseline;
+    height: 100%;
+}
+.vp-pt-left-box label {
+    margin-bottom: 0px;
+}
+.vp-pt-left-box, 
+.vp-pt-right-box {
+    height: calc(100% - 10px);
+}
+.vp-pt-option-box {
+    height: calc(100% - 30px);
+}
+.vp-tab-bar {
+    width: 100%;
+    overflow-y: hidden;
+}
+.vp-tab-item {
+    display: inline-block;
+    position: relative;
+    width: 85px;
+    height: 30px;
+    line-height: 30px;
+    background: var(--light-gray-color);
+    cursor: pointer;
+    border: 0.24px solid #E4E4E4;
+    box-sizing: border-box;
+    border-radius: 2px 2px 0px 0px;
+    font-weight: bold;
+    text-align: center;
+}
+.vp-tab-item.vp-focus {
+    color: var(--font-highlight);
+    background: white;
+    border-bottom: 3px solid #FFCF73;
+}
+.vp-tab-page {
+    width: 100%;
+    height: 100%;
+}
+.vp-tab-page-box {
+    height: calc(100% - 30px);
+    min-height: 352px;
+    align-content: baseline;
+}
+.vp-pt-preview-title {
+    line-height: 30px;
+}
+.vp-pt-preview-option {
+    float: right;
+    padding-right: 5px;
+}
+.vp-pt-preview-box {
+    min-height: 352px;
+    width: 100%;
+    height: calc(100% - 30px);
+}
+.vp-pt-preview-content:empty::after {
+    content: 'No preview image';
+    color: var(--gray-color);
+}
+.vp-pt-preview-box img {
+    width: 100%;
+    height: 100%;
+}
+.vp-tab-page label {
+    margin-bottom: 0px;
+}
+.vp-pt-setting-footer {
+    position: absolute;
+    left: 20px;
+    bottom: 15px;
+}

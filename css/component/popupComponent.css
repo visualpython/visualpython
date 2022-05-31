@@ -114,6 +114,7 @@
     cursor: pointer;
 }
 .vp-popup-body {
+    position: relative;
     width: 100%;
     height: calc(100% - 80px);
     padding: 15px;
