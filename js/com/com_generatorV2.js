@@ -258,6 +258,14 @@ define([
                 content = renderTabBlock(pageThis, obj, state);
                 break;
             case 'bool_checkbox':
+                content = $(`<input type="checkbox" id="${obj.name}" class="vp-checkbox"/>`);
+                if (value != undefined) {
+                    // set as saved value
+                    $(content).attr({
+                        'checked': value
+                    });
+                }
+                break;
             case 'bool_select':
                 // True False select box
                 var optSlct = $(`<select id="${obj.name}" class="vp-select vp-state"></select>`);
@@ -553,12 +561,16 @@ define([
                 value = input;
                 break;
             case 'option_checkbox':
-                var checked = $(pageThis.wrapSelector("input[name='"+obj.name+"']:checked")).val();
+                let checked = $(pageThis.wrapSelector("input[name='"+obj.name+"']:checked")).val();
 
                 for (var i = 0; i < checked.length; i++) {
                     value += "'" + $(checked[i]).val() + "',";
                 }
                 value = value.substr(0, value.length-1);
+                break;
+            case 'bool_checkbox':
+                let isChecked = $(pageThis.wrapSelector('#'+obj.name)).prop('checked');
+                value = isChecked?'True':'False';
                 break;
             case 'input_multi':
             case 'bool_select':
