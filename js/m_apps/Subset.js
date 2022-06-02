@@ -132,7 +132,7 @@ define([
             // set button next to input tag
             var buttonTag = new com_String();
             buttonTag.appendFormat('<button type="button" class="{0} {1} {2}">{3}</button>',
-                VP_DS_BTN, this.uuid, 'vp-button', 'Edit');
+                VP_DS_BTN, this.uuid, 'vp-button', 'Subset');
             if (this.pageThis) {
                 $(this.targetSelector).parent().append(buttonTag.toString());
             }
@@ -448,12 +448,7 @@ define([
 
             tag.appendLine('<div class="vp-td-line">');
             tag.appendLine(this.templateForConditionColumnInput(colList));
-            tag.appendFormatLine('<select class="{0} {1}">', 'vp-select s', 'vp-oper-list');
-            var operList = ['', '==', '!=', 'contains', 'not contains', '<', '<=', '>', '>=', 'starts with', 'ends with'];
-            operList.forEach(oper => {
-                tag.appendFormatLine('<option value="{0}">{1}</option>', oper, oper);
-            });
-            tag.appendLine('</select>');
+            tag.appendLine(this.templateForConditionOperator(''));
             tag.appendLine('<input class="vp-input m vp-condition" type="text" placeholder="Value"/>');
             tag.appendLine('</div>');
 
@@ -487,6 +482,22 @@ define([
             colList.forEach(col => {
                 tag.appendFormatLine('<option data-code="{0}" data-dtype="{1}" value="{2}">{3}</option>',
                     col.code, col.dtype, col.value, col.label);
+            });
+            tag.appendLine('</select>');
+            return tag.toString();
+        }
+        templateForConditionOperator(dtype='object') {
+            var tag = new com_String();
+            tag.appendFormatLine('<select class="{0} {1}">', 'vp-select s', 'vp-oper-list');
+            var operList = ['', '==', '!=', '<', '<=', '>', '>=', 'contains', 'not contains', 'starts with', 'ends with', 'isnull()', 'notnull()'];
+            if (dtype == '') {
+                // .index
+                operList = ['', '==', '!=', '<', '<=', '>', '>='];
+            } else if (dtype != 'object') {
+                operList = ['', '==', '!=', '<', '<=', '>', '>=', 'isnull()', 'notnull()'];
+            }
+            operList.forEach(oper => {
+                tag.appendFormatLine('<option value="{0}">{1}</option>', oper, oper);
             });
             tag.appendLine('</select>');
             return tag.toString();
@@ -1331,17 +1342,22 @@ define([
                 that.generateCode();
             });
 
+            // change column selection for condition page
             $(document).on('change', this.wrapSelector('.vp-ds-cond-tbl .vp-col-list'), function () {
                 var thisTag = $(this);
                 var varName = that.state.pandasObject;
                 var colName = $(this).find('option:selected').attr('data-code');
                 var colDtype = $(this).find('option:selected').attr('data-dtype');
 
+                var operTag = $(this).closest('td').find('.vp-oper-list');
                 var condTag = $(this).closest('td').find('.vp-condition');
 
                 if (colName == '.index') {
                     // index
                     $(thisTag).closest('td').find('.vp-cond-use-text').prop('checked', false);
+                    $(operTag).replaceWith(function () {
+                        return that.templateForConditionOperator('');
+                    });
                     $(condTag).replaceWith(function () {
                         return that.templateForConditionCondInput([], '');
                     });
@@ -1358,18 +1374,41 @@ define([
                             } else {
                                 $(thisTag).closest('td').find('.vp-cond-use-text').prop('checked', false);
                             }
+                            $(operTag).replaceWith(function () {
+                                return that.templateForConditionOperator(colDtype);
+                            });
                             $(condTag).replaceWith(function () {
                                 return that.templateForConditionCondInput(category, colDtype);
                             });
                             that.generateCode();
                         } catch {
                             $(thisTag).closest('td').find('.vp-cond-use-text').prop('checked', false);
+                            $(operTag).replaceWith(function () {
+                                return that.templateForConditionOperator(colDtype);
+                            });
                             $(condTag).replaceWith(function () {
                                 return that.templateForConditionCondInput([], colDtype);
                             });
                             that.generateCode();
                         }
                     });
+                }
+            });
+
+            // change operator selection
+            $(document).on('change', this.wrapSelector('.vp-ds-cond-tbl .vp-oper-list'), function () {
+                var oper = $(this).val();
+                var condTag = $(this).closest('td').find('.vp-condition');
+                var useTextTag = $(this).closest('td').find('.vp-cond-use-text');
+                // var colDtype = $(this).closest('td').find('.vp-col-list option:selected').attr('data-dtype');
+
+                // if operator is isnull(), notnull(), disable condition input
+                if (oper == 'isnull()' || oper == 'notnull()') {
+                    $(condTag).prop('disabled', true);
+                    $(useTextTag).prop('disabled', true);
+                } else {
+                    $(condTag).prop('disabled', false);
+                    $(useTextTag).prop('disabled', false);
                 }
             });
 
@@ -1507,6 +1546,8 @@ define([
                             rowSelection.appendFormat('{0}.str.startswith({1})', colValue, condValue);
                         } else if (oper == 'ends with') {
                             rowSelection.appendFormat('{0}.str.endswith({1})', colValue, condValue);
+                        } else if (oper == 'isnull()' || oper == 'notnull()') {
+                            rowSelection.appendFormat('{0}.{1}', colValue, oper);
                         } else {
                             rowSelection.appendFormat('{0}{1}{2}', colValue, oper != ''?(' ' + oper):'', condValue != ''?(' ' + condValue):'');
                         }
@@ -1538,6 +1579,8 @@ define([
                                 rowSelection.appendFormat('{0}.str.startswith({1})', colValue, condValue);
                             } else if (oper == 'ends with') {
                                 rowSelection.appendFormat('{0}.str.endswith({1})', colValue, condValue);
+                            } else if (oper == 'isnull()' || oper == 'notnull()') {
+                                rowSelection.appendFormat('{0}.{1}', colValue, oper);
                             } else {
                                 rowSelection.appendFormat('{0}{1}{2}', colValue, oper != ''?(' ' + oper):'', condValue != ''?(' ' + condValue):'');
                             }
