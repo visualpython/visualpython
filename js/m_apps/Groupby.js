@@ -403,6 +403,7 @@ define([
             var defaultMethod = '';
             page.appendFormatLine('<option value="{0}">{1}</option>', '', 'Select method type');
             page.appendFormatLine('<option value="{0}">{1}</option>', 'typing', 'Typing');
+            page.appendLine('<option disabled>-----------------------</option>');
             this.methodList.forEach(method => {
                 if (method.value == '') {
                     return;
