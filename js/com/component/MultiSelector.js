@@ -141,8 +141,8 @@ define([
         }
         
         _getColumnList(parent, callback) {
-            if (parent && parent.length > 1) {
-                vpKernel.getColumnList(parent).then(function(resultObj) {
+            if (Array.isArray(parent) && parent.length > 1) {
+                vpKernel.getCommonColumnList(parent).then(function(resultObj) {
                     let { result } = resultObj;
                     try {
                         var colList = JSON.parse(result);
