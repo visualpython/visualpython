@@ -241,8 +241,10 @@ define([
 
                 if (useIndex || that.state.merge.right.useIndex) {
                     $(that.wrapSelector('#vp_bdOn')).attr('disabled', true);
+                    $(that.wrapSelector('#vp_bdLeftOn')).attr('disabled', true);
                 } else {
                     $(that.wrapSelector('#vp_bdOn')).attr('disabled', false);
+                    $(that.wrapSelector('#vp_bdLeftOn')).attr('disabled', false);
                 }
             });
 
@@ -272,8 +274,10 @@ define([
 
                 if (useIndex || that.state.merge.left.useIndex) {
                     $(that.wrapSelector('#vp_bdOn')).attr('disabled', true);
+                    $(that.wrapSelector('#vp_bdRightOn')).attr('disabled', true);
                 } else {
                     $(that.wrapSelector('#vp_bdOn')).attr('disabled', false);
+                    $(that.wrapSelector('#vp_bdRightOn')).attr('disabled', false);
                 }
             });
 
