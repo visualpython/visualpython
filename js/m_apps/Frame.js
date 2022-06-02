@@ -499,19 +499,21 @@ define([
         }
 
         renderVariableList(varList, defaultValue='') {
-            var tag = new com_String();
-            tag.appendFormatLine('<select id="{0}">', 'vp_feVariable');
-            varList.forEach(vObj => {
-                // varName, varType
-                var label = vObj.varName;
-                tag.appendFormatLine('<option value="{0}" data-type="{1}" {2}>{3}</option>'
-                                    , vObj.varName, vObj.varType
-                                    , defaultValue == vObj.varName?'selected':''
-                                    , label);
+            let mappedList = varList.map(obj => { return { label: obj.varName, value: obj.varName, dtype: obj.varType } });
+
+            var variableInput = new SuggestInput();
+            variableInput.setComponentID('vp_feVariable');
+            variableInput.addClass('vp-state');
+            variableInput.setPlaceholder('Select variable');
+            variableInput.setSuggestList(function () { return mappedList; });
+            variableInput.setSelectEvent(function (value) {
+                $(this.wrapSelector()).val(value);
+                $(this.wrapSelector()).trigger('change');
             });
-            tag.appendLine('</select>'); // VP_VS_VARIABLES
+            variableInput.setNormalFilter(true);
+            variableInput.setValue(defaultValue);
             $(this.wrapSelector('#vp_feVariable')).replaceWith(function() {
-                return tag.toString();
+                return variableInput.toTagString();
             });
         }
 

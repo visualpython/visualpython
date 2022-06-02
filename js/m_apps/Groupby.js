@@ -18,8 +18,9 @@ define([
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
     'vp_base/js/com/component/PopupComponent',
+    'vp_base/js/com/component/SuggestInput',
     'vp_base/js/com/component/MultiSelector'
-], function(gbHtml, gbCss, com_String, com_util, PopupComponent, MultiSelector) {
+], function(gbHtml, gbCss, com_String, com_util, PopupComponent, SuggestInput, MultiSelector) {
 
     /**
      * Groupby
@@ -374,18 +375,29 @@ define([
          * @param {string} defaultValue previous value
          */
         templateForVariableList(varList, defaultValue='') {
-            var tag = new com_String();
-            tag.appendFormatLine('<select id="{0}">', 'vp_gbVariable');
-            varList.forEach(vObj => {
-                // varName, varType
-                var label = vObj.varName;
-                tag.appendFormatLine('<option value="{0}" data-type="{1}" {2}>{3}</option>'
-                                    , vObj.varName, vObj.varType
-                                    , defaultValue == vObj.varName?'selected':''
-                                    , label);
-            });
-            tag.appendLine('</select>'); // VP_VS_VARIABLES
-            return tag.toString();
+            // var tag = new com_String();
+            // tag.appendFormatLine('<select id="{0}">', 'vp_gbVariable');
+            // varList.forEach(vObj => {
+            //     // varName, varType
+            //     var label = vObj.varName;
+            //     tag.appendFormatLine('<option value="{0}" data-type="{1}" {2}>{3}</option>'
+            //                         , vObj.varName, vObj.varType
+            //                         , defaultValue == vObj.varName?'selected':''
+            //                         , label);
+            // });
+            // tag.appendLine('</select>'); // VP_VS_VARIABLES
+            // return tag.toString();
+            let mappedList = varList.map(obj => { return { label: obj.varName, value: obj.varName, dtype: obj.varType } });
+
+            var variableInput = new SuggestInput();
+            variableInput.setComponentID('vp_gbVariable');
+            variableInput.addClass('vp-state');
+            variableInput.setPlaceholder('Select variable');
+            variableInput.setSuggestList(function () { return mappedList; });
+            variableInput.setNormalFilter(true);
+            variableInput.setValue(defaultValue);
+
+            return variableInput.toTagString();
         }
 
         /**

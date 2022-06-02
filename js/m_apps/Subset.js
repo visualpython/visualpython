@@ -632,12 +632,25 @@ define([
 
                     // 1. Target Variable
                     var prevValue = $(that.wrapSelector('.' + VP_DS_PANDAS_OBJECT)).val();
-                    $(that.wrapSelector('.' + VP_DS_PANDAS_OBJECT_BOX)).replaceWith(function () {
-                        var pdVarSelect = new VarSelector(that.pdObjTypes, that.state.dataType, false, false);
-                        pdVarSelect.addClass(VP_DS_PANDAS_OBJECT);
-                        pdVarSelect.addBoxClass(VP_DS_PANDAS_OBJECT_BOX);
-                        pdVarSelect.setValue(prevValue);
-                        return pdVarSelect.render();
+                    // $(that.wrapSelector('.' + VP_DS_PANDAS_OBJECT_BOX)).replaceWith(function () {
+                    //     var pdVarSelect = new VarSelector(that.pdObjTypes, that.state.dataType, false, false);
+                    //     pdVarSelect.addClass(VP_DS_PANDAS_OBJECT);
+                    //     pdVarSelect.addBoxClass(VP_DS_PANDAS_OBJECT_BOX);
+                    //     pdVarSelect.setValue(prevValue);
+                    //     return pdVarSelect.render();
+                    // });
+                    var variableInput = new SuggestInput();
+                    variableInput.addClass(VP_DS_PANDAS_OBJECT);
+                    variableInput.setPlaceholder('Select variable');
+                    variableInput.setSuggestList(function () { return varList; });
+                    variableInput.setSelectEvent(function (value) {
+                        $(this.wrapSelector()).val(value);
+                        $(this.wrapSelector()).trigger('change');
+                    });
+                    variableInput.setNormalFilter(true);
+                    variableInput.setValue(prevValue);
+                    $(that.wrapSelector('.' + VP_DS_PANDAS_OBJECT)).replaceWith(function() {
+                        return variableInput.toTagString();
                     });
                     if (!that.stateLoaded) {
                         that.reloadSubsetData();

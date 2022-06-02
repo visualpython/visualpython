@@ -502,6 +502,16 @@ define([
             if (!packageButton) {
                 $(this.wrapSelector('#popupPackage')).hide();
             }
+            if (installButton || importButton || packageButton) {
+                // resize height
+                $(this.wrapSelector('.vp-popup-content')).css({
+                    'height': 'calc(100% - 30px)'
+                });
+            } else {
+                $(this.wrapSelector('.vp-popup-content')).css({
+                    'height': '100%'
+                });
+            }
 
             // codeview & dataview button hide/show
             if (!codeview) {
@@ -520,7 +530,7 @@ define([
             if(!footer) {
                 $(this.wrapSelector('.vp-popup-footer')).hide();
                 // set body wider
-                $(this.wrapSelector('.vp-popup-content')).css({
+                $(this.wrapSelector('.vp-popup-body')).css({
                     'height': 'calc(100% - 30px)'
                 })
             }

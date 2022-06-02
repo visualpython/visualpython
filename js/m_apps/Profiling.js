@@ -18,8 +18,9 @@ define([
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_interface',
     'vp_base/js/com/component/PopupComponent',
+    'vp_base/js/com/component/SuggestInput',
     'vp_base/js/com/component/FileNavigation'
-], function(proHTML, proCss, com_String, com_interface, PopupComponent, FileNavigation) {
+], function(proHTML, proCss, com_String, com_interface, PopupComponent, SuggestInput, FileNavigation) {
 
     const PROFILE_TYPE = {
         NONE: -1,
@@ -44,7 +45,7 @@ define([
             this.config.codeview = false;
             this.config.dataview = false;
             this.config.runButton = false;
-            this.config.size = { width: 500, height: 430 };
+            this.config.size = { width: 500, height: 500 };
 
             this.selectedReport = '';
         }
@@ -167,7 +168,7 @@ define([
                     // render variable list
                     // replace
                     $(that.wrapSelector('#vp_pfVariable')).replaceWith(function() {
-                        return that.renderVariableList(varList);
+                        return that.templateForVariableList(varList);
                     });
                     $(that.wrapSelector('#vp_pfVariable')).trigger('change');
                 } catch (ex) {
@@ -176,20 +177,35 @@ define([
             });
         }
 
-        renderVariableList(varList) {
-            var tag = new com_String();
+        templateForVariableList(varList) {
             var beforeValue = $(this.wrapSelector('#vp_pfVariable')).val();
-            tag.appendFormatLine('<select id="{0}" class="vp-select vp-pf-select">', 'vp_pfVariable');
-            varList.forEach(vObj => {
-                // varName, varType
-                var label = vObj.varName;
-                tag.appendFormatLine('<option value="{0}" data-type="{1}" {2}>{3}</option>'
-                                    , vObj.varName, vObj.varType
-                                    , beforeValue == vObj.varName?'selected':''
-                                    , label);
-            });
-            tag.appendLine('</select>'); // VP_VS_VARIABLES
-            return tag.toString();
+            if (beforeValue == null) {
+                beforeValue = '';
+            }
+            // var tag = new com_String();
+            // tag.appendFormatLine('<select id="{0}" class="vp-select vp-pf-select">', 'vp_pfVariable');
+            // varList.forEach(vObj => {
+            //     // varName, varType
+            //     var label = vObj.varName;
+            //     tag.appendFormatLine('<option value="{0}" data-type="{1}" {2}>{3}</option>'
+            //                         , vObj.varName, vObj.varType
+            //                         , beforeValue == vObj.varName?'selected':''
+            //                         , label);
+            // });
+            // tag.appendLine('</select>'); // VP_VS_VARIABLES
+            // return tag.toString();
+
+            let mappedList = varList.map(obj => { return { label: obj.varName, value: obj.varName, dtype: obj.varType } });
+
+            var variableInput = new SuggestInput();
+            variableInput.setComponentID('vp_pfVariable');
+            variableInput.addClass('vp-pf-select');
+            variableInput.setPlaceholder('Select variable');
+            variableInput.setSuggestList(function () { return mappedList; });
+            variableInput.setNormalFilter(true);
+            variableInput.setValue(beforeValue);
+
+            return variableInput.toTagString();
         }
 
         /**
