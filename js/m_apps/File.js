@@ -40,7 +40,7 @@ define([
                 'csv': 'csv',
                 'excel': 'xlsx',
                 'json': 'json',
-                'pickle': 'pickle'
+                'pickle': 'pkl'
             }
             
             this.package = {

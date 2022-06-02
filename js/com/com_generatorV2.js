@@ -772,6 +772,8 @@ define([
                             return $(tag);
                         });
                     }
+                }).catch(function(err) {
+                    vpLog.display(VP_LOG_TYPE.ERROR, 'com_generator - bindColumnSource error ', err)
                 });
                 
                 
