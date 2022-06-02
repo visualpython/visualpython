@@ -123,12 +123,22 @@ define([
      * @param {*} code 
      * @returns 
      */
-    var convertToStr = function(code) {
-        if (!$.isNumeric(code)) {
-            if (code.includes("'")) {
-                code = `"${code}"`;
-            } else {
-                code = `'${code}'`;
+    var convertToStr = function(code, isText=null, useRegex=false) {
+        let prefix = '';
+        if (useRegex) {
+            prefix = 'r';
+        }
+        if (isText != null) {
+            if (isText) {
+                code = `${prefix}'${code}'`;
+            }
+        } else {
+            if (!$.isNumeric(code)) {
+                if (code.includes("'")) {
+                    code = `${prefix}"${code}"`;
+                } else {
+                    code = `${prefix}'${code}'`;
+                }
             }
         }
         return code;
