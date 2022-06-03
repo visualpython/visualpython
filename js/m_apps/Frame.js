@@ -830,6 +830,14 @@ define([
                             }, 1);
                         }
                     });
+                    // initial code
+                    var code = this.subsetEditor.generateCode();
+                    that.subsetCm.setValue(code);
+                    that.subsetCm.save();
+                    setTimeout(function () {
+                        that.subsetCm.refresh();
+                    }, 1);
+                    
                     break;
                 case FRAME_EDIT_TYPE.ADD_ROW:
                     title = 'Add Row';
@@ -871,6 +879,14 @@ define([
                             }, 1);
                         }
                     });
+                    // initial code
+                    var code = this.subsetEditor.generateCode();
+                    that.subsetCm.setValue(code);
+                    that.subsetCm.save();
+                    setTimeout(function () {
+                        that.subsetCm.refresh();
+                    }, 1);
+
                     break;
                 case FRAME_EDIT_TYPE.AS_TYPE:
                     title = 'Convert type';
