@@ -38,7 +38,8 @@ define([
                 pivot: {
                     index: [],
                     columns: [],
-                    values: []
+                    values: [],
+                    aggfunc: []
                 },
                 melt: {
                     idVars: [],
@@ -98,7 +99,7 @@ define([
                     that._resetColumnSelector(that.wrapSelector('#vp_rsValueVars'));
 
                     that.state.pivot = {
-                        index: [], columns: [], values: []
+                        index: [], columns: [], values: [], aggfunc: []
                     };
                     that.state.melt = {
                         idVars: [], valueVars: []
@@ -116,13 +117,8 @@ define([
                 var type = $(this).val();
                 that.state.type = type;
                 // change visibility
-                if (type == 'pivot') {
-                    $(that.wrapSelector('.vp-rs-type-box.melt')).hide();
-                    $(that.wrapSelector('.vp-rs-type-box.pivot')).show();
-                } else {
-                    $(that.wrapSelector('.vp-rs-type-box.pivot')).hide();
-                    $(that.wrapSelector('.vp-rs-type-box.melt')).show();
-                }
+                $(that.wrapSelector('.vp-rs-type-box')).hide();
+                $(that.wrapSelector('.vp-rs-type-box.' + type)).show();
 
                 // clear user option
                 $(that.wrapSelector('#vp_rsUserOption')).val('');
@@ -166,6 +162,19 @@ define([
                 var targetVariable = [ that.state.variable ];
                 var excludeList = [ ...that.state.pivot.index, ...that.state.pivot.columns ].map(obj => obj.code);
                 that.openColumnSelector(targetVariable, $(that.wrapSelector('#vp_rsValues')), 'Select columns', excludeList);
+            });
+
+            // aggfunc change event
+            $(document).on('change', this.wrapSelector('#vp_rsAggfunc'), function(event) {
+                var colList = event.dataList;
+                that.state.pivot.aggfunc = colList;
+            });
+
+            // aggfunc select button event
+            $(document).on('click', this.wrapSelector('#vp_rsAggfunc'), function() {
+                var targetVariable = [ that.state.variable ];
+                var excludeList = that.state.pivot.aggfunc.map(obj => obj.code);
+                that.openMethodSelector(targetVariable, $(that.wrapSelector('#vp_rsAggfunc')), 'Select columns', excludeList);
             });
 
             // id vars change event
@@ -344,10 +353,36 @@ define([
          * @param {Array<string>} previousList previous selected columns
          * @param {Array<string>} excludeList columns to exclude 
          */
-         renderColumnSelector(targetVariable, previousList, excludeList) {
+        renderColumnSelector(targetVariable, previousList, excludeList) {
             this.popup.ColSelector = new MultiSelector(
                 this.wrapSelector('.vp-inner-popup-body'), 
                 { mode: 'columns', parent: targetVariable, selectedList: previousList, excludeList: excludeList }
+            );
+        }
+
+        /**
+         * Render method selector using MultiSelector module
+         * @param {Array<string>} previousList previous selected methods
+         * @param {Array<string>} excludeList methods to exclude 
+         */
+        renderMethodSelector(targetVariable, previousList, excludeList) {
+            let methodList = [
+                { value: 'count',   code: "'count'" },
+                { value: 'first',   code: "'first'" },
+                { value: 'last',    code: "'last'" },
+                { value: 'size',    code: "'size'" },
+                { value: 'std',     code: "'std'" },
+                { value: 'sum',     code: "'sum'" },
+                { value: 'max',     code: "'max'" },
+                { value: 'mean',    code: "'mean'" },
+                { value: 'median',  code: "'median'" },
+                { value: 'min',     code: "'min'" },
+                { value: 'quantile', code: "'quantile'" },
+            ];
+            
+            this.popup.ColSelector = new MultiSelector(
+                this.wrapSelector('.vp-inner-popup-body'), 
+                { mode: 'data', parent: targetVariable, dataList: methodList, selectedList: previousList, excludeList: excludeList }
             );
         }
 
@@ -422,6 +457,45 @@ define([
                     }
                 }
 
+            } else if (type == 'pivot_table') { 
+                //================================================================
+                // pivot_table
+                //================================================================
+                // index (optional)
+                if (pivot.index && pivot.index.length > 0) {
+                    if (pivot.index.length == 1) {
+                        options.push(com_util.formatString("index={0}", pivot.index[0].code));
+                    } else {
+                        options.push(com_util.formatString("index=[{0}]", pivot.index.map(col => col.code).join(',')));
+                    }
+                }
+
+                // columns
+                if (pivot.columns && pivot.columns.length > 0) {
+                    if (pivot.columns.length == 1) {
+                        options.push(com_util.formatString("columns={0}", pivot.columns[0].code));
+                    } else {
+                        options.push(com_util.formatString("columns=[{0}]", pivot.columns.map(col => col.code).join(',')));
+                    }
+                }
+
+                // values (optional)
+                if (pivot.values && pivot.values.length > 0) {
+                    if (pivot.values.length == 1) {
+                        options.push(com_util.formatString("values={0}", pivot.values[0].code));
+                    } else {
+                        options.push(com_util.formatString("values=[{0}]", pivot.values.map(col => col.code).join(',')));
+                    }
+                }
+
+                // aggfunc
+                if (pivot.aggfunc && pivot.aggfunc.length > 0) {
+                    if (pivot.aggfunc.length == 1) {
+                        options.push(com_util.formatString("aggfunc={0}", pivot.aggfunc[0].code));
+                    } else {
+                        options.push(com_util.formatString("aggfunc=[{0}]", pivot.aggfunc.map(col => col.code).join(',')));
+                    }
+                }
             } else {
                 //================================================================
                 // melt
@@ -506,6 +580,19 @@ define([
                 previousList = previousList.map(col => col.code)
             }
             this.renderColumnSelector(targetVariable, previousList, excludeList);
+    
+            // set title
+            this.openInnerPopup(title);
+        }
+
+        openMethodSelector(targetVariable, targetSelector, title='Select methods', excludeList=[]) {
+            this.popup.targetVariable = targetVariable;
+            this.popup.targetSelector = targetSelector;
+            var previousList = this.popup.targetSelector.data('list');
+            if (previousList) {
+                previousList = previousList.map(col => col.code)
+            }
+            this.renderMethodSelector(targetVariable, previousList, excludeList);
     
             // set title
             this.openInnerPopup(title);

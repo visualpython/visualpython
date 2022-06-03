@@ -4,6 +4,7 @@
             <label for="vp_rsType" class="vp-orange-text w100">Reshape Type</label>
             <select id="vp_rsType">
                 <option value="pivot" selected="">pivot</option>
+                <option value="pivot_table" selected="">pivot table</option>
                 <option value="melt">melt</option>
             </select>
         </div>
@@ -26,6 +27,24 @@
             <div>
                 <label for="vp_rsValues" class="w100">Values</label>
                 <input type="text" id="vp_rsValues" placeholder="Values key" readonly="">
+            </div>
+        </div>
+        <div class="vp-rs-type-box pivot_table">
+            <div>
+                <label for="vp_rsIndex" class="w100">Index</label>
+                <input type="text" id="vp_rsIndex" placeholder="Index key" readonly="">
+            </div>
+            <div>
+                <label for="vp_rsColumns" class="w100">Columns</label>
+                <input type="text" id="vp_rsColumns" placeholder="Columns key" readonly="">
+            </div>
+            <div>
+                <label for="vp_rsValues" class="w100">Values</label>
+                <input type="text" id="vp_rsValues" placeholder="Values key" readonly="">
+            </div>
+            <div>
+                <label for="vp_rsAggfunc" class="w100" title="aggfunc">Aggregate</label>
+                <input type="text" id="vp_rsAggfunc" placeholder="Aggregate functions" readonly="">
             </div>
         </div>
         <div class="vp-rs-type-box melt" style="display:none;">
