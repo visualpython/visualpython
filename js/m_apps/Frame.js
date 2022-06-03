@@ -808,8 +808,10 @@ define([
                         type: 'readonly' 
                     });
                     // set subset
+                    let contentState = that.getPopupContent(type);
                     this.subsetEditor = new Subset({ 
                         pandasObject: this.state.tempObj,
+                        selectedColumns: [ com_util.convertToStr(contentState.name, contentState.nameastext) ],
                         config: { name: 'Subset' } }, 
                     { 
                         useInputVariable: true,
@@ -861,6 +863,7 @@ define([
                     // set subset
                     this.subsetEditor = new Subset({ 
                         pandasObject: this.state.tempObj,
+                        selectedColumns: that.state.selected.map(col=>col.code),
                         config: { name: 'Subset' } }, 
                     { 
                         useInputVariable: true,

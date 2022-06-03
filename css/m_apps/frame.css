@@ -247,6 +247,9 @@
 }
 
 /* UDF Editor - CodeMirror */
+.vp-fr-subset-box {
+    width: 300px;
+}
 .vp-fr-subset-box .CodeMirror { 
     display: inline-block;
     width: calc(100% - 55px);
