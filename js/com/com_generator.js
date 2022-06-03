@@ -81,7 +81,7 @@ define([
             vp_bindColumnSource(selector, targetSelector, autoCols[target]);
             // on change event
             $(targetSelector).on('change', function() {
-                console.log('change event ', selector, targetSelector, autoCols[target]);
+                // console.log('change event ', selector, targetSelector, autoCols[target]);
                 vp_bindColumnSource(selector, this, autoCols[target]);
             });
         });

@@ -149,27 +149,27 @@ define([
             });
 
             // co-op with Subset
-            $(this.wrapSelector('#vp_instanceVariable')).on('remove_option_page', function(evt) {
-                let component = evt.component;
-                component.close();
-            });
-            $(this.wrapSelector('#vp_instanceVariable')).on('close_option_page', function(evt) {
-                let component = evt.component;
-                component.close();
-            });
-            $(this.wrapSelector('#vp_instanceVariable')).on('focus_option_page', function(evt) {
-                let component = evt.component;
-                component.focus();
-            });
-            $(this.wrapSelector('#vp_instanceVariable')).on('apply_option_page', function(evt) {
-                let component = evt.component;
-                // apply its value
-                let code = component.generateCode();
-                component.close();
-                that.addStack();
-                that.state.subsetEditor.state.pandasObject = code;
-                that.updateValue(code);
-            });
+            // $(this.wrapSelector('#vp_instanceVariable')).on('remove_option_page', function(evt) {
+            //     let component = evt.component;
+            //     component.close();
+            // });
+            // $(this.wrapSelector('#vp_instanceVariable')).on('close_option_page', function(evt) {
+            //     let component = evt.component;
+            //     component.close();
+            // });
+            // $(this.wrapSelector('#vp_instanceVariable')).on('focus_option_page', function(evt) {
+            //     let component = evt.component;
+            //     component.focus();
+            // });
+            // $(this.wrapSelector('#vp_instanceVariable')).on('apply_option_page', function(evt) {
+            //     let component = evt.component;
+            //     // apply its value
+            //     let code = component.generateCode();
+            //     component.close();
+            //     that.addStack();
+            //     that.state.subsetEditor.state.pandasObject = code;
+            //     that.updateValue(code);
+            // });
         }
 
         templateForBody() {
@@ -179,12 +179,19 @@ define([
         render() {
             super.render();
 
+            let that = this;
+
             // vpSubsetEditor
             this.state.subsetEditor = new Subset({ pandasObject: '', config: { name: 'Subset' } }, 
                 { 
                     useInputVariable: true,
                     targetSelector: this.wrapSelector('#vp_instanceVariable'),
-                    pageThis: this
+                    pageThis: this,
+                    finish: function(code) {
+                        that.addStack();
+                        that.state.subsetEditor.state.pandasObject = code;
+                        that.updateValue(code);
+                    }
                 });
             this.state.subsetEditor.disableButton();
 

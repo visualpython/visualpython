@@ -19,8 +19,9 @@ define([
     'vp_base/js/com/com_util',
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/SuggestInput',
-    'vp_base/js/com/component/VarSelector'
-], function(frameHtml, frameCss, com_String, com_util, PopupComponent, SuggestInput, VarSelector) {
+    'vp_base/js/com/component/VarSelector',
+    'vp_base/js/m_apps/Subset'
+], function(frameHtml, frameCss, com_String, com_util, PopupComponent, SuggestInput, VarSelector, Subset) {
 
     /**
      * Frame
@@ -60,6 +61,10 @@ define([
                 'object', 'category', 
                 'bool', 'str'
             ];
+
+            // Add/Replace - subset
+            this.subsetCm = null;
+            this.subsetEditor = null;
 
             this.loading = false;
 
@@ -581,6 +586,9 @@ define([
                     // render variable list
                     // get prevvalue
                     var prevValue = that.state.originObj;
+                    if (varList && varList.length > 0 && prevValue == '') {
+                        prevValue = varList[0].varName;
+                    }
                     // replace
                     that.renderVariableList(varList, prevValue);
                     $(that.wrapSelector('#vp_feVariable')).trigger('change');
@@ -610,6 +618,9 @@ define([
             content.appendFormatLine('<option value="{0}">{1}</option>', 'value', 'Value');
             content.appendFormatLine('<option value="{0}">{1}</option>', 'calculation', 'Calculation');
             content.appendFormatLine('<option value="{0}">{1}</option>', 'replace', 'Replace');
+            if (type == 'column' || type == 'replace') {
+                content.appendFormatLine('<option value="{0}">{1}</option>', 'subset', 'Subset');
+            }
             content.appendFormatLine('<option value="{0}">{1}</option>', 'apply', 'Apply');
             content.appendLine('</select></td></tr>');
             content.appendLine('</table>');
@@ -656,8 +667,25 @@ define([
             content.appendFormatLine('<div class="{0} {1} {2}" style="display: none;">', 'vp-inner-popup-tab', 'replace', 'vp-scrollbar');
             content.appendLine(this.renderReplacePage());
             content.appendLine('</div>'); // end of vp-inner-popup-tab replace
-            
-            // tab 4. apply
+
+            // tab 4. subset
+            if (type == 'column' || type == 'replace') {
+                content.appendFormatLine('<div class="{0} {1}" style="display: none;">', 'vp-inner-popup-tab', 'subset');
+                content.appendLine('<table class="vp-tbl-gap5"><colgroup><col width="80px"><col width="*"></colgroup>');
+
+                content.appendLine('<tr><td colspan="2">');
+                content.appendLine('<div class="vp-fr-subset-box">');
+                content.appendLine('<textarea class="vp-input vp-inner-popup-subset"></textarea>');
+                content.appendLine('</div>');
+                content.appendLine('</td></tr>');
+
+                content.appendLine('<tr><th><label>Value</label></th>');
+                content.appendFormatLine('<td><input type="text" class="{0}"/>', 'vp-inner-popup-input3');
+                content.appendFormatLine('<label><input type="checkbox" class="{0}" checked/><span>{1}</span></label>', 'vp-inner-popup-istext3','Text');
+                content.appendLine('</td></tr></table>');
+                content.appendLine('</div>'); // end of vp-inner-popup-tab subset
+            }
+            // tab 5. apply
             content.appendFormatLine('<div class="{0} {1}" style="display: none;">', 'vp-inner-popup-tab', 'apply');
             content.appendLine('<table class="vp-tbl-gap5"><colgroup><col width="80px"><col width="*"></colgroup>');
             content.appendLine('<tr><th><label>Column</label></th>');
@@ -668,6 +696,9 @@ define([
             content.appendLine('</tr></table>');
             content.appendLine('</div>'); // end of vp-inner-popup-tab apply
             content.appendLine('</div>'); // end of vp-inner-popup-addpage
+            
+            // set content
+            $(this.wrapSelector('.vp-inner-popup-body')).html(content.toString());
             return content.toString();
         }
 
@@ -695,10 +726,13 @@ define([
             });
             content.appendLine('</table>');
             content.appendLine('</div>');
+
+            // set content
+            $(this.wrapSelector('.vp-inner-popup-body')).html(content.toString());
             return content.toString();
         }
 
-        renderReplacePage = function() {
+        renderReplacePage() {
             var content = new com_String();
             content.appendFormatLine('<label><input type="checkbox" class="{0}"/><span>{1}</span></label>', 'vp-inner-popup-use-regex', 'Use Regular Expression');
             content.appendLine('<br/><br/>');
@@ -711,7 +745,7 @@ define([
             return content.toString();
         }
 
-        renderReplaceInput = function(index) {
+        renderReplaceInput(index) {
             var content = new com_String();
             content.appendLine('<tr>');
             content.appendLine('<td>');
@@ -727,7 +761,7 @@ define([
             return content.toString();
         }
 
-        renderAsType = function() {
+        renderAsType() {
             var astypeList = this.astypeList;
             var content = new com_String();
             content.appendFormatLine('<div class="{0}">', 'vp-inner-popup-astype');
@@ -750,18 +784,52 @@ define([
             });
             content.appendLine('</tbody></table>');
             content.append('</div>');
+
+            // set content
+            $(this.wrapSelector('.vp-inner-popup-body')).html(content.toString());
             return content.toString();
         }
 
-        openInputPopup = function(type, width=400, height=400) {
+        openInputPopup(type, width=400, height=400) {
             var title = '';
             var content = '';
             let size = { width: width, height: height };
+            let that = this;
     
             switch (parseInt(type)) {
                 case FRAME_EDIT_TYPE.ADD_COL:
                     title = 'Add Column';
                     content = this.renderAddPage('column', 'Column Name');
+
+                    // bind codemirror
+                    this.subsetCm = this.initCodemirror({ 
+                        key: 'vp-inner-popup-subset', 
+                        selector: this.wrapSelector('.vp-inner-popup-subset'), 
+                        type: 'readonly' 
+                    });
+                    // set subset
+                    this.subsetEditor = new Subset({ 
+                        pandasObject: this.state.tempObj,
+                        config: { name: 'Subset' } }, 
+                    { 
+                        useInputVariable: true,
+                        useInputColumns: true,
+                        targetSelector: this.wrapSelector('.vp-inner-popup-subset'),
+                        pageThis: this,
+                        allowSubsetTypes: ['iloc', 'loc'],
+                        beforeOpen: function(subsetThis) {
+                            let contentState = that.getPopupContent(type);
+                            let name = com_util.convertToStr(contentState.name, contentState.nameastext);
+                            subsetThis.state.selectedColumns = [ name ];
+                        },
+                        finish: function(code) {
+                            that.subsetCm.setValue(code);
+                            that.subsetCm.save();
+                            setTimeout(function () {
+                                that.subsetCm.refresh();
+                            }, 1);
+                        }
+                    });
                     break;
                 case FRAME_EDIT_TYPE.ADD_ROW:
                     title = 'Add Row';
@@ -775,6 +843,34 @@ define([
                     title = 'Replace';
                     // content = this.renderReplacePage();
                     content = this.renderAddPage('replace', 'Column');
+
+                    // bind codemirror
+                    this.subsetCm = this.initCodemirror({ 
+                        key: 'vp-inner-popup-subset', 
+                        selector: this.wrapSelector('.vp-inner-popup-subset'), 
+                        type: 'readonly' 
+                    });
+                    // set subset
+                    this.subsetEditor = new Subset({ 
+                        pandasObject: this.state.tempObj,
+                        config: { name: 'Subset' } }, 
+                    { 
+                        useInputVariable: true,
+                        useInputColumns: true,
+                        targetSelector: this.wrapSelector('.vp-inner-popup-subset'),
+                        pageThis: this,
+                        allowSubsetTypes: ['iloc', 'loc'],
+                        beforeOpen: function(subsetThis) {
+                            subsetThis.state.selectedColumns = that.state.selected.map(col=>col.code);
+                        },
+                        finish: function(code) {
+                            that.subsetCm.setValue(code);
+                            that.subsetCm.save();
+                            setTimeout(function () {
+                                that.subsetCm.refresh();
+                            }, 1);
+                        }
+                    });
                     break;
                 case FRAME_EDIT_TYPE.AS_TYPE:
                     title = 'Convert type';
@@ -789,14 +885,9 @@ define([
 
             // set size
             $(this.wrapSelector('.vp-inner-popup-box')).css(size);
-
-            // set content
-            $(this.wrapSelector('.vp-inner-popup-body')).html(content);
             
             // bindEventForAddPage
             this.bindEventForPopupPage();
-
-            let that = this;
 
             // set column list
             vpKernel.getColumnList(this.state.tempObj).then(function(resultObj) {
@@ -865,6 +956,10 @@ define([
                                 });
                             }
                         }
+                    } else if (tab == 'subset') {
+                        content['subset'] = this.subsetCm?this.subsetCm.getValue():'';
+                        content['value'] = $(this.wrapSelector('.vp-inner-popup-input3')).val();
+                        content['valueastext'] = $(this.wrapSelector('.vp-inner-popup-istext3')).prop('checked');
                     } else if (tab == 'apply') {
                         content['column'] = $(this.wrapSelector('.vp-inner-popup-apply-column')).val();
                         content['apply'] = $(this.wrapSelector('.vp-inner-popup-apply-lambda')).val();
@@ -1094,12 +1189,12 @@ define([
                     var tab = content.addtype;
                     if (tab == 'value') {
                         var value = com_util.convertToStr(content.value, content.valueastext);
-                        code.appendFormat("{0}[{1}] = {2}", tempObj, name, value);
+                        code.appendFormat("{0}[[{1}]] = {2}", tempObj, name, value);
                     } else if (tab == 'calculation') {
                         var { var1col, oper, var2col } = content;
                         var var1code = tempObj + "['" + var1col + "']";
                         var var2code = tempObj + "['" + var2col + "']";
-                        code.appendFormat('{0}[{1}] = {2} {3} {4}', tempObj, name, var1code, oper, var2code);
+                        code.appendFormat('{0}[[{1}]] = {2} {3} {4}', tempObj, name, var1code, oper, var2code);
                     } else if (tab == 'replace') {
                         var replaceStr = new com_String();
                         var useRegex = content['useregex'];
@@ -1122,8 +1217,11 @@ define([
                             code.append(', regex=True');
                         }
                         code.append(')');
+                    } else if (tab == 'subset') {
+                        var value = com_util.convertToStr(content.value, content.valueastext);
+                        code.appendFormat("{0} = {1}", content.subset, value);
                     } else if (tab == 'apply') {
-                        code.appendFormat("{0}[{1}] = {2}[{3}].apply({4})", tempObj, name, tempObj, content.column, content.apply);
+                        code.appendFormat("{0}[[{1}]] = {2}[{3}].apply({4})", tempObj, name, tempObj, content.column, content.apply);
                     }
                     break;
                 case FRAME_EDIT_TYPE.ADD_ROW: 
@@ -1333,6 +1431,21 @@ define([
 
         hideMenu() {
             $(this.wrapSelector(com_util.formatString('.{0}', VP_FE_MENU_BOX))).hide();
+        }
+
+        hide() {
+            super.hide();
+            this.subsetEditor && this.subsetEditor.hide();
+        }
+
+        close() {
+            super.close();
+            this.subsetEditor && this.subsetEditor.close();
+        }
+
+        remove() {
+            super.remove();
+            this.subsetEditor && this.subsetEditor.remove();
         }
 
     }

@@ -164,6 +164,10 @@ define([
         /**
          * Initialize codemirror
          * @param {Object} cmObj { key, selector, type, ... }
+         *  - key      : key to save its value as state (this.state[key])
+         *  - selector : selector to distinguish codemirror tag (textarea)
+         *    ex) this.wrapSelector('.cm-tag')
+         *  - type     : code / readonly / markdown
          */
         initCodemirror(cmObj) {
             let {key, selector, type, events} = cmObj;

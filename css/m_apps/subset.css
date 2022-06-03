@@ -99,8 +99,8 @@
     border: 0.25px solid #E4E4E4;
     padding: 15px;
 }
-.vp-ds-tab-page-box.subset-row {
-    border-right: 0px;
+.vp-ds-tab-page-box.subset-column {
+    border-left: 0px;
 }
 /* .vp-ds-tab-page-box.subset-condition {
     grid-column-start: 1;
@@ -110,6 +110,9 @@
 .vp-ds-rowcol-subset-title {
     font-weight: bold;
     margin: 5px 0px 0px 5px;
+}
+.vp-ds-rowtype-box.condition {
+    position: relative;
 }
 .vp-ds-rowtype-box.condition .vp-vs-box {
     padding-bottom: 5px;
@@ -130,8 +133,10 @@
     width: 85px;
 }
 .vp-ds-rowtype-box.condition .vp-condition-use-text {
-    float: right;
-    margin-right: 42px;
+    /* float: right;
+    margin-right: 42px; */
+    position: absolute;
+    left: 245px;
 }
 .vp-ds-rowtype,
 .vp-ds-coltype {

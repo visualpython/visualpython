@@ -30,19 +30,28 @@ define([
         _init() {
             super._init();
             this.config.sizeLevel = 3;
-            /** Write codes executed before rendering */
-            this.targetSelector = this.prop.targetSelector;
-            this.pageThis = this.prop.pageThis;
-            this.useInputVariable = this.prop.useInputVariable;
-            if (this.useInputVariable) {
-                this.eventTarget = this.targetSelector;
-            }
-
             // use Run/Add cell
             this.useCell = true;
 
+            /** Write codes executed before rendering */
+            this.targetSelector = this.prop.targetSelector;
+            this.pageThis = this.prop.pageThis;
+
+            this.useInputVariable = this.prop.useInputVariable;
+            if (this.useInputVariable) {
+                this.eventTarget = this.targetSelector;
+                this.useCell = false; // show apply button only
+            }
+            this.useInputColumns = this.prop.useInputColumns;
+            this.beforeOpen = this.prop.beforeOpen;
+            this.finish = this.prop.finish;
+
             // specify pandas object types
             this.pdObjTypes = ['DataFrame', 'Series'];
+            this.allowSubsetTypes = ['subset', 'iloc', 'loc', 'query'];
+            if (this.prop.allowSubsetTypes) {
+                this.allowSubsetTypes = this.prop.allowSubsetTypes;
+            }
 
             this.stateLoaded = false;
 
@@ -70,6 +79,7 @@ define([
                 columnList: [],
                 colPointer: { start: -1, end: -1 },
                 colPageDom: '',
+                selectedColumns: [],
                 ...this.state
             };
 
@@ -103,7 +113,18 @@ define([
                 this.renderButton();
 
                 // hide allocate to
-                $(this.wrapSelector('.vp-ds-allocate-to')).closest('tr').hide();
+                $(this.wrapSelector('.' + VP_DS_ALLOCATE_TO)).closest('tr').hide();
+            }
+
+            if (this.useInputColumns) {
+                // hide make copy
+                $(this.wrapSelector('.' + VP_DS_USE_COPY)).parent().hide();
+                // hide to frame
+                $(this.wrapSelector('.' + VP_DS_TO_FRAME)).parent().hide();
+                // hide allocate to
+                $(this.wrapSelector('.' + VP_DS_ALLOCATE_TO)).closest('tr').hide();
+                // hide column box
+                $(this.wrapSelector('.' + VP_DS_TAB_PAGE_BOX + '.subset-column')).hide();
             }
         }
 
@@ -142,12 +163,17 @@ define([
 
             var tag = new com_String();
             tag.appendFormatLine('<select class="{0} {1}">', VP_DS_SUBSET_TYPE, 'vp-select');
-            tag.appendFormatLine('<option value="{0}" {1}>{2}</option>', 'subset', subsetType == 'subset'?'selected':'', 'subset');
-            tag.appendFormatLine('<option value="{0}" {1}>{2}</option>', 'loc', subsetType == 'loc'?'selected':'', 'loc');
-            tag.appendFormatLine('<option value="{0}" {1}>{2}</option>', 'iloc', subsetType == 'iloc'?'selected':'', 'iloc');
-            if (dataType == 'DataFrame') {
-                tag.appendFormatLine('<option value="{0}" {1}>{2}</option>', 'query', subsetType == 'query'?'selected':'', 'query');
-            }
+            this.allowSubsetTypes.forEach(thisType => {
+                if (thisType != 'query' || dataType == 'DataFrame') {
+                    tag.appendFormatLine('<option value="{0}" {1}>{2}</option>', thisType, subsetType == thisType?'selected':'', thisType);
+                }
+            });
+            // tag.appendFormatLine('<option value="{0}" {1}>{2}</option>', 'subset', subsetType == 'subset'?'selected':'', 'subset');
+            // tag.appendFormatLine('<option value="{0}" {1}>{2}</option>', 'loc', subsetType == 'loc'?'selected':'', 'loc');
+            // tag.appendFormatLine('<option value="{0}" {1}>{2}</option>', 'iloc', subsetType == 'iloc'?'selected':'', 'iloc');
+            // if (dataType == 'DataFrame') {
+            //     tag.appendFormatLine('<option value="{0}" {1}>{2}</option>', 'query', subsetType == 'query'?'selected':'', 'query');
+            // }
             tag.appendLine('</select>');
 
             return tag.toString();
@@ -206,7 +232,7 @@ define([
             vpSearchSuggest.addClass(VP_DS_SELECT_SEARCH);
             vpSearchSuggest.setPlaceholder('Search Row');
             vpSearchSuggest.setSuggestList(function () { return that.state.rowList; });
-            vpSearchSuggest.setSelectEvent(function (value) {
+            vpSearchSuggest.setSelectEvent(function (value, item) {
                 $(this.wrapSelector()).val(value);
                 $(this.wrapSelector()).trigger('change');
             });
@@ -643,8 +669,11 @@ define([
                     variableInput.addClass(VP_DS_PANDAS_OBJECT);
                     variableInput.setPlaceholder('Select variable');
                     variableInput.setSuggestList(function () { return varList; });
-                    variableInput.setSelectEvent(function (value) {
+                    variableInput.setSelectEvent(function (value, item) {
                         $(this.wrapSelector()).val(value);
+                        $(this.wrapSelector()).data('dtype', item.dtype);
+                        that.state.pandasObject = value;
+                        that.state.dataType = item.dtype;
                         $(this.wrapSelector()).trigger('change');
                     });
                     variableInput.setNormalFilter(true);
@@ -1000,9 +1029,31 @@ define([
                 // open popup
                 $(document).on('click', com_util.formatString('.{0}.{1}', VP_DS_BTN, this.uuid), function (event) {
                     if (!$(this).hasClass('disabled')) {
-                        that.useCell = false; // show apply button only
+                        that.beforeOpen(that);
                         that.open();
+                        $(that.wrapSelector()).css({ 'z-index': 205 }); // move forward
                     }
+                });
+
+                // co-op with parent Popup
+                $(this.targetSelector).on('remove_option_page', function(evt) {
+                    that.close();
+                });
+                $(this.targetSelector).on('close_option_page', function(evt) {
+                    that.close();
+                });
+                $(this.targetSelector).on('focus_option_page', function(evt) {
+                    that.focus();
+                });
+                $(this.targetSelector).on('apply_option_page', function(evt) {
+                    let code = that.generateCode();
+
+                    // if finish callback is available
+                    if (that.finish && typeof that.finish == 'function') {
+                        that.finish(code);
+                    }
+                    
+                    that.close();
                 });
             }
 
@@ -1065,7 +1116,9 @@ define([
                     });
 
                     // show column box
-                    $(that.wrapSelector('.' + VP_DS_TAB_PAGE_BOX + '.subset-column')).show();
+                    if (that.useInputColumns != true) {
+                        $(that.wrapSelector('.' + VP_DS_TAB_PAGE_BOX + '.subset-column')).show();
+                    }
                 } else if (that.state.dataType == 'Series') {
                     // get result and load column list
                     vpKernel.getRowList(varName).then(function (resultObj) {
@@ -1636,32 +1689,41 @@ define([
             $(this.wrapSelector('.' + VP_DS_TO_FRAME)).parent().hide();
             if (this.state.dataType == 'DataFrame') {
                 if (this.state.colType == 'indexing') {
-                    var colTags = $(this.wrapSelector('.' + VP_DS_SELECT_ITEM + '.select-col.added:not(.moving)'));
-                    if (colTags.length > 0) {
-                        var colList = [];
-                        for (var i = 0; i < colTags.length; i++) {
-                            var colValue = $(colTags[i]).data('code');
-                            if (colValue) {
-                                colList.push(colValue);
-                            }
-                        }
-
-                        // hide/show to frame
+                    if (this.useInputColumns == true) {
+                        colList = this.state.selectedColumns;
                         if (colList.length == 1) {
-                            $(this.wrapSelector('.' + VP_DS_TO_FRAME)).parent().show();
-
-                            // to frame
-                            if (this.state.toFrame) {
-                                colSelection.appendFormat('[{0}]', colList.toString());
-                            } else {
-                                colSelection.appendFormat('{0}', colList.toString());
-                            }
+                            colSelection.appendFormat('{0}', colList.toString());
                         } else {
                             colSelection.appendFormat('[{0}]', colList.toString());
                         }
-
                     } else {
-                        colSelection.append(':');
+                        var colTags = $(this.wrapSelector('.' + VP_DS_SELECT_ITEM + '.select-col.added:not(.moving)'));
+                        if (colTags.length > 0) {
+                            var colList = [];
+                            for (var i = 0; i < colTags.length; i++) {
+                                var colValue = $(colTags[i]).data('code');
+                                if (colValue) {
+                                    colList.push(colValue);
+                                }
+                            }
+    
+                            // hide/show to frame
+                            if (colList.length == 1) {
+                                $(this.wrapSelector('.' + VP_DS_TO_FRAME)).parent().show();
+    
+                                // to frame
+                                if (this.state.toFrame) {
+                                    colSelection.appendFormat('[{0}]', colList.toString());
+                                } else {
+                                    colSelection.appendFormat('{0}', colList.toString());
+                                }
+                            } else {
+                                colSelection.appendFormat('[{0}]', colList.toString());
+                            }
+    
+                        } else {
+                            colSelection.append(':');
+                        }
                     }
                 } else if (this.state.colType == 'slicing') {
                     var start = $(this.wrapSelector('.' + VP_DS_COL_SLICE_START)).data('code');
