@@ -157,6 +157,15 @@ define([
                 $(that.wrapSelector(com_util.formatString('.vp-tab-page-box.{0} > .vp-tab-page', level))).hide();
                 $(that.wrapSelector(com_util.formatString('.vp-tab-page[data-type="{0}"]', type))).show();
             });
+
+            $(this.wrapSelector('#chartType')).on('change', function() {
+                // add bins to histplot
+                let chartType = $(this).val();
+                $(that.wrapSelector('.sb-option')).hide();
+                if (chartType == 'histplot') {
+                    $(that.wrapSelector('.sb-option.bins')).show();
+                }
+            })
             
             // use data or not
             $(this.wrapSelector('#setXY')).on('change', function() {
@@ -310,6 +319,12 @@ define([
                     cnt, selectedFlag, cnt);
             });
             $(page).find('#sampleCount').html(sampleCountTag.toString());
+
+            // data options depend on chart type
+            $(page).find('.sb-option').hide();
+            if (this.state.chartType == 'histplot') {
+                $(page).find('.sb-option.bins').show();
+            }
 
             //================================================================
             // Load state
