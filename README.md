@@ -49,10 +49,6 @@ pip install visualpython
 ```
 visualpy install
 ```
-NOTE : If you are using multiple versions of Python, specify the pip version as 3 like the following. <br>
-```
-visualpy install --pip3 
-```
 
 **4)  Activate Visual Python on Jupyter Notebook**
 
