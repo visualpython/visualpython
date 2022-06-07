@@ -1037,7 +1037,9 @@ define([
                 // open popup
                 $(document).on('click', com_util.formatString('.{0}.{1}', VP_DS_BTN, this.uuid), function (event) {
                     if (!$(this).hasClass('disabled')) {
-                        that.beforeOpen(that);
+                        if (that.beforeOpen && typeof that.beforeOpen == 'function') {
+                            that.beforeOpen(that);
+                        }
                         that.open();
                         $(that.wrapSelector()).css({ 'z-index': 205 }); // move forward
                     }

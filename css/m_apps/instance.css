@@ -48,20 +48,16 @@
     display: inline-block;
     width: calc(100% - 55px);
     height: 30px;
-    border: 1px solid var(--gray-color);
+    border: 0.25px solid var(--grid-line-color);
     border-radius: 3px;
-    overflow: hidden;
-}
-.vp-instance-box .CodeMirror.selected {
-    display: inline-block;
-    border: 1px solid silver;
-    overflow: hidden;
-    width: 88%;
-    height: 31px;
     background-image: repeating-linear-gradient( to right, var(--grid-line-color) 0, var(--grid-line-color) 0.25px, transparent 1px, transparent 5px ), repeating-linear-gradient( to bottom, var(--grid-line-color) 0, var(--grid-line-color) 0.25px, transparent 1px, transparent 5px );
     background-color: white;
-    border: 0.25px solid #E4E4E4;
+    overflow: hidden;
 }
+/* .vp-instance-box .CodeMirror.selected {
+    width: 88%;
+    height: 31px;
+} */
 .vp-instance-box .CodeMirror-empty { outline: none; }
 .vp-instance-box .CodeMirror-empty.CodeMirror-focused { outline: none; }
 .vp-instance-box .CodeMirror pre.CodeMirror-placeholder { color: #999; }
