@@ -62,6 +62,8 @@ define([
 
                         that.state.useFile = true;
                         $(that.wrapSelector('.vp-wc-file-option')).show();
+                        $(that.wrapSelector('#useFile')).prop('checked', true);
+                        $(that.wrapSelector('#useFile')).trigger('change');
 
                         // set text
                         $(that.wrapSelector('#data')).val(path);
@@ -69,6 +71,16 @@ define([
                     }
                 });
                 fileNavi.open();
+            });
+
+            // use file
+            $(this.wrapSelector('#useFile')).on('change', function() {
+                let checked = $(this).prop('checked');
+                if (checked) {
+                    $(that.wrapSelector('.vp-wc-file-option')).show();
+                } else {
+                    $(that.wrapSelector('.vp-wc-file-option')).hide();
+                }
             });
 
             // change tab
@@ -90,6 +102,11 @@ define([
                     that.loadPreview();
                 }
                 evt.stopPropagation();
+            });
+            
+            // preview refresh
+            $(this.wrapSelector('#previewRefresh')).on('click', function() {
+                that.loadPreview();
             });
 
         }
@@ -157,12 +174,16 @@ define([
                 pageThis: this,
                 id: 'data',
                 select: function() {
-                    that.state.useFile = false;
-                    $(that.wrapSelector('.vp-wc-file-option')).hide();
+                    // that.state.useFile = false;
+                    $(that.wrapSelector('#useFile')).prop('checked', false);
+                    $(that.wrapSelector('#useFile')).trigger('change');
+                    // $(that.wrapSelector('.vp-wc-file-option')).hide();
                 },
                 finish: function() {
-                    that.state.useFile = false;
-                    $(that.wrapSelector('.vp-wc-file-option')).hide();
+                    // that.state.useFile = false;
+                    $(that.wrapSelector('#useFile')).prop('checked', false);
+                    $(that.wrapSelector('#useFile')).trigger('change');
+                    // $(that.wrapSelector('.vp-wc-file-option')).hide();
                 }
             });
             $(this.wrapSelector('#data')).replaceWith(dataSelector.toTagString());
@@ -201,6 +222,7 @@ define([
                 suggestInput.addClass('vp-input vp-state');
                 suggestInput.setSuggestList(function() { return encodingList; });
                 suggestInput.setPlaceholder('encoding option');
+                suggestInput.setValue(that.state.encoding);
                 return suggestInput.toTagString();
             });
 
