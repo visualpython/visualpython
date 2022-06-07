@@ -50,6 +50,14 @@ define([
                 x_limit_to: '',
                 y_limit_from: '',
                 y_limit_to: '',
+                xticks: '',
+                xticks_label: '',
+                xticks_rotate: '',
+                removeXticks: false,
+                yticks: '',
+                yticks_label: '',
+                yticks_rotate: '',
+                removeYticks: false,
                 // info options
                 title: '',
                 x_label: '',
@@ -621,6 +629,8 @@ define([
             let { 
                 chartType, data, x, y, hue, setXY, userOption='', 
                 x_limit_from, x_limit_to, y_limit_from, y_limit_to,
+                xticks, xticks_label, xticks_rotate, removeXticks,
+                yticks, yticks_label, yticks_rotate, removeYticks,
                 title, x_label, y_label, legendPos,
                 useColor, color, useGrid, gridColor, markerStyle,
                 userCode1,
@@ -680,6 +690,56 @@ define([
 
             let generatedCode = com_generator.vp_codeGenerator(this, config, state, etcOptionCode.join(', '));
 
+            // Axes
+            if (x_limit_from != '' && x_limit_to != '') {
+                chartCode.appendFormatLine("plt.xlim(({0}, {1}))", x_limit_from, x_limit_to);
+            }
+            if (y_limit_from != '' && y_limit_to != '') {
+                chartCode.appendFormatLine("plt.ylim(({0}, {1}))", y_limit_from, y_limit_to);
+            }
+            if (legendPos != '') {
+                chartCode.appendFormatLine("plt.legend(loc='{0}')", legendPos);
+            }
+            if (removeXticks === true) {
+                // use empty list to disable xticks
+                chartCode.appendLine("plt.xticks([])");
+            } else {
+                let xticksOptList = [];
+                if (xticks && xticks !== '') {
+                    xticksOptList.push(xticks);
+                    // Not able to use xticks_label without xticks
+                    if (xticks_label && xticks_label != '') {
+                        xticksOptList.push(xticks_label);
+                    }
+                }
+                if (xticks_rotate && xticks_rotate !== '') {
+                    xticksOptList.push('rotation=' + xticks_rotate)
+                }
+                // Add option to chart code if available
+                if (xticksOptList.length > 0) {
+                    chartCode.appendFormatLine("plt.xticks({0})", xticksOptList.join(', '));
+                }
+            }
+            if (removeYticks === true) {
+                // use empty list to disable yticks
+                chartCode.appendLine("plt.yticks([])");
+            } else {
+                let yticksOptList = [];
+                if (yticks && yticks !== '') {
+                    yticksOptList.push(yticks);
+                    // Not able to use xticks_label without xticks
+                    if (yticks_label && yticks_label != '') {
+                        yticksOptList.push(yticks_label);
+                    }
+                }
+                if (yticks_rotate && yticks_rotate !== '') {
+                    yticksOptList.push('rotation=' + yticks_rotate)
+                }
+                // Add option to chart code if available
+                if (yticksOptList.length > 0) {
+                    chartCode.appendFormatLine("plt.yticks({0})", yticksOptList.join(', '));
+                }
+            }
             // Info
             if (title && title != '') {
                 chartCode.appendFormatLine("plt.title('{0}')", title);
@@ -689,15 +749,6 @@ define([
             }
             if (y_label && y_label != '') {
                 chartCode.appendFormatLine("plt.ylabel('{0}')", y_label);
-            }
-            if (x_limit_from != '' && x_limit_to != '') {
-                chartCode.appendFormatLine("plt.xlim(({0}, {1}))", x_limit_from, x_limit_to);
-            }
-            if (y_limit_from != '' && y_limit_to != '') {
-                chartCode.appendFormatLine("plt.ylim(({0}, {1}))", y_limit_from, y_limit_to);
-            }
-            if (legendPos != '') {
-                chartCode.appendFormatLine("plt.legend(loc='{0}')", legendPos);
             }
             // Style - Grid
             // plt.grid(True, axis='x', color='red', alpha=0.5, linestyle='--')
@@ -712,7 +763,6 @@ define([
                 chartCode.appendFormatLine("plt.grid({0})", gridCodeList.join(', '));
             }
 
-            let convertedData = data;
             if (preview) {
                 // Ignore warning
                 code.appendLine('import warnings');
@@ -728,7 +778,9 @@ define([
                 code.appendLine(chartCode.toString());
             } else {
                 code.appendLine(generatedCode);
-                code.appendLine(chartCode.toString());
+                if (chartCode.length > 0) {
+                    code.append(chartCode.toString());
+                }
             }
 
             if (userCode1 && userCode1 != '') {

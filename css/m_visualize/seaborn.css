@@ -91,6 +91,10 @@
 .vp-tab-page label {
     margin-bottom: 0px;
 }
+.vp-tab-group-title {
+    font-weight: bold;
+    background: var(--light-gray-color);
+}
 .vp-chart-setting-footer {
     position: absolute;
     left: 20px;
