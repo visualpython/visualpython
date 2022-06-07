@@ -159,7 +159,16 @@ define([
                 }).click(function() {
                     $(this).val('');
                     $(com_util.formatString(".{0}", that.uuid)).autocomplete('search', $(com_util.formatString(".{0}", that.uuid)).val());
-                });
+                }).autocomplete('instance')._renderItem = function(ul, item) {
+                    if (item.dtype != undefined) {
+                        return $('<li>').attr('data-value', item.value)
+                            .append(`<div class="vp-sg-item">${item.label}<label class="vp-gray-text vp-cursor">&nbsp;| ${item.dtype}</label></div>`)
+                            .appendTo(ul);
+                    }
+                    return $('<li>').attr('data-value', item.value)
+                            .append(`<div class="vp-sg-item">${item.label}</div>`)
+                            .appendTo(ul);
+                };;
             });
 
             return sbTagString.toString();

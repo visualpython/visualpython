@@ -460,7 +460,7 @@ define([
             let { result, type, msg } = resultObj;
             var varList = JSON.parse(result);
             varList = varList.map(function(v) {
-                return { label: v.varName + ' (' + v.varType + ')', value: v.varName, dtype: v.varType };
+                return { label: v.varName, value: v.varName, dtype: v.varType };
             });
             // 1. Target Variable
             var suggestInput = new SuggestInput();
