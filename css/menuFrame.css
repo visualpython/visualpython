@@ -102,6 +102,10 @@
 .vp-board-toggle-icon.vp-hide {
     background-image: url(../img/toggleNote_hide.svg);
 }
+.vp-board-toggle-icon:hover {
+    background-image: url(../img/toggleNote.svg);
+}
+
 .vp-menu-footer {
     width: 100%;
     height: 50px;
