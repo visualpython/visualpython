@@ -49,6 +49,12 @@ define([
             // specify pandas object types
             this.pdObjTypes = ['DataFrame', 'Series'];
             this.allowSubsetTypes = ['subset', 'iloc', 'loc', 'query'];
+            this.subsetLabels = {
+                'subset': 'subset', 
+                'iloc'  : 'iloc (integer location)', 
+                'loc'   : 'loc (location)', 
+                'query' : 'query'
+            };
             if (this.prop.allowSubsetTypes) {
                 this.allowSubsetTypes = this.prop.allowSubsetTypes;
             }
@@ -160,12 +166,14 @@ define([
         }
         renderSubsetType(dataType) {
             var subsetType = this.state.subsetType;
+            let that = this;
 
             var tag = new com_String();
             tag.appendFormatLine('<select class="{0} {1}">', VP_DS_SUBSET_TYPE, 'vp-select');
             this.allowSubsetTypes.forEach(thisType => {
                 if (thisType != 'query' || dataType == 'DataFrame') {
-                    tag.appendFormatLine('<option value="{0}" {1}>{2}</option>', thisType, subsetType == thisType?'selected':'', thisType);
+                    let label = that.subsetLabels[thisType];
+                    tag.appendFormatLine('<option value="{0}" {1}>{2}</option>', thisType, subsetType == thisType?'selected':'', label);
                 }
             });
             // tag.appendFormatLine('<option value="{0}" {1}>{2}</option>', 'subset', subsetType == 'subset'?'selected':'', 'subset');
@@ -619,7 +627,7 @@ define([
          * - render on VP_DS_PANDAS_OBJECT
          */
         loadVariables() {
-            var that = this;
+            let that = this;
             var types = that.pdObjTypes;
             var prevValue = this.state.pandasObject;
 
@@ -688,7 +696,7 @@ define([
             }
         }
         loadSubsetType(dataType) {
-            var that = this;
+            let that = this;
             $(this.wrapSelector('.' + VP_DS_SUBSET_TYPE)).replaceWith(function () {
                 return that.renderSubsetType(dataType);
             });

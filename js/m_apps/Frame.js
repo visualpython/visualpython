@@ -588,6 +588,7 @@ define([
                     var prevValue = that.state.originObj;
                     if (varList && varList.length > 0 && prevValue == '') {
                         prevValue = varList[0].varName;
+                        that.state.originObj = prevValue;
                     }
                     // replace
                     that.renderVariableList(varList, prevValue);
