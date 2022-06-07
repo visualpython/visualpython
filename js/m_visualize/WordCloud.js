@@ -76,7 +76,7 @@ define([
             // use file
             $(this.wrapSelector('#useFile')).on('change', function() {
                 let checked = $(this).prop('checked');
-                if (checked) {
+                if (checked === true) {
                     $(that.wrapSelector('.vp-wc-file-option')).show();
                 } else {
                     $(that.wrapSelector('.vp-wc-file-option')).hide();
@@ -174,16 +174,14 @@ define([
                 pageThis: this,
                 id: 'data',
                 select: function() {
-                    // that.state.useFile = false;
+                    that.state.useFile = false;
                     $(that.wrapSelector('#useFile')).prop('checked', false);
-                    $(that.wrapSelector('#useFile')).trigger('change');
-                    // $(that.wrapSelector('.vp-wc-file-option')).hide();
+                    $(that.wrapSelector('.vp-wc-file-option')).hide();
                 },
                 finish: function() {
-                    // that.state.useFile = false;
+                    that.state.useFile = false;
                     $(that.wrapSelector('#useFile')).prop('checked', false);
-                    $(that.wrapSelector('#useFile')).trigger('change');
-                    // $(that.wrapSelector('.vp-wc-file-option')).hide();
+                    $(that.wrapSelector('.vp-wc-file-option')).hide();
                 }
             });
             $(this.wrapSelector('#data')).replaceWith(dataSelector.toTagString());

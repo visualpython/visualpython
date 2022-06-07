@@ -186,14 +186,15 @@ define([
                     that.state.dataType = ui.item.dtype;
                     that.state.returnDataType = ui.item.dtype;
 
+                    that.prop.pageThis.state[that.prop.id] = ui.item.value;
                     that.prop.pageThis.state[that.prop.id + '_state'] = that.state;
-
-                    $(this).trigger('change');
 
                     // select event
                     if (that.prop.select && typeof that.prop.select == 'function') {
                         result = that.prop.select(ui.item.value, ui.item.dtype);
                     }
+                    $(this).trigger('change');
+
                     if (result != undefined) {
                         return result;
                     }

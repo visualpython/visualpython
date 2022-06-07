@@ -143,10 +143,11 @@ define([
                         let result = true;
                         // trigger change
                         $(this).val(ui.item.value);
-                        $(this).trigger('change');
                         
-                        if (typeof that._selectEvent == "function")
+                        if (typeof that._selectEvent == "function") {
                             result = that._selectEvent(ui.item.value, ui.item);
+                        }
+                        $(this).trigger('change');
                         if (result != undefined) {
                             return result;
                         }

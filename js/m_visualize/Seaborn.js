@@ -259,6 +259,7 @@ define([
                 pageThis: this,
                 id: 'data',
                 select: function(value, dtype) {
+                    that.state.data = value;
                     that.state.dtype = dtype;
 
                     if (dtype == 'DataFrame') {
