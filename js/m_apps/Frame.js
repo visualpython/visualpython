@@ -1151,15 +1151,15 @@ define([
                     code.appendFormat("{0}.drop([{1}], axis={2}, inplace=True)", tempObj, selectedName, axis);
                     break;
                 case FRAME_EDIT_TYPE.RENAME:
-                    var renameStr = new com_String();
+                    var renameList = [];
                     Object.keys(content).forEach((key, idx) => {
-                        if (idx == 0) {
-                            renameStr.appendFormat("{0}: {1}", content[key].label, com_util.convertToStr(content[key].value, content[key].istext));
-                        } else {
-                            renameStr.appendFormat(", {0}: {1}", content[key].label, com_util.convertToStr(content[key].value, content[key].istext));
+                        if (content[key].value != '') {
+                            renameList.push(com_util.formatString("{0}: {1}", content[key].label, com_util.convertToStr(content[key].value, content[key].istext)));
                         }
                     });
-                    code.appendFormat("{0}.rename({1}={{2}}, inplace=True)", tempObj, axis==FRAME_AXIS.ROW?'index':'columns', renameStr.toString());
+                    if (renameList.length > 0) {
+                        code.appendFormat("{0}.rename({1}={{2}}, inplace=True)", tempObj, axis==FRAME_AXIS.ROW?'index':'columns', renameList.join(', '));
+                    }
                     break;
                 case FRAME_EDIT_TYPE.DROP_NA:
                     var locObj = '';
@@ -1439,10 +1439,16 @@ define([
                 // row
                 $(this.wrapSelector(com_util.formatString('.{0}', VP_FE_MENU_BOX))).find('div[data-axis="col"]').hide();
                 $(this.wrapSelector(com_util.formatString('.{0}', VP_FE_MENU_BOX))).find('div[data-axis="row"]').show();
+
+                // change sub-box style
+                $(this.wrapSelector(com_util.formatString('.{0}.vp-fe-sub-cleaning', VP_FE_MENU_SUB_BOX))).css({ 'top': '90px'});
             } else if (this.state.axis == 1) {
                 // column
                 $(this.wrapSelector(com_util.formatString('.{0}', VP_FE_MENU_BOX))).find('div[data-axis="row"]').hide();
                 $(this.wrapSelector(com_util.formatString('.{0}', VP_FE_MENU_BOX))).find('div[data-axis="col"]').show();
+
+                // change sub-box style
+                $(this.wrapSelector(com_util.formatString('.{0}.vp-fe-sub-cleaning', VP_FE_MENU_SUB_BOX))).css({ 'top': '120px'});
             }
             $(this.wrapSelector(com_util.formatString('.{0}', VP_FE_MENU_BOX))).css({ top: top, left: left })
             $(this.wrapSelector(com_util.formatString('.{0}', VP_FE_MENU_BOX))).show();
@@ -1474,6 +1480,7 @@ define([
     const VP_FE_TITLE = 'vp-fe-title';
 
     const VP_FE_MENU_BOX = 'vp-fe-menu-box';
+    const VP_FE_MENU_SUB_BOX = 'vp-fe-menu-sub-box';
     const VP_FE_MENU_ITEM = 'vp-fe-menu-item';
 
     const VP_FE_POPUP_BOX = 'vp-fe-popup-box';
