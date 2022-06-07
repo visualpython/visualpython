@@ -45,6 +45,11 @@ define([
                 x: '',
                 y: '',
                 hue: '',
+                // axes options
+                x_limit_from: '',
+                x_limit_to: '',
+                y_limit_from: '',
+                y_limit_to: '',
                 // info options
                 title: '',
                 x_label: '',
@@ -56,11 +61,8 @@ define([
                 useGrid: '',
                 gridColor: '#000000',
                 markerStyle: '',
-                // setting options
-                x_limit_from: '',
-                x_limit_to: '',
-                y_limit_from: '',
-                y_limit_to: '',
+                // code option
+                userCode: '',
                 // preview options
                 useSampling: true,
                 sampleCount: 30,
@@ -429,6 +431,25 @@ define([
                     $(this.wrapSelector('#hue')).prop('disabled', true);
                 }
             }
+
+            // load code tab - code mirror
+            let that = this;
+            let userCodeKey = 'userCode1';
+            let userCodeTarget = this.wrapSelector('#' + userCodeKey);
+            this.codeArea = this.initCodemirror({
+                key: userCodeKey,
+                selector: userCodeTarget,
+                events: [{
+                    key: 'change',
+                    callback: function(instance, evt) {
+                        // save its state
+                        instance.save();
+                        that.state[userCodeKey] = $(userCodeTarget).val();
+                        // refresh preview
+                        that.loadPreview();
+                    }
+                }]
+            });
             
             this.loadPreview();
         }
@@ -599,9 +620,10 @@ define([
         generateCode(preview=false) {
             let { 
                 chartType, data, x, y, hue, setXY, userOption='', 
+                x_limit_from, x_limit_to, y_limit_from, y_limit_to,
                 title, x_label, y_label, legendPos,
                 useColor, color, useGrid, gridColor, markerStyle,
-                x_limit_from, x_limit_to, y_limit_from, y_limit_to,
+                userCode1,
                 useSampling, sampleCount 
             } = this.state;
 
@@ -689,7 +711,6 @@ define([
             if (gridCodeList.length > 0) {
                 chartCode.appendFormatLine("plt.grid({0})", gridCodeList.join(', '));
             }
-            chartCode.append('plt.show()');
 
             let convertedData = data;
             if (preview) {
@@ -709,6 +730,12 @@ define([
                 code.appendLine(generatedCode);
                 code.appendLine(chartCode.toString());
             }
+
+            if (userCode1 && userCode1 != '') {
+                code.appendLine(userCode1);
+            }
+
+            code.append('plt.show()');
 
             // remove last Enter(\n) from code and then run it
             return code.toString().replace(/\n+$/, "");
