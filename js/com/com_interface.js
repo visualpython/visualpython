@@ -29,8 +29,12 @@ define([
         var targetCell = Jupyter.notebook.insert_cell_below(type, selectedIndex);
 
         // Add signature
-        if (type == 'code' && sigNum >= 0) {
-            command = com_util.formatString('# VisualPython [{0}]\n', sigNum) + command
+        if (type == 'code') {
+            if (sigNum >= 0) {
+                command = com_util.formatString('# VisualPython [{0}]\n', sigNum) + command;
+            } else {
+                command = '# VisualPython\n' + command;
+            }
         }
         targetCell.set_text(command);
         Jupyter.notebook.select_next();
