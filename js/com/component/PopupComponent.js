@@ -168,6 +168,8 @@ define([
          *  - selector : selector to distinguish codemirror tag (textarea)
          *    ex) this.wrapSelector('.cm-tag')
          *  - type     : code / readonly / markdown
+         *  - events   : list of event objects
+         *    ex) [{ key: 'change', callback: function() { ; } }]
          */
         initCodemirror(cmObj) {
             let {key, selector, type, events} = cmObj;
