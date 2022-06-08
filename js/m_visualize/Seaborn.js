@@ -45,6 +45,19 @@ define([
                 x: '',
                 y: '',
                 hue: '',
+                // axes options
+                x_limit_from: '',
+                x_limit_to: '',
+                y_limit_from: '',
+                y_limit_to: '',
+                xticks: '',
+                xticks_label: '',
+                xticks_rotate: '',
+                removeXticks: false,
+                yticks: '',
+                yticks_label: '',
+                yticks_rotate: '',
+                removeYticks: false,
                 // info options
                 title: '',
                 x_label: '',
@@ -56,11 +69,8 @@ define([
                 useGrid: '',
                 gridColor: '#000000',
                 markerStyle: '',
-                // setting options
-                x_limit_from: '',
-                x_limit_to: '',
-                y_limit_from: '',
-                y_limit_to: '',
+                // code option
+                userCode: '',
                 // preview options
                 useSampling: true,
                 sampleCount: 30,
@@ -157,6 +167,15 @@ define([
                 $(that.wrapSelector(com_util.formatString('.vp-tab-page-box.{0} > .vp-tab-page', level))).hide();
                 $(that.wrapSelector(com_util.formatString('.vp-tab-page[data-type="{0}"]', type))).show();
             });
+
+            $(this.wrapSelector('#chartType')).on('change', function() {
+                // add bins to histplot
+                let chartType = $(this).val();
+                $(that.wrapSelector('.sb-option')).hide();
+                if (chartType == 'histplot') {
+                    $(that.wrapSelector('.sb-option.bins')).show();
+                }
+            })
             
             // use data or not
             $(this.wrapSelector('#setXY')).on('change', function() {
@@ -240,6 +259,7 @@ define([
                 pageThis: this,
                 id: 'data',
                 select: function(value, dtype) {
+                    that.state.data = value;
                     that.state.dtype = dtype;
 
                     if (dtype == 'DataFrame') {
@@ -310,6 +330,12 @@ define([
                     cnt, selectedFlag, cnt);
             });
             $(page).find('#sampleCount').html(sampleCountTag.toString());
+
+            // data options depend on chart type
+            $(page).find('.sb-option').hide();
+            if (this.state.chartType == 'histplot') {
+                $(page).find('.sb-option.bins').show();
+            }
 
             //================================================================
             // Load state
@@ -414,6 +440,25 @@ define([
                     $(this.wrapSelector('#hue')).prop('disabled', true);
                 }
             }
+
+            // load code tab - code mirror
+            let that = this;
+            let userCodeKey = 'userCode1';
+            let userCodeTarget = this.wrapSelector('#' + userCodeKey);
+            this.codeArea = this.initCodemirror({
+                key: userCodeKey,
+                selector: userCodeTarget,
+                events: [{
+                    key: 'change',
+                    callback: function(instance, evt) {
+                        // save its state
+                        instance.save();
+                        that.state[userCodeKey] = $(userCodeTarget).val();
+                        // refresh preview
+                        that.loadPreview();
+                    }
+                }]
+            });
             
             this.loadPreview();
         }
@@ -584,9 +629,12 @@ define([
         generateCode(preview=false) {
             let { 
                 chartType, data, x, y, hue, setXY, userOption='', 
+                x_limit_from, x_limit_to, y_limit_from, y_limit_to,
+                xticks, xticks_label, xticks_rotate, removeXticks,
+                yticks, yticks_label, yticks_rotate, removeYticks,
                 title, x_label, y_label, legendPos,
                 useColor, color, useGrid, gridColor, markerStyle,
-                x_limit_from, x_limit_to, y_limit_from, y_limit_to,
+                userCode1,
                 useSampling, sampleCount 
             } = this.state;
 
@@ -643,6 +691,56 @@ define([
 
             let generatedCode = com_generator.vp_codeGenerator(this, config, state, etcOptionCode.join(', '));
 
+            // Axes
+            if (x_limit_from != '' && x_limit_to != '') {
+                chartCode.appendFormatLine("plt.xlim(({0}, {1}))", x_limit_from, x_limit_to);
+            }
+            if (y_limit_from != '' && y_limit_to != '') {
+                chartCode.appendFormatLine("plt.ylim(({0}, {1}))", y_limit_from, y_limit_to);
+            }
+            if (legendPos != '') {
+                chartCode.appendFormatLine("plt.legend(loc='{0}')", legendPos);
+            }
+            if (removeXticks === true) {
+                // use empty list to disable xticks
+                chartCode.appendLine("plt.xticks([])");
+            } else {
+                let xticksOptList = [];
+                if (xticks && xticks !== '') {
+                    xticksOptList.push(xticks);
+                    // Not able to use xticks_label without xticks
+                    if (xticks_label && xticks_label != '') {
+                        xticksOptList.push(xticks_label);
+                    }
+                }
+                if (xticks_rotate && xticks_rotate !== '') {
+                    xticksOptList.push('rotation=' + xticks_rotate)
+                }
+                // Add option to chart code if available
+                if (xticksOptList.length > 0) {
+                    chartCode.appendFormatLine("plt.xticks({0})", xticksOptList.join(', '));
+                }
+            }
+            if (removeYticks === true) {
+                // use empty list to disable yticks
+                chartCode.appendLine("plt.yticks([])");
+            } else {
+                let yticksOptList = [];
+                if (yticks && yticks !== '') {
+                    yticksOptList.push(yticks);
+                    // Not able to use xticks_label without xticks
+                    if (yticks_label && yticks_label != '') {
+                        yticksOptList.push(yticks_label);
+                    }
+                }
+                if (yticks_rotate && yticks_rotate !== '') {
+                    yticksOptList.push('rotation=' + yticks_rotate)
+                }
+                // Add option to chart code if available
+                if (yticksOptList.length > 0) {
+                    chartCode.appendFormatLine("plt.yticks({0})", yticksOptList.join(', '));
+                }
+            }
             // Info
             if (title && title != '') {
                 chartCode.appendFormatLine("plt.title('{0}')", title);
@@ -652,15 +750,6 @@ define([
             }
             if (y_label && y_label != '') {
                 chartCode.appendFormatLine("plt.ylabel('{0}')", y_label);
-            }
-            if (x_limit_from != '' && x_limit_to != '') {
-                chartCode.appendFormatLine("plt.xlim(({0}, {1}))", x_limit_from, x_limit_to);
-            }
-            if (y_limit_from != '' && y_limit_to != '') {
-                chartCode.appendFormatLine("plt.ylim(({0}, {1}))", y_limit_from, y_limit_to);
-            }
-            if (legendPos != '') {
-                chartCode.appendFormatLine("plt.legend(loc='{0}')", legendPos);
             }
             // Style - Grid
             // plt.grid(True, axis='x', color='red', alpha=0.5, linestyle='--')
@@ -674,9 +763,7 @@ define([
             if (gridCodeList.length > 0) {
                 chartCode.appendFormatLine("plt.grid({0})", gridCodeList.join(', '));
             }
-            chartCode.append('plt.show()');
 
-            let convertedData = data;
             if (preview) {
                 // Ignore warning
                 code.appendLine('import warnings');
@@ -692,8 +779,16 @@ define([
                 code.appendLine(chartCode.toString());
             } else {
                 code.appendLine(generatedCode);
-                code.appendLine(chartCode.toString());
+                if (chartCode.length > 0) {
+                    code.append(chartCode.toString());
+                }
             }
+
+            if (userCode1 && userCode1 != '') {
+                code.appendLine(userCode1);
+            }
+
+            code.append('plt.show()');
 
             // remove last Enter(\n) from code and then run it
             return code.toString().replace(/\n+$/, "");

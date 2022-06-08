@@ -114,6 +114,7 @@
     cursor: pointer;
 }
 .vp-popup-body {
+    position: relative;
     width: 100%;
     height: calc(100% - 80px);
     padding: 15px;
@@ -204,7 +205,6 @@
 .vp-popup-save-button {
     float: right;
     height: 30px;
-    width: 100px;
     margin-top: 9px;
     margin-right: 10px;
 }

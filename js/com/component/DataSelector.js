@@ -54,6 +54,7 @@ define([
                 allowDataType: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], // default allow data types
                 // additional options
                 classes: '',
+                placeholder: '',
                 ...this.prop
             }
 
@@ -185,14 +186,15 @@ define([
                     that.state.dataType = ui.item.dtype;
                     that.state.returnDataType = ui.item.dtype;
 
+                    that.prop.pageThis.state[that.prop.id] = ui.item.value;
                     that.prop.pageThis.state[that.prop.id + '_state'] = that.state;
-
-                    $(this).trigger('change');
 
                     // select event
                     if (that.prop.select && typeof that.prop.select == 'function') {
                         result = that.prop.select(ui.item.value, ui.item.dtype);
                     }
+                    $(this).trigger('change');
+
                     if (result != undefined) {
                         return result;
                     }
@@ -209,7 +211,7 @@ define([
                 $(this).autocomplete('search', $(this).val());
             }).autocomplete('instance')._renderItem = function(ul, item) {
                 return $('<li>').attr('data-value', item.value)
-                        .append(`<div class="vp-ds-item">${item.label}<label class="vp-gray-text vp-cursor">&nbsp;| ${item.dtype}</label></div>`)
+                        .append(`<div class="vp-sg-item">${item.label}<label class="vp-gray-text vp-cursor">&nbsp;| ${item.dtype}</label></div>`)
                         .appendTo(ul);
             };
         }
@@ -330,7 +332,7 @@ define([
         templateForTarget() {
             return `
                 <div class="vp-ds-box vp-ds-box-${this.uuid} vp-ds-uninit">
-                    <input type="text" class="vp-ds-target vp-input vp-state ${this.prop.classes}" id="${this.prop.id}" value="${this.prop.pageThis.state[this.prop.id]}"/>
+                    <input type="text" class="vp-ds-target vp-input vp-state ${this.prop.classes}" id="${this.prop.id}" value="${this.prop.pageThis.state[this.prop.id]}" placeholder="${this.prop.placeholder}"/>
                     <span class="vp-ds-filter"><img src="/nbextensions/visualpython/img/filter.svg"/></span>
                 </div>
             `;

@@ -245,3 +245,37 @@
 .vp-inner-popup-apply-column {
     width: 153px;
 }
+
+/* UDF Editor - CodeMirror */
+.vp-fr-subset-box {
+    width: 300px;
+}
+.vp-fr-subset-box .CodeMirror { 
+    display: inline-block;
+    width: calc(100% - 55px);
+    height: 30px;
+    border: 1px solid var(--gray-color);
+    border-radius: 3px;
+    background-image: repeating-linear-gradient( to right, var(--grid-line-color) 0, var(--grid-line-color) 0.25px, transparent 1px, transparent 5px ), repeating-linear-gradient( to bottom, var(--grid-line-color) 0, var(--grid-line-color) 0.25px, transparent 1px, transparent 5px );
+    overflow: hidden;
+}
+.vp-fr-subset-box .CodeMirror-empty { outline: none; }
+.vp-fr-subset-box .CodeMirror-empty.CodeMirror-focused { outline: none; }
+.vp-fr-subset-box .CodeMirror pre.CodeMirror-placeholder { color: #999; }
+
+/* Hide cursor in read only fields */
+.vp-fr-subset-box .CodeMirror-readonly .CodeMirror-cursor {
+    display: none !important
+}
+/* .CodeMirror-scroll { min-height: 80px; max-height: 80px;} */
+.vp-fr-subset-box .CodeMirror-code .cm-variable {
+    background-color: rgba(47, 133, 90, 0.2);
+}
+.vp-fr-subset-box .CodeMirror-code .cm-property {
+    background-color: rgba(246, 173, 85, 0.2);
+}
+
+.vp-fr-subset-box .vp-ds-button {
+    width: 50px;
+    vertical-align: top;
+}

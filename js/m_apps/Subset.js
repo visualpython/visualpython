@@ -30,19 +30,34 @@ define([
         _init() {
             super._init();
             this.config.sizeLevel = 3;
-            /** Write codes executed before rendering */
-            this.targetSelector = this.prop.targetSelector;
-            this.pageThis = this.prop.pageThis;
-            this.useInputVariable = this.prop.useInputVariable;
-            if (this.useInputVariable) {
-                this.eventTarget = this.targetSelector;
-            }
-
             // use Run/Add cell
             this.useCell = true;
 
+            /** Write codes executed before rendering */
+            this.targetSelector = this.prop.targetSelector;
+            this.pageThis = this.prop.pageThis;
+
+            this.useInputVariable = this.prop.useInputVariable;
+            if (this.useInputVariable) {
+                this.eventTarget = this.targetSelector;
+                this.useCell = false; // show apply button only
+            }
+            this.useInputColumns = this.prop.useInputColumns;
+            this.beforeOpen = this.prop.beforeOpen;
+            this.finish = this.prop.finish;
+
             // specify pandas object types
             this.pdObjTypes = ['DataFrame', 'Series'];
+            this.allowSubsetTypes = ['subset', 'iloc', 'loc', 'query'];
+            this.subsetLabels = {
+                'subset': 'subset', 
+                'iloc'  : 'iloc (integer location)', 
+                'loc'   : 'loc (location)', 
+                'query' : 'query'
+            };
+            if (this.prop.allowSubsetTypes) {
+                this.allowSubsetTypes = this.prop.allowSubsetTypes;
+            }
 
             this.stateLoaded = false;
 
@@ -70,6 +85,7 @@ define([
                 columnList: [],
                 colPointer: { start: -1, end: -1 },
                 colPageDom: '',
+                selectedColumns: [],
                 ...this.state
             };
 
@@ -103,7 +119,18 @@ define([
                 this.renderButton();
 
                 // hide allocate to
-                $(this.wrapSelector('.vp-ds-allocate-to')).closest('tr').hide();
+                $(this.wrapSelector('.' + VP_DS_ALLOCATE_TO)).closest('tr').hide();
+            }
+
+            if (this.useInputColumns) {
+                // hide make copy
+                $(this.wrapSelector('.' + VP_DS_USE_COPY)).parent().hide();
+                // hide to frame
+                $(this.wrapSelector('.' + VP_DS_TO_FRAME)).parent().hide();
+                // hide allocate to
+                $(this.wrapSelector('.' + VP_DS_ALLOCATE_TO)).closest('tr').hide();
+                // hide column box
+                $(this.wrapSelector('.' + VP_DS_TAB_PAGE_BOX + '.subset-column')).hide();
             }
         }
 
@@ -132,22 +159,29 @@ define([
             // set button next to input tag
             var buttonTag = new com_String();
             buttonTag.appendFormat('<button type="button" class="{0} {1} {2}">{3}</button>',
-                VP_DS_BTN, this.uuid, 'vp-button', 'Edit');
+                VP_DS_BTN, this.uuid, 'vp-button', 'Subset');
             if (this.pageThis) {
                 $(this.targetSelector).parent().append(buttonTag.toString());
             }
         }
         renderSubsetType(dataType) {
             var subsetType = this.state.subsetType;
+            let that = this;
 
             var tag = new com_String();
             tag.appendFormatLine('<select class="{0} {1}">', VP_DS_SUBSET_TYPE, 'vp-select');
-            tag.appendFormatLine('<option value="{0}" {1}>{2}</option>', 'subset', subsetType == 'subset'?'selected':'', 'subset');
-            tag.appendFormatLine('<option value="{0}" {1}>{2}</option>', 'loc', subsetType == 'loc'?'selected':'', 'loc');
-            tag.appendFormatLine('<option value="{0}" {1}>{2}</option>', 'iloc', subsetType == 'iloc'?'selected':'', 'iloc');
-            if (dataType == 'DataFrame') {
-                tag.appendFormatLine('<option value="{0}" {1}>{2}</option>', 'query', subsetType == 'query'?'selected':'', 'query');
-            }
+            this.allowSubsetTypes.forEach(thisType => {
+                if (thisType != 'query' || dataType == 'DataFrame') {
+                    let label = that.subsetLabels[thisType];
+                    tag.appendFormatLine('<option value="{0}" {1}>{2}</option>', thisType, subsetType == thisType?'selected':'', label);
+                }
+            });
+            // tag.appendFormatLine('<option value="{0}" {1}>{2}</option>', 'subset', subsetType == 'subset'?'selected':'', 'subset');
+            // tag.appendFormatLine('<option value="{0}" {1}>{2}</option>', 'loc', subsetType == 'loc'?'selected':'', 'loc');
+            // tag.appendFormatLine('<option value="{0}" {1}>{2}</option>', 'iloc', subsetType == 'iloc'?'selected':'', 'iloc');
+            // if (dataType == 'DataFrame') {
+            //     tag.appendFormatLine('<option value="{0}" {1}>{2}</option>', 'query', subsetType == 'query'?'selected':'', 'query');
+            // }
             tag.appendLine('</select>');
 
             return tag.toString();
@@ -206,7 +240,7 @@ define([
             vpSearchSuggest.addClass(VP_DS_SELECT_SEARCH);
             vpSearchSuggest.setPlaceholder('Search Row');
             vpSearchSuggest.setSuggestList(function () { return that.state.rowList; });
-            vpSearchSuggest.setSelectEvent(function (value) {
+            vpSearchSuggest.setSelectEvent(function (value, item) {
                 $(this.wrapSelector()).val(value);
                 $(this.wrapSelector()).trigger('change');
             });
@@ -448,12 +482,7 @@ define([
 
             tag.appendLine('<div class="vp-td-line">');
             tag.appendLine(this.templateForConditionColumnInput(colList));
-            tag.appendFormatLine('<select class="{0} {1}">', 'vp-select s', 'vp-oper-list');
-            var operList = ['', '==', '!=', 'contains', 'not contains', '<', '<=', '>', '>=', 'starts with', 'ends with'];
-            operList.forEach(oper => {
-                tag.appendFormatLine('<option value="{0}">{1}</option>', oper, oper);
-            });
-            tag.appendLine('</select>');
+            tag.appendLine(this.templateForConditionOperator(''));
             tag.appendLine('<input class="vp-input m vp-condition" type="text" placeholder="Value"/>');
             tag.appendLine('</div>');
 
@@ -487,6 +516,22 @@ define([
             colList.forEach(col => {
                 tag.appendFormatLine('<option data-code="{0}" data-dtype="{1}" value="{2}">{3}</option>',
                     col.code, col.dtype, col.value, col.label);
+            });
+            tag.appendLine('</select>');
+            return tag.toString();
+        }
+        templateForConditionOperator(dtype='object') {
+            var tag = new com_String();
+            tag.appendFormatLine('<select class="{0} {1}">', 'vp-select s', 'vp-oper-list');
+            var operList = ['', '==', '!=', '<', '<=', '>', '>=', 'contains', 'not contains', 'starts with', 'ends with', 'isnull()', 'notnull()'];
+            if (dtype == '') {
+                // .index
+                operList = ['', '==', '!=', '<', '<=', '>', '>='];
+            } else if (dtype != 'object') {
+                operList = ['', '==', '!=', '<', '<=', '>', '>=', 'isnull()', 'notnull()'];
+            }
+            operList.forEach(oper => {
+                tag.appendFormatLine('<option value="{0}">{1}</option>', oper, oper);
             });
             tag.appendLine('</select>');
             return tag.toString();
@@ -582,7 +627,7 @@ define([
          * - render on VP_DS_PANDAS_OBJECT
          */
         loadVariables() {
-            var that = this;
+            let that = this;
             var types = that.pdObjTypes;
             var prevValue = this.state.pandasObject;
 
@@ -614,19 +659,35 @@ define([
                     let { result } = resultObj;
                     var varList = JSON.parse(result);
                     varList = varList.map(function (v) {
-                        return { label: v.varName + ' (' + v.varType + ')', value: v.varName, dtype: v.varType };
+                        return { label: v.varName, value: v.varName, dtype: v.varType };
                     });
 
                     that.state.dataList = varList;
 
                     // 1. Target Variable
                     var prevValue = $(that.wrapSelector('.' + VP_DS_PANDAS_OBJECT)).val();
-                    $(that.wrapSelector('.' + VP_DS_PANDAS_OBJECT_BOX)).replaceWith(function () {
-                        var pdVarSelect = new VarSelector(that.pdObjTypes, that.state.dataType, false, false);
-                        pdVarSelect.addClass(VP_DS_PANDAS_OBJECT);
-                        pdVarSelect.addBoxClass(VP_DS_PANDAS_OBJECT_BOX);
-                        pdVarSelect.setValue(prevValue);
-                        return pdVarSelect.render();
+                    // $(that.wrapSelector('.' + VP_DS_PANDAS_OBJECT_BOX)).replaceWith(function () {
+                    //     var pdVarSelect = new VarSelector(that.pdObjTypes, that.state.dataType, false, false);
+                    //     pdVarSelect.addClass(VP_DS_PANDAS_OBJECT);
+                    //     pdVarSelect.addBoxClass(VP_DS_PANDAS_OBJECT_BOX);
+                    //     pdVarSelect.setValue(prevValue);
+                    //     return pdVarSelect.render();
+                    // });
+                    var variableInput = new SuggestInput();
+                    variableInput.addClass(VP_DS_PANDAS_OBJECT);
+                    variableInput.setPlaceholder('Select variable');
+                    variableInput.setSuggestList(function () { return varList; });
+                    variableInput.setSelectEvent(function (value, item) {
+                        $(this.wrapSelector()).val(value);
+                        $(this.wrapSelector()).data('dtype', item.dtype);
+                        that.state.pandasObject = value;
+                        that.state.dataType = item.dtype;
+                        $(this.wrapSelector()).trigger('change');
+                    });
+                    variableInput.setNormalFilter(true);
+                    variableInput.setValue(prevValue);
+                    $(that.wrapSelector('.' + VP_DS_PANDAS_OBJECT)).replaceWith(function() {
+                        return variableInput.toTagString();
                     });
                     if (!that.stateLoaded) {
                         that.reloadSubsetData();
@@ -635,7 +696,7 @@ define([
             }
         }
         loadSubsetType(dataType) {
-            var that = this;
+            let that = this;
             $(this.wrapSelector('.' + VP_DS_SUBSET_TYPE)).replaceWith(function () {
                 return that.renderSubsetType(dataType);
             });
@@ -976,9 +1037,33 @@ define([
                 // open popup
                 $(document).on('click', com_util.formatString('.{0}.{1}', VP_DS_BTN, this.uuid), function (event) {
                     if (!$(this).hasClass('disabled')) {
-                        that.useCell = false; // show apply button only
+                        if (that.beforeOpen && typeof that.beforeOpen == 'function') {
+                            that.beforeOpen(that);
+                        }
                         that.open();
+                        $(that.wrapSelector()).css({ 'z-index': 205 }); // move forward
                     }
+                });
+
+                // co-op with parent Popup
+                $(this.targetSelector).on('remove_option_page', function(evt) {
+                    that.close();
+                });
+                $(this.targetSelector).on('close_option_page', function(evt) {
+                    that.close();
+                });
+                $(this.targetSelector).on('focus_option_page', function(evt) {
+                    that.focus();
+                });
+                $(this.targetSelector).on('apply_option_page', function(evt) {
+                    let code = that.generateCode();
+
+                    // if finish callback is available
+                    if (that.finish && typeof that.finish == 'function') {
+                        that.finish(code);
+                    }
+                    
+                    that.close();
                 });
             }
 
@@ -1041,7 +1126,9 @@ define([
                     });
 
                     // show column box
-                    $(that.wrapSelector('.' + VP_DS_TAB_PAGE_BOX + '.subset-column')).show();
+                    if (that.useInputColumns != true) {
+                        $(that.wrapSelector('.' + VP_DS_TAB_PAGE_BOX + '.subset-column')).show();
+                    }
                 } else if (that.state.dataType == 'Series') {
                     // get result and load column list
                     vpKernel.getRowList(varName).then(function (resultObj) {
@@ -1331,17 +1418,22 @@ define([
                 that.generateCode();
             });
 
+            // change column selection for condition page
             $(document).on('change', this.wrapSelector('.vp-ds-cond-tbl .vp-col-list'), function () {
                 var thisTag = $(this);
                 var varName = that.state.pandasObject;
                 var colName = $(this).find('option:selected').attr('data-code');
                 var colDtype = $(this).find('option:selected').attr('data-dtype');
 
+                var operTag = $(this).closest('td').find('.vp-oper-list');
                 var condTag = $(this).closest('td').find('.vp-condition');
 
                 if (colName == '.index') {
                     // index
                     $(thisTag).closest('td').find('.vp-cond-use-text').prop('checked', false);
+                    $(operTag).replaceWith(function () {
+                        return that.templateForConditionOperator('');
+                    });
                     $(condTag).replaceWith(function () {
                         return that.templateForConditionCondInput([], '');
                     });
@@ -1358,18 +1450,41 @@ define([
                             } else {
                                 $(thisTag).closest('td').find('.vp-cond-use-text').prop('checked', false);
                             }
+                            $(operTag).replaceWith(function () {
+                                return that.templateForConditionOperator(colDtype);
+                            });
                             $(condTag).replaceWith(function () {
                                 return that.templateForConditionCondInput(category, colDtype);
                             });
                             that.generateCode();
                         } catch {
                             $(thisTag).closest('td').find('.vp-cond-use-text').prop('checked', false);
+                            $(operTag).replaceWith(function () {
+                                return that.templateForConditionOperator(colDtype);
+                            });
                             $(condTag).replaceWith(function () {
                                 return that.templateForConditionCondInput([], colDtype);
                             });
                             that.generateCode();
                         }
                     });
+                }
+            });
+
+            // change operator selection
+            $(document).on('change', this.wrapSelector('.vp-ds-cond-tbl .vp-oper-list'), function () {
+                var oper = $(this).val();
+                var condTag = $(this).closest('td').find('.vp-condition');
+                var useTextTag = $(this).closest('td').find('.vp-cond-use-text');
+                // var colDtype = $(this).closest('td').find('.vp-col-list option:selected').attr('data-dtype');
+
+                // if operator is isnull(), notnull(), disable condition input
+                if (oper == 'isnull()' || oper == 'notnull()') {
+                    $(condTag).prop('disabled', true);
+                    $(useTextTag).prop('disabled', true);
+                } else {
+                    $(condTag).prop('disabled', false);
+                    $(useTextTag).prop('disabled', false);
                 }
             });
 
@@ -1447,7 +1562,7 @@ define([
                     var rowList = [];
                     for (var i = 0; i < rowTags.length; i++) {
                         var rowValue = $(rowTags[i]).data('code');
-                        if (rowValue != undefined) {
+                        if (rowValue !== undefined) {
                             rowList.push(rowValue);
                         }
                     }
@@ -1500,15 +1615,17 @@ define([
                             condValue = com_util.formatString("'{0}'", cond);
                         }
                         if (oper == 'contains') {
-                            rowSelection.appendFormat('{0}.str.contains({1})', colValue, condValue);
+                            rowSelection.appendFormat('`{0}`.str.contains({1})', colValue, condValue);
                         } else if (oper == 'not contains') {
-                            rowSelection.appendFormat('~{0}.str.contains({1})', colValue, condValue);
+                            rowSelection.appendFormat('~`{0}`.str.contains({1})', colValue, condValue);
                         } else if (oper == 'starts with') {
-                            rowSelection.appendFormat('{0}.str.startswith({1})', colValue, condValue);
+                            rowSelection.appendFormat('`{0}`.str.startswith({1})', colValue, condValue);
                         } else if (oper == 'ends with') {
-                            rowSelection.appendFormat('{0}.str.endswith({1})', colValue, condValue);
+                            rowSelection.appendFormat('`{0}`.str.endswith({1})', colValue, condValue);
+                        } else if (oper == 'isnull()' || oper == 'notnull()') {
+                            rowSelection.appendFormat('`{0}`.{1}', colValue, oper);
                         } else {
-                            rowSelection.appendFormat('{0}{1}{2}', colValue, oper != ''?(' ' + oper):'', condValue != ''?(' ' + condValue):'');
+                            rowSelection.appendFormat('`{0}`{1}{2}', colValue, oper != ''?(' ' + oper):'', condValue != ''?(' ' + condValue):'');
                         }
                         if (condList.length > 1) {
                             rowSelection.append(')');
@@ -1538,6 +1655,8 @@ define([
                                 rowSelection.appendFormat('{0}.str.startswith({1})', colValue, condValue);
                             } else if (oper == 'ends with') {
                                 rowSelection.appendFormat('{0}.str.endswith({1})', colValue, condValue);
+                            } else if (oper == 'isnull()' || oper == 'notnull()') {
+                                rowSelection.appendFormat('{0}.{1}', colValue, oper);
                             } else {
                                 rowSelection.appendFormat('{0}{1}{2}', colValue, oper != ''?(' ' + oper):'', condValue != ''?(' ' + condValue):'');
                             }
@@ -1580,32 +1699,41 @@ define([
             $(this.wrapSelector('.' + VP_DS_TO_FRAME)).parent().hide();
             if (this.state.dataType == 'DataFrame') {
                 if (this.state.colType == 'indexing') {
-                    var colTags = $(this.wrapSelector('.' + VP_DS_SELECT_ITEM + '.select-col.added:not(.moving)'));
-                    if (colTags.length > 0) {
-                        var colList = [];
-                        for (var i = 0; i < colTags.length; i++) {
-                            var colValue = $(colTags[i]).data('code');
-                            if (colValue) {
-                                colList.push(colValue);
-                            }
-                        }
-
-                        // hide/show to frame
+                    if (this.useInputColumns == true) {
+                        colList = this.state.selectedColumns;
                         if (colList.length == 1) {
-                            $(this.wrapSelector('.' + VP_DS_TO_FRAME)).parent().show();
-
-                            // to frame
-                            if (this.state.toFrame) {
-                                colSelection.appendFormat('[{0}]', colList.toString());
-                            } else {
-                                colSelection.appendFormat('{0}', colList.toString());
-                            }
+                            colSelection.appendFormat('{0}', colList.toString());
                         } else {
                             colSelection.appendFormat('[{0}]', colList.toString());
                         }
-
                     } else {
-                        colSelection.append(':');
+                        var colTags = $(this.wrapSelector('.' + VP_DS_SELECT_ITEM + '.select-col.added:not(.moving)'));
+                        if (colTags.length > 0) {
+                            var colList = [];
+                            for (var i = 0; i < colTags.length; i++) {
+                                var colValue = $(colTags[i]).data('code');
+                                if (colValue) {
+                                    colList.push(colValue);
+                                }
+                            }
+    
+                            // hide/show to frame
+                            if (colList.length == 1) {
+                                $(this.wrapSelector('.' + VP_DS_TO_FRAME)).parent().show();
+    
+                                // to frame
+                                if (this.state.toFrame) {
+                                    colSelection.appendFormat('[{0}]', colList.toString());
+                                } else {
+                                    colSelection.appendFormat('{0}', colList.toString());
+                                }
+                            } else {
+                                colSelection.appendFormat('[{0}]', colList.toString());
+                            }
+    
+                        } else {
+                            colSelection.append(':');
+                        }
                     }
                 } else if (this.state.colType == 'slicing') {
                     var start = $(this.wrapSelector('.' + VP_DS_COL_SLICE_START)).data('code');

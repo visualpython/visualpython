@@ -1,19 +1,20 @@
 <body>
     <div class="vp-rs-df-box">
         <div>
+            <label for="vp_rsType" class="vp-orange-text w100">Reshape Type</label>
+            <select id="vp_rsType">
+                <option value="pivot" selected="">pivot</option>
+                <option value="pivot_table" selected="">pivot table</option>
+                <option value="melt">melt</option>
+            </select>
+        </div>
+        <hr style="margin: 5px 0;">
+        <div>
             <label for="vp_rsDataframe" class="vp-orange-text w100">DataFrame</label>
             <select id="vp_rsDataframe">
             </select>
             <div class="vp-rs-df-refresh" title="Refresh dataframe list"><img src="/nbextensions/visualpython/img/refresh.svg"></div>
         </div>
-        <div>
-            <label for="vp_rsType" class="vp-orange-text w100">Reshape Type</label>
-            <select id="vp_rsType">
-                <option value="pivot" selected="">pivot</option>
-                <option value="melt">melt</option>
-            </select>
-        </div>
-        <hr style="margin: 5px 0;">
         <div class="vp-rs-type-box pivot">
             <div>
                 <label for="vp_rsIndex" class="w100">Index</label>
@@ -28,6 +29,24 @@
                 <input type="text" id="vp_rsValues" placeholder="Values key" readonly="">
             </div>
         </div>
+        <div class="vp-rs-type-box pivot_table">
+            <div>
+                <label for="vp_rsIndex" class="w100">Index</label>
+                <input type="text" id="vp_rsIndex" placeholder="Index key" readonly="">
+            </div>
+            <div>
+                <label for="vp_rsColumns" class="w100">Columns</label>
+                <input type="text" id="vp_rsColumns" placeholder="Columns key" readonly="">
+            </div>
+            <div>
+                <label for="vp_rsValues" class="w100">Values</label>
+                <input type="text" id="vp_rsValues" placeholder="Values key" readonly="">
+            </div>
+            <div>
+                <label for="vp_rsAggfunc" class="w100" title="aggfunc">Aggregate</label>
+                <input type="text" id="vp_rsAggfunc" placeholder="Aggregate functions" readonly="">
+            </div>
+        </div>
         <div class="vp-rs-type-box melt" style="display:none;">
             <div>
                 <label for="vp_rsIdVars" class="w100">Id</label>
@@ -40,10 +59,12 @@
             <div>
                 <label for="vp_rsVarName" class="w100">Var name</label>
                 <input type="text" id="vp_rsVarName" class="vp-state" data-key="melt.varName" placeholder="Var name">
+                <label><input type="checkbox" id="varNameText" class="vp-state" data-key="melt.varNameText" checked/><span>Text</span></label>
             </div>
             <div>
                 <label for="vp_rsValueName" class="w100">Value name</label>
                 <input type="text" id="vp_rsValueName" class="vp-state" data-key="melt.valueName" placeholder="Value name">
+                <label><input type="checkbox" id="valueNameText" class="vp-state" data-key="melt.valueNameText" checked/><span>Text</span></label>
             </div>
         </div>
         <hr style="margin: 5px 0;">

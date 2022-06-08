@@ -13,9 +13,12 @@
                 <div class="vp-tab-page-box vp-grid-border-box vp-scrollbar">
                     <div class="vp-tab-page vp-grid-box" data-type="data">
                         <label for="data" class="vp-bold">Data</label>
-                        <div>
-                            <input type="text" id="data" class="vp-input vp-state"/>
-                            <div id="vp_wcOpenFile" class="vp-file-browser-button" style="margin-left:0px;"></div>
+                        <div class="vp-grid-col-p50">
+                            <div>
+                                <input type="text" id="data" class="vp-input vp-state"/>
+                                <div id="vp_wcOpenFile" class="vp-file-browser-button"></div>
+                            </div>
+                            <label><input type="checkbox" id="useFile" class="vp-state"><span>Use file</span></label>
                         </div>
 
                         <div class="vp-wc-file-option vp-grid-box">
@@ -51,6 +54,9 @@
         <div class="vp-wc-right-box">
             <div class="vp-bold">
                 <span class="vp-wc-preview-title">Preview</span>
+                <span id="previewRefresh" class="vp-cursor">
+                    <img src="/nbextensions/visualpython/img/refresh.svg"/>
+                </span>
             </div>
             <div class="vp-wc-preview-box vp-grid-border-box">
                 <div id="vp_wcPreview" class="vp-wc-preview-content vp-center"></div>

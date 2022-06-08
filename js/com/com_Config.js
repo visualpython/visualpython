@@ -132,7 +132,7 @@ define([
                 vp_signature: 'VisualPython',
                 vp_position: {},
                 vp_section_display: false,
-                vp_note_display: true,
+                vp_note_display: false,
                 vp_menu_width: Config.MENU_MIN_WIDTH,
                 vp_note_width: Config.BOARD_MIN_WIDTH
             };
@@ -470,7 +470,7 @@ define([
     /**
      * Version
      */
-    Config.version = "2.2.2";
+    Config.version = "2.2.3";
 
     /**
      * Type of mode

@@ -18,8 +18,9 @@ define([
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
     'vp_base/js/com/component/PopupComponent',
+    'vp_base/js/com/component/SuggestInput',
     'vp_base/js/com/component/MultiSelector'
-], function(reshapeHtml, reshapeCss, com_String, com_util, PopupComponent, MultiSelector) {
+], function(reshapeHtml, reshapeCss, com_String, com_util, PopupComponent, SuggestInput, MultiSelector) {
 
     /**
      * Reshape
@@ -37,13 +38,16 @@ define([
                 pivot: {
                     index: [],
                     columns: [],
-                    values: []
+                    values: [],
+                    aggfunc: []
                 },
                 melt: {
                     idVars: [],
                     ValueVars: [],
                     varName: '',
-                    valueName: ''
+                    varNameText: true,
+                    valueName: '',
+                    valueNameText: true
                 },
                 userOption: '',
                 allocateTo: '',
@@ -97,7 +101,7 @@ define([
                     that._resetColumnSelector(that.wrapSelector('#vp_rsValueVars'));
 
                     that.state.pivot = {
-                        index: [], columns: [], values: []
+                        index: [], columns: [], values: [], aggfunc: []
                     };
                     that.state.melt = {
                         idVars: [], valueVars: []
@@ -115,13 +119,8 @@ define([
                 var type = $(this).val();
                 that.state.type = type;
                 // change visibility
-                if (type == 'pivot') {
-                    $(that.wrapSelector('.vp-rs-type-box.melt')).hide();
-                    $(that.wrapSelector('.vp-rs-type-box.pivot')).show();
-                } else {
-                    $(that.wrapSelector('.vp-rs-type-box.pivot')).hide();
-                    $(that.wrapSelector('.vp-rs-type-box.melt')).show();
-                }
+                $(that.wrapSelector('.vp-rs-type-box')).hide();
+                $(that.wrapSelector('.vp-rs-type-box.' + type)).show();
 
                 // clear user option
                 $(that.wrapSelector('#vp_rsUserOption')).val('');
@@ -165,6 +164,19 @@ define([
                 var targetVariable = [ that.state.variable ];
                 var excludeList = [ ...that.state.pivot.index, ...that.state.pivot.columns ].map(obj => obj.code);
                 that.openColumnSelector(targetVariable, $(that.wrapSelector('#vp_rsValues')), 'Select columns', excludeList);
+            });
+
+            // aggfunc change event
+            $(document).on('change', this.wrapSelector('#vp_rsAggfunc'), function(event) {
+                var colList = event.dataList;
+                that.state.pivot.aggfunc = colList;
+            });
+
+            // aggfunc select button event
+            $(document).on('click', this.wrapSelector('#vp_rsAggfunc'), function() {
+                var targetVariable = [ that.state.variable ];
+                var excludeList = that.state.pivot.aggfunc.map(obj => obj.code);
+                that.openMethodSelector(targetVariable, $(that.wrapSelector('#vp_rsAggfunc')), 'Select columns', excludeList);
             });
 
             // id vars change event
@@ -294,7 +306,9 @@ define([
             this._loadColumnSelectorInput(this.wrapSelector('#vp_rsIdVars'), melt.idVars);
             this._loadColumnSelectorInput(this.wrapSelector('#vp_rsValueVars'), melt.valueVars);
             $(this.wrapSelector('#vp_rsVarName')).val(melt.varName);
+            $(this.wrapSelector('#varNameText')).prop('checked', melt.varNameText);
             $(this.wrapSelector('#vp_rsValueName')).val(melt.valueName);
+            $(this.wrapSelector('#valueNameText')).prop('checked', melt.valueNameText);
 
             // userOption
             $(this.wrapSelector('#vp_rsUserOption')).val(userOption);
@@ -310,19 +324,31 @@ define([
          * @param {string} defaultValue previous value
          */
          renderVariableList(id, varList, defaultValue='') {
-            var tag = new com_String();
-            tag.appendFormatLine('<select id="{0}">', id);
-            varList.forEach(vObj => {
-                // varName, varType
-                var label = vObj.varName;
-                tag.appendFormatLine('<option value="{0}" data-type="{1}" {2}>{3}</option>'
-                                    , vObj.varName, vObj.varType
-                                    , defaultValue == vObj.varName?'selected':''
-                                    , label);
-            });
-            tag.appendLine('</select>'); // VP_VS_VARIABLES
+            // var tag = new com_String();
+            // tag.appendFormatLine('<select id="{0}">', id);
+            // varList.forEach(vObj => {
+            //     // varName, varType
+            //     var label = vObj.varName;
+            //     tag.appendFormatLine('<option value="{0}" data-type="{1}" {2}>{3}</option>'
+            //                         , vObj.varName, vObj.varType
+            //                         , defaultValue == vObj.varName?'selected':''
+            //                         , label);
+            // });
+            // tag.appendLine('</select>'); // VP_VS_VARIABLES
+            // $(this.wrapSelector('#' + id)).replaceWith(function() {
+            //     return tag.toString();
+            // });
+            let mappedList = varList.map(obj => { return { label: obj.varName, value: obj.varName, dtype: obj.varType } });
+
+            var variableInput = new SuggestInput();
+            variableInput.setComponentID(id);
+            variableInput.addClass('vp-state');
+            variableInput.setPlaceholder('Select variable');
+            variableInput.setSuggestList(function () { return mappedList; });
+            variableInput.setNormalFilter(true);
+            variableInput.setValue(defaultValue);
             $(this.wrapSelector('#' + id)).replaceWith(function() {
-                return tag.toString();
+                return variableInput.toTagString();
             });
         }
 
@@ -331,10 +357,36 @@ define([
          * @param {Array<string>} previousList previous selected columns
          * @param {Array<string>} excludeList columns to exclude 
          */
-         renderColumnSelector(targetVariable, previousList, excludeList) {
+        renderColumnSelector(targetVariable, previousList, excludeList) {
             this.popup.ColSelector = new MultiSelector(
                 this.wrapSelector('.vp-inner-popup-body'), 
                 { mode: 'columns', parent: targetVariable, selectedList: previousList, excludeList: excludeList }
+            );
+        }
+
+        /**
+         * Render method selector using MultiSelector module
+         * @param {Array<string>} previousList previous selected methods
+         * @param {Array<string>} excludeList methods to exclude 
+         */
+        renderMethodSelector(targetVariable, previousList, excludeList) {
+            let methodList = [
+                { value: 'count',   code: "'count'" },
+                { value: 'first',   code: "'first'" },
+                { value: 'last',    code: "'last'" },
+                { value: 'size',    code: "'size'" },
+                { value: 'std',     code: "'std'" },
+                { value: 'sum',     code: "'sum'" },
+                { value: 'max',     code: "'max'" },
+                { value: 'mean',    code: "'mean'" },
+                { value: 'median',  code: "'median'" },
+                { value: 'min',     code: "'min'" },
+                { value: 'quantile', code: "'quantile'" },
+            ];
+            
+            this.popup.ColSelector = new MultiSelector(
+                this.wrapSelector('.vp-inner-popup-body'), 
+                { mode: 'data', parent: targetVariable, dataList: methodList, selectedList: previousList, excludeList: excludeList }
             );
         }
 
@@ -409,6 +461,45 @@ define([
                     }
                 }
 
+            } else if (type == 'pivot_table') { 
+                //================================================================
+                // pivot_table
+                //================================================================
+                // index (optional)
+                if (pivot.index && pivot.index.length > 0) {
+                    if (pivot.index.length == 1) {
+                        options.push(com_util.formatString("index={0}", pivot.index[0].code));
+                    } else {
+                        options.push(com_util.formatString("index=[{0}]", pivot.index.map(col => col.code).join(',')));
+                    }
+                }
+
+                // columns
+                if (pivot.columns && pivot.columns.length > 0) {
+                    if (pivot.columns.length == 1) {
+                        options.push(com_util.formatString("columns={0}", pivot.columns[0].code));
+                    } else {
+                        options.push(com_util.formatString("columns=[{0}]", pivot.columns.map(col => col.code).join(',')));
+                    }
+                }
+
+                // values (optional)
+                if (pivot.values && pivot.values.length > 0) {
+                    if (pivot.values.length == 1) {
+                        options.push(com_util.formatString("values={0}", pivot.values[0].code));
+                    } else {
+                        options.push(com_util.formatString("values=[{0}]", pivot.values.map(col => col.code).join(',')));
+                    }
+                }
+
+                // aggfunc
+                if (pivot.aggfunc && pivot.aggfunc.length > 0) {
+                    if (pivot.aggfunc.length == 1) {
+                        options.push(com_util.formatString("aggfunc={0}", pivot.aggfunc[0].code));
+                    } else {
+                        options.push(com_util.formatString("aggfunc=[{0}]", pivot.aggfunc.map(col => col.code).join(',')));
+                    }
+                }
             } else {
                 //================================================================
                 // melt
@@ -433,12 +524,12 @@ define([
 
                 // var name (optional)
                 if (melt.varName) {
-                    options.push(com_util.formatString("var_name='{0}'", melt.varName));
+                    options.push(com_util.formatString("var_name={0}", com_util.convertToStr(melt.varName, melt.varNameText)));
                 }
 
                 // value name (optional)
-                if (melt.varName) {
-                    options.push(com_util.formatString("value_name='{0}'", melt.valueName));
+                if (melt.valueName) {
+                    options.push(com_util.formatString("value_name={0}", com_util.convertToStr(melt.valueName, melt.valueNameText)));
                 }
             }
 
@@ -493,6 +584,19 @@ define([
                 previousList = previousList.map(col => col.code)
             }
             this.renderColumnSelector(targetVariable, previousList, excludeList);
+    
+            // set title
+            this.openInnerPopup(title);
+        }
+
+        openMethodSelector(targetVariable, targetSelector, title='Select methods', excludeList=[]) {
+            this.popup.targetVariable = targetVariable;
+            this.popup.targetSelector = targetSelector;
+            var previousList = this.popup.targetSelector.data('list');
+            if (previousList) {
+                previousList = previousList.map(col => col.code)
+            }
+            this.renderMethodSelector(targetVariable, previousList, excludeList);
     
             // set title
             this.openInnerPopup(title);

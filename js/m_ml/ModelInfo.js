@@ -313,8 +313,16 @@ define([
 
         generateCode() {
             let { model } = this.state;
+            let codeList = [];
             let code = new com_String();
             let replaceDict = {'${model}': model};
+
+            // If functions are available
+            if (this.state.optionConfig.functions != undefined) {
+                this.state.optionConfig.functions.forEach(func => {
+                    codeList.push(func);
+                });
+            }
 
             // If import code is available, generate its code in front of code
             if (this.state.optionConfig.import != undefined) {
@@ -342,8 +350,9 @@ define([
                     }
                 }
             }
+            codeList.push(code.toString());
 
-            return code.toString();
+            return codeList;
         }
 
         getModelCategory(modelType) {
@@ -399,22 +408,61 @@ define([
                         { name: 'importance_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'importances' }
                     ]
                 },
+                'feature_importances': {
+                    name: 'feature_importances',
+                    label: 'Feature importances',
+                    functions: [
+                        "def create_feature_importances(model, X_train=None, sort=False):\
+                        \n    if isinstance(X_train, pd.core.frame.DataFrame):\
+                        \n        feature_names = X_train.columns\
+                        \n    else:\n\
+                        \n        feature_names = [ 'X{}'.format(i) for i in range(len(model.feature_importances_)) ]\
+                        \n\
+                        \n    df_i = pd.DataFrame(model.feature_importances_, index=feature_names, columns=['Feature_importance'])\
+                        \n    df_i['Percentage'] = 100 * (df_i['Feature_importance'] / df_i['Feature_importance'].max())\
+                        \n    if sort: df_i.sort_values(by='Feature_importance', ascending=False, inplace=True)\
+                        \n    df_i = df_i.round(2)\
+                        \n\
+                        \n    return df_i"
+                    ],
+                    code: "${fi_allocate} = create_feature_importances(${model}, ${fi_featureData}${sort})",
+                    description: 'Allocate feature_importances_',
+                    options: [
+                        { name: 'fi_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_train' },
+                        { name: 'fi_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'df_i' },
+                        { name: 'sort', label: 'Sort data', component: ['bool_checkbox'], value: true, usePair: true }
+                    ]
+                },
                 'plot_feature_importances': {
                     name: 'plot_feature_importances',
                     label: 'Plot feature importances',
-                    code: "def plot_feature_importances(model):\n\
-    n_features = len(model.feature_importances_)\n\
-    feature_names = [ 'X{}'.format(i) for i in range(n_features) ]\n\
-    plt.barh(np.arange(n_features), model.feature_importances_, align='center')\n\
-    plt.yticks(np.arange(n_features), feature_names)\n\
-    plt.xlabel('Feature importance')\n\
-    plt.ylabel('Features')\n\
-    plt.ylim(-1, n_features)\n\
-    plt.show()\n\n\
-plot_feature_importances(${model})",
-                    description: '',
+                    functions: [
+                        "def create_feature_importances(model, X_train=None, sort=False):\
+                        \n    if isinstance(X_train, pd.core.frame.DataFrame):\
+                        \n        feature_names = X_train.columns\
+                        \n    else:\n\
+                        \n        feature_names = [ 'X{}'.format(i) for i in range(len(model.feature_importances_)) ]\
+                        \n\
+                        \n    df_i = pd.DataFrame(model.feature_importances_, index=feature_names, columns=['Feature_importance'])\
+                        \n    df_i['Percentage'] = 100 * (df_i['Feature_importance'] / df_i['Feature_importance'].max())\
+                        \n    if sort: df_i.sort_values(by='Feature_importance', ascending=False, inplace=True)\
+                        \n    df_i = df_i.round(2)\
+                        \n\
+                        \n    return df_i",
+                        "def plot_feature_importances(model, X_train=None, sort=False):\
+                        \n    df_i = create_feature_importances(model, X_train, sort)\
+                        \n\
+                        \n    df_i['Percentage'].sort_values().plot(kind='barh')\
+                        \n    plt.xlabel('Feature importance Percentage')\
+                        \n    plt.ylabel('Features')\
+                        \n\
+                        \n    plt.show()"
+                    ],
+                    code: "plot_feature_importances(${model}, ${fi_featureData}${sort})",
+                    description: 'Draw feature_importances_',
                     options: [
-
+                        { name: 'fi_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_train' },
+                        { name: 'sort', label: 'Sort data', component: ['bool_checkbox'], value: true, usePair: true }
                     ]
                 }
             }
@@ -522,6 +570,7 @@ plot_feature_importances(${model})",
                             ]
                         },
                         'permutation_importance': defaultInfos['permutation_importance'],
+                        'feature_importances': defaultInfos['feature_importances'],
                         'plot_feature_importances': defaultInfos['plot_feature_importances'],
                         'Coefficient': {
                             name: 'coef_',
@@ -573,11 +622,11 @@ plot_feature_importances(${model})",
                             name: 'roc_curve',
                             label: 'ROC Curve',
                             import: 'from sklearn import metrics',
-                            code: "fpr, tpr, thresholds = metrics.roc_curve(${roc_targetData}, ${model}.predict_proba(${roc_featureData})[:, 1])\n\
-plt.plot(fpr, tpr, label='ROC Curve')\n\
-plt.xlabel('Sensitivity')\n\
-plt.ylabel('Specificity')\n\
-plt.show()",
+                            code: "fpr, tpr, thresholds = metrics.roc_curve(${roc_targetData}, ${model}.predict_proba(${roc_featureData})[:, 1])\
+                                \nplt.plot(fpr, tpr, label='ROC Curve')\
+                                \nplt.xlabel('Sensitivity')\
+                                \nplt.ylabel('Specificity')\
+                                \nplt.show()",
                             description: '',
                             options: [
                                 { name: 'roc_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y_test' },
@@ -595,8 +644,16 @@ plt.show()",
                                 { name: 'auc_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_test' }
                             ]
                         },
-                        'permutation_importance': defaultInfos['permutation_importance'],
-                        'plot_feature_importances': defaultInfos['plot_feature_importances']
+                        'permutation_importance': defaultInfos['permutation_importance']
+                    }
+
+                    // feature importances
+                    if (modelType != 'LogisticRegression' && modelType != 'SVC') {
+                        infos = {
+                            ...infos,
+                            'feature_importances': defaultInfos['feature_importances'],
+                            'plot_feature_importances': defaultInfos['plot_feature_importances']
+                        }
                     }
 
                     // use decision_function on ROC, AUC
@@ -608,11 +665,11 @@ plt.show()",
                             ...infos,
                             'roc_curve': {
                                 ...infos['roc_curve'],
-                                code: "fpr, tpr, thresholds = metrics.roc_curve(${roc_targetData}, ${model}.decision_function(${roc_featureData}))\n\
-plt.plot(fpr, tpr, label='ROC Curve')\n\
-plt.xlabel('Sensitivity')\n\
-plt.ylabel('Specificity')\n\
-plt.show()"
+                                code: "fpr, tpr, thresholds = metrics.roc_curve(${roc_targetData}, ${model}.decision_function(${roc_featureData}))\
+                                    \nplt.plot(fpr, tpr, label='ROC Curve')\
+                                    \nplt.xlabel('Sensitivity')\
+                                    \nplt.ylabel('Specificity')\
+                                    \nplt.show()"
                             },
                             'auc': {
                                 ...infos['auc'],

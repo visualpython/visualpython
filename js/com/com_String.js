@@ -75,6 +75,11 @@ define ([
         clear() {
             this.buffer = new Array();
         }
+
+        // get Length
+        get length() {
+            return this.buffer.length;
+        }
     }
 
     return com_String;
