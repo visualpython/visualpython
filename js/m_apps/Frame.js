@@ -36,6 +36,7 @@ define([
                 originObj: '',
                 tempObj: '_vp',
                 returnObj: '_vp',
+                inplace: false,
                 columnList: [],
                 indexList: [],
                 selected: [],
@@ -105,7 +106,13 @@ define([
                     // initialize state values
                     that.state.originObj = origin;
                     that.state.tempObj = '_vp';
+                    that.state.returnObj = that.state.tempObj;
+                    that.state.inplace = false;
                     that.initState();
+
+                    // reset return obj
+                    $(that.wrapSelector('#vp_feReturn')).val(that.state.tempObj);
+                    $(that.wrapSelector('#inplace')).prop('checked', false);
     
                     // reset table
                     $(that.wrapSelector('.' + VP_FE_TABLE)).replaceWith(function() {
@@ -133,10 +140,33 @@ define([
                 if (returnVariable == '') {
                     returnVariable = that.state.tempObj;
                 }
+                // check if it's same with origin obj
+                if (returnVariable === that.state.originObj) {
+                    $(that.wrapSelector('#inplace')).prop('checked', true);
+                    that.state.inplace = true;
+                } else {
+                    $(that.wrapSelector('#inplace')).prop('checked', false);
+                    that.state.inplace = false;
+                }
+
                 // show preview with new return variable
-                var newCode = that.state.steps[that.state.steps.length - 1];
-                that.setPreview(newCode.replaceAll(that.state.tempObj, returnVariable));
                 that.state.returnObj = returnVariable;
+                that.setPreview(that.getCurrentCode());
+            });
+
+            // check/uncheck inplace
+            $(this.wrapSelector('#inplace')).on('change', function() {
+                let checked = $(this).prop('checked');
+                let returnVariable = '_vp';
+                if (checked === true) {
+                    returnVariable = that.state.originObj;
+                }
+                $(that.wrapSelector('#vp_feReturn')).val(returnVariable);
+
+                // show preview with new return variable
+                that.state.inplace = checked;
+                that.state.returnObj = returnVariable;
+                that.setPreview(that.getCurrentCode());
             });
 
             // menu on column
@@ -483,22 +513,24 @@ define([
         render() {
             super.render();
 
-            this.loadVariableList();
-
             var {
-                originObj,
                 returnObj,
+                inplace,
                 steps
             } = this.state;
+
+            this.loadVariableList();
     
-            $(this.wrapSelector('#vp_feVariable')).val(originObj);
+            $(this.wrapSelector('#vp_feVariable')).val(this.state.originObj);
     
             $(this.wrapSelector('#vp_feReturn')).val(returnObj);
+
+            $(this.wrapSelector('#inplace')).prop('checked', inplace);
     
             // execute all steps
             if (steps && steps.length > 0) {
                 var code = steps.join('\n');
-                this.state.steps = [];
+                // this.state.steps = [];
                 this.loadCode(code);
             }
         }
@@ -537,13 +569,42 @@ define([
             return tag.toString();
         }
 
+        /**
+         * Get last code to set preview
+         * @returns 
+         */
+        getCurrentCode() {
+            let { inplace, steps, tempObj, returnObj } = this.state;
+            let codeList = steps;
+            if (inplace === true) {
+                codeList = steps.slice(1, steps.length);
+            }
+            
+            // get last code
+            let currentCode = codeList[codeList.length - 1];
+            if (currentCode && currentCode != '') {
+                currentCode = currentCode.replaceAll(tempObj, returnObj);
+            } else {
+                currentCode = '';
+            }
+            return currentCode;
+        }
+
         generateCode() {
-            var code = this.state.steps.join('\n');
+            var code = '';
+            // if inplace is true, join steps without .copy()
+            if (this.state.inplace === true) {
+                code = this.state.steps.slice(1).join('\n');
+            } else {
+                code = this.state.steps.join('\n');
+            }
             var returnVariable = $(this.wrapSelector('#vp_feReturn')).val();
             if (returnVariable != '') {
                 code = code.replaceAll(this.state.tempObj, returnVariable);
 
-                code += '\n' + returnVariable;
+                if (code != '') {
+                    code += '\n' + returnVariable;
+                }
             } else {
                 code += '\n' + this.state.tempObj;
             }
@@ -570,8 +631,11 @@ define([
 
         setPreview(previewCodeStr) {
             // get only last line of code
-            var previewCodeLines = previewCodeStr.split('\n');
-            var previewCode = previewCodeLines.pop();
+            var previewCode = previewCodeStr;
+            if (previewCodeStr.includes('\n') === true) {
+                let previewCodeLines = previewCodeStr.split('\n');
+                previewCode = previewCodeLines.pop();
+            }
             this.setCmValue('previewCode', previewCode);
         }
 
@@ -1273,12 +1337,11 @@ define([
             }
     
             var that = this;
-            var tempObj = this.state.tempObj;
-            var lines = this.state.lines;
+            let { tempObj, lines, indexList } = this.state;
             var prevLines = 0;
             var scrollPos = -1;
             if (more) {
-                prevLines = that.state.indexList.length;
+                prevLines = indexList.length;
                 scrollPos = $(this.wrapSelector('.vp-fe-table')).scrollTop();
             }
     
