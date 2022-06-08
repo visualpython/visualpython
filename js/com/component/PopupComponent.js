@@ -835,6 +835,9 @@ define([
         openInnerPopup(title) {
             $(this.wrapSelector('.vp-inner-popup-title')).text(title);
             $(this.wrapSelector('.vp-inner-popup-box')).show();
+
+            // focus on first input
+            $(this.wrapSelector('.vp-inner-popup-box input[type=text]:not(:disabled):visible:first')).focus();
         }
         
         /**
