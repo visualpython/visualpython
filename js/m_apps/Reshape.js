@@ -45,7 +45,9 @@ define([
                     idVars: [],
                     ValueVars: [],
                     varName: '',
-                    valueName: ''
+                    varNameText: true,
+                    valueName: '',
+                    valueNameText: true
                 },
                 userOption: '',
                 allocateTo: '',
@@ -304,7 +306,9 @@ define([
             this._loadColumnSelectorInput(this.wrapSelector('#vp_rsIdVars'), melt.idVars);
             this._loadColumnSelectorInput(this.wrapSelector('#vp_rsValueVars'), melt.valueVars);
             $(this.wrapSelector('#vp_rsVarName')).val(melt.varName);
+            $(this.wrapSelector('#varNameText')).prop('checked', melt.varNameText);
             $(this.wrapSelector('#vp_rsValueName')).val(melt.valueName);
+            $(this.wrapSelector('#valueNameText')).prop('checked', melt.valueNameText);
 
             // userOption
             $(this.wrapSelector('#vp_rsUserOption')).val(userOption);
@@ -520,12 +524,12 @@ define([
 
                 // var name (optional)
                 if (melt.varName) {
-                    options.push(com_util.formatString("var_name='{0}'", melt.varName));
+                    options.push(com_util.formatString("var_name={0}", com_util.convertToStr(melt.varName, melt.varNameText)));
                 }
 
                 // value name (optional)
-                if (melt.varName) {
-                    options.push(com_util.formatString("value_name='{0}'", melt.valueName));
+                if (melt.valueName) {
+                    options.push(com_util.formatString("value_name={0}", com_util.convertToStr(melt.valueName, melt.valueNameText)));
                 }
             }
 
