@@ -19,11 +19,6 @@
 .vp-ds-box input.vp-ds-target:disabled + .vp-ds-filter {
     cursor: not-allowed;
 }
-.vp-ds-item:hover {
-    background: var(--light-gray-color);
-    color: var(--font-highlight);
-    cursor: pointer;
-}
 /* DataSelector popup */
 .vp-dataselector {
     display: none;

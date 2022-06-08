@@ -164,6 +164,12 @@ define([
         /**
          * Initialize codemirror
          * @param {Object} cmObj { key, selector, type, ... }
+         *  - key      : key to save its value as state (this.state[key])
+         *  - selector : selector to distinguish codemirror tag (textarea)
+         *    ex) this.wrapSelector('.cm-tag')
+         *  - type     : code / readonly / markdown
+         *  - events   : list of event objects
+         *    ex) [{ key: 'change', callback: function() { ; } }]
          */
         initCodemirror(cmObj) {
             let {key, selector, type, events} = cmObj;
@@ -502,6 +508,16 @@ define([
             if (!packageButton) {
                 $(this.wrapSelector('#popupPackage')).hide();
             }
+            if (installButton || importButton || packageButton) {
+                // resize height
+                $(this.wrapSelector('.vp-popup-content')).css({
+                    'height': 'calc(100% - 30px)'
+                });
+            } else {
+                $(this.wrapSelector('.vp-popup-content')).css({
+                    'height': '100%'
+                });
+            }
 
             // codeview & dataview button hide/show
             if (!codeview) {
@@ -520,7 +536,7 @@ define([
             if(!footer) {
                 $(this.wrapSelector('.vp-popup-footer')).hide();
                 // set body wider
-                $(this.wrapSelector('.vp-popup-content')).css({
+                $(this.wrapSelector('.vp-popup-body')).css({
                     'height': 'calc(100% - 30px)'
                 })
             }
@@ -819,6 +835,9 @@ define([
         openInnerPopup(title) {
             $(this.wrapSelector('.vp-inner-popup-title')).text(title);
             $(this.wrapSelector('.vp-inner-popup-box')).show();
+
+            // focus on first input
+            $(this.wrapSelector('.vp-inner-popup-box input[type=text]:not(:disabled):visible:first')).focus();
         }
         
         /**

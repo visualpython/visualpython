@@ -56,9 +56,10 @@
                         <!-- Chart & Data Selection & Tab option box -->
                             <div class="vp-tab-bar plot" data-level="plot">
                                 <div class="vp-tab-item vp-focus" data-type="data">Data</div>
+                                <div class="vp-tab-item" data-type="axes">Axes</div>
                                 <div class="vp-tab-item" data-type="info">Info</div>
                                 <div class="vp-tab-item" data-type="style">Style</div>
-                                <div class="vp-tab-item" data-type="setting">Setting</div>
+                                <div class="vp-tab-item" data-type="code">Code</div>
                             </div>
                             <div class="vp-tab-page-box plot vp-grid-border-box vp-scrollbar">
                                 <div class="vp-tab-page vp-grid-box" data-type="data">
@@ -69,7 +70,7 @@
                                     <select id="chartType" class="vp-select vp-state wp100">
                 
                                     </select>
-                                    <label for="data" class="vp-bold">Data</label>
+                                    <label class="vp-bold">Data</label>
                                     <div class="vp-grid-col-p50">
                                         <input type="text" id="data" class="vp-input vp-state"/>
                                         <label><input type="checkbox" id="setXY" class="vp-state"><span>Set X and Y individually</span></label>
@@ -88,12 +89,64 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <label for="hue" class="vp-bold">Hue</label>
-                                    <select id="hue" class="vp-select vp-state">
-                
-                                    </select>
+                                    <div class="vp-grid-col-p50">
+                                        <div class="vp-grid-box">
+                                            <label for="hue" class="vp-bold">Hue</label>
+                                            <select id="hue" class="vp-select vp-state">
+                        
+                                            </select>
+                                        </div>
+                                        <div class="vp-grid-box sb-option bins">
+                                            <label for="bins" class="vp-bold">Bins</label>
+                                            <input type="number" class="vp-input vp-state" id="bins" placeholder="Type bins" />
+                                        </div>
+                                    </div>
                                     <label for="userOption" class="vp-bold">User Option</label>
                                     <input type="text" id="userOption" class="vp-input vp-state wp100" placeholder="key=value, ..."/>
+                                </div>
+                                <div class="vp-tab-page vp-grid-box" data-type="axes" style="display: none;">
+                                    <!-- SETTING : axis limit / tick interval / rotate tick labels ... -->
+                                    <div class="vp-grid-col-95">
+                                        <label for="x_limit_from" class="vp-bold">X Limit</label>
+                                        <div class="vp-grid-col-p50">
+                                            <input type="text" id="x_limit_from" class="vp-input m vp-state" placeholder="From" />
+                                            <input type="text" id="x_limit_to" class="vp-input m vp-state" placeholder="To" />
+                                        </div>
+                                    </div>
+                                    <div class="vp-grid-col-95">
+                                        <label for="y_limit_from" class="vp-bold">Y Limit</label>
+                                        <div class="vp-grid-col-p50">
+                                            <input type="text" id="y_limit_from" class="vp-input m vp-state" placeholder="From" />
+                                            <input type="text" id="y_limit_to" class="vp-input m vp-state" placeholder="To" />
+                                        </div>
+                                    </div>
+                                    <hr style="margin:5px;"/>
+                                    <label for="xticks" class="vp-tab-group-title">X ticks</label>
+                                    <div class="vp-grid-col-95">
+                                        <label>Ticks</label>
+                                        <div class="vp-grid-col-p50">
+                                            <input type="text" id="xticks" class="vp-input vp-state" placeholder="X ticks location" />
+                                            <input type="text" id="xticks_label" class="vp-input vp-state" placeholder="X ticks label" />
+                                        </div>
+                                    </div>
+                                    <div class="vp-grid-col-95">
+                                        <label for="xticks_rotate">Rotation</label>
+                                        <input type="number" id="xticks_rotate" class="vp-input vp-state" placeholder="45" />
+                                    </div>
+                                    <label><input type="checkbox" id="removeXticks" class="vp-state"/><span>Remove X ticks</span></label>
+                                    <label for="yticks" class="vp-tab-group-title">Y ticks</label>
+                                    <div class="vp-grid-col-95">
+                                        <label>Ticks</label>
+                                        <div class="vp-grid-col-p50">
+                                            <input type="text" id="yticks" class="vp-input vp-state" placeholder="Y ticks location" />
+                                            <input type="text" id="yticks_label" class="vp-input vp-state" placeholder="Y ticks label" />
+                                        </div>
+                                    </div>
+                                    <div class="vp-grid-col-95">
+                                        <label for="yticks_rotate">Rotation</label>
+                                        <input type="number" id="yticks_rotate" class="vp-input vp-state" placeholder="45" />
+                                    </div>
+                                    <label><input type="checkbox" id="removeYticks" class="vp-state"/><span>Remove Y ticks</span></label>
                                 </div>
                                 <div class="vp-tab-page vp-grid-box" data-type="info" style="display: none;">
                                     <label for="title" class="vp-bold">Title</label>
@@ -143,18 +196,10 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="vp-tab-page vp-grid-col-95" data-type="setting" style="display: none;">
-                                    <!-- SETTING : axis limit / tick interval / rotate tick labels ... -->
-                                    <label for="x_limit_from" class="vp-bold">X Limit</label>
-                                    <div class="vp-grid-col-p50">
-                                        <input type="text" id="x_limit_from" class="vp-input m vp-state" placeholder="From" />
-                                        <input type="text" id="x_limit_to" class="vp-input m vp-state" placeholder="To" />
-                                    </div>
-                                    <label for="y_limit_from" class="vp-bold">Y Limit</label>
-                                    <div class="vp-grid-col-p50">
-                                        <input type="text" id="y_limit_from" class="vp-input m vp-state" placeholder="From" />
-                                        <input type="text" id="y_limit_to" class="vp-input m vp-state" placeholder="To" />
-                                    </div>
+                                <div class="vp-tab-page vp-grid-box" data-type="code" style="display: none;">
+                                    <textarea id="userCode1" class="vp-state" placeholder="plt.text(3.0, 2.0, 'Hello Visual Python')
+plt.axvline(x=1, color='b', linestyle='-')
+plt.axhline(y=1, color='r', linestyle='-')"></textarea>
                                 </div>
                             </div>
                     </div>

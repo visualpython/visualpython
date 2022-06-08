@@ -258,6 +258,14 @@ define([
                 content = renderTabBlock(pageThis, obj, state);
                 break;
             case 'bool_checkbox':
+                content = $(`<input type="checkbox" id="${obj.name}" class="vp-checkbox"/>`);
+                if (value != undefined) {
+                    // set as saved value
+                    $(content).attr({
+                        'checked': value
+                    });
+                }
+                break;
             case 'bool_select':
                 // True False select box
                 var optSlct = $(`<select id="${obj.name}" class="vp-select vp-state"></select>`);
@@ -452,7 +460,7 @@ define([
             let { result, type, msg } = resultObj;
             var varList = JSON.parse(result);
             varList = varList.map(function(v) {
-                return { label: v.varName + ' (' + v.varType + ')', value: v.varName, dtype: v.varType };
+                return { label: v.varName, value: v.varName, dtype: v.varType };
             });
             // 1. Target Variable
             var suggestInput = new SuggestInput();
@@ -553,12 +561,16 @@ define([
                 value = input;
                 break;
             case 'option_checkbox':
-                var checked = $(pageThis.wrapSelector("input[name='"+obj.name+"']:checked")).val();
+                let checked = $(pageThis.wrapSelector("input[name='"+obj.name+"']:checked")).val();
 
                 for (var i = 0; i < checked.length; i++) {
                     value += "'" + $(checked[i]).val() + "',";
                 }
                 value = value.substr(0, value.length-1);
+                break;
+            case 'bool_checkbox':
+                let isChecked = $(pageThis.wrapSelector('#'+obj.name)).prop('checked');
+                value = isChecked?'True':'False';
                 break;
             case 'input_multi':
             case 'bool_select':
@@ -671,7 +683,7 @@ define([
             // reset with no source
             columnInputIdList && columnInputIdList.forEach(columnInputId => {
                 let defaultValue = pageThis.state[columnInputId];
-                if (defaultValue == null || defaultValue == undefined) {
+                if (defaultValue === null || defaultValue === undefined) {
                     defaultValue = '';
                 }
                 if (tagType == 'input') {
@@ -733,7 +745,7 @@ define([
                 // columns using suggestInput
                 columnInputIdList && columnInputIdList.forEach((columnInputId, idx) => {
                     let defaultValue = pageThis.state[columnInputId];
-                    if (defaultValue == null || defaultValue == undefined) {
+                    if (defaultValue === null || defaultValue === undefined) {
                         defaultValue = '';
                     }
                     // create tag
@@ -762,7 +774,7 @@ define([
                                 'data-type':listVar.dtype
                             });
                             // cell metadata test : defaultValue as selected
-                            if (listVar.value == defaultValue) {
+                            if (listVar.value === defaultValue) {
                                 $(option).prop('selected', true);
                             }
                             option.append(document.createTextNode(listVar.label));
@@ -772,6 +784,8 @@ define([
                             return $(tag);
                         });
                     }
+                }).catch(function(err) {
+                    vpLog.display(VP_LOG_TYPE.ERROR, 'com_generator - bindColumnSource error ', err)
                 });
                 
                 

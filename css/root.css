@@ -514,3 +514,9 @@ hr.vp-extra-menu-line {
     margin: 0px;
     padding: 7px;
 }
+/* suggest input hover items */
+.vp-sg-item:hover {
+    background: var(--light-gray-color);
+    color: var(--font-highlight);
+    cursor: pointer;
+}

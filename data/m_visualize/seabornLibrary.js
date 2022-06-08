@@ -48,13 +48,14 @@ define([
         /** Distribution plots */
         'histplot': {
             name: 'Histogram Plot',
-            code: '${allocateTo} = sns.histplot(${data}${x}${y}${hue}${etc})',
+            code: '${allocateTo} = sns.histplot(${data}${x}${y}${hue}${bins}${etc})',
             description: 'Plot univariate or bivariate histograms to show distributions of datasets.',
             options: [
                 { name: 'data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'list'], usePair: true },
                 { name: 'x', component: ['col_select'], usePair: true },
                 { name: 'y', component: ['col_select'], usePair: true },
                 { name: 'hue', component: ['col_select'], usePair: true },
+                { name: 'bins', component: ['col_select'], usePair: true },
                 { name: 'allocateTo', label: 'Allocate To', component: ['input'], usePair: true }
             ]
         },

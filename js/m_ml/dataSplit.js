@@ -19,8 +19,9 @@ define([
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/component/PopupComponent',
-    'vp_base/js/com/component/VarSelector2'
-], function(dsHtml, com_util, com_interface, com_Const, com_String, PopupComponent, VarSelector2) {
+    'vp_base/js/com/component/VarSelector2',
+    'vp_base/js/com/component/DataSelector'
+], function(dsHtml, com_util, com_interface, com_Const, com_String, PopupComponent, VarSelector2, DataSelector) {
 
     /**
      * Data split
@@ -37,6 +38,7 @@ define([
                 targetData: '',
                 testSize: 0.25,
                 shuffle: 'True',
+                stratify: '',
                 trainFeatures: 'X_train',
                 trainTarget: 'y_train',
                 testFeatures: 'X_test',
@@ -101,27 +103,20 @@ define([
             }
             $(page).find('#testSize').html(sizeOptions);
 
-            // varselector TEST:
-            let varSelector = new VarSelector2(this.wrapSelector());
-            varSelector.setComponentID('featureData');
-            varSelector.addClass('vp-state vp-input');
-            varSelector.setValue(this.state.featureData);
-            varSelector.setPlaceholder('Select feature data');
-            $(page).find('#featureData').replaceWith(varSelector.toTagString());
+            let featureSelector = new DataSelector({
+                pageThis: this, id: 'featureData', placeholder: 'Select feature data' 
+            });
+            $(page).find('#featureData').replaceWith(featureSelector.toTagString());
 
-            varSelector = new VarSelector2(this.wrapSelector());
-            varSelector.setComponentID('targetData');
-            varSelector.addClass('vp-state vp-input');
-            varSelector.setValue(this.state.targetData);
-            varSelector.setPlaceholder('Select target data');
-            $(page).find('#targetData').replaceWith(varSelector.toTagString());
+            let targetSelector = new DataSelector({
+                pageThis: this, id: 'targetData', placeholder: 'Select target data' 
+            });
+            $(page).find('#targetData').replaceWith(targetSelector.toTagString());
 
-            varSelector = new VarSelector2(this.wrapSelector());
-            varSelector.setComponentID('stratify');
-            varSelector.addClass('vp-state vp-input');
-            varSelector.setValue(this.state.stratify);
-            varSelector.setPlaceholder('None');
-            $(page).find('#stratify').replaceWith(varSelector.toTagString());
+            let stratifySelector = new DataSelector({
+                pageThis: this, id: 'stratify', placeholder: 'None' 
+            });
+            $(page).find('#stratify').replaceWith(stratifySelector.toTagString());
             
             // load state
             let that = this;

@@ -61,14 +61,14 @@ define([
             // configuration
             this.config = this.state;
 
-            var { mode, type, parent, selectedList=[], includeList=[], excludeList=[] } = this.config;
-            this.mode = mode;   // variable / columns / index / ndarray0 / ndarray1
+            var { mode, type, parent, dataList=[], selectedList=[], includeList=[], excludeList=[] } = this.config;
+            this.mode = mode;   // variable / columns / index / ndarray0 / ndarray1 / methods / data(given data)
             this.parent = parent;
             this.selectedList = selectedList;
             this.includeList = includeList;
             this.excludeList = excludeList;
 
-            this.dataList = [];
+            this.dataList = dataList;   // [ { value, code, type }, ... ]
             this.pointer = { start: -1, end: -1 };
 
             var that = this;
@@ -98,6 +98,9 @@ define([
                     this._getNdarray(parent, 1, function(dataList) {
                         that._executeCallback(dataList);
                     });
+                    break;
+                case 'data':
+                    that._executeCallback(this.dataList);
                     break;
             }
         }
@@ -141,8 +144,8 @@ define([
         }
         
         _getColumnList(parent, callback) {
-            if (parent && parent.length > 1) {
-                vpKernel.getColumnList(parent).then(function(resultObj) {
+            if (Array.isArray(parent) && parent.length > 1) {
+                vpKernel.getCommonColumnList(parent).then(function(resultObj) {
                     let { result } = resultObj;
                     try {
                         var colList = JSON.parse(result);
