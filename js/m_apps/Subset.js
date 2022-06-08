@@ -1562,7 +1562,7 @@ define([
                     var rowList = [];
                     for (var i = 0; i < rowTags.length; i++) {
                         var rowValue = $(rowTags[i]).data('code');
-                        if (rowValue != undefined) {
+                        if (rowValue !== undefined) {
                             rowList.push(rowValue);
                         }
                     }
