@@ -683,7 +683,7 @@ define([
             // reset with no source
             columnInputIdList && columnInputIdList.forEach(columnInputId => {
                 let defaultValue = pageThis.state[columnInputId];
-                if (defaultValue == null || defaultValue == undefined) {
+                if (defaultValue === null || defaultValue === undefined) {
                     defaultValue = '';
                 }
                 if (tagType == 'input') {
@@ -745,7 +745,7 @@ define([
                 // columns using suggestInput
                 columnInputIdList && columnInputIdList.forEach((columnInputId, idx) => {
                     let defaultValue = pageThis.state[columnInputId];
-                    if (defaultValue == null || defaultValue == undefined) {
+                    if (defaultValue === null || defaultValue === undefined) {
                         defaultValue = '';
                     }
                     // create tag
@@ -774,7 +774,7 @@ define([
                                 'data-type':listVar.dtype
                             });
                             // cell metadata test : defaultValue as selected
-                            if (listVar.value == defaultValue) {
+                            if (listVar.value === defaultValue) {
                                 $(option).prop('selected', true);
                             }
                             option.append(document.createTextNode(listVar.label));
