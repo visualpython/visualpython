@@ -1615,17 +1615,17 @@ define([
                             condValue = com_util.formatString("'{0}'", cond);
                         }
                         if (oper == 'contains') {
-                            rowSelection.appendFormat('{0}.str.contains({1})', colValue, condValue);
+                            rowSelection.appendFormat('`{0}`.str.contains({1})', colValue, condValue);
                         } else if (oper == 'not contains') {
-                            rowSelection.appendFormat('~{0}.str.contains({1})', colValue, condValue);
+                            rowSelection.appendFormat('~`{0}`.str.contains({1})', colValue, condValue);
                         } else if (oper == 'starts with') {
-                            rowSelection.appendFormat('{0}.str.startswith({1})', colValue, condValue);
+                            rowSelection.appendFormat('`{0}`.str.startswith({1})', colValue, condValue);
                         } else if (oper == 'ends with') {
-                            rowSelection.appendFormat('{0}.str.endswith({1})', colValue, condValue);
+                            rowSelection.appendFormat('`{0}`.str.endswith({1})', colValue, condValue);
                         } else if (oper == 'isnull()' || oper == 'notnull()') {
-                            rowSelection.appendFormat('{0}.{1}', colValue, oper);
+                            rowSelection.appendFormat('`{0}`.{1}', colValue, oper);
                         } else {
-                            rowSelection.appendFormat('{0}{1}{2}', colValue, oper != ''?(' ' + oper):'', condValue != ''?(' ' + condValue):'');
+                            rowSelection.appendFormat('`{0}`{1}{2}', colValue, oper != ''?(' ' + oper):'', condValue != ''?(' ' + condValue):'');
                         }
                         if (condList.length > 1) {
                             rowSelection.append(')');
