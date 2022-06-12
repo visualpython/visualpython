@@ -20,8 +20,17 @@
     cursor: not-allowed;
 }
 /* DataSelector popup */
-.vp-dataselector {
+.vp-dataselector-base {
     display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 300;
+    background-color: rgba(0,0,0,.4);
+}
+.vp-dataselector {
     position: absolute;
     top: calc(50% - 225px);
     left: calc(50% - 300px);

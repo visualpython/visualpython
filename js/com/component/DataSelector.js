@@ -39,7 +39,7 @@ define([
          * @param {Object} prop  { type, ... }
          */
         constructor(prop) {
-            super($('#site'), {}, prop);
+            super($('body'), {}, prop);
         }
 
         _init() {
