@@ -29,12 +29,13 @@ define([
         _init() {
             super._init();
             /** Write codes executed before rendering */
-            this.config.sizeLevel = 1;
+            this.config.sizeLevel = 2;
 
             this.state = {
                 variable: '',
                 type: 'pivot',
                 resetIndex: false,
+                withoutColumn: 'True',
                 pivot: {
                     index: [],
                     columns: [],
@@ -219,7 +220,11 @@ define([
             $(document).on('change', this.wrapSelector('#vp_rsResetIndex'), function() {
                 that.state.resetIndex = $(this).prop('checked');
             });
-
+            
+            // with/without column select event
+            $(this.wrapSelector('#vp_rsWithoutColumn')).on('change', function() {
+                that.state.withoutColumn = $(this).val();
+            });
 
         }
 
@@ -290,7 +295,7 @@ define([
             this.loadVariableList();
 
             var {
-                variable, type, pivot, melt, userOption, allocateTo, resetIndex
+                variable, type, pivot, melt, userOption, allocateTo, resetIndex, withoutColumn
             } = this.state;
 
             $(this.wrapSelector('#vp_rsDataframe')).val(variable);
@@ -316,6 +321,7 @@ define([
             // allocateTo
             $(this.wrapSelector('#vp_rsAllocateTo')).val(allocateTo);
             $(this.wrapSelector('#vp_rsResetIndex')).prop('checked', resetIndex);
+            $(this.wrapSelector('#vp_rsWithoutColumn')).val(withoutColumn);
         }
 
         /**
@@ -415,7 +421,7 @@ define([
 
         generateCode() {
             var code = new com_String();
-            var { variable, type, userOption, allocateTo, resetIndex, pivot, melt } = this.state;
+            var { variable, type, userOption, allocateTo, resetIndex, withoutColumn, pivot, melt } = this.state;
 
             //====================================================================
             // Allocation
@@ -544,7 +550,11 @@ define([
             // Reset index
             //====================================================================
             if (resetIndex) {
-                code.append('.reset_index()');
+                if (withoutColumn === 'True') {
+                    code.append('.reset_index(drop=True)');
+                } else {
+                    code.append('.reset_index()');
+                }
             }
 
             if (allocateTo && allocateTo != '') {

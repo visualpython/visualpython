@@ -29,7 +29,7 @@ define([
         _init() {
             super._init();
             /** Write codes executed before rendering */
-            this.config.sizeLevel = 1;
+            this.config.sizeLevel = 2;
 
             this.howList = [
                 { label: 'Inner', value: 'inner', desc: 'Inner join' },
@@ -66,6 +66,7 @@ define([
                 userOption: '',
                 allocateTo: '',
                 resetIndex: false,
+                withoutColumn: 'True',
                 ...this.state
             }
             this.popup = {
@@ -306,6 +307,11 @@ define([
             $(document).on('change', this.wrapSelector('#vp_bdResetIndex'), function() {
                 that.state.resetIndex = $(this).prop('checked');
             });
+
+            // with/without column select event
+            $(this.wrapSelector('#vp_bdWithoutColumn')).on('change', function() {
+                that.state.withoutColumn = $(this).val();
+            });
         }
 
         templateForBody() {
@@ -441,7 +447,7 @@ define([
         generateCode() {
             var code = new com_String();
             var {
-                type, concat, merge, allocateTo, resetIndex, userOption
+                type, concat, merge, allocateTo, resetIndex, withoutColumn, userOption
             } = this.state;
 
             //====================================================================
@@ -471,13 +477,6 @@ define([
                 }
 
                 //====================================================================
-                // Reset index
-                //====================================================================
-                if (resetIndex) {
-                    code.append(', ignore_index=True');
-                }
-
-                //====================================================================
                 // User option
                 //====================================================================
                 if (userOption && userOption != '') {
@@ -485,6 +484,7 @@ define([
                 }
 
                 code.append(')');
+
             } else {
                 //====================================================================
                 // Merge
@@ -538,11 +538,15 @@ define([
                 }
 
                 code.append(')');
-    
-                //====================================================================
-                // Reset index
-                //====================================================================
-                if (resetIndex) {
+            }
+
+            //====================================================================
+            // Reset index
+            //====================================================================
+            if (resetIndex) {
+                if (withoutColumn === 'True') {
+                    code.append('.reset_index(drop=True)');
+                } else {
                     code.append('.reset_index()');
                 }
             }
@@ -557,7 +561,7 @@ define([
 
         loadState() {
             var {
-                type, concat, merge, userOption, allocateTo, resetIndex
+                type, concat, merge, userOption, allocateTo, resetIndex, withoutColumn
             } = this.state;
 
             // type
@@ -599,6 +603,7 @@ define([
             $(this.wrapSelector('#vp_bdUserOption')).val(userOption);
             $(this.wrapSelector('#vp_bdAllocateTo')).val(allocateTo);
             $(this.wrapSelector('#vp_bdResetIndex')).prop('checked', resetIndex);
+            $(this.wrapSelector('#vp_bdWithoutColumn')).val(withoutColumn);
 
             $(this.wrapSelector('.vp-bd-type-box')).hide();
             $(this.wrapSelector('.vp-bd-type-box.' + type)).show();
