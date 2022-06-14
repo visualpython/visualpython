@@ -216,6 +216,36 @@ define([
                 $(that.wrapSelector('#color')).prop('disabled', $(this).prop('checked') == false);
             });
 
+            // axes - ticks location
+            $(this.wrapSelector('#xticks')).on('change', function() {
+                let val = $(this).val();
+                if (val !== '') {
+                    // enable xticks_label
+                    $(that.wrapSelector('#xticks_label')).prop('readonly', false);
+                } else {
+                    // disable xticks_label
+                    $(that.wrapSelector('#xticks_label')).prop('readonly', true);
+                }
+            });
+            $(this.wrapSelector('#yticks')).on('change', function() {
+                let val = $(this).val();
+                if (val !== '') {
+                    // enable yticks_label
+                    $(that.wrapSelector('#yticks_label')).prop('readonly', false);
+                } else {
+                    // disable yticks_label
+                    $(that.wrapSelector('#yticks_label')).prop('readonly', true);
+                }
+            });
+
+            // axes - ticks label: inform user to type location option to use label
+            $(this.wrapSelector('#xticks_label[readonly]')).on('click', function() {
+                $(that.wrapSelector('#xticks')).focus();
+            });
+            $(this.wrapSelector('#yticks_label[readonly]')).on('click', function() {
+                $(that.wrapSelector('#yticks')).focus();
+            });
+
             // preview refresh
             $(this.wrapSelector('#previewRefresh')).on('click', function() {
                 that.loadPreview();
@@ -318,6 +348,14 @@ define([
                     marker.value, marker.title, selectedFlag, marker.label);
             });
             $(page).find('#markerStyle').html(markerTag.toString());
+
+            // x, yticks label check
+            if (this.state.xticks && this.state.xticks !== '') {
+                $(page).find('#xticks_label').prop('readonly', false);
+            }
+            if (this.state.yticks && this.state.yticks !== '') {
+                $(page).find('#yticks_label').prop('readonly', false);
+            }
 
             // preview sample count
             let sampleCountList = [30, 50, 100, 300, 500, 700, 1000];
