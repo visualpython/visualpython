@@ -702,10 +702,10 @@ define([
             } else {
                 let xticksOptList = [];
                 if (xticks && xticks !== '') {
-                    xticksOptList.push(xticks);
+                    xticksOptList.push('ticks=' + xticks);
                     // Not able to use xticks_label without xticks
                     if (xticks_label && xticks_label != '') {
-                        xticksOptList.push(xticks_label);
+                        xticksOptList.push('labels=' + xticks_label);
                     }
                 }
                 if (xticks_rotate && xticks_rotate !== '') {
@@ -722,10 +722,10 @@ define([
             } else {
                 let yticksOptList = [];
                 if (yticks && yticks !== '') {
-                    yticksOptList.push(yticks);
+                    yticksOptList.push('ticks=' + yticks);
                     // Not able to use xticks_label without xticks
                     if (yticks_label && yticks_label != '') {
-                        yticksOptList.push(yticks_label);
+                        yticksOptList.push('labels=' + yticks_label);
                     }
                 }
                 if (yticks_rotate && yticks_rotate !== '') {
