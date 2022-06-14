@@ -7,8 +7,9 @@
             <div class="vp-pt-option-box">
                 <div class="vp-tab-bar">
                     <div class="vp-tab-item vp-focus" data-type="data">Data</div>
-                    <div class="vp-tab-item" data-type="style">Style</div>
-                    <div class="vp-tab-item" data-type="setting">Setting</div>
+                    <div class="vp-tab-item" data-type="info">Info</div>
+                    <!-- <div class="vp-tab-item" data-type="style">Style</div> -->
+                    <div class="vp-tab-item" data-type="code">Code</div>
                 </div>
                 <div class="vp-tab-page-box vp-grid-border-box vp-scrollbar">
                     <div class="vp-tab-page vp-grid-box" data-type="data">
@@ -23,32 +24,70 @@
                             <label><input type="checkbox" id="setXY" class="vp-state"><span>Set X and Y individually</span></label>
                         </div>
                         <div class="vp-grid-col-p50">
-                            <div class="vp-grid-box">
+                            <div class="vp-grid-box pt-option">
                                 <label for="x" class="vp-bold">X-axis Value</label>
                                 <select id="x" class="vp-select vp-state">
         
                                 </select>
                             </div>
-                            <div class="vp-grid-box">
-                                <label for="y" class="vp-bold">Y-axis Value</label>
+                            <div class="vp-grid-box pt-option">
+                                <label class="vp-bold">X-start Value</label>
+                                <select id="x_start" class="vp-select vp-state">
+        
+                                </select>
+                            </div>
+                            <div class="vp-grid-box pt-option">
+                                <label class="vp-bold">X-end Value</label>
+                                <select id="x_end" class="vp-select vp-state">
+        
+                                </select>
+                            </div>
+                            <div class="vp-grid-box pt-option">
+                                <label class="vp-bold">Y-axis Value</label>
                                 <select id="y" class="vp-select vp-state">
         
                                 </select>
                             </div>
+                            <div class="vp-grid-box pt-option">
+                                <label class="vp-bold">Z-axis Value</label>
+                                <select id="z" class="vp-select vp-state">
+        
+                                </select>
+                            </div>
+                            <div class="vp-grid-box pt-option">
+                                <label class="vp-bold">Values</label>
+                                <select id="values" class="vp-select vp-state">
+        
+                                </select>
+                            </div>
+                            <div class="vp-grid-box pt-option">
+                                <label class="vp-bold">Names</label>
+                                <select id="names" class="vp-select vp-state">
+        
+                                </select>
+                            </div>
+                            <div class="vp-grid-box pt-option">
+                                <label class="vp-bold">Parents</label>
+                                <select id="parents" class="vp-select vp-state">
+        
+                                </select>
+                            </div>
                         </div>
-
-
-
                         <label for="userOption" class="vp-bold">User Option</label>
                         <input type="text" id="userOption" class="vp-input vp-state wp100" placeholder="key=value, ..."/>
+                    </div>
+                    <div class="vp-tab-page vp-grid-box" data-type="info" style="display: none;">
+                        <label for="title" class="vp-bold">Title</label>
+                        <input type="text" id="title" class="vp-input vp-state wp100" placeholder="Title for the chart" />
+
+
                     </div>
                     <div class="vp-tab-page vp-grid-box" data-type="style" style="display: none;">
 
                         
                     </div>
-                    <div class="vp-tab-page vp-grid-box" data-type="setting" style="display: none;">
-
-
+                    <div class="vp-tab-page vp-grid-box" data-type="code" style="display: none;">
+                        <textarea id="userCode" class="vp-state"></textarea>
                     </div>
                 </div>
             </div>
@@ -57,6 +96,9 @@
         <div class="vp-pt-right-box">
             <div class="vp-bold">
                 <span class="vp-pt-preview-title">Preview</span>
+                <span id="previewRefresh" class="vp-cursor">
+                    <img src="/nbextensions/visualpython/img/refresh.svg"/>
+                </span>
             </div>
             <div class="vp-pt-preview-box vp-grid-border-box">
                 <div id="vp_ptPreview" class="vp-pt-preview-content vp-center"></div>

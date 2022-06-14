@@ -55,6 +55,8 @@ define([
                 chartType: 'scatter',
                 data: '',
                 userOption: '',
+                title: '',
+                userCode: '',
                 autoRefresh: true,
                 ...this.state
             }
@@ -77,16 +79,16 @@ define([
             this.chartConfig = PLOTLY_LIBRARIES;
             this.chartTypeList = {
                 'Basics': [ 'scatter', 'line', 'area', 'bar', 'funnel', 'timeline' ],
-                'Part-of-Whole': [ 'pie', 'sunburst', 'treemap', 'icicle', 'funnel_area' ],
-                '1D Distributions': [ 'histogram', 'box', 'violin', 'strip', 'ecdf' ],
+                'Part-of-Whole': [ 'pie', 'sunburst', 'treemap', 'funnel_area' ],       // 'icicle' removed
+                '1D Distributions': [ 'histogram', 'box', 'violin', 'strip' ],          // 'ecdf' removed
                 '2D Distributions': [ 'density_heatmap', 'density_contour' ],
                 'Matrix or Image Input': [ 'imshow' ],
-                '3-Dimensional': [ 'scatter_3d', 'line_3d' ],
-                'Multidimensional': [ 'scatter_matrix', 'parallel_coordinates', 'parallel_categories' ],
-                'Tile Maps': [ 'scatter_mapbox', 'line_mapbox', 'choropleth_mapbox', 'density_mapbox' ],
-                'Outline Maps': [ 'scatter_geo', 'line_geo', 'choropleth' ],
-                'Polar Charts': [ 'scatter_polar', 'line_polar', 'bar_polar' ],
-                'Ternary Charts': [ 'scatter_ternary', 'line_ternary' ],
+                // '3-Dimensional': [ 'scatter_3d', 'line_3d' ],
+                // 'Multidimensional': [ 'scatter_matrix', 'parallel_coordinates', 'parallel_categories' ],
+                // 'Tile Maps': [ 'scatter_mapbox', 'line_mapbox', 'choropleth_mapbox', 'density_mapbox' ],
+                // 'Outline Maps': [ 'scatter_geo', 'line_geo', 'choropleth' ],
+                // 'Polar Charts': [ 'scatter_polar', 'line_polar', 'bar_polar' ],
+                // 'Ternary Charts': [ 'scatter_ternary', 'line_ternary' ],
             }
 
         }
@@ -107,6 +109,39 @@ define([
                 $(that.wrapSelector(com_util.formatString('.vp-tab-page[data-type="{0}"]', type))).show();
             });
 
+            // change chart type
+            $(this.wrapSelector('#chartType')).on('change', function() {
+                let chartType = $(this).val();
+                $(that.wrapSelector('.pt-option')).hide();
+                if (chartType === 'density_heatmap' || chartType === 'density_contour') {
+                    // show x, y, z
+                    $(that.wrapSelector('#x')).closest('.pt-option').show();
+                    $(that.wrapSelector('#y')).closest('.pt-option').show();
+                    $(that.wrapSelector('#z')).closest('.pt-option').show();
+                }
+                else if (chartType === 'timeline') {
+                    $(that.wrapSelector('#x_start')).closest('.pt-option').show();
+                    $(that.wrapSelector('#x_end')).closest('.pt-option').show();
+                    $(that.wrapSelector('#y')).closest('.pt-option').show();
+                }
+                else if (chartType === 'pie' || chartType === 'funnel_area') {
+                    // show values, names
+                    $(that.wrapSelector('#values')).closest('.pt-option').show();
+                    $(that.wrapSelector('#names')).closest('.pt-option').show();
+                }
+                else if (chartType === 'sunburst' || chartType === 'treemap' || chartType === 'icicle') {
+                    // show values, names, parents
+                    $(that.wrapSelector('#values')).closest('.pt-option').show();
+                    $(that.wrapSelector('#names')).closest('.pt-option').show();
+                    $(that.wrapSelector('#parents')).closest('.pt-option').show();
+                }
+                else {
+                    // show x, y
+                    $(that.wrapSelector('#x')).closest('.pt-option').show();
+                    $(that.wrapSelector('#y')).closest('.pt-option').show();
+                }
+            });
+
             // use data or not
             $(this.wrapSelector('#setXY')).on('change', function() {
                 let setXY = $(this).prop('checked');
@@ -115,8 +150,13 @@ define([
                     $(that.wrapSelector('#data')).prop('disabled', false);
 
                     $(that.wrapSelector('#x')).closest('.vp-ds-box').replaceWith('<select id="x"></select>');
+                    $(that.wrapSelector('#x_start')).closest('.vp-ds-box').replaceWith('<select id="x_start"></select>');
+                    $(that.wrapSelector('#x_end')).closest('.vp-ds-box').replaceWith('<select id="x_end"></select>');
                     $(that.wrapSelector('#y')).closest('.vp-ds-box').replaceWith('<select id="y"></select>');
-                    $(that.wrapSelector('#hue')).closest('.vp-ds-box').replaceWith('<select id="hue"></select>');
+                    $(that.wrapSelector('#z')).closest('.vp-ds-box').replaceWith('<select id="z"></select>');
+                    $(that.wrapSelector('#values')).closest('.vp-ds-box').replaceWith('<select id="values"></select>');
+                    $(that.wrapSelector('#names')).closest('.vp-ds-box').replaceWith('<select id="names"></select>');
+                    $(that.wrapSelector('#parents')).closest('.vp-ds-box').replaceWith('<select id="parents"></select>');
                 } else {
                     // set X Y indivisually
                     // disable data selection
@@ -124,22 +164,46 @@ define([
                     $(that.wrapSelector('#data')).val('');
                     that.state.data = '';
                     that.state.x = '';
+                    that.state.x_start = '';
+                    that.state.x_end = '';
                     that.state.y = '';
-                    that.state.hue = '';
+                    that.state.z = '';
+                    that.state.values = '';
+                    that.state.names = '';
+                    that.state.parents = '';
 
                     let dataSelectorX = new DataSelector({ pageThis: that, id: 'x' });
                     $(that.wrapSelector('#x')).replaceWith(dataSelectorX.toTagString());
 
+                    let dataSelectorXStart = new DataSelector({ pageThis: that, id: 'x_start' });
+                    $(that.wrapSelector('#x_start')).replaceWith(dataSelectorXStart.toTagString());
+
+                    let dataSelectorXEnd = new DataSelector({ pageThis: that, id: 'x_end' });
+                    $(that.wrapSelector('#x_end')).replaceWith(dataSelectorXEnd.toTagString());
+
                     let dataSelectorY = new DataSelector({ pageThis: that, id: 'y' });
                     $(that.wrapSelector('#y')).replaceWith(dataSelectorY.toTagString());
 
-                    let dataSelectorHue = new DataSelector({ pageThis: that, id: 'hue' });
-                    $(that.wrapSelector('#hue')).replaceWith(dataSelectorHue.toTagString());
+                    let dataSelectorZ = new DataSelector({ pageThis: that, id: 'z' });
+                    $(that.wrapSelector('#z')).replaceWith(dataSelectorZ.toTagString());
+                    
+                    let dataSelectorValues = new DataSelector({ pageThis: that, id: 'values' });
+                    $(that.wrapSelector('#values')).replaceWith(dataSelectorValues.toTagString());
+                    
+                    let dataSelectorNames = new DataSelector({ pageThis: that, id: 'names' });
+                    $(that.wrapSelector('#names')).replaceWith(dataSelectorNames.toTagString());
+
+                    let dataSelectorParents = new DataSelector({ pageThis: that, id: 'parents' });
+                    $(that.wrapSelector('#parents')).replaceWith(dataSelectorParents.toTagString());
                     
                 }
             });
 
             // load preview
+            // preview refresh
+            $(this.wrapSelector('#previewRefresh')).on('click', function() {
+                that.loadPreview();
+            });
             $(document).off('change', this.wrapSelector('.vp-state'));
             $(document).on('change', this.wrapSelector('.vp-state'), function(evt) {
                 that._saveSingleState($(this)[0]);
@@ -181,36 +245,97 @@ define([
                 id: 'data',
                 select: function(value, dtype) {
                     that.state.dtype = dtype;
-                    console.log('data selected');
 
                     if (dtype == 'DataFrame') {
                         $(that.wrapSelector('#x')).prop('disabled', false);
+                        $(that.wrapSelector('#x_start')).prop('disabled', false);
+                        $(that.wrapSelector('#x_end')).prop('disabled', false);
                         $(that.wrapSelector('#y')).prop('disabled', false);
+                        $(that.wrapSelector('#z')).prop('disabled', false);
+                        $(that.wrapSelector('#values')).prop('disabled', false);
+                        $(that.wrapSelector('#names')).prop('disabled', false);
+                        $(that.wrapSelector('#parents')).prop('disabled', false);
                         
                         // bind column source using selected dataframe
-                        com_generator.vp_bindColumnSource(that, 'data', ['x', 'y'], 'select', true, true);
+                        com_generator.vp_bindColumnSource(that, 'data', [
+                            'x', 'x_start', 'x_end', 'y', 'z', 'values', 'names', 'parents'
+                        ], 'select', true, true);
                     } else {
                         $(that.wrapSelector('#x')).prop('disabled', true);
+                        $(that.wrapSelector('#x_start')).prop('disabled', true);
+                        $(that.wrapSelector('#x_end')).prop('disabled', true);
                         $(that.wrapSelector('#y')).prop('disabled', true);
+                        $(that.wrapSelector('#z')).prop('disabled', true);
+                        $(that.wrapSelector('#values')).prop('disabled', true);
+                        $(that.wrapSelector('#names')).prop('disabled', true);
+                        $(that.wrapSelector('#parents')).prop('disabled', true);
+                        
                     }
                 },
                 finish: function(value, dtype) {
                     that.state.dtype = dtype;
-                    console.log('data selected');
 
                     if (dtype == 'DataFrame') {
                         $(that.wrapSelector('#x')).prop('disabled', false);
+                        $(that.wrapSelector('#x_start')).prop('disabled', false);
+                        $(that.wrapSelector('#x_end')).prop('disabled', false);
                         $(that.wrapSelector('#y')).prop('disabled', false);
+                        $(that.wrapSelector('#z')).prop('disabled', false);
+                        $(that.wrapSelector('#values')).prop('disabled', false);
+                        $(that.wrapSelector('#names')).prop('disabled', false);
+                        $(that.wrapSelector('#parents')).prop('disabled', false);
                         
                         // bind column source using selected dataframe
-                        com_generator.vp_bindColumnSource(that, 'data', ['x', 'y'], 'select', true, true);
+                        com_generator.vp_bindColumnSource(that, 'data', [
+                            'x', 'x_start', 'x_end', 'y', 'z', 'values', 'names', 'parents'
+                        ], 'select', true, true);
                     } else {
                         $(that.wrapSelector('#x')).prop('disabled', true);
+                        $(that.wrapSelector('#x_start')).prop('disabled', true);
+                        $(that.wrapSelector('#x_end')).prop('disabled', true);
                         $(that.wrapSelector('#y')).prop('disabled', true);
+                        $(that.wrapSelector('#z')).prop('disabled', true);
+                        $(that.wrapSelector('#values')).prop('disabled', true);
+                        $(that.wrapSelector('#names')).prop('disabled', true);
+                        $(that.wrapSelector('#parents')).prop('disabled', true);
                     }
                 }
             });
             $(page).find('#data').replaceWith(dataSelector.toTagString());
+
+            $(page).find('.pt-option').hide();
+            if (this.state.chartType === 'density_heatmap' 
+                || this.state.chartType === 'density_contour') {
+                // show x, y, z
+                $(page).find('#x').closest('.pt-option').show();
+                $(page).find('#y').closest('.pt-option').show();
+                $(page).find('#z').closest('.pt-option').show();
+            }
+            else if (this.state.chartType === 'timeline') {
+                // show x_start, x_end, y
+                $(page).find('#x_start').closest('.pt-option').show();
+                $(page).find('#x_end').closest('.pt-option').show();
+                $(page).find('#y').closest('.pt-option').show();
+            }
+            else if (this.state.chartType === 'pie' 
+                || this.state.chartType === 'funnel_area') {
+                // show values, names
+                $(page).find('#values').closest('.pt-option').show();
+                $(page).find('#names').closest('.pt-option').show();
+            }
+            else if (this.state.chartType === 'sunburst' 
+                || this.state.chartType === 'treemap' 
+                || this.state.chartType === 'icicle') {
+                // show values, names, parents
+                $(page).find('#values').closest('.pt-option').show();
+                $(page).find('#names').closest('.pt-option').show();
+                $(page).find('#parents').closest('.pt-option').show();
+            }
+            else {
+                // show x, y
+                $(page).find('#x').closest('.pt-option').show();
+                $(page).find('#y').closest('.pt-option').show();
+            }
 
             //================================================================
             // Load state
@@ -257,6 +382,24 @@ define([
             });
             $(this.wrapSelector('.vp-popup-codeview-box')).css({
                 'height': '200px'
+            });
+
+            // load code tab - code mirror
+            let userCodeKey = 'userCode';
+            let userCodeTarget = this.wrapSelector('#' + userCodeKey);
+            this.codeArea = this.initCodemirror({
+                key: userCodeKey,
+                selector: userCodeTarget,
+                events: [{
+                    key: 'change',
+                    callback: function(instance, evt) {
+                        // save its state
+                        instance.save();
+                        that.state[userCodeKey] = $(userCodeTarget).val();
+                        // refresh preview
+                        that.loadPreview();
+                    }
+                }]
             });
 
             this.loadPreview();
@@ -328,19 +471,41 @@ define([
             let { 
                 chartType,
                 data, x, y, setXY,
-                userOption
+                userOption, userCode,
+                title
             } = this.state;
             let code = new com_String();
             let config = this.chartConfig[chartType];
 
             let etcOptionCode = [];
+            // add title
+            if (title != '') {
+                etcOptionCode.push(com_util.formatString("title='{0}'", title));
+            }
             // add user option
             if (userOption != '') {
                 etcOptionCode.push(userOption);
             }
 
-            let generatedCode = com_generator.vp_codeGenerator(this, config, this.state, etcOptionCode.join(', '));
+            if (preview === true) {
+                // set preview size
+                let width = 450;
+                let height = 400;
+                // let width = $(this.wrapSelector('#vp_ptPreview')).width();
+                // let height = $(this.wrapSelector('#vp_ptPreview')).height();
+                // console.log(width, height);
+                etcOptionCode.push(com_util.formatString('width={0}, height={1}', width, height));
+            }
+
+            let generatedCode = com_generator.vp_codeGenerator(this, config, this.state
+                , etcOptionCode.length > 0? ', ' + etcOptionCode.join(', '): '');
             code.append(generatedCode);
+
+            if (userCode && userCode != '') {
+                code.appendLine();
+                code.append(userCode);
+            }
+
             return code.toString();
         }
     }

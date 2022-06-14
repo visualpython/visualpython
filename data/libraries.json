@@ -3106,6 +3106,20 @@
                         }
                     },
                     {
+                        "id"   : "visualize_plotly",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Plotly",
+                        "tag"  : "PLOTLY,CHART,VISUALIZATION,VISUALIZE",
+                        "path" : "visualpython - visualization - plotly",
+                        "desc" : "Plotly chart creation",
+                        "file" : "m_visualize/Plotly",
+                        "apps" : {
+                            "color": 5,
+                            "icon": "apps/apps_visualize.svg"
+                        }
+                    },
+                    {
                         "id"   : "visualize_wordcloud",
                         "type" : "function",
                         "level": 1,
