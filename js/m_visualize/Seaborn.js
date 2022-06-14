@@ -168,6 +168,7 @@ define([
                 $(that.wrapSelector(com_util.formatString('.vp-tab-page[data-type="{0}"]', type))).show();
             });
 
+            // change chart type
             $(this.wrapSelector('#chartType')).on('change', function() {
                 // add bins to histplot
                 let chartType = $(this).val();
@@ -175,7 +176,7 @@ define([
                 if (chartType == 'histplot') {
                     $(that.wrapSelector('.sb-option.bins')).show();
                 }
-            })
+            });
             
             // use data or not
             $(this.wrapSelector('#setXY')).on('change', function() {
@@ -659,13 +660,6 @@ define([
                 etcOptionCode.push(userOption);
             }
 
-            if (etcOptionCode.length > 0) {
-                etcOptionCode = [
-                    '',
-                    ...etcOptionCode
-                ]
-            }
-
             if (preview && useSampling) {
                 // data sampling code for preview
                 // convertedData = data + '.sample(n=' + sampleCount + ', random_state=0)';
@@ -689,7 +683,8 @@ define([
                 }
             }   
 
-            let generatedCode = com_generator.vp_codeGenerator(this, config, state, etcOptionCode.join(', '));
+            let generatedCode = com_generator.vp_codeGenerator(this, config, state
+                , etcOptionCode.length > 0? ', ' + etcOptionCode.join(', '): '');
 
             // Axes
             if (x_limit_from != '' && x_limit_to != '') {
