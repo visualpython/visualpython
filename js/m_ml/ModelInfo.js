@@ -379,8 +379,8 @@ define([
                     code: '${score_allocate} = ${model}.score(${score_featureData}, ${score_targetData})',
                     description: '',
                     options: [
-                        { name: 'score_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
-                        { name: 'score_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y' },
+                        { name: 'score_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_train' },
+                        { name: 'score_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y_train' },
                         { name: 'score_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'scores' }
                     ]
                 },
@@ -452,7 +452,8 @@ define([
                         "def plot_feature_importances(model, X_train=None, sort=False):\
                         \n    df_i = create_feature_importances(model, X_train, sort)\
                         \n\
-                        \n    df_i['Percentage'].sort_values().plot(kind='barh')\
+                        \n    if sort: df_i['Percentage'].sort_values().plot(kind='barh')\
+                        \n    else: df_i['Percentage'].plot(kind='barh')\
                         \n    plt.xlabel('Feature importance Percentage')\
                         \n    plt.ylabel('Features')\
                         \n\
@@ -629,8 +630,8 @@ define([
                                 \nplt.show()",
                             description: '',
                             options: [
-                                { name: 'roc_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y_test' },
-                                { name: 'roc_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_test' }
+                                { name: 'roc_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_test' }, 
+                                { name: 'roc_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y_test' }
                             ]
                         },
                         'auc': {
@@ -640,8 +641,8 @@ define([
                             code: 'metrics.roc_auc_score(${auc_targetData}, ${model}.predict_proba(${auc_featureData})[:, 1])',
                             description: '',
                             options: [
-                                { name: 'auc_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y_test' },
-                                { name: 'auc_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_test' }
+                                { name: 'auc_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_test' },
+                                { name: 'auc_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y_test' }
                             ]
                         },
                         'permutation_importance': defaultInfos['permutation_importance']
