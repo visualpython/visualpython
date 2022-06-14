@@ -96,9 +96,23 @@
                         
                                             </select>
                                         </div>
-                                        <div class="vp-grid-box sb-option bins">
+                                        <div class="vp-grid-box sb-option">
                                             <label for="bins" class="vp-bold">Bins</label>
                                             <input type="number" class="vp-input vp-state" id="bins" placeholder="Type bins" step="5" min="0" />
+                                        </div>
+                                        <div class="vp-grid-box sb-option">
+                                            <label for="kde" class="vp-bold">Kde</label>
+                                            <select id="kde" class="vp-select vp-state">
+                                                <option value="">Select option...</option>
+                                                <option value="True">True</option>
+                                                <option value="False">False</option>
+                                            </select>
+                                        </div>
+                                        <div class="vp-grid-box sb-option">
+                                            <label for="stat" class="vp-bold">Stat</label>
+                                            <select id="stat" class="vp-state">
+                                                <!-- Auto-create -->
+                                            </select>
                                         </div>
                                     </div>
                                     <label for="userOption" class="vp-bold">User Option</label>

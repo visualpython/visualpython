@@ -45,6 +45,9 @@ define([
                 x: '',
                 y: '',
                 hue: '',
+                bins: '',
+                kde: '',
+                stat: '',
                 // axes options
                 x_limit_from: '',
                 x_limit_to: '',
@@ -127,6 +130,16 @@ define([
                 { label: 'diamond', value: 'D', title: 'diamond' }, 
                 { label: 'thin diamond', value: 'd', title: 'thin_diamond' }
             ]
+
+            this.statList = [
+                { label: 'Select option...', value: '' },
+                { label: 'count', value: "'count'" },
+                { label: 'frequency', value: "'frequency'" },
+                { label: 'density', value: "'density'" },
+                { label: 'probability', value: "'probability'" },
+                { label: 'proportion', value: "'proportion'" },
+                { label: 'percent', value: "'percent'" }
+            ];
         }
 
         _bindEvent() {
@@ -174,7 +187,9 @@ define([
                 let chartType = $(this).val();
                 $(that.wrapSelector('.sb-option')).hide();
                 if (chartType == 'histplot') {
-                    $(that.wrapSelector('.sb-option.bins')).show();
+                    $(that.wrapSelector('#bins')).closest('.sb-option').show();
+                    $(that.wrapSelector('#kde')).closest('.sb-option').show();
+                    $(that.wrapSelector('#stat')).closest('.sb-option').show();
                 }
             });
             
@@ -357,6 +372,18 @@ define([
                 $(page).find('#yticks_label').prop('readonly', false);
             }
 
+            // stat options
+            let statTag = new com_String();
+            this.statList.forEach(stat => {
+                let selectedFlag = '';
+                if (stat.value == that.state.stat) {
+                    selectedFlag = 'selected';
+                }
+                statTag.appendFormatLine('<option value="{0}" {1}>{2}</option>',
+                    stat.value, selectedFlag, stat.label);
+            });
+            $(page).find('#stat').html(statTag.toString());
+
             // preview sample count
             let sampleCountList = [30, 50, 100, 300, 500, 700, 1000];
             let sampleCountTag = new com_String();
@@ -373,7 +400,9 @@ define([
             // data options depend on chart type
             $(page).find('.sb-option').hide();
             if (this.state.chartType == 'histplot') {
-                $(page).find('.sb-option.bins').show();
+                $(page).find('#bins').closest('.sb-option').show();
+                $(page).find('#kde').closest('.sb-option').show();
+                $(page).find('#stat').closest('.sb-option').show();
             }
 
             //================================================================
