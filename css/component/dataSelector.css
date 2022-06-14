@@ -32,10 +32,10 @@
 }
 .vp-dataselector {
     position: absolute;
-    top: calc(50% - 225px);
-    left: calc(50% - 300px);
-    width: 600px;
-    height: 450px;
+    top: calc(50% - 275px);
+    left: calc(50% - 325px);
+    width: 650px;
+    height: 550px;
     background: white;
     border: 1px solid var(--border-gray-color);
     z-index: 999;
@@ -46,14 +46,14 @@
 }
 .vp-ds-data-box {
     width: 100%;
-    height: 100px;
+    height: 160px;
     align-content: baseline;
     align-items: center;
 }
 .vp-ds-type-box,
 .vp-ds-variable-box {
     border: 0.25px solid var(--border-gray-color);
-    height: 100px;
+    height: 160px;
     grid-row-gap: 0px;
     align-content: baseline;
 }
@@ -77,11 +77,17 @@
     font-weight: bold;
 }
 .vp-ds-option-box {
-    height: calc(100% - 140px);
+    height: calc(100% - 200px);
     margin-top: 10px;
 }
 .vp-ds-option-inner-box {
     height: calc(100% - 30px);
+}
+.vp-ds-df-option-box {
+    height: 100%;
+}
+.vp-ds-df-multiselector {
+    height: calc(100% - 25px);
 }
 .vp-nd-row-box,
 .vp-nd-col-box {

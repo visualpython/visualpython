@@ -70,6 +70,7 @@ define([
                 slicingEnd2: '',
                 ndRowType: 'slicing',
                 ndColType: 'slicing',
+                useIndex: false,
                 indexing: [],
                 rowIndexing: [],
                 colIndexing: [],
@@ -338,6 +339,40 @@ define([
             `;
         }
 
+        templateForMultiSelector() {
+            return `
+                <div class="vp-ds-df-option-box">
+                    <label><input type="checkbox" id="useIndex" class="vp-state" ${this.state.useIndex===true?'checked':''}/> <span>Use Index</span></label>
+                    <div class="vp-ds-df-multiselector" ${this.state.useIndex===true?'style="display:none;"':''}>
+                    </div>
+                    <div class="vp-ds-df-index-box" ${this.state.useIndex===false?'style="display:none;"':''}>
+                        <div><label>Index selected.</label>
+                            <div class="vp-cs-select-container no-selection">
+                                <div class="vp-cs-select-left">
+                                    <input type="text" class="vp-input wp100" placeholder="Search" value="" readonly>
+                                    <div class="vp-cs-select-box left vp-cs-droppable no-selection vp-scrollbar">
+                                    </div>
+                                </div>
+                                <div class="vp-cs-select-btn-box">
+                                    <button type="button" class="vp-cs-select-add-all-btn" title="Add all items"><img src="/nbextensions/visualpython/img/arrow_right_double.svg"></button>
+                                    <button type="button" class="vp-cs-select-add-btn" title="Add selected items"><img src="/nbextensions/visualpython/img/arrow_right.svg"></button>
+                                    <button type="button" class="vp-cs-select-del-btn" title="Remove selected items"><img src="/nbextensions/visualpython/img/arrow_left.svg"></button>
+                                    <button type="button" class="vp-cs-select-del-all-btn" title="Remove all items"><img src="/nbextensions/visualpython/img/arrow_left_double.svg"></button>
+                                </div>
+                                <div class="vp-cs-select-right">
+                                    <div class="vp-cs-select-box right vp-cs-droppable no-selection vp-scrollbar ui-droppable">
+                                        <div class="vp-cs-select-item">
+                                            <span>index</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `
+        }
+
         templateForSlicing() {
             return `
                 <div>
@@ -480,10 +515,25 @@ define([
 
             switch (dataType) {
                 case 'DataFrame':
+                    // render option page
+                    $(this.wrapSelector('.vp-ds-option-inner-box')).html(this.templateForMultiSelector());
                     // column selecting
-                    this._columnSelector = new MultiSelector(this.wrapSelector('.vp-ds-option-inner-box'),
+                    this._columnSelector = new MultiSelector(this.wrapSelector('.vp-ds-df-multiselector'),
                         { mode: 'columns', parent: [data], selectedList: this.state.indexing }
                     );
+
+                    // bind event
+                    $(this.wrapSelector('#useIndex')).on('change', function() {
+                        let checked = $(this).prop('checked');
+                        that.state.useIndex = checked;
+                        if (checked === true) {
+                            $(that.wrapSelector('.vp-ds-df-multiselector')).hide();
+                            $(that.wrapSelector('.vp-ds-df-index-box')).show();
+                        } else {
+                            $(that.wrapSelector('.vp-ds-df-multiselector')).show();
+                            $(that.wrapSelector('.vp-ds-df-index-box')).hide();
+                        }
+                    });
                     break;
                 case 'Series':
                 case 'list':
@@ -510,12 +560,12 @@ define([
                         $(this.wrapSelector('.vp-nd-col-box.' + this.state.ndColType)).show();
 
                         // bind event
-                        $(this.wrapSelector('#ndRowType')).change(function() {
+                        $(this.wrapSelector('#ndRowType')).on('change', function() {
                             that.state.ndRowType = $(this).val();
                             $(that.wrapSelector('.vp-nd-row-box')).hide();
                             $(that.wrapSelector('.vp-nd-row-box.' + that.state.ndRowType)).show();
                         });
-                        $(this.wrapSelector('#ndColType')).change(function() {
+                        $(this.wrapSelector('#ndColType')).on('change', function() {
                             that.state.ndColType = $(this).val();
                             $(that.wrapSelector('.vp-nd-col-box')).hide();
                             $(that.wrapSelector('.vp-nd-col-box.' + that.state.ndColType)).show();
@@ -593,6 +643,7 @@ define([
             // get states
             let {
                 data, dataType,
+                useIndex,
                 slicingStart1, slicingEnd1,
                 slicingStart2, slicingEnd2,
                 ndRowType, ndColType
@@ -602,21 +653,27 @@ define([
             switch (dataType) {
                 case 'DataFrame':
                     code.append(data);
-                    if (this._columnSelector != null) {
-                        let result = this._columnSelector.getDataList();
-                        this.state.indexing = result.map(obj => obj.code); // save state
-                        let columnList = [];
-                        result && result.forEach(obj => {
-                            columnList.push(obj.code);
-                        });
-                        if (columnList.length > 0) {
-                            if (columnList.length == 1) {
-                                // return as Series
-                                code.appendFormat('[{0}]', columnList.join(', '));
-                                // change datatype to Series
-                                this.state.returnDataType = 'Series';
-                            } else {
-                                code.appendFormat('[[{0}]]', columnList.join(', '));
+                    if (useIndex === true) {
+                        // use index
+                        code.append('.index');
+                    } else {
+                        // use column selector
+                        if (this._columnSelector != null) {
+                            let result = this._columnSelector.getDataList();
+                            this.state.indexing = result.map(obj => obj.code); // save state
+                            let columnList = [];
+                            result && result.forEach(obj => {
+                                columnList.push(obj.code);
+                            });
+                            if (columnList.length > 0) {
+                                if (columnList.length == 1) {
+                                    // return as Series
+                                    code.appendFormat('[{0}]', columnList.join(', '));
+                                    // change datatype to Series
+                                    this.state.returnDataType = 'Series';
+                                } else {
+                                    code.appendFormat('[[{0}]]', columnList.join(', '));
+                                }
                             }
                         }
                     }
