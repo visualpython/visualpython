@@ -3078,6 +3078,35 @@
                 "grid" : true,
                 "item" : [
                     {
+                        "id"   : "visualize_chartStyle",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Chart Style",
+                        "tag"  : "CHART STYLE SETTING,IMPORT CHART,VISUALIZATION,VISUALIZE",
+                        "path" : "visualpython - visualization - chartsstyle",
+                        "desc" : "Chart style setting",
+                        "file" : "m_visualize/ChartSetting",
+                        "apps" : {
+                            "color": 5,
+                            "icon": "apps/apps_style.svg"
+                        }
+                    },
+                    {
+                        "id"   : "pd_plot",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Pandas Plot",
+                        "tag"  : "PANDAS PLOT,PANDAS",
+                        "path" : "visualpython - library - pandas - plot",
+                        "desc" : "Pandas Plot",
+                        "file" : "m_library/m_pandas/plot",
+                        "apps" : {
+                            "color": 5,
+                            "icon": "apps/apps_chart.svg"
+                        },
+                        "useAuto" : true
+                    },
+                    {
                         "id": "visualize_chart",
                         "type": "function",
                         "level": 2,
