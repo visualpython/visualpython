@@ -24,16 +24,16 @@ define([
      * @param {boolean} exec true(default) / false
      * @param {int} sigNum 
      */
-    var insertCell = function(type, command, exec=true, sigNum=-1) {
+    var insertCell = function(type, command, exec=true, sigText='') {
         var selectedIndex = getSelectedCell();
         var targetCell = Jupyter.notebook.insert_cell_below(type, selectedIndex);
 
         // Add signature
         if (type == 'code') {
-            if (sigNum >= 0) {
-                command = com_util.formatString('# VisualPython [{0}]\n', sigNum) + command;
+            if (sigText !== '') {
+                command = com_util.formatString('# Visual Python: {0}\n', sigText) + command;
             } else {
-                command = '# VisualPython\n' + command;
+                command = '# Visual Python\n' + command;
             }
         }
         targetCell.set_text(command);
@@ -61,14 +61,18 @@ define([
      * @param {boolean} exec 
      * @param {int} sigNum 
      */
-    var insertCells = function(type, commands, exec=true, sigNum=-1) {
+    var insertCells = function(type, commands, exec=true, sigText='') {
         var selectedIndex = getSelectedCell();
         var targetCell = Jupyter.notebook.insert_cell_below(type, selectedIndex);
 
         commands && commands.forEach((command, idx) => {
             // Add signature
-            if (type == 'code' && sigNum >= 0) {
-                command = com_util.formatString('# VisualPython [{0}] - {1}\n', sigNum, idx + 1) + command
+            if (type == 'code') {
+                if (sigText !== '') {
+                    command = com_util.formatString('# Visual Python: {0}\n', sigText) + command;
+                } else {
+                    command = com_util.formatString('# Visual Python') + command;
+                }
             }
             targetCell.set_text(command);
             Jupyter.notebook.select_next();

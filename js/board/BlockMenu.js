@@ -73,8 +73,7 @@ define([
                     // if markdown, add #
                     groupCode = '#' + groupCode.replaceAll('\n', '\n# ');
                 }
-                overallCode.appendFormatLine('# VisualPython [{0}]{1}', that.block.blockNumber,
-                        that.block.id == 'apps_markdown'? ' - Markdown':'');
+                overallCode.appendFormatLine('# Visual Python: {0} > {1}', that.block.name, that.block.name);
                 overallCode.append(groupCode);
 
                 // open codeview

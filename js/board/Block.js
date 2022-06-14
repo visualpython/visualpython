@@ -296,6 +296,14 @@ define([
         get name() {
             return this.task.name;
         }
+        get menuGroup() {
+            let groupCode = this._getMenuGroupRootType();
+            let groupLabel = vpConfig.getMenuGroupLabel(groupCode);
+            if (groupLabel == undefined || groupLabel === '') {
+                return groupCode;
+            }
+            return groupLabel;
+        }
         get blockType() {
             return this.getColorLabel();
         }
@@ -329,6 +337,9 @@ define([
         }
         get popup() {
             return this.task;
+        }
+        get sigText() {
+            return this.menuGroup + ' > ' + this.name;
         }
         canMakeChild() {
             let innerList = [

@@ -437,6 +437,14 @@ define([
             })
         }
 
+        getMenuGroupLabel(key = '') {
+            return Config.MENU_GROUP_DICT[key];
+        }
+
+        getMenuGroupDict() {
+            return Config.MENU_GROUP_DICT;
+        }
+
         getDataTypes() {
             return Config.DATA_TYPES;
         }
@@ -485,7 +493,18 @@ define([
     Config.BOARD_MIN_WIDTH = 263;
     Config.MENU_BOARD_SPACING = 5;
     Config.VP_MIN_WIDTH = Config.MENU_MIN_WIDTH + Config.BOARD_MIN_WIDTH + Config.MENU_BOARD_SPACING; // = MENU_MIN_WIDTH + BOARD_MIN_WIDTH + MENU_BOARD_SPACING
-    
+
+    /**
+     * Menu group codes
+     */
+    Config.MENU_GROUP_DICT = {
+        '': '',
+        'logic': 'Logic',
+        'library': 'Library',
+        'apps': 'Data Analysis',
+        'visualization': 'Visualization',
+        'machine_learning': 'Machine Learning'
+    }    
     /**
      * Data types
      */
