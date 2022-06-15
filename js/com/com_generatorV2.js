@@ -393,6 +393,15 @@ define([
                     'value':(obj.default==undefined?'':obj.default),
                     'title':(obj.help==undefined?'':obj.help)
                 });
+                if (obj.step != undefined) {
+                    $(input).attr({ 'step': obj.step });
+                }
+                if (obj.min != undefined) {
+                    $(input).attr({ 'min': obj.min });
+                }
+                if (obj.max != undefined) {
+                    $(input).attr({ 'max': obj.max });
+                }
                 // cell metadata test
                 if (value != undefined) {
                     // set as saved value

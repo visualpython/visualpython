@@ -296,7 +296,7 @@ define([
             import: 'from sklearn.svm import SVR',
             code: 'SVR(${C}${kernel}${degree}${gamma}${coef0}${random_state}${etc})',
             options: [
-                { name: 'C', component: ['input_number'], placeholder: '1.0', usePair: true },
+                { name: 'C', component: ['input_number'], placeholder: '1.0', usePair: true, step: 0.1, min: 0 },
                 { name: 'kernel', component: ['option_select'], type: 'text', usePair: true, 
                     options: ['linear', 'poly', 'rbf', 'sigmoid', 'precomputed'], default: 'rbf' },
                 { name: 'degree', component: ['input_number'], placeholder: '3', usePair: true },
@@ -396,7 +396,7 @@ define([
             code: 'LogisticRegression(${penalty}${C}${random_state}${etc})',
             options: [
                 { name: 'penalty', component: ['option_select'], type: 'text', default: 'l2', usePair: true, options: ['l1', 'l2', 'elasticnet', 'none']},
-                { name: 'C', component: ['input_number'], placeholder: '1.0', usePair: true },
+                { name: 'C', component: ['input_number'], placeholder: '1.0', usePair: true, step: 0.1, min: 0 },
                 { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true }
             ]
         },
@@ -429,7 +429,7 @@ define([
             import: 'from sklearn.svm import SVC',
             code: 'SVC(${C}${kernel}${degree}${gamma}${coef0}${random_state}${etc})',
             options: [
-                { name: 'C', component: ['input_number'], placeholder: '1.0', usePair: true },
+                { name: 'C', component: ['input_number'], placeholder: '1.0', usePair: true, step: 0.1, min: 0 },
                 { name: 'kernel', component: ['option_select'], type: 'text', usePair: true, 
                     options: ['linear', 'poly', 'rbf', 'sigmoid', 'precomputed'], default: 'rbf' },
                 { name: 'degree', component: ['input_number'], placeholder: '3', usePair: true },
