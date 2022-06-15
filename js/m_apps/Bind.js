@@ -117,9 +117,11 @@ define([
                 if (type == 'concat') {
                     $(that.wrapSelector('.vp-bd-type-box.concat')).show();
                     $(that.wrapSelector('.vp-bd-type-box.merge')).hide();
+                    $(that.wrapSelector('#vp_bdWithoutColumn')).hide();
                 } else {
                     $(that.wrapSelector('.vp-bd-type-box.merge')).show();
                     $(that.wrapSelector('.vp-bd-type-box.concat')).hide();
+                    $(that.wrapSelector('#vp_bdWithoutColumn')).show();
                 }
                 // clear user option
                 $(that.wrapSelector('#vp_bdUserOption')).val('');
@@ -380,6 +382,13 @@ define([
         render() {
             super.render();
 
+            // check its type
+            if (this.state.type === 'concat') {
+                $(this.wrapSelector('#vp_bdWithoutColumn')).hide();
+            } else {
+                $(this.wrapSelector('#vp_bdWithoutColumn')).hide();
+            }
+
             this.loadVariableList();
         }
 
@@ -389,20 +398,6 @@ define([
          * @param {string} defaultValue previous value
          */
         renderVariableList(id, varList, defaultValue='') {
-            // var tag = new com_String();
-            // tag.appendFormatLine('<select id="{0}">', id);
-            // varList.forEach(vObj => {
-            //     // varName, varType
-            //     var label = vObj.varName;
-            //     tag.appendFormatLine('<option value="{0}" data-type="{1}" {2}>{3}</option>'
-            //                         , vObj.varName, vObj.varType
-            //                         , defaultValue == vObj.varName?'selected':''
-            //                         , label);
-            // });
-            // tag.appendLine('</select>'); // VP_VS_VARIABLES
-            // $(this.wrapSelector('#' + id)).replaceWith(function() {
-            //     return tag.toString();
-            // });
             let mappedList = varList.map(obj => { return { label: obj.varName, value: obj.varName, dtype: obj.varType } });
 
             var variableInput = new SuggestInput();
@@ -420,7 +415,7 @@ define([
         /**
          * Load variable list (dataframe)
          */
-         loadVariableList() {
+        loadVariableList() {
             var that = this;
             // load using kernel
             var dataTypes = ['DataFrame'];
@@ -474,6 +469,13 @@ define([
                 //====================================================================
                 if (concat.sort) {
                     code.append(', sort=True');
+                }
+
+                //====================================================================
+                // Reset index
+                //====================================================================
+                if (resetIndex) {
+                    code.append(', ignore_index=True');
                 }
 
                 //====================================================================
@@ -538,16 +540,16 @@ define([
                 }
 
                 code.append(')');
-            }
 
-            //====================================================================
-            // Reset index
-            //====================================================================
-            if (resetIndex) {
-                if (withoutColumn === 'True') {
-                    code.append('.reset_index(drop=True)');
-                } else {
-                    code.append('.reset_index()');
+                //====================================================================
+                // Reset index
+                //====================================================================
+                if (resetIndex) {
+                    if (withoutColumn === 'True') {
+                        code.append('.reset_index(drop=True)');
+                    } else {
+                        code.append('.reset_index()');
+                    }
                 }
             }
 
