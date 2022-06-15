@@ -257,6 +257,9 @@ define([
                 let type = $(this).data('var-type');
                 
                 that.renderOptionPage(type, name);
+
+                let optionPage = $(that.wrapSelector('.vp-ins-parameter-box')).get(0);
+                optionPage && optionPage.scrollIntoView();
             });
 
             // load once on initializing page

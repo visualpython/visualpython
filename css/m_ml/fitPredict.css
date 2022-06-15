@@ -18,7 +18,7 @@
     border: 0.25px solid var(--border-gray-color);
 }
 .vp-ins-select-list {
-    height: 145px;
+    height: 150px;
     width: 100%;
     list-style: none;
     margin: 0px;
@@ -41,4 +41,6 @@
 }
 .vp-ins-parameter-box {
     grid-column: 1/3;
+    min-height: 150px;
+    align-content: baseline;
 }
