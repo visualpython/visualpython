@@ -538,7 +538,7 @@ define([
                 /**
                  * Filter file/dir which included in this.state.extensions
                  */
-                if (Array.isArray(that.state.extensions)) {
+                if (Array.isArray(that.state.extensions) && that.state.extensions.length > 0 && that.state.extensions.toString() !== '') {
                     filtered_varList = filtered_varList.filter((data, index) => {
                         if (index == 0) {
                             return true;
