@@ -21,7 +21,7 @@ define([
 ], function(importCss, com_util, com_Const, com_String, PopupComponent) {
 
     const importTemplates = {
-        'pre-processing': [
+        'data-analysis': [
             { i0: 'numpy',  i1: 'np', type: 'module'},
             { i0: 'pandas',  i1: 'pd', type: 'module'},
             { 
@@ -29,8 +29,7 @@ define([
                 , include: [
                     '%matplotlib inline'
                 ]
-            },
-            { i0: 'seaborn', i1: 'sns', type: 'module'}
+            }
         ],
         'machine-learning': [
             { i0: 'sklearn.model_selection',  i1: 'train_test_split', type: 'function' },
@@ -56,7 +55,7 @@ define([
             }
 
             this.state = {
-                tabType: 'pre-processing',
+                tabType: 'data-analysis',
                 importMeta: [],
                 ...savedData,
                 ...this.state
@@ -142,7 +141,7 @@ define([
             // tab buttons
             page.appendLine('<div class="vp-tab-box">');
             page.appendFormatLine('<div class="vp-tab-button {0}" data-tab="{1}">{2}</div>'
-                                , this.state.tabType=='pre-processing'?'vp-tab-selected':'', 'pre-processing', 'Pre-processing');
+                                , this.state.tabType=='data-analysis'?'vp-tab-selected':'', 'data-analysis', 'Data Analysis');
             page.appendFormatLine('<div class="vp-tab-button {0}" data-tab="{1}">{2}</div>'
                                 , this.state.tabType=='machine-learning'?'vp-tab-selected':'', 'machine-learning', 'Machine Learning');
             page.appendLine('</div>');
