@@ -49,6 +49,7 @@ define([
                 type: 'data',   // selector type : data / column
                 pageThis: null, // target's page object
                 id: '',         // target id
+                value: null,    // pre-defined value
                 finish: null,   // callback after selection
                 select: null,   // callback after selection from suggestInput
                 allowDataType: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], // default allow data types
@@ -331,9 +332,13 @@ define([
         }
 
         templateForTarget() {
+            let value = this.prop.value;
+            if (value == undefined) {
+                value = this.prop.pageThis.state[this.prop.id] || '';
+            }
             return `
                 <div class="vp-ds-box vp-ds-box-${this.uuid} vp-ds-uninit">
-                    <input type="text" class="vp-ds-target vp-input vp-state ${this.prop.classes}" id="${this.prop.id}" value="${this.prop.pageThis.state[this.prop.id]}" placeholder="${this.prop.placeholder}"/>
+                    <input type="text" class="vp-ds-target vp-input vp-state ${this.prop.classes}" id="${this.prop.id}" value="${value}" placeholder="${this.prop.placeholder}"/>
                     <span class="vp-ds-filter"><img src="/nbextensions/visualpython/img/filter.svg"/></span>
                 </div>
             `;
