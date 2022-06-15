@@ -537,8 +537,6 @@ define([
                             ]
                         },
                         'permutation_importance': defaultInfos['permutation_importance'],
-                        'feature_importances': defaultInfos['feature_importances'],
-                        'plot_feature_importances': defaultInfos['plot_feature_importances'],
                         'Coefficient': {
                             name: 'coef_',
                             label: 'Coefficient',
@@ -556,6 +554,19 @@ define([
                             options: [
                                 { name: 'intercept_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'intercepts' }
                             ]
+                        }
+                    }
+                    let svcList = [
+                        'DecisionTreeRegressor', 
+                        'RandomForestRegressor',
+                        'GradientBoostingRegressor', 
+                        'XGBRegressor', 'LGBMRegressor', 'CatBoostRegressor'
+                    ];
+                    if (svcList.includes(modelType)) {
+                        infos = {
+                            ...infos,
+                            'feature_importances': defaultInfos['feature_importances'],
+                            'plot_feature_importances': defaultInfos['plot_feature_importances']
                         }
                     }
                     break;
@@ -615,7 +626,15 @@ define([
                     }
 
                     // feature importances
-                    if (modelType != 'LogisticRegression' && modelType != 'SVC') {
+                    let clfList = [
+                        'DecisionTreeClassifier', 
+                        'RandomForestClassifier', 
+                        'GradientBoostingClassifier', 
+                        'XGBClassifier', 
+                        'LGBMClassifier', 
+                        'CatBoostClassifier',
+                    ]
+                    if (clfList.includes(modelType)) {
                         infos = {
                             ...infos,
                             'feature_importances': defaultInfos['feature_importances'],
