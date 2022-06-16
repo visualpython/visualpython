@@ -48,6 +48,7 @@ define([
                 bins: '',
                 kde: '',
                 stat: '',
+                showValues: false,
                 // axes options
                 x_limit_from: '',
                 x_limit_to: '',
@@ -190,6 +191,10 @@ define([
                     $(that.wrapSelector('#bins')).closest('.sb-option').show();
                     $(that.wrapSelector('#kde')).closest('.sb-option').show();
                     $(that.wrapSelector('#stat')).closest('.sb-option').show();
+                } else if (chartType == 'barplot') {
+                    $(that.wrapSelector('#showValues')).closest('.sb-option').show();
+                } else if (chartType == 'countplot') {
+                    $(that.wrapSelector('#showValues')).closest('.sb-option').show();
                 }
             });
             
@@ -403,6 +408,10 @@ define([
                 $(page).find('#bins').closest('.sb-option').show();
                 $(page).find('#kde').closest('.sb-option').show();
                 $(page).find('#stat').closest('.sb-option').show();
+            } else if (this.state.chartType == 'barplot') {
+                $(page).find('#showValues').closest('.sb-option').show();
+            } else if (this.state.chartType == 'countplot') {
+                $(page).find('#showValues').closest('.sb-option').show();
             }
 
             //================================================================
@@ -696,7 +705,7 @@ define([
 
         generateCode(preview=false) {
             let { 
-                chartType, data, x, y, hue, setXY, userOption='', 
+                chartType, data, x, y, setXY, hue, kde, stat, showValues, userOption='', 
                 x_limit_from, x_limit_to, y_limit_from, y_limit_to,
                 xticks, xticks_label, xticks_rotate, removeXticks,
                 yticks, yticks_label, yticks_rotate, removeYticks,
@@ -720,6 +729,9 @@ define([
             if (markerStyle != '') {
                 // TODO: marker to seaborn argument (ex. marker='+' / markers={'Lunch':'s', 'Dinner':'X'})
                 etcOptionCode.push(com_util.formatString("marker='{0}'", markerStyle));
+            }
+            if (showValues === true && chartType === 'barplot') {
+                etcOptionCode.push('ci=None');
             }
 
             // add user option
@@ -837,10 +849,20 @@ define([
                 let defaultHeight = 6;
                 code.appendFormatLine('plt.figure(figsize=({0}, {1}))', defaultWidth, defaultHeight);
 
-                code.appendLine(generatedCode);
+                if (showValues && showValues === true) {
+                    code.appendLine('ax = ' + generatedCode);
+                    code.appendLine("vp_seaborn_show_values(ax)");
+                } else {
+                    code.appendLine(generatedCode);  
+                }
                 code.appendLine(chartCode.toString());
             } else {
-                code.appendLine(generatedCode);
+                if (showValues && showValues === true) {
+                    code.appendLine('ax = ' + generatedCode);
+                    code.appendLine("vp_seaborn_show_values(ax)");
+                } else {
+                    code.appendLine(generatedCode);  
+                }
                 if (chartCode.length > 0) {
                     code.append(chartCode.toString());
                 }
