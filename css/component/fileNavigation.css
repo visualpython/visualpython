@@ -21,6 +21,10 @@
     height: 55%;
     background-color: white;
 }
+#fnpRootFolder:hover {
+    color: var(--font-highlight);
+    cursor: pointer;
+}
 
 /* Sidebar Menu */
 .fileNavigationPage-sidebar {
@@ -119,7 +123,7 @@
 .fileNavigationPage-menu {
     min-height: 35px;
     height: fit-content;
-    padding-left: 10px;
+    /* padding-left: 10px; */
     background-color: #EEE;
     border:  1px solid #ddd;;
     display: flex; 

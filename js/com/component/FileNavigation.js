@@ -100,6 +100,15 @@ define([
                 that.close();
             });
 
+            // Click root
+            $(this.wrapSelector('#fnpRootFolder')).on('click', function() {
+                var dirObj = {
+                    direction: NAVIGATION_DIRECTION_TYPE.TOP,
+                    destDir: '/'
+                };
+                that.getFileList(dirObj);
+            });
+
             // Click sidebar
             $(this.wrapSelector('.fnp-sidebar-menu')).click(function(event) {
                 $('.fnp-sidebar-menu').removeClass('selected');
