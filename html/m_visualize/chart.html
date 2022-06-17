@@ -1,54 +1,5 @@
 <body>
     <div class="vp-option-page">
-        <!-- Variable Selector -->
-        <div id="vp_varViewBox" class="vp-var-view-box vp-close-on-blur">
-            <div class="vp-icon-btn vp-close-view"><img src="/nbextensions/visualpython/img/close_big.svg"/></div>
-            <div class="vp-var-view-div">
-                <table id="vp_varViewList" class="vp-option-table vp-var-view-list no-selection wp100">
-                    <colgroup><col width="40%"/><col width="*"/></colgroup>
-                    <thead>
-                        <tr><th>Variable</th><th>Data Type</th></tr>
-                        <tr><th colspan="2"><hr style="margin: 0px;"/></th></tr>
-                    </thead>
-                    <tbody>
-                        
-                    </tbody>
-                </table>
-            </div>
-            <hr style="margin: 0px;"/>
-            <div id="vp_varViewDetail">   
-                <table class="vp-option-table vp-var-view-detail no-selection wp100">
-                    <colgroup>
-                        <col width="50%"/>
-                        <col width="50%"/>
-                    </colgroup>
-                    <thead>
-                        <tr>
-                            <th>Column</th>
-                            <th>Method</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div id="vp_varDetailColList" class="vp-column-select vp-scrollbar">
-                                    
-                                </div>
-                            </td>
-                            <td>
-                                <div id="vp_varDetailArray" class="vp-method-select vp-scrollbar">
-                                    
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="var-view-footer">
-                <input id="vp_varSelectCode" type="text" class="vp-input" readonly/>
-                <input id="vp_varSelectBtn" type="button" class="vp-button w50" value="select"/>
-            </div>
-        </div>
         <!-- Import option -->
         <div class="vp-accordian-container">
             <div class="vp-accordian vp-close">
@@ -148,21 +99,25 @@
                     <tbody>
                         <tr>
                             <th class="vp-orange-text">X Value</th>
-                            <td><input type="text" class="vp-input vp-state" id="x" />
-                                <input type="button" class="vp-button vp-select-data" data-axes="x" value="Select" /></td>
+                            <td>
+                                <input type="text" class="vp-input vp-state" id="x" />
+                            </td>
                         </tr>
                         <tr>
                             <th class="vp-orange-text">Y Value</th>
-                            <td><input type="text" class="vp-input vp-state" id="y" />
-                                <input type="button" class="vp-button vp-select-data" data-axes="y" value="Select" /></td>
+                            <td>
+                                <input type="text" class="vp-input vp-state" id="y" />
+                            </td>
                         </tr>
                         <tr>
                             <th class="vp-orange-text">Z Value</th>
-                            <td><input type="text" class="vp-input vp-state" id="z" placeholder="[[2-dimension]]" /></td>
+                            <td>
+                                <input type="text" class="vp-input vp-state" id="z" placeholder="[[2-dimension]]" />
+                            </td>
                         </tr>
                         <tr>
                             <th class="vp-orange-text">Bins</th>
-                            <td><input type="text" class="vp-input vp-state" id="bins" value="10" /></td>
+                            <td><input type="number" class="vp-input vp-state" id="bins" value="10" step="5" /></td>
                         </tr>
                         <tr>
                             <th>X, Y Extent</th>

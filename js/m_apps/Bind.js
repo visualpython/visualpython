@@ -29,7 +29,7 @@ define([
         _init() {
             super._init();
             /** Write codes executed before rendering */
-            this.config.sizeLevel = 1;
+            this.config.sizeLevel = 2;
 
             this.howList = [
                 { label: 'Inner', value: 'inner', desc: 'Inner join' },
@@ -66,6 +66,7 @@ define([
                 userOption: '',
                 allocateTo: '',
                 resetIndex: false,
+                withoutColumn: 'True',
                 ...this.state
             }
             this.popup = {
@@ -116,9 +117,11 @@ define([
                 if (type == 'concat') {
                     $(that.wrapSelector('.vp-bd-type-box.concat')).show();
                     $(that.wrapSelector('.vp-bd-type-box.merge')).hide();
+                    $(that.wrapSelector('#vp_bdWithoutColumn')).hide();
                 } else {
                     $(that.wrapSelector('.vp-bd-type-box.merge')).show();
                     $(that.wrapSelector('.vp-bd-type-box.concat')).hide();
+                    $(that.wrapSelector('#vp_bdWithoutColumn')).show();
                 }
                 // clear user option
                 $(that.wrapSelector('#vp_bdUserOption')).val('');
@@ -306,6 +309,11 @@ define([
             $(document).on('change', this.wrapSelector('#vp_bdResetIndex'), function() {
                 that.state.resetIndex = $(this).prop('checked');
             });
+
+            // with/without column select event
+            $(this.wrapSelector('#vp_bdWithoutColumn')).on('change', function() {
+                that.state.withoutColumn = $(this).val();
+            });
         }
 
         templateForBody() {
@@ -374,6 +382,13 @@ define([
         render() {
             super.render();
 
+            // check its type
+            if (this.state.type === 'concat') {
+                $(this.wrapSelector('#vp_bdWithoutColumn')).hide();
+            } else {
+                $(this.wrapSelector('#vp_bdWithoutColumn')).hide();
+            }
+
             this.loadVariableList();
         }
 
@@ -383,20 +398,6 @@ define([
          * @param {string} defaultValue previous value
          */
         renderVariableList(id, varList, defaultValue='') {
-            // var tag = new com_String();
-            // tag.appendFormatLine('<select id="{0}">', id);
-            // varList.forEach(vObj => {
-            //     // varName, varType
-            //     var label = vObj.varName;
-            //     tag.appendFormatLine('<option value="{0}" data-type="{1}" {2}>{3}</option>'
-            //                         , vObj.varName, vObj.varType
-            //                         , defaultValue == vObj.varName?'selected':''
-            //                         , label);
-            // });
-            // tag.appendLine('</select>'); // VP_VS_VARIABLES
-            // $(this.wrapSelector('#' + id)).replaceWith(function() {
-            //     return tag.toString();
-            // });
             let mappedList = varList.map(obj => { return { label: obj.varName, value: obj.varName, dtype: obj.varType } });
 
             var variableInput = new SuggestInput();
@@ -414,7 +415,7 @@ define([
         /**
          * Load variable list (dataframe)
          */
-         loadVariableList() {
+        loadVariableList() {
             var that = this;
             // load using kernel
             var dataTypes = ['DataFrame'];
@@ -441,7 +442,7 @@ define([
         generateCode() {
             var code = new com_String();
             var {
-                type, concat, merge, allocateTo, resetIndex, userOption
+                type, concat, merge, allocateTo, resetIndex, withoutColumn, userOption
             } = this.state;
 
             //====================================================================
@@ -485,6 +486,7 @@ define([
                 }
 
                 code.append(')');
+
             } else {
                 //====================================================================
                 // Merge
@@ -538,12 +540,16 @@ define([
                 }
 
                 code.append(')');
-    
+
                 //====================================================================
                 // Reset index
                 //====================================================================
                 if (resetIndex) {
-                    code.append('.reset_index()');
+                    if (withoutColumn === 'True') {
+                        code.append('.reset_index(drop=True)');
+                    } else {
+                        code.append('.reset_index()');
+                    }
                 }
             }
 
@@ -557,7 +563,7 @@ define([
 
         loadState() {
             var {
-                type, concat, merge, userOption, allocateTo, resetIndex
+                type, concat, merge, userOption, allocateTo, resetIndex, withoutColumn
             } = this.state;
 
             // type
@@ -599,6 +605,7 @@ define([
             $(this.wrapSelector('#vp_bdUserOption')).val(userOption);
             $(this.wrapSelector('#vp_bdAllocateTo')).val(allocateTo);
             $(this.wrapSelector('#vp_bdResetIndex')).prop('checked', resetIndex);
+            $(this.wrapSelector('#vp_bdWithoutColumn')).val(withoutColumn);
 
             $(this.wrapSelector('.vp-bd-type-box')).hide();
             $(this.wrapSelector('.vp-bd-type-box.' + type)).show();

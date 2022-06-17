@@ -663,7 +663,12 @@ define([
             });
         }
 
-        // Render Inner popup page
+        /**
+         * Render Inner popup page
+         * @param {*} type 
+         * @param {*} targetLabel 
+         * @returns 
+         */
         renderAddPage = function(type, targetLabel = '') {
             var content = new com_String();
             content.appendFormatLine('<div class="{0}">', 'vp-inner-popup-addpage');
@@ -682,7 +687,9 @@ define([
             content.appendFormatLine('<td><select class="{0}">', 'vp-inner-popup-addtype');
             content.appendFormatLine('<option value="{0}">{1}</option>', 'value', 'Value');
             content.appendFormatLine('<option value="{0}">{1}</option>', 'calculation', 'Calculation');
-            content.appendFormatLine('<option value="{0}">{1}</option>', 'replace', 'Replace');
+            if (type == 'replace') {
+                content.appendFormatLine('<option value="{0}">{1}</option>', 'replace', 'Replace');
+            }
             if (type == 'column' || type == 'replace') {
                 content.appendFormatLine('<option value="{0}">{1}</option>', 'subset', 'Subset');
             }
@@ -1245,6 +1252,17 @@ define([
                         code.appendFormat("{0} = vp_drop_outlier({1}, {2})", tempObj, tempObj, selectedName);
                     }
                     break;
+                case FRAME_EDIT_TYPE.LABEL_ENCODING:
+                    if (axis == FRAME_AXIS.COLUMN) {
+                        let encodedColName = this.state.selected.map(col=> { 
+                            if (col.code !== col.label) {
+                                return com_util.formatString("'{0}'", col.label + '_label');
+                            }
+                            return col.label + '_label' 
+                        }).join(',');
+                        code.appendFormat("{0}[{1}] = pd.Categorical({2}[{3}]).codes", tempObj, encodedColName, tempObj, selectedName);
+                    }
+                    break;
                 case FRAME_EDIT_TYPE.ONE_HOT_ENCODING:
                     if (axis == FRAME_AXIS.COLUMN) {
                         code.appendFormat("{0} = pd.get_dummies(data={1}, columns=[{2}])", tempObj, tempObj, selectedName);
@@ -1347,7 +1365,7 @@ define([
     
             var code = new com_String();
             code.appendLine(codeStr);
-            code.appendFormat("{0}[{1}:{2}].to_json(orient='{3}')", tempObj, prevLines, lines, 'split');
+            code.appendFormat("{0}.iloc[{1}:{2}].to_json(orient='{3}')", tempObj, prevLines, lines, 'split');
             
             this.loading = true;
             vpKernel.execute(code.toString()).then(function(resultObj) {
@@ -1490,7 +1508,7 @@ define([
                 }
             }).catch(function(resultObj) {
                 let { result, type, msg } = resultObj;
-                vpLog.display(VP_LOG_TYPE.ERROR, result.ename + ': ' + result.evalue, msg);
+                vpLog.display(VP_LOG_TYPE.ERROR, result.ename + ': ' + result.evalue, msg, code.toString());
                 com_util.renderAlertModal(result.ename + ': ' + result.evalue);
                 that.loading = false;
             });
@@ -1579,6 +1597,8 @@ define([
         DROP_OUT: 11, 
 
         ONE_HOT_ENCODING: 6,
+        LABEL_ENCODING: 12,
+
         SET_IDX: 7,
         RESET_IDX: 8,
         REPLACE: 9,

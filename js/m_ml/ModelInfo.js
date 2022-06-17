@@ -257,6 +257,9 @@ define([
                 let type = $(this).data('var-type');
                 
                 that.renderOptionPage(type, name);
+
+                let optionPage = $(that.wrapSelector('.vp-ins-parameter-box')).get(0);
+                optionPage && optionPage.scrollIntoView();
             });
 
             // load once on initializing page
@@ -379,8 +382,8 @@ define([
                     code: '${score_allocate} = ${model}.score(${score_featureData}, ${score_targetData})',
                     description: '',
                     options: [
-                        { name: 'score_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
-                        { name: 'score_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y' },
+                        { name: 'score_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_train' },
+                        { name: 'score_targetData', label: 'Target Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y_train' },
                         { name: 'score_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'scores' }
                     ]
                 },
@@ -401,8 +404,8 @@ define([
                     code: '${importance_allocate} = permutation_importance(${model}, ${importance_featureData}, ${importance_targetData}${scoring}${random_state}${etc})',
                     description: 'Permutation importance for feature evaluation.',
                     options: [
-                        { name: 'importance_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_train' },
-                        { name: 'importance_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y_train' },
+                        { name: 'importance_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_train' },
+                        { name: 'importance_targetData', label: 'Target Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y_train' },
                         { name: 'scoring', component: ['input'], usePair: true },
                         { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true },
                         { name: 'importance_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'importances' }
@@ -411,24 +414,10 @@ define([
                 'feature_importances': {
                     name: 'feature_importances',
                     label: 'Feature importances',
-                    functions: [
-                        "def create_feature_importances(model, X_train=None, sort=False):\
-                        \n    if isinstance(X_train, pd.core.frame.DataFrame):\
-                        \n        feature_names = X_train.columns\
-                        \n    else:\n\
-                        \n        feature_names = [ 'X{}'.format(i) for i in range(len(model.feature_importances_)) ]\
-                        \n\
-                        \n    df_i = pd.DataFrame(model.feature_importances_, index=feature_names, columns=['Feature_importance'])\
-                        \n    df_i['Percentage'] = 100 * (df_i['Feature_importance'] / df_i['Feature_importance'].max())\
-                        \n    if sort: df_i.sort_values(by='Feature_importance', ascending=False, inplace=True)\
-                        \n    df_i = df_i.round(2)\
-                        \n\
-                        \n    return df_i"
-                    ],
-                    code: "${fi_allocate} = create_feature_importances(${model}, ${fi_featureData}${sort})",
+                    code: "${fi_allocate} = vp_create_feature_importances(${model}, ${fi_featureData}${sort})",
                     description: 'Allocate feature_importances_',
                     options: [
-                        { name: 'fi_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_train' },
+                        { name: 'fi_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_train' },
                         { name: 'fi_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'df_i' },
                         { name: 'sort', label: 'Sort data', component: ['bool_checkbox'], value: true, usePair: true }
                     ]
@@ -436,32 +425,10 @@ define([
                 'plot_feature_importances': {
                     name: 'plot_feature_importances',
                     label: 'Plot feature importances',
-                    functions: [
-                        "def create_feature_importances(model, X_train=None, sort=False):\
-                        \n    if isinstance(X_train, pd.core.frame.DataFrame):\
-                        \n        feature_names = X_train.columns\
-                        \n    else:\n\
-                        \n        feature_names = [ 'X{}'.format(i) for i in range(len(model.feature_importances_)) ]\
-                        \n\
-                        \n    df_i = pd.DataFrame(model.feature_importances_, index=feature_names, columns=['Feature_importance'])\
-                        \n    df_i['Percentage'] = 100 * (df_i['Feature_importance'] / df_i['Feature_importance'].max())\
-                        \n    if sort: df_i.sort_values(by='Feature_importance', ascending=False, inplace=True)\
-                        \n    df_i = df_i.round(2)\
-                        \n\
-                        \n    return df_i",
-                        "def plot_feature_importances(model, X_train=None, sort=False):\
-                        \n    df_i = create_feature_importances(model, X_train, sort)\
-                        \n\
-                        \n    df_i['Percentage'].sort_values().plot(kind='barh')\
-                        \n    plt.xlabel('Feature importance Percentage')\
-                        \n    plt.ylabel('Features')\
-                        \n\
-                        \n    plt.show()"
-                    ],
-                    code: "plot_feature_importances(${model}, ${fi_featureData}${sort})",
+                    code: "vp_plot_feature_importances(${model}, ${fi_featureData}${sort})",
                     description: 'Draw feature_importances_',
                     options: [
-                        { name: 'fi_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_train' },
+                        { name: 'fi_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_train' },
                         { name: 'sort', label: 'Sort data', component: ['bool_checkbox'], value: true, usePair: true }
                     ]
                 }
@@ -556,8 +523,8 @@ define([
                             code: '${cvs_allocate} = cross_val_score(${model}, ${cvs_featureData}, ${cvs_targetData}${scoring}${cv})',
                             description: 'Evaluate a score by cross-validation.',
                             options: [
-                                { name: 'cvs_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
-                                { name: 'cvs_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y' },
+                                { name: 'cvs_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
+                                { name: 'cvs_targetData', label: 'Target Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y' },
                                 { name: 'scoring', component: ['option_select'], usePair: true, type: 'text',
                                     options: [
                                         '',
@@ -570,8 +537,6 @@ define([
                             ]
                         },
                         'permutation_importance': defaultInfos['permutation_importance'],
-                        'feature_importances': defaultInfos['feature_importances'],
-                        'plot_feature_importances': defaultInfos['plot_feature_importances'],
                         'Coefficient': {
                             name: 'coef_',
                             label: 'Coefficient',
@@ -591,6 +556,19 @@ define([
                             ]
                         }
                     }
+                    let svcList = [
+                        'DecisionTreeRegressor', 
+                        'RandomForestRegressor',
+                        'GradientBoostingRegressor', 
+                        'XGBRegressor', 'LGBMRegressor', 'CatBoostRegressor'
+                    ];
+                    if (svcList.includes(modelType)) {
+                        infos = {
+                            ...infos,
+                            'feature_importances': defaultInfos['feature_importances'],
+                            'plot_feature_importances': defaultInfos['plot_feature_importances']
+                        }
+                    }
                     break;
                 case 'Classification':
                     infos = {
@@ -605,8 +583,8 @@ define([
                             code: '${cvs_allocate} = cross_val_score(${model}, ${cvs_featureData}, ${cvs_targetData}${scoring}${cv})',
                             description: 'Evaluate a score by cross-validation.',
                             options: [
-                                { name: 'cvs_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
-                                { name: 'cvs_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y' },
+                                { name: 'cvs_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
+                                { name: 'cvs_targetData', label: 'Target Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y' },
                                 { name: 'scoring', component: ['option_select'], usePair: true, type: 'text', 
                                     options: [
                                         '',
@@ -629,8 +607,8 @@ define([
                                 \nplt.show()",
                             description: '',
                             options: [
-                                { name: 'roc_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y_test' },
-                                { name: 'roc_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_test' }
+                                { name: 'roc_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_test' }, 
+                                { name: 'roc_targetData', label: 'Target Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y_test' }
                             ]
                         },
                         'auc': {
@@ -640,15 +618,23 @@ define([
                             code: 'metrics.roc_auc_score(${auc_targetData}, ${model}.predict_proba(${auc_featureData})[:, 1])',
                             description: '',
                             options: [
-                                { name: 'auc_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y_test' },
-                                { name: 'auc_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_test' }
+                                { name: 'auc_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_test' },
+                                { name: 'auc_targetData', label: 'Target Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y_test' }
                             ]
                         },
                         'permutation_importance': defaultInfos['permutation_importance']
                     }
 
                     // feature importances
-                    if (modelType != 'LogisticRegression' && modelType != 'SVC') {
+                    let clfList = [
+                        'DecisionTreeClassifier', 
+                        'RandomForestClassifier', 
+                        'GradientBoostingClassifier', 
+                        'XGBClassifier', 
+                        'LGBMClassifier', 
+                        'CatBoostClassifier',
+                    ]
+                    if (clfList.includes(modelType)) {
                         infos = {
                             ...infos,
                             'feature_importances': defaultInfos['feature_importances'],
@@ -724,7 +710,7 @@ define([
                                 code: "# import\nfrom scipy.cluster.hierarchy import dendrogram, ward\n\nlinkage_array = ward(${dendro_data})\ndendrogram(linkage_array, p=3, truncate_mode='level', no_labels=True)\nplt.show()",
                                 description: 'Draw a dendrogram',
                                 options: [
-                                    { name: 'dendro_data', label: 'Data', component: ['var_select'], var_type: ['DataFrame'] }
+                                    { name: 'dendro_data', label: 'Data', component: ['data_select'], var_type: ['DataFrame'] }
                                 ]
                             }
                         }
@@ -749,8 +735,8 @@ define([
                                 code: '${score_allocate} = ${model}.score(${score_featureData}, ${score_targetData})',
                                 description: 'Return the average log-likelihood of all samples.',
                                 options: [
-                                    { name: 'score_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
-                                    { name: 'score_targetData', label: 'Target Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y' },
+                                    { name: 'score_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
+                                    { name: 'score_targetData', label: 'Target Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y' },
                                     { name: 'score_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'scores' }
                                 ]
                             }
@@ -778,7 +764,7 @@ define([
                             code: '${score_allocate} = ${model}.score(${score_featureData})',
                             description: 'Return the average log-likelihood of all samples.',
                             options: [
-                                { name: 'score_featureData', label: 'Feature Data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
+                                { name: 'score_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
                                 { name: 'score_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'scores' }
                             ]
                         }

@@ -226,7 +226,7 @@ define([
             
             // reset index checkbox event
             $(document).on('change', this.wrapSelector('#vp_gbResetIndex'), function() {
-                that.state.resetIndex = $(this).val() == 'yes';
+                that.state.resetIndex = $(this).prop('checked');
             });
             
             //====================================================================
@@ -615,7 +615,7 @@ define([
             // Grouper
             if (useGrouper) {
                 byStr = com_util.formatString("pd.Grouper(key={0}, freq='{1}')", byStr, grouperNumber + grouperPeriod);
-            } else if (resetIndex == true) {
+            } else if (resetIndex === true) {
                 // as_index option cannot use with Grouper -> use .reset_index() at the end
                 byStr += ', as_index=False';
             }
@@ -787,7 +787,6 @@ define([
             $(this.wrapSelector('#vp_gbVariable')).val(variable);
             $(this.wrapSelector('#vp_gbBy')).val(groupby.map(col=>col.code).join(','));
             $(this.wrapSelector('#vp_gbBy')).data('list', groupby);
-            $(this.wrapSelector('#vp_gbResetIndex')).val(resetIndex?'yes':'no');
             if (useGrouper) {
                 $(this.wrapSelector('#vp_gbByGrouper')).removeAttr('disabled');
                 $(this.wrapSelector('#vp_gbByGrouper')).prop('checked', useGrouper);
@@ -805,6 +804,7 @@ define([
             }
             $(this.wrapSelector('#vp_gbAllocateTo')).val(allocateTo);
             $(this.wrapSelector('#vp_gbToFrame')).val(toFrame);
+            $(this.wrapSelector('#vp_gbResetIndex')).prop('checked', resetIndex);
 
             if (advPageDom != '') {
                 $(this.wrapSelector('.vp-gb-adv-box')).html(advPageDom);

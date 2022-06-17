@@ -598,10 +598,10 @@ define([
                     }
                     if (addcell) {
                         // insert single cell using prev code
-                        com_interface.insertCell('code', code.toString(), execute, block.blockNumber);
+                        com_interface.insertCell('code', code.toString(), execute, block.sigText);
                         code = new com_String();
                         // insert cells using this block code list
-                        com_interface.insertCells('code', thisBlockCode, execute, block.blockNumber);
+                        com_interface.insertCells('code', thisBlockCode, execute, block.sigText);
                     }
                 } else {
                     // set indent to every line of thisblockcode
@@ -610,7 +610,7 @@ define([
                 }
             });
             if (addcell) {
-                com_interface.insertCell('code', code.toString(), execute, block.blockNumber);
+                com_interface.insertCell('code', code.toString(), execute, block.sigText);
             }
             return code.toString();
         }
@@ -636,7 +636,7 @@ define([
                         // if markdown, add #
                         groupCode = '#' + groupCode.replaceAll('\n', '\n# ');
                     }
-                    overallCode.appendFormatLine('# VisualPython [{0}]{1}', block.blockNumber,
+                    overallCode.appendFormatLine('# Visual Python: {0} > {1}', block.name, block.name,
                         block.id == 'apps_markdown'? ' - Markdown':'');
                     overallCode.append(groupCode);
                 }

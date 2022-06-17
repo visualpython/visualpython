@@ -12,8 +12,9 @@ define([
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_makeDom',
     'vp_base/js/com/component/SuggestInput',
-    'vp_base/js/com/component/VarSelector2'
-], function (com_util, com_makeDom, SuggestInput, VarSelector2) {
+    'vp_base/js/com/component/VarSelector2',
+    'vp_base/js/com/component/DataSelector'
+], function (com_util, com_makeDom, SuggestInput, VarSelector2, DataSelector) {
     /**
      * show result after code executed
      */
@@ -33,6 +34,7 @@ define([
         'bool_select': 'Select Boolean',
         'option_select': 'Select option',
         'option_suggest': 'Input option',
+        'data_select': 'Select data',
         'var_select': 'Select Variable',
         'var_multi': 'Select N-Variables',
         'col_select': 'Select Column',
@@ -346,6 +348,16 @@ define([
                 });
                 content = $(suggestInput.toTagString());
                 break;
+            case 'data_select':
+                let dataSelector = new DataSelector({
+                    pageThis: pageThis, 
+                    id: obj.name,
+                    allowDataType: obj.var_type, 
+                    placeholder: obj.placeholder || 'Select data',
+                    value: value
+                });
+                content = $(dataSelector.toTagString());
+                break;
             case 'var_select':
                 // suggest input tag
                 var tag = $('<input/>').attr({
@@ -393,6 +405,15 @@ define([
                     'value':(obj.default==undefined?'':obj.default),
                     'title':(obj.help==undefined?'':obj.help)
                 });
+                if (obj.step != undefined) {
+                    $(input).attr({ 'step': obj.step });
+                }
+                if (obj.min != undefined) {
+                    $(input).attr({ 'min': obj.min });
+                }
+                if (obj.max != undefined) {
+                    $(input).attr({ 'max': obj.max });
+                }
                 // cell metadata test
                 if (value != undefined) {
                     // set as saved value
@@ -574,6 +595,7 @@ define([
                 break;
             case 'input_multi':
             case 'bool_select':
+            case 'data_select':
             case 'var_select':
             case 'var_multi':
             case 'col_select':

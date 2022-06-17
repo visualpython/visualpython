@@ -78,6 +78,7 @@ define([
 
                 rowType: 'condition',
                 rowList: [],
+                rowLimit: 10,
                 rowPointer: { start: -1, end: -1 },
                 rowPageDom: '',
 
@@ -290,6 +291,68 @@ define([
             $(this.wrapSelector('.select-row .' + VP_DS_SELECT_BOX + '.left')).replaceWith(function () {
                 return tag.toString();
             });
+
+            // item indexing - scroll to bottom
+            let that = this;
+            $(this.wrapSelector('.select-row .vp-ds-select-box.left')).on('scroll', function() {
+                if ($(this).scrollTop() + $(this).innerHeight() >= ($(this)[0].scrollHeight - 2)) {
+                    let scrollPos = $(this).scrollTop();
+                    let start = that.state.rowLimit;
+                    let end = start + 10;
+                    let subsetVariable = com_util.formatString('{0}.iloc[{1}:{2}]', that.state.pandasObject, start, end);
+                    vpKernel.getRowList(subsetVariable).then(function (resultObj) {
+                        let { result } = resultObj;
+                        var rowList = JSON.parse(result);
+                        rowList = rowList.map(function (x) {
+                            return {
+                                ...x,
+                                value: x.label,
+                                code: x.value
+                            };
+                        });
+                        // if iloc
+                        if (that.state.subsetType == 'iloc') {
+                            rowList = rowList.map(function (x) {
+                                return {
+                                    ...x,
+                                    label: x.location + '',
+                                    value: x.location + '',
+                                    code: x.location + '',
+                                };
+                            });
+                        }
+
+                        let newRowList = [
+                            ...that.state.rowList,
+                            ...rowList
+                        ];
+                        that.state.rowList = [ ...newRowList ];
+
+                        // filter with selected list
+                        var selectedList = [];
+                        var selectedTags = $(that.wrapSelector('.' + VP_DS_SELECT_ITEM + '.select-row.added:not(.moving)'));
+                        if (selectedTags.length > 0) {
+                            for (var i = 0; i < selectedTags.length; i++) {
+                                var rowValue = $(selectedTags[i]).data('code');
+                                if (rowValue !== undefined) {
+                                    selectedList.push(rowValue);
+                                }
+                            }
+                        }
+
+                        newRowList = newRowList.filter(row => !selectedList.includes(row.code));
+
+                        that.renderRowSelectionBox(newRowList);
+                        that.bindDraggable('row');
+                        that.generateCode();
+
+                        // load scroll position
+                        $(that.wrapSelector('.select-row .vp-ds-select-box.left')).scrollTop(scrollPos);
+
+                        that.state.rowLimit = end;
+                    });   
+                }
+            });
         }
         /**
          * Render row slicing box
@@ -299,35 +362,42 @@ define([
         renderRowSlicingBox(rowList) {
             var that = this;
             var tag = new com_String();
-            tag.appendFormatLine('<div class="{0}">', VP_DS_SLICING_BOX);
-            var vpRowStart = new SuggestInput();
-            vpRowStart.addClass(VP_DS_ROW_SLICE_START);
-            vpRowStart.addClass('vp-input m');
-            vpRowStart.setPlaceholder('start');
-            vpRowStart.setSuggestList(function () { return rowList; });
-            vpRowStart.setSelectEvent(function (value, item) {
-                $(this.wrapSelector()).val(item.code);
-                $(this.wrapSelector()).attr('data-code', item.code);
-                // $(this.wrapSelector()).trigger('change');
-                that.generateCode();
-            });
-            vpRowStart.setNormalFilter(false);
+            tag.appendFormatLine('<div class="{0} {1}">', VP_DS_SLICING_BOX, 'vp-grid-col-p50');
+            // var vpRowStart = new SuggestInput();
+            // vpRowStart.addClass(VP_DS_ROW_SLICE_START);
+            // vpRowStart.addClass('vp-input m');
+            // vpRowStart.setPlaceholder('start');
+            // vpRowStart.setSuggestList(function () { return rowList; });
+            // vpRowStart.setSelectEvent(function (value, item) {
+            //     $(this.wrapSelector()).val(item.code);
+            //     $(this.wrapSelector()).attr('data-code', item.code);
+            //     // $(this.wrapSelector()).trigger('change');
+            //     that.generateCode();
+            // });
+            // vpRowStart.setNormalFilter(false);
 
-            var vpRowEnd = new SuggestInput();
-            vpRowEnd.addClass(VP_DS_ROW_SLICE_END);
-            vpRowEnd.addClass('vp-input m');
-            vpRowEnd.setPlaceholder('end');
-            vpRowEnd.setSuggestList(function () { return rowList; });
-            vpRowEnd.setSelectEvent(function (value, item) {
-                $(this.wrapSelector()).val(item.code);
-                $(this.wrapSelector()).attr('data-code', item.code);
-                // $(this.wrapSelector()).trigger('change');
-                that.generateCode();
-            });
-            vpRowEnd.setNormalFilter(false);
-
-            tag.appendLine(vpRowStart.toTagString());
-            tag.appendLine(vpRowEnd.toTagString());
+            // var vpRowEnd = new SuggestInput();
+            // vpRowEnd.addClass(VP_DS_ROW_SLICE_END);
+            // vpRowEnd.addClass('vp-input m');
+            // vpRowEnd.setPlaceholder('end');
+            // vpRowEnd.setSuggestList(function () { return rowList; });
+            // vpRowEnd.setSelectEvent(function (value, item) {
+            //     $(this.wrapSelector()).val(item.code);
+            //     $(this.wrapSelector()).attr('data-code', item.code);
+            //     // $(this.wrapSelector()).trigger('change');
+            //     that.generateCode();
+            // });
+            // vpRowEnd.setNormalFilter(false);
+            // tag.appendLine(vpRowStart.toTagString());
+            // tag.appendLine(vpRowEnd.toTagString());
+            tag.appendLine('<div class="vp-grid-box">');
+            tag.appendFormatLine('<input type="text" class="vp-input {0}" placeholder="{1}"/>', VP_DS_ROW_SLICE_START, 'start');
+            tag.appendFormatLine('<label style="text-align:right;padding-right:10px;"><input type="checkbox" class="{0}"/><span>Text</span></label>', 'vp-ds-row-slice-start-text');
+            tag.appendLine('</div>');
+            tag.appendLine('<div class="vp-grid-box">');
+            tag.appendFormatLine('<input type="text" class="vp-input {0}" placeholder="{1}"/>', VP_DS_ROW_SLICE_END, 'end');
+            tag.appendFormatLine('<label style="text-align:right;padding-right:10px;"><input type="checkbox" class="{0}"/><span>Text</span></label>', 'vp-ds-row-slice-end-text');
+            tag.appendLine('</div>');
             tag.appendLine('</div>');
             // render
             $(this.wrapSelector('.' + VP_DS_ROWTYPE_BOX + ' .' + VP_DS_SLICING_BOX)).replaceWith(function () {
@@ -422,7 +492,7 @@ define([
             // tag.appendFormatLine('<input type="text" class="{0} {1}" placeholder="{2}"/>', VP_DS_COL_SLICE_END, 'vp-input m', 'end');
             var vpColStart = new SuggestInput();
             vpColStart.addClass(VP_DS_COL_SLICE_START);
-            vpColStart.addClass('vp-input m');
+            vpColStart.addClass('vp-input');
             vpColStart.setPlaceholder('start');
             vpColStart.setSuggestList(function () { return colList; });
             vpColStart.setSelectEvent(function (value, item) {
@@ -434,7 +504,7 @@ define([
 
             var vpColEnd = new SuggestInput();
             vpColEnd.addClass(VP_DS_COL_SLICE_END);
-            vpColEnd.addClass('vp-input m');
+            vpColEnd.addClass('vp-input');
             vpColEnd.setPlaceholder('end');
             vpColEnd.setSuggestList(function () { return colList; });
             vpColEnd.setSelectEvent(function (value, item) {
@@ -780,19 +850,6 @@ define([
         loadRowList(rowList) {
             var that = this;
 
-            // if iloc
-            if (this.state.subsetType == 'iloc') {
-                rowList = rowList.map(function (x) {
-                    return {
-                        ...x,
-                        label: x.location + '',
-                        value: x.location + '',
-                        code: x.location + '',
-                    };
-                });
-            }
-
-
             this.state.rowList = rowList;
             this.state.rowPointer = { start: -1, end: -1 };
 
@@ -1080,6 +1137,7 @@ define([
                 that.state.pandasObject = varName;
                 that.state.dataType = event.dataType ? event.dataType : that.state.dataType;
                 that.state.rowList = [];
+                that.state.rowLimit = 10;
                 that.state.columnList = [];
                 that.state.rowPointer = { start: -1, end: -1 };
                 that.state.colPointer = { start: -1, end: -1 };
@@ -1110,7 +1168,8 @@ define([
                     });
 
                     // get result and load column list
-                    vpKernel.getRowList(varName).then(function (resultObj) {
+                    let subsetVariable = com_util.formatString('{0}.iloc[:{1}]', varName, that.state.rowLimit);
+                    vpKernel.getRowList(subsetVariable).then(function (resultObj) {
                         let { result } = resultObj;
                         var rowList = JSON.parse(result);
                         rowList = rowList.map(function (x) {
@@ -1120,6 +1179,17 @@ define([
                                 code: x.value
                             };
                         });
+                        // if iloc
+                        if (that.state.subsetType == 'iloc') {
+                            rowList = rowList.map(function (x) {
+                                return {
+                                    ...x,
+                                    label: x.location + '',
+                                    value: x.location + '',
+                                    code: x.location + '',
+                                };
+                            });
+                        }
                         that.loadRowList(rowList);
                         that.bindDraggable('row');
                         that.generateCode();
@@ -1131,7 +1201,8 @@ define([
                     }
                 } else if (that.state.dataType == 'Series') {
                     // get result and load column list
-                    vpKernel.getRowList(varName).then(function (resultObj) {
+                    let subsetVariable = com_util.formatString('{0}.iloc[:{1}]', varName, that.state.rowLimit);
+                    vpKernel.getRowList(subsetVariable).then(function (resultObj) {
                         let { result } = resultObj;
                         var rowList = JSON.parse(result);
                         rowList = rowList.map(function (x) {
@@ -1141,6 +1212,17 @@ define([
                                 code: x.value
                             };
                         });
+                        // if iloc
+                        if (that.state.subsetType == 'iloc') {
+                            rowList = rowList.map(function (x) {
+                                return {
+                                    ...x,
+                                    label: x.location + '',
+                                    value: x.location + '',
+                                    code: x.location + '',
+                                };
+                            });
+                        }
                         that.loadRowList(rowList);
                         that.bindDraggable('row');
                         that.generateCode();
@@ -1413,7 +1495,7 @@ define([
             });
 
             // typing on slicing
-            $(document).on('change', this.wrapSelector('.vp-ds-slicing-box input[type="text"]'), function () {
+            $(document).on('change', this.wrapSelector('.vp-ds-slicing-box input'), function () {
                 $(this).data('code', $(this).val());
                 that.generateCode();
             });
@@ -1576,9 +1658,14 @@ define([
                     rowSelection.append(':');
                 }
             } else if (this.state.rowType == 'slicing') {
-                var start = $(this.wrapSelector('.' + VP_DS_ROW_SLICE_START)).data('code');
-                var end = $(this.wrapSelector('.' + VP_DS_ROW_SLICE_END)).data('code');
-                rowSelection.appendFormat('{0}:{1}', start ? start : '', end ? end : '');
+                let start = $(this.wrapSelector('.' + VP_DS_ROW_SLICE_START)).val();
+                let startText = $(this.wrapSelector('.vp-ds-row-slice-start-text')).prop('checked');
+                var end = $(this.wrapSelector('.' + VP_DS_ROW_SLICE_END)).val();
+                let endText = $(this.wrapSelector('.vp-ds-row-slice-end-text')).prop('checked');
+
+                rowSelection.appendFormat('{0}:{1}'
+                    , start ? com_util.convertToStr(start, startText) : ''
+                    , end ? com_util.convertToStr(end, endText) : '');
             } else if (this.state.rowType == 'condition') {
                 // condition
                 var condList = $(this.wrapSelector('.' + VP_DS_CONDITION_TBL + ' tr td:not(:last)'));

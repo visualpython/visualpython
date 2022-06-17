@@ -100,6 +100,15 @@ define([
                 that.close();
             });
 
+            // Click root
+            $(this.wrapSelector('#fnpRootFolder')).on('click', function() {
+                var dirObj = {
+                    direction: NAVIGATION_DIRECTION_TYPE.TOP,
+                    destDir: '/'
+                };
+                that.getFileList(dirObj);
+            });
+
             // Click sidebar
             $(this.wrapSelector('.fnp-sidebar-menu')).click(function(event) {
                 $('.fnp-sidebar-menu').removeClass('selected');
@@ -538,7 +547,7 @@ define([
                 /**
                  * Filter file/dir which included in this.state.extensions
                  */
-                if (Array.isArray(that.state.extensions)) {
+                if (Array.isArray(that.state.extensions) && that.state.extensions.length > 0 && that.state.extensions.toString() !== '') {
                     filtered_varList = filtered_varList.filter((data, index) => {
                         if (index == 0) {
                             return true;

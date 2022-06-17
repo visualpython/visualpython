@@ -97,6 +97,12 @@ body {
 	background-repeat: no-repeat;
 	border: none;
 }
+.vp-file-browser-button:hover {
+    content: url(../img/folder_open_hover.svg);
+}
+.vp-file-browser-button.disabled {
+    content: url(../img/folder_open_disabled.svg);
+}
 .vp-select {
 	height: 30px;
 	font-style: normal;

@@ -76,7 +76,7 @@ define([
                         code.append(saveas);
                         break;
                 }
-                com_interface.insertCell('code', code.toString());
+                com_interface.insertCell('code', code.toString(), 'Data Analysis > Profiling');
                 that.loadReportList();
             });
         }
@@ -113,7 +113,7 @@ define([
                                     }
                                     var code = new com_String();
                                     code.appendFormat("{0}.to_file('{1}')", varName, path);
-                                    com_interface.insertCell('code', code.toString());
+                                    com_interface.insertCell('code', code.toString(), 'Data Analysis > Profiling');
                     
                                     that.selectedReport = '';
                                 });
@@ -124,7 +124,7 @@ define([
                     default:
                         return;
                 }
-                com_interface.insertCell('code', code.toString());
+                com_interface.insertCell('code', code.toString(), 'Data Analysis > Profiling');
                 that.loadReportList();
             });
         }

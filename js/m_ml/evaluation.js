@@ -19,8 +19,8 @@ define([
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/component/PopupComponent',
-    'vp_base/js/com/component/VarSelector2'
-], function(evalHTML, com_util, com_interface, com_Const, com_String, PopupComponent, VarSelector2) {
+    'vp_base/js/com/component/DataSelector'
+], function(evalHTML, com_util, com_interface, com_Const, com_String, PopupComponent, DataSelector) {
 
     /**
      * Evaluation
@@ -128,37 +128,32 @@ define([
             $(page).find('.vp-eval-box').hide();
             $(page).find('.vp-eval-'+this.state.modelType).show();
 
-            // varselector
-            let varSelector = new VarSelector2(this.wrapSelector());
-            varSelector.setComponentID('predictData');
-            varSelector.addClass('vp-state vp-input');
-            varSelector.setValue(this.state.predictData);
-            $(page).find('#predictData').replaceWith(varSelector.toTagString());
+            // data selector
+            let predDataSelector = new DataSelector({
+                pageThis: this, id: 'predictData', value: this.state.predictData
+            });
+            $(page).find('#predictData').replaceWith(predDataSelector.toTagString());
 
-            varSelector = new VarSelector2(this.wrapSelector());
-            varSelector.setComponentID('targetData');
-            varSelector.addClass('vp-state vp-input');
-            varSelector.setValue(this.state.targetData);
-            $(page).find('#targetData').replaceWith(varSelector.toTagString());
+            let targetDataSelector = new DataSelector({
+                pageThis: this, id: 'targetData', value: this.state.targetData
+            });
+            $(page).find('#targetData').replaceWith(targetDataSelector.toTagString());
 
             // Clustering - data selection
-            varSelector = new VarSelector2(this.wrapSelector());
-            varSelector.setComponentID('clusteredIndex');
-            varSelector.addClass('vp-state vp-input');
-            varSelector.setValue(this.state.clusteredIndex);
-            $(page).find('#clusteredIndex').replaceWith(varSelector.toTagString());
+            let clusteredIdxSelector = new DataSelector({
+                pageThis: this, id: 'clusteredIndex', value: this.state.clusteredIndex
+            });
+            $(page).find('#clusteredIndex').replaceWith(clusteredIdxSelector.toTagString());
 
-            varSelector = new VarSelector2(this.wrapSelector());
-            varSelector.setComponentID('featureData2');
-            varSelector.addClass('vp-state vp-input vp-ev-model silhouette');
-            varSelector.setValue(this.state.featureData2);
-            $(page).find('#featureData2').replaceWith(varSelector.toTagString());
+            let featureData2Selector = new DataSelector({
+                pageThis: this, id: 'featureData2', value: this.state.featureData2, classes: 'vp-ev-model silhouette'
+            });
+            $(page).find('#featureData2').replaceWith(featureData2Selector.toTagString());
 
-            varSelector = new VarSelector2(this.wrapSelector());
-            varSelector.setComponentID('targetData2');
-            varSelector.addClass('vp-state vp-input vp-ev-model ari-nmi');
-            varSelector.setValue(this.state.targetData2);
-            $(page).find('#targetData2').replaceWith(varSelector.toTagString());
+            let targetData2Selector = new DataSelector({
+                pageThis: this, id: 'targetData2', value: this.state.targetData2, classes: 'vp-ev-model ari-nmi'
+            });
+            $(page).find('#targetData2').replaceWith(targetData2Selector.toTagString());
 
             // load state
             let that = this;

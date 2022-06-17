@@ -155,6 +155,11 @@ define([
             });
         }
     
+        /**
+         * Get rows list
+         * @param {*} dataframe 
+         * @returns 
+         */
         getRowList(dataframe) {
             var that = this;
             return new Promise(function(resolve, reject) {
