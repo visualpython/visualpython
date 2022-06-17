@@ -45,6 +45,10 @@ define([
                 x: '',
                 y: '',
                 hue: '',
+                bins: '',
+                kde: '',
+                stat: '',
+                showValues: false,
                 // axes options
                 x_limit_from: '',
                 x_limit_to: '',
@@ -127,6 +131,16 @@ define([
                 { label: 'diamond', value: 'D', title: 'diamond' }, 
                 { label: 'thin diamond', value: 'd', title: 'thin_diamond' }
             ]
+
+            this.statList = [
+                { label: 'Select option...', value: '' },
+                { label: 'count', value: "'count'" },
+                { label: 'frequency', value: "'frequency'" },
+                { label: 'density', value: "'density'" },
+                { label: 'probability', value: "'probability'" },
+                { label: 'proportion', value: "'proportion'" },
+                { label: 'percent', value: "'percent'" }
+            ];
         }
 
         _bindEvent() {
@@ -168,14 +182,21 @@ define([
                 $(that.wrapSelector(com_util.formatString('.vp-tab-page[data-type="{0}"]', type))).show();
             });
 
+            // change chart type
             $(this.wrapSelector('#chartType')).on('change', function() {
                 // add bins to histplot
                 let chartType = $(this).val();
                 $(that.wrapSelector('.sb-option')).hide();
                 if (chartType == 'histplot') {
-                    $(that.wrapSelector('.sb-option.bins')).show();
+                    $(that.wrapSelector('#bins')).closest('.sb-option').show();
+                    $(that.wrapSelector('#kde')).closest('.sb-option').show();
+                    $(that.wrapSelector('#stat')).closest('.sb-option').show();
+                } else if (chartType == 'barplot') {
+                    $(that.wrapSelector('#showValues')).closest('.sb-option').show();
+                } else if (chartType == 'countplot') {
+                    $(that.wrapSelector('#showValues')).closest('.sb-option').show();
                 }
-            })
+            });
             
             // use data or not
             $(this.wrapSelector('#setXY')).on('change', function() {
@@ -213,6 +234,36 @@ define([
             $(this.wrapSelector('#useColor')).on('change', function() {
                 that.state.useColor = $(this).prop('checked');
                 $(that.wrapSelector('#color')).prop('disabled', $(this).prop('checked') == false);
+            });
+
+            // axes - ticks location
+            $(this.wrapSelector('#xticks')).on('change', function() {
+                let val = $(this).val();
+                if (val !== '') {
+                    // enable xticks_label
+                    $(that.wrapSelector('#xticks_label')).prop('readonly', false);
+                } else {
+                    // disable xticks_label
+                    $(that.wrapSelector('#xticks_label')).prop('readonly', true);
+                }
+            });
+            $(this.wrapSelector('#yticks')).on('change', function() {
+                let val = $(this).val();
+                if (val !== '') {
+                    // enable yticks_label
+                    $(that.wrapSelector('#yticks_label')).prop('readonly', false);
+                } else {
+                    // disable yticks_label
+                    $(that.wrapSelector('#yticks_label')).prop('readonly', true);
+                }
+            });
+
+            // axes - ticks label: inform user to type location option to use label
+            $(this.wrapSelector('#xticks_label[readonly]')).on('click', function() {
+                $(that.wrapSelector('#xticks')).focus();
+            });
+            $(this.wrapSelector('#yticks_label[readonly]')).on('click', function() {
+                $(that.wrapSelector('#yticks')).focus();
             });
 
             // preview refresh
@@ -318,6 +369,26 @@ define([
             });
             $(page).find('#markerStyle').html(markerTag.toString());
 
+            // x, yticks label check
+            if (this.state.xticks && this.state.xticks !== '') {
+                $(page).find('#xticks_label').prop('readonly', false);
+            }
+            if (this.state.yticks && this.state.yticks !== '') {
+                $(page).find('#yticks_label').prop('readonly', false);
+            }
+
+            // stat options
+            let statTag = new com_String();
+            this.statList.forEach(stat => {
+                let selectedFlag = '';
+                if (stat.value == that.state.stat) {
+                    selectedFlag = 'selected';
+                }
+                statTag.appendFormatLine('<option value="{0}" {1}>{2}</option>',
+                    stat.value, selectedFlag, stat.label);
+            });
+            $(page).find('#stat').html(statTag.toString());
+
             // preview sample count
             let sampleCountList = [30, 50, 100, 300, 500, 700, 1000];
             let sampleCountTag = new com_String();
@@ -334,7 +405,13 @@ define([
             // data options depend on chart type
             $(page).find('.sb-option').hide();
             if (this.state.chartType == 'histplot') {
-                $(page).find('.sb-option.bins').show();
+                $(page).find('#bins').closest('.sb-option').show();
+                $(page).find('#kde').closest('.sb-option').show();
+                $(page).find('#stat').closest('.sb-option').show();
+            } else if (this.state.chartType == 'barplot') {
+                $(page).find('#showValues').closest('.sb-option').show();
+            } else if (this.state.chartType == 'countplot') {
+                $(page).find('#showValues').closest('.sb-option').show();
             }
 
             //================================================================
@@ -628,7 +705,7 @@ define([
 
         generateCode(preview=false) {
             let { 
-                chartType, data, x, y, hue, setXY, userOption='', 
+                chartType, data, x, y, setXY, hue, kde, stat, showValues, userOption='', 
                 x_limit_from, x_limit_to, y_limit_from, y_limit_to,
                 xticks, xticks_label, xticks_rotate, removeXticks,
                 yticks, yticks_label, yticks_rotate, removeYticks,
@@ -653,17 +730,13 @@ define([
                 // TODO: marker to seaborn argument (ex. marker='+' / markers={'Lunch':'s', 'Dinner':'X'})
                 etcOptionCode.push(com_util.formatString("marker='{0}'", markerStyle));
             }
+            if (showValues === true && chartType === 'barplot') {
+                etcOptionCode.push('ci=None');
+            }
 
             // add user option
             if (userOption != '') {
                 etcOptionCode.push(userOption);
-            }
-
-            if (etcOptionCode.length > 0) {
-                etcOptionCode = [
-                    '',
-                    ...etcOptionCode
-                ]
             }
 
             if (preview && useSampling) {
@@ -689,7 +762,8 @@ define([
                 }
             }   
 
-            let generatedCode = com_generator.vp_codeGenerator(this, config, state, etcOptionCode.join(', '));
+            let generatedCode = com_generator.vp_codeGenerator(this, config, state
+                , etcOptionCode.length > 0? ', ' + etcOptionCode.join(', '): '');
 
             // Axes
             if (x_limit_from != '' && x_limit_to != '') {
@@ -707,10 +781,10 @@ define([
             } else {
                 let xticksOptList = [];
                 if (xticks && xticks !== '') {
-                    xticksOptList.push(xticks);
+                    xticksOptList.push('ticks=' + xticks);
                     // Not able to use xticks_label without xticks
                     if (xticks_label && xticks_label != '') {
-                        xticksOptList.push(xticks_label);
+                        xticksOptList.push('labels=' + xticks_label);
                     }
                 }
                 if (xticks_rotate && xticks_rotate !== '') {
@@ -727,10 +801,10 @@ define([
             } else {
                 let yticksOptList = [];
                 if (yticks && yticks !== '') {
-                    yticksOptList.push(yticks);
+                    yticksOptList.push('ticks=' + yticks);
                     // Not able to use xticks_label without xticks
                     if (yticks_label && yticks_label != '') {
-                        yticksOptList.push(yticks_label);
+                        yticksOptList.push('labels=' + yticks_label);
                     }
                 }
                 if (yticks_rotate && yticks_rotate !== '') {
@@ -775,10 +849,20 @@ define([
                 let defaultHeight = 6;
                 code.appendFormatLine('plt.figure(figsize=({0}, {1}))', defaultWidth, defaultHeight);
 
-                code.appendLine(generatedCode);
+                if (showValues && showValues === true) {
+                    code.appendLine('ax = ' + generatedCode);
+                    code.appendLine("vp_seaborn_show_values(ax)");
+                } else {
+                    code.appendLine(generatedCode);  
+                }
                 code.appendLine(chartCode.toString());
             } else {
-                code.appendLine(generatedCode);
+                if (showValues && showValues === true) {
+                    code.appendLine('ax = ' + generatedCode);
+                    code.appendLine("vp_seaborn_show_values(ax)");
+                } else {
+                    code.appendLine(generatedCode);  
+                }
                 if (chartCode.length > 0) {
                     code.append(chartCode.toString());
                 }

@@ -53,24 +53,26 @@ define([
             let that = this;
             // open file event for data
             $(this.wrapSelector('#vp_wcOpenFile')).on('click', function() {
-                let fileNavi = new FileNavigation({
-                    type: 'open',
-                    extensions: [ 'txt' ],
-                    finish: function(filesPath, status, error) {
-                        let {file, path} = filesPath[0];
-                        that.state.data = path;
-
-                        that.state.useFile = true;
-                        $(that.wrapSelector('.vp-wc-file-option')).show();
-                        $(that.wrapSelector('#useFile')).prop('checked', true);
-                        $(that.wrapSelector('#useFile')).trigger('change');
-
-                        // set text
-                        $(that.wrapSelector('#data')).val(path);
-                        $(that.wrapSelector('#data')).trigger('change');
-                    }
-                });
-                fileNavi.open();
+                if (that.state.useFile === true) {
+                    let fileNavi = new FileNavigation({
+                        type: 'open',
+                        extensions: [ 'txt' ],
+                        finish: function(filesPath, status, error) {
+                            let {file, path} = filesPath[0];
+                            that.state.data = path;
+    
+                            that.state.useFile = true;
+                            $(that.wrapSelector('.vp-wc-file-option')).show();
+                            $(that.wrapSelector('#useFile')).prop('checked', true);
+                            $(that.wrapSelector('#useFile')).trigger('change');
+    
+                            // set text
+                            $(that.wrapSelector('#data')).val(path);
+                            $(that.wrapSelector('#data')).trigger('change');
+                        }
+                    });
+                    fileNavi.open();
+                }
             });
 
             // use file
@@ -78,8 +80,10 @@ define([
                 let checked = $(this).prop('checked');
                 if (checked === true) {
                     $(that.wrapSelector('.vp-wc-file-option')).show();
+                    $(that.wrapSelector('#vp_wcOpenFile')).show();
                 } else {
                     $(that.wrapSelector('.vp-wc-file-option')).hide();
+                    $(that.wrapSelector('#vp_wcOpenFile')).hide();
                 }
             });
 
@@ -116,8 +120,10 @@ define([
 
             if (this.state.useFile == true) {
                 $(page).find('.vp-wc-file-option').show();
+                $(page).find('#vp_wcOpenFile').show();
             } else {
                 $(page).find('.vp-wc-file-option').hide();
+                $(page).find('#vp_wcOpenFile').hide();
             }
 
             let that = this;

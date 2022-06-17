@@ -21,13 +21,14 @@ define([
     '../com/com_interface',
     '../com/component/Component',
     '../com/component/SuggestInput',
+    '../com/component/InnerFuncViewer',
 
     'text!../../data/libraries.json',
 
     './MenuGroup',
     './MenuItem',
     './TaskBar'
-], function(menuFrameHtml, menuFrameCss, com_Config, com_util, com_interface, Component, SuggestInput, 
+], function(menuFrameHtml, menuFrameCss, com_Config, com_util, com_interface, Component, SuggestInput, InnerFuncViewer,
             librariesJson, 
             MenuGroup, MenuItem, TaskBar) {
 	'use strict';
@@ -89,6 +90,10 @@ define([
                     case 'check-version':
                         // check vp version
                         vpConfig.checkVpVersion();
+                        break;
+                    case 'view-inner-func':
+                        let viewer = new InnerFuncViewer();
+                        viewer.open();
                         break;
                     case 'restart':
                         // restart vp

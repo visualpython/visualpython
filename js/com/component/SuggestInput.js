@@ -154,10 +154,10 @@ define([
                         return true;
                     }
                 }).focus(function() {
-                    $(this).val('');
+                    $(this).select();
                     $(com_util.formatString(".{0}", that.uuid)).autocomplete('search', $(com_util.formatString(".{0}", that.uuid)).val());
                 }).click(function() {
-                    $(this).val('');
+                    $(this).select();
                     $(com_util.formatString(".{0}", that.uuid)).autocomplete('search', $(com_util.formatString(".{0}", that.uuid)).val());
                 }).autocomplete('instance')._renderItem = function(ul, item) {
                     if (item.dtype != undefined) {

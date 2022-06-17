@@ -21,8 +21,9 @@ define([
     'vp_base/js/com/com_generator',
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/FileNavigation',
-    'vp_base/js/com/component/SuggestInput'
-], function(chartHTml, chartCss, com_String, com_Const, com_util, com_generator, PopupComponent, FileNavigation, SuggestInput) {
+    'vp_base/js/com/component/SuggestInput',
+    'vp_base/js/com/component/DataSelector'
+], function(chartHTml, chartCss, com_String, com_Const, com_util, com_generator, PopupComponent, FileNavigation, SuggestInput, DataSelector) {
 
     /**
      * Chart
@@ -57,17 +58,17 @@ define([
                 $(this).parent().find('.vp-plot-item').removeClass('selected');
                 $(this).addClass('selected');
     
-                // select 태그 강제 선택
+                // load selected kind
                 var kind = $(this).data('kind');
                 $(that.wrapSelector('#kind')).val(kind).prop('selected', true);
     
                 var thisPackage = { ...that.plotPackage[kind] };          
                 if (thisPackage == undefined) thisPackage = that.plotPackage['plot'];
     
-                // 모두 숨기기 (단, 대상 변수 입력란과 차트 유형 선택지 제외)
+                // hide all (without chart type, variable)
                 $(that.wrapSelector('table.vp-plot-setting-table tr:not(:last)')).hide();
     
-                // 해당 옵션에 있는 선택지만 보이게 처리
+                // show selected chart type's option page
                 thisPackage.input && thisPackage.input.forEach(obj => {
                     $(that.wrapSelector('#' + obj.name)).closest('tr').show();
     
@@ -94,7 +95,7 @@ define([
             $(this.wrapSelector('#useColor')).change(function() {
                 var checked = $(this).prop('checked');
                 if (checked == true) {
-                    // 색상 선택 가능하게
+                    // enable color selector
                     $(that.wrapSelector('#color')).removeAttr('disabled');
                 } else {
                     $(that.wrapSelector('#color')).attr('disabled', 'true');
@@ -404,219 +405,21 @@ define([
 
         bindVariableSelector() {
             var that = this;
-            // view button click - view little popup to show variable & details
-            $(this.wrapSelector('.vp-select-data')).click(function(event) {
-                var axes = $(this).data('axes');
-                
-                if($(that.wrapSelector('#vp_varViewBox')).is(":hidden")) {
-                    // refresh variables
-                    that.refreshVariables(function(varList) {
-                        // set position
-                        var boxSize = { width: 280, height: 260 };
-                        var boxPosition = { position: 'fixed', left: event.pageX - 20, top: event.pageY + 20 };
-    
-                        // set as center
-                        boxPosition.left = 'calc(50% - 140px)';
-                        boxPosition.top = 'calc(50% - 130px)';
-                        $('#vp_varViewBox').css({
-                            ...boxPosition
-                        });
-        
-                        // set axes and prev code
-                        $(that.wrapSelector('#vp_varViewBox')).attr({
-                            'data-axes': axes
-                        });
-                        $(that.wrapSelector('#vp_varSelectCode')).val($(that.wrapSelector('#' + axes)).val());
-        
-                        // show popup area
-                        $(that.wrapSelector('#vp_varViewBox')).show();
-                    });
-    
-                } else {
-                    // hide popup area
-                    $(that.wrapSelector('#vp_varViewBox')).hide();
-    
-                    // init boxes
-                    $(that.wrapSelector('#vp_varDetailColList')).html('');
-                    $(that.wrapSelector('#vp_varDetailDtype')).val('');
-                    $(that.wrapSelector('#vp_varDetailArray')).html('');
-                }
+            
+            let xSelector = new DataSelector({
+                pageThis: this, id: 'x', placeholder: 'Select data'
             });
-            // view close button click
-            $(this.wrapSelector('.vp-close-view')).click(function(event) {
-                // hide view
-                // show/hide popup area
-                $(that.wrapSelector('#vp_varViewBox')).toggle();
+            $(this.wrapSelector('#x')).replaceWith(xSelector.toTagString());
+
+            let ySelector = new DataSelector({
+                pageThis: this, id: 'y', placeholder: 'Select data'
             });
-    
-            // view object selection
-            $(document).on('click', this.wrapSelector('.vp-var-view-item'), function(event) {
-                // set selection style
-                // TODO: attach .selected
-                $(that.wrapSelector('.vp-var-view-item')).removeClass('selected');
-                $(this).addClass('selected');
-    
-                var varName = $(this).find('td:first').text();
-                var varType = $(this).find('td:last').text();
-    
-                // set code
-                $(that.wrapSelector('#vp_varSelectCode')).val(varName);
-    
-                // dataframe : columns, dtypes, array
-                // series : array
-                // use json.dumps to make python dict/list to become parsable with javascript JSON
-                var code = new com_String();
-                code.appendLine('import json');
-                if (varType == 'DataFrame') {
-                    code.appendFormat(`print(json.dumps([ { "colName": c, "dtype": str({0}[c].dtype), "array": str({1}[c].array) } for c in list({2}.columns) ]))`, varName, varName, varName);
-                } else if (varType == 'Series') {
-                    code.appendFormat(`print(json.dumps({"dtype": str({0}.dtype), "array": str({1}.array) }))`, varName, varName);
-                }
-    
-                // get result and show on detail box
-                vpKernel.execute(code.toString()).then(function(resultObj) {
-                    let { result } = resultObj;
-                    var varResult = JSON.parse(result);
-    
-                    $(that.wrapSelector('#vp_varDetailColList')).html('');
-                    
-                    var methodList = [];
-                    // DataFrame / Series Detail
-                    if (varType == 'DataFrame') {
-                        if (varResult.length > 0) {
-                            varResult.forEach(v => {
-                                var option = $(`<div class="vp-column-select-item" 
-                                                data-dtype="${v.dtype}" data-array="${v.array}" data-col="${v.colName}" title="${v.array}">
-                                                    ${v.colName}</div>`);
-                                $(that.wrapSelector('#vp_varDetailColList')).append(option);
-                            });
-    
-                            // $(that.wrapSelector('#vp_varDetailDtype')).val(varResult[0].dtype);
-    
-                            // var array = varResult[0].array.replaceAll('/n', '\n');
-                            // $(that.wrapSelector('#vp_varDetailArray')).text(array);
-                        }
-    
-                        // method for object
-                        methodList = [
-                            { method: 'index', label: 'index' },
-                            { method: 'columns', label: 'columns' },
-                            { method: 'values', label: 'values' }
-                        ]
-                        var methodArrayCode = new com_String();
-                        methodList.forEach(m => {
-                            methodArrayCode.appendFormat('<div class="{0}" data-method="{1}">{2}</div>', 'vp-method-select-item', m.method, m.label);
-                        });
-                        $(that.wrapSelector('#vp_varDetailArray')).html(methodArrayCode.toString());
-    
-                        // show columns
-                        // $(that.wrapSelector('#vp_varDetailColList')).closest('tr').show();
-                        $(that.wrapSelector('#vp_varDetailColList')).attr({'disabled': false});
-                    } else if (varType == 'Series') {
-                        $(that.wrapSelector('#vp_varDetailDtype')).val(varResult.dtype);
-                        var array = varResult.array.replaceAll('/n', '\n');
-                        // $(that.wrapSelector('#vp_varDetailArray')).text(array);
-    
-                        // method for object
-                        methodList = [
-                            { method: 'index', label: 'index' },
-                            { method: 'values', label: 'values' }
-                        ]
-                        var methodArrayCode = new com_String();
-                        methodList.forEach(m => {
-                            methodArrayCode.appendFormat('<div class="{0}" data-method="{1}">{2}</div>', 'vp-method-select-item', m.method, m.label);
-                        });
-                        $(that.wrapSelector('#vp_varDetailArray')).html(methodArrayCode.toString());
-    
-                        // disable columns
-                        $(that.wrapSelector('#vp_varDetailColList')).attr({'disabled': true});
-                    }
-    
-                });
+            $(this.wrapSelector('#y')).replaceWith(ySelector.toTagString());
+
+            let zSelector = new DataSelector({
+                pageThis: this, id: 'z', placeholder: 'Select data'
             });
-    
-            // view column selection
-            $(document).on('click', this.wrapSelector('#vp_varDetailColList .vp-column-select-item'), function() {
-                var dtype = $(this).data('dtype');
-                var array = $(this).data('array');
-    
-                var kind = $(that.wrapSelector('#kind')).val();
-                var axes = $(that.wrapSelector('#vp_varViewBox')).attr('data-axes');
-    
-                $(this).toggleClass('selected');
-    
-                // if ((kind == 'plot' && axes == 'y')
-                //     || (kind == 'bar' && axes == 'y')) {
-                // allow multi select
-                var methodArrayCode = new com_String();
-                var methodList;
-                // if categorical variable exists, set as categorical
-                var hasObject = false;
-                var selectedColumnList = $(that.wrapSelector('#vp_varDetailColList .vp-column-select-item.selected'));
-                if (selectedColumnList.length > 0) {
-                    selectedColumnList.each((i, tag) => {
-                        var tagDtype = $(tag).data('dtype');
-                        if (tagDtype == 'object') {
-                            hasObject = true;
-                        }
-                    });
-                }
-                if (dtype != undefined) {
-                    if (hasObject == true) {
-                        // categorical variable
-                        methodList = that.methodList.categorical;
-                    } else {
-                        // numeric variable
-                        methodList = that.methodList.numerical;
-                    }
-                    methodList = [ 
-                        { method: 'index', label: 'index' },
-                        { method: 'columns', label: 'columns' },
-                        { method: 'values', label: 'values' },
-                        ...methodList
-                    ]
-                    methodList.forEach(m => {
-                        methodArrayCode.appendFormat('<div class="{0}" data-method="{1}">{2}</div>', 'vp-method-select-item', m.method, m.label);
-                    });
-                }
-                $(that.wrapSelector('#vp_varDetailArray')).html(methodArrayCode.toString());
-    
-                // set code
-                var code = that.getSelectCode();
-                $(that.wrapSelector('#vp_varSelectCode')).val(code);
-            });
-    
-            // view method selection
-            $(document).on('click', this.wrapSelector('#vp_varDetailArray .vp-method-select-item'), function() {
-                var method = $(this).data('method');
-                var nowState = $(this).hasClass('selected');
-    
-                $(that.wrapSelector('#vp_varDetailArray .vp-method-select-item')).removeClass('selected');
-                if (nowState == false) {
-                    $(this).addClass('selected');
-                }
-    
-                // set code
-                var code = that.getSelectCode();
-                $(that.wrapSelector('#vp_varSelectCode')).val(code);
-            });
-    
-            // enter variables button 
-            $(this.wrapSelector('#vp_varSelectBtn')).click(function() {
-                var axes = $(that.wrapSelector('#vp_varViewBox')).attr('data-axes');
-                var code = $(that.wrapSelector('#vp_varSelectCode')).val();
-                
-                // set code
-                $(that.wrapSelector('#' + axes)).val(code);
-    
-                // hide view box
-                $(that.wrapSelector('#vp_varViewBox')).hide();
-    
-                // init boxes
-                $(that.wrapSelector('#vp_varDetailColList')).html('');
-                $(that.wrapSelector('#vp_varDetailDtype')).val('');
-                $(that.wrapSelector('#vp_varDetailArray')).html('');
-            });
+            $(this.wrapSelector('#z')).replaceWith(zSelector.toTagString());
         }
 
         getSelectCode() {

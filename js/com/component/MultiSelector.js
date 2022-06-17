@@ -258,7 +258,7 @@ define([
             var that = this;
 
             var tag = new com_String();
-            tag.appendLine('<label class="vp-bold">Drag-and-drop columns to right to select.</label>');
+            tag.appendLine('<label>Drag-and-drop columns to right to select.</label>');
             tag.appendFormatLine('<div class="{0} {1}">', APP_SELECT_CONTAINER, this.uuid);
             // select - left
             tag.appendFormatLine('<div class="{0}">', APP_SELECT_LEFT);

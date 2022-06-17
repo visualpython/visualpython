@@ -49,6 +49,7 @@ define([
             this.id = this.state.config.id;
             this.name = this.state.config.name;
             this.path = this.state.config.path;
+            
 
             this.config = {
                 sizeLevel: 0,          // 0: 400x400 / 1: 500x500 / 2: 600x500 / 3: 750x500
@@ -402,7 +403,6 @@ define([
             });
             // Close event for inner popup
             $(this.wrapSelector('.vp-inner-popup-close')).on('click', function(evt) {
-                that.handleInnerCancel();
                 that.closeInnerPopup();
             });
             // Click button event for inner popup
@@ -410,7 +410,6 @@ define([
                 let btnType = $(this).data('type');
                 switch(btnType) {
                     case 'cancel':
-                        that.handleInnerCancel();
                         that.closeInnerPopup();
                         break;
                     case 'ok':
@@ -479,7 +478,7 @@ define([
         template() { 
             this.$pageDom = $(popupComponentHtml);
             // set title
-            this.$pageDom.find('.vp-popup-title').text(this.state.config.name);
+            this.$pageDom.find('.vp-popup-title').text(this.name);
             // set body
             this.$pageDom.find('.vp-popup-content').html(this.templateForBody());
             return this.$pageDom;
@@ -683,18 +682,28 @@ define([
         run(execute=true, addcell=true) {
             let code = this.generateCode();
             let mode = this.config.executeMode;
-            let blockNumber = -1;
+            let sigText = '';
             // check if it's block
             if (this.getTaskType() == 'block') {
                 let block = this.taskItem;
-                blockNumber = block.blockNumber;
+                sigText = block.sigText;
+            } else {
+                try {
+                    let menuGroup = this.path.split(' - ')[1];
+                    let menuGroupLabel = vpConfig.getMenuGroupLabel(menuGroup);
+                    if (menuGroupLabel != undefined && menuGroupLabel !== '') {
+                        sigText = menuGroupLabel + ' > ' + this.name;
+                    } else {
+                        sigText = this.name;
+                    }
+                } catch {}
             }
             if (addcell) {
                 if (Array.isArray(code)) {
                     // insert cells if it's array of codes
-                    com_interface.insertCells(mode, code, execute, blockNumber);
+                    com_interface.insertCells(mode, code, execute, sigText);
                 } else {
-                    com_interface.insertCell(mode, code, execute, blockNumber);
+                    com_interface.insertCell(mode, code, execute, sigText);
                 }
             }
             return code;
@@ -837,13 +846,16 @@ define([
             $(this.wrapSelector('.vp-inner-popup-box')).show();
 
             // focus on first input
-            $(this.wrapSelector('.vp-inner-popup-box input[type=text]:not(:disabled):visible:first')).focus();
+            $(this.wrapSelector('.vp-inner-popup-box input:not(:disabled):visible:first')).focus();
+            // disable Jupyter key
+            com_interface.disableOtherShortcut();
         }
         
         /**
          * Close inner popup box
          */
         closeInnerPopup() {
+            this.handleInnerCancel();
             $(this.wrapSelector('.vp-inner-popup-box')).hide();
         }
 
