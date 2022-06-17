@@ -403,7 +403,6 @@ define([
             });
             // Close event for inner popup
             $(this.wrapSelector('.vp-inner-popup-close')).on('click', function(evt) {
-                that.handleInnerCancel();
                 that.closeInnerPopup();
             });
             // Click button event for inner popup
@@ -411,7 +410,6 @@ define([
                 let btnType = $(this).data('type');
                 switch(btnType) {
                     case 'cancel':
-                        that.handleInnerCancel();
                         that.closeInnerPopup();
                         break;
                     case 'ok':
@@ -480,7 +478,7 @@ define([
         template() { 
             this.$pageDom = $(popupComponentHtml);
             // set title
-            this.$pageDom.find('.vp-popup-title').text(this.state.config.name);
+            this.$pageDom.find('.vp-popup-title').text(this.name);
             // set body
             this.$pageDom.find('.vp-popup-content').html(this.templateForBody());
             return this.$pageDom;
@@ -848,13 +846,16 @@ define([
             $(this.wrapSelector('.vp-inner-popup-box')).show();
 
             // focus on first input
-            $(this.wrapSelector('.vp-inner-popup-box input[type=text]:not(:disabled):visible:first')).focus();
+            $(this.wrapSelector('.vp-inner-popup-box input:not(:disabled):visible:first')).focus();
+            // disable Jupyter key
+            com_interface.disableOtherShortcut();
         }
         
         /**
          * Close inner popup box
          */
         closeInnerPopup() {
+            this.handleInnerCancel();
             $(this.wrapSelector('.vp-inner-popup-box')).hide();
         }
 

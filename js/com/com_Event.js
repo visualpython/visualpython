@@ -207,11 +207,23 @@ define([], function() {
                             that.keyManager.keyCheck.shiftKey = false;
                         }
                         if (evt.keyCode == that.keyManager.keyCode.escKey) {
-                            // close popup on esc
-                            $('#vp_wrapper').trigger({
-                                type: 'close_option_page',
-                                component: that.mainFrame.focusedPage
-                            });
+                            // check if there is visible data selector : DataSelector
+                            if ($('.vp-dataselector-base:visible').length > 0) {
+                                // close data selector
+                                $('.vp-dataselector-base:visible').remove();
+                            }
+                            // check if there is visible inner popup
+                            else if ($('.vp-popup-frame > .vp-inner-popup-box:visible').length > 0) {
+                                // close inner popup on esc
+                                console.log('close inner popup from this component', that.mainFrame.focusedPage);
+                                that.mainFrame.focusedPage && that.mainFrame.focusedPage.closeInnerPopup();
+                            } else {
+                                // close popup on esc
+                                $('#vp_wrapper').trigger({
+                                    type: 'close_option_page',
+                                    component: that.mainFrame.focusedPage
+                                });
+                            }
                         }
                         if (evt.keyCode == that.keyManager.keyCode.enter) {
                             // blur on enter
