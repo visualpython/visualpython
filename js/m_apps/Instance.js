@@ -34,7 +34,7 @@ define([
             this.config.sizeLevel = 1;
 
             this.state = {
-                subsetEditor: undefined,
+                vp_instanceVariable: '',
                 variable: {
                     stack: []
                 },
@@ -43,6 +43,8 @@ define([
                 ...this.state
             }
             this.pointer = this.state.variable;
+            this.subsetEditor = null;
+            this.insEditor = null;
 
             this._addCodemirror('vp_instanceVariable', this.wrapSelector('#vp_instanceVariable'), 'readonly');
         }
@@ -173,7 +175,9 @@ define([
         }
 
         templateForBody() {
-            return insHtml;
+            let page = $(insHtml);
+            $(page).find('#vp_instanceVariable').val(this.state.vp_instanceVariable);
+            return page;
         }
 
         render() {
@@ -182,25 +186,25 @@ define([
             let that = this;
 
             // vpSubsetEditor
-            this.state.subsetEditor = new Subset({ pandasObject: '', config: { name: 'Subset' } }, 
+            this.subsetEditor = new Subset({ pandasObject: '', config: { name: 'Subset' } }, 
                 { 
                     useInputVariable: true,
                     targetSelector: this.wrapSelector('#vp_instanceVariable'),
                     pageThis: this,
                     finish: function(code) {
                         that.addStack();
-                        that.state.subsetEditor.state.pandasObject = code;
+                        that.subsetEditor.state.pandasObject = code;
                         that.updateValue(code);
                     }
                 });
-            this.state.subsetEditor.disableButton();
+            this.subsetEditor.disableButton();
 
-            this.ALLOW_SUBSET_TYPES = this.state.subsetEditor.getAllowSubsetTypes();
+            this.ALLOW_SUBSET_TYPES = this.subsetEditor.getAllowSubsetTypes();
 
             // vpInstanceEditor
-            this.state.variable.insEditor = new InstanceEditor(this, "vp_instanceVariable", 'vp_variableInsEditContainer');
+            this.insEditor = new InstanceEditor(this, "vp_instanceVariable", 'vp_variableInsEditContainer');
 
-            this.state.variable.insEditor.show();
+            this.insEditor.show();
 
             // variable load
             this.reloadInsEditor();
@@ -232,17 +236,17 @@ define([
 
         hide() {
             super.hide();
-            this.state.subsetEditor && this.state.subsetEditor.hide();
+            this.subsetEditor && this.subsetEditor.hide();
         }
 
         close() {
             super.close();
-            this.state.subsetEditor && this.state.subsetEditor.close();
+            this.subsetEditor && this.subsetEditor.close();
         }
 
         remove() {
             super.remove();
-            this.state.subsetEditor && this.state.subsetEditor.remove();
+            this.subsetEditor && this.subsetEditor.remove();
         }
 
         updateValue(value) {
@@ -254,6 +258,7 @@ define([
                 cm.focus();
                 cm.setCursor({ line: 0, ch: value.length});
             }
+            this.state.vp_instanceVariable = value;
         }
 
         addStack() {
@@ -287,22 +292,17 @@ define([
                 var varType = varObj.type;
     
                 if (that.ALLOW_SUBSET_TYPES.includes(varType)) {
-                    that.state.subsetEditor.state.dataType = varType;
+                    that.subsetEditor.state.dataType = varType;
                     let cmObj = that.getCodemirror('vp_instanceVariable');
                     let nowCode = (cmObj && cmObj.cm)?cmObj.cm.getValue():'';
-                    that.state.subsetEditor.state.pandasObject = nowCode;
-                    that.state.subsetEditor.enableButton();
+                    that.subsetEditor.state.pandasObject = nowCode;
+                    that.subsetEditor.enableButton();
                 } else {
-                    that.state.subsetEditor.disableButton();
+                    that.subsetEditor.disableButton();
                 }
             };
     
-            if (type == '') {
-                this.pointer.insEditor.reload(callbackFunction);
-            } else {
-                tempPointer = this.state[type];
-                this.state[type].insEditor.reload(callbackFunction);
-            }
+            this.insEditor.reload(callbackFunction);
         }
     }
 
