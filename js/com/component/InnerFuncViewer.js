@@ -46,6 +46,12 @@ define([
     
             // double click setter
             this.clicked = 0;
+
+            this.packageAlias = {
+                '_vp_np': 'np',
+                '_vp_pd': 'pd',
+                '_vp_plt': 'plt'
+            }
         }
 
         _bindEvent() {
@@ -193,6 +199,12 @@ define([
                 let regResult = reg.exec(code);
                 if (regResult !== null) {
                     name = regResult[1];
+                    // convert code's package alias
+                    Object.keys(that.packageAlias).forEach(key => {
+                        let desAlias = that.packageAlias[key];
+                        code = code.replaceAll(key + '.', desAlias + '.');
+                    });
+                    // list up
                     funcDict[name] = { code: code, description: desc };
                 }
             }
