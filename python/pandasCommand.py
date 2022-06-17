@@ -10,6 +10,7 @@ def _vp_get_rows_list(df):
     """
     rowList = []
     indexType = str(df.index.dtype)
+    # make dict for rows info
     for i, r in enumerate(df.index):
         rInfo = { 'label': r, 'value': r, 'location': i }
         # value
