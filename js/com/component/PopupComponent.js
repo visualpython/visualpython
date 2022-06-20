@@ -683,6 +683,7 @@ define([
             let code = this.generateCode();
             let mode = this.config.executeMode;
             let sigText = '';
+            vpLog.display(VP_LOG_TYPE.DEVELOP, sigText, mode, code);
             // check if it's block
             if (this.getTaskType() == 'block') {
                 let block = this.taskItem;

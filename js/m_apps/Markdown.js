@@ -126,7 +126,7 @@ define([
             var page = new com_String();
             page.appendLine('<div class="vp-divide-top">');
             page.appendLine(this.templateForToolbar());
-            page.appendFormatLine('<textarea id="{0}">{1}</textarea>', 'vp_markdownEditor', this.state.editor);
+            page.appendFormatLine('<textarea id="{0}" class="vp-state">{1}</textarea>', 'vp_markdownEditor', this.state.editor);
             page.appendFormatLine('<div id="{0}"></div>', "vp_attachEncodedDataArea");
             page.appendLine('</div>');
             page.appendFormatLine('<div id="{0}" class="vp-divide-bot">{1}</div>', 'vp_markdownPreview', this.state.preview);
@@ -146,10 +146,6 @@ define([
                 <div class="vp-markdown-editor-toolbar-btn-unorder-list" data-menu="unorder-list" title="Unordered list"></div>
                 <div class="vp-markdown-editor-toolbar-btn-horizontal-line" data-menu="horizontal-line" title="Horizontal line"></div>
             </div>`;
-        }
-
-        templateForDataView() {
-            return `<textarea id="vp_markdownPreview"></textarea>`;
         }
 
         render() {
@@ -213,14 +209,9 @@ define([
                     preview = '';
                 }
                 that.state.preview = preview;
-                document.getElementById("vp_markdownPreview").innerHTML = preview;
+                $(that.wrapSelector("#vp_markdownPreview")).html(preview);
 
                 MathJax.Hub.Queue(["Typeset", MathJax.Hub, "vp_markdownPreview"]);
-
-                // re render block
-                if (block) {
-                    block.render();
-                }
             });
         }
 
@@ -306,6 +297,7 @@ define([
             // repace selection
             cm.replaceSelection(adjustText);
             // TODO: set block code
+            cm.focus();
         }
     
         /**
