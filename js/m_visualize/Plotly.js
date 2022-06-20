@@ -107,27 +107,34 @@ define([
                     $(that.wrapSelector('#x')).closest('.pt-option').show();
                     $(that.wrapSelector('#y')).closest('.pt-option').show();
                     $(that.wrapSelector('#z')).closest('.pt-option').show();
+                    if (chartType === 'density_contour') {
+                        $(that.wrapSelector('#color')).closest('.pt-option').show();
+                    }
                 }
                 else if (chartType === 'timeline') {
                     $(that.wrapSelector('#x_start')).closest('.pt-option').show();
                     $(that.wrapSelector('#x_end')).closest('.pt-option').show();
                     $(that.wrapSelector('#y')).closest('.pt-option').show();
+                    $(that.wrapSelector('#color')).closest('.pt-option').show();
                 }
                 else if (chartType === 'pie' || chartType === 'funnel_area') {
                     // show values, names
                     $(that.wrapSelector('#values')).closest('.pt-option').show();
                     $(that.wrapSelector('#names')).closest('.pt-option').show();
+                    $(that.wrapSelector('#color')).closest('.pt-option').show();
                 }
                 else if (chartType === 'sunburst' || chartType === 'treemap' || chartType === 'icicle') {
                     // show values, names, parents
                     $(that.wrapSelector('#values')).closest('.pt-option').show();
                     $(that.wrapSelector('#names')).closest('.pt-option').show();
+                    $(that.wrapSelector('#color')).closest('.pt-option').show();
                     $(that.wrapSelector('#parents')).closest('.pt-option').show();
                 }
                 else {
                     // show x, y
                     $(that.wrapSelector('#x')).closest('.pt-option').show();
                     $(that.wrapSelector('#y')).closest('.pt-option').show();
+                    $(that.wrapSelector('#color')).closest('.pt-option').show();
                 }
             });
 
@@ -146,6 +153,7 @@ define([
                     $(that.wrapSelector('#values')).closest('.vp-ds-box').replaceWith('<select id="values"></select>');
                     $(that.wrapSelector('#names')).closest('.vp-ds-box').replaceWith('<select id="names"></select>');
                     $(that.wrapSelector('#parents')).closest('.vp-ds-box').replaceWith('<select id="parents"></select>');
+                    $(that.wrapSelector('#color')).closest('.vp-ds-box').replaceWith('<select id="color"></select>');
                 } else {
                     // set X Y indivisually
                     // disable data selection
@@ -160,6 +168,7 @@ define([
                     that.state.values = '';
                     that.state.names = '';
                     that.state.parents = '';
+                    that.state.color = '';
 
                     let dataSelectorX = new DataSelector({ pageThis: that, id: 'x' });
                     $(that.wrapSelector('#x')).replaceWith(dataSelectorX.toTagString());
@@ -184,6 +193,9 @@ define([
 
                     let dataSelectorParents = new DataSelector({ pageThis: that, id: 'parents' });
                     $(that.wrapSelector('#parents')).replaceWith(dataSelectorParents.toTagString());
+
+                    let dataSelectorColor = new DataSelector({ pageThis: that, id: 'color' });
+                    $(that.wrapSelector('#color')).replaceWith(dataSelectorColor.toTagString());
                     
                 }
             });
@@ -244,10 +256,11 @@ define([
                         $(that.wrapSelector('#values')).prop('disabled', false);
                         $(that.wrapSelector('#names')).prop('disabled', false);
                         $(that.wrapSelector('#parents')).prop('disabled', false);
+                        $(that.wrapSelector('#color')).prop('disabled', false);
                         
                         // bind column source using selected dataframe
                         com_generator.vp_bindColumnSource(that, 'data', [
-                            'x', 'x_start', 'x_end', 'y', 'z', 'values', 'names', 'parents'
+                            'x', 'x_start', 'x_end', 'y', 'z', 'values', 'names', 'parents', 'color'
                         ], 'select', true, true);
                     } else {
                         $(that.wrapSelector('#x')).prop('disabled', true);
@@ -258,6 +271,7 @@ define([
                         $(that.wrapSelector('#values')).prop('disabled', true);
                         $(that.wrapSelector('#names')).prop('disabled', true);
                         $(that.wrapSelector('#parents')).prop('disabled', true);
+                        $(that.wrapSelector('#color')).prop('disabled', true);
                         
                     }
                 },
@@ -273,10 +287,11 @@ define([
                         $(that.wrapSelector('#values')).prop('disabled', false);
                         $(that.wrapSelector('#names')).prop('disabled', false);
                         $(that.wrapSelector('#parents')).prop('disabled', false);
+                        $(that.wrapSelector('#color')).prop('disabled', false);
                         
                         // bind column source using selected dataframe
                         com_generator.vp_bindColumnSource(that, 'data', [
-                            'x', 'x_start', 'x_end', 'y', 'z', 'values', 'names', 'parents'
+                            'x', 'x_start', 'x_end', 'y', 'z', 'values', 'names', 'parents', 'color'
                         ], 'select', true, true);
                     } else {
                         $(that.wrapSelector('#x')).prop('disabled', true);
@@ -287,6 +302,7 @@ define([
                         $(that.wrapSelector('#values')).prop('disabled', true);
                         $(that.wrapSelector('#names')).prop('disabled', true);
                         $(that.wrapSelector('#parents')).prop('disabled', true);
+                        $(that.wrapSelector('#color')).prop('disabled', true);
                     }
                 }
             });
@@ -299,18 +315,23 @@ define([
                 $(page).find('#x').closest('.pt-option').show();
                 $(page).find('#y').closest('.pt-option').show();
                 $(page).find('#z').closest('.pt-option').show();
+                if (this.state.chartType === 'density_contour') {
+                    $(page).find('#color').closest('.pt-option').show();
+                }
             }
             else if (this.state.chartType === 'timeline') {
                 // show x_start, x_end, y
                 $(page).find('#x_start').closest('.pt-option').show();
                 $(page).find('#x_end').closest('.pt-option').show();
                 $(page).find('#y').closest('.pt-option').show();
+                $(page).find('#color').closest('.pt-option').show();
             }
             else if (this.state.chartType === 'pie' 
                 || this.state.chartType === 'funnel_area') {
                 // show values, names
                 $(page).find('#values').closest('.pt-option').show();
                 $(page).find('#names').closest('.pt-option').show();
+                $(page).find('#color').closest('.pt-option').show();
             }
             else if (this.state.chartType === 'sunburst' 
                 || this.state.chartType === 'treemap' 
@@ -318,12 +339,14 @@ define([
                 // show values, names, parents
                 $(page).find('#values').closest('.pt-option').show();
                 $(page).find('#names').closest('.pt-option').show();
+                $(page).find('#color').closest('.pt-option').show();
                 $(page).find('#parents').closest('.pt-option').show();
             }
             else {
                 // show x, y
                 $(page).find('#x').closest('.pt-option').show();
                 $(page).find('#y').closest('.pt-option').show();
+                $(page).find('#color').closest('.pt-option').show();
             }
 
             //================================================================
