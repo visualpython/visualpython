@@ -25,23 +25,6 @@ define([
     'vp_base/data/m_visualize/plotlyLibrary',
 ], function(ptHTML, ptCss, com_String, com_generator, com_util, PopupComponent, SuggestInput, FileNavigation, DataSelector, PLOTLY_LIBRARIES) {
 
-    /**
-     * TODO: libraries.json add menu
-     * {
-            "id"   : "visualize_plotly",
-            "type" : "function",
-            "level": 1,
-            "name" : "Plotly",
-            "tag"  : "PLOTLY,VISUALIZATION,VISUALIZE",
-            "path" : "visualpython - visualization - plotly",
-            "desc" : "Plotly express",
-            "file" : "m_visualize/Plotly",
-            "apps" : {
-                "color": 5,
-                "icon": "apps/apps_visualize.svg"
-            }
-        },
-     */
     class Plotly extends PopupComponent {
         _init() {
             super._init();
@@ -391,7 +374,7 @@ define([
                 key: userCodeKey,
                 selector: userCodeTarget,
                 events: [{
-                    key: 'change',
+                    key: 'blur',
                     callback: function(instance, evt) {
                         // save its state
                         instance.save();
@@ -499,12 +482,12 @@ define([
 
             let generatedCode = com_generator.vp_codeGenerator(this, config, this.state
                 , etcOptionCode.length > 0? ', ' + etcOptionCode.join(', '): '');
-            code.append(generatedCode);
+            code.appendFormatLine("fig = {0}", generatedCode);
 
             if (userCode && userCode != '') {
-                code.appendLine();
-                code.append(userCode);
+                code.appendLine(userCode);
             }
+            code.append('fig.show()');
 
             return code.toString();
         }

@@ -526,7 +526,7 @@ define([
                 key: userCodeKey,
                 selector: userCodeTarget,
                 events: [{
-                    key: 'change',
+                    key: 'blur',
                     callback: function(instance, evt) {
                         // save its state
                         instance.save();
