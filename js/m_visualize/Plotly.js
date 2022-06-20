@@ -37,8 +37,14 @@ define([
             this.state = {
                 chartType: 'scatter',
                 data: '',
+                x: '', y: '', z: '',
+                x_start: '', x_end: '',
+                values: '', names: '', parents: '',
+                color: '',
                 userOption: '',
                 title: '',
+                x_label: '',
+                y_label: '',
                 userCode: '',
                 autoRefresh: true,
                 ...this.state
@@ -453,9 +459,9 @@ define([
              */
             let { 
                 chartType,
-                data, x, y, setXY,
+                data, x, y, color, setXY,
                 userOption, userCode,
-                title
+                title, x_label, y_label
             } = this.state;
             let code = new com_String();
             let config = this.chartConfig[chartType];
@@ -464,6 +470,42 @@ define([
             // add title
             if (title != '') {
                 etcOptionCode.push(com_util.formatString("title='{0}'", title));
+            }
+            let labelOptions = [];
+            // add x_label
+            if (x_label != '') {
+                if (setXY === true) {
+                    // replace 'x' to x_label
+                    labelOptions.push(com_util.formatString("'x': '{0}'", x_label));
+                } else {
+                    // if x is selected
+                    if (x != '') {
+                        // replace x column name to x_label
+                        labelOptions.push(com_util.formatString("{0}: '{1}'", x, x_label));
+                    } else {
+                        // replace 'index' to x_label
+                        labelOptions.push(com_util.formatString("'index': '{0}'", x_label));
+                    }
+                }
+            }
+            // add y_label
+            if (y_label != '') {
+                if (setXY === true) {
+                    // replace 'y' to y_label
+                    labelOptions.push(com_util.formatString("'y': '{0}'", y_label));
+                } else {
+                    // if y is selected
+                    if (y != '') {
+                        // replace y column name to y_label
+                        labelOptions.push(com_util.formatString("{0}: '{1}'", y, y_label));
+                    } else {
+                        // replace 'index' to y_label
+                        labelOptions.push(com_util.formatString("'index': '{0}'", y_label));
+                    }
+                }
+            }
+            if (labelOptions.length > 0) {
+                etcOptionCode.push(com_util.formatString("labels={ {0} }", labelOptions.join(', ')));
             }
             // add user option
             if (userOption != '') {
