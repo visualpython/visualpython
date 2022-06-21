@@ -302,7 +302,7 @@ define([
                 // add install codes
                 var codes = that.generateInstallCode();
                 codes && codes.forEach(code => {
-                    com_interface.insertCell('code', code);
+                    com_interface.insertCell('code', code, true, that.getSigText());
                 });
             });
 
@@ -679,12 +679,8 @@ define([
             }
         }
 
-        run(execute=true, addcell=true) {
-            let code = this.generateCode();
-            let mode = this.config.executeMode;
+        getSigText() {
             let sigText = '';
-            vpLog.display(VP_LOG_TYPE.DEVELOP, sigText, mode, code);
-            // check if it's block
             if (this.getTaskType() == 'block') {
                 let block = this.taskItem;
                 sigText = block.sigText;
@@ -699,6 +695,15 @@ define([
                     }
                 } catch {}
             }
+            return sigText;
+        }
+
+        run(execute=true, addcell=true) {
+            let code = this.generateCode();
+            let mode = this.config.executeMode;
+            let sigText = this.getSigText();
+            vpLog.display(VP_LOG_TYPE.DEVELOP, sigText, mode, code);
+
             if (addcell) {
                 if (Array.isArray(code)) {
                     // insert cells if it's array of codes

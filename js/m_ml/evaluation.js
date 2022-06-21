@@ -56,7 +56,7 @@ define([
 
             // import library
             $(this.wrapSelector('#vp_importLibrary')).on('click', function() {
-                com_interface.insertCell('code', 'from sklearn import metrics');
+                com_interface.insertCell('code', 'from sklearn import metrics', true, 'Machine Learning > Evaluation');
             });
 
             // model type change
