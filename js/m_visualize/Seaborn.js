@@ -49,6 +49,7 @@ define([
                 kde: '',
                 stat: '',
                 showValues: false,
+                showValuesPrecision: '',
                 // axes options
                 x_limit_from: '',
                 x_limit_to: '',
@@ -705,7 +706,8 @@ define([
 
         generateCode(preview=false) {
             let { 
-                chartType, data, x, y, setXY, hue, kde, stat, showValues, userOption='', 
+                chartType, data, x, y, setXY, hue, kde, stat, showValues, showValuesPrecision, 
+                userOption='', 
                 x_limit_from, x_limit_to, y_limit_from, y_limit_to,
                 xticks, xticks_label, xticks_rotate, removeXticks,
                 yticks, yticks_label, yticks_rotate, removeYticks,
@@ -851,7 +853,11 @@ define([
 
                 if (showValues && showValues === true) {
                     code.appendLine('ax = ' + generatedCode);
-                    code.appendLine("vp_seaborn_show_values(ax)");
+                    code.append("vp_seaborn_show_values(ax");
+                    if (showValuesPrecision !== '') {
+                        code.appendFormat(", precision={0}", showValuesPrecision);
+                    }
+                    code.appendLine(")");
                 } else {
                     code.appendLine(generatedCode);  
                 }
