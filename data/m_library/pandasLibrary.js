@@ -207,7 +207,7 @@ define([
                 {
                     name:'i0',
                     type:'var',
-                    label: 'Target Variable',
+                    label: 'DataFrame',
                     component: 'var_select',
                     var_type: ['DataFrame', 'Series']
                 },
@@ -2936,7 +2936,7 @@ define([
                 {
                     name: 'i0',
                     type:'var',
-                    label: 'Target Variable',
+                    label: 'DataFrame',
                     component: 'var_select',
                     var_type: ['DataFrame', 'Series']
                 }
@@ -2974,7 +2974,7 @@ define([
                 {
                     name: 'i0',
                     type:'var',
-                    label: 'Target Variable',
+                    label: 'DataFrame',
                     component: 'var_select',
                     var_type: ['DataFrame', 'Series']
                 },
@@ -5206,7 +5206,7 @@ define([
                 {
                     name: 'i0',
                     type: 'var',
-                    label: 'Target Variable',
+                    label: 'DataFrame',
                     component: 'var_select',
                     var_type: ['DataFrame', 'Series']
                 },
