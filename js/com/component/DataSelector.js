@@ -55,7 +55,7 @@ define([
                 allowDataType: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], // default allow data types
                 // additional options
                 classes: '',
-                placeholder: '',
+                placeholder: 'Select variable',
                 ...this.prop
             }
 

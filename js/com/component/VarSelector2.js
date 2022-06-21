@@ -14,7 +14,7 @@ define([
 
         _init() {
             this._value = "";
-            this._placeholder = "";
+            this._placeholder = "Select variable";
             this._compID = "";
             this._additionalClass = "";
             this._normalFilter = true;

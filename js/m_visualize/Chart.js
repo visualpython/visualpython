@@ -407,17 +407,17 @@ define([
             var that = this;
             
             let xSelector = new DataSelector({
-                pageThis: this, id: 'x', placeholder: 'Select data'
+                pageThis: this, id: 'x'
             });
             $(this.wrapSelector('#x')).replaceWith(xSelector.toTagString());
 
             let ySelector = new DataSelector({
-                pageThis: this, id: 'y', placeholder: 'Select data'
+                pageThis: this, id: 'y'
             });
             $(this.wrapSelector('#y')).replaceWith(ySelector.toTagString());
 
             let zSelector = new DataSelector({
-                pageThis: this, id: 'z', placeholder: 'Select data'
+                pageThis: this, id: 'z'
             });
             $(this.wrapSelector('#z')).replaceWith(zSelector.toTagString());
         }
