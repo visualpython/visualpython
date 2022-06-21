@@ -81,11 +81,16 @@ def vp_create_feature_importances(model, X_train=None, sort=False):
 ######
 # Visual Python: Machine Learning > Model Info
 ######
-def vp_plot_feature_importances(model, X_train=None, sort=False):
+def vp_plot_feature_importances(model, X_train=None, sort=False, top_count=0):
     df_i = vp_create_feature_importances(model, X_train, sort)
                         
-    if sort: df_i['Percentage'].sort_values().plot(kind='barh')
-    else: df_i['Percentage'].plot(kind='barh')
+    if sort: 
+        if top_count > 0:
+            df_i['Percentage'].sort_values().tail(top_count).plot(kind='barh')
+        else:
+            df_i['Percentage'].sort_values().plot(kind='barh')
+    else: 
+        df_i['Percentage'].plot(kind='barh')
     _vp_plt.xlabel('Feature importance Percentage')
     _vp_plt.ylabel('Features')
                         
