@@ -237,11 +237,29 @@ define([
                 }
                 $(tblInput).append(textarea);
                 break;
+            case 'input_number':
+                var input = com_makeDom.renderInput({
+                    'type': 'number',
+                    'class': 'vp-input vp-state',
+                    'id': obj.name,
+                    'placeholder': (obj.placeholder==undefined?'':obj.placeholder),
+                    'value': (obj.default==undefined?'':obj.default),
+                    'title': (obj.help==undefined?'':obj.help)
+                });
+                // cell metadata test
+                if (getValue && obj.value != undefined) {
+                    // set as saved value
+                    input.attr({
+                        'value': obj.value
+                    });
+                }
+                $(tblInput).append(input);
+                break;
             case 'table':
                 // break;
             case 'file':
                 // break;
-            // default : input_single
+                // default : input_single
             default:
                 // FIXME: use makedom
                 var input = com_makeDom.renderInput({
@@ -422,6 +440,7 @@ define([
             case 'table':
             case 'file':
             case 'option_suggest':
+            case 'input_number':
             default:
                 var input = $(vp_wrapSelector(pageId, '#'+obj.name)).val();
                 // same as default
