@@ -84,9 +84,9 @@ def _vp_sample(data, sample_cnt):
     sample_cnt = len(data) if len(data) < sample_cnt else sample_cnt
 
     if dataType == 'DataFrame':
-        return data.sample(sample_cnt)
+        return data.sample(sample_cnt, random_state=0)
     elif dataType == 'Series':
-        return data.sample(sample_cnt)
+        return data.sample(sample_cnt, random_state=0)
     elif dataType == 'ndarray':
         return data[_vp_np.random.choice(data.shape[0], sample_cnt, replace=False)]
     elif dataType == 'list':

@@ -118,6 +118,26 @@
                                             <label><input type="checkbox" id="showValues" class="vp-state"/><span>Show values</span></label>
                                             <input type="number" id="showValuesPrecision" class="vp-state" placeholder="Type precision (0 ~ 5)" min="0" max="5"/>
                                         </div>
+                                        <div class="vp-grid-col-p50 sb-option" style="grid-column-start: 1;grid-column-end: 3;">
+                                            <div class="vp-grid-box">
+                                                <label class="vp-bold">Sort values by 
+                                                    <select id="sortBy" class="vp-state vp-select" style="width: 75px;height:25px;">
+                                                        <option value="y">y axis</option>
+                                                        <option value="x">x axis</option>
+                                                    </select>
+                                                </label>
+                                                <select id="sortType" class="vp-state">
+                                                    <option value="">No sorting</option>
+                                                    <option value="descending">Sort in descending order</option>
+                                                    <option value="ascending">Sort in ascending order</option>
+                                                </select>
+                                            </div>
+                                            <div class="vp-grid-box">
+                                                <label class="vp-bold">Sort condition</label>
+                                                <input type="text" id="sortHue" class="vp-input vp-state" placeholder="Type hue condition"/>
+                                                <label><input type="checkbox" id="sortHueText" class="vp-state"/><span>Text</span></label>
+                                            </div>
+                                        </div>
                                     </div>
                                     <label for="userOption" class="vp-bold">User Option</label>
                                     <input type="text" id="userOption" class="vp-input vp-state wp100" placeholder="key=value, ..."/>

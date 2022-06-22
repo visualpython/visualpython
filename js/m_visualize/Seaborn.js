@@ -50,6 +50,10 @@ define([
                 stat: '',
                 showValues: false,
                 showValuesPrecision: '',
+                sortBy: 'y',
+                sortType: '',
+                sortHue: '',
+                sortHueText: false,
                 // axes options
                 x_limit_from: '',
                 x_limit_to: '',
@@ -194,8 +198,10 @@ define([
                     $(that.wrapSelector('#stat')).closest('.sb-option').show();
                 } else if (chartType == 'barplot') {
                     $(that.wrapSelector('#showValues')).closest('.sb-option').show();
+                    $(that.wrapSelector('#sortBy')).closest('.sb-option').show();
                 } else if (chartType == 'countplot') {
                     $(that.wrapSelector('#showValues')).closest('.sb-option').show();
+                    $(that.wrapSelector('#sortBy')).closest('.sb-option').show();
                 }
             });
             
@@ -209,6 +215,11 @@ define([
                     $(that.wrapSelector('#x')).closest('.vp-ds-box').replaceWith('<select id="x"></select>');
                     $(that.wrapSelector('#y')).closest('.vp-ds-box').replaceWith('<select id="y"></select>');
                     $(that.wrapSelector('#hue')).closest('.vp-ds-box').replaceWith('<select id="hue"></select>');
+
+                    // FIXME: hide sort values for barplot/countplot (as temporary)
+                    if (that.state.chartType == 'barplot' || that.state.chartType == 'countplot') {
+                        $(that.wrapSelector('#sortBy')).closest('.sb-option').show();
+                    }
                 } else {
                     // set X Y indivisually
                     // disable data selection
@@ -227,7 +238,40 @@ define([
 
                     let dataSelectorHue = new DataSelector({ pageThis: that, id: 'hue' });
                     $(that.wrapSelector('#hue')).replaceWith(dataSelectorHue.toTagString());
+
+                    // FIXME: hide sort values for barplot/countplot (as temporary)
+                    if (that.state.chartType == 'barplot' || that.state.chartType == 'countplot') {
+                        $(that.wrapSelector('#sortBy')).closest('.sb-option').hide();
+                    }
                     
+                }
+            });
+
+            // change hue
+            $(document).off('change', this.wrapSelector('.vp-state'));
+            $(document).on('change', this.wrapSelector('#hue'), function() {
+                let { chartType, data } = that.state;
+                let hue = $(this).val();
+                if (chartType == 'barplot' || chartType == 'countplot') {
+                    let colDtype = $(that.wrapSelector('#hue')).find('option:selected').data('type');
+                    console.log(data, hue);
+                    // get result and load column list
+                    vpKernel.getColumnCategory(data, hue).then(function (resultObj) {
+                        let { result } = resultObj;
+                        try {
+                            var category = JSON.parse(result);
+                            if (category && category.length > 0 && colDtype == 'object') {
+                                // if it's categorical column and its dtype is object, check 'Text' as default
+                                $(that.wrapSelector('#sortHueText')).prop('checked', true);
+                            } else {
+                                $(that.wrapSelector('#sortHueText')).prop('checked', false);
+                            }
+                            $(that.wrapSelector('#sortHue')).replaceWith(that.templateForHueCondition(category, colDtype));
+                        } catch {
+                            $(that.wrapSelector('#sortHueText')).prop('checked', false);
+                            $(that.wrapSelector('#sortHue')).replaceWith(that.templateForHueCondition([], colDtype));
+                        }
+                    });
                 }
             });
 
@@ -541,6 +585,25 @@ define([
             this.loadPreview();
         }
 
+        templateForHueCondition(category, dtype='object') {
+            var vpCondSuggest = new SuggestInput();
+            vpCondSuggest.setComponentID('sortHue');
+            vpCondSuggest.addClass('vp-input vp-state');
+            vpCondSuggest.setPlaceholder('Type hue condition');
+            if (category && category.length > 0) {
+                vpCondSuggest.setPlaceholder((dtype=='object'?'Categorical':dtype) + " dtype");
+                vpCondSuggest.setSuggestList(function () { return category; });
+                vpCondSuggest.setSelectEvent(function (value) {
+                    $(this.wrapSelector()).val(value);
+                    $(this.wrapSelector()).trigger('change');
+                });
+                vpCondSuggest.setNormalFilter(false);
+            } else {
+                vpCondSuggest.setPlaceholder(dtype==''?'Value':(dtype + " dtype"));
+            }
+            return vpCondSuggest.toTagString();
+        }
+
         bindSettingBox() {
             //====================================================================
             // Stylesheet suggestinput
@@ -706,7 +769,9 @@ define([
 
         generateCode(preview=false) {
             let { 
-                chartType, data, x, y, setXY, hue, kde, stat, showValues, showValuesPrecision, 
+                chartType, data, x, y, setXY, hue, kde, stat, 
+                showValues, showValuesPrecision, 
+                sortType, sortBy, sortHue, sortHueText,
                 userOption='', 
                 x_limit_from, x_limit_to, y_limit_from, y_limit_to,
                 xticks, xticks_label, xticks_rotate, removeXticks,
@@ -721,25 +786,6 @@ define([
             let code = new com_String();
             let config = this.chartConfig[chartType];
             let state = JSON.parse(JSON.stringify(this.state));
-
-            let chartCode = new com_String();
-
-            let etcOptionCode = []
-            if (useColor == true && color != '') {
-                etcOptionCode.push(com_util.formatString("color='{0}'", color));
-            }
-            if (markerStyle != '') {
-                // TODO: marker to seaborn argument (ex. marker='+' / markers={'Lunch':'s', 'Dinner':'X'})
-                etcOptionCode.push(com_util.formatString("marker='{0}'", markerStyle));
-            }
-            if (showValues === true && chartType === 'barplot') {
-                etcOptionCode.push('ci=None');
-            }
-
-            // add user option
-            if (userOption != '') {
-                etcOptionCode.push(userOption);
-            }
 
             if (preview && useSampling) {
                 // data sampling code for preview
@@ -762,7 +808,71 @@ define([
                         state.data = com_util.formatString('_vp_sample({0}, {1})', data, sampleCount);
                     }
                 }
-            }   
+            }  
+
+            let chartCode = new com_String();
+
+            let etcOptionCode = []
+            if (useColor == true && color != '') {
+                etcOptionCode.push(com_util.formatString("color='{0}'", color));
+            }
+            if (markerStyle != '') {
+                // TODO: marker to seaborn argument (ex. marker='+' / markers={'Lunch':'s', 'Dinner':'X'})
+                etcOptionCode.push(com_util.formatString("marker='{0}'", markerStyle));
+            }
+            if (showValues === true && chartType === 'barplot') {
+                etcOptionCode.push('ci=None');
+            }
+            if (sortType != '') {
+                let sortCode = '';
+                let sortTypeStr = (sortType === 'descending'? 'ascending=False': 'ascending=True');
+                let sortX = state.x;
+                let sortY = state.y;
+                if (sortBy === 'x') {
+                    sortX = state.y;
+                    sortY = state.x;
+                }
+                if (chartType === 'barplot') {
+                    if (setXY === true) {
+                        // TODO: sort on setXY
+                        // if (hue !== '' && sortHue !== '') {
+                        //     sortCode = com_util.formatString("{}.groupby({})[{}].mean().sort_values({}).index")
+                        // } else {
+                        //     sortCode = com_util.formatString("pd.concat([{0},{1}], axis=1).groupby({2})[{3}].mean().sort_values({4}).index"
+                        //                         , sortX, sortY, sortX)
+                        // }
+                    } else {
+                        if (hue !== '' && sortHue !== '') {
+                            sortCode = com_util.formatString("{0}[{1}[{2}]=={3}].groupby({4})[{5}].mean().sort_values({6}).index"
+                                                , state.data, state.data, state.hue, com_util.convertToStr(sortHue, sortHueText), sortX, sortY, sortTypeStr);
+                        } else {
+                            sortCode = com_util.formatString("{0}.groupby({1})[{2}].mean().sort_values({3}).index", state.data, sortX, sortY, sortTypeStr);
+                        }
+                    }
+                } else if (chartType === 'countplot') {
+                    let countVar = sortX === ''? sortY: sortX;
+                    if (setXY === true) {
+                        // TODO: sort on setXY
+                        ;
+                    } else {
+                        if (hue !== '' && sortHue !== '') {
+                            sortCode = com_util.formatString("{0}[{1}[{2}]=={3}][{4}].value_counts({5}).index"
+                                                , state.data, state.data, state.hue, com_util.convertToStr(sortHue, sortHueText), countVar, sortTypeStr);
+                        } else {
+                            sortCode = com_util.formatString("{0}[{1}].value_counts({2}).index", state.data, countVar, sortTypeStr);
+                        }
+                    }
+                }
+
+                if (sortCode != '') {
+                    etcOptionCode.push('order=' + sortCode);
+                }
+            }
+
+            // add user option
+            if (userOption != '') {
+                etcOptionCode.push(userOption);
+            } 
 
             let generatedCode = com_generator.vp_codeGenerator(this, config, state
                 , etcOptionCode.length > 0? ', ' + etcOptionCode.join(', '): '');
