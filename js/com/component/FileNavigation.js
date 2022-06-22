@@ -84,6 +84,7 @@ define([
             this.currentFileList = [];
 
             this.pathState = {
+                parentPath: '',
                 currentPath: '',
                 baseFolder: '',     // root folder name
                 relativeDir: '',    // root folder name
@@ -257,9 +258,24 @@ define([
             let fileList = this.currentFileList;
             // clear body
             $(this.wrapSelector('.fileNavigationPage-body')).html('');
+
             // render file items
             let dirArr = [];
             let fileArr = [];
+
+            // render upper folder
+            if (that.pathState.parentPath != '') {
+                let upperFolderTag = that.renderFileItem({
+                    name: '..',
+                    type: 'dir',
+                    path: that.pathState.parentPath,
+                    size: '',
+                    atime: '',
+                    mtime: ''
+                });
+                dirArr.push(upperFolderTag);
+            }
+
             fileList && fileList.forEach((file, idx) => {
                 if (idx == 0) return;
                 let fileTag = that.renderFileItem(file);
@@ -400,7 +416,7 @@ define([
                     let selectedExt = $(that.wrapSelector('#vp_fileNavigationExt')).val();
                     let fileExtIdx = fileName.lastIndexOf('.');
                     // if no extension, add it
-                    if (fileExtIdx < 0 || fileName.substring(fileExtIdx + 1) != selectedExt) {
+                    if (selectedExt != '' && (fileExtIdx < 0 || fileName.substring(fileExtIdx + 1) != selectedExt)) {
                         fileName += '.' + selectedExt;
                     }
                     // no path, set it
@@ -408,7 +424,7 @@ define([
                         filePath = './' + fileName;
                     }
                     fileExtIdx = filePath.lastIndexOf('.');
-                    if (fileExtIdx < 0 || filePath.substring(fileExtIdx + 1) != selectedExt) {
+                    if (selectedExt != '' && (fileExtIdx < 0 || filePath.substring(fileExtIdx + 1) != selectedExt)) {
                         filePath += '.' + selectedExt;
                     }
 
@@ -569,8 +585,15 @@ define([
                     });
                 }
 
+                vpLog.display(VP_LOG_TYPE.DEVELOP, 'FileNavigation - getFileList: ', filtered_varList);
 
                 var { currentDirStr,  currentRelativePathStr } = that.splitPathStrAndSetStack(dirObj, filtered_varList);
+                if (filtered_varList[0].current === filtered_varList[0].parent) {
+                    // no parent
+                    that.pathState.parentPath = '';
+                } else {
+                    that.pathState.parentPath = filtered_varList[0].parent; // parent path
+                }
                 that.pathState.relativeDir = currentRelativePathStr;
                 that.pathState.currentPath = currentDirStr;
                 that.currentFileList = filtered_varList;

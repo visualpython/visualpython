@@ -73,6 +73,7 @@ nltk.download('punkt')`;
             this.config.importButton = true;
             this.config.dataview = false;
             this.config.size = { width: 500, height: 400 };
+            this.config.checkModules = ['pd', 'fitz', 'nltk', 'vp_pdf_get_sentence'];
 
             this.state = {
                 vp_pdfFile: '',

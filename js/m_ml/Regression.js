@@ -88,7 +88,7 @@ define([
                 let config = that.modelConfig[that.state.modelType];
                 if (config && config.install != undefined) {
                     // insert install code
-                    com_interface.insertCell('code', config.install);
+                    com_interface.insertCell('code', config.install, true, 'Machine Learning > Regression');
                 }
             });
 

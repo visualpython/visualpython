@@ -14,8 +14,9 @@
 define([
     './com_Const', 
     './com_util', 
-    './com_interface'
-], function(com_Const, com_util, com_interface) {
+    './com_interface',
+    'text!vp_base/python/userCommand.py',
+], function(com_Const, com_util, com_interface, userCommandFile) {
 	'use strict';
     //========================================================================
     // Define Inner Variable
@@ -115,7 +116,56 @@ define([
             this.defaultConfig = {};
             this.metadataSettings = {};
 
+            this.moduleDict = {
+                'np': {
+                    code: 'import numpy as np',
+                    type: 'package'
+                },
+                'pd': {
+                    code: 'import pandas as pd',
+                    type: 'package'
+                },
+                'plt': {
+                    code: 'import matplotlib.pyplot as plt\n%matplotlib inline',
+                    type: 'package'
+                },
+                'sns': {
+                    code: 'import seaborn as sns',
+                    type: 'package'
+                },
+                'metrics': {
+                    code: 'from sklearn import metrics',
+                    type: 'package'
+                },
+                'ProfileReport': {
+                    code: 'from pandas_profiling import ProfileReport',
+                    type: 'package'
+                },
+                'px': {
+                    code: 'import plotly.express as px',
+                    type: 'package'
+                },
+                'WordCloud': {
+                    code: 'from wordcloud import WordCloud',
+                    type: 'package'
+                },
+                'fitz': {
+                    code: 'import fitz',
+                    type: 'package'
+                },
+                'nltk': {
+                    code: "import nltk\nnltk.download('punkt')",
+                    type: 'package'
+                },
+                'Counter': {
+                    code: 'from collections import Counter',
+                    type: 'package'
+                }
+            }
+
             this._readDefaultConfig();
+            this._readUserCommandList();
+            
         }
 
         /**
@@ -150,6 +200,46 @@ define([
             $.extend(true, this.defaultConfig, this.metadataSettings);
         }
 
+        _readUserCommandList() {
+            let divider = '#'.repeat(6);
+            // get list of codes (ignore first 2 items)
+            let tmpList = userCommandFile.split(divider).slice(2);
+
+            // match key-codes-description
+            // { 'func_name': { code: '', description: '' } }
+            let funcDict = {};
+            let reg = /^def (.+)\(/;
+            let name = '';
+            let code = '';
+            let desc = '';
+            let packageAlias = {
+                '_vp_np': 'np',
+                '_vp_pd': 'pd',
+                '_vp_plt': 'plt'
+            }
+
+            for (let i = 0; i < tmpList.length; i += 2) {
+                desc = tmpList[i].trim();
+                code = tmpList[i + 1].trim();
+                let regResult = reg.exec(code);
+                if (regResult !== null) {
+                    name = regResult[1];
+                    // convert code's package alias
+                    Object.keys(packageAlias).forEach(key => {
+                        let desAlias = packageAlias[key];
+                        code = code.replaceAll(key + '.', desAlias + '.');
+                    });
+                    // list up
+                    funcDict[name] = { code: code, type: 'function', description: desc };
+                }
+            }
+
+            this.moduleDict = {
+                ...this.moduleDict,
+                ...funcDict
+            }
+        }
+
         /**
          * Read kernel functions for using visualpython
          * - manually click restart menu (MenuFrame.js)
@@ -161,7 +251,7 @@ define([
                 'fileNaviCommand.py',
                 'pandasCommand.py',
                 'variableCommand.py',
-                'userCommand.py'
+                // 'userCommand.py'
             ];
             let promiseList = [];
             libraryList.forEach(libName => {
@@ -464,6 +554,17 @@ define([
             return Object.keys(Config.ML_DATA_DICT);
         }
 
+        getModuleCode(modName='') {
+            if (modName == '') {
+                return this.moduleDict;
+            }
+            try {
+                return this.moduleDict[modName];
+            } catch {
+                return null;
+            }
+        }
+
     }
 
     //========================================================================
@@ -478,7 +579,7 @@ define([
     /**
      * Version
      */
-    Config.version = "2.2.4";
+    Config.version = "2.2.5";
 
     /**
      * Type of mode

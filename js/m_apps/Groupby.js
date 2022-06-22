@@ -30,6 +30,7 @@ define([
             super._init();
             /** Write codes executed before rendering */
             this.config.size = { width: 700, height: 550 };
+            this.config.checkModules = ['pd'];
 
             this.periodList = [
                 { label: 'business day', value: 'B'},
@@ -395,6 +396,7 @@ define([
             variableInput.setPlaceholder('Select variable');
             variableInput.setSuggestList(function () { return mappedList; });
             variableInput.setNormalFilter(true);
+            variableInput.addAttribute('required', true);
             variableInput.setValue(defaultValue);
 
             return variableInput.toTagString();

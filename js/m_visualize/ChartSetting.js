@@ -75,7 +75,6 @@ define([
             var code = new com_String(); 
             // FIXME: convert it to kernelApi
             code.appendLine('import matplotlib.pyplot as plt');
-            code.appendLine('%matplotlib inline');
             code.appendLine('import json');
             code.append(`print(json.dumps([{ 'label': s, 'value': s } for s in plt.style.available]))`);
             vpKernel.execute(code.toString()).then(function(resultObj) {
@@ -125,8 +124,8 @@ define([
         generateImportCode() {
             var code = new com_String();
             code.appendLine('import matplotlib.pyplot as plt');
-            code.appendLine('import seaborn as sns');
             code.append('%matplotlib inline');
+            code.appendLine('import seaborn as sns');
             return [code.toString()];
         }
 
@@ -143,6 +142,7 @@ define([
                 let { figureWidth, figureHeight, styleSheet, fontName, fontSize } = this.state;
         
                 code.appendLine('import matplotlib.pyplot as plt');
+                code.appendLine('%matplotlib inline');
                 code.appendLine('import seaborn as sns');
                 code.appendFormatLine("plt.rc('figure', figsize=({0}, {1}))", figureWidth, figureHeight);
                 if (styleSheet && styleSheet.length > 0) {

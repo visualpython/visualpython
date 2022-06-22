@@ -15,12 +15,11 @@
 define([
     'text!vp_base/html/component/innerFuncViewer.html!strip',
     'css!vp_base/css/component/innerFuncViewer.css',
-    'text!vp_base/python/userCommand.py',
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_String',
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/FileNavigation'
-], function(ifHtml, ifCss, userCommandFile, com_util, com_String, PopupComponent, FileNavigation) {
+], function(ifHtml, ifCss, com_util, com_String, PopupComponent, FileNavigation) {
 
     /**
      * InnerFuncViewer
@@ -46,12 +45,6 @@ define([
     
             // double click setter
             this.clicked = 0;
-
-            this.packageAlias = {
-                '_vp_np': 'np',
-                '_vp_pd': 'pd',
-                '_vp_plt': 'plt'
-            }
         }
 
         _bindEvent() {
@@ -181,33 +174,8 @@ define([
         loadUserCommandList() {
             var that = this;
 
-            let divider = '#'.repeat(6);
-            // get list of codes (ignore first 2 items)
-            let tmpList = userCommandFile.split(divider).slice(2);
-
-            // match key-codes-description
-            // { 'func_name': { code: '', description: '' } }
-            let funcDict = {};
-            let reg = /^def (.+)\(/;
-            let name = '';
-            let code = '';
-            let desc = '';
-
-            for (let i = 0; i < tmpList.length; i += 2) {
-                desc = tmpList[i].trim();
-                code = tmpList[i + 1].trim();
-                let regResult = reg.exec(code);
-                if (regResult !== null) {
-                    name = regResult[1];
-                    // convert code's package alias
-                    Object.keys(that.packageAlias).forEach(key => {
-                        let desAlias = that.packageAlias[key];
-                        code = code.replaceAll(key + '.', desAlias + '.');
-                    });
-                    // list up
-                    funcDict[name] = { code: code, description: desc };
-                }
-            }
+            let funcDict = vpConfig.getModuleCode();
+            funcDict = Object.fromEntries(Object.entries(funcDict).filter(([key]) => funcDict[key].type == 'function'));
 
             // clear table except head
             $(this.wrapSelector('.vp-if-table')).html('');
