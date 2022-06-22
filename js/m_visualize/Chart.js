@@ -34,6 +34,7 @@ define([
             /** Write codes executed before rendering */
             this.config.dataview = false;
             this.config.sizeLevel = 2;
+            this.config.checkModules = ['plt'];
             
             this.setDefaultVariables();
             this.state = {
@@ -78,6 +79,9 @@ define([
                         if (obj.required != false) {
                             // label = "* " + obj.label;
                             $(that.wrapSelector('#' + obj.name)).closest('tr').find('th').addClass('vp-orange-text');
+                            $(that.wrapSelector('#' + obj.name)).attr({'required': true});
+                        } else {
+                            $(that.wrapSelector('#' + obj.name)).attr({'required': false});
                         }
                         // $(that.wrapSelector("label[for='" + obj.name + "']")).text(label);
                         $(that.wrapSelector('#' + obj.name)).closest('tr').find('th').text(label);
@@ -159,7 +163,7 @@ define([
         }
 
         templateForBody() {
-            return chartHTml
+            return chartHTml;
         }
 
         loadState() {
@@ -338,6 +342,9 @@ define([
                     if (obj.required != false) {
                         // label = "* " + obj.label;
                         $(this.wrapSelector('#' + obj.name)).closest('tr').find('th').addClass('vp-orange-text');
+                        $(this.wrapSelector('#' + obj.name)).attr({'required': true});
+                    } else {
+                        $(this.wrapSelector('#' + obj.name)).attr({'required': false});
                     }
                     // $(this.wrapSelector("label[for='" + obj.name + "']")).text(label);
                     $(this.wrapSelector('#' + obj.name)).closest('tr').find('th').text(label);
@@ -407,17 +414,17 @@ define([
             var that = this;
             
             let xSelector = new DataSelector({
-                pageThis: this, id: 'x', placeholder: 'Select data'
+                pageThis: this, id: 'x'
             });
             $(this.wrapSelector('#x')).replaceWith(xSelector.toTagString());
 
             let ySelector = new DataSelector({
-                pageThis: this, id: 'y', placeholder: 'Select data'
+                pageThis: this, id: 'y', required: true
             });
             $(this.wrapSelector('#y')).replaceWith(ySelector.toTagString());
 
             let zSelector = new DataSelector({
-                pageThis: this, id: 'z', placeholder: 'Select data'
+                pageThis: this, id: 'z'
             });
             $(this.wrapSelector('#z')).replaceWith(zSelector.toTagString());
         }
@@ -639,8 +646,10 @@ define([
                 sbCode.append('plt.show()');
 
             } catch (exmsg) {
-                // 에러 표시
-                com_util.renderAlertModal(exmsg);
+                // show error on alert modal
+                if (this.isHidden() == false) {
+                    com_util.renderAlertModal(exmsg);
+                }
             }
     
             return sbCode.toString();

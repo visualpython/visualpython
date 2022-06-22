@@ -207,7 +207,7 @@ define([
                 {
                     name:'i0',
                     type:'var',
-                    label: 'Target Variable',
+                    label: 'DataFrame',
                     component: 'var_select',
                     var_type: ['DataFrame', 'Series']
                 },
@@ -2936,7 +2936,7 @@ define([
                 {
                     name: 'i0',
                     type:'var',
-                    label: 'Target Variable',
+                    label: 'DataFrame',
                     component: 'var_select',
                     var_type: ['DataFrame', 'Series']
                 }
@@ -2974,7 +2974,7 @@ define([
                 {
                     name: 'i0',
                     type:'var',
-                    label: 'Target Variable',
+                    label: 'DataFrame',
                     component: 'var_select',
                     var_type: ['DataFrame', 'Series']
                 },
@@ -5017,22 +5017,17 @@ define([
             name: 'Plot',
             library: 'pandas',
             description: 'create chart',
-            code: '${o0} = ${i0}.plot(${v}${etc})\nplt.show()',
+            code: '${i0}.plot(${v}${etc})\nplt.show()',
             input: [
                 {
                     name: 'i0',
-                    type:'var',
-                    label: 'Pandas Object',
-                    component: 'var_select',
-                    var_type: ['DataFrame', 'Series']
+                    type: 'var',
+                    label: 'DataFrame',
+                    var_type: ['DataFrame', 'Series'],
+                    required: true
                 }
             ],
             output: [
-                {
-                    name:'o0',
-                    type:'var',
-                    label:'Allocate to'
-                }
             ],
             variable: [
                 {
@@ -5046,7 +5041,7 @@ define([
                 },
                 {
                     name: 'title',
-                    type: ['text', 'list'],
+                    type: 'text',
                     label: 'Chart Title'
                 },
                 {
@@ -5058,6 +5053,7 @@ define([
                 {
                     name: 'fontsize',
                     type: 'int',
+                    component: 'input_number',
                     label: 'Font Size'
                 },
                 {
@@ -5089,16 +5085,17 @@ define([
                 {
                     name: 'rot',
                     type: 'int',
+                    component: 'input_number',
                     label: 'X Label Rotation'
                 },
                 {
                     name: 'xlabel',
-                    type: 'list',
+                    type: 'text',
                     label: 'X Label'
                 },
                 {
                     name: 'ylabel',
-                    type: 'list',
+                    type: 'text',
                     label: 'Y Label'
                 },
                 {
@@ -5210,7 +5207,7 @@ define([
                 {
                     name: 'i0',
                     type: 'var',
-                    label: 'Target Variable',
+                    label: 'DataFrame',
                     component: 'var_select',
                     var_type: ['DataFrame', 'Series']
                 },

@@ -255,6 +255,14 @@ define([
             $(this.wrapSelector('.vp-ins-select-list.info .vp-ins-select-item')).on('click', function() {
                 let name = $(this).data('var-name');
                 let type = $(this).data('var-type');
+
+                if (name == 'feature_importances') {
+                    that.config.checkModules = ['pd', 'vp_create_feature_importances'];
+                } else if (name == 'plot_feature_importances') {
+                    that.config.checkModules = ['pd', 'plt', 'vp_create_feature_importances', 'vp_plot_feature_importances'];
+                } else {
+                    that.config.checkModules = ['pd'];
+                }
                 
                 that.renderOptionPage(type, name);
 
@@ -425,11 +433,12 @@ define([
                 'plot_feature_importances': {
                     name: 'plot_feature_importances',
                     label: 'Plot feature importances',
-                    code: "vp_plot_feature_importances(${model}, ${fi_featureData}${sort})",
+                    code: "vp_plot_feature_importances(${model}, ${fi_featureData}${sort}${top_count})",
                     description: 'Draw feature_importances_',
                     options: [
                         { name: 'fi_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_train' },
-                        { name: 'sort', label: 'Sort data', component: ['bool_checkbox'], value: true, usePair: true }
+                        { name: 'sort', label: 'Sort data', component: ['bool_checkbox'], value: true, usePair: true },
+                        { name: 'top_count', label: 'Top count', component: ['input_number'], min: 0, max: 5, usePair: true },
                     ]
                 }
             }

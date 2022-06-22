@@ -25,23 +25,6 @@ define([
     'vp_base/data/m_visualize/plotlyLibrary',
 ], function(ptHTML, ptCss, com_String, com_generator, com_util, PopupComponent, SuggestInput, FileNavigation, DataSelector, PLOTLY_LIBRARIES) {
 
-    /**
-     * TODO: libraries.json add menu
-     * {
-            "id"   : "visualize_plotly",
-            "type" : "function",
-            "level": 1,
-            "name" : "Plotly",
-            "tag"  : "PLOTLY,VISUALIZATION,VISUALIZE",
-            "path" : "visualpython - visualization - plotly",
-            "desc" : "Plotly express",
-            "file" : "m_visualize/Plotly",
-            "apps" : {
-                "color": 5,
-                "icon": "apps/apps_visualize.svg"
-            }
-        },
-     */
     class Plotly extends PopupComponent {
         _init() {
             super._init();
@@ -50,12 +33,20 @@ define([
             this.config.installButton = true;
             this.config.importButton = true;
             this.config.dataview = false;
+            this.config.checkModules = ['px'];
 
             this.state = {
                 chartType: 'scatter',
                 data: '',
+                x: '', y: '', z: '',
+                x_start: '', x_end: '',
+                values: '', names: '', parents: '',
+                color: '',
+                sort: '',
                 userOption: '',
                 title: '',
+                x_label: '',
+                y_label: '',
                 userCode: '',
                 autoRefresh: true,
                 ...this.state
@@ -118,28 +109,36 @@ define([
                     $(that.wrapSelector('#x')).closest('.pt-option').show();
                     $(that.wrapSelector('#y')).closest('.pt-option').show();
                     $(that.wrapSelector('#z')).closest('.pt-option').show();
+                    if (chartType === 'density_contour') {
+                        $(that.wrapSelector('#color')).closest('.pt-option').show();
+                    }
                 }
                 else if (chartType === 'timeline') {
                     $(that.wrapSelector('#x_start')).closest('.pt-option').show();
                     $(that.wrapSelector('#x_end')).closest('.pt-option').show();
                     $(that.wrapSelector('#y')).closest('.pt-option').show();
+                    $(that.wrapSelector('#color')).closest('.pt-option').show();
                 }
                 else if (chartType === 'pie' || chartType === 'funnel_area') {
                     // show values, names
                     $(that.wrapSelector('#values')).closest('.pt-option').show();
                     $(that.wrapSelector('#names')).closest('.pt-option').show();
+                    $(that.wrapSelector('#color')).closest('.pt-option').show();
                 }
                 else if (chartType === 'sunburst' || chartType === 'treemap' || chartType === 'icicle') {
                     // show values, names, parents
                     $(that.wrapSelector('#values')).closest('.pt-option').show();
                     $(that.wrapSelector('#names')).closest('.pt-option').show();
+                    $(that.wrapSelector('#color')).closest('.pt-option').show();
                     $(that.wrapSelector('#parents')).closest('.pt-option').show();
                 }
                 else {
                     // show x, y
                     $(that.wrapSelector('#x')).closest('.pt-option').show();
                     $(that.wrapSelector('#y')).closest('.pt-option').show();
+                    $(that.wrapSelector('#color')).closest('.pt-option').show();
                 }
+                $(that.wrapSelector('#sort')).closest('.pt-option').show();
             });
 
             // use data or not
@@ -157,6 +156,7 @@ define([
                     $(that.wrapSelector('#values')).closest('.vp-ds-box').replaceWith('<select id="values"></select>');
                     $(that.wrapSelector('#names')).closest('.vp-ds-box').replaceWith('<select id="names"></select>');
                     $(that.wrapSelector('#parents')).closest('.vp-ds-box').replaceWith('<select id="parents"></select>');
+                    $(that.wrapSelector('#color')).closest('.vp-ds-box').replaceWith('<select id="color"></select>');
                 } else {
                     // set X Y indivisually
                     // disable data selection
@@ -171,6 +171,7 @@ define([
                     that.state.values = '';
                     that.state.names = '';
                     that.state.parents = '';
+                    that.state.color = '';
 
                     let dataSelectorX = new DataSelector({ pageThis: that, id: 'x' });
                     $(that.wrapSelector('#x')).replaceWith(dataSelectorX.toTagString());
@@ -195,6 +196,9 @@ define([
 
                     let dataSelectorParents = new DataSelector({ pageThis: that, id: 'parents' });
                     $(that.wrapSelector('#parents')).replaceWith(dataSelectorParents.toTagString());
+
+                    let dataSelectorColor = new DataSelector({ pageThis: that, id: 'color' });
+                    $(that.wrapSelector('#color')).replaceWith(dataSelectorColor.toTagString());
                     
                 }
             });
@@ -255,10 +259,11 @@ define([
                         $(that.wrapSelector('#values')).prop('disabled', false);
                         $(that.wrapSelector('#names')).prop('disabled', false);
                         $(that.wrapSelector('#parents')).prop('disabled', false);
+                        $(that.wrapSelector('#color')).prop('disabled', false);
                         
                         // bind column source using selected dataframe
                         com_generator.vp_bindColumnSource(that, 'data', [
-                            'x', 'x_start', 'x_end', 'y', 'z', 'values', 'names', 'parents'
+                            'x', 'x_start', 'x_end', 'y', 'z', 'values', 'names', 'parents', 'color'
                         ], 'select', true, true);
                     } else {
                         $(that.wrapSelector('#x')).prop('disabled', true);
@@ -269,6 +274,7 @@ define([
                         $(that.wrapSelector('#values')).prop('disabled', true);
                         $(that.wrapSelector('#names')).prop('disabled', true);
                         $(that.wrapSelector('#parents')).prop('disabled', true);
+                        $(that.wrapSelector('#color')).prop('disabled', true);
                         
                     }
                 },
@@ -284,10 +290,11 @@ define([
                         $(that.wrapSelector('#values')).prop('disabled', false);
                         $(that.wrapSelector('#names')).prop('disabled', false);
                         $(that.wrapSelector('#parents')).prop('disabled', false);
+                        $(that.wrapSelector('#color')).prop('disabled', false);
                         
                         // bind column source using selected dataframe
                         com_generator.vp_bindColumnSource(that, 'data', [
-                            'x', 'x_start', 'x_end', 'y', 'z', 'values', 'names', 'parents'
+                            'x', 'x_start', 'x_end', 'y', 'z', 'values', 'names', 'parents', 'color'
                         ], 'select', true, true);
                     } else {
                         $(that.wrapSelector('#x')).prop('disabled', true);
@@ -298,6 +305,7 @@ define([
                         $(that.wrapSelector('#values')).prop('disabled', true);
                         $(that.wrapSelector('#names')).prop('disabled', true);
                         $(that.wrapSelector('#parents')).prop('disabled', true);
+                        $(that.wrapSelector('#color')).prop('disabled', true);
                     }
                 }
             });
@@ -310,18 +318,23 @@ define([
                 $(page).find('#x').closest('.pt-option').show();
                 $(page).find('#y').closest('.pt-option').show();
                 $(page).find('#z').closest('.pt-option').show();
+                if (this.state.chartType === 'density_contour') {
+                    $(page).find('#color').closest('.pt-option').show();
+                }
             }
             else if (this.state.chartType === 'timeline') {
                 // show x_start, x_end, y
                 $(page).find('#x_start').closest('.pt-option').show();
                 $(page).find('#x_end').closest('.pt-option').show();
                 $(page).find('#y').closest('.pt-option').show();
+                $(page).find('#color').closest('.pt-option').show();
             }
             else if (this.state.chartType === 'pie' 
                 || this.state.chartType === 'funnel_area') {
                 // show values, names
                 $(page).find('#values').closest('.pt-option').show();
                 $(page).find('#names').closest('.pt-option').show();
+                $(page).find('#color').closest('.pt-option').show();
             }
             else if (this.state.chartType === 'sunburst' 
                 || this.state.chartType === 'treemap' 
@@ -329,13 +342,16 @@ define([
                 // show values, names, parents
                 $(page).find('#values').closest('.pt-option').show();
                 $(page).find('#names').closest('.pt-option').show();
+                $(page).find('#color').closest('.pt-option').show();
                 $(page).find('#parents').closest('.pt-option').show();
             }
             else {
                 // show x, y
                 $(page).find('#x').closest('.pt-option').show();
                 $(page).find('#y').closest('.pt-option').show();
+                $(page).find('#color').closest('.pt-option').show();
             }
+            $(page).find('#sort').closest('.pt-option').show();
 
             //================================================================
             // Load state
@@ -391,7 +407,7 @@ define([
                 key: userCodeKey,
                 selector: userCodeTarget,
                 events: [{
-                    key: 'change',
+                    key: 'blur',
                     callback: function(instance, evt) {
                         // save its state
                         instance.save();
@@ -409,44 +425,46 @@ define([
             let that = this;
             let code = this.generateCode(true);
 
-            // show variable information on clicking variable
-            vpKernel.execute(code).then(function(resultObj) {
-                let { result, type, msg } = resultObj;
-                if (msg.content.data) {
-                    var textResult = msg.content.data["text/plain"];
-                    var htmlResult = msg.content.data["text/html"];
-                    var imgResult = msg.content.data["image/png"];
-                    
-                    $(that.wrapSelector('#vp_ptPreview')).html('');
-                    if (htmlResult != undefined) {
-                        // 1. HTML tag
-                        $(that.wrapSelector('#vp_ptPreview')).append(htmlResult);
-                    } else if (imgResult != undefined) {
-                        // 2. Image data (base64)
-                        var imgTag = '<img src="data:image/png;base64, ' + imgResult + '">';
-                        $(that.wrapSelector('#vp_ptPreview')).append(imgTag);
-                    } else if (textResult != undefined) {
-                        // 3. Text data
-                        var preTag = document.createElement('pre');
-                        $(preTag).text(textResult);
-                        $(that.wrapSelector('#vp_ptPreview')).html(preTag);
+            that.checkAndRunModules(true).then(function() {
+                // show variable information on clicking variable
+                vpKernel.execute(code).then(function(resultObj) {
+                    let { result, type, msg } = resultObj;
+                    if (msg.content.data) {
+                        var textResult = msg.content.data["text/plain"];
+                        var htmlResult = msg.content.data["text/html"];
+                        var imgResult = msg.content.data["image/png"];
+                        
+                        $(that.wrapSelector('#vp_ptPreview')).html('');
+                        if (htmlResult != undefined) {
+                            // 1. HTML tag
+                            $(that.wrapSelector('#vp_ptPreview')).append(htmlResult);
+                        } else if (imgResult != undefined) {
+                            // 2. Image data (base64)
+                            var imgTag = '<img src="data:image/png;base64, ' + imgResult + '">';
+                            $(that.wrapSelector('#vp_ptPreview')).append(imgTag);
+                        } else if (textResult != undefined) {
+                            // 3. Text data
+                            var preTag = document.createElement('pre');
+                            $(preTag).text(textResult);
+                            $(that.wrapSelector('#vp_ptPreview')).html(preTag);
+                        }
+                    } else {
+                        var errorContent = '';
+                        if (msg.content.ename) {
+                            errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
+                        }
+                        $(that.wrapSelector('#vp_ptPreview')).html(errorContent);
+                        vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
                     }
-                } else {
+                }).catch(function(resultObj) {
+                    let { msg } = resultObj;
                     var errorContent = '';
                     if (msg.content.ename) {
                         errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
                     }
                     $(that.wrapSelector('#vp_ptPreview')).html(errorContent);
                     vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
-                }
-            }).catch(function(resultObj) {
-                let { msg } = resultObj;
-                var errorContent = '';
-                if (msg.content.ename) {
-                    errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
-                }
-                $(that.wrapSelector('#vp_ptPreview')).html(errorContent);
-                vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
+                });
             });
         }
 
@@ -470,9 +488,9 @@ define([
              */
             let { 
                 chartType,
-                data, x, y, setXY,
+                data, x, y, color, setXY, sort,
                 userOption, userCode,
-                title
+                title, x_label, y_label
             } = this.state;
             let code = new com_String();
             let config = this.chartConfig[chartType];
@@ -481,6 +499,42 @@ define([
             // add title
             if (title != '') {
                 etcOptionCode.push(com_util.formatString("title='{0}'", title));
+            }
+            let labelOptions = [];
+            // add x_label
+            if (x_label != '') {
+                if (setXY === true) {
+                    // replace 'x' to x_label
+                    labelOptions.push(com_util.formatString("'x': '{0}'", x_label));
+                } else {
+                    // if x is selected
+                    if (x != '') {
+                        // replace x column name to x_label
+                        labelOptions.push(com_util.formatString("{0}: '{1}'", x, x_label));
+                    } else {
+                        // replace 'index' to x_label
+                        labelOptions.push(com_util.formatString("'index': '{0}'", x_label));
+                    }
+                }
+            }
+            // add y_label
+            if (y_label != '') {
+                if (setXY === true) {
+                    // replace 'y' to y_label
+                    labelOptions.push(com_util.formatString("'y': '{0}'", y_label));
+                } else {
+                    // if y is selected
+                    if (y != '') {
+                        // replace y column name to y_label
+                        labelOptions.push(com_util.formatString("{0}: '{1}'", y, y_label));
+                    } else {
+                        // replace 'index' to y_label
+                        labelOptions.push(com_util.formatString("'index': '{0}'", y_label));
+                    }
+                }
+            }
+            if (labelOptions.length > 0) {
+                etcOptionCode.push(com_util.formatString("labels={ {0} }", labelOptions.join(', ')));
             }
             // add user option
             if (userOption != '') {
@@ -499,12 +553,17 @@ define([
 
             let generatedCode = com_generator.vp_codeGenerator(this, config, this.state
                 , etcOptionCode.length > 0? ', ' + etcOptionCode.join(', '): '');
-            code.append(generatedCode);
+            code.appendFormatLine("fig = {0}", generatedCode);
+
+            // sort code
+            if (sort && sort != '') {
+                code.appendFormatLine("fig.update_xaxes(categoryorder='{0}')", sort);
+            }
 
             if (userCode && userCode != '') {
-                code.appendLine();
-                code.append(userCode);
+                code.appendLine(userCode);
             }
+            code.append('fig.show()');
 
             return code.toString();
         }

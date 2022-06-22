@@ -189,6 +189,9 @@ define([
                     } else {
                         suggestInput.setPlaceholder('Type or Select value');
                     }
+                    if (required === true) {
+                        suggestInput.addAttribute('required', true);
+                    }
                     suggestInput.setSelectEvent(function(selectedValue) {
                         // trigger change
                         $(pageThis.wrapSelector('#' + obj.name)).val(selectedValue);
@@ -202,9 +205,10 @@ define([
                 $(tag).attr({
                     'type': 'text',
                     'id': obj.name,
-                    'class': 'vp-input vp-state'
+                    'class': 'vp-input vp-state',
+                    'required': required === true
                 });
-                vp_generateVarSuggestInput(divTag, obj);
+                vp_generateVarSuggestInput(divTag, obj, required);
                 tblInput.appendChild(tag);
                 break;
             case 'var_multi':
@@ -237,11 +241,30 @@ define([
                 }
                 $(tblInput).append(textarea);
                 break;
+            case 'input_number':
+                var input = com_makeDom.renderInput({
+                    'type': 'number',
+                    'class': 'vp-input vp-state',
+                    'id': obj.name,
+                    'placeholder': (obj.placeholder==undefined?'':obj.placeholder),
+                    'value': (obj.default==undefined?'':obj.default),
+                    'title': (obj.help==undefined?'':obj.help),
+                    'required': required === true
+                });
+                // cell metadata test
+                if (getValue && obj.value != undefined) {
+                    // set as saved value
+                    input.attr({
+                        'value': obj.value
+                    });
+                }
+                $(tblInput).append(input);
+                break;
             case 'table':
                 // break;
             case 'file':
                 // break;
-            // default : input_single
+                // default : input_single
             default:
                 // FIXME: use makedom
                 var input = com_makeDom.renderInput({
@@ -250,7 +273,8 @@ define([
                     'id':obj.name,
                     'placeholder':(obj.placeholder==undefined?'':obj.placeholder),
                     'value':(obj.default==undefined?'':obj.default),
-                    'title':(obj.help==undefined?'':obj.help)
+                    'title':(obj.help==undefined?'':obj.help),
+                    'required': required === true
                 });
                 // cell metadata test
                 if (getValue && obj.value != undefined) {
@@ -271,7 +295,7 @@ define([
      * Generate suggest input
      * @param {object} obj
      */
-    var vp_generateVarSuggestInput = function(divTag, obj) {
+    var vp_generateVarSuggestInput = function(divTag, obj, required=false) {
         var types = obj.var_type;
         var defaultValue = obj.value;
 
@@ -301,6 +325,9 @@ define([
             suggestInput.setValue($(divTag + ' #' + obj.name).val());
             if (obj.placeholder != undefined) {
                 suggestInput.setPlaceholder(obj.placeholder);
+            }
+            if (required === true) {
+                suggestInput.addAttribute('required', true);
             }
             suggestInput.setSelectEvent(function(selectedValue) {
                 // trigger change
@@ -422,6 +449,7 @@ define([
             case 'table':
             case 'file':
             case 'option_suggest':
+            case 'input_number':
             default:
                 var input = $(vp_wrapSelector(pageId, '#'+obj.name)).val();
                 // same as default

@@ -96,6 +96,23 @@ define([
             });
         }
 
+        /**
+         * Check if module/function is loaded already
+         * @param {*} moduleList 
+         */
+        checkModule(moduleList) {
+            var that = this;
+            return new Promise(function(resolve, reject) {
+                that.execute(com_util.formatString('_vp_print(_vp_check_module_loaded({0}))', JSON.stringify(moduleList))).then(function(resultObj) {
+                    // resolve
+                    resolve(resultObj);
+                }).catch(function(err) {
+                    // reject
+                    reject(err);
+                })
+            });
+        }
+
         getDataList(dataTypeList=[], excludeList=[]) {
             // use function command to get variable list of selected data types
             var cmdSB = '_vp_print(_vp_get_variables_list(None))';

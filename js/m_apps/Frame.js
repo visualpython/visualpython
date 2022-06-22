@@ -30,6 +30,7 @@ define([
         _init() {
             super._init();
             this.config.sizeLevel = 3;
+            this.config.checkModules = ['pd'];
 
             // state
             this.state = {
@@ -107,12 +108,13 @@ define([
                     that.state.originObj = origin;
                     that.state.tempObj = '_vp';
                     that.state.returnObj = that.state.tempObj;
-                    that.state.inplace = false;
+                    if (that.state.inplace === true) {
+                        that.state.returnObj = origin;
+                    }
                     that.initState();
 
                     // reset return obj
-                    $(that.wrapSelector('#vp_feReturn')).val(that.state.tempObj);
-                    $(that.wrapSelector('#inplace')).prop('checked', false);
+                    $(that.wrapSelector('#vp_feReturn')).val(that.state.returnObj);
     
                     // reset table
                     $(that.wrapSelector('.' + VP_FE_TABLE)).replaceWith(function() {
@@ -368,6 +370,12 @@ define([
                     case FRAME_EDIT_TYPE.AS_TYPE:
                         that.openInputPopup(editType);
                         break;
+                    case FRAME_EDIT_TYPE.DROP_OUT:
+                        that.config.checkModules = ['pd', 'np', 'vp_drop_outlier'];
+                        that.checkAndRunModules(true).then(function() {
+                            that.loadCode(that.getTypeCode(editType));
+                        });
+                        break;
                     default:
                         that.loadCode(that.getTypeCode(editType));
                         break;
@@ -514,6 +522,7 @@ define([
             super.render();
 
             var {
+                originObj,
                 returnObj,
                 inplace,
                 steps
@@ -521,7 +530,7 @@ define([
 
             this.loadVariableList();
     
-            $(this.wrapSelector('#vp_feVariable')).val(this.state.originObj);
+            $(this.wrapSelector('#vp_feVariable')).val(originObj);
     
             $(this.wrapSelector('#vp_feReturn')).val(returnObj);
 
@@ -543,6 +552,7 @@ define([
             variableInput.addClass('vp-state');
             variableInput.setPlaceholder('Select variable');
             variableInput.setSuggestList(function () { return mappedList; });
+            variableInput.addAttribute('required', true);
             variableInput.setSelectEvent(function (value) {
                 $(this.wrapSelector()).val(value);
                 $(this.wrapSelector()).trigger('change');
@@ -1218,6 +1228,7 @@ define([
             switch (type) {
                 case FRAME_EDIT_TYPE.INIT:
                     code.appendFormat('{0} = {1}.copy()', tempObj, orgObj);
+                    this.config.checkModules = ['pd'];
                     break;
                 case FRAME_EDIT_TYPE.DROP:
                     code.appendFormat("{0}.drop([{1}], axis={2}, inplace=True)", tempObj, selectedName, axis);
@@ -1485,7 +1496,11 @@ define([
                             that.loadInfo();
                             // add to stack
                             if (codeStr !== '') {
-                                that.state.steps.push(codeStr);
+                                let newSteps = codeStr.split('\n');
+                                that.state.steps = [
+                                    ...that.state.steps,
+                                    ...newSteps
+                                ]
                                 var replacedCode = codeStr.replaceAll(that.state.tempObj, that.state.returnObj);
                                 that.setPreview(replacedCode);
                             }
@@ -1509,7 +1524,10 @@ define([
             }).catch(function(resultObj) {
                 let { result, type, msg } = resultObj;
                 vpLog.display(VP_LOG_TYPE.ERROR, result.ename + ': ' + result.evalue, msg, code.toString());
-                com_util.renderAlertModal(result.ename + ': ' + result.evalue);
+                if (that.isHidden() == false) {
+                    // show alert modal only if this popup is visible
+                    com_util.renderAlertModal(result.ename + ': ' + result.evalue);
+                }
                 that.loading = false;
             });
     

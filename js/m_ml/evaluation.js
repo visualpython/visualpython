@@ -30,6 +30,7 @@ define([
             super._init();
             this.config.importButton = true;
             this.config.dataview = false;
+            this.config.checkModules = ['metrics'];
 
             this.state = {
                 modelType: 'rgs',
@@ -56,7 +57,7 @@ define([
 
             // import library
             $(this.wrapSelector('#vp_importLibrary')).on('click', function() {
-                com_interface.insertCell('code', 'from sklearn import metrics');
+                com_interface.insertCell('code', 'from sklearn import metrics', true, 'Machine Learning > Evaluation');
             });
 
             // model type change
@@ -130,28 +131,28 @@ define([
 
             // data selector
             let predDataSelector = new DataSelector({
-                pageThis: this, id: 'predictData', value: this.state.predictData
+                pageThis: this, id: 'predictData', value: this.state.predictData, required: true
             });
             $(page).find('#predictData').replaceWith(predDataSelector.toTagString());
 
             let targetDataSelector = new DataSelector({
-                pageThis: this, id: 'targetData', value: this.state.targetData
+                pageThis: this, id: 'targetData', value: this.state.targetData, required: true
             });
             $(page).find('#targetData').replaceWith(targetDataSelector.toTagString());
 
             // Clustering - data selection
             let clusteredIdxSelector = new DataSelector({
-                pageThis: this, id: 'clusteredIndex', value: this.state.clusteredIndex
+                pageThis: this, id: 'clusteredIndex', value: this.state.clusteredIndex, required: true
             });
             $(page).find('#clusteredIndex').replaceWith(clusteredIdxSelector.toTagString());
 
             let featureData2Selector = new DataSelector({
-                pageThis: this, id: 'featureData2', value: this.state.featureData2, classes: 'vp-ev-model silhouette'
+                pageThis: this, id: 'featureData2', value: this.state.featureData2, classes: 'vp-ev-model silhouette', required: true
             });
             $(page).find('#featureData2').replaceWith(featureData2Selector.toTagString());
 
             let targetData2Selector = new DataSelector({
-                pageThis: this, id: 'targetData2', value: this.state.targetData2, classes: 'vp-ev-model ari-nmi'
+                pageThis: this, id: 'targetData2', value: this.state.targetData2, classes: 'vp-ev-model ari-nmi', required: true
             });
             $(page).find('#targetData2').replaceWith(targetData2Selector.toTagString());
 

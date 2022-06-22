@@ -66,7 +66,8 @@ define([
                 footer: true,
                 position: { right: 10, top: 120 },
                 size: { width: 400, height: 550 },
-                saveOnly: false
+                saveOnly: false,
+                checkModules: [] // module aliases or function names
             };
 
             // check BoardFrame width and set initial position of popup
@@ -302,7 +303,7 @@ define([
                 // add install codes
                 var codes = that.generateInstallCode();
                 codes && codes.forEach(code => {
-                    com_interface.insertCell('code', code);
+                    com_interface.insertCell('code', code, true, that.getSigText());
                 });
             });
 
@@ -376,8 +377,10 @@ define([
                         }
                         break;
                     case 'run':
-                        that.save();
-                        that.run();
+                        let result = that.run();
+                        if (result) {
+                            that.save();
+                        }
                         break;
                     case 'show-detail':
                         $(that.wrapSelector('.vp-popup-run-detailbox')).show();
@@ -396,8 +399,10 @@ define([
                         that.save();
                         break;
                     case 'add':
-                        that.save();
-                        that.run(false);
+                        let result = that.run(false);
+                        if (result) {
+                            that.save();
+                        }
                         break;
                 }
             });
@@ -679,11 +684,8 @@ define([
             }
         }
 
-        run(execute=true, addcell=true) {
-            let code = this.generateCode();
-            let mode = this.config.executeMode;
+        getSigText() {
             let sigText = '';
-            // check if it's block
             if (this.getTaskType() == 'block') {
                 let block = this.taskItem;
                 sigText = block.sigText;
@@ -698,15 +700,85 @@ define([
                     }
                 } catch {}
             }
-            if (addcell) {
-                if (Array.isArray(code)) {
-                    // insert cells if it's array of codes
-                    com_interface.insertCells(mode, code, execute, sigText);
-                } else {
-                    com_interface.insertCell(mode, code, execute, sigText);
+            return sigText;
+        }
+
+        /**
+         * Check if required option is filled
+         * @returns true if it's ok / false if there is empty required option
+         */
+        checkRequiredOption() {
+            let requiredFilled = true;
+            let requiredTags = $(this.wrapSelector('input[required=true],input[required=required]'));
+
+            if (requiredTags) {
+                for (let i = 0; i < requiredTags.length; i++) {
+                    let thisTag = $(requiredTags[i]);
+                    // if it's visible and empty, focus on it
+                    if (thisTag.is(':visible') && thisTag.val() == '') {
+                        $(requiredTags[i]).focus();
+                        requiredFilled = false;
+                        break;
+                    }
                 }
             }
-            return code;
+
+            return requiredFilled;
+        }
+
+        checkAndRunModules(execute=true, background=false) {
+            let sigText = this.getSigText();
+
+            let checkModules = this.config.checkModules;
+            return new Promise(function(resolve, reject) {
+                if (checkModules.length > 0) {
+                    vpKernel.checkModule(checkModules).then(function(resultObj) {
+                        let { result } = resultObj;
+                        let checkedList = JSON.parse(result);
+                        let executeList = [];
+                        checkedList && checkedList.forEach((mod, idx) => {
+                            if (mod == false) {
+                                let modInfo = vpConfig.getModuleCode(checkModules[idx]);
+                                if (modInfo) {
+                                    executeList.push(modInfo.code);
+                                }
+                            }
+                        });
+                        if (executeList && executeList.length > 0) {
+                            com_interface.insertCell('code', executeList.join('\n'), execute, sigText);
+                        }
+                        resolve(executeList);
+                    });
+                } else {
+                    resolve([]);
+                }
+            });
+        }
+
+        run(execute=true, addcell=true) {
+            // check required
+            if (this.checkRequiredOption() === false) {
+                return false;
+            }
+
+            let mode = this.config.executeMode;
+            let sigText = this.getSigText();
+            let code = this.generateCode();
+
+            vpLog.display(VP_LOG_TYPE.DEVELOP, sigText, mode, code);
+
+            // check modules
+            this.checkAndRunModules(execute).then(function(executeList) {
+                if (addcell) {
+                    if (Array.isArray(code)) {
+                        // insert cells if it's array of codes
+                        com_interface.insertCells(mode, code, execute, sigText);
+                    } else {
+                        com_interface.insertCell(mode, code, execute, sigText);
+                    }
+                }
+            });
+            return true;
         }
 
         /**

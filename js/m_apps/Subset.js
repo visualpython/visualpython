@@ -30,6 +30,7 @@ define([
         _init() {
             super._init();
             this.config.sizeLevel = 3;
+            this.config.checkModules = ['pd'];
             // use Run/Add cell
             this.useCell = true;
 
@@ -756,6 +757,7 @@ define([
                     });
                     variableInput.setNormalFilter(true);
                     variableInput.setValue(prevValue);
+                    variableInput.addAttribute('required', true);
                     $(that.wrapSelector('.' + VP_DS_PANDAS_OBJECT)).replaceWith(function() {
                         return variableInput.toTagString();
                     });
