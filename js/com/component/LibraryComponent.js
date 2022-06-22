@@ -44,7 +44,7 @@ define([
                 vpLog.display(VP_LOG_TYPE.ERROR, 'Cannot find package id from library: ' + this.packageId);
                 return;
             }
-            this.config.checkModules = [this.package.library];
+            this.config.checkModules = ['pd'];
 
             vpLog.display(VP_LOG_TYPE.DEVELOP, 'loading state', this.state);
         }

@@ -121,15 +121,7 @@ define([
                     code: 'import numpy as np',
                     type: 'package'
                 },
-                'numpy': {
-                    code: 'import numpy as np',
-                    type: 'package'
-                },
                 'pd': {
-                    code: 'import pandas as pd',
-                    type: 'package'
-                },
-                'pandas': {
                     code: 'import pandas as pd',
                     type: 'package'
                 },
