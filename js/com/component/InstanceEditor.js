@@ -431,8 +431,10 @@ define([
                 }
             }).catch(function(resultObj) {
                 let { result } = resultObj;
-                // show alert
-                com_util.renderAlertModal(result.ename + ': ' + result.evalue);
+                // show alert if this is visible
+                if (that.pageThis.isHidden() == false) {
+                    com_util.renderAlertModal(result.ename + ': ' + result.evalue);
+                }
                 // callback
                 if (callback) {
                     callback('');

@@ -646,7 +646,9 @@ define([
 
             } catch (exmsg) {
                 // show error on alert modal
-                com_util.renderAlertModal(exmsg);
+                if (this.isHidden() == false) {
+                    com_util.renderAlertModal(exmsg);
+                }
             }
     
             return sbCode.toString();
