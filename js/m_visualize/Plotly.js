@@ -41,6 +41,7 @@ define([
                 x_start: '', x_end: '',
                 values: '', names: '', parents: '',
                 color: '',
+                sort: '',
                 userOption: '',
                 title: '',
                 x_label: '',
@@ -136,6 +137,7 @@ define([
                     $(that.wrapSelector('#y')).closest('.pt-option').show();
                     $(that.wrapSelector('#color')).closest('.pt-option').show();
                 }
+                $(that.wrapSelector('#sort')).closest('.pt-option').show();
             });
 
             // use data or not
@@ -348,6 +350,7 @@ define([
                 $(page).find('#y').closest('.pt-option').show();
                 $(page).find('#color').closest('.pt-option').show();
             }
+            $(page).find('#sort').closest('.pt-option').show();
 
             //================================================================
             // Load state
@@ -482,7 +485,7 @@ define([
              */
             let { 
                 chartType,
-                data, x, y, color, setXY,
+                data, x, y, color, setXY, sort,
                 userOption, userCode,
                 title, x_label, y_label
             } = this.state;
@@ -548,6 +551,11 @@ define([
             let generatedCode = com_generator.vp_codeGenerator(this, config, this.state
                 , etcOptionCode.length > 0? ', ' + etcOptionCode.join(', '): '');
             code.appendFormatLine("fig = {0}", generatedCode);
+
+            // sort code
+            if (sort && sort != '') {
+                code.appendFormatLine("fig.update_xaxes(categoryorder='{0}')", sort);
+            }
 
             if (userCode && userCode != '') {
                 code.appendLine(userCode);
