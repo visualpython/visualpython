@@ -62,6 +62,11 @@ define([
 
             // click menu
             $(this.wrapSelector('.vp-pf-menu-item')).on('click', function() {
+                // check required filled
+                if (that.checkRequiredOption() === false) {
+                    return ;
+                }
+
                 var type = $(this).data('type');
                 var df = $(that.wrapSelector('#vp_pfVariable')).val();
                 var saveas = $(that.wrapSelector('#vp_pfReturn')).val();
@@ -204,6 +209,7 @@ define([
             variableInput.setPlaceholder('Select variable');
             variableInput.setSuggestList(function () { return mappedList; });
             variableInput.setNormalFilter(true);
+            variableInput.addAttribute('required', true);
             variableInput.setValue(beforeValue);
 
             return variableInput.toTagString();

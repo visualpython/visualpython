@@ -376,8 +376,10 @@ define([
                         }
                         break;
                     case 'run':
-                        that.save();
-                        that.run();
+                        let result = that.run();
+                        if (result) {
+                            that.save();
+                        }
                         break;
                     case 'show-detail':
                         $(that.wrapSelector('.vp-popup-run-detailbox')).show();
@@ -396,8 +398,10 @@ define([
                         that.save();
                         break;
                     case 'add':
-                        that.save();
-                        that.run(false);
+                        let result = that.run(false);
+                        if (result) {
+                            that.save();
+                        }
                         break;
                 }
             });
@@ -698,7 +702,35 @@ define([
             return sigText;
         }
 
+        /**
+         * Check if required option is filled
+         * @returns true if it's ok / false if there is empty required option
+         */
+        checkRequiredOption() {
+            let requiredFilled = true;
+            let requiredTags = $(this.wrapSelector('input[required=true],input[required=required]'));
+
+            if (requiredTags) {
+                for (let i = 0; i < requiredTags.length; i++) {
+                    let thisTag = $(requiredTags[i]);
+                    // if it's visible and empty, focus on it
+                    if (thisTag.is(':visible') && thisTag.val() == '') {
+                        $(requiredTags[i]).focus();
+                        requiredFilled = false;
+                        break;
+                    }
+                }
+            }
+
+            return requiredFilled;
+        }
+
         run(execute=true, addcell=true) {
+            // check required
+            if (this.checkRequiredOption() === false) {
+                return null;
+            }
+
             let code = this.generateCode();
             let mode = this.config.executeMode;
             let sigText = this.getSigText();

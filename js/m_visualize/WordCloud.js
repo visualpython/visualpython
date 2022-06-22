@@ -179,6 +179,7 @@ define([
                 type: 'data',
                 pageThis: this,
                 id: 'data',
+                required: true,
                 select: function() {
                     that.state.useFile = false;
                     $(that.wrapSelector('#useFile')).prop('checked', false);

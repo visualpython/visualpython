@@ -341,6 +341,9 @@ define([
                 if (obj.placeholder != undefined) {
                     suggestInput.setPlaceholder(obj.placeholder);
                 }
+                if (obj.required === true) {
+                    suggestInput.addAttribute('required', true);
+                }
                 suggestInput.setSelectEvent(function(selectedValue) {
                     // trigger change
                     $(pageThis.wrapSelector('#' + obj.name)).val(selectedValue);
@@ -354,16 +357,18 @@ define([
                     id: obj.name,
                     allowDataType: obj.var_type, 
                     placeholder: obj.placeholder || 'Select data',
-                    value: value
+                    value: value,
+                    required: obj.required === true
                 });
                 content = $(dataSelector.toTagString());
                 break;
             case 'var_select':
                 // suggest input tag
                 var tag = $('<input/>').attr({
-                    'type': 'text',
-                    'id': obj.name,
-                    'class': 'vp-input vp-state'
+                    type: 'text',
+                    id: obj.name,
+                    class: 'vp-input vp-state',
+                    required: obj.required === true
                 });
                 vp_generateVarSuggestInput(pageThis.wrapSelector(), obj);
                 content = tag;
@@ -398,12 +403,13 @@ define([
                 break;
             case 'input_number':
                 var input = $('<input/>').attr({
-                    'type':'number',
-                    'class':'vp-input vp-state',
-                    'id':obj.name,
-                    'placeholder':(obj.placeholder==undefined?'Input Number':obj.placeholder),
-                    'value':(obj.default==undefined?'':obj.default),
-                    'title':(obj.help==undefined?'':obj.help)
+                    type: 'number',
+                    class: 'vp-input vp-state',
+                    id: obj.name,
+                    placeholder: (obj.placeholder==undefined?'Input Number':obj.placeholder),
+                    value: (obj.default==undefined?'':obj.default),
+                    title: (obj.help==undefined?'':obj.help),
+                    required: obj.required === true
                 });
                 if (obj.step != undefined) {
                     $(input).attr({ 'step': obj.step });
@@ -430,12 +436,13 @@ define([
             // default : input_single
             default:
                 var input = $('<input/>').attr({
-                    'type':'text',
-                    'class':'vp-input input-single vp-state',
-                    'id':obj.name,
-                    'placeholder':(obj.placeholder==undefined?'Input Data':obj.placeholder),
-                    'value':(obj.default==undefined?'':obj.default),
-                    'title':(obj.help==undefined?'':obj.help)
+                    type: 'text',
+                    class: 'vp-input input-single vp-state',
+                    id: obj.name,
+                    placeholder: (obj.placeholder==undefined?'Input Data':obj.placeholder),
+                    value: (obj.default==undefined?'':obj.default),
+                    title: (obj.help==undefined?'':obj.help),
+                    required: obj.required == true
                 });
                 // cell metadata test
                 if (value != undefined) {
@@ -490,6 +497,9 @@ define([
             suggestInput.setSuggestList(function() { return varList; });
             suggestInput.setNormalFilter(false);
             suggestInput.setValue(defaultValue);
+            if (obj.required === true) {
+                suggestInput.addAttribute('required', true);
+            }
             if (obj.placeholder != undefined) {
                 suggestInput.setPlaceholder(obj.placeholder);
             }

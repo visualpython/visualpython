@@ -395,6 +395,7 @@ define([
             variableInput.setPlaceholder('Select variable');
             variableInput.setSuggestList(function () { return mappedList; });
             variableInput.setNormalFilter(true);
+            variableInput.addAttribute('required', true);
             variableInput.setValue(defaultValue);
 
             return variableInput.toTagString();

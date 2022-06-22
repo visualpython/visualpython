@@ -407,6 +407,7 @@ define([
             variableInput.setSuggestList(function () { return mappedList; });
             variableInput.setNormalFilter(true);
             variableInput.setValue(defaultValue);
+            variableInput.addAttribute('required', true);
             $(this.wrapSelector('#' + id)).replaceWith(function() {
                 return variableInput.toTagString();
             });

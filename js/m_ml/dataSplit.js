@@ -104,12 +104,12 @@ define([
             $(page).find('#testSize').html(sizeOptions);
 
             let featureSelector = new DataSelector({
-                pageThis: this, id: 'featureData', placeholder: 'Select feature data' 
+                pageThis: this, id: 'featureData', placeholder: 'Select feature data', required: true
             });
             $(page).find('#featureData').replaceWith(featureSelector.toTagString());
 
             let targetSelector = new DataSelector({
-                pageThis: this, id: 'targetData', placeholder: 'Select target data' 
+                pageThis: this, id: 'targetData', placeholder: 'Select target data', required: true
             });
             $(page).find('#targetData').replaceWith(targetSelector.toTagString());
 

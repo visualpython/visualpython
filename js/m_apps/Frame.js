@@ -545,6 +545,7 @@ define([
             variableInput.addClass('vp-state');
             variableInput.setPlaceholder('Select variable');
             variableInput.setSuggestList(function () { return mappedList; });
+            variableInput.addAttribute('required', true);
             variableInput.setSelectEvent(function (value) {
                 $(this.wrapSelector()).val(value);
                 $(this.wrapSelector()).trigger('change');

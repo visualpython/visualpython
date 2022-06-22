@@ -23,6 +23,8 @@ define([
     //     type: 'data',
     //     pageThis: this,
     //     id: 'targetId',
+    //     classes: '',
+    //     placeholder: '',
     //     select: function(value, dtype) {
     //         ;
     //     }
@@ -56,6 +58,7 @@ define([
                 // additional options
                 classes: '',
                 placeholder: 'Select variable',
+                required: false,
                 ...this.prop
             }
 
@@ -338,7 +341,9 @@ define([
             }
             return `
                 <div class="vp-ds-box vp-ds-box-${this.uuid} vp-ds-uninit">
-                    <input type="text" class="vp-ds-target vp-input vp-state ${this.prop.classes}" id="${this.prop.id}" value="${value}" placeholder="${this.prop.placeholder}"/>
+                    <input type="text" class="vp-ds-target vp-input vp-state ${this.prop.classes}" 
+                            id="${this.prop.id}" value="${value}" 
+                            placeholder="${this.prop.placeholder}" ${this.prop.required?'required="required"':''}/>
                     <span class="vp-ds-filter"><img src="/nbextensions/visualpython/img/filter.svg"/></span>
                 </div>
             `;

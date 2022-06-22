@@ -756,6 +756,7 @@ define([
                     });
                     variableInput.setNormalFilter(true);
                     variableInput.setValue(prevValue);
+                    variableInput.addAttribute('required', true);
                     $(that.wrapSelector('.' + VP_DS_PANDAS_OBJECT)).replaceWith(function() {
                         return variableInput.toTagString();
                     });

@@ -5023,7 +5023,8 @@ define([
                     name: 'i0',
                     type: 'var',
                     label: 'DataFrame',
-                    var_type: ['DataFrame', 'Series']
+                    var_type: ['DataFrame', 'Series'],
+                    required: true
                 }
             ],
             output: [
