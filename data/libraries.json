@@ -2154,8 +2154,7 @@
                                 "tag"  : "PANDAS PLOT,PANDAS",
                                 "path" : "visualpython - library - pandas - plot",
                                 "desc" : "Pandas Plot",
-                                "file" : "m_library/m_pandas/plot",
-                                "useAuto" : true
+                                "file" : "m_library/m_pandas/PandasPlot"
                             },
                             {
                                 "id"   : "pdPkg_inputOutput",
