@@ -30,6 +30,7 @@ define([
             super._init();
             this.config.importButton = true;
             this.config.dataview = false;
+            this.config.checkModules = ['metrics'];
 
             this.state = {
                 modelType: 'rgs',

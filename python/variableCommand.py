@@ -80,6 +80,9 @@ def _vp_get_profiling_list():
 import numpy as _vp_np
 import random as _vp_rd
 def _vp_sample(data, sample_cnt):
+    """
+    Sampling data
+    """
     dataType = type(data).__name__
     sample_cnt = len(data) if len(data) < sample_cnt else sample_cnt
 
@@ -92,3 +95,15 @@ def _vp_sample(data, sample_cnt):
     elif dataType == 'list':
         return _vp_rd.choices(data, k=sample_cnt)
     return data
+
+def _vp_check_module_loaded(fname_list):
+    """
+    Check if this module is loaded
+    """
+    result = []
+    for fname in fname_list:
+        if fname in globals():
+            result.append(True)
+        else:
+            result.append(False)
+    return result

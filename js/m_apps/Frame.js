@@ -30,6 +30,7 @@ define([
         _init() {
             super._init();
             this.config.sizeLevel = 3;
+            this.config.checkModules = ['pd'];
 
             // state
             this.state = {
@@ -368,6 +369,12 @@ define([
                     case FRAME_EDIT_TYPE.REPLACE:
                     case FRAME_EDIT_TYPE.AS_TYPE:
                         that.openInputPopup(editType);
+                        break;
+                    case FRAME_EDIT_TYPE.DROP_OUT:
+                        that.config.checkModules = ['pd', 'np', 'vp_drop_outlier'];
+                        that.checkAndRunModules(true).then(function() {
+                            that.loadCode(that.getTypeCode(editType));
+                        });
                         break;
                     default:
                         that.loadCode(that.getTypeCode(editType));
@@ -1221,6 +1228,7 @@ define([
             switch (type) {
                 case FRAME_EDIT_TYPE.INIT:
                     code.appendFormat('{0} = {1}.copy()', tempObj, orgObj);
+                    this.config.checkModules = ['pd'];
                     break;
                 case FRAME_EDIT_TYPE.DROP:
                     code.appendFormat("{0}.drop([{1}], axis={2}, inplace=True)", tempObj, selectedName, axis);

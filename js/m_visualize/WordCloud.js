@@ -31,6 +31,7 @@ define([
             this.config.installButton = true;
             this.config.importButton = true;
             this.config.dataview = false;
+            this.config.checkModules = ['Counter', 'plt', 'Wordcloud'];
 
             this.state = {
                 data: '',
@@ -238,44 +239,46 @@ define([
             let that = this;
             let code = this.generateCode(true);
 
-            // show variable information on clicking variable
-            vpKernel.execute(code).then(function(resultObj) {
-                let { result, type, msg } = resultObj;
-                if (msg.content.data) {
-                    var textResult = msg.content.data["text/plain"];
-                    var htmlResult = msg.content.data["text/html"];
-                    var imgResult = msg.content.data["image/png"];
-                    
-                    $(that.wrapSelector('#vp_wcPreview')).html('');
-                    if (htmlResult != undefined) {
-                        // 1. HTML tag
-                        $(that.wrapSelector('#vp_wcPreview')).append(htmlResult);
-                    } else if (imgResult != undefined) {
-                        // 2. Image data (base64)
-                        var imgTag = '<img src="data:image/png;base64, ' + imgResult + '">';
-                        $(that.wrapSelector('#vp_wcPreview')).append(imgTag);
-                    } else if (textResult != undefined) {
-                        // 3. Text data
-                        var preTag = document.createElement('pre');
-                        $(preTag).text(textResult);
-                        $(that.wrapSelector('#vp_wcPreview')).html(preTag);
+            that.checkAndRunModules(true).then(function() {
+                // show variable information on clicking variable
+                vpKernel.execute(code).then(function(resultObj) {
+                    let { result, type, msg } = resultObj;
+                    if (msg.content.data) {
+                        var textResult = msg.content.data["text/plain"];
+                        var htmlResult = msg.content.data["text/html"];
+                        var imgResult = msg.content.data["image/png"];
+                        
+                        $(that.wrapSelector('#vp_wcPreview')).html('');
+                        if (htmlResult != undefined) {
+                            // 1. HTML tag
+                            $(that.wrapSelector('#vp_wcPreview')).append(htmlResult);
+                        } else if (imgResult != undefined) {
+                            // 2. Image data (base64)
+                            var imgTag = '<img src="data:image/png;base64, ' + imgResult + '">';
+                            $(that.wrapSelector('#vp_wcPreview')).append(imgTag);
+                        } else if (textResult != undefined) {
+                            // 3. Text data
+                            var preTag = document.createElement('pre');
+                            $(preTag).text(textResult);
+                            $(that.wrapSelector('#vp_wcPreview')).html(preTag);
+                        }
+                    } else {
+                        var errorContent = '';
+                        if (msg.content.ename) {
+                            errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
+                        }
+                        $(that.wrapSelector('#vp_wcPreview')).html(errorContent);
+                        vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
                     }
-                } else {
+                }).catch(function(resultObj) {
+                    let { msg } = resultObj;
                     var errorContent = '';
                     if (msg.content.ename) {
                         errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
                     }
                     $(that.wrapSelector('#vp_wcPreview')).html(errorContent);
                     vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
-                }
-            }).catch(function(resultObj) {
-                let { msg } = resultObj;
-                var errorContent = '';
-                if (msg.content.ename) {
-                    errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
-                }
-                $(that.wrapSelector('#vp_wcPreview')).html(errorContent);
-                vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
+                });
             });
         }
 

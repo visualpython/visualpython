@@ -42,6 +42,7 @@ define([
             this.config.codeview = false;
             this.config.dataview = false;
             this.config.sizeLevel = 1;
+            this.config.checkModules = ['pd'];
 
             this.state = {
                 editor: '',

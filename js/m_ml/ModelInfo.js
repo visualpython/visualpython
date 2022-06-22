@@ -255,6 +255,14 @@ define([
             $(this.wrapSelector('.vp-ins-select-list.info .vp-ins-select-item')).on('click', function() {
                 let name = $(this).data('var-name');
                 let type = $(this).data('var-type');
+
+                if (name == 'feature_importances') {
+                    that.config.checkModules = ['pd', 'vp_create_feature_importances'];
+                } else if (name == 'plot_feature_importances') {
+                    that.config.checkModules = ['pd', 'plt', 'vp_create_feature_importances', 'vp_plot_feature_importances'];
+                } else {
+                    that.config.checkModules = ['pd'];
+                }
                 
                 that.renderOptionPage(type, name);
 

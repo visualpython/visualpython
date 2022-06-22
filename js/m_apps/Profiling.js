@@ -46,6 +46,7 @@ define([
             this.config.dataview = false;
             this.config.runButton = false;
             this.config.size = { width: 500, height: 500 };
+            this.config.checkModules = ['ProfileReport'];
 
             this.selectedReport = '';
         }

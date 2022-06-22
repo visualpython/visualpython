@@ -30,6 +30,7 @@ define([
             super._init();
             /** Write codes executed before rendering */
             this.config.size = { width: 700, height: 550 };
+            this.config.checkModules = ['pd'];
 
             this.periodList = [
                 { label: 'business day', value: 'B'},

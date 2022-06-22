@@ -31,6 +31,7 @@ define([
 
             this.config.dataview = false;
             this.config.size = { width: 1064, height: 550 };
+            this.config.checkModules = ['plt', 'sns'];
 
             this.state = {
                 chartType: 'scatterplot',
@@ -272,6 +273,18 @@ define([
                             $(that.wrapSelector('#sortHue')).replaceWith(that.templateForHueCondition([], colDtype));
                         }
                     });
+                }
+            });
+
+            // show values or not
+            $(this.wrapSelector('#showValues')).on('change', function() {
+                let checked = $(this).prop('checked');
+                if (checked === true) {
+                    that.config.checkModules = ['plt', 'sns', 'np', 'vp_seaborn_show_values'];
+                    $(that.wrapSelector('#showValuesPrecision')).attr('disabled', false);
+                } else {
+                    that.config.checkModules = ['plt', 'sns'];
+                    $(that.wrapSelector('#showValuesPrecision')).attr('disabled', true);
                 }
             });
 
@@ -689,44 +702,46 @@ define([
             let that = this;
             let code = this.generateCode(true);
 
-            // show variable information on clicking variable
-            vpKernel.execute(code).then(function(resultObj) {
-                let { result, type, msg } = resultObj;
-                if (msg.content.data) {
-                    var textResult = msg.content.data["text/plain"];
-                    var htmlResult = msg.content.data["text/html"];
-                    var imgResult = msg.content.data["image/png"];
-                    
-                    $(that.wrapSelector('#chartPreview')).html('');
-                    if (htmlResult != undefined) {
-                        // 1. HTML tag
-                        $(that.wrapSelector('#chartPreview')).append(htmlResult);
-                    } else if (imgResult != undefined) {
-                        // 2. Image data (base64)
-                        var imgTag = '<img src="data:image/png;base64, ' + imgResult + '">';
-                        $(that.wrapSelector('#chartPreview')).append(imgTag);
-                    } else if (textResult != undefined) {
-                        // 3. Text data
-                        var preTag = document.createElement('pre');
-                        $(preTag).text(textResult);
-                        $(that.wrapSelector('#chartPreview')).html(preTag);
+            that.checkAndRunModules(true).then(function() {
+                // show variable information on clicking variable
+                vpKernel.execute(code).then(function(resultObj) {
+                    let { result, type, msg } = resultObj;
+                    if (msg.content.data) {
+                        var textResult = msg.content.data["text/plain"];
+                        var htmlResult = msg.content.data["text/html"];
+                        var imgResult = msg.content.data["image/png"];
+                        
+                        $(that.wrapSelector('#chartPreview')).html('');
+                        if (htmlResult != undefined) {
+                            // 1. HTML tag
+                            $(that.wrapSelector('#chartPreview')).append(htmlResult);
+                        } else if (imgResult != undefined) {
+                            // 2. Image data (base64)
+                            var imgTag = '<img src="data:image/png;base64, ' + imgResult + '">';
+                            $(that.wrapSelector('#chartPreview')).append(imgTag);
+                        } else if (textResult != undefined) {
+                            // 3. Text data
+                            var preTag = document.createElement('pre');
+                            $(preTag).text(textResult);
+                            $(that.wrapSelector('#chartPreview')).html(preTag);
+                        }
+                    } else {
+                        var errorContent = '';
+                        if (msg.content.ename) {
+                            errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
+                        }
+                        $(that.wrapSelector('#chartPreview')).html(errorContent);
+                        vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
                     }
-                } else {
+                }).catch(function(resultObj) {
+                    let { msg } = resultObj;
                     var errorContent = '';
                     if (msg.content.ename) {
                         errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
                     }
                     $(that.wrapSelector('#chartPreview')).html(errorContent);
                     vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
-                }
-            }).catch(function(resultObj) {
-                let { msg } = resultObj;
-                var errorContent = '';
-                if (msg.content.ename) {
-                    errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
-                }
-                $(that.wrapSelector('#chartPreview')).html(errorContent);
-                vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
+                });
             });
         }
 

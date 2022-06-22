@@ -66,7 +66,8 @@ define([
                 footer: true,
                 position: { right: 10, top: 120 },
                 size: { width: 400, height: 550 },
-                saveOnly: false
+                saveOnly: false,
+                checkModules: [] // module aliases or function names
             };
 
             // check BoardFrame width and set initial position of popup
@@ -725,26 +726,59 @@ define([
             return requiredFilled;
         }
 
+        checkAndRunModules(execute=true, background=false) {
+            let sigText = this.getSigText();
+
+            let checkModules = this.config.checkModules;
+            return new Promise(function(resolve, reject) {
+                if (checkModules.length > 0) {
+                    vpKernel.checkModule(checkModules).then(function(resultObj) {
+                        let { result } = resultObj;
+                        let checkedList = JSON.parse(result);
+                        let executeList = [];
+                        checkedList && checkedList.forEach((mod, idx) => {
+                            if (mod == false) {
+                                let modInfo = vpConfig.getModuleCode(checkModules[idx]);
+                                if (modInfo) {
+                                    executeList.push(modInfo.code);
+                                }
+                            }
+                        });
+                        if (executeList && executeList.length > 0) {
+                            com_interface.insertCell('code', executeList.join('\n'), execute, sigText);
+                        }
+                        resolve(executeList);
+                    });
+                } else {
+                    resolve([]);
+                }
+            });
+        }
+
         run(execute=true, addcell=true) {
             // check required
             if (this.checkRequiredOption() === false) {
-                return null;
+                return false;
             }
 
-            let code = this.generateCode();
             let mode = this.config.executeMode;
             let sigText = this.getSigText();
+            let code = this.generateCode();
+
             vpLog.display(VP_LOG_TYPE.DEVELOP, sigText, mode, code);
 
-            if (addcell) {
-                if (Array.isArray(code)) {
-                    // insert cells if it's array of codes
-                    com_interface.insertCells(mode, code, execute, sigText);
-                } else {
-                    com_interface.insertCell(mode, code, execute, sigText);
+            // check modules
+            this.checkAndRunModules(execute).then(function(executeList) {
+                if (addcell) {
+                    if (Array.isArray(code)) {
+                        // insert cells if it's array of codes
+                        com_interface.insertCells(mode, code, execute, sigText);
+                    } else {
+                        com_interface.insertCell(mode, code, execute, sigText);
+                    }
                 }
-            }
-            return code;
+            });
+            return true;
         }
 
         /**

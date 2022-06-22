@@ -34,6 +34,7 @@ define([
             /** Write codes executed before rendering */
             this.config.dataview = false;
             this.config.sizeLevel = 2;
+            this.config.checkModules = ['plt'];
             
             this.setDefaultVariables();
             this.state = {
