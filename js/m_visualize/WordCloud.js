@@ -304,11 +304,16 @@ define([
             let code = new com_String();
             
             // preview option
-            if (preview) {
+            if (preview === true) {
                 // Ignore warning
                 code.appendLine('import warnings');
                 code.appendLine('with warnings.catch_warnings():');
                 code.appendLine("    warnings.simplefilter('ignore')");
+
+                // no auto-import for preview
+                this.config.checkModules = [];
+            } else {
+                this.config.checkModules = ['Counter', 'plt', 'WordCloud'];
             }
 
             // counter for top limit
