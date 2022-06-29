@@ -31,7 +31,7 @@ define([
             this.config.installButton = true;
             this.config.importButton = true;
             this.config.dataview = false;
-            this.config.checkModules = ['Counter', 'plt', 'Wordcloud'];
+            this.config.checkModules = ['Counter', 'plt', 'WordCloud'];
 
             this.state = {
                 data: '',

@@ -46,7 +46,6 @@ define([
             /** Write codes executed before rendering */
             this.config.dataview = false;
             this.config.sizeLevel = 1;
-            this.config.checkModules = ['pd'];
 
             let savedData = vpConfig.getDataSimple('', 'vpimport');
             // Reset abnormal data
