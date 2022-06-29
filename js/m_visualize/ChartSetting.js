@@ -144,10 +144,10 @@ define([
                 code.appendLine('import matplotlib.pyplot as plt');
                 code.appendLine('%matplotlib inline');
                 code.appendLine('import seaborn as sns');
-                code.appendFormatLine("plt.rc('figure', figsize=({0}, {1}))", figureWidth, figureHeight);
                 if (styleSheet && styleSheet.length > 0) {
                     code.appendFormatLine("plt.style.use('{0}')", styleSheet);
                 }
+                code.appendFormatLine("plt.rc('figure', figsize=({0}, {1}))", figureWidth, figureHeight);
                 code.appendLine();
         
                 code.appendLine('from matplotlib import rcParams');
