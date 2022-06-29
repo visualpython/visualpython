@@ -24,14 +24,16 @@ def _vp_seaborn_show_values(axs, precision=1, space=0.01):
             for p in ax.patches:
                 _x = p.get_x() + p.get_width() / 2
                 _y = p.get_y() + p.get_height() + (p.get_height()*space)
-                value = pstr.format(p.get_height())
-                ax.text(_x, _y, value, ha='center') 
+                if not _vp_np.isnan(_x) and not _vp_np.isnan(_y):
+                    value = pstr.format(p.get_height())
+                    ax.text(_x, _y, value, ha='center') 
         elif orient == 'h':
             for p in ax.patches:
                 _x = p.get_x() + p.get_width() + (space - 0.01)
                 _y = p.get_y() + p.get_height() / 2
-                value = pstr.format(p.get_width())
-                ax.text(_x, _y, value, ha='left')
+                if not _vp_np.isnan(_x) and not _vp_np.isnan(_y):
+                    value = pstr.format(p.get_width())
+                    ax.text(_x, _y, value, ha='left')
 
     if isinstance(axs, _vp_np.ndarray):
         for idx, ax in _vp_np.ndenumerate(axs):
