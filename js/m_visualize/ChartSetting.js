@@ -29,11 +29,11 @@ define([
             this.config.dataview = false;
 
             this.state = {
-                figureWidth: 12,
-                figureHeight: 8,
+                figureWidth: '12',
+                figureHeight: '8',
                 styleSheet: '',
                 fontName: '',
-                fontSize: 10,
+                fontSize: '10',
                 ...this.state
             }
         }
@@ -124,7 +124,7 @@ define([
         generateImportCode() {
             var code = new com_String();
             code.appendLine('import matplotlib.pyplot as plt');
-            code.append('%matplotlib inline');
+            code.appendLine('%matplotlib inline');
             code.appendLine('import seaborn as sns');
             return [code.toString()];
         }
