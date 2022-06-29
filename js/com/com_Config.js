@@ -104,7 +104,14 @@ define([
                             '%matplotlib inline'
                         ]
                     },
-                    { library: 'seaborn', alias:'sns' }
+                    { library: 'seaborn', alias:'sns' },
+                    {
+                        library: 'plotly.express', alias: 'px',
+                        include: [
+                            'from plotly.offline import init_notebook_mode',
+                            'init_notebook_mode(connected=True)'
+                        ]
+                    }
                 ]
             }
 
@@ -251,6 +258,7 @@ define([
                 'fileNaviCommand.py',
                 'pandasCommand.py',
                 'variableCommand.py',
+                'visualizationCommand.py',
                 // 'userCommand.py'
             ];
             let promiseList = [];

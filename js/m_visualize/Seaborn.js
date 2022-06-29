@@ -280,10 +280,8 @@ define([
             $(this.wrapSelector('#showValues')).on('change', function() {
                 let checked = $(this).prop('checked');
                 if (checked === true) {
-                    that.config.checkModules = ['plt', 'sns', 'np', 'vp_seaborn_show_values'];
                     $(that.wrapSelector('#showValuesPrecision')).attr('disabled', false);
                 } else {
-                    that.config.checkModules = ['plt', 'sns'];
                     $(that.wrapSelector('#showValuesPrecision')).attr('disabled', true);
                 }
             });
@@ -696,6 +694,9 @@ define([
             });
 
             this.closeInnerPopup();
+
+            // load preview
+            this.loadPreview();
         }
 
         loadPreview() {
@@ -802,7 +803,19 @@ define([
             let config = this.chartConfig[chartType];
             let state = JSON.parse(JSON.stringify(this.state));
 
-            if (preview && useSampling) {
+            // set checkmodules
+            if (preview === true) {
+                // no auto-import for preview
+                this.config.checkModules = [];
+            } else {
+                if (showValues && showValues === true) {
+                    this.config.checkModules = ['plt', 'sns', 'np', 'vp_seaborn_show_values'];
+                } else {
+                    this.config.checkModules = ['plt', 'sns'];
+                }
+            }
+
+            if (preview === true && useSampling) {
                 // data sampling code for preview
                 // convertedData = data + '.sample(n=' + sampleCount + ', random_state=0)';
                 // convertedData = com_util.formatString('_vp_sample({0}, {1})', data, sampleCount);
@@ -965,7 +978,7 @@ define([
                 chartCode.appendFormatLine("plt.grid({0})", gridCodeList.join(', '));
             }
 
-            if (preview) {
+            if (preview === true) {
                 // Ignore warning
                 code.appendLine('import warnings');
                 code.appendLine('with warnings.catch_warnings():');
@@ -978,7 +991,7 @@ define([
 
                 if (showValues && showValues === true) {
                     code.appendLine('ax = ' + generatedCode);
-                    code.append("vp_seaborn_show_values(ax");
+                    code.append("_vp_seaborn_show_values(ax");
                     if (showValuesPrecision !== '') {
                         code.appendFormat(", precision={0}", showValuesPrecision);
                     }
