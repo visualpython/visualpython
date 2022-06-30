@@ -438,7 +438,7 @@ define([
                     options: [
                         { name: 'fi_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_train' },
                         { name: 'sort', label: 'Sort data', component: ['bool_checkbox'], value: true, usePair: true },
-                        { name: 'top_count', label: 'Top count', component: ['input_number'], min: 0, max: 5, usePair: true },
+                        { name: 'top_count', label: 'Top count', component: ['input_number'], min: 0, usePair: true },
                     ]
                 }
             }

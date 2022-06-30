@@ -54,7 +54,7 @@ define([
                 sortBy: 'y',
                 sortType: '',
                 sortHue: '',
-                sortHueText: false,
+                sortHueText: true,
                 // axes options
                 x_limit_from: '',
                 x_limit_to: '',
@@ -199,10 +199,20 @@ define([
                     $(that.wrapSelector('#stat')).closest('.sb-option').show();
                 } else if (chartType == 'barplot') {
                     $(that.wrapSelector('#showValues')).closest('.sb-option').show();
-                    $(that.wrapSelector('#sortBy')).closest('.sb-option').show();
+                    if (that.state.setXY === false) {
+                        $(that.wrapSelector('#sortBy')).closest('.sb-option').show();
+                        if (that.state.hue !== '') {
+                            $(that.wrapSelector('#sortHue')).closest('.sb-option').show();
+                        }
+                    }
                 } else if (chartType == 'countplot') {
                     $(that.wrapSelector('#showValues')).closest('.sb-option').show();
-                    $(that.wrapSelector('#sortBy')).closest('.sb-option').show();
+                    if (that.state.setXY === false) {
+                        $(that.wrapSelector('#sortBy')).closest('.sb-option').show();
+                        if (that.state.hue !== '') {
+                            $(that.wrapSelector('#sortHue')).closest('.sb-option').show();
+                        }
+                    }
                 }
             });
             
@@ -243,36 +253,46 @@ define([
                     // FIXME: hide sort values for barplot/countplot (as temporary)
                     if (that.state.chartType == 'barplot' || that.state.chartType == 'countplot') {
                         $(that.wrapSelector('#sortBy')).closest('.sb-option').hide();
+                        $(that.wrapSelector('#sortHue')).closest('.sb-option').hide();
                     }
                     
                 }
             });
 
             // change hue
-            $(document).off('change', this.wrapSelector('.vp-state'));
+            $(document).off('change', this.wrapSelector('#hue'));
             $(document).on('change', this.wrapSelector('#hue'), function() {
                 let { chartType, data } = that.state;
                 let hue = $(this).val();
-                if (chartType == 'barplot' || chartType == 'countplot') {
-                    let colDtype = $(that.wrapSelector('#hue')).find('option:selected').data('type');
-                    console.log(data, hue);
-                    // get result and load column list
-                    vpKernel.getColumnCategory(data, hue).then(function (resultObj) {
-                        let { result } = resultObj;
-                        try {
-                            var category = JSON.parse(result);
-                            if (category && category.length > 0 && colDtype == 'object') {
-                                // if it's categorical column and its dtype is object, check 'Text' as default
-                                $(that.wrapSelector('#sortHueText')).prop('checked', true);
-                            } else {
+                if (hue !== '') {
+                    if (chartType == 'barplot' || chartType == 'countplot') {
+                        let colDtype = $(that.wrapSelector('#hue')).find('option:selected').data('type');
+                        console.log(data, hue);
+                        // get result and load column list
+                        vpKernel.getColumnCategory(data, hue).then(function (resultObj) {
+                            let { result } = resultObj;
+                            try {
+                                var category = JSON.parse(result);
+                                if (category && category.length > 0 && colDtype == 'object') {
+                                    // if it's categorical column and its dtype is object, check 'Text' as default
+                                    $(that.wrapSelector('#sortHueText')).prop('checked', true);
+                                    that.state.sortHueText = true;
+                                } else {
+                                    $(that.wrapSelector('#sortHueText')).prop('checked', false);
+                                    that.state.sortHueText = false;
+                                }
+                                $(that.wrapSelector('#sortHue')).replaceWith(that.templateForHueCondition(category, colDtype));
+                            } catch {
                                 $(that.wrapSelector('#sortHueText')).prop('checked', false);
+                                that.state.sortHueText = false;
+
+                                $(that.wrapSelector('#sortHue')).replaceWith(that.templateForHueCondition([], colDtype));
                             }
-                            $(that.wrapSelector('#sortHue')).replaceWith(that.templateForHueCondition(category, colDtype));
-                        } catch {
-                            $(that.wrapSelector('#sortHueText')).prop('checked', false);
-                            $(that.wrapSelector('#sortHue')).replaceWith(that.templateForHueCondition([], colDtype));
-                        }
-                    });
+                        });
+                    }
+                    $(that.wrapSelector('#sortHue')).closest('.sb-option').show();
+                } else {
+                    $(that.wrapSelector('#sortHue')).closest('.sb-option').hide();
                 }
             });
 
@@ -280,10 +300,8 @@ define([
             $(this.wrapSelector('#showValues')).on('change', function() {
                 let checked = $(this).prop('checked');
                 if (checked === true) {
-                    that.config.checkModules = ['plt', 'sns', 'np', 'vp_seaborn_show_values'];
                     $(that.wrapSelector('#showValuesPrecision')).attr('disabled', false);
                 } else {
-                    that.config.checkModules = ['plt', 'sns'];
                     $(that.wrapSelector('#showValuesPrecision')).attr('disabled', true);
                 }
             });
@@ -468,8 +486,20 @@ define([
                 $(page).find('#stat').closest('.sb-option').show();
             } else if (this.state.chartType == 'barplot') {
                 $(page).find('#showValues').closest('.sb-option').show();
+                if (this.state.setXY === false) {
+                    $(page).find('#sortBy').closest('.sb-option').show();
+                    if (this.state.hue !== '') {
+                        $(page).find('#sortHue').closest('.sb-option').show();
+                    }
+                }
             } else if (this.state.chartType == 'countplot') {
                 $(page).find('#showValues').closest('.sb-option').show();
+                if (this.state.setXY === false) {
+                    $(page).find('#sortBy').closest('.sb-option').show();
+                    if (this.state.hue !== '') {
+                        $(page).find('#sortHue').closest('.sb-option').show();
+                    }
+                }
             }
 
             //================================================================
@@ -696,6 +726,9 @@ define([
             });
 
             this.closeInnerPopup();
+
+            // load preview
+            this.loadPreview();
         }
 
         loadPreview() {
@@ -763,10 +796,10 @@ define([
                 code.appendLine('import matplotlib.pyplot as plt');
                 code.appendLine('%matplotlib inline');
                 code.appendLine('import seaborn as sns');
-                code.appendFormatLine("plt.rc('figure', figsize=({0}, {1}))", figWidth, figHeight);
                 if (styleName && styleName.length > 0) {
                     code.appendFormatLine("plt.style.use('{0}')", styleName);
                 }
+                code.appendFormatLine("plt.rc('figure', figsize=({0}, {1}))", figWidth, figHeight);
                 code.appendLine();
         
                 code.appendLine('from matplotlib import rcParams');
@@ -802,7 +835,19 @@ define([
             let config = this.chartConfig[chartType];
             let state = JSON.parse(JSON.stringify(this.state));
 
-            if (preview && useSampling) {
+            // set checkmodules
+            if (preview === true) {
+                // no auto-import for preview
+                this.config.checkModules = [];
+            } else {
+                if (showValues && showValues === true) {
+                    this.config.checkModules = ['plt', 'sns', 'np', 'vp_seaborn_show_values'];
+                } else {
+                    this.config.checkModules = ['plt', 'sns'];
+                }
+            }
+
+            if (preview === true && useSampling) {
                 // data sampling code for preview
                 // convertedData = data + '.sample(n=' + sampleCount + ', random_state=0)';
                 // convertedData = com_util.formatString('_vp_sample({0}, {1})', data, sampleCount);
@@ -838,7 +883,7 @@ define([
             if (showValues === true && chartType === 'barplot') {
                 etcOptionCode.push('ci=None');
             }
-            if (sortType != '') {
+            if (setXY === false && sortType !== '') {
                 let sortCode = '';
                 let sortTypeStr = (sortType === 'descending'? 'ascending=False': 'ascending=True');
                 let sortX = state.x;
@@ -847,35 +892,20 @@ define([
                     sortX = state.y;
                     sortY = state.x;
                 }
-                if (chartType === 'barplot') {
-                    if (setXY === true) {
-                        // TODO: sort on setXY
-                        // if (hue !== '' && sortHue !== '') {
-                        //     sortCode = com_util.formatString("{}.groupby({})[{}].mean().sort_values({}).index")
-                        // } else {
-                        //     sortCode = com_util.formatString("pd.concat([{0},{1}], axis=1).groupby({2})[{3}].mean().sort_values({4}).index"
-                        //                         , sortX, sortY, sortX)
-                        // }
+                if (chartType === 'barplot' && sortX !== '' && sortY !== '') {
+                    if (hue !== '' && sortHue !== '') {
+                        sortCode = com_util.formatString("{0}[{1}[{2}]=={3}].groupby({4})[{5}].mean().sort_values({6}).index"
+                                            , state.data, state.data, state.hue, com_util.convertToStr(sortHue, sortHueText), sortX, sortY, sortTypeStr);
                     } else {
-                        if (hue !== '' && sortHue !== '') {
-                            sortCode = com_util.formatString("{0}[{1}[{2}]=={3}].groupby({4})[{5}].mean().sort_values({6}).index"
-                                                , state.data, state.data, state.hue, com_util.convertToStr(sortHue, sortHueText), sortX, sortY, sortTypeStr);
-                        } else {
-                            sortCode = com_util.formatString("{0}.groupby({1})[{2}].mean().sort_values({3}).index", state.data, sortX, sortY, sortTypeStr);
-                        }
+                        sortCode = com_util.formatString("{0}.groupby({1})[{2}].mean().sort_values({3}).index", state.data, sortX, sortY, sortTypeStr);
                     }
-                } else if (chartType === 'countplot') {
+                } else if (chartType === 'countplot' && (sortX !== '' || sortY !== '')) {
                     let countVar = sortX === ''? sortY: sortX;
-                    if (setXY === true) {
-                        // TODO: sort on setXY
-                        ;
+                    if (hue !== '' && sortHue !== '') {
+                        sortCode = com_util.formatString("{0}[{1}[{2}]=={3}][{4}].value_counts({5}).index"
+                                            , state.data, state.data, state.hue, com_util.convertToStr(sortHue, sortHueText), countVar, sortTypeStr);
                     } else {
-                        if (hue !== '' && sortHue !== '') {
-                            sortCode = com_util.formatString("{0}[{1}[{2}]=={3}][{4}].value_counts({5}).index"
-                                                , state.data, state.data, state.hue, com_util.convertToStr(sortHue, sortHueText), countVar, sortTypeStr);
-                        } else {
-                            sortCode = com_util.formatString("{0}[{1}].value_counts({2}).index", state.data, countVar, sortTypeStr);
-                        }
+                        sortCode = com_util.formatString("{0}[{1}].value_counts({2}).index", state.data, countVar, sortTypeStr);
                     }
                 }
 
@@ -965,7 +995,7 @@ define([
                 chartCode.appendFormatLine("plt.grid({0})", gridCodeList.join(', '));
             }
 
-            if (preview) {
+            if (preview === true) {
                 // Ignore warning
                 code.appendLine('import warnings');
                 code.appendLine('with warnings.catch_warnings():');
@@ -978,7 +1008,7 @@ define([
 
                 if (showValues && showValues === true) {
                     code.appendLine('ax = ' + generatedCode);
-                    code.append("vp_seaborn_show_values(ax");
+                    code.append("_vp_seaborn_show_values(ax");
                     if (showValuesPrecision !== '') {
                         code.appendFormat(", precision={0}", showValuesPrecision);
                     }

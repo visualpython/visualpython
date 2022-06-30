@@ -30,6 +30,7 @@ define([
             super._init();
             this.config.sizeLevel = 2;
             this.config.dataview = false;
+            this.config.checkModules = ['pd'];
 
             this.state = {
                 loadType: 'load_boston',

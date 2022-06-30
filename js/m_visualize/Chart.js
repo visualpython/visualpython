@@ -570,10 +570,11 @@ define([
             var fontSize = $(this.wrapSelector('#vp_plFontSize')).val();
     
             code.appendLine('import matplotlib.pyplot as plt');
-            code.appendFormatLine("plt.rc('figure', figsize=({0}, {1}))", figWidth, figHeight);
+            code.appendLine('%matplotlib inline');
             if (styleName && styleName.length > 0) {
                 code.appendFormatLine("plt.style.use('{0}')", styleName);
             }
+            code.appendFormatLine("plt.rc('figure', figsize=({0}, {1}))", figWidth, figHeight);
             code.appendLine();
     
             code.appendLine('from matplotlib import rcParams');

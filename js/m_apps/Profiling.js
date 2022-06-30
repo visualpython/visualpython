@@ -82,8 +82,10 @@ define([
                         code.append(saveas);
                         break;
                 }
-                com_interface.insertCell('code', code.toString(), true, 'Data Analysis > Profiling');
-                that.loadReportList();
+                that.checkAndRunModules(true).then(function() {
+                    com_interface.insertCell('code', code.toString(), true, 'Data Analysis > Profiling');
+                    that.loadReportList();
+                });
             });
         }
 
