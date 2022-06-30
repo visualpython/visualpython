@@ -149,7 +149,7 @@ define([
                     type: 'package'
                 },
                 'px': {
-                    code: 'import plotly.express as px',
+                    code: 'import plotly.express as px\nfrom plotly.offline import init_notebook_mode\ninit_notebook_mode(connected=True)',
                     type: 'package'
                 },
                 'WordCloud': {
