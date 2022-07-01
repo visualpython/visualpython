@@ -104,7 +104,14 @@ define([
                             '%matplotlib inline'
                         ]
                     },
-                    { library: 'seaborn', alias:'sns' }
+                    { library: 'seaborn', alias:'sns' },
+                    {
+                        library: 'plotly.express', alias: 'px',
+                        include: [
+                            'from plotly.offline import init_notebook_mode',
+                            'init_notebook_mode(connected=True)'
+                        ]
+                    }
                 ]
             }
 
@@ -142,7 +149,7 @@ define([
                     type: 'package'
                 },
                 'px': {
-                    code: 'import plotly.express as px',
+                    code: 'import plotly.express as px\nfrom plotly.offline import init_notebook_mode\ninit_notebook_mode(connected=True)',
                     type: 'package'
                 },
                 'WordCloud': {
@@ -251,6 +258,7 @@ define([
                 'fileNaviCommand.py',
                 'pandasCommand.py',
                 'variableCommand.py',
+                'visualizationCommand.py',
                 // 'userCommand.py'
             ];
             let promiseList = [];
@@ -579,7 +587,7 @@ define([
     /**
      * Version
      */
-    Config.version = "2.2.5";
+    Config.version = "2.2.7";
 
     /**
      * Type of mode

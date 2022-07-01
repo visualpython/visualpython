@@ -114,29 +114,34 @@
                                                 <!-- Auto-create -->
                                             </select>
                                         </div>
-                                        <div class="vp-grid-box sb-option">
-                                            <label><input type="checkbox" id="showValues" class="vp-state"/><span>Show values</span></label>
-                                            <input type="number" id="showValuesPrecision" class="vp-state" placeholder="Type precision (0 ~ 5)" min="0" max="5"/>
-                                        </div>
-                                        <div class="vp-grid-col-p50 sb-option" style="grid-column-start: 1;grid-column-end: 3;">
-                                            <div class="vp-grid-box">
-                                                <label class="vp-bold">Sort values by 
-                                                    <select id="sortBy" class="vp-state vp-select" style="width: 75px;height:25px;">
+                                        <div class="vp-grid-box sb-option" style="grid-column-start: 1;grid-column-end: 3;">
+                                            <hr style="margin:5px;"/>
+                                            <label class="vp-tab-group-title">Sort</label>
+                                            <div class="vp-grid-col-p50">
+                                                <div class="vp-grid-col-95">
+                                                    <label for="sortType">Order</label>
+                                                    <select id="sortType" class="vp-state vp-select m">
+                                                        <option value="">No sorting</option>
+                                                        <option value="descending">Sort in descending order</option>
+                                                        <option value="ascending">Sort in ascending order</option>
+                                                    </select>
+                                                </div>
+                                                <div class="vp-grid-col-95">
+                                                    <label for="sortBy">Sort by</label>
+                                                    <select id="sortBy" class="vp-state vp-select m">
                                                         <option value="y">y axis</option>
                                                         <option value="x">x axis</option>
                                                     </select>
-                                                </label>
-                                                <select id="sortType" class="vp-state">
-                                                    <option value="">No sorting</option>
-                                                    <option value="descending">Sort in descending order</option>
-                                                    <option value="ascending">Sort in ascending order</option>
-                                                </select>
+                                                </div>
                                             </div>
-                                            <div class="vp-grid-box">
-                                                <label class="vp-bold">Sort condition</label>
-                                                <input type="text" id="sortHue" class="vp-input vp-state" placeholder="Type hue condition"/>
-                                                <label><input type="checkbox" id="sortHueText" class="vp-state"/><span>Text</span></label>
+                                            <div class="vp-grid-col-95 sb-option">
+                                                <label for="sortHue">Hue condition</label>
+                                                <div>
+                                                    <input type="text" id="sortHue" class="vp-input vp-state" placeholder="Type hue condition"/>
+                                                    <label><input type="checkbox" id="sortHueText" class="vp-state" checked/><span>Text</span></label>
+                                                </div>
                                             </div>
+                                            <hr style="margin:5px;"/>
                                         </div>
                                     </div>
                                     <label for="userOption" class="vp-bold">User Option</label>
@@ -207,7 +212,16 @@
                                             <input type="text" id="y_label" class="vp-input vp-state" placeholder="Type Y Label" />
                                         </div>
                                     </div>
-                                    
+                                    <div class="vp-grid-box sb-option">
+                                        <hr style="margin:5px;"/>
+                                        <label class="vp-tab-group-title">Show values</label>
+                                        <label><input type="checkbox" id="showValues" class="vp-state"/><span>Show values on the top of bar</span></label>
+                                        <div class="vp-grid-col-95">
+                                            <label for="showValuesPrecision">Decimal place</label>
+                                            <input type="number" id="showValuesPrecision" class="vp-state" placeholder="Type decimal places(0~5)" min="0" max="5"/>
+                                        </div>
+                                        <hr style="margin:5px;"/>
+                                    </div>
                                     <label for="useLegend" class="vp-bold">Legend</label>
                                     <div class="vp-grid-col-p50">
                                         <select id="legendPos" class="vp-select vp-state">

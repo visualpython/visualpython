@@ -29,6 +29,14 @@ define([
                 , include: [
                     '%matplotlib inline'
                 ]
+            },
+            { i0: 'seaborn', i1: 'sns', type: 'module'},
+            {
+                i0: 'plotly.express', i1: 'px', type: 'module'
+                , include: [
+                    'from plotly.offline import init_notebook_mode',
+                    'init_notebook_mode(connected=True)'
+                ]
             }
         ],
         'machine-learning': [
@@ -46,7 +54,6 @@ define([
             /** Write codes executed before rendering */
             this.config.dataview = false;
             this.config.sizeLevel = 1;
-            this.config.checkModules = ['pd'];
 
             let savedData = vpConfig.getDataSimple('', 'vpimport');
             // Reset abnormal data
@@ -243,14 +250,19 @@ define([
                         // module
                         sbCode.appendFormat("import {0}{1}", pacI0, ((pacI1 === undefined || pacI1 === "") ? "" : (" as " + pacI1)));
                     }
-                }
 
-                // Need additional code?
-                if (pacI0 == 'matplotlib.pyplot' || pacI0 == 'matplotlib') {
-                    sbCode.appendLine();
-                    sbCode.append('%matplotlib inline');
+                    // Need additional code?
+                    if (pacI0 == 'matplotlib.pyplot' || pacI0 == 'matplotlib') {
+                        sbCode.appendLine();
+                        sbCode.append('%matplotlib inline');
+                    }
+                    if (pacI0 == 'plotly.express' || pacI0 == 'plotly') {
+                        sbCode.appendLine();
+                        sbCode.appendLine('from plotly.offline import init_notebook_mode');
+                        sbCode.append('init_notebook_mode(connected=True)');
+                    }
                 }
-
+                
                 importMeta.push({ i0: pacI0, i1: pacI1, type: pacType, checked: pacChecked });
             }
             this.state.importMeta = importMeta;

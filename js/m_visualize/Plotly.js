@@ -549,6 +549,11 @@ define([
                 // let height = $(this.wrapSelector('#vp_ptPreview')).height();
                 // console.log(width, height);
                 etcOptionCode.push(com_util.formatString('width={0}, height={1}', width, height));
+
+                // no auto-import for preview
+                this.config.checkModules = [];
+            } else {
+                this.config.checkModules = ['px'];
             }
 
             let generatedCode = com_generator.vp_codeGenerator(this, config, this.state

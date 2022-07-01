@@ -709,7 +709,9 @@ define([
          */
         checkRequiredOption() {
             let requiredFilled = true;
-            let requiredTags = $(this.wrapSelector('input[required=true],input[required=required]'));
+            let requiredTags = $(this.wrapSelector('input[required=true]') + ',' + this.wrapSelector('input[required=required]'));
+
+            vpLog.display(VP_LOG_TYPE.DEVELOP, 'checkRequiredOption', this, requiredTags);
 
             if (requiredTags) {
                 for (let i = 0; i < requiredTags.length; i++) {
