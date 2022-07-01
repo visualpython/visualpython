@@ -151,8 +151,7 @@ define([
 
         generateInstallCode() {
             return [
-                '!pip install pandas-profiling',
-                '!pip install ipywidgets'
+                '!pip install pandas-profiling'
             ];
         }
 

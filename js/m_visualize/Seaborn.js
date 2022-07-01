@@ -200,7 +200,9 @@ define([
                 } else if (chartType == 'barplot') {
                     $(that.wrapSelector('#showValues')).closest('.sb-option').show();
                     if (that.state.setXY === false) {
-                        $(that.wrapSelector('#sortBy')).closest('.sb-option').show();
+                        if (that.state.x !== '' && that.state.y !== '') {
+                            $(that.wrapSelector('#sortBy')).closest('.sb-option').show();
+                        }
                         if (that.state.hue !== '') {
                             $(that.wrapSelector('#sortHue')).closest('.sb-option').show();
                         }
@@ -208,7 +210,9 @@ define([
                 } else if (chartType == 'countplot') {
                     $(that.wrapSelector('#showValues')).closest('.sb-option').show();
                     if (that.state.setXY === false) {
-                        $(that.wrapSelector('#sortBy')).closest('.sb-option').show();
+                        if (that.state.x !== '' || that.state.y !== '') {
+                            $(that.wrapSelector('#sortBy')).closest('.sb-option').show();
+                        }
                         if (that.state.hue !== '') {
                             $(that.wrapSelector('#sortHue')).closest('.sb-option').show();
                         }
@@ -226,11 +230,6 @@ define([
                     $(that.wrapSelector('#x')).closest('.vp-ds-box').replaceWith('<select id="x"></select>');
                     $(that.wrapSelector('#y')).closest('.vp-ds-box').replaceWith('<select id="y"></select>');
                     $(that.wrapSelector('#hue')).closest('.vp-ds-box').replaceWith('<select id="hue"></select>');
-
-                    // FIXME: hide sort values for barplot/countplot (as temporary)
-                    if (that.state.chartType == 'barplot' || that.state.chartType == 'countplot') {
-                        $(that.wrapSelector('#sortBy')).closest('.sb-option').show();
-                    }
                 } else {
                     // set X Y indivisually
                     // disable data selection
@@ -250,12 +249,55 @@ define([
                     let dataSelectorHue = new DataSelector({ pageThis: that, id: 'hue' });
                     $(that.wrapSelector('#hue')).replaceWith(dataSelectorHue.toTagString());
 
-                    // FIXME: hide sort values for barplot/countplot (as temporary)
+                    // FIXME: hide sort values for barplot/countplot
                     if (that.state.chartType == 'barplot' || that.state.chartType == 'countplot') {
                         $(that.wrapSelector('#sortBy')).closest('.sb-option').hide();
                         $(that.wrapSelector('#sortHue')).closest('.sb-option').hide();
                     }
                     
+                }
+            });
+
+            // change x, y
+            $(document).off('change', this.wrapSelector('#x'));
+            $(document).on('change', this.wrapSelector('#x'), function() {
+                let { chartType, y, setXY } = that.state;
+                let x = $(this).val();
+                if (setXY === false) {
+                    if (chartType == 'barplot') {
+                        if (x !== '' && y !== '') {
+                            $(that.wrapSelector('#sortBy')).closest('.sb-option').show();
+                        } else {
+                            $(that.wrapSelector('#sortBy')).closest('.sb-option').hide();
+                        }
+                    } else if (chartType == 'countplot') {
+                        if (x !== '' || y !== '') {
+                            $(that.wrapSelector('#sortBy')).closest('.sb-option').show();
+                        } else {
+                            $(that.wrapSelector('#sortBy')).closest('.sb-option').hide();
+                        }
+                    }
+                }
+            });
+
+            $(document).off('change', this.wrapSelector('#y'));
+            $(document).on('change', this.wrapSelector('#y'), function() {
+                let { chartType, x, setXY } = that.state;
+                let y = $(this).val();
+                if (setXY === false) {
+                    if (chartType == 'barplot') {
+                        if (x !== '' && y !== '') {
+                            $(that.wrapSelector('#sortBy')).closest('.sb-option').show();
+                        } else {
+                            $(that.wrapSelector('#sortBy')).closest('.sb-option').hide();
+                        }
+                    } else if (chartType == 'countplot') {
+                        if (x !== '' || y !== '') {
+                            $(that.wrapSelector('#sortBy')).closest('.sb-option').show();
+                        } else {
+                            $(that.wrapSelector('#sortBy')).closest('.sb-option').hide();
+                        }
+                    }
                 }
             });
 
@@ -487,7 +529,9 @@ define([
             } else if (this.state.chartType == 'barplot') {
                 $(page).find('#showValues').closest('.sb-option').show();
                 if (this.state.setXY === false) {
-                    $(page).find('#sortBy').closest('.sb-option').show();
+                    if (this.state.x !== '' && this.state.y !== '') {
+                        $(page).find('#sortBy').closest('.sb-option').show();
+                    }
                     if (this.state.hue !== '') {
                         $(page).find('#sortHue').closest('.sb-option').show();
                     }
@@ -495,7 +539,9 @@ define([
             } else if (this.state.chartType == 'countplot') {
                 $(page).find('#showValues').closest('.sb-option').show();
                 if (this.state.setXY === false) {
-                    $(page).find('#sortBy').closest('.sb-option').show();
+                    if (this.state.x !== '' || this.state.y !== '') {
+                        $(page).find('#sortBy').closest('.sb-option').show();
+                    }
                     if (this.state.hue !== '') {
                         $(page).find('#sortHue').closest('.sb-option').show();
                     }
