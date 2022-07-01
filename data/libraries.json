@@ -3049,20 +3049,6 @@
                             "color": 3,
                             "icon": "apps/apps_pymupdf.svg"
                         }
-                    },
-                    {
-                        "id"   : "apps_profiling",
-                        "type" : "function",
-                        "level": 1,
-                        "name" : "Profiling",
-                        "tag"  : "PROFILING,PANDAS PROFILING,APPS",
-                        "path" : "visualpython - apps - profiling",
-                        "desc" : "Pandas Profiling",
-                        "file" : "m_apps/Profiling",
-                        "apps" : {
-                            "color": 4,
-                            "icon": "apps/apps_profiling.svg"
-                        }
                     }
                 ]
             },
