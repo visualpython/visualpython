@@ -19,7 +19,7 @@ define ([
     class Constants { }
 
     Constants.TOOLBAR_BTN_INFO = {
-        HELP: "Visual Python 2.2.7"
+        HELP: "Visual Python 2.2.8"
         , ICON: "vp-main-icon"
         , ID: "vpBtnToggle"
         , NAME: "toggle-vp"
