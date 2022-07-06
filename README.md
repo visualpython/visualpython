@@ -27,9 +27,9 @@ Try Visual Python if you would like to: <br>
 
 ### 1. Requirements
 
-Visual Python is a Jupyter Notebook extension. <br>
+Visual Python is an extension to Jupyter Notebook, so you must have Jupyter Notebook installed already.<br>
 - Python version 3.x
-- Jupyter notebook or Anaconda env 
+- Jupyter notebook environment
 
 ### 2. How to Install
 
