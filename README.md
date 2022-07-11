@@ -44,6 +44,10 @@ We recommend installing Anaconda (virtual environment).
 ```
 pip install visualpython
 ```
+or
+```
+pip3 install visualpython
+```
 
 **3)  Enable the package**
 ```
