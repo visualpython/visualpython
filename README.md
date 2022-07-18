@@ -21,7 +21,7 @@ Try Visual Python if you would like to: <br>
 * save & reuse repeatedly used codes(snippets). <br>
 
 <br>
-<img src="https://i.esdrop.com/d/7o0dj05m8rnz/Vo69p6HOwb.gif" width="85%">
+<img src="https://github.com/visualpython/visualpython/blob/main/img/Visual%20Python_2.2.8.gif" width="85%">
 
 ## Getting Started
 
