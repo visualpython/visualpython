@@ -1,6 +1,4 @@
-
-![Visual Python](https://i.esdrop.com/d/7o0dj05m8rnz/JNGCMedl18.png)
-
+<img src="https://i.esdrop.com/d/7o0dj05m8rnz/JNGCMedl18.png" width="45%">
 
 [![PyPI version shields.io](https://img.shields.io/pypi/v/visualpython)](https://pypi.python.org/pypi/visualpython/)
 ![Python: 3.x](https://img.shields.io/badge/Python-3.x-yellowgreen)
@@ -21,7 +19,7 @@ Try Visual Python if you would like to: <br>
 * save & reuse repeatedly used codes(snippets). <br>
 
 <br>
-<img src="https://github.com/visualpython/visualpython/blob/main/img/Visual%20Python_2.2.8.gif" width="85%">
+<img src="https://github.com/visualpython/visualpython/blob/main/img/Visual%20Python_2.2.8.gif" width="95%">
 
 ## Getting Started
 
@@ -71,10 +69,10 @@ GNU GPLv3 with Visual Python special exception (See LICENSE file).
 
 ## Mission & Vision
 **Mission** <br>
-To support technology and education so that anyone can leverage big data analytics to create a variety of social values.
+To support technology and education so that anyone can leverage big data analytical skills to create a variety of social values.
 
 **Vision** <br>
-To create an environment where everyone can learn and use big data analytics skills easily.
+To create an environment where everyone can learn and use big data analytical skills easily.
 
 ## Support Visual Python
 Love Visual Python? <br>
