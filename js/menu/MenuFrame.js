@@ -252,7 +252,7 @@ define([
             menuLibraries && menuLibraries.forEach(item => {
                 if (item.type == 'package') {
                     // packages : MenuGroup
-                    var menuGroup = new MenuGroup($('#vp_menuBody'), item);
+                    var menuGroup = new MenuGroup($('.vp-menugroup-list'), item);
                     if (item.item) {
                         that.renderMenuItem(menuGroup);
                     }

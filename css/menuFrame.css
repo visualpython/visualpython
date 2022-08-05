@@ -57,18 +57,18 @@
     padding: 0 5px 5px 5px;
     box-sizing: border-box;
 }
-.vp-menu-body > div:nth-child(2) {
+/* .vp-menu-body > div:nth-child(2) {
     margin-top: 50px;
-}
+} */
 .vp-menu-search-div {
     box-sizing: border-box;
     padding: 10px 0 10px 0px;
-    position: absolute;
-    width: calc(100% - 10px);
+    position: relative;
+    width: 100%;
     background: white;
 }
 .vp-menu-search-box {
-    width: calc(100% - 50px);
+    width: calc(100% - 45px);
     height: 30px;
     background: #FFFFFF;
     border: 0.25px solid #e4e4e4;
@@ -83,14 +83,14 @@
     width: 20px;
     height: 20px;
     position: relative;
-    right: 32px;
+    right: 30px;
 }
 .vp-board-toggle-icon {
     width: 26px;
     height: 26px;
     position: absolute;
     top: 11px;
-    right: 8px;
+    right: 4px;
     cursor: pointer;
     background-image: url(../img/toggleNote.svg);
     background-position: center;
@@ -104,6 +104,9 @@
 }
 .vp-board-toggle-icon:hover {
     background-image: url(../img/toggleNote.svg);
+}
+.vp-menugroup-list {
+    height: calc(100% - 45px);
 }
 
 .vp-menu-footer {

@@ -712,7 +712,7 @@ define([
                 suggestInput.setComponentID('styleSheet');
                 suggestInput.setSuggestList(function() { return varList; });
                 suggestInput.setPlaceholder('style name');
-                suggestInput.setValue('seaborn-darkgrid'); // set default (seaborn-darkgrid)
+                // suggestInput.setValue('seaborn-darkgrid'); // set default (seaborn-darkgrid)
                 // suggestInput.setNormalFilter(false);
                 $(stylesheetTag).replaceWith(function() {
                     return suggestInput.toTagString();
