@@ -660,10 +660,10 @@ define([
                     // render variable list
                     // get prevvalue
                     var prevValue = that.state.originObj;
-                    if (varList && varList.length > 0 && prevValue == '') {
-                        prevValue = varList[0].varName;
-                        that.state.originObj = prevValue;
-                    }
+                    // if (varList && varList.length > 0 && prevValue == '') {
+                    //     prevValue = varList[0].varName;
+                    //     that.state.originObj = prevValue;
+                    // }
                     // replace
                     that.renderVariableList(varList, prevValue);
                     $(that.wrapSelector('#vp_feVariable')).trigger('change');

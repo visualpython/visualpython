@@ -39,6 +39,8 @@ define([
                         bodyTag.hide();
                     } else {
                         bodyTag.show();
+                        // scroll to view
+                        $(target)[0].scrollIntoView({behavior: "smooth", block: "start"});
                     }
                     evt.stopPropagation();
                 }
