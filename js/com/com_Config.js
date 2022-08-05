@@ -587,7 +587,7 @@ define([
     /**
      * Version
      */
-    Config.version = "2.2.10";
+    Config.version = "2.2.11";
 
     /**
      * Type of mode
