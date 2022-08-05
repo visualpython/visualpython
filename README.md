@@ -1,6 +1,4 @@
-
-![Visual Python](https://i.esdrop.com/d/7o0dj05m8rnz/JNGCMedl18.png)
-
+<img src="https://i.esdrop.com/d/7o0dj05m8rnz/JNGCMedl18.png" width="45%">
 
 [![PyPI version shields.io](https://img.shields.io/pypi/v/visualpython)](https://pypi.python.org/pypi/visualpython/)
 ![Python: 3.x](https://img.shields.io/badge/Python-3.x-yellowgreen)
@@ -21,38 +19,31 @@ Try Visual Python if you would like to: <br>
 * save & reuse repeatedly used codes(snippets). <br>
 
 <br>
-<img src="https://i.esdrop.com/d/7o0dj05m8rnz/Vo69p6HOwb.gif" width="85%">
+<img src="https://github.com/visualpython/visualpython/blob/main/img/Visual%20Python_2.2.8.gif?raw=true" width="95%">
 
 ## Getting Started
 
 ### 1. Requirements
 
-Visual Python is a Jupyter Notebook extension. <br>
-We recommend installing Anaconda (virtual environment).
-
+Visual Python is an extension to Jupyter Notebook, so you must have Jupyter Notebook installed already.<br>
 - Python version 3.x
-- Jupyter notebook or Anaconda env 
+- Jupyter notebook environment
 
 ### 2. How to Install
 
-**1)  Open Anaconda prompt**
-
-* Windows : Click Start > Search or Select 'Anaconda Prompt' <br>
-* Mac : Open Launchpad > Select 'Terminal'
-
-**2)  Install package from**
+**1)  Install package from**
 ```
 pip install visualpython
 ```
 
-**3)  Enable the package**
+**2)  Enable the package**
 ```
 visualpy install
 ```
 
-**4)  Activate Visual Python on Jupyter Notebook**
+**3)  Activate Visual Python on Jupyter Notebook**
 
-Click orange square button on the right side of the Jupyter Notebook menu. 
+Click orange square button on the right side of the Jupyter Notebook menu bar. 
 
 ### 3. Package Control Info
 * Usage: visualpy **[option]** <br>
@@ -78,10 +69,10 @@ GNU GPLv3 with Visual Python special exception (See LICENSE file).
 
 ## Mission & Vision
 **Mission** <br>
-To support technology and education so that anyone can leverage big data analytics to create a variety of social values.
+To support technology and education so that anyone can leverage big data analytical skills to create a variety of social values.
 
 **Vision** <br>
-To create an environment where everyone can learn and use big data analytics skills easily.
+To create an environment where everyone can learn and use big data analytical skills easily.
 
 ## Support Visual Python
 Love Visual Python? <br>
