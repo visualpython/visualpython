@@ -279,7 +279,8 @@ define([
                 {
                     name: 'i0',
                     label: 'Input Data',
-                    component: ['var_select']
+                    component: ['key_value']
+                    // component: ['var_select']
                 },
                 {
                     name: 'o0',

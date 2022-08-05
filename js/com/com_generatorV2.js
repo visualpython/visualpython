@@ -30,6 +30,7 @@ define([
         'scalar': 'Scalar Value',
         'param': 'Param Value',
         'dtype': 'Dtype',
+        'key_val': 'Key Value',
         'bool_checkbox': 'Boolean',
         'bool_select': 'Select Boolean',
         'option_select': 'Select option',
@@ -255,6 +256,9 @@ define([
                 break;
             case 'dtype':
                 content = renderDtypeSelector(pageThis, obj, state);
+                break;
+            case 'key_value':
+                content = renderKeyValue(pageThis, obj, state);
                 break;
             case 'tabblock':
                 content = renderTabBlock(pageThis, obj, state);
@@ -635,10 +639,11 @@ define([
      */
     var vp_codeGenerator = function(pageThis, package, state = {}, etcOptions = '') {
         var code = package.code;
-        
+        console.log("code is " + code);
         try {
             package.options && package.options.forEach(function(v, i) {
                 var val = state[v.name];
+                console.log("val is " + val);
                 if (val == undefined || val == '' || val == v.default) {
                     val = vp_getTagValue(pageThis, v);
                 }
@@ -1101,6 +1106,43 @@ define([
         return slctTag;
     }
 
+    // (pageThis, obj, state)
+    var renderKeyValue = function(pageThis, obj, state) {
+        let arrKey = obj.name + '_key_val';
+        let arrState = [ '' ];
+        let value = `${arrState.join(',')}`;
+        if (state[arrKey] == undefined) {
+            pageThis.setState({ [arrKey]: arrState });
+            pageThis.setState({ [obj.name]: value});
+        } else {
+            arrState = state[arrKey];
+            value = `${arrState.join(',')}`;
+        }
+
+        let contentTag = $(`<div class="vp-key-val-box"></div>`);
+        $(contentTag).attr({
+            'data-id': obj.name
+        });
+        contentTag.data('obj', obj);
+        // Array Items
+        let arrItems = $(`<div class="vp-numpy-style-flex-row-between-wrap vp-scrollbar" style="max-height: 200px; overflow: auto;"></div>`);
+        arrState.forEach((item, idx) => {
+            arrItems.append($(`<div class="vp-numpy-style-flex-row">
+                <div class="vp-numpy-style-flex-column-center vp-bold mr5 w10">
+                    ${idx + 1}
+                </div>
+                <input class="vp-numpy-input vp-key-val-item" data-idx="${idx}" value="${item}" type="text" placeholder="Value">
+                <input class="vp-numpy-input vp-key-val-item" data-idx="${idx}" value="${item}" type="text" placeholder="Value">
+                
+                <button class="vp-button vp-key-val-del w30">x</button>
+            </div>`));
+        });
+        contentTag.append(arrItems);
+        // add button
+        contentTag.append($(`<button class="vp-button vp-key-val-add w30">+</button>`));
+        return contentTag;
+    }
+
     var renderTabBlock = function(pageThis, obj, defaultValue) {
         return $('<input value="tabblock"/>');
     }
@@ -1313,7 +1355,7 @@ define([
             pageThis.setState({ [id]: code });
             $(pageThis.wrapSelector('#'+id)).val(code);
         });
-
+        
         //====================================================================
         // Event for ndArr
         //====================================================================
@@ -1357,6 +1399,61 @@ define([
         $(selector).on('change', '.vp-numpy-ndarr-item', function() {
             let id = $(this).closest('.vp-numpy-ndarr-box').data('id');
             let arrId = id + '_ndarr';
+            let idx = $(this).data('idx');
+            let value = $(this).val();
+            // update state
+            let state = pageThis.getState(arrId);
+            state[idx] = value;
+            let code = `${state.join(',')}`;
+            pageThis.setState({ [arrId]: state });
+            pageThis.setState({ [id]: code });
+            $(pageThis.wrapSelector('#'+id)).val(code);
+        });
+        //====================================================================
+        // Event for ndArr
+        //====================================================================
+        $(selector).on('click', '.vp-key-val-del', function() {
+            let id = $(this).closest('.vp-key-val-box').data('id');
+            let arrId = id + '_key_val';
+            let idx = $(this).parent().find('.vp-key-val-item').data('idx');
+            // update state
+            let state = pageThis.getState(arrId);
+            state.splice(idx, 1);
+            pageThis.setState({ [arrId]: state });
+            pageThis.setState({ [id]: `${state.join(',')}` });
+            // re-render
+            let obj = $(this).closest('.vp-key-val-box').data('obj');
+            $(this).closest('.vp-key-val-box').replaceWith(function() {
+                return renderKeyValue(pageThis, obj, pageThis.getState());
+            });
+        });
+
+        $(selector).on('click', '.vp-key-val-add', function() {
+            //alert("press key val add");
+            let id = $(this).closest('.vp-key-val-box').data('id');
+            let arrId = id + '_key_val';
+            let idx = 0;
+            // update state
+            let state = pageThis.getState(arrId);
+            if (!state) {
+                state = [ ];
+            } else {
+                idx = state.length;
+            }
+            state.push(0);
+            pageThis.setState({ [arrId]: state });
+            pageThis.setState({ [id]: `${state.join(',')}` });
+            // re-render
+            let obj = $(this).closest('.vp-key-val-box').data('obj');
+            $(this).closest('.vp-key-val-box').replaceWith(function() {
+                return renderKeyValue(pageThis, obj, pageThis.getState());
+            });
+        });
+
+        $(selector).on('change', '.vp-key-val-item', function() {
+            //alert("change key val");
+            let id = $(this).closest('.vp-key-val-box').data('id');
+            let arrId = id + '_key_val';
             let idx = $(this).data('idx');
             let value = $(this).val();
             // update state
