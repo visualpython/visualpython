@@ -402,9 +402,7 @@ define([
             $(this.wrapSelector('#vp_fileNavigationInput')).on('change', function() {
                 let fileName = $(this).val();
                 let filePath = that.getRelativePath(that.pathState.baseDir, that.pathState.currentPath);
-                if (filePath == '') {
-                    filePath = './' + fileName;
-                }
+                
                 that.handleSelectFile(filePath, fileName);
             });
             // bind save cancel event
