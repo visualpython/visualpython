@@ -643,6 +643,8 @@ define([
         try {
             package.options && package.options.forEach(function(v, i) {
                 var val = state[v.name];
+                console.log("v.name is " + v.name);
+                console.log("v is " , v);
                 console.log("val is " + val);
                 if (val == undefined || val == '' || val == v.default) {
                     val = vp_getTagValue(pageThis, v);
@@ -654,6 +656,7 @@ define([
                     }
                     // if no value, replace it
                     code = code.split(id).join('');
+                    console.log("code2 is " + code);
                 } else {
                     // text quotation
                     if (v.type == 'text') {
@@ -680,6 +683,7 @@ define([
                         }
                     }
                     code = code.split(id).join(val);
+                    console.log("code3 is " + code);
                 }
             });
 

@@ -39,8 +39,10 @@ define([
                 let findPackage = null;
                 if (packageName == 'numpy') {
                     findPackage = numpyLibrary.NUMPY_LIBRARIES[this.packageId];
+                    console.log("packge numpy");
                 } else if (packageName == 'python') {
                     findPackage = pythonLibrary.PYTHON_LIBRARIES[this.packageId];
+                    console.log("packge python !!");
                 }
                 if (findPackage) {
                     this.package = JSON.parse(JSON.stringify(findPackage)); // deep copy of package
@@ -159,6 +161,7 @@ define([
         }
 
         generateCode() {
+            alert("this is numpy component");
             let code = com_generatorV2.vp_codeGenerator(this, this.package, this.state);
             return code;
         }
