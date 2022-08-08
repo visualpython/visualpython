@@ -792,7 +792,20 @@ define([
         open() {
             vpLog.display(VP_LOG_TYPE.DEVELOP, 'open popup', this);
             this.loadState();
+            
             this.show();
+
+            // set popup position if its top-left side is outside of view
+            let pos = $(this.wrapSelector()).position();
+            if (pos) {
+                if (pos.top < 0) {
+                    $(this.wrapSelector()).css({ top: 0 });
+                }
+                if (pos.left < 0) {
+                    $(this.wrapSelector()).css({ left: 0 });
+                }
+            }
+
             this._bindCodemirror();
 
             $(this.eventTarget).trigger({
