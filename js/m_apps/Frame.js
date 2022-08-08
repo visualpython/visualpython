@@ -1302,12 +1302,12 @@ define([
                     var tab = content.addtype;
                     if (tab == 'value') {
                         var value = com_util.convertToStr(content.value, content.valueastext);
-                        code.appendFormat("{0}[[{1}]] = {2}", tempObj, name, value);
+                        code.appendFormat("{0}[{1}] = {2}", tempObj, name, value);
                     } else if (tab == 'calculation') {
                         var { var1col, oper, var2col } = content;
                         var var1code = tempObj + "['" + var1col + "']";
                         var var2code = tempObj + "['" + var2col + "']";
-                        code.appendFormat('{0}[[{1}]] = {2} {3} {4}', tempObj, name, var1code, oper, var2code);
+                        code.appendFormat('{0}[{1}] = {2} {3} {4}', tempObj, name, var1code, oper, var2code);
                     } else if (tab == 'replace') {
                         var replaceStr = new com_String();
                         var useRegex = content['useregex'];
@@ -1325,7 +1325,7 @@ define([
                         if (selectedName && selectedName != '') {
                             selectedName = '[[' + selectedName + ']]';
                         }
-                        code.appendFormat("{0}[[{1}]] = {2}{3}.replace({{4}}", tempObj, name, tempObj, selectedName, replaceStr);
+                        code.appendFormat("{0}[{1}] = {2}{3}.replace({{4}}", tempObj, name, tempObj, selectedName, replaceStr);
                         if (useRegex) {
                             code.append(', regex=True');
                         }
@@ -1334,7 +1334,7 @@ define([
                         var value = com_util.convertToStr(content.value, content.valueastext);
                         code.appendFormat("{0} = {1}", content.subset, value);
                     } else if (tab == 'apply') {
-                        code.appendFormat("{0}[[{1}]] = {2}[{3}].apply({4})", tempObj, name, tempObj, content.column, content.apply);
+                        code.appendFormat("{0}[{1}] = {2}[{3}].apply({4})", tempObj, name, tempObj, content.column, content.apply);
                     }
                     break;
                 case FRAME_EDIT_TYPE.ADD_ROW: 
