@@ -12,6 +12,8 @@
 //============================================================================
 // Load Visual Python
 //============================================================================
+// CHROME: removed code
+define([
     // CHROME: removed .css extension type
     'css!vp_base/css/root',
     'vp_base/js/com/com_Const',
@@ -27,7 +29,7 @@
     //========================================================================
     // Define variable
     //========================================================================
-    var Jupyter;
+    var Jupyter = null;
     var events;
     var liveNotebook = false;
 
@@ -149,7 +151,9 @@
         /**
          * visualpython config util
          */
-        window.vpConfig = new com_Config();
+        // CHROME: added extType as 'chrome'
+        // window.vpConfig = new com_Config();
+        window.vpConfig = new com_Config('chrome');
         window.VP_MODE_TYPE = com_Config.MODE_TYPE;
         /**
          * visualpython kernel
@@ -236,7 +240,10 @@
         let cfg = readConfig();
 
         vpConfig.readKernelFunction();
-        _addToolBarVpButton();
+        // CHROME: edited
+        if (Jupyter) {
+            _addToolBarVpButton();
+        }
         _loadVpResource(cfg);
         _checkVersion();
 
