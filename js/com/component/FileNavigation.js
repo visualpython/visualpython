@@ -47,7 +47,7 @@ define([
          * @param {Object} state { type, extensions, finish ... }
          */
         constructor(state) {
-            super($('#site'), state);
+            super($(vpConfig.parentSelector), state);
             /**
              * state.type           open / save
              * state.extensions     extensions list

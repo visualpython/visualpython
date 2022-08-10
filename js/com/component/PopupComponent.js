@@ -41,7 +41,9 @@ define([
      */
     class PopupComponent extends Component {
         constructor(state={ config: { id: 'popup', name: 'Popup title', path: 'path/file' }}, prop={}) {
-            super($('#site'), state, prop);
+            // CHROME: FIXME: #site -> .notebook-vertical
+            // super($('#site'), state, prop);
+            super($(vpConfig.parentSelector), state, prop);
         }
 
         _init() {

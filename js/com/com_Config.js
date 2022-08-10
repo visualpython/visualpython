@@ -47,6 +47,12 @@ define([
         constructor(extensionType='notebook', initialData={}) {
             // initial mode
             this.extensionType = extensionType;
+            this.parentSelector = 'body';
+            if (extensionType === 'notebook') {
+                this.parentSelector = '#site';
+            } else if (extensionType === 'chrome') {
+                this.parentSelector = '.notebook-horizontal';
+            }
             // initial configuration
             this.data = {
                 // Configuration
