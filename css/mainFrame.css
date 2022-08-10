@@ -25,6 +25,10 @@
     background: white;
     z-index: 100;
 }
+/* CHROME: set default box-sizing for vp area */
+div#vp_wrapper * {
+    box-sizing: border-box !important;
+}
 
 /* resizing handle */
 #vp_wrapper > .ui-resizable-handle {

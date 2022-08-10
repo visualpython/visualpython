@@ -26,6 +26,10 @@
     font-size: 14px;
     color: var(--font-primary);
 }
+/* CHROME: set default box-sizing for popup area */
+.vp-popup-frame * {
+    box-sizing: border-box !important;
+}
 .vp-popup-frame.vp-close {
     width: 200px !important;
     min-width: 200px !important;

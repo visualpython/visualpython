@@ -10,6 +10,10 @@
     z-index: 300;
     background-color: rgba(0,0,0,.4);
 }
+/* CHROME: set default box-sizing for file navigation area */
+#vp_fileNavigation * {
+    box-sizing: border-box !important;
+}
 .fileNavigationPage-container {
     position: relative;
     left: 50%;

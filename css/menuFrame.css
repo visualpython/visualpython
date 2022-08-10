@@ -67,7 +67,7 @@
     width: 100%;
     background: white;
 }
-.vp-menu-search-box {
+input.vp-menu-search-box {
     width: calc(100% - 45px);
     height: 30px;
     background: #FFFFFF;
@@ -84,6 +84,7 @@
     height: 20px;
     position: relative;
     right: 30px;
+    top: 6px;
 }
 .vp-board-toggle-icon {
     width: 26px;

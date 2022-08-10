@@ -70,7 +70,7 @@ body {
     height: 10px;
 }
 /* common component style */
-.vp-input {
+input.vp-input {
     font-size: 14px;
     line-height: 16px;
     height: 30px;
@@ -81,7 +81,7 @@ body {
     border: 0.25px solid var(--border-gray-color);
     box-sizing: border-box;
 }
-.vp-input::placeholder {
+input.vp-input::placeholder {
 	color: var(--gray-color);
 }
 
@@ -103,7 +103,7 @@ body {
 .vp-file-browser-button.disabled {
     content: url(../img/folder_open_disabled.svg);
 }
-.vp-select {
+select.vp-select {
 	height: 30px;
 	font-style: normal;
 	font-weight: normal;
@@ -124,12 +124,12 @@ body {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-.vp-select::-ms-expand {
+select.vp-select::-ms-expand {
     display: none;
 }
 
 /* Select Option Design */
-.vp-select * {
+select.vp-select * {
     background-color: white;
     color: #696969;
 }
@@ -153,7 +153,8 @@ body {
 }
 
 /* Buttons */
-.vp-button {
+input.vp-button,
+button.vp-button {
     width: 80px;
     height: 30px;
     background: #FFFFFF;
