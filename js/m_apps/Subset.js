@@ -258,9 +258,9 @@ define([
             tag.appendFormatLine('<button type="button" class="{0} {1}" title="{2}"><img src="{3}"/></button>',
                 VP_DS_SELECT_ADD_ALL_BTN, 'select-row', 'Add all items', com_Const.IMAGE_PATH + 'arrow_right_double.svg');
             tag.appendFormatLine('<button type="button" class="{0} {1}"><img src="{2}"/></button>', VP_DS_SELECT_ADD_BTN, 'select-row', com_Const.IMAGE_PATH + 'arrow_right.svg');
-            tag.appendFormatLine('<button type="button" class="{0} {1}"><img src="{2}"/></button>', VP_DS_SELECT_DEL_BTN, 'select-row', com_Const.IMAGE_PATH + 'img/arrow_left.svg');
+            tag.appendFormatLine('<button type="button" class="{0} {1}"><img src="{2}"/></button>', VP_DS_SELECT_DEL_BTN, 'select-row', com_Const.IMAGE_PATH + 'arrow_left.svg');
             tag.appendFormatLine('<button type="button" class="{0} {1}" title="{2}"><img src="{3}"/></button>',
-                VP_DS_SELECT_DEL_ALL_BTN, 'select-row', 'Remove all items', com_Const.IMAGE_PATH + 'img/arrow_left_double.svg');
+                VP_DS_SELECT_DEL_ALL_BTN, 'select-row', 'Remove all items', com_Const.IMAGE_PATH + 'arrow_left_double.svg');
             tag.appendLine('</div>'); // VP_DS_SELECT_BTNS
 
             // row select - right
