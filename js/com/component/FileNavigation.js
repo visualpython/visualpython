@@ -15,10 +15,11 @@
 define([
     'text!vp_base/html/component/fileNavigation.html!strip',
     'css!vp_base/css/component/fileNavigation',
+    'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
     'vp_base/js/com/component/Component'
-], function(fileNaviHtml, fileNaviCss, com_String, com_util, Component) {
+], function(fileNaviHtml, fileNaviCss, com_Const, com_String, com_util, Component) {
     // Temporary constant data
     const NAVIGATION_DIRECTION_TYPE = {
         TOP: 0,
@@ -189,7 +190,7 @@ define([
 
         template() {
             /** Implement generating template */
-            return fileNaviHtml;
+            return fileNaviHtml.replaceAll('${vp_base}', com_Const.BASE_PATH);
         }
 
         /**
