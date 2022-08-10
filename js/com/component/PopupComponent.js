@@ -14,7 +14,7 @@
 //============================================================================
 define([
     'text!vp_base/html/component/popupComponent.html!strip',
-    'css!vp_base/css/component/popupComponent.css',
+    'css!vp_base/css/component/popupComponent',
     '../com_util',
     '../com_Const',
     '../com_String',

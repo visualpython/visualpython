@@ -14,7 +14,7 @@
 //============================================================================
 define([
     'text!vp_base/html/component/fileNavigation.html!strip',
-    'css!vp_base/css/component/fileNavigation.css',
+    'css!vp_base/css/component/fileNavigation',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
     'vp_base/js/com/component/Component'

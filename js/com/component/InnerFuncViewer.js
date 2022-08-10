@@ -14,7 +14,7 @@
 //============================================================================
 define([
     'text!vp_base/html/component/innerFuncViewer.html!strip',
-    'css!vp_base/css/component/innerFuncViewer.css',
+    'css!vp_base/css/component/innerFuncViewer',
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_String',
     'vp_base/js/com/component/PopupComponent',

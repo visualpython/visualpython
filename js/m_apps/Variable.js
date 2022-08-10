@@ -14,7 +14,7 @@
 //============================================================================
 define([
     'text!vp_base/html/m_apps/variable.html!strip',
-    'css!vp_base/css/m_apps/variable.css',
+    'css!vp_base/css/m_apps/variable',
     'vp_base/js/com/com_String',
     'vp_base/js/com/component/PopupComponent'
 ], function(varHtml, varCss, com_String, PopupComponent) {

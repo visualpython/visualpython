@@ -14,7 +14,7 @@
 //============================================================================
 define([
     'text!vp_base/html/m_library/numpyComponent.html!strip',
-    'css!vp_base/css/m_library/numpyComponent.css',
+    'css!vp_base/css/m_library/numpyComponent',
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/com_generatorV2',
     'vp_base/data/m_library/numpyLibrary',

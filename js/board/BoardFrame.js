@@ -14,7 +14,7 @@
 //============================================================================
 define([
     'text!../../html/boardFrame.html!strip',
-    'css!../../css/boardFrame.css',
+    'css!../../css/boardFrame',
     '../com/com_Config',
     '../com/com_String',
     '../com/com_util',

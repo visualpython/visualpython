@@ -13,7 +13,7 @@
 // [CLASS] Import
 //============================================================================
 define([
-    'css!vp_base/css/m_apps/import.css',
+    'css!vp_base/css/m_apps/import',
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',

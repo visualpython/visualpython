@@ -14,7 +14,7 @@
 //============================================================================
 define([
     'text!vp_base/html/component/infoModal.html!strip',
-    'css!vp_base/css/component/infoModal.css',
+    'css!vp_base/css/component/infoModal',
     'vp_base/js/com/component/Component'
 ], function(msgHtml, msgCss, Component) {
 

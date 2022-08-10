@@ -13,7 +13,7 @@
 // [CLASS] Modal
 //============================================================================
 define([
-    'css!vp_base/css/component/modal.css',
+    'css!vp_base/css/component/modal',
     'vp_base/js/com/com_String',
     'vp_base/js/com/component/Component',
     'vp_base/js/com/com_util'

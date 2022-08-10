@@ -14,7 +14,7 @@
 //============================================================================
 define([
     'text!vp_base/html/m_visualize/seaborn.html!strip',
-    'css!vp_base/css/m_visualize/seaborn.css',
+    'css!vp_base/css/m_visualize/seaborn',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_generatorV2',
     'vp_base/js/com/com_util',

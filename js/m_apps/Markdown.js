@@ -15,7 +15,7 @@
 define([
     'notebook/js/mathjaxutils',
     'components/marked/lib/marked',
-    'css!vp_base/css/m_apps/markdown.css',
+    'css!vp_base/css/m_apps/markdown',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
     'vp_base/js/com/component/PopupComponent',

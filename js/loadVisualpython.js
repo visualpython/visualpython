@@ -12,18 +12,8 @@
 //============================================================================
 // Load Visual Python
 //============================================================================
-(
-    require.specified('base/js/namespace')
-        ? define
-        : function (deps, callback) {
-            'use strict';
-            // if here, the Jupyter namespace hasn't been specified to be loaded.
-            // This means that we're probably embedded in a page,
-            // so we need to make our definition with a specific module name
-            return define('vp_base/js/loadVisualpython', deps, callback);
-        }
-)([
-    'css!vp_base/css/root.css',
+    // CHROME: removed .css extension type
+    'css!vp_base/css/root',
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_Config',

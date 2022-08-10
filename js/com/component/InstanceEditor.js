@@ -1,5 +1,5 @@
 define([
-    'css!vp_base/css/component/instanceEditor.css',
+    'css!vp_base/css/component/instanceEditor',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
     'vp_base/js/com/component/SuggestInput'

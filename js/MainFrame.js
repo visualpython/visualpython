@@ -14,7 +14,7 @@
 //============================================================================
 define([
     'text!vp_base/html/mainFrame.html!strip',
-    'css!vp_base/css/mainFrame.css',
+    'css!vp_base/css/mainFrame',
 
     // load module
     './com/com_Config',

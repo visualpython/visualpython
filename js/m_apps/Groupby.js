@@ -14,7 +14,7 @@
 //============================================================================
 define([
     'text!vp_base/html/m_apps/groupby.html!strip',
-    'css!vp_base/css/m_apps/groupby.css',
+    'css!vp_base/css/m_apps/groupby',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
     'vp_base/js/com/component/PopupComponent',

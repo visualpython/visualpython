@@ -14,7 +14,7 @@
 //============================================================================
 define([
     'text!vp_base/html/m_apps/file.html!strip',
-    'css!vp_base/css/m_apps/file.css',
+    'css!vp_base/css/m_apps/file',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_Const',

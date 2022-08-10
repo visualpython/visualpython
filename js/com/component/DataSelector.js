@@ -10,7 +10,7 @@
  */
 define([
     'text!vp_base/html/component/dataSelector.html!strip',
-    'css!vp_base/css/component/dataSelector.css',
+    'css!vp_base/css/component/dataSelector',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
     'vp_base/js/com/component/Component',

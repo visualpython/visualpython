@@ -14,7 +14,7 @@
 //============================================================================
 define([
     'text!vp_base/html/m_apps/profiling.html!strip',
-    'css!vp_base/css/m_apps/profiling.css',
+    'css!vp_base/css/m_apps/profiling',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_interface',
     'vp_base/js/com/component/PopupComponent',

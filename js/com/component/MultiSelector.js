@@ -9,7 +9,7 @@
  *    Change Date     :
  */
 define([
-    'css!vp_base/css/component/multiSelector.css',
+    'css!vp_base/css/component/multiSelector',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
     'vp_base/js/com/component/Component',

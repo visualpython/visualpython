@@ -14,7 +14,7 @@
 //============================================================================
 define([
     'text!../../html/menuFrame.html!strip',
-    'css!../../css/menuFrame.css',
+    'css!../../css/menuFrame',
 
     '../com/com_Config',
     '../com/com_util',

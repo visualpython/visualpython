@@ -14,7 +14,7 @@
 //============================================================================
 define([
     'text!vp_base/html/component/alertModal.html!strip',
-    'css!vp_base/css/component/alertModal.css',
+    'css!vp_base/css/component/alertModal',
     'vp_base/js/com/component/Component'
 ], function(msgHtml, msgCss, Component) {
 

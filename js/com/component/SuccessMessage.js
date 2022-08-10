@@ -14,7 +14,7 @@
 //============================================================================
 define([
     'text!vp_base/html/component/successMessage.html!strip',
-    'css!vp_base/css/component/successMessage.css',
+    'css!vp_base/css/component/successMessage',
     'vp_base/js/com/component/Component'
 ], function(msgHtml, msgCss, Component) {
 
