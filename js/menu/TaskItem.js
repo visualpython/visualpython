@@ -13,9 +13,10 @@
 // [CLASS] TaskItem
 //============================================================================
 define([
+    '../com/com_Const',
     '../com/com_String',
     '../com/component/Component',
-], function(com_String, Component) {
+], function(com_Const, com_String, Component) {
     'use strict';
     //========================================================================
     // Declare class
@@ -85,7 +86,7 @@ define([
             page.appendFormatLine('<div class="{0} vp-no-selection" title="{1}">', 'vp-menu-task-item', desc);
             // page.appendFormatLine('<img class="vp-menu-task-icon" src="/nbextensions/visualpython/img/{0}">', icon);
             page.appendFormatLine('<span>{0}</span>', title);
-            page.appendFormatLine('<img class="vp-menu-task-remove" title="{0}" src="/nbextensions/visualpython/img/{1}">', 'Close task', 'close_small.svg');
+            page.appendFormatLine('<img class="vp-menu-task-remove" title="{0}" src="{1}">', 'Close task', com_Const.IMAGE_PATH + 'close_small.svg');
             page.appendLine('</div>');
             return page.toString();
         }

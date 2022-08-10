@@ -481,11 +481,14 @@ define([
         }
 
         template() { 
-            this.$pageDom = $(popupComponentHtml);
+            this.$pageDom = $(popupComponentHtml.replaceAll('${vp_base}', com_Const.BASE_PATH));
             // set title
             this.$pageDom.find('.vp-popup-title').text(this.name);
             // set body
-            this.$pageDom.find('.vp-popup-content').html(this.templateForBody());
+            let bodyTemplate = this.templateForBody();
+            // CHROME: check url keyword and replace it
+            bodyTemplate = bodyTemplate.replaceAll('${vp_base}', com_Const.BASE_PATH);
+            this.$pageDom.find('.vp-popup-content').html(bodyTemplate);
             return this.$pageDom;
         }
 
@@ -883,11 +886,11 @@ define([
             if (isClosed) {
                 // show
                 $this.removeClass('vp-close');
-                $(this.wrapSelector('.vp-popup-toggle')).attr('src', '/nbextensions/visualpython/img/tri_down_fill_dark.svg');
+                $(this.wrapSelector('.vp-popup-toggle')).attr('src', com_Const.IMAGE_PATH + 'tri_down_fill_dark.svg');
             } else {
                 // hide
                 $this.addClass('vp-close');
-                $(this.wrapSelector('.vp-popup-toggle')).attr('src', '/nbextensions/visualpython/img/tri_right_fill_dark.svg');
+                $(this.wrapSelector('.vp-popup-toggle')).attr('src', com_Const.IMAGE_PATH + 'tri_right_fill_dark.svg');
             }
         }
 

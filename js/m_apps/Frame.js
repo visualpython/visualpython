@@ -15,13 +15,14 @@
 define([
     'text!vp_base/html/m_apps/frame.html!strip',
     'css!vp_base/css/m_apps/frame',
+    'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/SuggestInput',
     'vp_base/js/com/component/VarSelector',
     'vp_base/js/m_apps/Subset'
-], function(frameHtml, frameCss, com_String, com_util, PopupComponent, SuggestInput, VarSelector, Subset) {
+], function(frameHtml, frameCss, com_Const, com_String, com_util, PopupComponent, SuggestInput, VarSelector, Subset) {
 
     /**
      * Frame
@@ -838,7 +839,7 @@ define([
             content.appendFormatLine('<input type="text" class="{0}" placeholder="{1}"/>', 'vp-inner-popup-replace' + index, 'Replace');
             content.appendFormatLine('<label><input type="checkbox" class="{0}" checked/><span>{1}</span></label>', 'vp-inner-popup-replace-istext' + index, 'Text');
             content.appendLine('</td>');
-            content.appendFormatLine('<td><div class="{0} {1}"><img src="{2}"/></div></td>', 'vp-inner-popup-delete', 'vp-cursor', '/nbextensions/visualpython/img/close_small.svg');
+            content.appendFormatLine('<td><div class="{0} {1}"><img src="{2}"/></div></td>', 'vp-inner-popup-delete', 'vp-cursor', com_Const.IMAGE_PATH + 'close_small.svg');
             content.appendLine('</tr>');
             return content.toString();
         }
@@ -1417,7 +1418,7 @@ define([
                                                             , colCode, FRAME_AXIS.COLUMN, col.type, VP_FE_TABLE_COLUMN, colClass, col.label);
                                 });
                                 // add column
-                                table.appendFormatLine('<th class="{0}"><img src="{1}"/></th>', VP_FE_ADD_COLUMN, '/nbextensions/visualpython/img/plus.svg');
+                                table.appendFormatLine('<th class="{0}"><img src="{1}"/></th>', VP_FE_ADD_COLUMN, com_Const.IMAGE_PATH + 'plus.svg');
                 
                                 table.appendLine('</tr>');
                                 table.appendLine('</thead>');
@@ -1448,7 +1449,7 @@ define([
                                 });
                                 // add row
                                 table.appendLine('<tr>');
-                                table.appendFormatLine('<th class="{0}"><img src="{1}"/></th>', VP_FE_ADD_ROW, '/nbextensions/visualpython/img/plus.svg');
+                                table.appendFormatLine('<th class="{0}"><img src="{1}"/></th>', VP_FE_ADD_ROW, com_Const.IMAGE_PATH + 'plus.svg');
                                 table.appendLine('</tr>');
                                 table.appendLine('</tbody>');
                                 $(that.wrapSelector('.' + VP_FE_TABLE)).replaceWith(function() {

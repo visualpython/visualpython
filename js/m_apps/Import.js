@@ -195,7 +195,7 @@ define([
             tag.appendFormat('<td style="{0}">as</td>', 'text-align="center";');
             tag.appendFormat('<td><input id="{0}" type="text" class="{1}" placeholder="{2}" value="{3}"/></td>'
                             , 'vp_i1_' + idx, 'vp-input m vp-add-i1', 'Type alias', aliasName);
-            tag.appendFormat('<td class="{0}"><img src="{1}"/></td>', 'vp-remove-option w100 vp-cursor', '/nbextensions/visualpython/img/close_small.svg');
+            tag.appendFormat('<td class="{0}"><img src="{1}"/></td>', 'vp-remove-option w100 vp-cursor', com_Const.IMAGE_PATH + 'close_small.svg');
             tag.append('</tr>');
             return tag.toString();
         }
@@ -213,7 +213,7 @@ define([
             tag.appendFormat('<td style="{0}">import</td>', 'text-align="center";');
             tag.appendFormat('<td><input id="{0}" type="text" class="{1}" placeholder="{2}" value="{3}"/></td>'
                             , 'vp_i1_' + idx, 'vp-input m vp-add-i1', 'Type function', functionName);
-            tag.appendFormat('<td class="{0}"><img src="{1}"/></td>', 'vp-remove-option w100 vp-cursor', '/nbextensions/visualpython/img/close_small.svg');
+            tag.appendFormat('<td class="{0}"><img src="{1}"/></td>', 'vp-remove-option w100 vp-cursor', com_Const.IMAGE_PATH + 'close_small.svg');
             tag.append('</tr>');
             return tag.toString();
         }

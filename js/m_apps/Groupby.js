@@ -15,12 +15,13 @@
 define([
     'text!vp_base/html/m_apps/groupby.html!strip',
     'css!vp_base/css/m_apps/groupby',
+    'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/SuggestInput',
     'vp_base/js/com/component/MultiSelector'
-], function(gbHtml, gbCss, com_String, com_util, PopupComponent, SuggestInput, MultiSelector) {
+], function(gbHtml, gbCss, com_Const, com_String, com_util, PopupComponent, SuggestInput, MultiSelector) {
 
     /**
      * Groupby
@@ -429,12 +430,12 @@ define([
             page.appendFormatLine('<input type="text" class="{0}" placeholder="{1}" value="{2}"/>', 'vp-gb-adv-method', 'Type function name', "'" + defaultMethod + "'");
             // page.appendFormatLine('<i class="fa fa-search {0}"></i>', 'vp-gb-adv-method-return');
             page.appendFormatLine('<img src="{0}" class="{1}" title="{2}">'
-                                , '/nbextensions/visualpython/img/arrow_left.svg', 'vp-gb-adv-method-return', 'Return to select method');
+                                , com_Const.IMAGE_PATH + 'arrow_left.svg', 'vp-gb-adv-method-return', 'Return to select method');
             page.appendLine('</div>');
             // naming
             page.appendFormatLine('<input type="text" class="{0}" placeholder="{1}" data-dict={} readonly/>', 'vp-gb-adv-naming', 'Display name');
             // delete button
-            page.appendFormatLine('<div class="{0} {1}"><img src="{2}"/></div>', 'vp-gb-adv-item-delete', 'vp-cursor', '/nbextensions/visualpython/img/close_small.svg');
+            page.appendFormatLine('<div class="{0} {1}"><img src="{2}"/></div>', 'vp-gb-adv-item-delete', 'vp-cursor', com_Const.IMAGE_PATH + 'close_small.svg');
             page.appendLine('</div>');
             return page.toString();
         }

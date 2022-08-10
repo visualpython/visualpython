@@ -16,10 +16,11 @@ define([
     'text!vp_base/html/m_apps/snippets.html!strip',
     'css!vp_base/css/m_apps/snippets',
     'vp_base/js/com/com_util',
+    'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/FileNavigation'
-], function(snHtml, snCss, com_util, com_String, PopupComponent, FileNavigation) {
+], function(snHtml, snCss, com_util, com_Const, com_String, PopupComponent, FileNavigation) {
 
     /**
      * Snippets
@@ -558,15 +559,15 @@ define([
             item.appendFormatLine('<div class="{0}">', 'vp-sn-item-menu');
             item.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}">'
                                 , 'vp-sn-item-menu-item', 'run', 'Run');
-            item.appendFormatLine('<img src="{0}"/>', '/nbextensions/visualpython/img/snippets/run.svg');
+            item.appendFormatLine('<img src="{0}"/>', com_Const.IMAGE_PATH + 'snippets/run.svg');
             item.appendLine('</div>');
             item.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}">'
                                 , 'vp-sn-item-menu-item', 'duplicate', 'Duplicate');
-            item.appendFormatLine('<img src="{0}"/>', '/nbextensions/visualpython/img/snippets/duplicate.svg');
+            item.appendFormatLine('<img src="{0}"/>', com_Const.IMAGE_PATH + 'snippets/duplicate.svg');
             item.appendLine('</div>');
             item.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}">'
                                 , 'vp-sn-item-menu-item', 'delete', 'Delete');
-            item.appendFormatLine('<img src="{0}"/>', '/nbextensions/visualpython/img/delete.svg');
+            item.appendFormatLine('<img src="{0}"/>', com_Const.IMAGE_PATH + 'delete.svg');
             item.appendLine('</div>'); 
             item.appendLine('</div>'); // end of vp-sn-item-menu
             // export mode checkbox
@@ -575,7 +576,7 @@ define([
             item.appendFormatLine('<div class="{0}">', 'vp-sn-item-code');
             item.appendFormatLine('<textarea>{0}</textarea>', code);
             item.appendFormatLine('<div class="{0} {1} vp-disable" data-menu="{2}" title="{3}">', 'vp-sn-item-menu-item', 'vp-sn-save', 'save', 'Save changes');
-            item.appendFormatLine('<img src="{0}"/>', '/nbextensions/visualpython/img/snippets/save_orange.svg');
+            item.appendFormatLine('<img src="{0}"/>', com_Const.IMAGE_PATH + 'snippets/save_orange.svg');
             item.appendLine('</div>'); // vp-sn-save
             item.appendLine('</div>'); // end of vp-sn-item-code
             item.appendLine('</div>'); // end of vp-sn-item

@@ -15,12 +15,13 @@
 define([
     'text!vp_base/html/m_apps/profiling.html!strip',
     'css!vp_base/css/m_apps/profiling',
+    'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_interface',
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/SuggestInput',
     'vp_base/js/com/component/FileNavigation'
-], function(proHTML, proCss, com_String, com_interface, PopupComponent, SuggestInput, FileNavigation) {
+], function(proHTML, proCss, com_Const, com_String, com_interface, PopupComponent, SuggestInput, FileNavigation) {
 
     const PROFILE_TYPE = {
         NONE: -1,
@@ -314,11 +315,11 @@ define([
                 // button box
                 page.appendFormatLine('<div class="{0}">', 'vp-pf-list-button-box');
                 page.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}"><img src="{3}"/></div>'
-                                        , 'vp-pf-list-menu-item', LIST_MENU_ITEM.SHOW, 'Show report', '/nbextensions/visualpython/img/snippets/run.svg');
+                                        , 'vp-pf-list-menu-item', LIST_MENU_ITEM.SHOW, 'Show report', com_Const.IMAGE_PATH + 'snippets/run.svg');
                 page.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}"><img src="{3}"/></div>'
-                                        , 'vp-pf-list-menu-item', LIST_MENU_ITEM.DELETE, 'Delete report', '/nbextensions/visualpython/img/delete.svg');
+                                        , 'vp-pf-list-menu-item', LIST_MENU_ITEM.DELETE, 'Delete report', com_Const.IMAGE_PATH + 'delete.svg');
                 page.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}"><img src="{3}"/></div>'
-                                        , 'vp-pf-list-menu-item', LIST_MENU_ITEM.SAVE, 'Save report', '/nbextensions/visualpython/img/snippets/export.svg');
+                                        , 'vp-pf-list-menu-item', LIST_MENU_ITEM.SAVE, 'Save report', com_Const.IMAGE_PATH + 'snippets/export.svg');
                 page.appendLine('</div>');
                 page.appendLine('</div>');
             });

@@ -16,6 +16,7 @@ define([
     'text!../../html/boardFrame.html!strip',
     'css!../../css/boardFrame',
     '../com/com_Config',
+    '../com/com_Const',
     '../com/com_String',
     '../com/com_util',
     '../com/com_interface',
@@ -24,7 +25,7 @@ define([
     './Block',
     './BlockMenu',
     './CodeView'
-], function(boardFrameHtml, boardFrameCss, com_Config, com_String, com_util, com_interface, 
+], function(boardFrameHtml, boardFrameCss, com_Config, com_Const, com_String, com_util, com_interface, 
             Component, FileNavigation, Block, BlockMenu, CodeView) {
 	'use strict';
     //========================================================================
@@ -328,7 +329,7 @@ define([
          * Make template
          */
         template() {
-            return boardFrameHtml;
+            return boardFrameHtml.replaceAll('${vp_base}', com_Const.BASE_PATH);
         }
 
         /**

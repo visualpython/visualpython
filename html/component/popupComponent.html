@@ -14,7 +14,7 @@
         <div class="vp-inner-popup-box" style="display: none; width: 400px; height: 300px;">
             <div class="vp-inner-popup-header">
                 <label class="vp-inner-popup-title">Title</label>
-                <img class="vp-inner-popup-close" src="/nbextensions/visualpython/img/close_big.svg" title="Close inner popup"/>
+                <img class="vp-inner-popup-close" src="${vp_base}/img/close_big.svg" title="Close inner popup"/>
             </div>
             <div class="vp-inner-popup-body vp-scrollbar">
                 <!-- Inner popup body -->
@@ -29,7 +29,7 @@
         <div class="vp-variable-popup-box" style="display: none; width: 400px; height: 300px;">
             <div class="vp-variable-popup-header">
                 <label class="vp-variable-popup-title">Title</label>
-                <img class="vp-variable-popup-close" src="/nbextensions/visualpython/img/close_big.svg" title="Close inner popup"/>
+                <img class="vp-variable-popup-close" src="${vp_base}/img/close_big.svg" title="Close inner popup"/>
             </div>
             <div class="vp-variable-popup-body vp-scrollbar">
                 <!-- Variable popup body -->
@@ -45,24 +45,24 @@
             <label class="vp-popup-title">
                 <!-- Title -->
             </label>
-            <img class="vp-popup-toggle" src="/nbextensions/visualpython/img/minimize.svg" title="Minimize this popup">
-            <img class="vp-popup-maximize" src="/nbextensions/visualpython/img/max_window.svg" title="Maximize this popup">
-            <img class="vp-popup-return" src="/nbextensions/visualpython/img/min_window.svg" title="Return size of this popup">
-            <img class="vp-popup-close" src="/nbextensions/visualpython/img/close_big.svg" title="Close popup"/>
+            <img class="vp-popup-toggle" src="${vp_base}/img/minimize.svg" title="Minimize this popup">
+            <img class="vp-popup-maximize" src="${vp_base}/img/max_window.svg" title="Maximize this popup">
+            <img class="vp-popup-return" src="${vp_base}/img/min_window.svg" title="Return size of this popup">
+            <img class="vp-popup-close" src="${vp_base}/img/close_big.svg" title="Close popup"/>
         </div>
         <div class="vp-popup-body vp-scrollbar">
             <div class="vp-popup-body-top-bar vp-italic vp-gray-text vp-no-selection vp-cursor">
                 <span id="popupInstall" class="vp-popup-body-top-bar-item" data-type="install">
                     Install Package
-                    <img src="/nbextensions/visualpython/img/import.svg"/>
+                    <img src="${vp_base}/img/import.svg"/>
                 </span>
                 <span id="popupImport" class="vp-popup-body-top-bar-item" data-type="import">
                     Import Library
-                    <img src="/nbextensions/visualpython/img/import.svg"/>
+                    <img src="${vp_base}/img/import.svg"/>
                 </span>
                 <span id="popupPackage" class="vp-popup-body-top-bar-item" data-type="package">
                     Package Manager
-                    <img src="/nbextensions/visualpython/img/setting.svg"/>
+                    <img src="${vp_base}/img/setting.svg"/>
                 </span>
             </div>
             <!-- Body -->
@@ -87,7 +87,7 @@
 
                 <div class="vp-popup-runadd-box">
                     <button type="button" class="vp-button activated vp-popup-button" data-type="run" title="Save to block & Run cell">Run</button>
-                    <button type="button" class="vp-button activated vp-popup-button" data-type="show-detail"><img src="/nbextensions/visualpython/img/arrow_short_up.svg"/></button>
+                    <button type="button" class="vp-button activated vp-popup-button" data-type="show-detail"><img src="${vp_base}/img/arrow_short_up.svg"/></button>
                     <div class="vp-popup-run-detailbox vp-cursor vp-close-on-blur">
                         <div class="vp-popup-detail-button" data-type="apply" title="Save to block">Save to block</div>
                         <div class="vp-popup-detail-button" data-type="add" title="Save to block & Add cell">Code to cell</div>
