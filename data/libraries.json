@@ -3328,6 +3328,60 @@
                         }
                     }
                 ]
+            },
+            {
+                "id"   : "pkg_stat",
+                "type" : "package",
+                "level": 0,
+                "name" : "Statistics",
+                "path" : "visualpython - statistics",
+                "desc" : "Statistics modules",
+                "open" : true,
+                "grid" : true,
+                "item" : [
+                    {
+                        "id"   : "stat_descriptive",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Descriptive Stat",
+                        "tag"  : "DESCRIPTIVE,STATISTICS,STAT",
+                        "path" : "visualpython - statistics - descriptive",
+                        "desc" : "Descriptive Stat",
+                        "file" : "m_stat/DescriptiveStat",
+                        "apps" : {
+                            "color": 6,
+                            "icon": "apps/apps_dataset.svg"
+                        }
+                    },
+                    {
+                        "id"   : "stat_analysis",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Stat Analysis",
+                        "tag"  : "ANALYSIS,STATISTICS,STAT",
+                        "path" : "visualpython - statistics - analysis",
+                        "desc" : "Analysis",
+                        "file" : "m_stat/Analysis",
+                        "apps" : {
+                            "color": 6,
+                            "icon": "apps/apps_datasplit.svg"
+                        }
+                    },
+                    {
+                        "id"   : "stat_test",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Test",
+                        "tag"  : "TEST,STATISTICS,STAT",
+                        "path" : "visualpython - statistics - test",
+                        "desc" : "Test",
+                        "file" : "m_stat/Test",
+                        "apps" : {
+                            "color": 6,
+                            "icon": "apps/apps_dataprep.svg"
+                        }
+                    }
+               ]
             }
         ]
     }
