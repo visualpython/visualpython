@@ -51,7 +51,12 @@ define([
                 ]
             }
 
-            this.dataPath = window.location.origin + com_Const.DATA_PATH + "sample_csv/";
+            if (vpConfig.extensionType === 'notebook') {
+                this.dataPath = window.location.origin + com_Const.DATA_PATH + "sample_csv/";
+            } else if (vpConfig.extensionType === 'chrome') {
+                // this.dataPath = com_Const.DATA_PATH + "sample_csv/";
+                this.dataPath = 'https://raw.githubusercontent.com/visualpython/visualpython/main/data/sample_csv/';
+            }
 
             this.state = {
                 fileExtension: 'csv',
