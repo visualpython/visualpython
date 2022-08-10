@@ -39,7 +39,14 @@ define([
         //========================================================================
         // Constructor
         //========================================================================
-        constructor(initialData) {
+        /**
+         * 
+         * @param {*} initialData 
+         * @param {*} extensionType      extension type: notebook/chrome/lab
+         */
+        constructor(extensionType='notebook', initialData={}) {
+            // initial mode
+            this.extensionType = extensionType;
             // initial configuration
             this.data = {
                 // Configuration
@@ -291,15 +298,22 @@ define([
         }
 
         loadData(configKey = 'vpudf') {
+            let that = this;
             return new Promise(function(resolve, reject) {
-                Jupyter.notebook.config.load();
-                Jupyter.notebook.config.loaded.then(function() {
-                    var data = Jupyter.notebook.config.data[configKey];
-                    if (data == undefined) {
-                        data = {};
-                    }
-                    resolve(data);
-                });
+                // CHROME: edited to use chrome.storage
+                if (that.extensionType === 'notebook') {
+                    Jupyter.notebook.config.load();
+                    Jupyter.notebook.config.loaded.then(function() {
+                        var data = Jupyter.notebook.config.data[configKey];
+                        if (data == undefined) {
+                            data = {};
+                        }
+                        resolve(data);
+                    });
+                } else if (that.extensionType === 'chrome') {
+                    // CHROME: TODO: chrome.storage
+                    resolve({});
+                }
             });
         };
 
@@ -310,38 +324,49 @@ define([
          * @returns 
          */
         getData(dataKey='', configKey='vpudf') {
+            let that = this;
             return new Promise(function(resolve, reject) {
-                Jupyter.notebook.config.load();
-                Jupyter.notebook.config.loaded.then(function() {
-                    var data = Jupyter.notebook.config.data[configKey];
-                    if (data == undefined) {
-                        resolve(data);
-                        return;
-                    }
-                    if (dataKey == '') {
-                        resolve(data);
-                        return;
-                    }
-                    if (Object.keys(data).length > 0) {
-                        resolve(data[dataKey]);
-                        return;
-                    }
-                    reject('No data available.');
-                });
+                if (that.extensionType === 'notebook') {
+                    Jupyter.notebook.config.load();
+                    Jupyter.notebook.config.loaded.then(function() {
+                        var data = Jupyter.notebook.config.data[configKey];
+                        if (data == undefined) {
+                            resolve(data);
+                            return;
+                        }
+                        if (dataKey == '') {
+                            resolve(data);
+                            return;
+                        }
+                        if (Object.keys(data).length > 0) {
+                            resolve(data[dataKey]);
+                            return;
+                        }
+                        reject('No data available.');
+                    });
+                } else if (that.extensionType === 'chrome') {
+                    // CHROME: TODO: chrome.storage
+                    resolve({});
+                }
             });
         }
 
         getDataSimple(dataKey='', configKey='vpudf') {
-            Jupyter.notebook.config.load();
-            var data = Jupyter.notebook.config.data[configKey];
-            if (data == undefined) {
+            if (this.extensionType === 'notebook') {
+                Jupyter.notebook.config.load();
+                var data = Jupyter.notebook.config.data[configKey];
+                if (data == undefined) {
+                    return undefined;
+                }
+                if (dataKey == '') {
+                    return data;
+                }
+                if (Object.keys(data).length > 0) {
+                    return data[dataKey];
+                }
+            } else if (this.extensionType === 'chrome') {
+                // CHROME: TODO: chrome.storage
                 return undefined;
-            }
-            if (dataKey == '') {
-                return data;
-            }
-            if (Object.keys(data).length > 0) {
-                return data[dataKey];
             }
             
             return undefined;
@@ -353,17 +378,27 @@ define([
          * @param {String} configKey 
          */
         setData(dataObj, configKey='vpudf') {
-            // set data using key
-            Jupyter.notebook.config.loaded.then(function() {
-                Jupyter.notebook.config.update({[configKey]: dataObj});
-            });
+            if (this.extensionType === 'notebook') {
+                // set data using key
+                Jupyter.notebook.config.loaded.then(function() {
+                    Jupyter.notebook.config.update({[configKey]: dataObj});
+                });
+            } else if (this.extensionType === 'chrome') {
+                // CHROME: TODO: chrome.storage
+                
+            }
         }
 
         removeData(key, configKey = 'vpudf') {
-             // if set value to null, it removes from config data
-            Jupyter.notebook.config.loaded.then(function() {
-                Jupyter.notebook.config.update({[configKey]: {[key]: null}});
-            });
+            if (this.extensionType === 'notebook') {
+                // if set value to null, it removes from config data
+                Jupyter.notebook.config.loaded.then(function() {
+                    Jupyter.notebook.config.update({[configKey]: {[key]: null}});
+                });
+            } else if (this.extensionType === 'chrome') {
+                // CHROME: TODO: chrome.storage
+                
+            }
         }
 
         /**
@@ -372,18 +407,35 @@ define([
          * @param {String} configKey 
          */
         getMetadata(dataKey='', configKey='vp') {
-            let metadata = Jupyter.notebook.metadata[configKey];
-            if (metadata) {
-                // update this metadataSetting
-                this.metadataSettings = {
-                    ...this.metadataSettings,
-                    ...metadata
-                };
-                // no datakey, return all metadata
-                if (dataKey == '') {
-                    return metadata;
+            if (this.extensionType === 'notebook') {
+                let metadata = Jupyter.notebook.metadata[configKey];
+                if (metadata) {
+                    // update this metadataSetting
+                    this.metadataSettings = {
+                        ...this.metadataSettings,
+                        ...metadata
+                    };
+                    // no datakey, return all metadata
+                    if (dataKey == '') {
+                        return metadata;
+                    }
+                    return metadata[dataKey];
                 }
-                return metadata[dataKey];
+            } else if (this.extensionType === 'chrome') {
+                // CHROME: use colab.global.notebookModel.metadata
+                let metadata = colab.global.notebookModel.metadata[configKey];
+                if (metadata) {
+                    // update this metadataSetting
+                    this.metadataSettings = {
+                        ...this.metadataSettings,
+                        ...metadata
+                    };
+                    // no datakey, return all metadata
+                    if (dataKey == '') {
+                        return metadata;
+                    }
+                    return metadata[dataKey];
+                }
             }
             return {};
         }
@@ -394,19 +446,28 @@ define([
          * @param {String} configKey 
          */
         setMetadata(dataObj, configKey='vp') {
-            let oldData = Jupyter.notebook.metadata[configKey];
-            Jupyter.notebook.metadata[configKey] = {
-                ...oldData,
-                ...dataObj
-            };
-            Jupyter.notebook.set_dirty();
+            if (this.extensionType === 'notebook') {
+                let oldData = Jupyter.notebook.metadata[configKey];
+                Jupyter.notebook.metadata[configKey] = {
+                    ...oldData,
+                    ...dataObj
+                };
+                Jupyter.notebook.set_dirty();
+
+            } else if (this.extensionType === 'chrome') {
+                // CHROME: use colab.global.notebookModel.metadata
+                let oldData = colab.global.notebookModel.metadata[configKey];
+                colab.global.notebookModel.metadata[configKey] = {
+                    ...oldData,
+                    ...dataObj
+                };
+            }
 
             // update this metadataSetting
             this.metadataSettings = {
                 ...this.metadataSettings,
                 ...dataObj
             };
-
         }
 
         /**
@@ -414,7 +475,12 @@ define([
          * @param {String} configKey 
          */
         resetMetadata(configKey='vp') {
-            Jupyter.notebook.metadata[configKey] = {};
+            if (this.extensionType === 'notebook') {
+                Jupyter.notebook.metadata[configKey] = {};
+            } else if (this.extensionType === 'chrome') {
+                // CHROME: use colab.global.notebookModel.metadata
+                colab.global.notebookModel.metadata[configKey] = {};
+            }
         }
 
         /**
