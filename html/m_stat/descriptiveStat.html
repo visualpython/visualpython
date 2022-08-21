@@ -1,0 +1,53 @@
+<body>
+    <div class="vp-method-body" >
+        <div class="vp-method-left-box">
+            <div class="vp-tab-bar figure" data-level="figure">
+                <div class="vp-tab-item vp-focus" data-type="1">Stat</div>
+                <span id="methodSetting" class="vp-method-setting vp-no-selection">
+                    <i class="fa fa-gear"></i> Setting
+                </span>
+            </div>
+            <div class="vp-tab-page-box figure vp-grid-border-box vp-scrollbar">
+                <div class="vp-tab-page-box plot vp-grid-border-box vp-scrollbar">
+                    <div class="vp-tab-page vp-grid-box" data-type="data">
+<!--                                    <div class="vp-italic">-->
+<!--                                        <span class="vp-orange-text">NOTE: </span>Options selected from this tab only apply to subplot 1.-->
+<!--                                    </div>-->
+                        <label for="methodType" class="vp-bold vp-orange-text">Method</label>
+                        <select id="methodType" class="vp-select vp-state wp100">
+
+                        </select>
+                        <label class="vp-bold">Data</label>
+                        <div class="vp-grid-col-p50">
+                            <input type="text" id="data" class="vp-input vp-state"/>
+                        </div>
+                        <label for="userOption" class="vp-bold">User Option</label>
+                        <input type="text" id="userOption" class="vp-input vp-state wp100" placeholder="key=value, ..."/>
+                        <div class="vp-sn-table">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="vp-method-right-box">
+            <div class="vp-bold">
+                <span class="vp-method-preview-title">Method Preview</span>
+                <span class="vp-method-preview-option vp-no-selection">
+                    <label><input type="checkbox" id="useSampling" class="vp-state" checked><span>Sampling</span></label>
+                    <select id="sampleCount" class="vp-select s vp-state">
+    
+                    </select>
+                    <label style="margin-left:10px;"><input type="checkbox" id="autoRefresh" class="vp-state" checked><span>Auto Refresh</span></label>
+                    <span id="previewRefresh" class="vp-cursor">
+                        <img src="/nbextensions/visualpython/img/refresh.svg"/>
+                    </span>
+                </span>
+            </div>
+            <div class="vp-method-preview-box vp-grid-border-box">
+                <div id="methodPreview" class="vp-method-preview-content vp-center"></div>
+            </div>
+        </div>
+    </div>
+    
+</body>
