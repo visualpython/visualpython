@@ -61,6 +61,7 @@ define([
                 vp_note_display: true,
                 viewDepthNumber: false,
                 indentCount: 4,
+                currentParentBlock : null,
                 ...this.state
             };
 
@@ -759,6 +760,10 @@ define([
                 // add to specific position
                 this.blockList.splice(position, 0, block);
             }
+            if(this.currentParentBlock){
+                this.moveBlock(position, position, this.currentParentBlock);
+                this.currentParentBlock = null;
+            }
             return block;
         }
 
@@ -807,6 +812,8 @@ define([
                     movingBlock.setGroupBlock();
                 }
                 this.reloadBlockList();
+            }else if(parentBlock){
+                this.currentParentBlock = parentBlock
             }
         }
 
