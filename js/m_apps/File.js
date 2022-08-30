@@ -39,6 +39,7 @@ define([
 
             this.fileExtensions = {
                 'csv': 'csv',
+                'tsv': 'tsv',
                 'excel': 'xlsx',
                 'json': 'json',
                 'pickle': ''
@@ -72,6 +73,7 @@ define([
                 'Read': {
                     fileTypeId: {
                         'csv': 'pd004',
+                        'tsv': 'pd004',
                         'excel': 'pd123',
                         'json': 'pd076',
                         'pickle': 'pd079'
@@ -86,6 +88,7 @@ define([
                 'Write': {
                     fileTypeId: {
                         'csv': 'pd005',
+                        'tsv': 'pd005',
                         'excel': 'pd124',
                         'json': 'pd077',
                         'pickle': 'pd078'
@@ -147,7 +150,7 @@ define([
         _bindEventByType(pageType) {
             var that = this;
             var prefix = '#vp_file' + pageType + ' ';
-    
+
             // select file type 
             $(this.wrapSelector(prefix + '#fileType')).change(function() {
                 var value = $(this).val();
@@ -244,7 +247,7 @@ define([
         renderPage(pageType) {
             var that = this;
             var prefix = '#vp_file' + pageType + ' ';
-    
+            
             // clear
             $(this.wrapSelector(prefix + '#vp_inputOutputBox table tbody')).html('');
             $(this.wrapSelector(prefix + '#vp_optionBox table tbody')).html('');
@@ -386,6 +389,13 @@ define([
                     name: 'fileType',
                     type: 'var'
                 });
+                // if file type is tsv
+                var fileSelected = $("#fileType").val();
+                // $ delimeter = '\t'
+                if($("#fileType").val() === "tsv"){
+                    $("#delimiter").val(`\n`);
+                }
+
                 var result = pdGen.vp_codeGenerator(this.uuid + ' #vp_fileRead', thisPkg, userOption.toString());
                 sbCode.append(result);
             } else if (pageType == 'Write') {
