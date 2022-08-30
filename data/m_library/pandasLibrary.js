@@ -239,6 +239,11 @@ define([
                     component: 'bool_checkbox'
                 },
                 {
+                    name: 'delimiter',
+                    type: 'text',
+                    label: 'Delimiter'
+                },
+                {
                     name: 'index',
                     type: 'bool',
                     label: 'Index',
