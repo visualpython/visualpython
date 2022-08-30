@@ -389,11 +389,9 @@ define([
                     name: 'fileType',
                     type: 'var'
                 });
-                // if file type is tsv
-                var fileSelected = $("#fileType").val();
-                // $ delimeter = '\t'
+                
                 if($("#fileType").val() === "tsv"){
-                    $("#delimiter").val(`\n`);
+                    $("#delimiter").val('\\' + "t");
                 }
 
                 var result = pdGen.vp_codeGenerator(this.uuid + ' #vp_fileRead', thisPkg, userOption.toString());
@@ -404,6 +402,11 @@ define([
                     name: 'fileType',
                     type: 'var'
                 });
+
+                if($("#fileType").val() === "tsv"){
+                    $("#delimiter").val('\\' + "t");
+                }
+
                 var result = pdGen.vp_codeGenerator(this.uuid + ' #vp_fileWrite', thisPkg, userOption.toString());
                 sbCode.append(result);
             }
