@@ -6,7 +6,7 @@
  *    Note            : Apps > File
  *    License         : GNU GPLv3 with Visual Python special exception
  *    Date            : 2021. 11. 18
- *    Change Date     :
+ *    Change Date     : 2022. 09. 03
  */
 
 //============================================================================
@@ -39,7 +39,6 @@ define([
 
             this.fileExtensions = {
                 'csv': 'csv',
-                'tsv': 'tsv',
                 'excel': 'xlsx',
                 'json': 'json',
                 'pickle': ''
@@ -73,7 +72,6 @@ define([
                 'Read': {
                     fileTypeId: {
                         'csv': 'pd004',
-                        'tsv': 'pd004',
                         'excel': 'pd123',
                         'json': 'pd076',
                         'pickle': 'pd079'
@@ -88,7 +86,6 @@ define([
                 'Write': {
                     fileTypeId: {
                         'csv': 'pd005',
-                        'tsv': 'pd005',
                         'excel': 'pd124',
                         'json': 'pd077',
                         'pickle': 'pd078'
@@ -150,7 +147,13 @@ define([
         _bindEventByType(pageType) {
             var that = this;
             var prefix = '#vp_file' + pageType + ' ';
+            var fileExtensionArr = [that.state.fileExtension];
 
+            // add tsv dsv ssv extension to csv option
+            if(that.state.fileExtension === 'csv'){
+                fileExtensionArr = fileExtensionArr.concat(['tsv', 'dsv', 'ssv']);
+            }
+            
             // select file type 
             $(this.wrapSelector(prefix + '#fileType')).change(function() {
                 var value = $(this).val();
@@ -160,7 +163,7 @@ define([
                 that.renderPage(pageType);
                 that._bindEventByType(pageType);
             });
-    
+            
             // open file navigation
             $(this.wrapSelector(prefix + '#vp_openFileNavigationBtn')).click(function() {
                 
@@ -168,10 +171,10 @@ define([
                 if (pageType == 'Read') {
                     type = 'open';
                 }
-
+                
                 let fileNavi = new FileNavigation({
                     type: type,
-                    extensions: [ that.state.fileExtension ],
+                    extensions: fileExtensionArr,
                     finish: function(filesPath, status, error) {
                         let {file, path} = filesPath[0];
                         that.state.selectedFile = file;
@@ -371,7 +374,7 @@ define([
             var sbCode = new com_String;
 
             this.saveState();
-
+            
             var prefix = '#vp_file' + pageType + ' ';
             var userOption = new com_String();
             var userOptValue = $(this.wrapSelector(prefix + '#userOption')).val();
@@ -390,9 +393,6 @@ define([
                     type: 'var'
                 });
                 
-                if($("#fileType").val() === "tsv"){
-                    $("#delimiter").val('\\' + "t");
-                }
 
                 var result = pdGen.vp_codeGenerator(this.uuid + ' #vp_fileRead', thisPkg, userOption.toString());
                 sbCode.append(result);
@@ -403,9 +403,6 @@ define([
                     type: 'var'
                 });
 
-                if($("#fileType").val() === "tsv"){
-                    $("#delimiter").val('\\' + "t");
-                }
 
                 var result = pdGen.vp_codeGenerator(this.uuid + ' #vp_fileWrite', thisPkg, userOption.toString());
                 sbCode.append(result);
