@@ -161,6 +161,11 @@ define([
                     options: ['None', '0']
                 },
                 {
+                    name: 'delimiter',
+                    type: 'text',
+                    label: 'Delimiter'
+                },
+                {
                     name: 'sep',
                     type: 'text',
                     label: 'Seperator'
