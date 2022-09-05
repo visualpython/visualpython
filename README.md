@@ -8,7 +8,7 @@
 [![Issues: ](https://img.shields.io/github/issues/visualpython/visualpython?color=%23FF6347)](https://github.com/visualpython/visualpython/issues)
 
 ## Introduction
-Visual Python is a GUI-based Python code generator, developed on the Jupyter Notebook as an extension. <br>
+Visual Python is a GUI-based Python code generator, developed on the **Jupyter Notebook** and **Google Colab** as an extension. <br>
 Visual Python is an open source project started for students who struggle with coding during Python classes for data science.
 
 <br>
@@ -21,7 +21,7 @@ Try Visual Python if you would like to: <br>
 <br>
 <img src="https://github.com/visualpython/visualpython/blob/main/img/Visual%20Python_2.2.8.gif?raw=true" width="95%">
 
-## Getting Started
+## Getting Started with Jupyter Notebook
 
 ### 1. Requirements
 
@@ -56,6 +56,22 @@ uninstall  - uninstall packages
 upgrade    - version upgrade
 version    - version check
 ```
+
+## Getting Started with Google Colab
+### 1. Requirements
+
+Visual Python is an extension to Google Colab, so you must have Google Colab opened.<br>
+- Google Colab
+
+### 2. How to Install
+
+**1)  Install package using Chrome Web Store**
+- [Link to Visual Python for Colab](https://chrome.google.com/webstore/detail/visual-python-for-colab/ccmkpknjfagaldcgidgcipbpdipfopob)
+
+**2)  Open Google Colab**
+- [Link to Google Colab](https://colab.research.google.com/)
+
+**3)  Activate Visual Python on Google Colab**
 
 ## Contributing
 If you are interested in contributing to the Visual Python, please see [`CONTRIBUTING.md`](CONTRIBUTING.md). <br>
