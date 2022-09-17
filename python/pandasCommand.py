@@ -36,15 +36,14 @@ def _vp_get_columns_list(df):
             cInfo['value'] = "'{}'".format(c)
         elif type(c).__name__ == 'Timestamp':
             cInfo['value'] = str(c)
+            
         # category - iopub data rate limit issue...
+        cInfo['category'] = []
         if str(df[c].dtype) == 'object':
             uniqValues = df[c].dropna().unique()
             if len(uniqValues) <= 20:
                 cInfo['category'] = [{ "value": "'{}'".format(u) if type(u) == str else u, "label": u } for u in uniqValues]
-            else:
-                cInfo['category'] = []
-        else:
-            cInfo['category'] = []
+            
         colList.append(cInfo)
     return colList
 
