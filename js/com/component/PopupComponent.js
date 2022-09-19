@@ -63,6 +63,10 @@ define([
                 // show view box
                 codeview: true, 
                 dataview: true,
+
+                // 220919
+                helpview: true,
+
                 // show footer
                 runButton: true,
                 footer: true,
