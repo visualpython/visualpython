@@ -129,8 +129,11 @@
     height: 50px;
     border-top: 0.25px solid var(--border-gray-color);
 }
+
+/* 220919 */
 .vp-popup-codeview-box,
-.vp-popup-dataview-box {
+.vp-popup-dataview-box,
+.vp-popup-helpview-box {
     display: none;
     width: 100%;
     height: 100px;
@@ -151,6 +154,13 @@
     margin-left: 10px;
 }
 .vp-popup-button[data-type="data"] {
+    float: left;
+    margin-top: 9px;
+    margin-left: 10px;
+}
+
+/* 220919 */
+.vp-popup-button[data-type="help"] {
     float: left;
     margin-top: 9px;
     margin-left: 10px;

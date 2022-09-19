@@ -27,25 +27,32 @@ Try Visual Python if you would like to: <br>
 
 ### 1. Requirements
 
-Visual Python is an extension to Jupyter Notebook, so you must have Jupyter Notebook installed already.<br>
+Visual Python is a Jupyter Notebook extension. <br>
+We recommend installing Anaconda (virtual environment).
+
 - Python version 3.x
-- Jupyter notebook environment
+- Jupyter notebook or Anaconda env 
 
 ### 2. How to Install
 
-**1)  Install package from**
+**1)  Open Anaconda prompt**
+
+* Windows : Click Start > Search or Select 'Anaconda Prompt' <br>
+* Mac : Open Launchpad > Select 'Terminal'
+
+**2)  Install package from**
 ```
 pip install visualpython
 ```
 
-**2)  Enable the package**
+**3)  Enable the package**
 ```
 visualpy install
 ```
 
-**3)  Activate Visual Python on Jupyter Notebook**
+**4)  Activate Visual Python on Jupyter Notebook**
 
-Click orange square button on the right side of the Jupyter Notebook menu bar. 
+Click orange square button on the right side of the Jupyter Notebook menu. 
 
 ### 3. Package Control Info
 * Usage: visualpy **[option]** <br>

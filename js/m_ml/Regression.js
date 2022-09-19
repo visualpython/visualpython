@@ -44,6 +44,8 @@ define([
                 // model selection
                 model: '',
                 method: '',
+
+                help : "도움말 테스트",
                 ...this.state
             }
 
@@ -322,6 +324,21 @@ define([
 
             return code.toString();
         }
+
+        // 220906
+        generateHelp() {
+            let { help } = this.state;
+
+            let test = new com_String();
+
+            test.appendLine(help);
+            test.appendLine();
+            test.appendLine("도움말 추가 완료(?)");
+
+            return test.toString();
+        }
+
+
 
     }
 

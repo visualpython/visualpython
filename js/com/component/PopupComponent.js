@@ -8,7 +8,7 @@
  *    Date            : 2021. 11. 18
  *    Change Date     :
  */
-
+ 
 //============================================================================
 // [CLASS] PopupComponent
 //============================================================================
@@ -22,6 +22,8 @@ define([
     './Component',
     './DataSelector',
 
+
+    
     /** codemirror */
     'codemirror/lib/codemirror',
     'codemirror/mode/python/python',
@@ -146,7 +148,26 @@ define([
                 }
             }
 
-            // code view
+            // // code view
+            // if (this.config.codeview) {
+            //     if (!this.cmCodeview) {
+            //         // codemirror setting
+            //         let selector = this.wrapSelector('.vp-popup-codeview-box textarea');
+            //         let textarea = $(selector);
+            //         if (textarea && textarea.length > 0) {
+            //             this.cmCodeview = codemirror.fromTextArea(textarea[0], this.cmReadonlyConfig);
+            //         } else {
+            //             vpLog.display(VP_LOG_TYPE.ERROR, 'No text area to create codemirror. (selector: '+selector+')');
+            //         }
+            //     } else {
+            //         this.cmCodeview.refresh();
+            //     }
+
+
+
+            // 220919
+            // 220912
+            // code view + helpview 
             if (this.config.codeview) {
                 if (!this.cmCodeview) {
                     // codemirror setting
@@ -160,7 +181,23 @@ define([
                 } else {
                     this.cmCodeview.refresh();
                 }
-            }
+            } else {
+                if (!this.cmCodeview) {
+                    // codemirror setting
+                    let selector = this.wrapSelector('.vp-popup-helpview-box textarea');
+                    let textarea = $(selector);
+                    if (textarea && textarea.length > 0) {
+                        this.cmCodeview = codemirror.fromTextArea(textarea[0], this.cmReadonlyConfig);
+                    } else {
+                        vpLog.display(VP_LOG_TYPE.ERROR, 'No text area to create codemirror. (selector: '+selector+')');
+                    }
+                } else {
+                    this.cmCodeview.refresh();
+                }
+
+
+
+            }            
         }
 
         /**
@@ -346,6 +383,26 @@ define([
             $(this.wrapSelector('.vp-popup-button')).on('click', function(evt) {
                 var btnType = $(this).data('type');
                 switch(btnType) {
+                    
+                    // 220919
+                    case 'help' :
+
+                        // $(".vp-popup-help").attr("title", "바뀐 후");
+
+                        // if ($(that.wrapSelector('.vp-popup-run-detailbox')).is(':hidden')) {
+                        //     $(".vp-popup-help").attr("title", "바뀐 후");
+                            
+                        // } else {
+                        //     $(".vp-popup-help").attr("title", "바뀐 후");
+                        // }
+                        if ($(that.wrapSelector('.vp-popup-helpview-box')).is(':hidden')) {
+                            that.openView('help');
+                        } else {
+                            that.closeView('help');
+                        }
+                        evt.stopPropagation();
+                        break;
+
                     case 'code':
                         if ($(that.wrapSelector('.vp-popup-codeview-box')).is(':hidden')) {
                             that.openView('code');
@@ -498,7 +555,7 @@ define([
 
             let { 
                 installButton, importButton, packageButton, 
-                codeview, dataview, runButton, footer, 
+                codeview, dataview, helpview, runButton, footer, 
                 sizeLevel, position
             } = this.config;
 
@@ -530,6 +587,11 @@ define([
             if (!dataview) {
                 $(this.wrapSelector('.vp-popup-button[data-type="data"]')).hide();
             }
+            // 220919
+            if (!helpview) {
+                $(this.wrapSelector('.vp-popup-button[data-type="help"]')).hide();
+            } 
+
 
             // run button
             if (!runButton) {
@@ -627,6 +689,11 @@ define([
             /** Implementation needed */
             return '';
         }
+    
+        generateHelp() {
+            /** Implementation needed */
+            return '';
+        }        
 
         load() {
             
@@ -900,7 +967,24 @@ define([
                     that.cmCodeview.refresh();
                 }, 1);
                 $(this.wrapSelector('.vp-popup-dataview-box')).hide();
-            } else {
+            } else if (viewType == 'help') {        // 220919
+                this.saveState();
+                var code = this.generateHelp();
+                let codeText = '';
+                if (Array.isArray(code)) {
+                    codeText = code.join('\n');
+                } else {
+                    codeText = code;
+                }
+                this.cmCodeview.setValue(codeText);
+                this.cmCodeview.save();
+                
+                var that = this;
+                setTimeout(function() {
+                    that.cmCodeview.refresh();
+                }, 1);
+                $(this.wrapSelector('.vp-popup-helpview-box')).hide();
+             } else {
                 this.renderDataView();
                 $(this.wrapSelector('.vp-popup-codeview-box')).hide();
             }
