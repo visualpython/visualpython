@@ -10,6 +10,7 @@ import matplotlib.pyplot as _vp_plt
 import fitz
 import nltk
 nltk.download('punkt')
+
 ######
 # Visual Python: Data Analysis > PDF
 ######
@@ -43,6 +44,7 @@ def vp_pdf_get_sentence(fname_lst):
         df = _vp_pd.concat([df,df_doc])
         
     return df.reset_index().drop('index', axis=1)
+
 ######
 # Visual Python: Data Analysis > Frame
 ######
@@ -63,6 +65,7 @@ def vp_drop_outlier(df, col, weight=1.5):
     df_res = df.drop(outlier_index).copy()
     
     return df_res
+
 ######
 # Visual Python: Machine Learning > Model Info
 ######
@@ -74,10 +77,12 @@ def vp_create_feature_importances(model, X_train=None, sort=False):
                         
     df_i = _vp_pd.DataFrame(model.feature_importances_, index=feature_names, columns=['Feature_importance'])
     df_i['Percentage'] = 100 * (df_i['Feature_importance'] / df_i['Feature_importance'].max())
-    if sort: df_i.sort_values(by='Feature_importance', ascending=False, inplace=True)
+    if sort: 
+        df_i.sort_values(by='Feature_importance', ascending=False, inplace=True)
     df_i = df_i.round(2)
                         
     return df_i
+
 ######
 # Visual Python: Machine Learning > Model Info
 ######
@@ -91,10 +96,13 @@ def vp_plot_feature_importances(model, X_train=None, sort=False, top_count=0):
             df_i['Percentage'].sort_values().plot(kind='barh')
     else: 
         df_i['Percentage'].plot(kind='barh')
+
     _vp_plt.xlabel('Feature importance Percentage')
     _vp_plt.ylabel('Features')
-                        
     _vp_plt.show()
+
+    return 
+
 ######
 # Visual Python: Visualization > Seaborn
 ######
@@ -135,3 +143,5 @@ def vp_seaborn_show_values(axs, precision=1, space=0.01):
             _single(ax)
     else:
         _single(axs)
+    
+    return 

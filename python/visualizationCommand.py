@@ -7,12 +7,10 @@ def _vp_seaborn_show_values(axs, precision=1, space=0.01):
     pstr = '{:.' + str(precision) + 'f}'
     
     def _single(ax):
-        # check orient
+        # check orient / if 0
         orient = 'v'
-        if len(ax.patches) == 1:
-            # check if 0
-            if ax.patches[0].get_x() == 0:
-                orient = 'h'
+        if len(ax.patches) == 1 and ax.patches[0].get_x() == 0:
+            orient = 'h'
         else:
             # compare 0, 1 patches
             p0 = ax.patches[0]
@@ -36,7 +34,7 @@ def _vp_seaborn_show_values(axs, precision=1, space=0.01):
                     ax.text(_x, _y, value, ha='left')
 
     if isinstance(axs, _vp_np.ndarray):
-        for idx, ax in _vp_np.ndenumerate(axs):
+        for _, ax in _vp_np.ndenumerate(axs):
             _single(ax)
     else:
         _single(axs)
