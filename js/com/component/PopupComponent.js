@@ -6,7 +6,7 @@
  *    Note            : Popup Components for rendering objects
  *    License         : GNU GPLv3 with Visual Python special exception
  *    Date            : 2021. 11. 18
- *    Change Date     :
+ *    Change Date     : 2022. 09. 24
  */
  
 //============================================================================
@@ -21,7 +21,9 @@ define([
     '../com_interface',
     './Component',
     './DataSelector',
-
+    
+    // helpview boolean 판단
+    'json!vp_base/data/help_data.json',
 
     
     /** codemirror */
@@ -31,7 +33,7 @@ define([
     'codemirror/addon/display/placeholder',
     'codemirror/addon/display/autorefresh'
 ], function(popupComponentHtml, popupComponentCss
-    , com_util, com_Const, com_String, com_interface, Component, DataSelector, codemirror
+    , com_util, com_Const, com_String, com_interface, Component, DataSelector, helpData, codemirror
 ) {
     'use strict';
 
@@ -52,7 +54,7 @@ define([
             this.name = this.state.config.name;
             this.path = this.state.config.path;
             
-
+            
             this.config = {
                 sizeLevel: 0,          // 0: 400x400 / 1: 500x500 / 2: 600x500 / 3: 750x500
                 executeMode: 'code',   // cell execute mode
@@ -65,7 +67,7 @@ define([
                 dataview: true,
 
                 // 220919
-                helpview: true,
+                helpview: helpData[this.name],
 
                 // show footer
                 runButton: true,
@@ -95,6 +97,24 @@ define([
                 theme: "ipython",
                 extraKeys: {"Enter": "newlineAndIndentContinueMarkdownList"}
             }
+
+            // makrdown codemirror 위한 config 추가
+            this.cmMarkdownConfig = {
+                mode: {
+                    name: 'markdown',
+                    version: 3,
+                    singleLineStringErrors: false
+                },
+                height: '100%',
+                width: '100%',
+                indentUnit: 4,
+                lineNumbers: true,
+                matchBrackets: true,
+                autoRefresh: true,
+                theme: "markdown",
+                extraKeys: {"Enter": "newlineAndIndentContinueMarkdownList"}
+            }
+
             this.cmReadonlyConfig = {
                 ...this.cmPythonConfig,
                 readOnly: true,
@@ -102,7 +122,15 @@ define([
                 scrollbarStyle: "null"
             }
 
+            this.cmReadonlyHelpConfig = {
+                ...this.cmMarkdownConfig,
+                readOnly: true,
+                lineNumbers: false,
+                scrollbarStyle: "null"
+            }
+
             this.cmCodeview = null;
+            this.helpViewText = null;
 
             this.cmCodeList = [];
         }
@@ -185,18 +213,20 @@ define([
                 } else {
                     this.cmCodeview.refresh();
                 }
-            } else {
-                if (!this.cmCodeview) {
+            }
+            
+            if(this.config.helpview) {
+                if (!this.helpViewText) {
                     // codemirror setting
                     let selector = this.wrapSelector('.vp-popup-helpview-box textarea');
                     let textarea = $(selector);
                     if (textarea && textarea.length > 0) {
-                        this.cmCodeview = codemirror.fromTextArea(textarea[0], this.cmReadonlyConfig);
+                        this.helpViewText = codemirror.fromTextArea(textarea[0], this.cmReadonlyHelpConfig);
                     } else {
                         vpLog.display(VP_LOG_TYPE.ERROR, 'No text area to create codemirror. (selector: '+selector+')');
                     }
                 } else {
-                    this.cmCodeview.refresh();
+                    this.helpViewText.refresh();
                 }
 
 
@@ -695,9 +725,12 @@ define([
         }
     
         generateHelp() {
-            /** Implementation needed */
-            return '';
-        }        
+            var helpTextObj = new com_String();
+            var helpComment = helpData[this.name];
+            helpTextObj.append(helpComment);
+
+            return helpTextObj.toString();
+        }
 
         load() {
             
@@ -971,6 +1004,8 @@ define([
                     that.cmCodeview.refresh();
                 }, 1);
                 $(this.wrapSelector('.vp-popup-dataview-box')).hide();
+                $(this.wrapSelector('.vp-popup-helpview-box')).hide();
+
             } else if (viewType == 'help') {        // 220919
                 this.saveState();
                 var code = this.generateHelp();
@@ -980,17 +1015,23 @@ define([
                 } else {
                     codeText = code;
                 }
-                this.cmCodeview.setValue(codeText);
-                this.cmCodeview.save();
+                
+                this.helpViewText.setValue(codeText);
+                this.helpViewText.save();
                 
                 var that = this;
                 setTimeout(function() {
-                    that.cmCodeview.refresh();
+                    that.helpViewText.refresh();
                 }, 1);
-                $(this.wrapSelector('.vp-popup-helpview-box')).hide();
+                
+                // button 클릭 시, 하나의 팝업만 나타나도록
+                $(this.wrapSelector('.vp-popup-dataview-box')).hide();
+                $(this.wrapSelector('.vp-popup-codeview-box')).hide();
+
              } else {
                 this.renderDataView();
                 $(this.wrapSelector('.vp-popup-codeview-box')).hide();
+                $(this.wrapSelector('.vp-popup-helpview-box')).hide();
             }
 
             $(this.wrapSelector('.vp-popup-'+viewType+'view-box')).show();
