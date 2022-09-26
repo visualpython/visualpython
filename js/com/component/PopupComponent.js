@@ -6,9 +6,9 @@
  *    Note            : Popup Components for rendering objects
  *    License         : GNU GPLv3 with Visual Python special exception
  *    Date            : 2021. 11. 18
- *    Change Date     :
+ *    Change Date     : 2022. 09. 24
  */
-
+ 
 //============================================================================
 // [CLASS] PopupComponent
 //============================================================================
@@ -21,7 +21,11 @@ define([
     '../com_interface',
     './Component',
     './DataSelector',
+    
+    // helpview boolean 판단
+    'json!vp_base/data/help_data.json',
 
+    
     /** codemirror */
     'codemirror/lib/codemirror',
     'codemirror/mode/python/python',
@@ -29,7 +33,7 @@ define([
     'codemirror/addon/display/placeholder',
     'codemirror/addon/display/autorefresh'
 ], function(popupComponentHtml, popupComponentCss
-    , com_util, com_Const, com_String, com_interface, Component, DataSelector, codemirror
+    , com_util, com_Const, com_String, com_interface, Component, DataSelector, helpData, codemirror
 ) {
     'use strict';
 
@@ -50,7 +54,7 @@ define([
             this.name = this.state.config.name;
             this.path = this.state.config.path;
             
-
+            
             this.config = {
                 sizeLevel: 0,          // 0: 400x400 / 1: 500x500 / 2: 600x500 / 3: 750x500
                 executeMode: 'code',   // cell execute mode
@@ -61,6 +65,10 @@ define([
                 // show view box
                 codeview: true, 
                 dataview: true,
+
+                // 220919
+                helpview: helpData[this.name],
+
                 // show footer
                 runButton: true,
                 footer: true,
@@ -89,6 +97,24 @@ define([
                 theme: "ipython",
                 extraKeys: {"Enter": "newlineAndIndentContinueMarkdownList"}
             }
+
+            // makrdown codemirror 위한 config 추가
+            this.cmMarkdownConfig = {
+                mode: {
+                    name: 'markdown',
+                    version: 3,
+                    singleLineStringErrors: false
+                },
+                height: '100%',
+                width: '100%',
+                indentUnit: 4,
+                lineNumbers: true,
+                matchBrackets: true,
+                autoRefresh: true,
+                theme: "markdown",
+                extraKeys: {"Enter": "newlineAndIndentContinueMarkdownList"}
+            }
+
             this.cmReadonlyConfig = {
                 ...this.cmPythonConfig,
                 readOnly: true,
@@ -96,7 +122,15 @@ define([
                 scrollbarStyle: "null"
             }
 
+            this.cmReadonlyHelpConfig = {
+                ...this.cmMarkdownConfig,
+                readOnly: true,
+                lineNumbers: false,
+                scrollbarStyle: "null"
+            }
+
             this.cmCodeview = null;
+            this.helpViewText = null;
 
             this.cmCodeList = [];
         }
@@ -146,7 +180,26 @@ define([
                 }
             }
 
-            // code view
+            // // code view
+            // if (this.config.codeview) {
+            //     if (!this.cmCodeview) {
+            //         // codemirror setting
+            //         let selector = this.wrapSelector('.vp-popup-codeview-box textarea');
+            //         let textarea = $(selector);
+            //         if (textarea && textarea.length > 0) {
+            //             this.cmCodeview = codemirror.fromTextArea(textarea[0], this.cmReadonlyConfig);
+            //         } else {
+            //             vpLog.display(VP_LOG_TYPE.ERROR, 'No text area to create codemirror. (selector: '+selector+')');
+            //         }
+            //     } else {
+            //         this.cmCodeview.refresh();
+            //     }
+
+
+
+            // 220919
+            // 220912
+            // code view + helpview 
             if (this.config.codeview) {
                 if (!this.cmCodeview) {
                     // codemirror setting
@@ -161,6 +214,24 @@ define([
                     this.cmCodeview.refresh();
                 }
             }
+            
+            if(this.config.helpview) {
+                if (!this.helpViewText) {
+                    // codemirror setting
+                    let selector = this.wrapSelector('.vp-popup-helpview-box textarea');
+                    let textarea = $(selector);
+                    if (textarea && textarea.length > 0) {
+                        this.helpViewText = codemirror.fromTextArea(textarea[0], this.cmReadonlyHelpConfig);
+                    } else {
+                        vpLog.display(VP_LOG_TYPE.ERROR, 'No text area to create codemirror. (selector: '+selector+')');
+                    }
+                } else {
+                    this.helpViewText.refresh();
+                }
+
+
+
+            }            
         }
 
         /**
@@ -346,6 +417,26 @@ define([
             $(this.wrapSelector('.vp-popup-button')).on('click', function(evt) {
                 var btnType = $(this).data('type');
                 switch(btnType) {
+                    
+                    // 220919
+                    case 'help' :
+
+                        // $(".vp-popup-help").attr("title", "바뀐 후");
+
+                        // if ($(that.wrapSelector('.vp-popup-run-detailbox')).is(':hidden')) {
+                        //     $(".vp-popup-help").attr("title", "바뀐 후");
+                            
+                        // } else {
+                        //     $(".vp-popup-help").attr("title", "바뀐 후");
+                        // }
+                        if ($(that.wrapSelector('.vp-popup-helpview-box')).is(':hidden')) {
+                            that.openView('help');
+                        } else {
+                            that.closeView('help');
+                        }
+                        evt.stopPropagation();
+                        break;
+
                     case 'code':
                         if ($(that.wrapSelector('.vp-popup-codeview-box')).is(':hidden')) {
                             that.openView('code');
@@ -498,7 +589,7 @@ define([
 
             let { 
                 installButton, importButton, packageButton, 
-                codeview, dataview, runButton, footer, 
+                codeview, dataview, helpview, runButton, footer, 
                 sizeLevel, position
             } = this.config;
 
@@ -530,6 +621,11 @@ define([
             if (!dataview) {
                 $(this.wrapSelector('.vp-popup-button[data-type="data"]')).hide();
             }
+            // 220919
+            if (!helpview) {
+                $(this.wrapSelector('.vp-popup-button[data-type="help"]')).hide();
+            } 
+
 
             // run button
             if (!runButton) {
@@ -626,6 +722,14 @@ define([
         generateCode() {
             /** Implementation needed */
             return '';
+        }
+    
+        generateHelp() {
+            var helpTextObj = new com_String();
+            var helpComment = helpData[this.name];
+            helpTextObj.append(helpComment);
+
+            return helpTextObj.toString();
         }
 
         load() {
@@ -913,9 +1017,34 @@ define([
                     that.cmCodeview.refresh();
                 }, 1);
                 $(this.wrapSelector('.vp-popup-dataview-box')).hide();
-            } else {
+                $(this.wrapSelector('.vp-popup-helpview-box')).hide();
+
+            } else if (viewType == 'help') {        // 220919
+                this.saveState();
+                var code = this.generateHelp();
+                let codeText = '';
+                if (Array.isArray(code)) {
+                    codeText = code.join('\n');
+                } else {
+                    codeText = code;
+                }
+                
+                this.helpViewText.setValue(codeText);
+                this.helpViewText.save();
+                
+                var that = this;
+                setTimeout(function() {
+                    that.helpViewText.refresh();
+                }, 1);
+                
+                // button 클릭 시, 하나의 팝업만 나타나도록
+                $(this.wrapSelector('.vp-popup-dataview-box')).hide();
+                $(this.wrapSelector('.vp-popup-codeview-box')).hide();
+
+             } else {
                 this.renderDataView();
                 $(this.wrapSelector('.vp-popup-codeview-box')).hide();
+                $(this.wrapSelector('.vp-popup-helpview-box')).hide();
             }
 
             $(this.wrapSelector('.vp-popup-'+viewType+'view-box')).show();

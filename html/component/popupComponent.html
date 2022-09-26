@@ -6,7 +6,7 @@
     Note            : popup component
     License         : GNU GPLv3 with Visual Python special exception
     Date            : 2021. 12. 01
-    Change Date     : 
+    Change Date     : 2021. 09. 25
 -->
 <!-- use body tag to strip comments out on requirejs/text plugin -->
 <body>
@@ -80,10 +80,21 @@
             <div class="vp-popup-codeview-box vp-close-on-blur vp-scrollbar">
                 <textarea name="code"></textarea>
             </div>
+
+
+            <!-- Help view box -->
+            <div class="vp-popup-helpview-box vp-close-on-blur vp-scrollbar">
+                <textarea name="help"></textarea>
+            </div>
+
+            
             <!-- Button box -->
             <div class="vp-popup-button-box">
                 <button type="button" class="vp-button vp-popup-button" data-type="code">Code view</button>
                 <button type="button" class="vp-button vp-popup-button" data-type="data">Data view</button>
+                <!-- 220919 -->
+                <button type="button" class="vp-button vp-popup-button vp-popup-help" data-type="help" title="test">Help</button>
+
 
                 <div class="vp-popup-runadd-box">
                     <button type="button" class="vp-button activated vp-popup-button" data-type="run" title="Save to block & Run cell">Run</button>

@@ -3063,6 +3063,20 @@
                             "color": 4,
                             "icon": "apps/apps_profiling.svg"
                         }
+                    },
+                    {
+                        "id"   : "apps_sample",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Sample App",
+                        "tag"  : "SAMPLE,OSSCA,APPS",
+                        "path" : "visualpython - apps - sample",
+                        "desc" : "Sample app for OSSCA",
+                        "file" : "m_apps/SampleApp2.js",
+                        "apps" : {
+                            "color": 4,
+                            "icon": "apps/apps_white.svg"
+                        }
                     }
                 ]
             },

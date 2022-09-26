@@ -1,0 +1,67 @@
+<body>
+    <div class="vp-grid-box">
+        <div class="vp-grid-border-box">
+            <div class="vp-grid-col-95">
+                <label for="modelType" class="vp-orange-text">Model Type</label>
+                <select id="modelType" class="vp-select vp-state">
+                    <option value="rgs">Regression</option>
+                    <option value="clf">Classfication</option>
+                    <option value="cls">Clustering</option>
+                </select>
+            </div>
+            <div class="vp-grid-col-95 vp-upper-box rgs clf">
+                <label for="targetData" class="vp-orange-text">Target Data</label>
+                <input type="text" class="vp-input vp-state" id="targetData" placeholder="Input target data" value="y_test"/>
+            </div>
+            <div class="vp-grid-col-95 vp-upper-box rgs clf">
+                <label for="predictData" class="vp-orange-text">Predict Data</label>
+                <input type="text" class="vp-input vp-state" id="predictData" placeholder="Input predict data" value="pred"/>
+            </div>
+            <div class="vp-grid-col-95 vp-upper-box cls">
+                <label for="clusteredIndex" class="vp-orange-text">Clustered Index</label>
+                <input type="text" class="vp-input vp-state" id="clusteredIndex" placeholder="Input predict data" value="clusters"/>
+            </div>
+        </div>
+        <div class="vp-grid-border-box">
+            <label for="featureData">Evaluation Metrics</label>
+            <div class="vp-grid-box vp-eval-box vp-eval-rgs">
+                <label><input type="checkbox" id="r_squared" class="vp-state" checked><span>R squared</span></label>
+                <label><input type="checkbox" id="mae" class="vp-state"><span>Mean Absolute Error</span></label>
+                <label><input type="checkbox" id="mape" class="vp-state"><span>Mean Absolute Percentage Error</span></label>
+                <label><input type="checkbox" id="rmse" class="vp-state" checked><span>Root Mean Squared Error</span></label>
+                <label><input type="checkbox" id="scatter_plot" class="vp-state"><span>Scatter plot</span></label>
+            </div>
+            <div class="vp-grid-box vp-eval-box vp-eval-clf">
+                <label><input type="checkbox" id="confusion_matrix" class="vp-state" checked><span>Confusion Matrix</span></label>
+                <label><input type="checkbox" id="report" class="vp-state" checked><span>Report (Accuracy/Precision/Recall/F1-score)</span></label>
+                <label class="vp-gray-text vp-italic">* You can select individually</span></label>
+                <label><input type="checkbox" id="accuracy" class="vp-state"><span>Accuracy</span></label>
+                <label><input type="checkbox" id="precision" class="vp-state"><span>Precision</span></label>
+                <label><input type="checkbox" id="recall" class="vp-state"><span>Recall</span></label>
+                <label><input type="checkbox" id="f1_score" class="vp-state"><span>F1-scorev</label>
+                <!-- <hr style="margin: 5px;"/> -->
+                <!-- <label><input type="checkbox" id="roc_curve" class="vp-eval-check vp-state" data-type="roc-auc"><span>ROC Curve</span></label>
+                <label><input type="checkbox" id="auc" class="vp-eval-check vp-state" data-type="roc-auc"><span>AUC</span></label> -->
+                <!-- <div class="vp-grid-col-95">
+                    <label for="model" class="vp-orange-text">Model</label>
+                    <select id="model" class="vp-select vp-state vp-ev-model roc-auc">
+                    </select>
+                </div> -->
+            </div>
+            <div class="vp-grid-box vp-eval-box vp-eval-cls">
+                <label><input type="checkbox" id="silhouetteScore" class="vp-eval-check vp-state" data-type="silhouette" checked><span>Silhouette score</span></label>
+                <div class="vp-grid-col-95">
+                    <label for="featureData2" class="vp-orange-text">Feature Data</label>
+                    <input type="text" class="vp-input vp-state vp-ev-model silhouette" id="featureData2" placeholder="Input feature data" value="X"/>
+                </div>
+                <hr style="margin: 5px;"/>
+                <label><input type="checkbox" id="ari" class="vp-eval-check vp-state" data-type="ari-nmi"><span>ARI (Adjusted Random Score)</span></label>
+                <label><input type="checkbox" id="nmi" class="vp-eval-check vp-state" data-type="ari-nmi"><span>NMI (Normalized Mutual Information)</span></label>
+                <div class="vp-grid-col-95">
+                    <label for="targetData2" class="vp-orange-text">Target Data</label>
+                    <input type="text" class="vp-input vp-state vp-ev-model ari-nmi" id="targetData2" placeholder="Input target data" value="y"/>
+                </div>
+            </div>
+        </div>
+    </div>  
+</body>
