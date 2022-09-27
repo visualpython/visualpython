@@ -14,9 +14,10 @@
 //============================================================================
 define([
     'text!../../html/menuFrame.html!strip',
-    'css!../../css/menuFrame.css',
+    'css!vp_base/css/menuFrame',
 
     '../com/com_Config',
+    '../com/com_Const',
     '../com/com_util',
     '../com/com_interface',
     '../com/component/Component',
@@ -28,7 +29,7 @@ define([
     './MenuGroup',
     './MenuItem',
     './TaskBar'
-], function(menuFrameHtml, menuFrameCss, com_Config, com_util, com_interface, Component, SuggestInput, InnerFuncViewer,
+], function(menuFrameHtml, menuFrameCss, com_Config, com_Const, com_util, com_interface, Component, SuggestInput, InnerFuncViewer,
             librariesJson, 
             MenuGroup, MenuItem, TaskBar) {
 	'use strict';
@@ -97,7 +98,12 @@ define([
                         break;
                     case 'restart':
                         // restart vp
-                        vpConfig.readKernelFunction();
+                        vpConfig.readKernelFunction().then(function() {
+                            // successfully restarted
+                            com_util.renderSuccessMessage('Successfully loaded inner functions for Visual Python');
+                        }).catch(function() {
+                            com_util.renderAlertModal('No connected runtime is detected. Please connect to runtime...');
+                        });
                         break;
                     case 'about':
                     case 'vpnote':
@@ -206,7 +212,7 @@ define([
         }
         
         template() {
-            this.$pageDom = $(menuFrameHtml);
+            this.$pageDom = $(menuFrameHtml.replaceAll('${vp_base}', com_Const.BASE_PATH));
             return this.$pageDom;
         }
 

@@ -14,7 +14,7 @@
 //============================================================================
 define([
     'text!vp_base/html/m_ml/modelInfo.html!strip',
-    'css!vp_base/css/m_ml/modelInfo.css',
+    'css!vp_base/css/m_ml/modelInfo',
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_generatorV2',

@@ -13,11 +13,15 @@
     <div id="vp_fileNavigation">
         <div class='fileNavigationPage-container center-1rem-gray' >
             <div class="fileNavigationPage-sidebar">
-                <div class="fnp-sidebar-menu" data-path="/">Jupyter Home</div>
-                <div class="fnp-sidebar-menu" data-path="desktop">Desktop</div>
-                <div class="fnp-sidebar-menu" data-path="documents">Documents</div>
-                <div class="fnp-sidebar-menu" data-path="downloads">Downloads</div>
-                <div class="fnp-sidebar-menu" data-path="userid">User ID (Home)</div>
+                <!-- Jupyter Notebook -->
+                <div class="fnp-sidebar-menu notebook" data-path="/">Jupyter Home</div>
+                <div class="fnp-sidebar-menu notebook" data-path="desktop">Desktop</div>
+                <div class="fnp-sidebar-menu notebook" data-path="documents">Documents</div>
+                <div class="fnp-sidebar-menu notebook" data-path="downloads">Downloads</div>
+                <div class="fnp-sidebar-menu notebook" data-path="userid">User ID (Home)</div>
+                <!-- Chrome extension for colab -->
+                <div class="fnp-sidebar-menu colab" data-path="/">Colab Home</div>
+                <div class="fnp-sidebar-menu colab" data-path="drive">Drive Home</div>
             </div>
             <div class='fileNavigationPage-inner flex-column'
 >
@@ -29,8 +33,8 @@
                                 flex-direction: column;
                                 justify-content: center;'>
                         <div class="wp60">
-                            <img class="fileNavigationPage-btn-prev" src="/nbextensions/visualpython/img/arrow_backward.svg">
-                            <img class="fileNavigationPage-btn-next" src="/nbextensions/visualpython/img/arrow_forward.svg">
+                            <img class="fileNavigationPage-btn-prev" src="${vp_base}/img/arrow_backward.svg">
+                            <img class="fileNavigationPage-btn-next" src="${vp_base}/img/arrow_forward.svg">
                         </div>
                     </div> -->
 
@@ -47,7 +51,7 @@
                         </div>
                     </div>
                 </div>
-                <div class='fileNavigationPage-closedBtn'><img src="/nbextensions/visualpython/img/close_big.svg"></div>
+                <div class='fileNavigationPage-closedBtn'><img src="${vp_base}/img/close_big.svg"></div>
                 <div class='fileNavigationPage-directory-container'>
                    
                     <div class='fileNavigationPage-body'></div>

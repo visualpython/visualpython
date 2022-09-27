@@ -10,12 +10,13 @@
  */
 define([
     'text!vp_base/html/component/dataSelector.html!strip',
-    'css!vp_base/css/component/dataSelector.css',
+    'css!vp_base/css/component/dataSelector',
+    'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
     'vp_base/js/com/component/Component',
     'vp_base/js/com/component/MultiSelector'
-], function(dataHTML, dataCss, com_String, com_util, Component, MultiSelector) {
+], function(dataHTML, dataCss, com_Const, com_String, com_util, Component, MultiSelector) {
     //========================================================================
     // [CLASS] DataSelector
     // Usage:
@@ -344,7 +345,7 @@ define([
                     <input type="text" class="vp-ds-target vp-input vp-state ${this.prop.classes}" 
                             id="${this.prop.id}" value="${value}" 
                             placeholder="${this.prop.placeholder}" ${this.prop.required?'required="required"':''}/>
-                    <span class="vp-ds-filter"><img src="/nbextensions/visualpython/img/filter.svg"/></span>
+                    <span class="vp-ds-filter"><img src="${com_Const.IMAGE_PATH}filter.svg"/></span>
                 </div>
             `;
         }
@@ -364,10 +365,10 @@ define([
                                     </div>
                                 </div>
                                 <div class="vp-cs-select-btn-box">
-                                    <button type="button" class="vp-cs-select-add-all-btn" title="Add all items"><img src="/nbextensions/visualpython/img/arrow_right_double.svg"></button>
-                                    <button type="button" class="vp-cs-select-add-btn" title="Add selected items"><img src="/nbextensions/visualpython/img/arrow_right.svg"></button>
-                                    <button type="button" class="vp-cs-select-del-btn" title="Remove selected items"><img src="/nbextensions/visualpython/img/arrow_left.svg"></button>
-                                    <button type="button" class="vp-cs-select-del-all-btn" title="Remove all items"><img src="/nbextensions/visualpython/img/arrow_left_double.svg"></button>
+                                    <button type="button" class="vp-cs-select-add-all-btn" title="Add all items"><img src="${com_Const.IMAGE_PATH}arrow_right_double.svg"></button>
+                                    <button type="button" class="vp-cs-select-add-btn" title="Add selected items"><img src="${com_Const.IMAGE_PATH}arrow_right.svg"></button>
+                                    <button type="button" class="vp-cs-select-del-btn" title="Remove selected items"><img src="${com_Const.IMAGE_PATH}arrow_left.svg"></button>
+                                    <button type="button" class="vp-cs-select-del-all-btn" title="Remove all items"><img src="${com_Const.IMAGE_PATH}arrow_left_double.svg"></button>
                                 </div>
                                 <div class="vp-cs-select-right">
                                     <div class="vp-cs-select-box right vp-cs-droppable no-selection vp-scrollbar ui-droppable">

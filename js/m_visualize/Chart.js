@@ -14,7 +14,7 @@
 //============================================================================
 define([
     'text!vp_base/html/m_visualize/chart.html!strip',
-    'css!vp_base/css/m_visualize/chart.css',
+    'css!vp_base/css/m_visualize/chart',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_util',

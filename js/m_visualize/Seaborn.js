@@ -14,7 +14,7 @@
 //============================================================================
 define([
     'text!vp_base/html/m_visualize/seaborn.html!strip',
-    'css!vp_base/css/m_visualize/seaborn.css',
+    'css!vp_base/css/m_visualize/seaborn',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_generatorV2',
     'vp_base/js/com/com_util',
@@ -807,7 +807,7 @@ define([
                     } else {
                         var errorContent = '';
                         if (msg.content.ename) {
-                            errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
+                            errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue, msg.content.detail);
                         }
                         $(that.wrapSelector('#chartPreview')).html(errorContent);
                         vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
@@ -816,7 +816,7 @@ define([
                     let { msg } = resultObj;
                     var errorContent = '';
                     if (msg.content.ename) {
-                        errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
+                        errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue, msg.content.detail);
                     }
                     $(that.wrapSelector('#chartPreview')).html(errorContent);
                     vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);

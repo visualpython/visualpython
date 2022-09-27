@@ -7,6 +7,7 @@
 }
 .vp-instance-base .vp-ds-button {
     vertical-align: top;
+    width: 50px;
 }
 .vp-instance-toolbar {
     /* display: none; */

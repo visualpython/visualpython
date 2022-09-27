@@ -13,11 +13,12 @@
 // [CLASS] While
 //============================================================================
 define([
+    'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/SuggestInput'
-], function(com_String, com_util, PopupComponent, SuggestInput) {
+], function(com_Const, com_String, com_util, PopupComponent, SuggestInput) {
 
     /**
      * While
@@ -157,7 +158,7 @@ define([
                 page.appendFormatLine('<option value="{0}" {1}>{2}</option>', op, op == v.i4? 'selected': '', op);
             })
             page.appendLine('</select></td>');
-            page.appendFormatLine('<td class="{0} vp-cursor"><img src="/nbextensions/visualpython/img/close_big.svg"/></td>', 'v1-del');
+            page.appendFormatLine('<td class="{0} vp-cursor"><img src="{1}close_big.svg"/></td>', 'v1-del', com_Const.IMAGE_PATH);
             page.appendLine('</tr>');
             return page.toString();
         }
@@ -177,7 +178,7 @@ define([
                 page.appendFormatLine('<option value="{0}" {1}>{2}</option>', op, op == v.i4? 'selected': '', op);
             })
             page.appendLine('</select></td>');
-            page.appendFormatLine('<td class="{0} vp-cursor"><img src="/nbextensions/visualpython/img/close_big.svg"/></td>', 'v1-del');
+            page.appendFormatLine('<td class="{0} vp-cursor"><img src="{1}close_big.svg"/></td>', 'v1-del', com_Const.IMAGE_PATH);
             page.appendLine('</tr>');
             return page.toString();
         }

@@ -12,18 +12,10 @@
 //============================================================================
 // Load Visual Python
 //============================================================================
-(
-    require.specified('base/js/namespace')
-        ? define
-        : function (deps, callback) {
-            'use strict';
-            // if here, the Jupyter namespace hasn't been specified to be loaded.
-            // This means that we're probably embedded in a page,
-            // so we need to make our definition with a specific module name
-            return define('vp_base/js/loadVisualpython', deps, callback);
-        }
-)([
-    'css!vp_base/css/root.css',
+// CHROME: removed code
+define([
+    // CHROME: removed .css extension type
+    'css!vp_base/css/root',
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_Config',
@@ -37,7 +29,7 @@
     //========================================================================
     // Define variable
     //========================================================================
-    var Jupyter;
+    var Jupyter = null;
     var events;
     var liveNotebook = false;
 
@@ -142,7 +134,40 @@
         $(document).on('blur', com_util.wrapSelector('.vp-popup-frame textarea'), function() {
             com_interface.enableOtherShortcut();
         });
+
+        
+        // CHROME: TODO: 2: background <-> vp
+        //======================================================================
+        // Event listener
+        //======================================================================
+        if (colab) {
+            document.removeEventListener('vpcomm', _vpcommHandler);
+            document.addEventListener('vpcomm', _vpcommHandler);
+        }
     };
+
+    var _vpcommHandler = function(e) {
+        let detailObj = e.detail;
+        switch (detailObj.type) {
+            // case 'sendBase':
+            //     // get base url of its extension
+            //     vpBase = detailObj.data;
+            //     // initialize vp environment
+            //     vp_init();
+            //     break;
+            case 'toggle':
+                vpLog.display(VP_LOG_TYPE.DEVELOP, 'received from inject - ', e.detail.type, e);
+                // toggle vp_wrapper
+                if (window.vpBase != '' && window.$ && $('#vp_wrapper').length > 0) {
+                    vpFrame.toggleVp();
+                } else {
+                    vpLog.display(VP_LOG_TYPE.DEVELOP, 'No vp...');
+                }
+                break;
+            default:
+                break;
+        }
+    }
 
     var _setGlobalVariables = function() {
         /**
@@ -159,7 +184,12 @@
         /**
          * visualpython config util
          */
-        window.vpConfig = new com_Config();
+        // CHROME: added extType as 'colab'
+        if (colab) {
+            window.vpConfig = new com_Config('colab');
+        } else {
+            window.vpConfig = new com_Config();
+        }
         window.VP_MODE_TYPE = com_Config.MODE_TYPE;
         /**
          * visualpython kernel
@@ -246,7 +276,10 @@
         let cfg = readConfig();
 
         vpConfig.readKernelFunction();
-        _addToolBarVpButton();
+        // CHROME: edited
+        if (Jupyter) {
+            _addToolBarVpButton();
+        }
         _loadVpResource(cfg);
         _checkVersion();
 
@@ -255,11 +288,20 @@
         }
 
         // Operations on kernel restart
-        events.on('kernel_ready.Kernel', function (evt, info) {
-            vpLog.display(VP_LOG_TYPE.LOG, 'vp operations for kernel ready...');
-            // read vp functions
-            vpConfig.readKernelFunction();
-        });
+        if (vpConfig.extensionType === 'notebook') {
+            events.on('kernel_ready.Kernel', function (evt, info) {
+                vpLog.display(VP_LOG_TYPE.LOG, 'vp operations for kernel ready...');
+                // read vp functions
+                vpConfig.readKernelFunction();
+            });
+        } else if (vpConfig.extensionType === 'colab') {
+            // CHROME: ready for colab kernel connected, and restart vp
+            colab.global.notebook.kernel.listen('connected', function(x) { 
+                vpLog.display(VP_LOG_TYPE.LOG, 'vp operations for kernel ready...');
+                // read vp functions
+                vpConfig.readKernelFunction();
+            });
+        }
     }
 
     return { initVisualpython: initVisualpython, readConfig: readConfig };

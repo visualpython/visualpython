@@ -14,12 +14,14 @@
 //============================================================================
 define([
     'text!vp_base/html/m_apps/snippets.html!strip',
-    'css!vp_base/css/m_apps/snippets.css',
+    'css!vp_base/css/m_apps/snippets',
     'vp_base/js/com/com_util',
+    'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/component/PopupComponent',
-    'vp_base/js/com/component/FileNavigation'
-], function(snHtml, snCss, com_util, com_String, PopupComponent, FileNavigation) {
+    'vp_base/js/com/component/FileNavigation',
+    'vp_base/js/com/component/LoadingSpinner'
+], function(snHtml, snCss, com_util, com_Const, com_String, PopupComponent, FileNavigation, LoadingSpinner) {
 
     /**
      * Snippets
@@ -171,10 +173,11 @@ define([
                     $(that.wrapSelector('.vp-sn-item-check')).prop('checked', true);
                 } else if (menu == 'default-snippets') {
                     // import default snippets
+                    let loadingSpinner = new LoadingSpinner($(that.wrapSelector('.vp-sn-table')));
                     var timestamp = new Date().getTime();
-
                     var keys = Object.keys(that.defaultSnippets);
                     var importKeys = [];
+                    var newSnippet = {};
                     keys.forEach(key => {
                         var importKey = key;
                         var importNo = 1;
@@ -185,16 +188,17 @@ define([
                             importNo += 1;
                         }
                         var code = that.defaultSnippets[key].join('\n');
-                        var newSnippet = { [importKey]: { code: code, timestamp: timestamp } };
-                        vpConfig.setData(newSnippet);
-
+                        newSnippet = { ...newSnippet, [importKey]: { code: code, timestamp: timestamp } };
                         importKeys.push(importKey);
                     });
-                    that.importedList = [ ...importKeys ];
 
-                    that.loadUdfList();
-
-                    com_util.renderSuccessMessage('Default snippets imported');
+                    vpConfig.setData(newSnippet).then(function() {
+                        that.importedList = [ ...importKeys ];
+                        that.loadUdfList();
+                        com_util.renderSuccessMessage('Default snippets imported');
+                    }).finally(function() {
+                        loadingSpinner.remove();
+                    });
                 }
                 $(that.wrapSelector('.vp-sn-menu-box')).hide();
                 evt.stopPropagation();
@@ -398,21 +402,21 @@ define([
                         cmCode.save();
                         var code = cmCode.getValue();
                         // Remove original title
-                        vpConfig.removeData(prevTitle);
-                        
-                        // Save data with new title
-                        // save udf
-                        var newTimestamp = new Date().getTime();
-                        var newSnippet = { [newTitle]: { code: code, timestamp: newTimestamp } };
-                        vpConfig.setData(newSnippet);
+                        vpConfig.removeData(prevTitle).then(function() {
+                            // Save data with new title
+                            // save udf
+                            var newTimestamp = new Date().getTime();
+                            var newSnippet = { [newTitle]: { code: code, timestamp: newTimestamp } };
+                            vpConfig.setData(newSnippet);
 
+                            // update title & codemirror
+                            $(this).closest('.vp-sn-item-title').val(newTitle);
+                            $(this).closest('.vp-sn-item').data('title', newTitle);
+                            // update codemirror
+                            that.codemirrorList[newTitle] = that.codemirrorList[prevTitle];
+                            delete that.codemirrorList[prevTitle];
+                        });
                     }
-                    // update title & codemirror
-                    $(this).closest('.vp-sn-item-title').val(newTitle);
-                    $(this).closest('.vp-sn-item').data('title', newTitle);
-                    // update codemirror
-                    that.codemirrorList[newTitle] = that.codemirrorList[prevTitle];
-                    delete that.codemirrorList[prevTitle];
                 }
 
                 // disable
@@ -466,9 +470,9 @@ define([
                     $(dupItem).find('.vp-sn-indicator').trigger('click');
 
                 } else if (menu == 'delete') {
-                    title && vpConfig.getData(title).then(function(dataObj) {
-                        // remove key
-                        vpConfig.removeData(title);
+                    let loadingSpinner = new LoadingSpinner($(that.wrapSelector('.vp-sn-table')));
+                    // remove key
+                    vpConfig.removeData(title).then(function() {
                         delete that.codemirrorList[title];
                         // remove item
                         $(that.wrapSelector('.vp-sn-item[data-title="' + title + '"]')).remove();
@@ -476,9 +480,11 @@ define([
                         // vp-multilang for success message
                         com_util.renderSuccessMessage('Successfully removed!');
                     }).catch(function(err) {
-                        com_util.renderAlertModal('No key available...');
+                        com_util.renderAlertModal('Failed to remove data...', err);
                         // load again
                         that.loadUdfList();
+                    }).finally(function() {
+                        loadingSpinner.remove();
                     });
                     
                 } else if (menu == 'save') {
@@ -558,15 +564,15 @@ define([
             item.appendFormatLine('<div class="{0}">', 'vp-sn-item-menu');
             item.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}">'
                                 , 'vp-sn-item-menu-item', 'run', 'Run');
-            item.appendFormatLine('<img src="{0}"/>', '/nbextensions/visualpython/img/snippets/run.svg');
+            item.appendFormatLine('<img src="{0}"/>', com_Const.IMAGE_PATH + 'snippets/run.svg');
             item.appendLine('</div>');
             item.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}">'
                                 , 'vp-sn-item-menu-item', 'duplicate', 'Duplicate');
-            item.appendFormatLine('<img src="{0}"/>', '/nbextensions/visualpython/img/snippets/duplicate.svg');
+            item.appendFormatLine('<img src="{0}"/>', com_Const.IMAGE_PATH + 'snippets/duplicate.svg');
             item.appendLine('</div>');
             item.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}">'
                                 , 'vp-sn-item-menu-item', 'delete', 'Delete');
-            item.appendFormatLine('<img src="{0}"/>', '/nbextensions/visualpython/img/delete.svg');
+            item.appendFormatLine('<img src="{0}"/>', com_Const.IMAGE_PATH + 'delete.svg');
             item.appendLine('</div>'); 
             item.appendLine('</div>'); // end of vp-sn-item-menu
             // export mode checkbox
@@ -575,7 +581,7 @@ define([
             item.appendFormatLine('<div class="{0}">', 'vp-sn-item-code');
             item.appendFormatLine('<textarea>{0}</textarea>', code);
             item.appendFormatLine('<div class="{0} {1} vp-disable" data-menu="{2}" title="{3}">', 'vp-sn-item-menu-item', 'vp-sn-save', 'save', 'Save changes');
-            item.appendFormatLine('<img src="{0}"/>', '/nbextensions/visualpython/img/snippets/save_orange.svg');
+            item.appendFormatLine('<img src="{0}"/>', com_Const.IMAGE_PATH + 'snippets/save_orange.svg');
             item.appendLine('</div>'); // vp-sn-save
             item.appendLine('</div>'); // end of vp-sn-item-code
             item.appendLine('</div>'); // end of vp-sn-item
@@ -593,6 +599,7 @@ define([
             $(this.wrapSelector('.vp-sn-table')).html('');
 
             // load udf list to table 'vp_udfList'
+            let loadingSpinner = new LoadingSpinner($(this.wrapSelector('.vp-sn-table')));
             vpConfig.getData().then(function(udfObj) {
                 vpLog.display(VP_LOG_TYPE.DEVELOP, udfObj);
                 var snippets = new com_String();
@@ -620,6 +627,10 @@ define([
                     var title = $(tag).closest('.vp-sn-item').data('title');
                     that.bindCodeMirror(title, tag);
                 });
+            }).catch(function(err) {
+                com_util.renderAlertModal(err);
+            }).finally(function() {
+                loadingSpinner.remove();
             });
         }
 

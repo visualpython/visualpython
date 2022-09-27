@@ -14,7 +14,7 @@
 //============================================================================
 define([
     'text!vp_base/html/mainFrame.html!strip',
-    'css!vp_base/css/mainFrame.css',
+    'css!vp_base/css/mainFrame',
 
     // load module
     './com/com_Config',
@@ -69,15 +69,26 @@ define([
 
             // window resize event
             $(window).resize(function(evt){
-                let jupyterHeadHeight = $('#' + JUPYTER_HEADER_ID).height();
-                let jupyterBodyHeight = $('#' + JUPYTER_NOTEBOOK_ID).height();
-                
-                let vpWidth = $('#vp_wrapper')[0].getBoundingClientRect().width;
-                let vpHeight = $(window).height() - jupyterHeadHeight;
-
-                // $('#vp_wrapper').css( { height: vpHeight + 'px' });
-                that._resizeNotebook(vpWidth);
+                that._resizeWindow();
             });
+
+            // CHROME: colab header toggle
+            if (vpConfig.extensionType === 'colab') {
+                $('#toggle-header-button').click(function(evt) {
+                    console.log('[vp] click toggle header ')
+                    // change height
+                    let colabHeaderVisible = $('#header').is(':visible');
+                    let colabHeaderHeight = $('#header').height() * colabHeaderVisible;
+                    let colabFooterHeight = $('colab-status-bar').height();
+
+                    let colabHeight = colabHeaderHeight + colabFooterHeight + 2;
+
+                    $('#vp_wrapper').css( { 
+                        height:  'calc(100% - ' + colabHeight + 'px)',
+                        top: colabHeaderHeight + 'px' 
+                    });
+                });
+            }
 
             window.vpEvent = new com_Event(this);
         }
@@ -111,6 +122,34 @@ define([
                     $('#vp_wrapper').css({'left': '', 'height': ''});
                 }
             });  
+        }
+
+        _resizeWindow() {
+            // CHROME: resize colab
+            if (vpConfig.extensionType === 'notebook') {
+                let jupyterHeadHeight = $('#' + JUPYTER_HEADER_ID).height();
+                let jupyterBodyHeight = $('#' + JUPYTER_NOTEBOOK_ID).height();
+
+                let vpWidth = $('#vp_wrapper')[0].getBoundingClientRect().width;
+                let vpHeight = $(window).height() - jupyterHeadHeight;
+
+                $('#vp_wrapper').css( { height: vpHeight + 'px' });
+                this._resizeNotebook(vpWidth);
+            } else if (vpConfig.extensionType === 'colab') {
+                let colabHeaderVisible = $('#header').is(':visible');
+                let colabHeaderHeight = $('#header').height() * colabHeaderVisible;
+                let colabFooterHeight = $('colab-status-bar').height();
+
+                let colabHeight = colabHeaderHeight + colabFooterHeight + 2;
+
+                let vpWidth = $('#vp_wrapper')[0].getBoundingClientRect().width;
+
+                $('#vp_wrapper').css( { 
+                    height:  'calc(100% - ' + colabHeight + 'px)',
+                    top: colabHeaderHeight + 'px'
+                });
+                this._resizeNotebook(vpWidth);
+            }
         }
 
         _resizeVp(currentWidth) {
@@ -161,8 +200,14 @@ define([
             let nbWidth = baseWidth - vpWidth;
             let nbContainerWidth = nbWidth - 60;
             // apply resized width
-            $('#' + JUPYTER_NOTEBOOK_ID).css({ 'width': nbWidth + 'px' });
-            $('#notebook-container').css({ 'width': nbContainerWidth + 'px' });
+            // CHROME: resize colab
+            if (vpConfig.extensionType === 'notebook') {
+                $('#' + JUPYTER_NOTEBOOK_ID).css({ 'width': nbWidth + 'px' });
+                $('#notebook-container').css({ 'width': nbContainerWidth + 'px' });
+            } else if (vpConfig.extensionType === 'colab') {
+                $('.notebook-horizontal').css({ 'width': nbWidth + 'px' });
+                // $('#notebook-container').css({ 'width': nbContainerWidth + 'px' });
+            }
         }
 
         _getMenuGroupRootType(menu) {
@@ -193,9 +238,6 @@ define([
             if (!vp_note_display) {
                 this.minWidth = MENU_MIN_WIDTH + MENU_BOARD_SPACING;
             }
-
-            // resize jupyterNotebook area
-            let vpWidth = $('#vp_wrapper')[0].getBoundingClientRect().width;
             
             // load menu & board
             this._menuFrame = new MenuFrame($('#vp_wrapper'), 
@@ -207,7 +249,8 @@ define([
                 { parent: this }
             );
             
-            this._resizeNotebook(vpWidth);
+            // consider height and width
+            this._resizeWindow();
             
             // bind event
             this._bindEvent();
@@ -221,7 +264,8 @@ define([
             let vpWidth = $('#vp_wrapper')[0].clientWidth;
 
             let metadata = vpConfig.getMetadata();
-            let { vp_position, vp_menu_width, vp_note_width } = metadata;
+            vpLog.display(VP_LOG_TYPE.DEVELOP, 'toggle vp with metadata', metadata);
+            let { vp_position, vp_menu_width, vp_note_width, vp_note_display } = metadata;
             let newMetadata = { vp_section_display: !vpDisplay };
             if (vpDisplay) {
                 // hide
@@ -229,11 +273,15 @@ define([
                 $('#vp_wrapper').hide();
             } else {
                 // show
-                vpWidth = vp_position.width;
-                if (vp_position.width == 0) {
-                    vpWidth = (vp_menu_width + vp_note_width + MENU_BOARD_SPACING) + 'px';
+                if (!vp_position || vp_position.width <= 0) {
+                    vpWidth = (vp_menu_width + vp_note_width + MENU_BOARD_SPACING);
+                    if (!vpWidth) {
+                        vpWidth = com_Config.MENU_MIN_WIDTH + (vp_note_display? com_Config.BOARD_MIN_WIDTH: 0) + com_Config.MENU_BOARD_SPACING;
+                    }
                     newMetadata['vp_position'] = { width: vpWidth };
                     $('#vp_wrapper').css({ width: vpWidth });
+                } else {
+                    vpWidth = vp_position.width;
                 }
                 $('#vp_wrapper').show();
             }

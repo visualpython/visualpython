@@ -1,12 +1,18 @@
 .vp-chart-setting {
     float: right;
     color: var(--gray-color);
-    padding-top: 5px;
+    /* padding-top: 5px; */
     padding-right: 5px;
     cursor: pointer;
+    background-image: url(../../img/gear-solid.svg);
+    background-size: 15px;
+    background-repeat: no-repeat;
+    padding-left: 20px;
+    margin-top: 5px;
 }
 .vp-chart-setting:hover {
     color: var(--font-highlight);
+    background-image: url(../../img/gear-solid_hover.svg);
 }
 .vp-create-subplot-btn {
     float: right;

@@ -1,9 +1,10 @@
 define([
-    'css!vp_base/css/component/instanceEditor.css',
+    'css!vp_base/css/component/instanceEditor',
+    'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
     'vp_base/js/com/component/SuggestInput'
-], function(insCss, com_String, com_util, SuggestInput) {
+], function(insCss, com_Const, com_String, com_util, SuggestInput) {
 
 
     // temporary const
@@ -104,7 +105,7 @@ define([
             // create variable input
             tag.appendFormatLine('<div class="{0}">', VP_CREATE_VAR_BOX);
             tag.appendFormatLine('<input class="vp-input {0}" type="text" placeholder="Create new variable" />', VP_CREATE_VAR);
-            tag.appendFormatLine('<div class="{0}"><img src="{1}"/></div>', VP_CREATE_VAR_BTN, '/nbextensions/visualpython/img/plus.svg');
+            tag.appendFormatLine('<div class="{0}"><img src="{1}"/></div>', VP_CREATE_VAR_BTN, com_Const.IMAGE_PATH + 'plus.svg');
             tag.appendLine('</div>');
 
             tag.appendLine('</div>'); // VP_INS_SELECT_CONTAINER

@@ -14,7 +14,7 @@
 //============================================================================
 define([
     'text!vp_base/html/m_apps/pdf.html!strip',
-    'css!vp_base/css/m_apps/pdf.css',
+    'css!vp_base/css/m_apps/pdf',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_interface',
     'vp_base/js/com/component/PopupComponent',

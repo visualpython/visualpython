@@ -237,6 +237,9 @@
     position: relative;
     border: 0.25px solid var(--border-gray-color);
 }
+.vp-sn-item-code .CodeMirror {
+    min-height: 50px;
+}
 .vp-sn-save {
     width: 20px;
     position: absolute;

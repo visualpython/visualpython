@@ -14,7 +14,7 @@
 //============================================================================
 define([
     'text!vp_base/html/m_apps/file.html!strip',
-    'css!vp_base/css/m_apps/file.css',
+    'css!vp_base/css/m_apps/file',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_Const',
@@ -51,7 +51,12 @@ define([
                 ]
             }
 
-            this.dataPath = window.location.origin + com_Const.DATA_PATH + "sample_csv/";
+            if (vpConfig.extensionType === 'notebook') {
+                this.dataPath = window.location.origin + com_Const.DATA_PATH + "sample_csv/";
+            } else if (vpConfig.extensionType === 'colab') {
+                // this.dataPath = com_Const.DATA_PATH + "sample_csv/";
+                this.dataPath = 'https://raw.githubusercontent.com/visualpython/visualpython/main/data/sample_csv/';
+            }
 
             this.state = {
                 fileExtension: 'csv',

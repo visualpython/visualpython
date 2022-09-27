@@ -93,7 +93,7 @@ define([
             page.appendFormatLine('<th>{0}</th>', idx);
             page.appendFormatLine('<td><input type="text" class="vp-input wp100 {0}" value="{1}" placeholder="{2}"/></td>'
                                 , 'v1-i1', value, 'Input parameter');
-            page.appendFormatLine('<td class="{0} vp-cursor"><img src="/nbextensions/visualpython/img/close_big.svg"/></td>', 'v1-del');
+            page.appendFormatLine('<td class="{0} vp-cursor"><img src="{1}close_big.svg"/></td>', 'v1-del', );
             page.appendLine('</tr>');
             return page.toString();
         }

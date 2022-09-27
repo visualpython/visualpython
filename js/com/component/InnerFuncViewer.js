@@ -14,12 +14,13 @@
 //============================================================================
 define([
     'text!vp_base/html/component/innerFuncViewer.html!strip',
-    'css!vp_base/css/component/innerFuncViewer.css',
+    'css!vp_base/css/component/innerFuncViewer',
     'vp_base/js/com/com_util',
+    'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/FileNavigation'
-], function(ifHtml, ifCss, com_util, com_String, PopupComponent, FileNavigation) {
+], function(ifHtml, ifCss, com_util, com_Const, com_String, PopupComponent, FileNavigation) {
 
     /**
      * InnerFuncViewer
@@ -156,7 +157,7 @@ define([
             item.appendFormatLine('<div class="{0}">', 'vp-if-item-menu');
             item.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}">'
                                 , 'vp-if-item-menu-item', 'run', 'Run');
-            item.appendFormatLine('<img src="{0}"/>', '/nbextensions/visualpython/img/snippets/run.svg');
+            item.appendFormatLine('<img src="{0}"/>', com_Const.IMAGE_PATH + 'snippets/run.svg');
             item.appendLine('</div>');
             item.appendLine('</div>'); // end of vp-if-item-menu
             item.appendLine('</div>'); // end of vp-if-item-header

@@ -9,12 +9,13 @@
  *    Change Date     :
  */
 define([
-    'css!vp_base/css/component/multiSelector.css',
+    'css!vp_base/css/component/multiSelector',
+    'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
     'vp_base/js/com/component/Component',
     'vp_base/js/com/component/SuggestInput'
-], function(multiCss, com_String, com_util, Component, SuggestInput) {
+], function(multiCss, com_Const, com_String, com_util, Component, SuggestInput) {
 
     //========================================================================
     // Define variable
@@ -282,14 +283,14 @@ define([
             tag.appendLine('</div>');  // APP_SELECT_LEFT
             // select - buttons
             tag.appendFormatLine('<div class="{0}">', APP_SELECT_BTN_BOX);
-            tag.appendFormatLine('<button type="button" class="{0}" title="{1}">{2}</button>'
-                                , APP_SELECT_ADD_ALL_BTN, 'Add all items', '<img src="/nbextensions/visualpython/img/arrow_right_double.svg"/></i>');
-            tag.appendFormatLine('<button type="button" class="{0}" title="{1}">{2}</button>'
-                                ,  APP_SELECT_ADD_BTN, 'Add selected items', '<img src="/nbextensions/visualpython/img/arrow_right.svg"/></i>');
-            tag.appendFormatLine('<button type="button" class="{0}" title="{1}">{2}</button>'
-                                , APP_SELECT_DEL_BTN, 'Remove selected items', '<img src="/nbextensions/visualpython/img/arrow_left.svg"/>');
-            tag.appendFormatLine('<button type="button" class="{0}" title="{1}">{2}</button>'
-                                , APP_SELECT_DEL_ALL_BTN, 'Remove all items', '<img src="/nbextensions/visualpython/img/arrow_left_double.svg"/>');
+            tag.appendFormatLine('<button type="button" class="{0}" title="{1}"><img src="{2}"/></button>'
+                                , APP_SELECT_ADD_ALL_BTN, 'Add all items', com_Const.IMAGE_PATH + 'arrow_right_double.svg');
+            tag.appendFormatLine('<button type="button" class="{0}" title="{1}"><img src="{2}"/></button>'
+                                ,  APP_SELECT_ADD_BTN, 'Add selected items', com_Const.IMAGE_PATH + 'arrow_right.svg');
+            tag.appendFormatLine('<button type="button" class="{0}" title="{1}"><img src="{2}"/></button>'
+                                , APP_SELECT_DEL_BTN, 'Remove selected items', com_Const.IMAGE_PATH + 'arrow_left.svg');
+            tag.appendFormatLine('<button type="button" class="{0}" title="{1}"><img src="{2}"/></button>'
+                                , APP_SELECT_DEL_ALL_BTN, 'Remove all items', com_Const.IMAGE_PATH + 'arrow_left_double.svg');
             tag.appendLine('</div>');  // APP_SELECT_BTNS
             // select - right
             tag.appendFormatLine('<div class="{0}">', APP_SELECT_RIGHT);

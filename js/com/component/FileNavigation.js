@@ -14,11 +14,13 @@
 //============================================================================
 define([
     'text!vp_base/html/component/fileNavigation.html!strip',
-    'css!vp_base/css/component/fileNavigation.css',
+    'css!vp_base/css/component/fileNavigation',
+    'vp_base/js/com/component/LoadingSpinner',
+    'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
     'vp_base/js/com/component/Component'
-], function(fileNaviHtml, fileNaviCss, com_String, com_util, Component) {
+], function(fileNaviHtml, fileNaviCss, LoadingSpinner, com_Const, com_String, com_util, Component) {
     // Temporary constant data
     const NAVIGATION_DIRECTION_TYPE = {
         TOP: 0,
@@ -47,7 +49,7 @@ define([
          * @param {Object} state { type, extensions, finish ... }
          */
         constructor(state) {
-            super($('#site'), state);
+            super($(vpConfig.parentSelector), state);
             /**
              * state.type           open / save
              * state.extensions     extensions list
@@ -121,9 +123,6 @@ define([
                     destDir: '/'
                 }
                 switch (pathType) {
-                    case '/':
-                        dirObj.direction = NAVIGATION_DIRECTION_TYPE.TOP;
-                        break;
                     case 'desktop':
                         dirObj.destDir = "_vp_get_desktop_path()";
                         dirObj.useFunction = true;
@@ -139,6 +138,13 @@ define([
                     case 'userid':
                         dirObj.destDir = "_vp_get_userprofile_path()";
                         dirObj.useFunction = true;
+                        break;
+                    case 'drive':
+                        dirObj.destDir = "/content/drive/MyDrive";
+                        break;
+                    case '/':
+                    default:
+                        dirObj.direction = NAVIGATION_DIRECTION_TYPE.TOP;
                         break;
                 }
                 that.getFileList(dirObj);
@@ -189,7 +195,14 @@ define([
 
         template() {
             /** Implement generating template */
-            return fileNaviHtml;
+            let fileNaviBody = $(fileNaviHtml.replaceAll('${vp_base}', com_Const.BASE_PATH));
+            $(fileNaviBody).find('.fnp-sidebar-menu').hide();
+            if (vpConfig.extensionType === 'notebook') {
+                $(fileNaviBody).find('.fnp-sidebar-menu.notebook').show();
+            } else if (vpConfig.extensionType === 'colab') {
+                $(fileNaviBody).find('.fnp-sidebar-menu.colab').show();
+            }
+            return fileNaviBody;
         }
 
         /**
@@ -311,7 +324,7 @@ define([
             /** render current path */
             var currentRelativePathStrArray = currentRelativePathStr.split('/');
             
-            if (baseFolder === notebookFolder && Jupyter.notebook.notebook_path.indexOf('/') === -1) {
+            if (baseFolder === notebookFolder && vpKernel.getNotebookPath().indexOf('/') === -1) {
                 var index = currentRelativePathStrArray.indexOf(baseFolder)
                 if (index >= 0) {
                     currentRelativePathStrArray.splice(index,1);
@@ -538,6 +551,8 @@ define([
             } else {
                 destDir = '.';
             }
+            // loading
+            let loadingSpinner = new LoadingSpinner($(this.wrapSelector('.fileNavigationPage-directory-container')));
             // get file list using kernel
             return vpKernel.getFileList(destDir, useFunction).then(function(result) {
                 /** Caution : if change code "$1" to '$1' as single quote, json parsing error occurs */
@@ -596,8 +611,23 @@ define([
                 that.pathState.currentPath = currentDirStr;
                 that.currentFileList = filtered_varList;
 
-                that.loadFileList(); 
-            });;
+                that.loadFileList();
+            }).catch(function(resultObj) {
+                vpLog.display(VP_LOG_TYPE.ERROR, 'FileNavigation error', resultObj);
+
+                let { msg, result } = resultObj;
+                // show error using alert
+                
+                if (msg.content.evalue) {
+                    let resultStr = msg.content.evalue;
+                    //t.match(/\[Errno [0-9]+?\] (.*)/)[1]
+                    // get error message from traceback
+                    let alertMsg = resultStr.match(/\[Errno [0-9]+?\] (.*)/)[1];
+                    com_util.renderAlertModal(alertMsg);
+                }
+            }).finally(function() {
+                loadingSpinner.remove();
+            });
         }
 
         /**
@@ -626,7 +656,7 @@ define([
              *      RelativePathStr changes when moving through paths
              */
             var rootFolderName = splitedDirStrArr[splitedDirStrArr.length - 1];
-            var notebookPath = Jupyter.notebook.notebook_path;
+            var notebookPath = vpKernel.getNotebookPath();
 
             this.pathState.baseFolder = rootFolderName;
             this.pathState.relativeDir = rootFolderName;

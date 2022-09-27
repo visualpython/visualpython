@@ -12,9 +12,44 @@
 //============================================================================
 // [CLASS] PopupComponent
 //============================================================================
+// CHROME: notebook/js/codemirror-ipython
+(function(mod) {
+    if (typeof exports == "object" && typeof module == "object"){ // CommonJS
+      mod(requirejs("codemirror/lib/codemirror"),
+          requirejs("codemirror/mode/python/python")
+          );
+    } else if (typeof define == "function" && define.amd){ // AMD
+      define('notebook/js/codemirror-ipython',["codemirror/lib/codemirror",
+              "codemirror/mode/python/python"], mod);
+    } else {// Plain browser env
+      mod(CodeMirror);
+    }
+})(function(CodeMirror) {
+    "use strict";
+
+    CodeMirror.defineMode("ipython", function(conf, parserConf) {
+        var pythonConf = {};
+        for (var prop in parserConf) {
+            if (parserConf.hasOwnProperty(prop)) {
+                pythonConf[prop] = parserConf[prop];
+            }
+        }
+        pythonConf.name = 'python';
+        pythonConf.singleOperators = new RegExp("^[\\+\\-\\*/%&|@\\^~<>!\\?]");
+        if (pythonConf.version === 3) {
+            pythonConf.identifiers = new RegExp("^[_A-Za-z\u00A1-\uFFFF][_A-Za-z0-9\u00A1-\uFFFF]*");
+        } else if (pythonConf.version === 2) {
+            pythonConf.identifiers = new RegExp("^[_A-Za-z][_A-Za-z0-9]*");
+        }
+        return CodeMirror.getMode(conf, pythonConf);
+    }, 'python');
+
+    CodeMirror.defineMIME("text/x-ipython", "ipython");
+});
+
 define([
     'text!vp_base/html/component/popupComponent.html!strip',
-    'css!vp_base/css/component/popupComponent.css',
+    'css!vp_base/css/component/popupComponent',
     '../com_util',
     '../com_Const',
     '../com_String',
@@ -25,9 +60,9 @@ define([
     /** codemirror */
     'codemirror/lib/codemirror',
     'codemirror/mode/python/python',
-    'notebook/js/codemirror-ipython',
     'codemirror/addon/display/placeholder',
-    'codemirror/addon/display/autorefresh'
+    'codemirror/addon/display/autorefresh',
+    'notebook/js/codemirror-ipython'
 ], function(popupComponentHtml, popupComponentCss
     , com_util, com_Const, com_String, com_interface, Component, DataSelector, codemirror
 ) {
@@ -41,7 +76,9 @@ define([
      */
     class PopupComponent extends Component {
         constructor(state={ config: { id: 'popup', name: 'Popup title', path: 'path/file' }}, prop={}) {
-            super($('#site'), state, prop);
+            // CHROME: FIXME: #site -> .notebook-vertical
+            // super($('#site'), state, prop);
+            super($(vpConfig.parentSelector), state, prop);
         }
 
         _init() {
@@ -481,11 +518,22 @@ define([
         }
 
         template() { 
-            this.$pageDom = $(popupComponentHtml);
+            this.$pageDom = $(popupComponentHtml.replaceAll('${vp_base}', com_Const.BASE_PATH));
             // set title
             this.$pageDom.find('.vp-popup-title').text(this.name);
             // set body
-            this.$pageDom.find('.vp-popup-content').html(this.templateForBody());
+            let bodyTemplate = this.templateForBody();
+            // CHROME: check url keyword and replace it
+            if (bodyTemplate) {
+                if (typeof bodyTemplate === 'string') {
+                    // string replacement
+                    bodyTemplate = bodyTemplate.replaceAll('${vp_base}', com_Const.BASE_PATH);
+                } else {
+                    // object = jquery object
+
+                }
+            }
+            this.$pageDom.find('.vp-popup-content').html(bodyTemplate);
             return this.$pageDom;
         }
 
@@ -733,9 +781,11 @@ define([
 
             let checkModules = this.config.checkModules;
             return new Promise(function(resolve, reject) {
+                // CHROME: TODO: 9: checkmodule works strange...
                 if (checkModules.length > 0) {
                     vpKernel.checkModule(checkModules).then(function(resultObj) {
                         let { result } = resultObj;
+                        vpLog.display(VP_LOG_TYPE.DEVELOP, resultObj);
                         let checkedList = JSON.parse(result);
                         let executeList = [];
                         checkedList && checkedList.forEach((mod, idx) => {
@@ -754,6 +804,7 @@ define([
                 } else {
                     resolve([]);
                 }
+                // resolve([]);
             });
         }
 
@@ -847,9 +898,9 @@ define([
 
         focus() {
             $('.vp-popup-frame').removeClass('vp-focused');
-            $('.vp-popup-frame').css({ 'z-index': 200 });
+            $('.vp-popup-frame').css({ 'z-index': 1200 });
             $(this.wrapSelector()).addClass('vp-focused');
-            $(this.wrapSelector()).css({ 'z-index': 205 }); // move forward
+            $(this.wrapSelector()).css({ 'z-index': 1205 }); // move forward
             // focus on its block
             if (this.taskItem) {
                 this.taskItem.focusItem();
@@ -883,11 +934,11 @@ define([
             if (isClosed) {
                 // show
                 $this.removeClass('vp-close');
-                $(this.wrapSelector('.vp-popup-toggle')).attr('src', '/nbextensions/visualpython/img/tri_down_fill_dark.svg');
+                $(this.wrapSelector('.vp-popup-toggle')).attr('src', com_Const.IMAGE_PATH + 'tri_down_fill_dark.svg');
             } else {
                 // hide
                 $this.addClass('vp-close');
-                $(this.wrapSelector('.vp-popup-toggle')).attr('src', '/nbextensions/visualpython/img/tri_right_fill_dark.svg');
+                $(this.wrapSelector('.vp-popup-toggle')).attr('src', com_Const.IMAGE_PATH + 'tri_right_fill_dark.svg');
             }
         }
 

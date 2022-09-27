@@ -14,7 +14,7 @@
 //============================================================================
 define([
     'text!vp_base/html/m_apps/reshape.html!strip',
-    'css!vp_base/css/m_apps/reshape.css',
+    'css!vp_base/css/m_apps/reshape',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
     'vp_base/js/com/component/PopupComponent',

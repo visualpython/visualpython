@@ -13,10 +13,11 @@
 // [CLASS] Def
 //============================================================================
 define([
+    'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
     'vp_base/js/com/component/PopupComponent'
-], function(com_String, com_util, PopupComponent) {
+], function(com_Const, com_String, com_util, PopupComponent) {
 
     /**
      * Def
@@ -109,7 +110,7 @@ define([
             page.appendLine('<td class="w30 vp-center">=</td>');
             page.appendFormatLine('<td><input type="text" class="vp-input w100 {0}" value="{1}" placeholder="{2}"/></td>'
                                 , 'v2-value', value, 'Value');
-            page.appendFormatLine('<td class="{0} vp-cursor"><img src="/nbextensions/visualpython/img/close_big.svg"/></td>', 'v2-del');
+            page.appendFormatLine('<td class="{0} vp-cursor"><img src="{1}close_big.svg"/></td>', 'v2-del', com_Const.IMAGE_PATH);
             page.appendLine('</tr>');
             return page.toString();
         }

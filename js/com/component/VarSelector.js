@@ -1,7 +1,8 @@
 define([
+    'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
-], function(com_String, com_util) {
+], function(com_Const, com_String, com_util) {
 
     const VP_VS_BOX = 'vp-vs-box';
     const VP_VS_DATA_TYPE = 'vp-vs-data-type';
@@ -153,7 +154,7 @@ define([
 
             // reload
             tag.appendFormatLine('<span class="{0} vp-cursor" title="{1}"><img src="{2}"></span>',
-                                VP_VS_REFRESH, 'Refresh variables', '/nbextensions/visualpython/img/refresh.svg');
+                                VP_VS_REFRESH, 'Refresh variables', com_Const.IMAGE_PATH + 'refresh.svg');
 
             tag.appendLine('</div>'); // VP_VS_BOX
             return tag.toString();

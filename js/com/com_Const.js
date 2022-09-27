@@ -31,7 +31,10 @@ define ([
     // Base Path Constants
     //========================================================================
     Constants.PATH_SEPARATOR = "/";
-    Constants.BASE_PATH = Jupyter.notebook.base_url + "nbextensions" + Constants.PATH_SEPARATOR + "visualpython" + Constants.PATH_SEPARATOR;
+    // CHROME: edited
+    // Constants.BASE_PATH = Jupyter.notebook.base_url + "nbextensions" + Constants.PATH_SEPARATOR + "visualpython" + Constants.PATH_SEPARATOR;
+    Constants.BASE_PATH = vpBase + "visualpython" + Constants.PATH_SEPARATOR;
+    
     Constants.SOURCE_PATH   = Constants.BASE_PATH + "js" + Constants.PATH_SEPARATOR;
     Constants.IMAGE_PATH = Constants.BASE_PATH + "img" + Constants.PATH_SEPARATOR;
     Constants.STYLE_PATH    = Constants.BASE_PATH + "css" + Constants.PATH_SEPARATOR;

@@ -14,7 +14,7 @@
 //============================================================================
 define([
     'text!vp_base/html/m_apps/instance.html!strip',
-    'css!vp_base/css/m_apps/instance.css',
+    'css!vp_base/css/m_apps/instance',
     'vp_base/js/com/com_String',
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/InstanceEditor',
