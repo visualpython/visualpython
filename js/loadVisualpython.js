@@ -134,7 +134,40 @@ define([
         $(document).on('blur', com_util.wrapSelector('.vp-popup-frame textarea'), function() {
             com_interface.enableOtherShortcut();
         });
+
+        
+        // CHROME: TODO: 2: background <-> vp
+        //======================================================================
+        // Event listener
+        //======================================================================
+        if (colab) {
+            document.removeEventListener('vpcomm', _vpcommHandler);
+            document.addEventListener('vpcomm', _vpcommHandler);
+        }
     };
+
+    var _vpcommHandler = function(e) {
+        let detailObj = e.detail;
+        switch (detailObj.type) {
+            // case 'sendBase':
+            //     // get base url of its extension
+            //     vpBase = detailObj.data;
+            //     // initialize vp environment
+            //     vp_init();
+            //     break;
+            case 'toggle':
+                vpLog.display(VP_LOG_TYPE.DEVELOP, 'received from inject - ', e.detail.type, e);
+                // toggle vp_wrapper
+                if (window.vpBase != '' && window.$ && $('#vp_wrapper').length > 0) {
+                    vpFrame.toggleVp();
+                } else {
+                    vpLog.display(VP_LOG_TYPE.DEVELOP, 'No vp...');
+                }
+                break;
+            default:
+                break;
+        }
+    }
 
     var _setGlobalVariables = function() {
         /**
@@ -151,9 +184,12 @@ define([
         /**
          * visualpython config util
          */
-        // CHROME: added extType as 'chrome'
-        // window.vpConfig = new com_Config();
-        window.vpConfig = new com_Config('chrome');
+        // CHROME: added extType as 'colab'
+        if (colab) {
+            window.vpConfig = new com_Config('colab');
+        } else {
+            window.vpConfig = new com_Config();
+        }
         window.VP_MODE_TYPE = com_Config.MODE_TYPE;
         /**
          * visualpython kernel
@@ -252,11 +288,20 @@ define([
         }
 
         // Operations on kernel restart
-        events.on('kernel_ready.Kernel', function (evt, info) {
-            vpLog.display(VP_LOG_TYPE.LOG, 'vp operations for kernel ready...');
-            // read vp functions
-            vpConfig.readKernelFunction();
-        });
+        if (vpConfig.extensionType === 'notebook') {
+            events.on('kernel_ready.Kernel', function (evt, info) {
+                vpLog.display(VP_LOG_TYPE.LOG, 'vp operations for kernel ready...');
+                // read vp functions
+                vpConfig.readKernelFunction();
+            });
+        } else if (vpConfig.extensionType === 'colab') {
+            // CHROME: ready for colab kernel connected, and restart vp
+            colab.global.notebook.kernel.listen('connected', function(x) { 
+                vpLog.display(VP_LOG_TYPE.LOG, 'vp operations for kernel ready...');
+                // read vp functions
+                vpConfig.readKernelFunction();
+            });
+        }
     }
 
     return { initVisualpython: initVisualpython, readConfig: readConfig };

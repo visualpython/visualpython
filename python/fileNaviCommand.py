@@ -148,3 +148,23 @@ def _vp_has_hidden_attribute(filepath):
     except (AttributeError, AssertionError):
         result = False
     return result
+
+def _vp_get_colab_mounted():
+    """
+    check Colab Drive mounted
+    and make .visualpython directory
+    returns: Unmounted / Mounted
+    """
+    if _vp_os.path.exists('/content/drive/MyDrive'):
+        if not _vp_os.path.exists('/content/drive/MyDrive/.visualpython'):
+            _vp_os.makedirs('/content/drive/MyDrive/.visualpython')
+        # Mounted
+        return True
+    # Not Mounted
+    return False
+
+def _vp_get_colab_vpcfg(configFile):
+    if _vp_os.path.exists('/content/drive/MyDrive/.visualpython/' + configFile):
+        with open('/content/drive/MyDrive/.visualpython/' + configFile, 'r') as f:
+            return f.read()
+    return ''

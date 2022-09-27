@@ -16,7 +16,7 @@ define([
     var getSelectedCell = function() {
         if (vpConfig.extensionType === 'notebook') {
             return Jupyter.notebook.get_selected_index();
-        } else if (vpConfig.extensionType === 'chrome') {
+        } else if (vpConfig.extensionType === 'colab') {
             if (colab.global.notebook.focusedCell) {
                 return colab.global.notebook.focusedCell.cellId;
             } else {
@@ -60,22 +60,46 @@ define([
             }
             // move to executed cell
             Jupyter.notebook.scroll_to_cell(Jupyter.notebook.get_selected_index());
-        } else if (vpConfig.extensionType === 'chrome') {
+        } else if (vpConfig.extensionType === 'colab') {
             // CHROME: use colab api to add cell
-            colab.global.notebook.notebookToolbar.toolbarButtons.get("insert-cell-below").click();
-            let cell = colab.global.notebook.focusedCell;
-            cell.setText(command);
+            let cell = null;
+            // get focused index
+            let lastFocusedCellId = '';
+            let lastFocusedCellIdx = 0;
+            try {
+                // get focused cell id
+                lastFocusedCellId = colab.global.notebook.focusedCell? colab.global.notebook.focusedCell.getId() : null;
+                // get focused cell index
+                lastFocusedCellIdx = colab.global.notebook.cells.findIndex(cell => cell.getId() === lastFocusedCellId);
+            } catch (err) { 
+                vpLog.display(VP_LOG_TYPE.ERROR, err);
+            }
             if (exec) {
                 switch (type) {
                     case "markdown":
-                        // trigger esc
-                        var esc = $.Event("keydown", { keyCode: 27 });
-                        // cell.trigger(esc); // CHROME: FIXME:
-                        console.log('this is your cell', cell);
+                        // add text
+                        // create cell to execute
+                        colab.global.notebook.insertCell('text', {after:true, index:lastFocusedCellIdx});
+                        setTimeout(() => {
+                            // cell = colab.global.notebook.focusedCell;
+                            cell = colab.global.notebook.cells[lastFocusedCellIdx + 1];
+                            cell.setText(command);
+                            // colab text cell's focus out is same as running it
+                            cell.setFocused(false);
+                        }, 300);
                         break;
                     case "code":
                     default:
-                        cell.runButton.click();
+                        // add code cell
+                        // colab.global.notebook.notebookToolbar.toolbarButtons.get("insert-cell-below").click();
+                        // create cell to execute
+                        colab.global.notebook.insertCell('code', {after:true, index:lastFocusedCellIdx});
+                        setTimeout(() => {
+                            // cell = colab.global.notebook.focusedCell;
+                            cell = colab.global.notebook.cells[lastFocusedCellIdx + 1];
+                            cell.setText(command);
+                            cell.runButton.click();
+                        }, 300);
                 }
             }
             // move to executed cell
@@ -120,22 +144,43 @@ define([
                             targetCell.execute();
                     }
                 }
-            } else if (vpConfig.extensionType === 'chrome') {
+            } else if (vpConfig.extensionType === 'colab') {
                 // CHROME: use colab api to add cell
-                colab.global.notebook.notebookToolbar.toolbarButtons.get("insert-cell-below").click();
-                let cell = colab.global.notebook.focusedCell;
-                cell.setText(command);
+                let cell = null;
+                // get focused index
+                let lastFocusedCellId = '';
+                let lastFocusedCellIdx = 0;
+                try {
+                    // get focused cell id
+                    lastFocusedCellId = colab.global.notebook.focusedCell? colab.global.notebook.focusedCell.getId() : colab.global.notebook.lastFocusedCellId;
+                    // get focused cell index
+                    lastFocusedCellIdx = colab.global.notebook.cells.findIndex(cell => cell.getId() === lastFocusedCellId);
+                } catch (err) { 
+                    vpLog.display(VP_LOG_TYPE.ERROR, err);
+                }
                 if (exec) {
                     switch (type) {
                         case "markdown":
-                            // trigger esc
-                            var esc = $.Event("keydown", { keyCode: 27 });
-                            // cell.trigger(esc); // CHROME: FIXME:
-                            console.log('this is your cell', cell);
+                            // add text
+                            // create cell to execute
+                            colab.global.notebook.insertCell('text', {after:true, index:lastFocusedCellIdx});
+                            setTimeout(() => {
+                                // cell = colab.global.notebook.focusedCell;
+                                cell = colab.global.notebook.cells[lastFocusedCellIdx + 1];
+                                cell.setText(command);
+                                // colab text cell's focus out is same as running it
+                                cell.setFocused(false);
+                            }, 300);
                             break;
                         case "code":
                         default:
-                            cell.runButton.click();
+                            colab.global.notebook.insertCell('code', {after:true, index:lastFocusedCellIdx});
+                            setTimeout(() => {
+                                // cell = colab.global.notebook.focusedCell;
+                                cell = colab.global.notebook.cells[lastFocusedCellIdx + 1];
+                                cell.setText(command);
+                                cell.runButton.click();
+                            }, 300);
                     }
                 }
             }
@@ -144,9 +189,9 @@ define([
         // move to executed cell
         if (vpConfig.extensionType === 'notebook') {
             Jupyter.notebook.scroll_to_cell(Jupyter.notebook.get_selected_index());
-        } else if (vpConfig.extensionType === 'chrome') {
+        } else if (vpConfig.extensionType === 'colab') {
             // CHROME: TODO:
-            
+
         }
 
         com_util.renderSuccessMessage('Your code is successfully generated.');
@@ -156,7 +201,7 @@ define([
         vpLog.display(VP_LOG_TYPE.DEVELOP, 'enable short cut');
         if (vpConfig.extensionType == 'notebook') {
             Jupyter.notebook.keyboard_manager.enable();
-        } else if (vpConfig.extensionType == 'chrome') {
+        } else if (vpConfig.extensionType == 'colab') {
             ;
         }
     }
@@ -165,7 +210,7 @@ define([
         vpLog.display(VP_LOG_TYPE.DEVELOP, 'disable short cut');
         if (vpConfig.extensionType == 'notebook') {
             Jupyter.notebook.keyboard_manager.disable();
-        } else if (vpConfig.extensionType == 'chrome') {
+        } else if (vpConfig.extensionType == 'colab') {
             ;
         }
     }

@@ -807,7 +807,7 @@ define([
                     } else {
                         var errorContent = '';
                         if (msg.content.ename) {
-                            errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
+                            errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue, msg.content.detail);
                         }
                         $(that.wrapSelector('#chartPreview')).html(errorContent);
                         vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
@@ -816,7 +816,7 @@ define([
                     let { msg } = resultObj;
                     var errorContent = '';
                     if (msg.content.ename) {
-                        errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
+                        errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue, msg.content.detail);
                     }
                     $(that.wrapSelector('#chartPreview')).html(errorContent);
                     vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);

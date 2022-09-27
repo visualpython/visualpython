@@ -21,7 +21,7 @@
     border: 1px solid var(--border-gray-color);
     border-top: 3px solid var(--border-gray-color);
     box-shadow: 1px 1px 2px rgb(0 0 0 / 10%);
-    z-index: 200;
+    z-index: 1200;
     font-family: AppleSDGothicNeo;
     font-size: 14px;
     color: var(--font-primary);
@@ -29,6 +29,10 @@
 /* CHROME: set default box-sizing for popup area */
 .vp-popup-frame * {
     box-sizing: border-box !important;
+}
+.CodeMirror-scroll, .CodeMirror-sizer, .CodeMirror-gutter, .CodeMirror-gutters, .CodeMirror-linenumber {
+    -moz-box-sizing: content-box !important;
+    box-sizing: content-box !important;
 }
 .vp-popup-frame.vp-close {
     width: 200px !important;
@@ -469,6 +473,9 @@
 }
 .vp-popup-body-top-bar-item {
     margin-bottom: 5px;
+    height: 22px;
+    line-height: 22px;
+    display: inline-flex;
 }
 .vp-popup-body-top-bar-item:hover {
     color: var(--font-highlight);
@@ -480,6 +487,7 @@
     height: 22px; /* Height of new image */
     padding-left: 22px; /* Equal to width of new image */
     margin-bottom: 5px;
+    margin-left: 4px;
 }
 .vp-popup-body-top-bar-item[data-type="install"] img {
     background: url(../../img/import.svg) no-repeat;
@@ -504,4 +512,13 @@
 }
 .vp-popup-body-top-bar-item[data-type="package"]:hover img {
     background: url(../../img/setting_activated.svg) no-repeat;
+}
+
+/* CHROME: missing styles under popup frame */
+.vp-popup-frame hr {
+    border: 0;
+    border-top: 1px solid #eeeeee;
+}
+.vp-popup-frame label {
+    display: inline-block;
 }

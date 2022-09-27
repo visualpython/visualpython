@@ -16,9 +16,10 @@ define([
     'text!vp_base/html/m_library/libraryComponent.html!strip',
     'css!vp_base/css/m_library/libraryComponent',
     'vp_base/js/com/component/PopupComponent',
+    'vp_base/js/com/com_Const',
     'vp_base/js/com/com_generator',
     'vp_base/data/m_library/pandasLibrary'
-], function(libHtml, libCss, PopupComponent, com_generator, pandasLibrary) {
+], function(libHtml, libCss, PopupComponent, com_Const, com_generator, pandasLibrary) {
 
     /**
      * LibraryComponent
@@ -123,7 +124,7 @@ define([
         }
 
         templateForBody() {
-            return libHtml;
+            return libHtml.replaceAll('${vp_base}', com_Const.BASE_PATH);
         }
 
         render() {

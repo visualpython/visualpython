@@ -181,9 +181,9 @@ define([
      * AlertModal
      * @param {string} titleStr 
      */
-    var renderAlertModal = function(titleStr) {
+    var renderAlertModal = function(titleStr, detail='') {
         require(['vp_base/js/com/component/AlertModal'], function(AlertModal) {
-            new AlertModal(titleStr);
+            new AlertModal(titleStr, detail=detail);
         });
     }
 
@@ -203,9 +203,9 @@ define([
      * @param {*} contentStr 
      * @returns 
      */
-    var templateForErrorBox = function(titleStr, contentStr='') {
+    var templateForErrorBox = function(titleStr, contentStr='', detailStr='') {
         let errorContent = new com_String();
-        errorContent.appendFormatLine('<div class="{0}">', 'vp-data-error-box');
+        errorContent.appendFormatLine('<div class="{0}" {1}>', 'vp-data-error-box', (detailStr && detailStr.length > 0)?('title="'+detailStr+"'"):'');
         errorContent.appendLine('<i class="fa fa-exclamation-triangle"></i>');
         errorContent.appendFormatLine('<label class="{0}">{1}</label>',
             'vp-data-error-box-title', titleStr);
@@ -228,26 +228,6 @@ define([
      */
     var getIsAPIListRunCode = function() {
         return isAPIListRunCode;
-    }
-
-    /**
-     * kernelExecute
-     */
-    var kernelExecute = function(command, isSilent = false, isStoreHistory = !isSilent, isStopOnError = true) {
-        return new Promise((resolve, reject) => {
-            Jupyter.notebook.kernel.execute(
-                command,
-                {
-                    iopub: {
-                        output: function(msg) {
-                            // msg.content.data['text/plain']
-                            resolve(msg.content.data);
-                        }
-                    }
-                },
-                { silent: isSilent, store_history: isStoreHistory, stop_on_error: isStopOnError }
-            );
-        });
     }
 
      /**
@@ -396,7 +376,6 @@ define([
 
         setIsAPIListRunCode: setIsAPIListRunCode,
         getIsAPIListRunCode: getIsAPIListRunCode,
-        kernelExecute: kernelExecute,
         safeString: safeString,
 
         regex_split: regex_split

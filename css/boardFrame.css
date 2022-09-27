@@ -92,15 +92,11 @@
 .vp-board-loading {
     display: none;
     position: absolute;
-    top: 100px;
+    top: 150px;
     z-index: 10;
     width: 50px;
     height: 50px;
     margin: calc(50% - 20px);
-}
-.vp-board-loading i {
-    font-size: 50px;
-    color: var(--highlight-color);
 }
 
 /* board menu */

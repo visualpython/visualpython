@@ -91,7 +91,7 @@ def _vp_display_dataframe_info(df):
     """
     Get info of dataframe
     """
-    display(df.shape)
+    # display(df.shape)
     _notnull = df.notnull().sum()
     _types = df.dtypes
     _desc = df.describe().T

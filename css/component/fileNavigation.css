@@ -7,7 +7,7 @@
     left: 0;
     width: 100%; 
     height: 100%; 
-    z-index: 300;
+    z-index: 1300;
     background-color: rgba(0,0,0,.4);
 }
 /* CHROME: set default box-sizing for file navigation area */
@@ -252,6 +252,22 @@
     flex-direction: column;
     justify-content: center;
 }
+
+/* CHROME: alternatives for fontawesome */
+#vp_fileNavigation .folder_icon {
+    background-image: url(../../img/folder-regular.svg);
+    padding-left: 20px;
+    background-position: left;
+    background-repeat: no-repeat;
+    background-size: 15px;
+}
+#vp_fileNavigation .file_icon {
+    background-image: url(../../img/file-regular.svg);
+    padding-left: 20px;
+    background-position: left;
+    background-repeat: no-repeat;
+    background-size: 12px;
+}
   
 @font-face {
     font-family: 'octicons';
@@ -259,8 +275,8 @@
     font-weight: normal;
     font-style: normal;
 } 
-[class^="icon-"],
-[class*=" icon-"] {
+#vp_fileNavigation [class^="icon-"],
+#vp_fileNavigation [class*=" icon-"] {
     font-family: 'octicons' !important;
     /* speak: none; */
     font-style: normal;
@@ -271,48 +287,48 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
-.icon-squirrel:before {
+#vp_fileNavigation .icon-squirrel:before {
     content: "\e900";
 }
-.icon-repo:before {
+#vp_fileNavigation .icon-repo:before {
     content: "\e901";
 }
-.icon-git-branch:before {
+#vp_fileNavigation .icon-git-branch:before {
     content: "\e902";
 }
-.icon-folder:before {
+#vp_fileNavigation .icon-folder:before {
     content: "\e903";
     padding-left: 10px;
     padding-right: 10px;
 }
-.icon-file:before {
+#vp_fileNavigation .icon-file:before {
     content: "\e904";
     padding-left: 10px;
     padding-right: 10px;
 }
-.icon-diff:before {
+#vp_fileNavigation .icon-diff:before {
     content: "\e905";
 }
-.icon-tree-down {
+#vp_fileNavigation .icon-tree-down {
     padding: 5px;
 }
-.icon-tree-down:before {
+#vp_fileNavigation .icon-tree-down:before {
     content: "\e907";
 }
-.icon-tree-right {
+#vp_fileNavigation .icon-tree-right {
     padding: 5px;
 }
-.icon-tree-down:hover,
-.icon-tree-right:hover {
+#vp_fileNavigation .icon-tree-down:hover,
+#vp_fileNavigation .icon-tree-right:hover {
     transition: 0.7s;
     cursor: pointer;
     background-color: black;
     color: white;
 }
-.icon-tree-right:before {
+#vp_fileNavigation .icon-tree-right:before {
     content: "\e908";
 }
-.icon-tree:before {
+#vp_fileNavigation .icon-tree:before {
     font-family: 'octicons' !important;
     position: absolute;
     left: 10px;

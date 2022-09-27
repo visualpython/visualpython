@@ -27,8 +27,12 @@
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 300;
+    z-index: 1305;
     background-color: rgba(0,0,0,.4);
+}
+/* CHROME: prevent default box-sizing */
+.vp-dataselector-base * {
+    box-sizing: border-box;
 }
 .vp-dataselector {
     position: absolute;
@@ -38,7 +42,7 @@
     height: 550px;
     background: white;
     border: 1px solid var(--border-gray-color);
-    z-index: 999;
+    z-index: 1300;
     /* font */
     font-family: AppleSDGothicNeo;
     font-size: 14px;

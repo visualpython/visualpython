@@ -465,7 +465,7 @@ hr.vp-extra-menu-line {
 }
 /* jquery auto-complete */
 .ui-autocomplete {
-    z-index: 999;
+    z-index: 1250;
 }
 .vp-vs-box {
     position: relative;
@@ -492,7 +492,7 @@ hr.vp-extra-menu-line {
     border: 0.25px solid #C4C4C4;
     box-sizing: border-box;
     box-shadow: 2px 2px 8px rgb(0 0 0 / 10%);
-    z-index: 10;
+    z-index: 50;
     padding: 5px;
 }
 .vp-vs-item:hover {
@@ -526,4 +526,50 @@ hr.vp-extra-menu-line {
     background: var(--light-gray-color);
     color: var(--font-highlight);
     cursor: pointer;
+}
+
+/* CHROME: override codemirror styles */
+.CodeMirror {
+    line-height: 1.21429em;
+    font-size: 14px;
+    height: auto;
+    background: none;
+}
+.cm-s-ipython span.cm-comment {
+    color: #007979;
+    font-style: italic;
+}
+.cm-s-ipython span.cm-operator {
+    color: #AA22FF;
+    font-weight: bold;
+}
+.cm-s-ipython span.cm-variable {
+    color: #000;
+}
+.cm-s-ipython span.cm-string {
+    color: #BA2121;
+}
+.cm-s-ipython span.cm-number {
+    color: #080;
+}
+.cm-s-ipython span.cm-keyword {
+    color: #008000;
+    font-weight: bold;
+}
+.cm-s-ipython span.cm-def {
+    color: #00f;
+}
+.cm-s-ipython span.cm-builtin {
+    color: #008000;
+}
+
+/* CHROME: hr style for vp */
+#vp_wrapper hr {
+    border: 0;
+    border-top: 1px solid #eeeeee;
+}
+
+/* CHROME: hide background running cell */
+div.vp-background-cell {
+    display: none !important;
 }

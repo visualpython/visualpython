@@ -98,7 +98,12 @@ define([
                         break;
                     case 'restart':
                         // restart vp
-                        vpConfig.readKernelFunction();
+                        vpConfig.readKernelFunction().then(function() {
+                            // successfully restarted
+                            com_util.renderSuccessMessage('Successfully loaded inner functions for Visual Python');
+                        }).catch(function() {
+                            com_util.renderAlertModal('No connected runtime is detected. Please connect to runtime...');
+                        });
                         break;
                     case 'about':
                     case 'vpnote':

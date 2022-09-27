@@ -15,15 +15,16 @@
 define([
     'text!vp_base/html/component/alertModal.html!strip',
     'css!vp_base/css/component/alertModal',
+    'vp_base/js/com/com_Const',
     'vp_base/js/com/component/Component'
-], function(msgHtml, msgCss, Component) {
+], function(msgHtml, msgCss, com_Const, Component) {
 
     /**
      * AlertModal
      */
     class AlertModal extends Component {
-        constructor(title) {
-            super($('body'), { title: title });
+        constructor(title, detail='') {
+            super($('body'), { title: title, detail: detail });
         }
 
         _bindEvent() {
@@ -35,7 +36,7 @@ define([
         }
 
         template() {
-            return msgHtml;
+            return msgHtml.replaceAll('${vp_base}', com_Const.BASE_PATH);
         }
 
         render() {
@@ -43,6 +44,10 @@ define([
 
             // set title
             $(this.wrapSelector('.vp-alertModal-titleStr')).text(this.state.title);
+            // set detail as tooltip
+            if (this.state.detail) {
+                $(this.wrapSelector('.vp-alertModal-titleStr')).attr({ title: this.state.detail });
+            }
         }
 
         remove() {

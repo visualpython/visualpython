@@ -1,9 +1,10 @@
 define([
     'css!vp_base/css/component/instanceEditor',
+    'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
     'vp_base/js/com/component/SuggestInput'
-], function(insCss, com_String, com_util, SuggestInput) {
+], function(insCss, com_Const, com_String, com_util, SuggestInput) {
 
 
     // temporary const

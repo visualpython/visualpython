@@ -524,7 +524,15 @@ define([
             // set body
             let bodyTemplate = this.templateForBody();
             // CHROME: check url keyword and replace it
-            bodyTemplate = bodyTemplate.replaceAll('${vp_base}', com_Const.BASE_PATH);
+            if (bodyTemplate) {
+                if (typeof bodyTemplate === 'string') {
+                    // string replacement
+                    bodyTemplate = bodyTemplate.replaceAll('${vp_base}', com_Const.BASE_PATH);
+                } else {
+                    // object = jquery object
+
+                }
+            }
             this.$pageDom.find('.vp-popup-content').html(bodyTemplate);
             return this.$pageDom;
         }
@@ -773,9 +781,11 @@ define([
 
             let checkModules = this.config.checkModules;
             return new Promise(function(resolve, reject) {
+                // CHROME: TODO: 9: checkmodule works strange...
                 if (checkModules.length > 0) {
                     vpKernel.checkModule(checkModules).then(function(resultObj) {
                         let { result } = resultObj;
+                        vpLog.display(VP_LOG_TYPE.DEVELOP, resultObj);
                         let checkedList = JSON.parse(result);
                         let executeList = [];
                         checkedList && checkedList.forEach((mod, idx) => {
@@ -794,6 +804,7 @@ define([
                 } else {
                     resolve([]);
                 }
+                // resolve([]);
             });
         }
 
@@ -887,9 +898,9 @@ define([
 
         focus() {
             $('.vp-popup-frame').removeClass('vp-focused');
-            $('.vp-popup-frame').css({ 'z-index': 200 });
+            $('.vp-popup-frame').css({ 'z-index': 1200 });
             $(this.wrapSelector()).addClass('vp-focused');
-            $(this.wrapSelector()).css({ 'z-index': 205 }); // move forward
+            $(this.wrapSelector()).css({ 'z-index': 1205 }); // move forward
             // focus on its block
             if (this.taskItem) {
                 this.taskItem.focusItem();

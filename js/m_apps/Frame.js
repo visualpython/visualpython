@@ -1172,43 +1172,48 @@ define([
             // code.append(".value_counts()");
             code.appendFormat('_vp_display_dataframe_info({0})', locObj.toString());
     
-            Jupyter.notebook.kernel.execute(
-                code.toString(),
-                {
-                    iopub: {
-                        output: function(msg) {
-                            if (msg.content.data) {
-                                var htmlText = String(msg.content.data["text/html"]);
-                                var codeText = String(msg.content.data["text/plain"]);
-                                if (htmlText != 'undefined') {
-                                    $(that.wrapSelector('.' + VP_FE_INFO_CONTENT)).replaceWith(function() {
-                                        return that.renderInfoPage(htmlText);
-                                    });
-                                } else if (codeText != 'undefined') {
-                                    // plain text as code
-                                    $(that.wrapSelector('.' + VP_FE_INFO_CONTENT)).replaceWith(function() {
-                                        return that.renderInfoPage(codeText, false);
-                                    });
-                                } else {
-                                    $(that.wrapSelector('.' + VP_FE_INFO_CONTENT)).replaceWith(function() {
-                                        return that.renderInfoPage('');
-                                    });
-                                }
-                            } else {
-                                var errorContent = '';
-                                if (msg.content.ename) {
-                                    errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
-                                }
-                                vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
-                                $(that.wrapSelector('.' + VP_FE_INFO_CONTENT)).replaceWith(function() {
-                                    return that.renderInfoPage(errorContent);
-                                });
-                            }
-                        }
+            // CHROME: TODO: 6: use com_Kernel.execute
+            // Jupyter.notebook.kernel.execute(
+            vpKernel.execute(code.toString()).then(function(resultObj) {
+                let { msg } = resultObj;
+                if (msg.content.data) {
+                    var htmlText = String(msg.content.data["text/html"]);
+                    var codeText = String(msg.content.data["text/plain"]);
+                    if (htmlText != 'undefined') {
+                        $(that.wrapSelector('.' + VP_FE_INFO_CONTENT)).replaceWith(function() {
+                            return that.renderInfoPage(htmlText);
+                        });
+                    } else if (codeText != 'undefined') {
+                        // plain text as code
+                        $(that.wrapSelector('.' + VP_FE_INFO_CONTENT)).replaceWith(function() {
+                            return that.renderInfoPage(codeText, false);
+                        });
+                    } else {
+                        $(that.wrapSelector('.' + VP_FE_INFO_CONTENT)).replaceWith(function() {
+                            return that.renderInfoPage('');
+                        });
                     }
-                },
-                { silent: false, store_history: true, stop_on_error: true }
-            );
+                } else {
+                    var errorContent = '';
+                    if (msg.content.ename) {
+                        errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
+                    }
+                    vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
+                    $(that.wrapSelector('.' + VP_FE_INFO_CONTENT)).replaceWith(function() {
+                        return that.renderInfoPage(errorContent);
+                    });
+                }
+            }).catch(function(resultObj) {
+                let { msg } = resultObj;
+                var errorContent = '';
+                if (msg.content.ename) {
+                    errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
+                }
+                vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
+                $(that.wrapSelector('.' + VP_FE_INFO_CONTENT)).replaceWith(function() {
+                    return that.renderInfoPage(errorContent);
+                });
+            })
         }
 
         getTypeCode(type, content={}) {

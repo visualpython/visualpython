@@ -15,8 +15,9 @@
 define([
     'text!vp_base/html/component/successMessage.html!strip',
     'css!vp_base/css/component/successMessage',
+    'vp_base/js/com/com_Const',
     'vp_base/js/com/component/Component'
-], function(msgHtml, msgCss, Component) {
+], function(msgHtml, msgCss, com_Const, Component) {
 
     /**
      * SuccessMessage
@@ -27,7 +28,7 @@ define([
         }
 
         template() {
-            return msgHtml;
+            return msgHtml.replaceAll('${vp_base}', com_Const.BASE_PATH);
         }
 
         render() {

@@ -13,7 +13,8 @@
     <div class="vp-popup-frame">
         <div class="vp-inner-popup-box" style="display: none; width: 400px; height: 300px;">
             <div class="vp-inner-popup-header">
-                <label class="vp-inner-popup-title">Title</label>
+                <!-- CHROME: title is a handler for draggable, but for some reason label tag's width is not controllable. changed tag: label -> div -->
+                <div class="vp-inner-popup-title">Title</div>
                 <img class="vp-inner-popup-close" src="${vp_base}/img/close_big.svg" title="Close inner popup"/>
             </div>
             <div class="vp-inner-popup-body vp-scrollbar">
@@ -42,9 +43,10 @@
             </div>
         </div>
         <div class="vp-popup-header">
-            <label class="vp-popup-title">
+            <!-- CHROME: title is a handler for draggable, but for some reason label tag's width is not controllable. changed tag: label -> div -->
+            <div class="vp-popup-title">
                 <!-- Title -->
-            </label>
+            </div>
             <img class="vp-popup-toggle" src="${vp_base}/img/minimize.svg" title="Minimize this popup">
             <img class="vp-popup-maximize" src="${vp_base}/img/max_window.svg" title="Maximize this popup">
             <img class="vp-popup-return" src="${vp_base}/img/min_window.svg" title="Return size of this popup">

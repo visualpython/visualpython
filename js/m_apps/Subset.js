@@ -1101,7 +1101,7 @@ define([
                             that.beforeOpen(that);
                         }
                         that.open();
-                        $(that.wrapSelector()).css({ 'z-index': 205 }); // move forward
+                        $(that.wrapSelector()).css({ 'z-index': 1205 }); // move forward
                     }
                 });
 
