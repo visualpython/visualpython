@@ -1,6 +1,6 @@
 <img src="https://i.esdrop.com/d/7o0dj05m8rnz/JNGCMedl18.png" width="45%">
 
-[![PyPI version shields.io](https://img.shields.io/pypi/v/visualpython)](https://pypi.python.org/pypi/jupyterlab-visualpython/)
+[![PyPI version shields.io](https://img.shields.io/pypi/v/jupyterlab-visualpython)](https://pypi.python.org/pypi/jupyterlab-visualpython/)
 ![Python: 3.x](https://img.shields.io/badge/Python-3.x-yellowgreen)
 [![License: GPLv3](https://img.shields.io/badge/License-GPLv3-brightgreen)](https://github.com/visualpython/visualpython/blob/main/LICENSE)
 [![Downloads](https://static.pepy.tech/personalized-badge/visualpython?period=total&units=international_system&left_color=grey&right_color=orange&left_text=Downloads)](https://pepy.tech/project/visualpython)
