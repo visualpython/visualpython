@@ -13,8 +13,8 @@
 // [CLASS] ModelInfo
 //============================================================================
 define([
-    'text!vp_base/html/m_ml/modelInfo.html!strip',
-    'css!vp_base/css/m_ml/modelInfo',
+    '!!text-loader!vp_base/html/m_ml/modelInfo.html', // LAB: text! to text-loader
+    'vp_base/css/m_ml/modelInfo.css', // LAB: css! to css-loader
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_generatorV2',

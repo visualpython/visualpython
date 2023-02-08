@@ -8,6 +8,10 @@
     display: inline-block;
     cursor: pointer;
     margin-left: 5px;
+    /* LAB: img to background-image */
+    background: center / contain no-repeat url(../../img/refresh.svg);
+    width: 18px;
+    height: 19px;
 }
 .vp-rs-df-box label {
     font-weight: bold;

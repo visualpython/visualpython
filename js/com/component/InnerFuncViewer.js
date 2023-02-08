@@ -13,8 +13,8 @@
 // [CLASS] InnerFuncViewer
 //============================================================================
 define([
-    'text!vp_base/html/component/innerFuncViewer.html!strip',
-    'css!vp_base/css/component/innerFuncViewer',
+    '!!text-loader!vp_base/html/component/innerFuncViewer.html', // LAB: text! to text-loader
+    'vp_base/css/component/innerFuncViewer.css', // LAB: css! to css-loader
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
@@ -155,9 +155,11 @@ define([
             item.appendFormatLine('<div class="{0}"></div>', 'vp-if-indicator');
             item.appendFormatLine('<input type="text" class="vp-input {0}" value="{1}" disabled/>', 'vp-if-item-title', title);
             item.appendFormatLine('<div class="{0}">', 'vp-if-item-menu');
-            item.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}">'
+            // LAB: img to url
+            // item.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}">'
+            item.appendFormatLine('<div class="{0} vp-icon-run" data-menu="{1}" title="{2}">'
                                 , 'vp-if-item-menu-item', 'run', 'Run');
-            item.appendFormatLine('<img src="{0}"/>', com_Const.IMAGE_PATH + 'snippets/run.svg');
+            // item.appendFormatLine('<img src="{0}"/>', com_Const.IMAGE_PATH + 'snippets/run.svg');
             item.appendLine('</div>');
             item.appendLine('</div>'); // end of vp-if-item-menu
             item.appendLine('</div>'); // end of vp-if-item-header

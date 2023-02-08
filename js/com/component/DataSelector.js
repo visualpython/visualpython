@@ -9,8 +9,8 @@
  *    Change Date     :
  */
 define([
-    'text!vp_base/html/component/dataSelector.html!strip',
-    'css!vp_base/css/component/dataSelector',
+    '!!text-loader!vp_base/html/component/dataSelector.html', // LAB: text! to text-loader
+    'vp_base/css/component/dataSelector.css', // LAB: css! to css-loader
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
@@ -345,7 +345,10 @@ define([
                     <input type="text" class="vp-ds-target vp-input vp-state ${this.prop.classes}" 
                             id="${this.prop.id}" value="${value}" 
                             placeholder="${this.prop.placeholder}" ${this.prop.required?'required="required"':''}/>
-                    <span class="vp-ds-filter"><img src="${com_Const.IMAGE_PATH}filter.svg"/></span>
+                    <span class="vp-ds-filter">
+                    <!-- LAB: img to url -->
+                    <!-- <img src="${com_Const.IMAGE_PATH}filter.svg"/> -->
+                    </span>
                 </div>
             `;
         }
@@ -365,10 +368,17 @@ define([
                                     </div>
                                 </div>
                                 <div class="vp-cs-select-btn-box">
+                                <!-- 
                                     <button type="button" class="vp-cs-select-add-all-btn" title="Add all items"><img src="${com_Const.IMAGE_PATH}arrow_right_double.svg"></button>
                                     <button type="button" class="vp-cs-select-add-btn" title="Add selected items"><img src="${com_Const.IMAGE_PATH}arrow_right.svg"></button>
                                     <button type="button" class="vp-cs-select-del-btn" title="Remove selected items"><img src="${com_Const.IMAGE_PATH}arrow_left.svg"></button>
-                                    <button type="button" class="vp-cs-select-del-all-btn" title="Remove all items"><img src="${com_Const.IMAGE_PATH}arrow_left_double.svg"></button>
+                                    <button type="button" class="vp-cs-select-del-all-btn" title="Remove all items"><img src="${com_Const.IMAGE_PATH}arrow_left_double.svg"></button> 
+                                -->
+                                <!-- LAB: img to url -->
+                                    <button type="button" class="vp-cs-select-add-all-btn" title="Add all items"><div class="vp-icon-arrow-right-double"></div></button>
+                                    <button type="button" class="vp-cs-select-add-btn vp-icon-arrow-right" title="Add selected items"><div class="vp-icon-arrow-right"></div></button>
+                                    <button type="button" class="vp-cs-select-del-btn vp-icon-arrow-left" title="Remove selected items"><div class="vp-icon-arrow-left"></div></button>
+                                    <button type="button" class="vp-cs-select-del-all-btn vp-icon-arrow-left-double" title="Remove all items"><div class="vp-icon-arrow-left-double"></div></button>
                                 </div>
                                 <div class="vp-cs-select-right">
                                     <div class="vp-cs-select-box right vp-cs-droppable no-selection vp-scrollbar ui-droppable">

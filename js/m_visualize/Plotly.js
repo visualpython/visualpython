@@ -13,8 +13,8 @@
 // [CLASS] Plotly
 //============================================================================
 define([
-    'text!vp_base/html/m_visualize/plotly.html!strip',
-    'css!vp_base/css/m_visualize/plotly',
+    '!!text-loader!vp_base/html/m_visualize/plotly.html', // LAB: text! to text-loader
+    'vp_base/css/m_visualize/plotly.css', // LAB: css! to css-loader
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_generatorV2',
     'vp_base/js/com/com_util',

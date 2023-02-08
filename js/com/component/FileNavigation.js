@@ -13,8 +13,8 @@
 // [CLASS] FileNavigation
 //============================================================================
 define([
-    'text!vp_base/html/component/fileNavigation.html!strip',
-    'css!vp_base/css/component/fileNavigation',
+    '!!text-loader!vp_base/html/component/fileNavigation.html', // LAB: text! to text-loader
+    'vp_base/css/component/fileNavigation.css', // LAB: css! to css-loader
     'vp_base/js/com/component/LoadingSpinner',
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
@@ -201,6 +201,8 @@ define([
                 $(fileNaviBody).find('.fnp-sidebar-menu.notebook').show();
             } else if (vpConfig.extensionType === 'colab') {
                 $(fileNaviBody).find('.fnp-sidebar-menu.colab').show();
+            } else if (vpConfig.extensionType === 'lab') {
+                $(fileNaviBody).find('.fnp-sidebar-menu.lab').show();
             }
             return fileNaviBody;
         }

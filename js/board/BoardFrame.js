@@ -13,8 +13,8 @@
 // [CLASS] BoardFrame
 //============================================================================
 define([
-    'text!../../html/boardFrame.html!strip',
-    'css!../../css/boardFrame',
+    '!!text-loader!../../html/boardFrame.html', // LAB: text! to text-loader
+    '../../css/boardFrame.css', // LAB: css! to css-loader
     '../com/com_Config',
     '../com/com_Const',
     '../com/com_String',
@@ -55,7 +55,12 @@ define([
         _init() {
             // selected block
             this.selectedBlock = null;
-            this.blockList = [];
+            this._blockList = {
+                'default': {
+                    title: '',
+                    blockList: []
+                }
+            }
 
             // state
             this.state = {
@@ -77,6 +82,127 @@ define([
 
             this.headBlocks = ['lgCtrl_if', 'lgCtrl_for', 'lgCtrl_try'];
             this.subBlocks = ['lgCtrl_elif', 'lgCtrl_else', 'lgCtrl_except', 'lgCtrl_finally'];
+        }
+
+        get blockList() {
+            let sessionId = 'default';
+            // LAB: get session id
+            if (vpConfig.extensionType === 'lab') {
+                let panelId = vpKernel.getLabPanelId();
+                if (panelId) {
+                    sessionId = panelId;
+                }
+            }
+            if (sessionId in this._blockList) {
+                return this._blockList[sessionId].blockList;
+            }
+            return [];
+        }
+
+        set blockList(val) {
+            let sessionId = 'default';
+            // LAB: get session id
+            if (vpConfig.extensionType === 'lab') {
+                let panelId = vpKernel.getLabPanelId();
+                if (panelId) {
+                    sessionId = panelId;
+                }
+            }
+            if (sessionId in this._blockList) {
+                this._blockList[sessionId].blockList = val;
+            } else {
+                this._blockList[sessionId] = {
+                    title: '',
+                    blockList: val
+                }
+            }
+            return true;
+        }
+
+        addToBlockList(newVal, position=-1) {
+            let sessionId = 'default';
+            // LAB: get session id
+            if (vpConfig.extensionType === 'lab') {
+                let panelId = vpKernel.getLabPanelId();
+                if (panelId) {
+                    sessionId = panelId;
+                } else {
+                    // No Session
+                    sessionId = null;
+                }
+            }
+            if (sessionId == null) {
+                // No session
+                return false;
+            } else {
+                if (sessionId in this._blockList) {
+                    if (position >= 0) {
+                        this._blockList[sessionId].blockList.splice(position, 0, newVal);
+                    } else {
+                        this._blockList[sessionId].blockList.push(newVal);
+                    }
+                } else {
+                    this._blockList[sessionId] = {
+                        title: '',
+                        blockList: [ newVal ]
+                    };
+                }
+            }
+            return true;
+        }
+
+        removeFromBlockList(removeVal) {
+            let sessionId = 'default';
+            // LAB: get session id
+            if (vpConfig.extensionType === 'lab') {
+                let panelId = vpKernel.getLabPanelId();
+                if (panelId) {
+                    sessionId = panelId;
+                }
+            }
+            if (sessionId in this._blockList) {
+                this._blockList[sessionId].blockList.splice(
+                    this._blockList[sessionId].blockList.indexOf(removeVal), 1
+                );
+            } else {
+                return false;
+            }
+            return true;
+        }
+
+        getTitle() {
+            let sessionId = 'default';
+            // LAB: get session id
+            if (vpConfig.extensionType === 'lab') {
+                let panelId = vpKernel.getLabPanelId();
+                if (panelId) {
+                    sessionId = panelId;
+                }
+            }
+            if (sessionId in this._blockList) {
+                return this._blockList[sessionId].title;
+            } else {
+                return '';
+            }
+        }
+
+        setTitle(newTitle) {
+            let sessionId = 'default';
+            // LAB: get session id
+            if (vpConfig.extensionType === 'lab') {
+                let panelId = vpKernel.getLabPanelId();
+                if (panelId) {
+                    sessionId = panelId;
+                }
+            }
+            if (sessionId in this._blockList) {
+                this._blockList[sessionId].title = newTitle;
+            } else {
+                this._blockList[sessionId] = {
+                    title: newTitle,
+                    blockList: [ ]
+                };
+            }
         }
 
         _bindEvent() {
@@ -140,6 +266,7 @@ define([
             // change of boardTitle
             $(this.wrapSelector('#vp_boardTitle')).on('change', function() {
                 let fileName = $(this).val();
+                that.setTitle(fileName); // LAB: session note title
                 that.tmpState.boardTitle = fileName;
                 that.tmpState.boardPath = null;
             });
@@ -351,6 +478,14 @@ define([
             this._bindSortable();
 
             this.blockMenu = new BlockMenu(this);
+
+            if (vpConfig.extensionType === 'lab') {
+                let that = this;
+                vpLab.shell._currentChanged.connect(function(sender, value) {
+                    // if lab tab changed, reset title and reload board
+                    that.reloadBlockList();
+                });
+            }
         }
 
         /**
@@ -362,7 +497,9 @@ define([
             $('.vp-board-body').html('');
             blockPopupList && blockPopupList.forEach(task => {
                 let block = new Block(this, { task: task });
-                that.blockList.push(block); 
+                // LAB: add session queue to blockList
+                // that.blockList.push(block); 
+                that.addToBlockList(block);
             });
         }
 
@@ -371,6 +508,8 @@ define([
          */
         reloadBlockList() {
             let num = 1;
+            // reset boardframe title
+            $(this.wrapSelector('#vp_boardTitle')).val(this.getTitle());
             // init boardframe body
             $(this.wrapSelector('.vp-board-body')).html('');
             // render block list
@@ -478,13 +617,16 @@ define([
             // clear board before create new note
             this.clearBoard();
 
+            let defaultTitle = 'Untitled';
+
             // set title to Untitled
-            this.tmpState.boardTitle = 'Untitled';
+            this.tmpState.boardTitle = defaultTitle;
             // set path to empty
             this.tmpState.boardPath = null;
 
             // set title
-            $(this.wrapSelector('#vp_boardTitle')).val('Untitled');
+            $(this.wrapSelector('#vp_boardTitle')).val(defaultTitle);
+            this.setTitle(defaultTitle); // LAB: session note title
         }
         openNote() {
             // TODO: check save as
@@ -501,16 +643,11 @@ define([
                     let vpFilePath = filesPath[0].path;
                     let vpFileName = filesPath[0].file;
                     // read file
-                    fetch(vpFilePath).then(function(file) {
-                        if (file.status != 200) {
-                            com_util.renderAlertModal('The file format is not valid. (file: '+file+')');
-                            return;
-                        }
-                
-                        file.text().then(function(data) {
-                            // var parsedData = decodeURIComponent(data);
+                    if (vpConfig.extensionType === 'lab') {
+                        // LAB: read file using python open
+                        vpKernel.readFile(vpFilePath).then(function(resultObj) {
                             try {
-                                var jsonList = JSON.parse(data);
+                                var jsonList = JSON.parse(resultObj.result);
                                 // load blocks
                                 that.jsonToBlock(jsonList);
     
@@ -519,6 +656,7 @@ define([
                 
                                 // show title of board and path
                                 $('#vp_boardTitle').val(saveFileName);
+                                that.setTitle(saveFileName); // LAB: session note title
                                 that.tmpState.boardTitle = saveFileName;
                                 that.tmpState.boardPath = vpFilePath;
     
@@ -526,8 +664,42 @@ define([
                             } catch (ex) {
                                 com_util.renderAlertModal('Not applicable file contents with vp format! (JSON)');
                             }
+                        }).catch(function(err) {
+                            vpLog.display(VP_LOG_TYPE.ERROR, err);
+                        })
+                    } else {
+                        fetch(vpFilePath).then(function(file) {
+                            if (file.status != 200) {
+                                com_util.renderAlertModal('The file format is not valid. (file: '+file+')');
+                                return;
+                            }
+                    
+                            file.text().then(function(data) {
+                                // var parsedData = decodeURIComponent(data);
+                                try {
+                                    var jsonList = JSON.parse(data);
+                                    // load blocks
+                                    that.jsonToBlock(jsonList);
+        
+                                    var indexVp = vpFileName.indexOf('.vp');
+                                    var saveFileName = vpFileName.slice(0,indexVp);
+                    
+                                    // show title of board and path
+                                    $('#vp_boardTitle').val(saveFileName);
+                                    that.setTitle(saveFileName); // LAB: session note title
+                                    that.tmpState.boardTitle = saveFileName;
+                                    that.tmpState.boardPath = vpFilePath;
+        
+                                    com_util.renderSuccessMessage('Successfully opened file. (' + vpFileName + ')');
+                                } catch (ex) {
+                                    com_util.renderAlertModal('Not applicable file contents with vp format! (JSON)');
+                                }
+                            });
+                        }).catch(function(err) {
+                            vpLog.display(VP_LOG_TYPE.ERROR, err);
                         });
-                    });
+                    }
+                    
                 }
             });
             fileNavi.open();
@@ -572,6 +744,7 @@ define([
                     that.tmpState.boardTitle = boardTitle;
                     that.tmpState.boardPath = boardPath;
                     $('#vp_boardTitle').val(boardTitle);
+                    that.setTitle(boardTitle); // LAB: session note title
 
                     if (callback != undefined && typeof callback === 'function') {
                         callback();
@@ -754,11 +927,13 @@ define([
             option.setTaskItem(block);
             if (position < 0) {
                 // add to the end
-                this.blockList.push(block);
+                // this.blockList.push(block);
+                this.addToBlockList(block);
                 position = this.blockList.length;
             } else {
                 // add to specific position
-                this.blockList.splice(position, 0, block);
+                // this.blockList.splice(position, 0, block);
+                this.addToBlockList(block, position);
             }
             return block;
         }
@@ -779,9 +954,10 @@ define([
             groupedBlocks.forEach(block => {
                 // remove block
                 if (blockToRemove.isGroup || blockToRemove.equals(block) || block.depth > blockToRemove.depth) {
-                    const blockIdx = that.blockList.indexOf(block);
+                    // const blockIdx = that.blockList.indexOf(block);
                     block.popup.remove();
-                    that.blockList.splice(blockIdx, 1);
+                    // that.blockList.splice(blockIdx, 1);
+                    that.removeFromBlockList(block);
                 }
             });
             // render block list  
@@ -794,11 +970,19 @@ define([
          * @param {int} endIdx 
          */
         moveBlock(startIdx, endIdx, parentBlock=null) {
-            var movingBlock = this.blockList[startIdx];
+            let sessionId = 'default';
+            // LAB: get session id
+            if (vpConfig.extensionType === 'lab') {
+                let panelId = vpKernel.getLabPanelId();
+                if (panelId) {
+                    sessionId = panelId;
+                }
+            }
+            var movingBlock = this._blockList[sessionId].boardList[startIdx];
             if (movingBlock) {
                 let groupBlocks = this.getGroupedBlocks(movingBlock);
-                this.blockList.splice(startIdx, groupBlocks.length);
-                this.blockList.splice(endIdx, 0, ...groupBlocks);
+                this._blockList[sessionId].boardList.splice(startIdx, groupBlocks.length);
+                this._blockList[sessionId].boardList.splice(endIdx, 0, ...groupBlocks);
                 // move tag
                 if (parentBlock != null) {
                     // set this movingBlock as child of parentBlock

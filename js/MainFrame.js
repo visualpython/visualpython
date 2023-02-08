@@ -13,8 +13,8 @@
 // Load main frame
 //============================================================================
 define([
-    'text!vp_base/html/mainFrame.html!strip',
-    'css!vp_base/css/mainFrame',
+    '!!text-loader!vp_base/html/mainFrame.html', // LAB: text! to text-loader
+    'vp_base/css/mainFrame.css', // LAB: css! to css-loader
 
     // load module
     './com/com_Config',
@@ -103,25 +103,27 @@ define([
             // get visualpython minimum width
             // resizable setting
             // $('#vp_wrapper').resizable('disable');
-            $('#vp_wrapper').resizable({
-                // alsoResize: '#vp_menuFrame',
-                helper: 'vp-wrapper-resizer',
-                handles: 'w',
-                // resizeHeight: false,
-                minWidth: this.minWidth,
-                // maxWidth: 0,
-                start: function(event, ui) {
-                    
-                },
-                resize: function(event, ui) {
-                    // resize #vp_wrapper with currentWidth and resize jupyter area
-                    var currentWidth = ui.size.width;
-                    that._resizeVp(currentWidth);
-                },
-                stop: function(event, ui) {
-                    $('#vp_wrapper').css({'left': '', 'height': ''});
-                }
-            });  
+            if (vpConfig.extensionType !== 'lab') {
+                $('#vp_wrapper').resizable({
+                    // alsoResize: '#vp_menuFrame',
+                    helper: 'vp-wrapper-resizer',
+                    handles: 'w',
+                    // resizeHeight: false,
+                    minWidth: this.minWidth,
+                    // maxWidth: 0,
+                    start: function(event, ui) {
+                        
+                    },
+                    resize: function(event, ui) {
+                        // resize #vp_wrapper with currentWidth and resize jupyter area
+                        var currentWidth = ui.size.width;
+                        that._resizeVp(currentWidth);
+                    },
+                    stop: function(event, ui) {
+                        $('#vp_wrapper').css({'left': '', 'height': ''});
+                    }
+                });  
+            }
         }
 
         _resizeWindow() {
@@ -149,6 +151,8 @@ define([
                     top: colabHeaderHeight + 'px'
                 });
                 this._resizeNotebook(vpWidth);
+            } else if (vpConfig.extensionType === 'lab') {
+                // LAB: do nothing
             }
         }
 
@@ -220,14 +224,14 @@ define([
         //========================================================================
         // External call function
         //========================================================================
-        /**
-         * Load main frame
-         */
-        loadMainFrame() {
-            // load vp_wrapper into jupyter base
+        renderMainFrame() {
             this.$pageDom = $(vpHtml);
-            $(this.$pageDom).prependTo(document.body);
-
+            if (vpConfig.extensionType === 'lab') {
+                this.$pageDom.addClass('lab');
+            }
+            return this.$pageDom;
+        }
+        afterAttach() {
             // set vp width using metadata
             let metadata = vpConfig.getMetadata();
             let { vp_position, vp_note_display, vp_menu_width, vp_note_width } = metadata;
@@ -255,6 +259,18 @@ define([
             // bind event
             this._bindEvent();
             this._bindResizable();
+        }
+        /**
+         * Load main frame
+         */
+        loadMainFrame() {
+            // load vp_wrapper into jupyter base
+            this.renderMainFrame();
+            
+            // prepend
+            $(this.$pageDom).prependTo(document.body);
+
+            this.afterAttach();
 
             return this.$pageDom;
         }
@@ -297,8 +313,10 @@ define([
         openVp() {
             $('#vp_wrapper').show();
 
-            let vpWidth = $('#vp_wrapper')[0].clientWidth;
-            this._resizeNotebook(vpWidth);
+            if ($('#vp_wrapper').length > 0) {
+                let vpWidth = $('#vp_wrapper')[0].clientWidth;
+                this._resizeNotebook(vpWidth);
+            }
 
             vpLog.display(VP_LOG_TYPE.DEVELOP, 'vp opened');
         }
@@ -318,7 +336,29 @@ define([
                 this.boardFrame.hide();
                 newVpWidth = menuWidth + MENU_BOARD_SPACING;
                 $('#vp_wrapper').width(newVpWidth);
-                $('#vp_wrapper').resizable({ minWidth: MENU_MIN_WIDTH + MENU_BOARD_SPACING });
+                if (vpConfig.extensionType === 'lab') {
+                    // LAB: set parent width and position, min-width
+                    let target = $('#vp_wrapper').parent();
+                    let prevWidth = target[0].getBoundingClientRect().width;
+                    let prevLeft = $(target).position().left;
+                    let widthDiff = newVpWidth - vpWidth;
+                    $(target).css({
+                        width: prevWidth + widthDiff,
+                        left: prevLeft - widthDiff
+                    });
+                    $('#vp_wrapper').attr('style', `min-width: ${MENU_MIN_WIDTH + MENU_BOARD_SPACING}px !important`);
+                    if (vpLab.shell.rightCollapsed == false) {
+                        vpLab.shell.collapseRight();
+                        vpLab.shell.expandRight();
+                    }
+                    let relativeSizes = vpLab.shell._hsplitPanel.layout.relativeSizes();
+                    let absoluteSizes = vpLab.shell._hsplitPanel.layout.absoluteSizes();
+                    let newSize = absoluteSizes[1] - widthDiff;
+                    let totalWidth = absoluteSizes.reduce((x, a) => x + a, 0);
+                    vpLab.shell._hsplitPanel.layout.setRelativeSizes([relativeSizes[0], newSize/totalWidth, newVpWidth/totalWidth]);
+                } else {
+                    $('#vp_wrapper').resizable({ minWidth: MENU_MIN_WIDTH + MENU_BOARD_SPACING });
+                }
                 this.menuFrame._unbindResizable();
                 
             } else {
@@ -326,7 +366,29 @@ define([
                 this.boardFrame.show();
                 newVpWidth = vpWidth + BOARD_MIN_WIDTH + MENU_BOARD_SPACING;
                 $('#vp_wrapper').width(newVpWidth);
-                $('#vp_wrapper').resizable({ minWidth: VP_MIN_WIDTH });
+                if (vpConfig.extensionType === 'lab') {
+                    // LAB: set parent width and position, min-width
+                    let target = $('#vp_wrapper').parent();
+                    let prevWidth = target[0].getBoundingClientRect().width;
+                    let prevLeft = $(target).position().left;
+                    let widthDiff = newVpWidth - vpWidth;
+                    $(target).css({
+                        width: prevWidth + widthDiff,
+                        left: prevLeft - widthDiff
+                    });
+                    $('#vp_wrapper').attr('style', `min-width: ${VP_MIN_WIDTH}px !important`);
+                    if (vpLab.shell.rightCollapsed == false) {
+                        vpLab.shell.collapseRight();
+                        vpLab.shell.expandRight();
+                    }
+                    let relativeSizes = vpLab.shell._hsplitPanel.layout.relativeSizes();
+                    let absoluteSizes = vpLab.shell._hsplitPanel.layout.absoluteSizes();
+                    let newSize = absoluteSizes[1] - widthDiff;
+                    let totalWidth = absoluteSizes.reduce((x, a) => x + a, 0);
+                    vpLab.shell._hsplitPanel.layout.setRelativeSizes([relativeSizes[0], newSize/totalWidth, newVpWidth/totalWidth]);
+                } else {
+                    $('#vp_wrapper').resizable({ minWidth: VP_MIN_WIDTH });
+                }
                 this.menuFrame._bindResizable();
             }
             // save current page info
@@ -336,7 +398,6 @@ define([
                 vp_menu_width: menuWidth
             });
 
-            // $('#vp_wrapper').trigger('resize');
             this._resizeVp(newVpWidth);
         }
 
@@ -414,13 +475,15 @@ define([
                 // loading bar enable
                 this.boardFrame.showLoadingBar();
                 // create components
-                require(loadMenuList, function() {
+                // LAB: use require
+                if (vpConfig.extensionType === 'lab') {
                     let parentBlock = null;
                     let prevBlock = null;
                     loadStateList.forEach(obj => {
                         let { blockType, menuId, menuState, menuConfig, argIdx, position, afterAction } = obj;
                         // get OptionComponent Object
-                        let OptionComponent = arguments[argIdx];
+                        // LAB: relative path needed
+                        let OptionComponent = require('./' + menuConfig.file);
                         if (OptionComponent) {
                             let taskState = menuState.taskState;
                             let blockState = menuState.blockState;
@@ -478,11 +541,80 @@ define([
                     }
                     that.boardFrame.hideLoadingBar();
                     that.boardFrame.reloadBlockList();
-                }, function (err) {
-                    vpLog.display(VP_LOG_TYPE.ERROR, 'Error on creating popup (' + err.message + ')');
-                    that.boardFrame.hideLoadingBar();
-                });
+                } else {
+                    // LAB: require -> requirejs changed module to require to avoid error : Cannot statically analyse 'require(…, …)'
+                    requirejs(loadMenuList, function() {
+                        let parentBlock = null;
+                        let prevBlock = null;
+                        loadStateList.forEach(obj => {
+                            let { blockType, menuId, menuState, menuConfig, argIdx, position, afterAction } = obj;
+                            // get OptionComponent Object
+                            let OptionComponent = arguments[argIdx];
+                            if (OptionComponent) {
+                                let taskState = menuState.taskState;
+                                let blockState = menuState.blockState;
+                                let tmpState = menuState.tmpState;
+                                let state = {
+                                    ...taskState,
+                                    config: menuConfig
+                                };
+                                // create popup instance
+                                let popup = new OptionComponent(state);
+                                let newBlock = null;
+                                if (blockType === 'block') {
+                                    // add to block list
+                                    newBlock = that.addBlock(popup, position, blockState);
+                                    if (parentBlock == null) {
+                                        parentBlock = newBlock; // set parent block of created block
+                                    } else {
+                                        if (!(blockState && blockState.depth != undefined) && prevBlock != null && !newBlock.isGroup) {
+                                            let newDepth = prevBlock.getChildDepth();
+                                            if (tmpState && tmpState.relativeDepth) {
+                                                newDepth = parentBlock.getChildDepth() + tmpState.relativeDepth;
+                                            }
+                                            newBlock.setDepth(newDepth);
+                                        }
+                                    }
+                                    vpLog.display(VP_LOG_TYPE.DEVELOP, 'new block ' + position + ' with depth ' + newBlock.depth);
+                                    prevBlock = newBlock;
+                                } else {
+                                    // add to task list
+                                    that.addTask(popup);
+                                }
+                                // after action
+                                if (afterAction && afterAction != '') {
+                                    switch (afterAction) {
+                                        case 'run':
+                                            popup.run();
+                                            break;
+                                        case 'add':
+                                            popup.run(false);
+                                            break;
+                                        case 'open':
+                                            that.openPopup(popup);
+                                            break;
+                                    }
+                                }
+                            } else {
+                                vpLog.display(VP_LOG_TYPE.ERROR, 'Not implemented or available menu. (menu id: '+menuConfig.id+')');
+                            }
+                        });
+                        // focus created popup
+                        if (parentBlock && parentBlock.isGroup) {
+                            parentBlock.focusItem();
+                            // scroll to new block
+                            that.boardFrame.scrollToBlock(parentBlock);
+                        }
+                        that.boardFrame.hideLoadingBar();
+                        that.boardFrame.reloadBlockList();
+                    }, function (err) {
+                        vpLog.display(VP_LOG_TYPE.ERROR, 'Error on creating popup (' + err.message + ')');
+                        that.boardFrame.hideLoadingBar();
+                    });
+                }
+                
             } catch(err) {
+                vpLog.display(VP_LOG_TYPE.ERROR, 'Error on creating popup (' + err.message + ')');
                 that.boardFrame.hideLoadingBar();
             }
         }

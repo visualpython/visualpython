@@ -23,19 +23,22 @@
 /* Logo */
 @font-face {
 	font-family: Foglihten;
-	src: url(../fonts/Foglihten-068.otf) format("opentype");
+    /* LAB: truetype to font-opentype */
+	src: url(../fonts/Foglihten-068.otf) format("font-opentype");
 	font-style: normal;
 	font-weight: 500;
 }
 /* Headlines, Body, Componenets */
 @font-face {
 	font-family: AppleSDGothicNeo;
-	src: url(../fonts/AppleSDGothicNeoM.ttf) format("truetype");
+    /* LAB: truetype to font-truetype */
+	src: url(../fonts/AppleSDGothicNeoM.ttf) format("font-truetype");
 }
 /* Codes */
 @font-face {
 	font-family: Consola;
-	src: url(../fonts/consola.ttf) format("truetype");
+    /* LAB: truetype to font-truetype */
+	src: url(../fonts/consola.ttf) format("font-truetype");
 }
 /* font style */
 .vp-primary {
@@ -83,6 +86,86 @@ input.vp-input {
 }
 input.vp-input::placeholder {
 	color: var(--gray-color);
+}
+
+/* image icons */
+/* LAB: img to background-image */
+.vp-icon-refresh {
+    background: top / contain no-repeat url(../img/refresh.svg);
+    height: 100%;
+} 
+.vp-icon-arrow-right-double {
+    background: center / contain no-repeat url(../img/arrow_right_double.svg);
+    width: 15px;
+    height: 15px;
+}
+.vp-icon-arrow-left-double {
+    background: center / contain no-repeat url(../img/arrow_left_double.svg);
+    width: 15px;
+    height: 15px;
+}
+.vp-icon-arrow-right {
+    background: center / contain no-repeat url(../img/arrow_right.svg);
+    width: 15px;
+    height: 15px;
+}
+.vp-icon-arrow-left {
+    background: center / contain no-repeat url(../img/arrow_left.svg);
+    width: 15px;
+    height: 15px;
+}
+.vp-icon-arrow-short-up {
+    background: center / contain no-repeat url(../img/arrow_short_up.svg);
+    width: 15px;
+    height: 15px;
+}
+.vp-icon-run {
+    background: center / contain no-repeat url(../img/snippets/run.svg);
+    width: 16px;
+    height: 16px;
+}
+.vp-icon-save {
+    background: center / contain no-repeat url(../img/snippets/save_orange.svg);
+    width: 16px;
+    height: 16px;
+}
+.vp-icon-save.vp-disable {
+    background: center / contain no-repeat url(../img/snippets/save_gray.svg);
+}
+.vp-icon-export {
+    background: center / contain no-repeat url(../img/snippets/export.svg);
+    width: 16px;
+    height: 16px;
+}
+.vp-icon-duplicate {
+    background: center / contain no-repeat url(../img/snippets/duplicate.svg);
+    width: 16px;
+    height: 16px;
+}
+.vp-icon-delete {
+    background: center / contain no-repeat url(../img/delete.svg);
+    width: 16px;
+    height: 16px;
+}
+.vp-icon-plus {
+    background: center / contain no-repeat url(../img/plus.svg);
+    width: 16px;
+    height: 16px;
+}
+.vp-icon-filter {
+    background: center / contain no-repeat url(../img/filter.svg);
+    width: 16px;
+    height: 16px;
+}
+.vp-icon-close-big {
+    background: top / contain no-repeat url(../img/close_big.svg);
+    width: 23px;
+    height: 23px;
+}
+.vp-icon-close-small {
+    background: center / contain no-repeat url(../img/close_small.svg);
+    width: 15px;
+    height: 15px;
 }
 
 .vp-file-browser-button {
@@ -165,7 +248,8 @@ button.vp-button {
     line-height: 30px;
     vertical-align: middle;
     font-family: 'AppleSDGothicNeo';
-    font-size: 14px;
+    /* font-size: 14px; */
+    font-size: 13px; /* LAB: font-size */
     text-align: center;
     color: #696969;
     cursor: pointer;
@@ -529,7 +613,8 @@ hr.vp-extra-menu-line {
 }
 
 /* CHROME: override codemirror styles */
-.CodeMirror {
+#vp_wrapper .CodeMirror,
+.vp-popup-frame .CodeMirror {
     line-height: 1.21429em;
     font-size: 14px;
     height: auto;

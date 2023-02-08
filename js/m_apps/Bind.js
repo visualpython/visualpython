@@ -13,8 +13,8 @@
 // [CLASS] Bind
 //============================================================================
 define([
-    'text!vp_base/html/m_apps/bind.html!strip',
-    'css!vp_base/css/m_apps/bind',
+    '!!text-loader!vp_base/html/m_apps/bind.html', // LAB: text! to text-loader
+    'vp_base/css/m_apps/bind.css', // LAB: css! to css-loader
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_String',
     'vp_base/js/com/component/PopupComponent',

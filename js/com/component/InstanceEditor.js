@@ -1,5 +1,5 @@
 define([
-    'css!vp_base/css/component/instanceEditor',
+    'vp_base/css/component/instanceEditor.css', // LAB: css! to css-loader
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
@@ -105,7 +105,8 @@ define([
             // create variable input
             tag.appendFormatLine('<div class="{0}">', VP_CREATE_VAR_BOX);
             tag.appendFormatLine('<input class="vp-input {0}" type="text" placeholder="Create new variable" />', VP_CREATE_VAR);
-            tag.appendFormatLine('<div class="{0}"><img src="{1}"/></div>', VP_CREATE_VAR_BTN, com_Const.IMAGE_PATH + 'plus.svg');
+            // tag.appendFormatLine('<div class="{0}"><img src="{1}"/></div>', VP_CREATE_VAR_BTN, com_Const.IMAGE_PATH + 'plus.svg');
+            tag.appendFormatLine('<div class="{0} vp-icon-plus"></div>', VP_CREATE_VAR_BTN);
             tag.appendLine('</div>');
 
             tag.appendLine('</div>'); // VP_INS_SELECT_CONTAINER

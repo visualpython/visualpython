@@ -57,6 +57,12 @@
     color: #C4C4C4;
     right: 10px;
     padding-top: 4px;
+
+    /* LAB: img to background-image */
+    background: center / contain no-repeat url(../../img/search.svg);
+    width: 20px;
+    height: 20px;
+    top: 5px;
 }
 /* Empty List */
 .vp-if-table {

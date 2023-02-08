@@ -13,7 +13,7 @@
 // [CLASS] Data split
 //============================================================================
 define([
-    'text!vp_base/html/m_ml/dataSplit.html!strip',
+    '!!text-loader!vp_base/html/m_ml/dataSplit.html', // LAB: text! to text-loader
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_interface',
     'vp_base/js/com/com_Const',

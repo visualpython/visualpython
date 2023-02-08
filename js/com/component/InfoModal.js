@@ -13,8 +13,8 @@
 // [CLASS] InfoModal
 //============================================================================
 define([
-    'text!vp_base/html/component/infoModal.html!strip',
-    'css!vp_base/css/component/infoModal',
+    '!!text-loader!vp_base/html/component/infoModal.html', // LAB: text! to text-loader
+    'vp_base/css/component/infoModal.css', // LAB: css! to css-loader
     'vp_base/js/com/com_Const',
     'vp_base/js/com/component/Component'
 ], function(msgHtml, msgCss, com_Const, Component) {

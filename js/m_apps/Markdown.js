@@ -13,7 +13,7 @@
 // [CLASS] Markdown
 //============================================================================
 define([
-    'css!vp_base/css/m_apps/markdown',
+    'vp_base/css/m_apps/markdown.css', // LAB: css! to css-loader
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
     'vp_base/js/com/component/PopupComponent',
@@ -39,8 +39,6 @@ define([
     class Markdown extends PopupComponent {
         _init() {
             super._init();
-
-            console.log('Markdown - ', arguments);
 
             /** Write codes executed before rendering */
             this.config.executeMode = 'markdown';
@@ -203,24 +201,46 @@ define([
             math = text_and_math[1];
 
             // CHROME: TODO: 4: marked is not loaded, before fix it comment it
-            // var renderer = new marked.Renderer();
+            if (vpConfig.extensionType === 'notebook') {
+                var marked = require('marked');
+                var renderer = new marked.Renderer();
 
-            // get block
-            // let block = this.getTaskType() == 'block'? this.taskItem: null;
+                // get block
+                let block = this.getTaskType() == 'block'? this.taskItem: null;
 
-            // let that = this;
-            // // render preview
-            // marked(text, { renderer: renderer }, function (err, html) {
-            //     html = mathjaxutils.replace_math(html, math);
-            //     let preview = `<div>${html}</div>`;
-            //     if (html == '') {
-            //         preview = '';
-            //     }
-            //     that.state.preview = preview;
-            //     $(that.wrapSelector("#vp_markdownPreview")).html(preview);
+                let that = this;
+                // render preview
+                marked(text, { renderer: renderer }, function (err, html) {
+                    html = mathjaxutils.replace_math(html, math);
+                    let preview = `<div>${html}</div>`;
+                    if (html == '') {
+                        preview = '';
+                    }
+                    that.state.preview = preview;
+                    $(that.wrapSelector("#vp_markdownPreview")).html(preview);
 
-            //     MathJax.Hub.Queue(["Typeset", MathJax.Hub, "vp_markdownPreview"]);
-            // });
+                    MathJax.Hub.Queue(["Typeset", MathJax.Hub, "vp_markdownPreview"]);
+                });
+            } else if (vpConfig.extensionType === 'lab') {
+                var marked = require('marked');
+                var renderer = new marked.Renderer();
+
+                // get block
+                let block = this.getTaskType() == 'block'? this.taskItem: null;
+
+                let that = this;
+                // render preview
+                let html = marked.parse(text);
+                html = mathjaxutils.replace_math(html, math);
+                let preview = `<iframe id="vp_markdownIFrame" style="width:100%;height:270px;border:0px;"></iframe>`;
+                if (html == '') {
+                    preview = '';
+                }
+                that.state.preview = preview;
+                $(that.wrapSelector("#vp_markdownPreview")).html(preview);
+                $(that.wrapSelector('#vp_markdownIFrame')).contents().find('body').html(html);
+            }
+            
         }
 
         getPreview() {

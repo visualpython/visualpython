@@ -33,6 +33,12 @@
 .vp-infoModal-icon {
     font-size: 26px;
     color: var(--font-primary);
+    /* LAB: img to background-image */
+    background-image: url(../../img/info_circle.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 24px;
+    height: 24px;
 }
 .vp-infoModal-titleStr {
     color: var(--font-primary);

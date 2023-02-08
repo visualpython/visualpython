@@ -215,7 +215,6 @@ define([], function() {
                             // check if there is visible inner popup
                             else if ($('.vp-popup-frame > .vp-inner-popup-box:visible').length > 0) {
                                 // close inner popup on esc
-                                console.log('close inner popup from this component', that.mainFrame.focusedPage);
                                 that.mainFrame.focusedPage && that.mainFrame.focusedPage.closeInnerPopup();
                             } else {
                                 // close popup on esc

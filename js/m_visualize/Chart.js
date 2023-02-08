@@ -13,8 +13,8 @@
 // [CLASS] Chart
 //============================================================================
 define([
-    'text!vp_base/html/m_visualize/chart.html!strip',
-    'css!vp_base/css/m_visualize/chart',
+    '!!text-loader!vp_base/html/m_visualize/chart.html', // LAB: text! to text-loader
+    'vp_base/css/m_visualize/chart.css', // LAB: css! to css-loader
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_util',

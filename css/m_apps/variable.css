@@ -36,6 +36,9 @@
 }
 #vp_varRefresh{
     margin-left: 7px;
+    /* LAB: img to background-image */
+    background: top / contain no-repeat url(../../img/refresh.svg);
+    height: 100%;
 }
 #vp_varRefresh:hover {
     cursor: pointer;

@@ -1,14 +1,14 @@
 <img src="https://i.esdrop.com/d/7o0dj05m8rnz/JNGCMedl18.png" width="45%">
 
-[![PyPI version shields.io](https://img.shields.io/pypi/v/visualpython)](https://pypi.python.org/pypi/visualpython/)
+[![PyPI version shields.io](https://img.shields.io/pypi/v/jupyterlab-visualpython)](https://pypi.python.org/pypi/jupyterlab-visualpython/)
 ![Python: 3.x](https://img.shields.io/badge/Python-3.x-yellowgreen)
 [![License: GPLv3](https://img.shields.io/badge/License-GPLv3-brightgreen)](https://github.com/visualpython/visualpython/blob/main/LICENSE)
-[![Code of Conduct: Contributor Covenant](https://img.shields.io/badge/Code%20of%20Conduct-Contributor%20Covenant-pink)](https://github.com/visualpython/visualpython/blob/main/CODE_OF_CONDUCT.md)
 [![Downloads](https://static.pepy.tech/personalized-badge/visualpython?period=total&units=international_system&left_color=grey&right_color=orange&left_text=Downloads)](https://pepy.tech/project/visualpython)
 [![Issues: ](https://img.shields.io/github/issues/visualpython/visualpython?color=%23FF6347)](https://github.com/visualpython/visualpython/issues)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/visualpython/visualpython-binder/HEAD?labpath=index.ipynb)
 
 ## Introduction
-Visual Python is a GUI-based Python code generator, developed on the **Jupyter Notebook** and **Google Colab** as an extension. <br>
+Visual Python is a GUI-based Python code generator, developed on the **Jupyter Lab**, **Jupyter Notebook** and **Google Colab** as an extension. <br>
 Visual Python is an open source project started for students who struggle with coding during Python classes for data science.
 
 <br>
@@ -20,6 +20,25 @@ Try Visual Python if you would like to: <br>
 
 <br>
 <img src="https://github.com/visualpython/visualpython/blob/main/img/Visual%20Python_2.2.8.gif?raw=true" width="95%">
+
+## Getting Started with Jupyter Lab
+
+### 1. Requirements
+
+Visual Python is an extension to Jupyter Lab, so you must have Jupyter Lab installed already.<br>
+- Python version 3.x
+- Jupyter lab environment
+
+### 2. How to Install
+
+**1)  Install package from**
+```
+pip install jupyterlab-visualpython
+```
+
+**2)  Activate Visual Python on Jupyter Lab**
+
+Click orange square button on the right side of the Jupyter Lab. 
 
 ## Getting Started with Jupyter Notebook
 

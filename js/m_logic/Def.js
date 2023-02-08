@@ -110,7 +110,9 @@ define([
             page.appendLine('<td class="w30 vp-center">=</td>');
             page.appendFormatLine('<td><input type="text" class="vp-input w100 {0}" value="{1}" placeholder="{2}"/></td>'
                                 , 'v2-value', value, 'Value');
-            page.appendFormatLine('<td class="{0} vp-cursor"><img src="{1}close_big.svg"/></td>', 'v2-del', com_Const.IMAGE_PATH);
+            // LAB: img to url
+            // page.appendFormatLine('<td class="{0} vp-cursor"><img src="{1}close_big.svg"/></td>', 'v2-del', com_Const.IMAGE_PATH);
+            page.appendFormatLine('<td class="{0} vp-cursor"><div class="vp-icon-close-big"></div></td>', 'v2-del');
             page.appendLine('</tr>');
             return page.toString();
         }

@@ -349,7 +349,9 @@ define([
                 'vp-vs-input', that._additionalClass, that._compID == "" ? "" : com_util.formatString('id="{0}"', that._compID), that._placeholder, that._value, attributes);
             if (this._showFilterbox) {
                 // filter icon
-                sbTagString.appendFormatLine('<span class="vp-vs-blur-btn {0}"><img src="{1}"/></span>', 'vp-vs-filter', com_Const.IMAGE_PATH + 'filter.svg');
+                // LAB: img to url
+                // sbTagString.appendFormatLine('<span class="vp-vs-blur-btn {0}"><img src="{1}"/></span>', 'vp-vs-filter', com_Const.IMAGE_PATH + 'filter.svg');
+                sbTagString.appendFormatLine('<span class="vp-vs-blur-btn {0} {1}"></span>', 'vp-vs-filter', 'vp-icon-filter');
                 // filter box
                 sbTagString.appendFormatLine('<div class="vp-vs-blur-btn vp-vs-blur {0}">', 'vp-vs-filter-box');
                 sbTagString.appendLine('<div class="vp-grid-box">');

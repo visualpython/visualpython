@@ -153,8 +153,11 @@ define([
                 (this.useColumn == true && defaultType == 'DataFrame'?'':'style="display: none;"'));
 
             // reload
-            tag.appendFormatLine('<span class="{0} vp-cursor" title="{1}"><img src="{2}"></span>',
-                                VP_VS_REFRESH, 'Refresh variables', com_Const.IMAGE_PATH + 'refresh.svg');
+            // LAB: img to url
+            // tag.appendFormatLine('<span class="{0} vp-cursor" title="{1}"><img src="{2}"></span>',
+            //                     VP_VS_REFRESH, 'Refresh variables', com_Const.IMAGE_PATH + 'refresh.svg');
+            tag.appendFormatLine('<span class="{0} vp-cursor vp-icon-refresh" title="{1}"></span>',
+                                VP_VS_REFRESH, 'Refresh variables');
 
             tag.appendLine('</div>'); // VP_VS_BOX
             return tag.toString();

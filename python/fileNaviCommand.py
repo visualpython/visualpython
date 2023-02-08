@@ -168,3 +168,50 @@ def _vp_get_colab_vpcfg(configFile):
         with open('/content/drive/MyDrive/.visualpython/' + configFile, 'r') as f:
             return f.read()
     return ''
+
+def _vp_get_lab_vpcfg(configFile):
+    if _vp_os.name == 'nt':
+        # windows
+        _user_path = _vp_get_userprofile_path()
+    else:
+        # linux
+        _user_path = _vp_os.path.expanduser('~')
+    _vpcfg_path = _vp_os.path.join(_user_path, '.visualpython', configFile)
+    if _vp_os.path.exists(_vpcfg_path):
+        with open(_vpcfg_path, 'r') as f:
+            return f.read()
+    return ''
+
+def _vp_get_lab_vpcfg_path():
+    if _vp_os.name == 'nt':
+        # windows
+        _user_path = _vp_get_userprofile_path()
+    else:
+        # linux
+        _user_path = _vp_os.path.expanduser('~')
+    if _vp_os.path.exists(_user_path):
+        _vpcfg_path = _vp_os.path.join(_user_path, '.visualpython')
+        # check .visualpython folder
+        if not _vp_os.path.exists(_vpcfg_path):
+            _vp_os.makedirs(_vpcfg_path)
+        return _vpcfg_path
+    return ''
+
+def _vp_set_lab_vpcfg(configFile, content):
+    if _vp_os.name == 'nt':
+        # windows
+        _user_path = _vp_get_userprofile_path()
+    else:
+        # linux
+        _user_path = _vp_os.path.expanduser('~')
+    _vpcfg_path = _vp_os.path.join(_user_path, '.visualpython')
+    _vp_os.makedirs(_vpcfg_path, exist_ok=True)
+    with open(_vp_os.path.join(_vpcfg_path, configFile), "w") as f:
+        f.write(content)
+    return True
+
+def _vp_read_file(filePath):
+    if _vp_os.path.exists(filePath):
+        with open(filePath, 'r') as f:
+            return f.read()
+    return ''

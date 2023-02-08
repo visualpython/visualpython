@@ -15,12 +15,12 @@ define([
     './com_Const', 
     './com_util', 
     './com_interface',
-    'text!vp_base/python/userCommand.py',
-    'text!vp_base/python/printCommand.py',
-    'text!vp_base/python/fileNaviCommand.py',
-    'text!vp_base/python/pandasCommand.py',
-    'text!vp_base/python/variableCommand.py',
-    'text!vp_base/python/visualizationCommand.py'
+    '!!text-loader!vp_base/python/userCommand.py', // LAB: text! to text-loader
+    '!!text-loader!vp_base/python/printCommand.py', // LAB: text! to text-loader
+    '!!text-loader!vp_base/python/fileNaviCommand.py', // LAB: text! to text-loader
+    '!!text-loader!vp_base/python/pandasCommand.py', // LAB: text! to text-loader
+    '!!text-loader!vp_base/python/variableCommand.py', // LAB: text! to text-loader
+    '!!text-loader!vp_base/python/visualizationCommand.py' // LAB: text! to text-loader
 ], function(com_Const, com_util, com_interface, 
             userCommandFile, printCommand, fileNaviCommand, pandasCommand, variableCommand, visualizationCommand) {
 	'use strict';
@@ -56,7 +56,7 @@ define([
             this.parentSelector = 'body';
             if (extensionType === 'notebook') {
                 this.parentSelector = '#site';
-            } else if (extensionType === 'colab') {
+            } else if (extensionType === 'colab' || extensionType === 'lab') {
                 // this.parentSelector = '.notebook-horizontal';
                 this.parentSelector = 'body';
             }
@@ -377,6 +377,47 @@ define([
             });
         }
 
+        /**
+         * LAB: Read from lab
+         * @param {*} configKey config key to read
+         */
+        _readFromLab(configKey='vpudf') {
+            return new Promise(function(resolve, reject) {
+                // mounted
+                // read USER_PATH/.visualpython
+                vpKernel.getLabConfig(configKey).then(function(resultObj) {
+                    let { result } = resultObj;
+                    try {
+                        if (result && result.trim() != '') {
+                            let parsedResult = JSON.parse(result);
+                            resolve(parsedResult);
+                        } else {
+                            resolve({});
+                        }
+                    } catch (err) {
+                        reject(err);
+                    }
+                }).catch(function(err) {
+                    reject(err);
+                })
+            });
+        }
+
+        /**
+         * LAB: Write to lab
+         * @param {*} data data to write
+         */
+        _writeToLab(data={}, configKey='vpudf') {
+            return new Promise(function(resolve, reject) {
+                // write to USER_PATH/.visualpython
+                vpKernel.setLabConfig(JSON.stringify(data), configKey).then(function(result) {
+                    resolve(result);
+                }).catch(function(err) {
+                    reject(err);
+                });
+            });
+        }
+
         loadData(configKey = 'vpudf') {
             let that = this;
             return new Promise(function(resolve, reject) {
@@ -400,6 +441,13 @@ define([
                     }).catch(function() {
                         // not mounted
                         reject('Colab Drive is not mounted!');
+                    })
+                } else if (that.extensionType === 'lab') {
+                    // CHROME: edited to use .visualpython files
+                    that._readFromLab('', configKey).then(function(result) {
+                        resolve(result);
+                    }).catch(function(err) {
+                        reject(err);
                     })
                 }
             });
@@ -456,6 +504,26 @@ define([
                     }).catch(function() {
                         // not mounted
                         reject('Colab Drive is not mounted!');
+                    })
+                } else if (that.extensionType === 'lab') {
+                    // LAB: use local .visualpython files
+                    that._readFromLab(configKey).then(function(result) {
+                        let data = result;
+                        if (data == undefined || data == {}) {
+                            resolve(data);
+                            return;
+                        }
+                        if (dataKey == '') {
+                            resolve(data);
+                            return;
+                        }
+                        if (Object.keys(data).length > 0) {
+                            resolve(data[dataKey]);
+                            return;
+                        }
+                        reject('No data available.');
+                    }).catch(function(err) {
+                        reject(err);
                     })
                 }
             });
@@ -515,6 +583,25 @@ define([
                             reject();
                         });
                     });
+                } else if (that.extensionType === 'lab') {
+                    // LAB: use .visualpython files
+                    that.getData('', configKey).then(function(data) {
+                        let newDataObj = {};
+                        if (data && typeof data === 'object') {
+                            newDataObj = {
+                                ...data
+                            };
+                        }
+                        newDataObj = {
+                            ...newDataObj,
+                            ...dataObj
+                        }
+                        that._writeToLab(newDataObj, configKey).then(function() {
+                            resolve();
+                        }).catch(function() {
+                            reject();
+                        });
+                    });
                 }
             });
         }
@@ -534,6 +621,19 @@ define([
                         let dataObj = data;
                         delete dataObj[key];
                         that._writeToColab(dataObj, configKey).then(function() {
+                            resolve(true);
+                        }).catch(function() {
+                            reject(false);
+                        });
+                    }).catch(function(err) {
+                        reject(false);
+                    })
+                } else if (that.extensionType === 'lab') {
+                    // LAB: use .visualpython files
+                    that.getData('', configKey).then(function(data) {
+                        let dataObj = data;
+                        delete dataObj[key];
+                        that._writeToLab(dataObj, configKey).then(function() {
                             resolve(true);
                         }).catch(function() {
                             reject(false);
@@ -580,7 +680,7 @@ define([
                     }
                     return metadata[dataKey];
                 }
-            }
+            } 
             return {};
         }
 
@@ -728,7 +828,7 @@ define([
                                         com_interface.insertCell('code', '!pip install visualpython --upgrade');
                                         com_interface.insertCell('code', '!visualpy install');
                                     } else if (that.extensionType === 'colab') {
-                                        // CHROME: TODO: update chrome extension
+                                        // CHROME: update chrome extension
                                         let info = [
                                             '## Visual Python Upgrade',
                                             'NOTE: ',
@@ -737,6 +837,16 @@ define([
                                             '- Save VP Note before refreshing the page.'
                                         ];
                                         com_interface.insertCell('markdown', info.join('\n'));
+                                    } else if (that.extensionType === 'lab') {
+                                        // LAB: update lab extension
+                                        let info = [
+                                            '## Visual Python Upgrade',
+                                            'NOTE: ',
+                                            '- Refresh your web browser to start a new version.',
+                                            '- Save VP Note before refreshing the page.'
+                                        ];
+                                        com_interface.insertCell('markdown', info.join('\n'));
+                                        com_interface.insertCell('code', '!pip install jupyterlab-visualpython --upgrade');
                                     }
 
                                     // update version_timestamp

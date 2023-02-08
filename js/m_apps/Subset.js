@@ -13,8 +13,8 @@
 // [CLASS] Subset
 //============================================================================
 define([
-    'text!vp_base/html/m_apps/subset.html!strip',
-    'css!vp_base/css/m_apps/subset',
+    '!!text-loader!vp_base/html/m_apps/subset.html', // LAB: text! to text-loader
+    'vp_base/css/m_apps/subset.css', // LAB: css! to css-loader
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
@@ -255,12 +255,21 @@ define([
 
             // row select - buttons
             tag.appendFormatLine('<div class="{0}">', VP_DS_SELECT_BTN_BOX);
-            tag.appendFormatLine('<button type="button" class="{0} {1}" title="{2}"><img src="{3}"/></button>',
-                VP_DS_SELECT_ADD_ALL_BTN, 'select-row', 'Add all items', com_Const.IMAGE_PATH + 'arrow_right_double.svg');
-            tag.appendFormatLine('<button type="button" class="{0} {1}"><img src="{2}"/></button>', VP_DS_SELECT_ADD_BTN, 'select-row', com_Const.IMAGE_PATH + 'arrow_right.svg');
-            tag.appendFormatLine('<button type="button" class="{0} {1}"><img src="{2}"/></button>', VP_DS_SELECT_DEL_BTN, 'select-row', com_Const.IMAGE_PATH + 'arrow_left.svg');
-            tag.appendFormatLine('<button type="button" class="{0} {1}" title="{2}"><img src="{3}"/></button>',
-                VP_DS_SELECT_DEL_ALL_BTN, 'select-row', 'Remove all items', com_Const.IMAGE_PATH + 'arrow_left_double.svg');
+            // LAB: img to url
+            // tag.appendFormatLine('<button type="button" class="{0} {1}" title="{2}"><img src="{3}"/></button>',
+            //     VP_DS_SELECT_ADD_ALL_BTN, 'select-row', 'Add all items', com_Const.IMAGE_PATH + 'arrow_right_double.svg');
+            // tag.appendFormatLine('<button type="button" class="{0} {1}"><img src="{2}"/></button>', VP_DS_SELECT_ADD_BTN, 'select-row', com_Const.IMAGE_PATH + 'arrow_right.svg');
+            // tag.appendFormatLine('<button type="button" class="{0} {1}"><img src="{2}"/></button>', VP_DS_SELECT_DEL_BTN, 'select-row', com_Const.IMAGE_PATH + 'arrow_left.svg');
+            // tag.appendFormatLine('<button type="button" class="{0} {1}" title="{2}"><img src="{3}"/></button>',
+            // VP_DS_SELECT_DEL_ALL_BTN, 'select-row', 'Remove all items', com_Const.IMAGE_PATH + 'arrow_left_double.svg');
+            tag.appendFormatLine('<button type="button" class="{0} {1}" title="{2}"><div class="vp-icon-arrow-right-double"></div></button>',
+                VP_DS_SELECT_ADD_ALL_BTN, 'select-row', 'Add all items');
+            tag.appendFormatLine('<button type="button" class="{0} {1}"><div class="vp-icon-arrow-right"></div></button>',
+                VP_DS_SELECT_ADD_BTN, 'select-row');
+            tag.appendFormatLine('<button type="button" class="{0} {1}"><div class="vp-icon-arrow-left"></div></button>',
+                VP_DS_SELECT_DEL_BTN, 'select-row');
+            tag.appendFormatLine('<button type="button" class="{0} {1}" title="{2}"><div class="vp-icon-arrow-left-double"></div></button>',
+                VP_DS_SELECT_DEL_ALL_BTN, 'select-row', 'Remove all items');
             tag.appendLine('</div>'); // VP_DS_SELECT_BTNS
 
             // row select - right
@@ -439,12 +448,21 @@ define([
 
             // col select - buttons
             tag.appendFormatLine('<div class="{0}">', VP_DS_SELECT_BTN_BOX);
-            tag.appendFormatLine('<button type="button" class="{0} {1}" title="{2}"><img src="{3}"/></button>',
-                VP_DS_SELECT_ADD_ALL_BTN, 'select-col', 'Add all items', com_Const.IMAGE_PATH + 'arrow_right_double.svg');
-            tag.appendFormatLine('<button type="button" class="{0} {1}"><img src="{2}"/></button>', VP_DS_SELECT_ADD_BTN, 'select-col', com_Const.IMAGE_PATH + 'arrow_right.svg');
-            tag.appendFormatLine('<button type="button" class="{0} {1}"><img src="{2}"/></button>', VP_DS_SELECT_DEL_BTN, 'select-col', com_Const.IMAGE_PATH + 'arrow_left.svg');
-            tag.appendFormatLine('<button type="button" class="{0} {1}" title="{2}"><img src="{3}"/></button>',
-                VP_DS_SELECT_DEL_ALL_BTN, 'select-col', 'Remove all items', com_Const.IMAGE_PATH + 'arrow_left_double.svg');
+            // LAB: img to url
+            // tag.appendFormatLine('<button type="button" class="{0} {1}" title="{2}"><img src="{3}"/></button>',
+            //     VP_DS_SELECT_ADD_ALL_BTN, 'select-col', 'Add all items', com_Const.IMAGE_PATH + 'arrow_right_double.svg');
+            // tag.appendFormatLine('<button type="button" class="{0} {1}"><img src="{2}"/></button>', VP_DS_SELECT_ADD_BTN, 'select-col', com_Const.IMAGE_PATH + 'arrow_right.svg');
+            // tag.appendFormatLine('<button type="button" class="{0} {1}"><img src="{2}"/></button>', VP_DS_SELECT_DEL_BTN, 'select-col', com_Const.IMAGE_PATH + 'arrow_left.svg');
+            // tag.appendFormatLine('<button type="button" class="{0} {1}" title="{2}"><img src="{3}"/></button>',
+            //     VP_DS_SELECT_DEL_ALL_BTN, 'select-col', 'Remove all items', com_Const.IMAGE_PATH + 'arrow_left_double.svg');
+            tag.appendFormatLine('<button type="button" class="{0} {1}" title="{2}"><div class="vp-icon-arrow-right-double"></div></button>',
+                VP_DS_SELECT_ADD_ALL_BTN, 'select-row', 'Add all items');
+            tag.appendFormatLine('<button type="button" class="{0} {1}"><div class="vp-icon-arrow-right"></div></button>',
+                VP_DS_SELECT_ADD_BTN, 'select-row');
+            tag.appendFormatLine('<button type="button" class="{0} {1}"><div class="vp-icon-arrow-left"></div></button>',
+                VP_DS_SELECT_DEL_BTN, 'select-row');
+            tag.appendFormatLine('<button type="button" class="{0} {1}" title="{2}"><div class="vp-icon-arrow-left-double"></div></button>',
+                VP_DS_SELECT_DEL_ALL_BTN, 'select-row', 'Remove all items');
             tag.appendLine('</div>'); // VP_DS_SELECT_BTNS
 
             // col select - right

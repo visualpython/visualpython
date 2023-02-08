@@ -15,7 +15,9 @@
             <div class="vp-inner-popup-header">
                 <!-- CHROME: title is a handler for draggable, but for some reason label tag's width is not controllable. changed tag: label -> div -->
                 <div class="vp-inner-popup-title">Title</div>
-                <img class="vp-inner-popup-close" src="${vp_base}/img/close_big.svg" title="Close inner popup"/>
+                <!-- LAB: img to url -->
+                <!-- <img class="vp-inner-popup-close" src="${vp_base}/img/close_big.svg" title="Close inner popup"/> -->
+                <div class="vp-inner-popup-close" title="Close inner popup"></div>
             </div>
             <div class="vp-inner-popup-body vp-scrollbar">
                 <!-- Inner popup body -->
@@ -30,7 +32,9 @@
         <div class="vp-variable-popup-box" style="display: none; width: 400px; height: 300px;">
             <div class="vp-variable-popup-header">
                 <label class="vp-variable-popup-title">Title</label>
-                <img class="vp-variable-popup-close" src="${vp_base}/img/close_big.svg" title="Close inner popup"/>
+                <!-- LAB: img to url -->
+                <!-- <img class="vp-variable-popup-close" src="${vp_base}/img/close_big.svg" title="Close inner popup"/> -->
+                <div class="vp-variable-popup-close" title="Close inner popup"></div>
             </div>
             <div class="vp-variable-popup-body vp-scrollbar">
                 <!-- Variable popup body -->
@@ -47,24 +51,35 @@
             <div class="vp-popup-title">
                 <!-- Title -->
             </div>
-            <img class="vp-popup-toggle" src="${vp_base}/img/minimize.svg" title="Minimize this popup">
+            <!-- LAB: img to url -->
+            <!-- <img class="vp-popup-toggle" src="${vp_base}/img/minimize.svg" title="Minimize this popup">
             <img class="vp-popup-maximize" src="${vp_base}/img/max_window.svg" title="Maximize this popup">
             <img class="vp-popup-return" src="${vp_base}/img/min_window.svg" title="Return size of this popup">
-            <img class="vp-popup-close" src="${vp_base}/img/close_big.svg" title="Close popup"/>
+            <img class="vp-popup-close" src="${vp_base}/img/close_big.svg" title="Close popup"/> -->
+            <div class="vp-popup-toggle" title="Minimize this popup"></div>
+            <div class="vp-popup-maximize" title="Maximize this popup"></div>
+            <div class="vp-popup-return" title="Return size of this popup"></div>
+            <div class="vp-popup-close" title="Close popup"></div>
         </div>
         <div class="vp-popup-body vp-scrollbar">
             <div class="vp-popup-body-top-bar vp-italic vp-gray-text vp-no-selection vp-cursor">
                 <span id="popupInstall" class="vp-popup-body-top-bar-item" data-type="install">
                     Install Package
-                    <img src="${vp_base}/img/import.svg"/>
+                    <!-- LAB: img to url -->
+                    <!-- <img src="${vp_base}/img/import.svg"/> -->
+                    <div class="vp-popup-body-top-bar-install"></div>
                 </span>
                 <span id="popupImport" class="vp-popup-body-top-bar-item" data-type="import">
                     Import Library
-                    <img src="${vp_base}/img/import.svg"/>
+                    <!-- LAB: img to url -->
+                    <!-- <img src="${vp_base}/img/import.svg"/> -->
+                    <div class="vp-popup-body-top-bar-import"></div>
                 </span>
                 <span id="popupPackage" class="vp-popup-body-top-bar-item" data-type="package">
                     Package Manager
-                    <img src="${vp_base}/img/setting.svg"/>
+                    <!-- LAB: img to url -->
+                    <!-- <img src="${vp_base}/img/setting.svg"/> -->
+                    <div class="vp-popup-body-top-bar-package"></div>
                 </span>
             </div>
             <!-- Body -->
@@ -89,7 +104,11 @@
 
                 <div class="vp-popup-runadd-box">
                     <button type="button" class="vp-button activated vp-popup-button" data-type="run" title="Save to block & Run cell">Run</button>
-                    <button type="button" class="vp-button activated vp-popup-button" data-type="show-detail"><img src="${vp_base}/img/arrow_short_up.svg"/></button>
+                    <button type="button" class="vp-button activated vp-popup-button" data-type="show-detail">
+                        <!-- LAB: img to url -->
+                        <!-- <img src="${vp_base}/img/arrow_short_up.svg"/> -->
+                        <div class="vp-icon-arrow-short-up"></div>
+                    </button>
                     <div class="vp-popup-run-detailbox vp-cursor vp-close-on-blur">
                         <div class="vp-popup-detail-button" data-type="apply" title="Save to block">Save to block</div>
                         <div class="vp-popup-detail-button" data-type="add" title="Save to block & Add cell">Code to cell</div>

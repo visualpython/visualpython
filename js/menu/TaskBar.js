@@ -32,10 +32,6 @@ define([
 
         _bindEvent() {
             let that = this;
-            // TEST:
-            $(this.wrapSelector()).on('click', function() {
-                vpLog.display(VP_LOG_TYPE.DEVELOP, that.taskList);
-            });
 
             // Mousewheel horizontal scrolling event
             $(this.wrapSelector()).on('mousewheel', function(evt) {

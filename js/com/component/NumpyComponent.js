@@ -13,8 +13,8 @@
 // [CLASS] NumpyComponent
 //============================================================================
 define([
-    'text!vp_base/html/m_library/numpyComponent.html!strip',
-    'css!vp_base/css/m_library/numpyComponent',
+    '!!text-loader!vp_base/html/m_library/numpyComponent.html', // LAB: text! to text-loader
+    'vp_base/css/m_library/numpyComponent.css', // LAB: css! to css-loader
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/com_generatorV2',
     'vp_base/data/m_library/numpyLibrary',

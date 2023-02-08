@@ -13,8 +13,8 @@
 // [CLASS] FitPredict
 //============================================================================
 define([
-    'text!vp_base/html/m_ml/fitPredict.html!strip',
-    'css!vp_base/css/m_ml/fitPredict',
+    '!!text-loader!vp_base/html/m_ml/fitPredict.html', // LAB: text! to text-loader
+    'vp_base/css/m_ml/fitPredict.css', // LAB: css! to css-loader
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_generatorV2',

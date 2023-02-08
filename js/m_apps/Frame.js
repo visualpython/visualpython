@@ -13,8 +13,8 @@
 // [CLASS] Frame
 //============================================================================
 define([
-    'text!vp_base/html/m_apps/frame.html!strip',
-    'css!vp_base/css/m_apps/frame',
+    '!!text-loader!vp_base/html/m_apps/frame.html', // LAB: text! to text-loader
+    'vp_base/css/m_apps/frame.css', // LAB: css! to css-loader
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
@@ -839,7 +839,9 @@ define([
             content.appendFormatLine('<input type="text" class="{0}" placeholder="{1}"/>', 'vp-inner-popup-replace' + index, 'Replace');
             content.appendFormatLine('<label><input type="checkbox" class="{0}" checked/><span>{1}</span></label>', 'vp-inner-popup-replace-istext' + index, 'Text');
             content.appendLine('</td>');
-            content.appendFormatLine('<td><div class="{0} {1}"><img src="{2}"/></div></td>', 'vp-inner-popup-delete', 'vp-cursor', com_Const.IMAGE_PATH + 'close_small.svg');
+            // LAB: img to url
+            // content.appendFormatLine('<td><div class="{0} {1}"><img src="{2}"/></div></td>', 'vp-inner-popup-delete', 'vp-cursor', com_Const.IMAGE_PATH + 'close_small.svg');
+            content.appendFormatLine('<td><div class="{0} {1} {2}"></div></td>', 'vp-inner-popup-delete', 'vp-cursor', 'vp-icon-close-small');
             content.appendLine('</tr>');
             return content.toString();
         }
@@ -1423,7 +1425,9 @@ define([
                                                             , colCode, FRAME_AXIS.COLUMN, col.type, VP_FE_TABLE_COLUMN, colClass, col.label);
                                 });
                                 // add column
-                                table.appendFormatLine('<th class="{0}"><img src="{1}"/></th>', VP_FE_ADD_COLUMN, com_Const.IMAGE_PATH + 'plus.svg');
+                                // LAB: img to url
+                                // table.appendFormatLine('<th class="{0}"><img src="{1}"/></th>', VP_FE_ADD_COLUMN, com_Const.IMAGE_PATH + 'plus.svg');
+                                table.appendFormatLine('<th class="{0} {1}"></th>', VP_FE_ADD_COLUMN, 'vp-icon-plus');
                 
                                 table.appendLine('</tr>');
                                 table.appendLine('</thead>');
@@ -1454,7 +1458,9 @@ define([
                                 });
                                 // add row
                                 table.appendLine('<tr>');
-                                table.appendFormatLine('<th class="{0}"><img src="{1}"/></th>', VP_FE_ADD_ROW, com_Const.IMAGE_PATH + 'plus.svg');
+                                // LAB: img to url
+                                // table.appendFormatLine('<th class="{0}"><img src="{1}"/></th>', VP_FE_ADD_ROW, com_Const.IMAGE_PATH + 'plus.svg');
+                                table.appendFormatLine('<th class="{0} {1}"></th>', VP_FE_ADD_ROW, 'vp-icon-plus');
                                 table.appendLine('</tr>');
                                 table.appendLine('</tbody>');
                                 $(that.wrapSelector('.' + VP_FE_TABLE)).replaceWith(function() {

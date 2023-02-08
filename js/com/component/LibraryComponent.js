@@ -13,8 +13,8 @@
 // [CLASS] LibraryComponent
 //============================================================================
 define([
-    'text!vp_base/html/m_library/libraryComponent.html!strip',
-    'css!vp_base/css/m_library/libraryComponent',
+    '!!text-loader!vp_base/html/m_library/libraryComponent.html', // LAB: text! to text-loader
+    'vp_base/css/m_library/libraryComponent.css', // LAB: css! to css-loader
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_generator',

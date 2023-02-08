@@ -13,8 +13,8 @@
 // [CLASS] Snippets
 //============================================================================
 define([
-    'text!vp_base/html/m_apps/snippets.html!strip',
-    'css!vp_base/css/m_apps/snippets',
+    '!!text-loader!vp_base/html/m_apps/snippets.html', // LAB: text! to text-loader
+    'vp_base/css/m_apps/snippets.css', // LAB: css! to css-loader
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
@@ -384,6 +384,7 @@ define([
             $(this.wrapSelector('.vp-sn-item-title')).on('blur', function(evt) {
                 var prevTitle = $(this).closest('.vp-sn-item').data('title');
                 var inputTitle = $(this).val();
+                var $thisItem = $(this);
 
                 if (prevTitle == inputTitle) {
                     ;
@@ -410,8 +411,8 @@ define([
                             vpConfig.setData(newSnippet);
 
                             // update title & codemirror
-                            $(this).closest('.vp-sn-item-title').val(newTitle);
-                            $(this).closest('.vp-sn-item').data('title', newTitle);
+                            $thisItem.closest('.vp-sn-item-title').val(newTitle);
+                            $thisItem.closest('.vp-sn-item').data('title', newTitle);
                             // update codemirror
                             that.codemirrorList[newTitle] = that.codemirrorList[prevTitle];
                             delete that.codemirrorList[prevTitle];
@@ -472,20 +473,44 @@ define([
                 } else if (menu == 'delete') {
                     let loadingSpinner = new LoadingSpinner($(that.wrapSelector('.vp-sn-table')));
                     // remove key
-                    vpConfig.removeData(title).then(function() {
-                        delete that.codemirrorList[title];
-                        // remove item
-                        $(that.wrapSelector('.vp-sn-item[data-title="' + title + '"]')).remove();
+                    if (vpConfig.extensionType === 'lab') {
+                        vpConfig.getData('').then(function(data) {
+                            let dataObj = data;
+                            // remove data
+                            delete dataObj[title];
+                            vpConfig._writeToLab(dataObj).then(function() {
+                                delete that.codemirrorList[title];
+                                // remove item
+                                $(that.wrapSelector('.vp-sn-item[data-title="' + title + '"]')).remove();
+        
+                                // vp-multilang for success message
+                                com_util.renderSuccessMessage('Successfully removed!');
+                            }).catch(function(err) {
+                                com_util.renderAlertModal('Failed to remove data...', err);
+                                // load again
+                                that.loadUdfList();
+                            }).finally(function() {
+                                loadingSpinner.remove();
+                            });
+                        }).catch(function(err) {
 
-                        // vp-multilang for success message
-                        com_util.renderSuccessMessage('Successfully removed!');
-                    }).catch(function(err) {
-                        com_util.renderAlertModal('Failed to remove data...', err);
-                        // load again
-                        that.loadUdfList();
-                    }).finally(function() {
-                        loadingSpinner.remove();
-                    });
+                        })
+                    } else {
+                        vpConfig.removeData(title).then(function() {
+                            delete that.codemirrorList[title];
+                            // remove item
+                            $(that.wrapSelector('.vp-sn-item[data-title="' + title + '"]')).remove();
+    
+                            // vp-multilang for success message
+                            com_util.renderSuccessMessage('Successfully removed!');
+                        }).catch(function(err) {
+                            com_util.renderAlertModal('Failed to remove data...', err);
+                            // load again
+                            that.loadUdfList();
+                        }).finally(function() {
+                            loadingSpinner.remove();
+                        });
+                    }
                     
                 } else if (menu == 'save') {
                     if (!$(this).hasClass('vp-disable')) {
@@ -562,17 +587,20 @@ define([
                 item.appendFormatLine('<i class="{0}"></i>', 'fa fa-circle vp-sn-imported-item');
             }
             item.appendFormatLine('<div class="{0}">', 'vp-sn-item-menu');
+            // LAB: img to url
             item.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}">'
-                                , 'vp-sn-item-menu-item', 'run', 'Run');
-            item.appendFormatLine('<img src="{0}"/>', com_Const.IMAGE_PATH + 'snippets/run.svg');
+                                , 'vp-sn-item-menu-item vp-icon-run', 'run', 'Run');
+            // item.appendFormatLine('<img src="{0}"/>', com_Const.IMAGE_PATH + 'snippets/run.svg');
             item.appendLine('</div>');
+            // LAB: img to url
             item.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}">'
-                                , 'vp-sn-item-menu-item', 'duplicate', 'Duplicate');
-            item.appendFormatLine('<img src="{0}"/>', com_Const.IMAGE_PATH + 'snippets/duplicate.svg');
+                                , 'vp-sn-item-menu-item vp-icon-duplicate', 'duplicate', 'Duplicate');
+            // item.appendFormatLine('<img src="{0}"/>', com_Const.IMAGE_PATH + 'snippets/duplicate.svg');
             item.appendLine('</div>');
+            // LAB: img to url
             item.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}">'
-                                , 'vp-sn-item-menu-item', 'delete', 'Delete');
-            item.appendFormatLine('<img src="{0}"/>', com_Const.IMAGE_PATH + 'delete.svg');
+                                , 'vp-sn-item-menu-item vp-icon-delete', 'delete', 'Delete');
+            // item.appendFormatLine('<img src="{0}"/>', com_Const.IMAGE_PATH + 'delete.svg');
             item.appendLine('</div>'); 
             item.appendLine('</div>'); // end of vp-sn-item-menu
             // export mode checkbox
@@ -580,8 +608,9 @@ define([
             item.appendLine('</div>'); // end of vp-sn-item-header
             item.appendFormatLine('<div class="{0}">', 'vp-sn-item-code');
             item.appendFormatLine('<textarea>{0}</textarea>', code);
-            item.appendFormatLine('<div class="{0} {1} vp-disable" data-menu="{2}" title="{3}">', 'vp-sn-item-menu-item', 'vp-sn-save', 'save', 'Save changes');
-            item.appendFormatLine('<img src="{0}"/>', com_Const.IMAGE_PATH + 'snippets/save_orange.svg');
+            // LAB: img to url
+            item.appendFormatLine('<div class="{0} {1} vp-icon-save vp-disable" data-menu="{2}" title="{3}">', 'vp-sn-item-menu-item', 'vp-sn-save', 'save', 'Save changes');
+            // item.appendFormatLine('<img src="{0}"/>', com_Const.IMAGE_PATH + 'snippets/save_orange.svg');
             item.appendLine('</div>'); // vp-sn-save
             item.appendLine('</div>'); // end of vp-sn-item-code
             item.appendLine('</div>'); // end of vp-sn-item

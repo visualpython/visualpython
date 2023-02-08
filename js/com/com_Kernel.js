@@ -21,7 +21,8 @@ define([
      */
     class Kernel {
         /** constructor */
-        constructor() {
+        constructor(app=null) {
+            this.app = app; // LAB: app needed for kernel
             this.data = [
                 { varName: 'df1', varType: 'DataFrame' },
                 { varName: 'df2', varType: 'DataFrame' },
@@ -40,6 +41,9 @@ define([
                 },
                 'vpudf': {
 
+                },
+                'vpimport': {
+
                 }
             }
         }
@@ -57,6 +61,7 @@ define([
         // Executing command api
         //====================================================================
         execute(command, isSilent = false) {
+            let that = this;
             return new Promise(function(resolve, reject) {
                 if (vpConfig.extensionType === 'notebook') {
                     Jupyter.notebook.kernel.execute(
@@ -234,9 +239,263 @@ define([
                     cell.runButton.click();
                     // set last focused cell
                     colab.global.notebook.focusCell(lastFocusedCellId);
+                } else if (vpConfig.extensionType === 'lab') {
+                    // LAB: 
+                    // { code, stdin, stop_on_error, silent, ... } 
+                    var codeObj = {
+                        code: command,
+                        silent: isSilent,
+                        stop_on_error: true
+                    } 
+                    var kernelConnection = that.getLabKernel();
+                    if (kernelConnection) {
+                        var future = kernelConnection.requestExecute(codeObj);
+                        future.onIOPub  = (msg) => {
+                            const msgType = msg.header.msg_type;
+                            switch(msgType) {
+                                case 'status':
+                                    // if(!isExpectingOutput){
+                                    //     if(msg.content.execution_state === 'idle'){
+                                    //         resolve();
+                                    //     }
+                                    // }
+                                    return;
+                                case 'execute_input':
+                                    // var content = msg.content;
+                                    // resolve({
+                                    //     result: content, 
+                                    //     type: type, 
+                                    //     msg: {
+                                    //         content: {
+                                    //             name: type,
+                                    //             data: {
+                                    //                 [type]: content
+                                    //             }
+                                    //         }
+                                    //     }
+                                    // });	
+                                    return;
+                                case 'stream':
+                                    var content = msg.content;
+                                    var type = content.name;
+                                    switch(type){
+                                        case 'stdout':
+                                            var message = content.text;    	    		    	    
+                                            resolve({
+                                                result: message, 
+                                                type: type, 
+                                                msg: {
+                                                    content: {
+                                                        name: type,
+                                                        data: {
+                                                            [type]: message
+                                                        }
+                                                    }
+                                                }
+                                            });				
+                                            break;
+                                        case 'stderr':
+                                            var message = content.text;    	    		    	    				    
+                                            reject({status: 'stderr', ename: 'stderr', evalue: message});
+                                            break;
+                                        default:
+                                            var message = '[jupyterLabTerminal]: Unknown stream type ' + type;												    
+                                            reject({status: 'error', ename: 'Unknown stream type', evalue: message});
+                                    } 
+                                    break;   	    		    
+                                case 'error':    
+                                    //stderr does not yield output for all errors	    
+                                    // var message = msg.content.ename + '\n' + msg.content.evalue;
+                                    reject({status: 'error', ename: msg.content.ename, evalue: msg.content.evalue});
+                                    break;						
+                                case 'execute_result':
+                                    var type = 'text';
+                                    if (msg.content) {
+                                        try {
+                                            if (msg.content['text']) {
+                                                result = String(msg.content['text']);
+                                                type = 'text';
+                                            } else if (msg.content.data) {
+                                                if (msg.content.data['image/png']) {
+                                                    result = String(msg.content.data['image/png']);
+                                                    type = 'image/png';
+                                                } else if (msg.content.data['text/plain']) {
+                                                    result = String(msg.content.data['text/plain']);
+                                                    type = 'text/plain';
+                                                } else if (msg.content.data['text/html']) {
+                                                    result = String(msg.content.data['text/html']);
+                                                    type = 'text/html';
+                                                }
+                                            }
+                                            resolve({result: result, type: type, msg: msg});
+                                        } catch(ex) {
+                                            reject(ex);
+                                        }
+                                    } else {
+                                        resolve({result: result, type: type, msg: msg});
+                                    }		
+                                    break;
+                                case 'display_data':
+                                    var type = 'text';
+                                    if (msg.content) {
+                                        try {
+                                            if (msg.content['text']) {
+                                                result = String(msg.content['text']);
+                                                type = 'text';
+                                            } else if (msg.content.data) {
+                                                if (msg.content.data['image/png']) {
+                                                    result = String(msg.content.data['image/png']);
+                                                    type = 'image/png';
+                                                } else if (msg.content.data['text/plain']) {
+                                                    result = String(msg.content.data['text/plain']);
+                                                    type = 'text/plain';
+                                                } else if (msg.content.data['text/html']) {
+                                                    result = String(msg.content.data['text/html']);
+                                                    type = 'text/html';
+                                                }
+                                            }
+                                            resolve({result: result, type: type, msg: msg});
+                                        } catch(ex) {
+                                            reject(ex);
+                                        }
+                                    } else {
+                                        resolve({result: result, type: type, msg: msg});
+                                    }											
+                                    break;
+                                case 'update_display_data':
+                                    var result = msg.content;
+                                    resolve({
+                                        result: result, 
+                                        type: msgType, 
+                                        msg: {
+                                            content: {
+                                                name: msgType,
+                                                data: {
+                                                    [msgType]: result
+                                                }
+                                            }
+                                        }
+                                    });										
+                                    break;
+                                default:
+                                    var message = '[jupyterLabTerminal]: Unknown message type ' + msgType;					  				    
+                                    reject({status: 'error', ename: 'Unknown message type', evalue: message});
+
+                            };
+                            return;
+                        };
+                    }
+                    
                 }
-                
             });
+        }
+
+        /** 
+         * LAB: get lab notebook panel
+        */
+        getLabKernel(){
+            var notebookPanel = this.getLabNotebookPanel(); 
+            if (notebookPanel) {
+                var kernelConnection = notebookPanel.sessionContext.session?.kernel;
+                return kernelConnection;
+            }
+            return null;
+        }
+
+        async executeLabCell(pythonCode, cellType='code'){
+            var { NotebookActions } = require('@jupyterlab/notebook');
+            var notebookPanel = this.getLabNotebookPanel();
+        
+            return new Promise(async (resolve, reject) => {
+                if (notebookPanel){
+                    var notebook = notebookPanel.content;
+                    var notebookModel = notebook.model;
+                    var sessionContext = notebookPanel.sessionContext;	
+            
+                    var options = {	};
+                    var cellModel = notebookModel.contentFactory.createCell(cellType, options);				
+                    cellModel.value.text = pythonCode;
+            
+                    const activeCellIndexBackup = notebook.activeCellIndex;
+                    // 셀 추가
+                    notebookModel.cells.insert(activeCellIndexBackup + 1, cellModel);				
+                    notebook.activeCellIndex = newCellIndex;
+            
+                    var cell = notebook.activeCell;
+                    
+                    try{
+                        await NotebookActions.run(notebook, sessionContext)
+                        .catch(error=>{
+                            reject(error);
+                        });
+                    } catch(error){
+                        reject(error);
+                    } 
+                    
+                    var htmlArray = [];
+            
+                    for(var output of cell.outputArea.node.children){								
+                        htmlArray.push(output.innerHTML);
+                    }					
+                    
+                    // 셀 삭제
+                    //    await NotebookActions.deleteCells(notebook);
+                    //    notebook.activeCellIndex = activeCellIndexBackup;
+            
+                    resolve(htmlArray);
+                }				
+                
+            }); 	
+        }
+
+        createLabCell(code, type='code') {
+            var { CellModel, CodeCellModel, MarkdownCellModel } = require('@jupyterlab/cells');
+            return new CellModel({
+                cell_type: 'code',
+                source: "print('hi')",
+                metadata: { trusted: false }
+            })
+        }
+
+        /** 
+         * LAB: get lab notebook panel
+        */
+        getLabNotebookPanel(){
+            var mainWidgets = this.app.shell.widgets('main');
+            var widget = mainWidgets.next();
+            while(widget){
+                if(widget.sessionContext){
+                    var type = widget.sessionContext.type;
+                    if(type == 'notebook' || type == 'console'){  //other wigets might be of type DocumentWidget
+                        if (widget.isVisible){
+                            return widget;
+                        }
+                    }
+                }
+                widget = mainWidgets.next();
+            }
+            return null;
+        }
+
+        get labWidgets() {
+            let mainWidgets = this.app.shell.widgets('main');
+            let widget = mainWidgets.next();
+            let widgetList = [];
+            while (widget) {
+                if (widget.sessionContext) {
+                    widgetList.push(widget);
+                }
+                widget = mainWidgets.next();
+            }
+            return widgetList;
+        }
+
+        getLabPanelId() {
+            let currentPanel = vpKernel.getLabNotebookPanel();
+            if (currentPanel) { 
+                return currentPanel.id;
+            }
+            return undefined;
         }
 
         /**
@@ -415,6 +674,9 @@ define([
                 case 'vpcfg':
                     configFile = 'configure';
                     break;
+                case 'vpimport':
+                    configFile = 'import';
+                    break;
             }
             var cmd = com_util.formatString("print(_vp_get_colab_vpcfg('{0}'))", configFile);
             return new Promise(function(resolve, reject) {
@@ -444,11 +706,79 @@ define([
                 case 'vpcfg':
                     configFile = 'configure';
                     break;
+                case 'vpimport':
+                    configFile = 'import';
+                    break;
             }
             // write file
             var sbfileSaveCmd = new com_String();
             sbfileSaveCmd.appendFormatLine('%%writefile "/content/drive/MyDrive/.visualpython/{0}"', configFile);
             sbfileSaveCmd.appendLine(content);
+            return new Promise(function(resolve, reject) {
+                that.execute(sbfileSaveCmd.toString())
+                .then(function(resultObj) {
+                    resolve(resultObj.result);
+                }).catch(function(err) {
+                    // reject
+                    reject(err);
+                })
+            });
+        }
+
+        /**
+         * Get jupyterlab's vp config file content
+         * @param {String} configType vpudf, vpcfg 
+         * @returns 
+         */
+        getLabConfig(configType='vpudf') {
+            var that = this;
+            var configFile = '';
+            switch (configType) {
+                case 'vpudf':
+                    configFile = 'snippets';
+                    break;
+                case 'vpcfg':
+                    configFile = 'configure';
+                    break;
+                case 'vpimport':
+                    configFile = 'import';
+                    break;
+            }
+            var cmd = com_util.formatString("print(_vp_get_lab_vpcfg('{0}'))", configFile);
+            return new Promise(function(resolve, reject) {
+                that.execute(cmd)
+                .then(function(resultObj) {
+                    resolve(resultObj);
+                }).catch(function(err) {
+                    // reject
+                    reject(err);
+                })
+            });
+        }
+
+        /**
+         * Set jupyterlab's vp config file content
+         * @param {String} content file content to write
+         * @param {String} configType vpudf, vpcfg 
+         * @returns 
+         */
+        setLabConfig(content, configType='vpudf') {
+            var that = this;
+            var configFile = '';
+            switch (configType) {
+                case 'vpudf':
+                    configFile = 'snippets';
+                    break;
+                case 'vpcfg':
+                    configFile = 'configure';
+                    break;
+                case 'vpimport':
+                    configFile = 'import';
+                    break;
+            }
+            // write file
+            var sbfileSaveCmd = new com_String();
+            sbfileSaveCmd.appendFormat("_vp_set_lab_vpcfg('{0}', '{1}')", configFile, content);
             return new Promise(function(resolve, reject) {
                 that.execute(sbfileSaveCmd.toString())
                 .then(function(resultObj) {
@@ -465,6 +795,23 @@ define([
         getImageFile(path) {
             var that = this;
             let code = com_util.formatString("_vp_get_image_by_path('{0}')", path);
+            return new Promise(function(resolve, reject) {
+                that.execute(code)
+                .then(function(resultObj) {
+                    resolve(resultObj);
+                }).catch(function(err) {
+                    // reject
+                    reject(err);
+                })
+            });
+        }
+
+        //====================================================================
+        // Read File 
+        //====================================================================
+        readFile(filePath) {
+            let that = this;
+            let code = com_util.formatString("print(_vp_read_file('{0}'))", filePath);
             return new Promise(function(resolve, reject) {
                 that.execute(code)
                 .then(function(resultObj) {

@@ -13,8 +13,8 @@
 // [CLASS] PDF
 //============================================================================
 define([
-    'text!vp_base/html/m_apps/pdf.html!strip',
-    'css!vp_base/css/m_apps/pdf',
+    '!!text-loader!vp_base/html/m_apps/pdf.html', // LAB: text! to text-loader
+    'vp_base/css/m_apps/pdf.css', // LAB: css! to css-loader
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_interface',
     'vp_base/js/com/component/PopupComponent',

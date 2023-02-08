@@ -13,8 +13,8 @@
 // [CLASS] SuccessMessage
 //============================================================================
 define([
-    'text!vp_base/html/component/successMessage.html!strip',
-    'css!vp_base/css/component/successMessage',
+    '!!text-loader!vp_base/html/component/successMessage.html', // LAB: text! to text-loader
+    'vp_base/css/component/successMessage.css', // LAB: css! to css-loader
     'vp_base/js/com/com_Const',
     'vp_base/js/com/component/Component'
 ], function(msgHtml, msgCss, com_Const, Component) {

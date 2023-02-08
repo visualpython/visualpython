@@ -158,7 +158,9 @@ define([
                 page.appendFormatLine('<option value="{0}" {1}>{2}</option>', op, op == v.i4? 'selected': '', op);
             })
             page.appendLine('</select></td>');
-            page.appendFormatLine('<td class="{0} vp-cursor"><img src="{1}close_big.svg"/></td>', 'v1-del', com_Const.IMAGE_PATH);
+            // LAB: img to url
+            // page.appendFormatLine('<td class="{0} vp-cursor"><img src="{1}close_big.svg"/></td>', 'v1-del', com_Const.IMAGE_PATH);
+            page.appendFormatLine('<td class="{0} vp-cursor"><div class="vp-icon-close-big"></div></td>', 'v1-del');
             page.appendLine('</tr>');
             return page.toString();
         }
@@ -178,7 +180,9 @@ define([
                 page.appendFormatLine('<option value="{0}" {1}>{2}</option>', op, op == v.i4? 'selected': '', op);
             })
             page.appendLine('</select></td>');
-            page.appendFormatLine('<td class="{0} vp-cursor"><img src="{1}close_big.svg"/></td>', 'v1-del', com_Const.IMAGE_PATH);
+            // LAB: img to url
+            // page.appendFormatLine('<td class="{0} vp-cursor"><img src="{1}close_big.svg"/></td>', 'v1-del', com_Const.IMAGE_PATH);
+            page.appendFormatLine('<td class="{0} vp-cursor"><div class="vp-icon-close-big"></div></td>', 'v1-del');
             page.appendLine('</tr>');
             return page.toString();
         }

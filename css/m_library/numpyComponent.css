@@ -73,8 +73,8 @@
 .vp-popup-frame .vp-option-page .vp-accordian-header {
     font-weight: bold;
 }
-.vp-popup-frame .vp-option-page .vp-arrow-right,
-.vp-popup-frame .vp-option-page .vp-arrow-down {
+.vp-popup-frame .vp-option-page .vp-icon-arrow-right,
+.vp-popup-frame .vp-option-page .vp-icon-arrow-down {
     background-repeat: no-repeat;
 }
 .vp-popup-frame .vp-option-page .vp-spread {

@@ -13,8 +13,8 @@
 // [CLASS] MenuFrame
 //============================================================================
 define([
-    'text!../../html/menuFrame.html!strip',
-    'css!vp_base/css/menuFrame',
+    '!!text-loader!../../html/menuFrame.html', // LAB: text! to text-loader
+    'vp_base/css/menuFrame.css', // LAB: css! to css-loader
 
     '../com/com_Config',
     '../com/com_Const',
@@ -24,7 +24,7 @@ define([
     '../com/component/SuggestInput',
     '../com/component/InnerFuncViewer',
 
-    'text!../../data/libraries.json',
+    '../../data/libraries.json', // LAB: text! to raw-loader
 
     './MenuGroup',
     './MenuItem',
@@ -180,7 +180,13 @@ define([
          * @returns library object
          */
         getMenuLibraries() {
-            var libraries = JSON.parse(librariesJson);
+            var libraries = {};
+            // LAB: webpack5 load json object by default
+            if (vpConfig.extensionType === 'lab') {
+                libraries = librariesJson;
+            } else {
+                libraries = JSON.parse(librariesJson);
+            }
             if (!libraries || !libraries.library) {
                 vpLog.display(VP_LOG_TYPE.ERROR, 'vp menus are not avilable!');
                 return {};
@@ -213,6 +219,23 @@ define([
         
         template() {
             this.$pageDom = $(menuFrameHtml.replaceAll('${vp_base}', com_Const.BASE_PATH));
+            // LAB: vp_base replacing test
+            // const regexp = /"\$\{vp_base\}(.+?)"/g;
+            // var replaceHtml = menuFrameHtml;
+
+            // const rep_list = [...replaceHtml.matchAll(regexp)];
+
+            // for (var i=0; i<rep_list.length; i++) {
+            //     try {
+            //         var img_url = require(`..${rep_list[i][1]}`);
+            //         // var img_url = '/lib/visualpython' + rep_list[i][1];
+            //         replaceHtml = replaceHtml.replace(rep_list[i][0], `"${img_url}"`)
+            //     } catch (ex) {
+            //         ; // ignore error
+            //         console.log(ex);
+            //     }
+            // }
+            // this.$pageDom = $(replaceHtml);
             return this.$pageDom;
         }
 

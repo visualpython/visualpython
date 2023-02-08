@@ -13,8 +13,8 @@
 // [CLASS] Groupby
 //============================================================================
 define([
-    'text!vp_base/html/m_apps/groupby.html!strip',
-    'css!vp_base/css/m_apps/groupby',
+    '!!text-loader!vp_base/html/m_apps/groupby.html', // LAB: text! to text-loader
+    'vp_base/css/m_apps/groupby.css', // LAB: css! to css-loader
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
@@ -429,13 +429,18 @@ define([
             page.appendFormatLine('<div class="{0}" style="display: none;">', 'vp-gb-adv-method-box');
             page.appendFormatLine('<input type="text" class="{0}" placeholder="{1}" value="{2}"/>', 'vp-gb-adv-method', 'Type function name', "'" + defaultMethod + "'");
             // page.appendFormatLine('<i class="fa fa-search {0}"></i>', 'vp-gb-adv-method-return');
-            page.appendFormatLine('<img src="{0}" class="{1}" title="{2}">'
-                                , com_Const.IMAGE_PATH + 'arrow_left.svg', 'vp-gb-adv-method-return', 'Return to select method');
+            // LAB: img to url
+            // page.appendFormatLine('<img src="{0}" class="{1}" title="{2}">'
+            //                     , com_Const.IMAGE_PATH + 'arrow_left.svg', 'vp-gb-adv-method-return', 'Return to select method');
+            page.appendFormatLine('<div class="{0} {1}" title="{2}"></div>'
+                                , 'vp-icon-arrow-left', 'vp-gb-adv-method-return', 'Return to select method');
             page.appendLine('</div>');
             // naming
             page.appendFormatLine('<input type="text" class="{0}" placeholder="{1}" data-dict={} readonly/>', 'vp-gb-adv-naming', 'Display name');
             // delete button
-            page.appendFormatLine('<div class="{0} {1}"><img src="{2}"/></div>', 'vp-gb-adv-item-delete', 'vp-cursor', com_Const.IMAGE_PATH + 'close_small.svg');
+            // LAB: img to url
+            // page.appendFormatLine('<div class="{0} {1}"><img src="{2}"/></div>', 'vp-gb-adv-item-delete', 'vp-cursor', com_Const.IMAGE_PATH + 'close_small.svg');
+            page.appendFormatLine('<div class="{0} {1} {2}"></div>', 'vp-gb-adv-item-delete', 'vp-cursor', 'vp-icon-close-small');
             page.appendLine('</div>');
             return page.toString();
         }

@@ -13,8 +13,8 @@
 // [CLASS] Reshape
 //============================================================================
 define([
-    'text!vp_base/html/m_apps/reshape.html!strip',
-    'css!vp_base/css/m_apps/reshape',
+    '!!text-loader!vp_base/html/m_apps/reshape.html', // LAB: text! to text-loader
+    'vp_base/css/m_apps/reshape.css', // LAB: css! to css-loader
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
     'vp_base/js/com/component/PopupComponent',

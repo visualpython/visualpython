@@ -23,6 +23,9 @@
 .vp-successMessage-icon {
     margin-left: 15px;
     color: var(--font-highlight);
+    /* LAB: img to background-image */
+    background: top / contain no-repeat url(../../img/code.svg);
+    height: 100%;
 }
 #vp_successMessage {
     position: absolute;

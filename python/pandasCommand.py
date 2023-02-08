@@ -2,7 +2,14 @@
 Pandas Objects Command
 """
 import pandas as _vp_pd
-from IPython.core.display import display
+import IPython
+# LAB: prevent import error
+ipython_version = IPython.version_info
+if ipython_version[0] < 7 or ( ipython_version[0] == 7 and ipython_version[1] <= 13 ):
+    from IPython.core.display import display
+else:
+    # from IPython.core.display is deprecated since IPython 7.14
+    from IPython.display import display
 
 def _vp_get_rows_list(df):
     """

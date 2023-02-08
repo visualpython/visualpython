@@ -86,7 +86,9 @@ define([
             page.appendFormatLine('<div class="{0} vp-no-selection" title="{1}">', 'vp-menu-task-item', desc);
             // page.appendFormatLine('<img class="vp-menu-task-icon" src="/nbextensions/visualpython/img/{0}">', icon);
             page.appendFormatLine('<span>{0}</span>', title);
-            page.appendFormatLine('<img class="vp-menu-task-remove" title="{0}" src="{1}">', 'Close task', com_Const.IMAGE_PATH + 'close_small.svg');
+            // LAB: img to url
+            // page.appendFormatLine('<img class="vp-menu-task-remove" title="{0}" src="{1}">', 'Close task', com_Const.IMAGE_PATH + 'close_small.svg');
+            page.appendFormatLine('<div class="vp-menu-task-remove vp-icon-close-small" title="{0}"></div>', 'Close task');
             page.appendLine('</div>');
             return page.toString();
         }

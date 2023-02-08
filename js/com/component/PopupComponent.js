@@ -15,9 +15,15 @@
 // CHROME: notebook/js/codemirror-ipython
 (function(mod) {
     if (typeof exports == "object" && typeof module == "object"){ // CommonJS
-      mod(requirejs("codemirror/lib/codemirror"),
-          requirejs("codemirror/mode/python/python")
-          );
+        if (vpExtType === 'lab') {
+            mod(require("codemirror/lib/codemirror"),
+            require("codemirror/mode/python/python")
+            );
+        } else {
+            mod(requirejs("codemirror/lib/codemirror"),
+                requirejs("codemirror/mode/python/python")
+            );
+        }
     } else if (typeof define == "function" && define.amd){ // AMD
       define('notebook/js/codemirror-ipython',["codemirror/lib/codemirror",
               "codemirror/mode/python/python"], mod);
@@ -48,8 +54,8 @@
 });
 
 define([
-    'text!vp_base/html/component/popupComponent.html!strip',
-    'css!vp_base/css/component/popupComponent',
+    '!!text-loader!vp_base/html/component/popupComponent.html', // LAB: text! to text-loader
+    'vp_base/css/component/popupComponent.css', // LAB: css! to css-loader
     '../com_util',
     '../com_Const',
     '../com_String',
@@ -62,7 +68,7 @@ define([
     'codemirror/mode/python/python',
     'codemirror/addon/display/placeholder',
     'codemirror/addon/display/autorefresh',
-    'notebook/js/codemirror-ipython'
+    // 'notebook/js/codemirror-ipython' // LAB: disabled to avoid error FIXME:
 ], function(popupComponentHtml, popupComponentCss
     , com_util, com_Const, com_String, com_interface, Component, DataSelector, codemirror
 ) {
@@ -477,9 +483,13 @@ define([
 
         _bindDraggable() {
             var that = this;
+            let containment = 'body';
+            if (vpConfig.extensionType === 'lab') {
+                containment = '#main';
+            }
             $(this.wrapSelector()).draggable({
                 handle: '.vp-popup-title',
-                containment: 'body',
+                containment: containment,
                 start: function(evt, ui) {
                     // check focused
                     $(that.eventTarget).trigger({

@@ -13,8 +13,8 @@
 // [CLASS] AlertModal
 //============================================================================
 define([
-    'text!vp_base/html/component/alertModal.html!strip',
-    'css!vp_base/css/component/alertModal',
+    '!!text-loader!vp_base/html/component/alertModal.html', // LAB: text! to text-loader
+    'vp_base/css/component/alertModal.css', // LAB: css! to css-loader
     'vp_base/js/com/com_Const',
     'vp_base/js/com/component/Component'
 ], function(msgHtml, msgCss, com_Const, Component) {

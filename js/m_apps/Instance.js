@@ -13,8 +13,8 @@
 // [CLASS] Instance
 //============================================================================
 define([
-    'text!vp_base/html/m_apps/instance.html!strip',
-    'css!vp_base/css/m_apps/instance',
+    '!!text-loader!vp_base/html/m_apps/instance.html', // LAB: text! to text-loader
+    'vp_base/css/m_apps/instance.css', // LAB: css! to css-loader
     'vp_base/js/com/com_String',
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/InstanceEditor',

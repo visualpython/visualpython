@@ -104,6 +104,57 @@ define([
             }
             // move to executed cell
             // CHROME: TODO:
+        } else if (vpConfig.extensionType === 'lab') {
+            var { NotebookActions } = require('@jupyterlab/notebook');
+            var notebookPanel = vpKernel.getLabNotebookPanel();
+            if (notebookPanel && notebookPanel.sessionContext){
+                var sessionContext = notebookPanel.sessionContext;	
+                let sessionType = sessionContext.type;
+                if (sessionType === 'notebook') {
+                    var notebook = notebookPanel.content;
+                    var notebookModel = notebook.model;
+            
+                    var cellModel = notebookModel.contentFactory.createCell(type, {});				
+                    cellModel.value.text = command;
+            
+                    const newCellIndex = notebook.activeCellIndex + 1;
+                    // 셀 추가
+                    notebookModel.cells.insert(newCellIndex, cellModel);				
+                    notebook.activeCellIndex = newCellIndex;
+            
+                    var cell = notebook.activeCell;
+                    if (exec == true) {
+                        try{
+                            NotebookActions.run(notebook, sessionContext);
+                        } catch(err){
+                            vpLog.display(VP_LOG_TYPE.ERROR, err);
+                        }
+                    }
+                    // move to executed cell
+                    let activeCell = notebookPanel.content.activeCell;
+                    let activeCellTop = $(activeCell.node).position().top;
+                    // scroll to current cell top
+                    $(notebookPanel.layout.widgets[2].node).animate({scrollTop: activeCellTop},"fast");
+                } else if (sessionType === 'console') {
+                    var labConsole = notebookPanel.content;
+                    var widget = labConsole.widgets[0];
+
+                    // execute or not
+                    if (exec == true) {
+                        // console allow only code cell
+                        var cellModel = widget.createCodeCell();
+                        cellModel.model.value.text = command;
+                        widget.addCell(cellModel);
+                        widget._execute(cellModel);
+                    } else {
+                        widget.promptCell.model.value.text = command;
+                    }
+                    widget.promptCell.inputArea.editor.focus();
+                }
+            } else {
+                // No session found
+                com_util.renderAlertModal('Visual Python only supports Notebook and Console type.  Please use appropriate type of file to use it.');
+            }
         }
 
         com_util.renderSuccessMessage('Your code is successfully generated.');
@@ -117,6 +168,11 @@ define([
      * @param {int} sigNum 
      */
     var insertCells = function(type, commands, exec=true, sigText='') {
+
+        if (vpConfig.extensionType === 'lab') {
+            var { NotebookActions } = require('@jupyterlab/notebook');
+            var notebookPanel = vpKernel.getLabNotebookPanel();
+        }
         
         commands && commands.forEach((command, idx) => {
             // Add signature
@@ -183,6 +239,41 @@ define([
                             }, 300);
                     }
                 }
+            } else if (vpConfig.extensionType === 'lab') {
+                if (notebookPanel && notebookPanel.sessionContext){ 
+                    var sessionContext = notebookPanel.sessionContext;	
+                    let sessionType = sessionContext.type;
+                    if (sessionType === 'notebook') {
+                        var notebook = notebookPanel.content;
+                        var notebookModel = notebook.model;
+                
+                        var options = {	};
+                        var cellModel = notebookModel.contentFactory.createCell(type, options);				
+                        cellModel.value.text = command;
+                
+                        const newCellIndex = notebook.activeCellIndex + 1;
+                        // 셀 추가
+                        notebookModel.cells.insert(newCellIndex, cellModel);				
+                        notebook.activeCellIndex = newCellIndex;
+                
+                        var cell = notebook.activeCell;
+                        if (exec == true) {
+                            try{
+                                NotebookActions.run(notebook, sessionContext);
+                            } catch(err){
+                                vpLog.display(VP_LOG_TYPE.ERROR, err);
+                            }
+                        }
+                    } else if (sessionType === 'console') {
+                        var console = notebookPanel.content;
+                        var cellModel = console.contentFactory.createCell(type, {});
+                        cellModel.value.text = command;
+
+                    } 
+                } else {
+                    // No session found
+                    com_util.renderAlertModal('Visual Python only supports Notebook and Console type. Please use appropriate type of file to use it.');
+                }
             }
         });
         
@@ -192,6 +283,12 @@ define([
         } else if (vpConfig.extensionType === 'colab') {
             // CHROME: TODO:
 
+        } else if (vpConfig.extensionType === 'lab') {
+            // LAB: TODO:
+            let activeCell = notebookPanel.content.activeCell;
+            let activeCellTop = $(activeCell.node).position().top;
+            // scroll to current cell top
+            $(notebookPanel.layout.widgets[2].node).animate({scrollTop: activeCellTop},"fast");
         }
 
         com_util.renderSuccessMessage('Your code is successfully generated.');

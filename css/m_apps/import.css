@@ -6,6 +6,8 @@
     border-radius: 3px;
     padding: 5px;
     cursor: pointer;
+    /* LAB: add size */
+    font-size: 13px;
 }
 .vp-tab-button.vp-tab-selected {
     color: var(--font-highlight);

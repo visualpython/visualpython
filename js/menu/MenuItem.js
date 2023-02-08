@@ -145,7 +145,9 @@ define([
                 // render apps menu item
                 page.appendFormatLine('<div class="vp-menuitem apps {0}" data-menu="{1}" title="{2}">'
                             , this._getColorClass(true), id, desc);
-                page.appendFormatLine('<img src="{0}">', com_Const.IMAGE_PATH + apps.icon);
+                // LAB: img to url
+                // page.appendFormatLine('<img src="{0}">', com_Const.IMAGE_PATH + apps.icon);
+                page.appendFormatLine('<div class="apps-icon {0}"></div>', id);
                 page.appendFormatLine('<div class="vp-menuitem-apps-name">{0}</div>', name);
                 page.append('</div>');
             } else {

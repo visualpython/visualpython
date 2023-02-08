@@ -70,6 +70,11 @@
     cursor: pointer;
     position: relative;
 }
+.vp-sn-menu-more {
+    /* LAB: img to background-image */
+    background: top / contain no-repeat url(../../img/snippets/more.svg);
+    height: 100%;
+}
 .vp-sn-menu-box {
     display: none;
     position: absolute;
@@ -105,6 +110,9 @@
     color: #C4C4C4;
     right: 10px;
     padding-top: 4px;
+    /* LAB: img to background-image */
+    background: top / contain no-repeat url(../../img/search.svg);
+    height: 100%;
 }
 .vp-sn-func-box {
     height: 50px;
@@ -119,6 +127,9 @@
 }
 .vp-sn-sort {
     cursor: pointer;
+    /* LAB: img to background-image */
+    background: top / contain no-repeat url(../../img/snippets/sort.svg);
+    height: 100%;
 }
 .vp-sn-sort-menu-box {
     display: none;

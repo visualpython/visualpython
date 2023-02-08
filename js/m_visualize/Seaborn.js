@@ -13,8 +13,8 @@
 // [CLASS] Seaborn
 //============================================================================
 define([
-    'text!vp_base/html/m_visualize/seaborn.html!strip',
-    'css!vp_base/css/m_visualize/seaborn',
+    '!!text-loader!vp_base/html/m_visualize/seaborn.html', // LAB: text! to text-loader
+    'vp_base/css/m_visualize/seaborn.css', // LAB: css! to css-loader
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_generatorV2',
     'vp_base/js/com/com_util',
@@ -309,7 +309,6 @@ define([
                 if (hue !== '') {
                     if (chartType == 'barplot' || chartType == 'countplot') {
                         let colDtype = $(that.wrapSelector('#hue')).find('option:selected').data('type');
-                        console.log(data, hue);
                         // get result and load column list
                         vpKernel.getColumnCategory(data, hue).then(function (resultObj) {
                             let { result } = resultObj;

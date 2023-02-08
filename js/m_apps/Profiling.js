@@ -13,8 +13,8 @@
 // [CLASS] Profiling
 //============================================================================
 define([
-    'text!vp_base/html/m_apps/profiling.html!strip',
-    'css!vp_base/css/m_apps/profiling',
+    '!!text-loader!vp_base/html/m_apps/profiling.html', // LAB: text! to text-loader
+    'vp_base/css/m_apps/profiling.css', // LAB: css! to css-loader
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_interface',
@@ -314,12 +314,19 @@ define([
                 page.appendFormatLine('<div>{0}</div>', title);
                 // button box
                 page.appendFormatLine('<div class="{0}">', 'vp-pf-list-button-box');
-                page.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}"><img src="{3}"/></div>'
-                                        , 'vp-pf-list-menu-item', LIST_MENU_ITEM.SHOW, 'Show report', com_Const.IMAGE_PATH + 'snippets/run.svg');
-                page.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}"><img src="{3}"/></div>'
-                                        , 'vp-pf-list-menu-item', LIST_MENU_ITEM.DELETE, 'Delete report', com_Const.IMAGE_PATH + 'delete.svg');
-                page.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}"><img src="{3}"/></div>'
-                                        , 'vp-pf-list-menu-item', LIST_MENU_ITEM.SAVE, 'Save report', com_Const.IMAGE_PATH + 'snippets/export.svg');
+                // LAB: img to url
+                // page.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}"><img src="{3}"/></div>'
+                //                         , 'vp-pf-list-menu-item', LIST_MENU_ITEM.SHOW, 'Show report', com_Const.IMAGE_PATH + 'snippets/run.svg');
+                // page.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}"><img src="{3}"/></div>'
+                //                         , 'vp-pf-list-menu-item', LIST_MENU_ITEM.DELETE, 'Delete report', com_Const.IMAGE_PATH + 'delete.svg');
+                // page.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}"><img src="{3}"/></div>'
+                //                         , 'vp-pf-list-menu-item', LIST_MENU_ITEM.SAVE, 'Save report', com_Const.IMAGE_PATH + 'snippets/export.svg');
+                page.appendFormatLine('<div class="{0} {1}" data-menu="{2}" title="{3}"></div>'
+                                        , 'vp-pf-list-menu-item', 'vp-icon-run', LIST_MENU_ITEM.SHOW, 'Show report');
+                page.appendFormatLine('<div class="{0} {1}" data-menu="{2}" title="{3}"></div>'
+                                        , 'vp-pf-list-menu-item', 'vp-icon-delete', LIST_MENU_ITEM.DELETE, 'Delete report');
+                page.appendFormatLine('<div class="{0} {1}" data-menu="{2}" title="{3}"></div>'
+                                        , 'vp-pf-list-menu-item', 'vp-icon-export', LIST_MENU_ITEM.SAVE, 'Save report');
                 page.appendLine('</div>');
                 page.appendLine('</div>');
             });

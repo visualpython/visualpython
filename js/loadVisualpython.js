@@ -15,7 +15,7 @@
 // CHROME: removed code
 define([
     // CHROME: removed .css extension type
-    'css!vp_base/css/root',
+    'vp_base/css/root.css', // LAB: css! to css-loader
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_Config',
@@ -99,7 +99,9 @@ define([
             cfg = $.extend(true, {}, vpConfig.defaultConfig, cfg);
 
         vpFrame = new MainFrame();
-        vpFrame.loadMainFrame();
+        if (vpConfig.extensionType !== 'lab') {
+            vpFrame.loadMainFrame();
+        }
 
         // TODO: hotkey control -> Implement under InputComponent or Event class
         // input:text - hotkey control
@@ -140,7 +142,7 @@ define([
         //======================================================================
         // Event listener
         //======================================================================
-        if (colab) {
+        if (window.colab) {
             document.removeEventListener('vpcomm', _vpcommHandler);
             document.addEventListener('vpcomm', _vpcommHandler);
         }
@@ -184,9 +186,12 @@ define([
         /**
          * visualpython config util
          */
-        // CHROME: added extType as 'colab'
-        if (colab) {
+        if (window.colab) {
+            // CHROME: added extType as 'colab' // CHROME: FIXME: use window.vpExtType = 'colab'
             window.vpConfig = new com_Config('colab');
+        } else if (window.vpExtType === 'lab') {
+            // LAB: added extType as 'lab'
+            window.vpConfig = new com_Config('lab');
         } else {
             window.vpConfig = new com_Config();
         }
@@ -194,7 +199,11 @@ define([
         /**
          * visualpython kernel
          */
-        window.vpKernel = new com_Kernel();
+        if (vpConfig.extensionType === 'lab') {
+            window.vpKernel = new com_Kernel(vpLab);
+        } else {
+            window.vpKernel = new com_Kernel();
+        }
     }
 
     var _checkVersion = function() {
@@ -301,7 +310,29 @@ define([
                 // read vp functions
                 vpConfig.readKernelFunction();
             });
+        } else if (vpConfig.extensionType === 'lab') {
+            // LAB: if widget is ready or changed, ready for lab kernel connected, and restart vp
+            vpLab.shell._currentChanged.connect(function(s1, value) {
+                var { newValue } = value;
+                // kernel restart for notebook and console
+                if (newValue && newValue.sessionContext) {
+                    if (newValue.sessionContext.isReady) {
+                        vpLog.display(VP_LOG_TYPE.LOG, 'vp operations for kernel ready...');
+                        vpConfig.readKernelFunction();
+                    }
+                    newValue.sessionContext._connectionStatusChanged.connect(function(s2, status) {
+                        if (status === 'connected') {
+                            vpLog.display(VP_LOG_TYPE.LOG, 'vp operations for kernel ready...');
+                            vpConfig.readKernelFunction();
+                        }
+                    });
+                } else {
+                    vpLog.display(VP_LOG_TYPE.LOG, 'No widget detected...');
+                }
+            });
         }
+
+        return vpFrame;
     }
 
     return { initVisualpython: initVisualpython, readConfig: readConfig };

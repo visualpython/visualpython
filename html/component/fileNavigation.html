@@ -14,11 +14,11 @@
         <div class='fileNavigationPage-container center-1rem-gray' >
             <div class="fileNavigationPage-sidebar">
                 <!-- Jupyter Notebook -->
-                <div class="fnp-sidebar-menu notebook" data-path="/">Jupyter Home</div>
-                <div class="fnp-sidebar-menu notebook" data-path="desktop">Desktop</div>
-                <div class="fnp-sidebar-menu notebook" data-path="documents">Documents</div>
-                <div class="fnp-sidebar-menu notebook" data-path="downloads">Downloads</div>
-                <div class="fnp-sidebar-menu notebook" data-path="userid">User ID (Home)</div>
+                <div class="fnp-sidebar-menu notebook lab" data-path="/">Jupyter Home</div>
+                <div class="fnp-sidebar-menu notebook lab" data-path="desktop">Desktop</div>
+                <div class="fnp-sidebar-menu notebook lab" data-path="documents">Documents</div>
+                <div class="fnp-sidebar-menu notebook lab" data-path="downloads">Downloads</div>
+                <div class="fnp-sidebar-menu notebook lab" data-path="userid">User ID (Home)</div>
                 <!-- Chrome extension for colab -->
                 <div class="fnp-sidebar-menu colab" data-path="/">Colab Home</div>
                 <div class="fnp-sidebar-menu colab" data-path="drive">Drive Home</div>
@@ -51,7 +51,10 @@
                         </div>
                     </div>
                 </div>
-                <div class='fileNavigationPage-closedBtn'><img src="${vp_base}/img/close_big.svg"></div>
+                <!-- LAB: img to url-->
+                <div class='fileNavigationPage-closedBtn vp-icon-close-big'>
+                    <!-- <img src="${vp_base}/img/close_big.svg"> -->
+                </div>
                 <div class='fileNavigationPage-directory-container'>
                    
                     <div class='fileNavigationPage-body'></div>
