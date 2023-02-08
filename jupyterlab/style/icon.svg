@@ -1,0 +1,9 @@
+<svg viewBox="0 0 24 24" width="24px" height="24px" xmlns="http://www.w3.org/2000/svg">
+    <defs></defs>
+    <rect width="24" height="4.1" style="stroke-width: 0px; fill: rgb(249, 196, 0); stroke-opacity: 0;"></rect>
+    <rect width="24" height="4.1" style="stroke-width: 0px; stroke-opacity: 0; fill: rgb(245, 166, 49);" y="8"></rect>
+    <rect width="24" height="4.1" style="stroke-width: 0px; stroke-opacity: 0; fill: rgb(249, 181, 42);" y="4"></rect>
+    <rect width="24" height="4.1" style="stroke-width: 0px; stroke-opacity: 0; fill: rgb(239, 143, 60);" y="12"></rect>
+    <rect width="24" height="4.1" style="stroke-width: 0px; stroke-opacity: 0; fill: rgb(235, 119, 60);" y="16"></rect>
+    <rect width="24" height="4" style="stroke-width: 0px; stroke-opacity: 0; fill: rgb(229, 97, 57);" y="20"></rect>
+</svg>

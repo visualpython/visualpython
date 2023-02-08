@@ -14,7 +14,7 @@
 //============================================================================
 require.config({
     paths: { 
-        'vp_base'   : '../nbextensions/visualpython',
+        'vp_base'   : '../nbextensions/visualpython/visualpython',
         'css'       : 'vp_base/lib/require/css.min'
     },
     config: {

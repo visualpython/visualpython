@@ -1,0 +1,32 @@
+{
+    "name": "Visual Python for colab",
+    "description": "Visual Python for colab",
+    "version": "2.2.12.1",
+    "manifest_version": 3,
+    "action": {
+        "default_icon": {
+            "48": "icon.png"
+        }
+    },
+    "permissions": [
+        "activeTab",
+        "scripting"
+    ],
+    "content_scripts": [
+        {
+          "matches": ["https://colab.research.google.com/*"],
+          "js": ["content.js"],
+          "all_frames": true
+        }
+    ],
+    "web_accessible_resources": [{
+        "resources": [
+            "inject.js",
+            "visualpython/*"
+        ],
+        "matches": ["<all_urls>"]
+    }],
+    "background": {
+        "service_worker": "background.js"
+    }    
+}
