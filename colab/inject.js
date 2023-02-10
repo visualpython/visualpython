@@ -107,35 +107,37 @@ function vp_config_require() {
 //======================================================================
 var _vpcommHandler = function(e) {
     let detailObj = e.detail;
-    switch (detailObj.type) {
-        case 'sendBase':
-            vp_log('received from inject - ', e.detail.type, e);
-            // get base url of its extension
-            vpBase = detailObj.data;
-            // check if it has vp_wrapper
-            if (document.getElementById('vp_wrapper') == null) {
-                // initialize vp environment
-                vp_init();
-            } else {
-                // send event to toggle vp
-                let detailObj = { type: 'toggle', data: 'hi' };
-                let evt = new CustomEvent('vpcomm', { bubbles: true, detail: detailObj });
-                document.dispatchEvent(evt);
-            }
-            break;
-        // CHROME: TODO: 2: use vp frame.toggle for toggle it
-        // case 'toggle':
-        //     // toggle vp_wrapper
-        //     if (window.vpBase != '' && window.$) {
-        //         vp_toggle();
-        //     } else {
-        //         vp_log('No jquery...');
-        //         // init again
-        //         vp_init();
-        //     }
-        //     break;
-        default:
-            break;
+    if (detailObj && detailObj.type) {
+        switch (detailObj.type) {
+            case 'sendBase':
+                vp_log('received from inject - ', e.detail.type, e);
+                // get base url of its extension
+                vpBase = detailObj.data;
+                // check if it has vp_wrapper
+                if (document.getElementById('vp_wrapper') == null) {
+                    // initialize vp environment
+                    vp_init();
+                } else {
+                    // send event to toggle vp
+                    let detailObj = { type: 'toggle', data: 'hi' };
+                    let evt = new CustomEvent('vpcomm', { bubbles: true, detail: detailObj });
+                    document.dispatchEvent(evt);
+                }
+                break;
+            // CHROME: TODO: 2: use vp frame.toggle for toggle it
+            // case 'toggle':
+            //     // toggle vp_wrapper
+            //     if (window.vpBase != '' && window.$) {
+            //         vp_toggle();
+            //     } else {
+            //         vp_log('No jquery...');
+            //         // init again
+            //         vp_init();
+            //     }
+            //     break;
+            default:
+                break;
+        }
     }
 };
 document.removeEventListener('vpcomm', _vpcommHandler);

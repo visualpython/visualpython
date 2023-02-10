@@ -19,10 +19,10 @@ setup(
     long_description = long_description,
     author           = 'Black Logic Co.,Ltd.',
     author_email     = 'blacklogic.dev@gmail.com',
-    url              = 'http://visualpython.ai',
+    url              = 'https://github.com/visualpython/visualpython',
     license          = 'GPLv3',
     install_requires = [],
     platforms        = "Linux, Mac OS X, Windows",
-    keywords         = ['Visual', 'visual', 'VisualPython', 'visualpython', 'visual python', 'Visual Python', 'blackpen', 'BlackPen'],
+    keywords         = ['VisualPython', 'visualpython', 'visual python', 'Visual Python', 'Visual', 'visual'],
     python_requires  = '>=3.6',
     )

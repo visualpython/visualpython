@@ -1,16 +1,23 @@
 {
-    "name": "Visual Python for colab",
-    "description": "Visual Python for colab",
-    "version": "2.2.12.1",
+    "name": "Visual Python for Colab",
+    "description": "GUI-based Python code generator for Google Colab as an extension",
+    "version": "2.2.12.4",
     "manifest_version": 3,
+    "icons": {
+        "48": "icon.png",
+        "128": "icon128.png"
+    },
     "action": {
+        "default_title": "Visual Python for Colab\n\nGUI-based Python code generator.\nClick icon to enable.",
         "default_icon": {
-            "48": "icon.png"
+            "48": "icon.png",
+            "128": "icon128.png"
         }
     },
     "permissions": [
         "activeTab",
-        "scripting"
+        "scripting",
+        "tabs"
     ],
     "content_scripts": [
         {
@@ -21,6 +28,8 @@
     ],
     "web_accessible_resources": [{
         "resources": [
+            "icon.png",
+            "icon-deactivated.png",
             "inject.js",
             "visualpython/*"
         ],

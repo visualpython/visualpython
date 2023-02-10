@@ -42,15 +42,18 @@ function injectFile() {
 }
 
 //======================================================================
-// Event listener - background <-> inject
+// Event listener - background <-> (content -> inject)
 //======================================================================
 function msgHandler(msg, sender) {
-    if (msg == "toggle"){
-        // var evt = new CustomEvent('vpcomm', { bubbles: true, detail: { type: 'toggle' } });
-        // document.dispatchEvent(evt);
-        // check if injected
-        injectFile();
-        sendEvent('toggle');
+    if (msg && msg.type) {
+        switch(msg.type) {
+            case "toggle":
+                injectFile();
+                sendEvent('toggle');
+                break;
+            default:
+                break;
+        }
     }
 }
 chrome.runtime.onMessage.removeListener(msgHandler);

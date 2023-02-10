@@ -36,6 +36,13 @@ require.config({
     }
 });
 
+function vp_text(path) {
+    return 'text!' + path + '!strip';
+}
+function vp_css(path) {
+    return 'css!' + path;
+}
+
 //============================================================================
 // Load extension
 //============================================================================

@@ -11,7 +11,7 @@
   "bugs": {
     "url": "https://github.com/visualpython/visualpython/issues"
   },
-  "license": "GNU GPLv3 with Visual Python special exception",
+  "license": "GPLv3 with Visual Python special exception",
   "author": {
     "name": "BlackLogic",
     "email": "blacklogic.dev@gmail.com"

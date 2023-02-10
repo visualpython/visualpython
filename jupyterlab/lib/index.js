@@ -2,6 +2,13 @@ const path = require('path');
 const $ = require('jquery');
 require("jquery-ui");
 
+function vp_text(path) {
+    return '!!text-loader!' + path;
+}
+function vp_css(path) {
+    return path;
+}
+
 global.$ = $;
 global.vpBase = path.resolve(__dirname, "lib") + '/';
 module.exports = [{
