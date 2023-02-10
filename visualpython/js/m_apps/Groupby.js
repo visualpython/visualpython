@@ -13,8 +13,8 @@
 // [CLASS] Groupby
 //============================================================================
 define([
-    '!!text-loader!vp_base/html/m_apps/groupby.html', // LAB: text! to text-loader
-    'vp_base/css/m_apps/groupby.css', // LAB: css! to css-loader
+    vp_text_loader('vp_base/html/m_apps/groupby.html'), // INTEGRATION: unified version of text loader
+    vp_css_loader('vp_base/css/m_apps/groupby'), // INTEGRATION: unified version of css loader
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',

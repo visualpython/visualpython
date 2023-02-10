@@ -13,8 +13,8 @@
 // [CLASS] WordCloud
 //============================================================================
 define([
-    '!!text-loader!vp_base/html/m_visualize/wordCloud.html', // LAB: text! to text-loader
-    'vp_base/css/m_visualize/wordCloud.css', // LAB: css! to css-loader
+    vp_text_loader('vp_base/html/m_visualize/wordCloud.html'), // INTEGRATION: unified version of text loader
+    vp_css_loader('vp_base/css/m_visualize/wordCloud'), // INTEGRATION: unified version of css loader
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
     'vp_base/js/com/component/PopupComponent',

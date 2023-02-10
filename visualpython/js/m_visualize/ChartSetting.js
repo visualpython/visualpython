@@ -13,7 +13,7 @@
 // [CLASS] Chart Setting
 //============================================================================
 define([
-    '!!text-loader!vp_base/html/m_visualize/chartSetting.html', // LAB: text! to text-loader
+    vp_text_loader('vp_base/html/m_visualize/chartSetting.html'), // INTEGRATION: unified version of text loader
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
     'vp_base/js/com/component/PopupComponent',

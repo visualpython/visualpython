@@ -36,11 +36,16 @@ require.config({
     }
 });
 
-function vp_text(path) {
+function vp_css_loader(path) {
+    return 'css!' + path + '.css';
+}
+
+function vp_text_loader(path) {
     return 'text!' + path + '!strip';
 }
-function vp_css(path) {
-    return 'css!' + path;
+
+function vp_raw_loader(path) {
+    return 'text!' + path;
 }
 
 //============================================================================

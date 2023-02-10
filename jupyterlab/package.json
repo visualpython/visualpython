@@ -48,7 +48,6 @@
     "module-alias": "^2.2.2",
     "raw-loader": "^4.0.2",
     "requirejs": "^2.3.6",
-    "text": "github:requirejs/text",
     "text-loader": "^0.0.1"
   },
   "devDependencies": {

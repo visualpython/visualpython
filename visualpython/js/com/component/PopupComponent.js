@@ -54,8 +54,8 @@
 });
 
 define([
-    '!!text-loader!vp_base/html/component/popupComponent.html', // LAB: text! to text-loader
-    'vp_base/css/component/popupComponent.css', // LAB: css! to css-loader
+    vp_text_loader('vp_base/html/component/popupComponent.html'), // INTEGRATION: unified version of text loader
+    vp_css_loader('vp_base/css/component/popupComponent'), // INTEGRATION: unified version of css loader
     '../com_util',
     '../com_Const',
     '../com_String',

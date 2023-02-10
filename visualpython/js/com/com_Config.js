@@ -15,12 +15,12 @@ define([
     './com_Const', 
     './com_util', 
     './com_interface',
-    '!!text-loader!vp_base/python/userCommand.py', // LAB: text! to text-loader
-    '!!text-loader!vp_base/python/printCommand.py', // LAB: text! to text-loader
-    '!!text-loader!vp_base/python/fileNaviCommand.py', // LAB: text! to text-loader
-    '!!text-loader!vp_base/python/pandasCommand.py', // LAB: text! to text-loader
-    '!!text-loader!vp_base/python/variableCommand.py', // LAB: text! to text-loader
-    '!!text-loader!vp_base/python/visualizationCommand.py' // LAB: text! to text-loader
+    vp_text_loader('vp_base/python/userCommand.py'), // INTEGRATION: unified version of text loader
+    vp_text_loader('vp_base/python/printCommand.py'), // INTEGRATION: unified version of text loader
+    vp_text_loader('vp_base/python/fileNaviCommand.py'), // INTEGRATION: unified version of text loader
+    vp_text_loader('vp_base/python/pandasCommand.py'), // INTEGRATION: unified version of text loader
+    vp_text_loader('vp_base/python/variableCommand.py'), // INTEGRATION: unified version of text loader
+    vp_text_loader('vp_base/python/visualizationCommand.py') // INTEGRATION: unified version of text loader
 ], function(com_Const, com_util, com_interface, 
             userCommandFile, printCommand, fileNaviCommand, pandasCommand, variableCommand, visualizationCommand) {
 	'use strict';
@@ -919,7 +919,7 @@ define([
     /**
      * Version
      */
-    Config.version = "2.2.12";
+    Config.version = "2.2.13";
 
     /**
      * Type of mode

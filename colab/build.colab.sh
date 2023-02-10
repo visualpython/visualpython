@@ -17,12 +17,13 @@ export VP_NEW_VER=2.2.13
 mkdir -p ../dist/colab
 
 # update version info
-# rsync -av --exclude='path1/in/source' --exclude='path2/in/source' [source]/ [destination]
-rm -rf ../dist/colab/visualpython-v$VP_NEW_VER/*
-rsync -avk --exclude='./build.colab.sh' ../colab/ ../dist/colab/visualpython-v$VP_NEW_VER/
-grep -REil ${VP_ORG_VER//\./\\.} setup.py visualpython/* | xargs sed -i --follow-symlinks "s/${VP_ORG_VER//\./\\.}/${VP_NEW_VER}/g"
+# update manifest version with new numbering for new version
+grep -REil ${VP_ORG_VER//\./\\.}\.[0-9] manifest.json | xargs sed -i "s/${VP_ORG_VER//\./\\.}\.[0-9]/${VP_NEW_VER}.1/g"
+# update version inside visualpython package
+grep -REil ${VP_ORG_VER//\./\\.} visualpython/* | xargs sed -i --follow-symlinks "s/${VP_ORG_VER//\./\\.}/${VP_NEW_VER}/g"
 
 # build package
+# sudo apt-get install zip
 zip -r ../dist/colab/visualpython-v$VP_NEW_VER.zip background.js content.js icon.png inject.js manifest.json visualpython
 
 exit 0

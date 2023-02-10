@@ -13,8 +13,8 @@
 // [CLASS] Profiling
 //============================================================================
 define([
-    '!!text-loader!vp_base/html/m_apps/profiling.html', // LAB: text! to text-loader
-    'vp_base/css/m_apps/profiling.css', // LAB: css! to css-loader
+    vp_text_loader('vp_base/html/m_apps/profiling.html'), // INTEGRATION: unified version of text loader
+    vp_css_loader('vp_base/css/m_apps/profiling'), // INTEGRATION: unified version of css loader
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_interface',

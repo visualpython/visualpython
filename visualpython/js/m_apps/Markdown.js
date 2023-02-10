@@ -13,7 +13,7 @@
 // [CLASS] Markdown
 //============================================================================
 define([
-    'vp_base/css/m_apps/markdown.css', // LAB: css! to css-loader
+    vp_css_loader('vp_base/css/m_apps/markdown'), // INTEGRATION: unified version of css loader
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
     'vp_base/js/com/component/PopupComponent',

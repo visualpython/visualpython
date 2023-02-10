@@ -4,8 +4,8 @@ Pandas Objects Command
 import pandas as _vp_pd
 import IPython
 # LAB: prevent import error
-ipython_version = IPython.version_info
-if ipython_version[0] < 7 or ( ipython_version[0] == 7 and ipython_version[1] <= 13 ):
+_ipython_version = IPython.version_info
+if _ipython_version[0] < 7 or ( _ipython_version[0] == 7 and _ipython_version[1] <= 13 ):
     from IPython.core.display import display
 else:
     # from IPython.core.display is deprecated since IPython 7.14

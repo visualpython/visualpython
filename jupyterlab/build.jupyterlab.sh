@@ -23,6 +23,13 @@ grep -REil ${VP_ORG_VER//\./\\.} setup.py visualpython/* | xargs sed -i --follow
 
 mkdir -p ../dist/jupyterlab
 
+# run build as static files
+# npm install   # install npm package dependencies
+# npm run build  # optional build step if using TypeScript, babel, etc.
+# jupyter labextension install  # install the current directory as an extension
+jlpm run build
+
+# build file to output dir
 python -m build --outdir ../dist/jupyterlab
 
 exit 0

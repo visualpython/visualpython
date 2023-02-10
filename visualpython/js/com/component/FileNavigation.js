@@ -13,8 +13,8 @@
 // [CLASS] FileNavigation
 //============================================================================
 define([
-    '!!text-loader!vp_base/html/component/fileNavigation.html', // LAB: text! to text-loader
-    'vp_base/css/component/fileNavigation.css', // LAB: css! to css-loader
+    vp_text_loader('vp_base/html/component/fileNavigation.html'), // INTEGRATION: unified version of text loader
+    vp_css_loader('vp_base/css/component/fileNavigation'), // INTEGRATION: unified version of css loader
     'vp_base/js/com/component/LoadingSpinner',
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',

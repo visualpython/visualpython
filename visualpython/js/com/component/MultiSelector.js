@@ -9,7 +9,7 @@
  *    Change Date     :
  */
 define([
-    'vp_base/css/component/multiSelector.css', // LAB: css! to css-loader
+    vp_css_loader('vp_base/css/component/multiSelector'), // INTEGRATION: unified version of css loader
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',

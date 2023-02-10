@@ -13,7 +13,7 @@
 // [CLASS] Modal
 //============================================================================
 define([
-    'vp_base/css/component/modal.css', // LAB: css! to css-loader
+    vp_css_loader('vp_base/css/component/modal'), // INTEGRATION: unified version of css loader
     'vp_base/js/com/com_String',
     'vp_base/js/com/component/Component',
     'vp_base/js/com/com_util'

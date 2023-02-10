@@ -13,8 +13,8 @@
 // Load main frame
 //============================================================================
 define([
-    '!!text-loader!vp_base/html/mainFrame.html', // LAB: text! to text-loader
-    'vp_base/css/mainFrame.css', // LAB: css! to css-loader
+    vp_text_loader('vp_base/html/mainFrame.html'), // INTEGRATION: unified version of text loader
+    vp_css_loader('vp_base/css/mainFrame'), // INTEGRATION: unified version of css loader
 
     // load module
     './com/com_Config',
@@ -542,8 +542,7 @@ define([
                     that.boardFrame.hideLoadingBar();
                     that.boardFrame.reloadBlockList();
                 } else {
-                    // LAB: require -> requirejs changed module to require to avoid error : Cannot statically analyse 'require(…, …)'
-                    requirejs(loadMenuList, function() {
+                    require(loadMenuList, function() {
                         let parentBlock = null;
                         let prevBlock = null;
                         loadStateList.forEach(obj => {

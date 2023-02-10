@@ -13,7 +13,7 @@
 // [CLASS] LoadingSpinner
 //============================================================================
 define([
-    'vp_base/css/component/loadingSpinner.css', // LAB: css! to css-loader
+    vp_css_loader('vp_base/css/component/loadingSpinner'), // INTEGRATION: unified version of css loader
     'vp_base/js/com/component/Component'
 ], function(msgCss, Component) {
 
