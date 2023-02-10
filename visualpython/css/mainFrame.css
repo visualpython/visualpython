@@ -9,6 +9,22 @@
  *    Change Date     :
  */
 #vp_wrapper {
+    display: none;
+
+    position: fixed;
+    height: calc(100% - 110px);
+    overflow: hidden;
+    left: unset !important;
+    object-fit: contain; 
+    color: var(--font-primary);
+    font-family: AppleSDGothicNeo;
+    border: 1px solid var(--border-gray-color);
+    top: 110px;
+    right: 0;
+    background: white;
+    z-index: 100;
+}
+#vp_wrapper.colab {
     /* CHROME: edited to show */
     display: none;
 
@@ -30,7 +46,7 @@
     z-index: 100;
 }
 /* CHROME: set default box-sizing for vp area */
-div#vp_wrapper * {
+div#vp_wrapper.colab * {
     box-sizing: border-box !important;
 }
 /* LAB: reset position and size */

@@ -226,9 +226,7 @@ define([
         //========================================================================
         renderMainFrame() {
             this.$pageDom = $(vpHtml);
-            if (vpConfig.extensionType === 'lab') {
-                this.$pageDom.addClass('lab');
-            }
+            this.$pageDom.addClass(vpConfig.extensionType);
             return this.$pageDom;
         }
         afterAttach() {

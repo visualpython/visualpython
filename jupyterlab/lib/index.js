@@ -2,15 +2,15 @@ const path = require('path');
 const $ = require('jquery');
 require("jquery-ui");
 
-function vp_css_loader(path) {
+global.vp_css_loader = function(path) {
     return path + '.css';
 }
 
-function vp_text_loader(path) {
+global.vp_text_loader = function(path) {
     return '!!text-loader!' + path;
 }
 
-function vp_raw_loader(path) {
+global.vp_raw_loader = function(path) {
     return path;
 }
 

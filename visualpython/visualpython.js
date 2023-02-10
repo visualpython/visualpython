@@ -14,7 +14,7 @@
 //============================================================================
 require.config({
     paths: { 
-        'vp_base'   : '../nbextensions/visualpython/visualpython',
+        'vp_base'   : '../nbextensions/visualpython',
         'css'       : 'vp_base/lib/require/css.min'
     },
     config: {
@@ -47,6 +47,8 @@ function vp_text_loader(path) {
 function vp_raw_loader(path) {
     return 'text!' + path;
 }
+
+window.vpBase = "/nbextensions/";
 
 //============================================================================
 // Load extension
