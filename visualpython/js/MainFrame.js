@@ -540,8 +540,7 @@ define([
                     that.boardFrame.hideLoadingBar();
                     that.boardFrame.reloadBlockList();
                 } else {
-                    let customRequire = eval('require');
-                    customRequire(loadMenuList, function() {
+                    window.require(loadMenuList, function() {
                         let parentBlock = null;
                         let prevBlock = null;
                         loadStateList.forEach(obj => {
