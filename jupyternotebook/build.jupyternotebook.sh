@@ -8,9 +8,8 @@
 #    Date            : 2023. 02. 08
 #    Change Date     :
 #
-export VP_ORG_VER=2.2.12
-export VP_NEW_VER=2.2.13
-export CH_DT=`date "+%Y.%m.%d"`
+VP_ORG_VER=2.2.12
+VP_NEW_VER=2.2.13
 
 # update version info
 grep -REil ${VP_ORG_VER//\./\\.} setup.py visualpython/* | xargs sed -i --follow-symlinks "s/${VP_ORG_VER//\./\\.}/${VP_NEW_VER}/g"

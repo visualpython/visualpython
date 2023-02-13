@@ -10,8 +10,8 @@
 #
 
 # set visualpython version
-export VP_ORG_VER=2.2.12
-export VP_NEW_VER=2.2.13
+VP_ORG_VER=2.2.12
+VP_NEW_VER=2.2.13
 
 # make directories to save build output
 mkdir -p ../dist/colab

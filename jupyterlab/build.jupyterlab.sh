@@ -8,8 +8,8 @@
 #    Date            : 2023. 02. 08
 #    Change Date     :
 #
-export VP_ORG_VER=2.2.12
-export VP_NEW_VER=2.2.13
+VP_ORG_VER=2.2.12
+VP_NEW_VER=2.2.13
 
 # on conda environment
 pip install build
@@ -19,15 +19,15 @@ cp ../LICENSE LICENSE
 cp ../README.md README.md
 
 # update version info
-grep -REil ${VP_ORG_VER//\./\\.} setup.py visualpython/* | xargs sed -i --follow-symlinks "s/${VP_ORG_VER//\./\\.}/${VP_NEW_VER}/g"
+grep -REil "version = \"${VP_ORG_VER}\"" pyproject.toml | xargs sed -i "s/version = \"${VP_ORG_VER//\./\\.}\"/version = \"${VP_NEW_VER}\"/g"
+grep -REil ${VP_ORG_VER//\./\\.} visualpython/* | xargs sed -i --follow-symlinks "s/${VP_ORG_VER//\./\\.}/${VP_NEW_VER}/g"
 
+# Run dev-build script to build static files to ./visualpython/labextension
+# chmod 755 dev-build.jupyterlab.sh
+./dev-build.jupyterlab.sh
+
+# make dist directory if not exist
 mkdir -p ../dist/jupyterlab
-
-# run build as static files
-# npm install   # install npm package dependencies
-# npm run build  # optional build step if using TypeScript, babel, etc.
-# jupyter labextension install  # install the current directory as an extension
-jlpm run build
 
 # build file to output dir
 python -m build --outdir ../dist/jupyterlab
