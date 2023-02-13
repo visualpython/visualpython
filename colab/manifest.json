@@ -29,7 +29,8 @@
     "web_accessible_resources": [{
         "resources": [
             "icon.png",
-            "icon-deactivated.png",
+            "icon128.png",
+            "icon-disable.png",
             "inject.js",
             "visualpython/*"
         ],
