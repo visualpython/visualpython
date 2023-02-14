@@ -8,7 +8,7 @@ define([
 	'jquery-ui', 
 	'jquery-ui-css',
 	'codemirror/lib/codemirror', 
-	// vp_css_loader('codemirror/lib/codemirror'), // INTEGRATION: unified version of css loader 
+	// __VP_CSS_LOADER__('codemirror/lib/codemirror'), // INTEGRATION: unified version of css loader 
 	'vp_base/js/loadVisualpython',
 	'vp_base/js/com/com_Config'
 ], function(

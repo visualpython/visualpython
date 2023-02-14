@@ -13,8 +13,8 @@
 // [CLASS] MenuFrame
 //============================================================================
 define([
-    vp_text_loader('../../html/menuFrame.html'), // INTEGRATION: unified version of text loader
-    vp_css_loader('vp_base/css/menuFrame'), // INTEGRATION: unified version of css loader
+    __VP_TEXT_LOADER__('../../html/menuFrame.html'), // INTEGRATION: unified version of text loader
+    __VP_CSS_LOADER__('vp_base/css/menuFrame'), // INTEGRATION: unified version of css loader
 
     '../com/com_Config',
     '../com/com_Const',
@@ -24,7 +24,7 @@ define([
     '../com/component/SuggestInput',
     '../com/component/InnerFuncViewer',
 
-    vp_raw_loader('../../data/libraries.json'), // INTEGRATION: text! to raw-loader
+    __VP_RAW_LOADER__('../../data/libraries.json'), // INTEGRATION: text! to raw-loader
 
     './MenuGroup',
     './MenuItem',

@@ -15,7 +15,7 @@
 // CHROME: removed code
 define([
     // CHROME: removed .css extension type
-    vp_css_loader('vp_base/css/root'), // INTEGRATION: unified version of css loader
+    __VP_CSS_LOADER__('vp_base/css/root'), // INTEGRATION: unified version of css loader
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_Config',

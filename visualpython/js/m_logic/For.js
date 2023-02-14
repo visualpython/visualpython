@@ -13,7 +13,7 @@
 // [CLASS] For
 //============================================================================
 define([
-    vp_css_loader('vp_base/css/m_logic/for'), // INTEGRATION: unified version of css loader
+    __VP_CSS_LOADER__('vp_base/css/m_logic/for'), // INTEGRATION: unified version of css loader
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
     'vp_base/js/com/component/PopupComponent',

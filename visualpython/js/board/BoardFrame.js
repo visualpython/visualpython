@@ -13,8 +13,8 @@
 // [CLASS] BoardFrame
 //============================================================================
 define([
-    vp_text_loader('../../html/boardFrame.html'), // INTEGRATION: unified version of text loader
-    vp_css_loader('../../css/boardFrame'), // INTEGRATION: unified version of css loader
+    __VP_TEXT_LOADER__('../../html/boardFrame.html'), // INTEGRATION: unified version of text loader
+    __VP_CSS_LOADER__('../../css/boardFrame'), // INTEGRATION: unified version of css loader
     '../com/com_Config',
     '../com/com_Const',
     '../com/com_String',

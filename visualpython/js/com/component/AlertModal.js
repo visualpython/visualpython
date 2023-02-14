@@ -13,8 +13,8 @@
 // [CLASS] AlertModal
 //============================================================================
 define([
-    vp_text_loader('vp_base/html/component/alertModal.html'), // INTEGRATION: unified version of text loader
-    vp_css_loader('vp_base/css/component/alertModal'), // INTEGRATION: unified version of css loader
+    __VP_TEXT_LOADER__('vp_base/html/component/alertModal.html'), // INTEGRATION: unified version of text loader
+    __VP_CSS_LOADER__('vp_base/css/component/alertModal'), // INTEGRATION: unified version of css loader
     'vp_base/js/com/com_Const',
     'vp_base/js/com/component/Component'
 ], function(msgHtml, msgCss, com_Const, Component) {

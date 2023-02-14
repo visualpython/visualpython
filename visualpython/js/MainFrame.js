@@ -13,8 +13,8 @@
 // Load main frame
 //============================================================================
 define([
-    vp_text_loader('vp_base/html/mainFrame.html'), // INTEGRATION: unified version of text loader
-    vp_css_loader('vp_base/css/mainFrame'), // INTEGRATION: unified version of css loader
+    __VP_TEXT_LOADER__('vp_base/html/mainFrame.html'), // INTEGRATION: unified version of text loader
+    __VP_CSS_LOADER__('vp_base/css/mainFrame'), // INTEGRATION: unified version of css loader
 
     // load module
     './com/com_Config',

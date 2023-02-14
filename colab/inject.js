@@ -21,15 +21,15 @@ function vp_inject(path) {
     s.remove();
 }
 
-function vp_css_loader(path) {
+function __VP_CSS_LOADER__(path) {
     return 'css!' + path;
 }
 
-function vp_text_loader(path) {
+function __VP_TEXT_LOADER__(path) {
     return 'text!' + path + '!strip';
 }
 
-function vp_raw_loader(path) {
+function __VP_RAW_LOADER__(path) {
     return 'text!' + path;
 }
 
@@ -102,9 +102,9 @@ function vp_config_require() {
         'jquery', 
         'jquery-ui', 
         // 'css!vp_base/lib/jquery/jquery-ui.min',
-        vp_css_loader('vp_base/lib/jquery/jquery-ui.min'),
+        __VP_CSS_LOADER__('vp_base/lib/jquery/jquery-ui.min'),
         'codemirror/lib/codemirror', 
-        vp_css_loader('codemirror/lib/codemirror'), 
+        __VP_CSS_LOADER__('codemirror/lib/codemirror'), 
         'vp_base/js/loadVisualpython'
     ], function(text, css, $, ui, uiCss, codemirror, cmCss, loadVisualpython) {
         // codemirror

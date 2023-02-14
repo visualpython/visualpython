@@ -13,8 +13,8 @@
 // [CLASS] FitPredict
 //============================================================================
 define([
-    vp_text_loader('vp_base/html/m_ml/fitPredict.html'), // INTEGRATION: unified version of text loader
-    vp_css_loader('vp_base/css/m_ml/fitPredict'), // INTEGRATION: unified version of css loader
+    __VP_TEXT_LOADER__('vp_base/html/m_ml/fitPredict.html'), // INTEGRATION: unified version of text loader
+    __VP_CSS_LOADER__('vp_base/css/m_ml/fitPredict'), // INTEGRATION: unified version of css loader
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_generatorV2',

@@ -13,7 +13,7 @@
 // [CLASS] Evaluation
 //============================================================================
 define([
-    vp_text_loader('vp_base/html/m_ml/evaluation.html'), // INTEGRATION: unified version of text loader
+    __VP_TEXT_LOADER__('vp_base/html/m_ml/evaluation.html'), // INTEGRATION: unified version of text loader
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_interface',
     'vp_base/js/com/com_Const',
