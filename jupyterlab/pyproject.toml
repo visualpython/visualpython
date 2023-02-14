@@ -41,6 +41,7 @@ file = "LICENSE"
 Homepage = "https://github.com/visualpython/visualpython"
 
 [tool.hatch.build]
+directory = "../dist/jupyterlab"
 artifacts = [
     "visualpython/labextension",
 ]
@@ -53,6 +54,7 @@ artifacts = [
 [tool.hatch.build.targets.sdist]
 exclude = [
     ".github",
+    "build.jupyterlab.sh",
 ]
 
 [tool.hatch.build.hooks.jupyter-builder]
