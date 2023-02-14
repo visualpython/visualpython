@@ -8,19 +8,23 @@
 #    Date            : 2023. 02. 08
 #    Change Date     :
 #
-
-# set visualpython version
+#=============================================================================
+# Replace Version
+#=============================================================================
 VP_ORG_VER=2.2.12
-VP_NEW_VER=2.2.13
-
-# make directories to save build output
-mkdir -p ../dist/colab
+VP_NEW_VER=2.3.1
 
 # update version info
 # update manifest version with new numbering for new version
 grep -REil ${VP_ORG_VER//\./\\.}\.[0-9] manifest.json | xargs sed -i "s/${VP_ORG_VER//\./\\.}\.[0-9]/${VP_NEW_VER}.1/g"
 # update version inside visualpython package
 grep -REil ${VP_ORG_VER//\./\\.} visualpython/* | xargs sed -i --follow-symlinks "s/${VP_ORG_VER//\./\\.}/${VP_NEW_VER}/g"
+
+#=============================================================================
+# Build output for Colab
+#=============================================================================
+# make directories to save build output
+mkdir -p ../dist/colab
 
 # build package
 # sudo apt-get install zip
