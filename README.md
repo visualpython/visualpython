@@ -31,7 +31,7 @@ Visual Python is an extension to Jupyter Lab, so you must have Jupyter Lab insta
 
 ### 2. How to Install
 
-**1)  Install package from**
+**1)  Install package from PyPI**
 ```
 pip install jupyterlab-visualpython
 ```
@@ -50,7 +50,7 @@ Visual Python is an extension to Jupyter Notebook, so you must have Jupyter Note
 
 ### 2. How to Install
 
-**1)  Install package from**
+**1)  Install package from PyPI**
 ```
 pip install visualpython
 ```
