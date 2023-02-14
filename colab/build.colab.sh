@@ -12,7 +12,7 @@
 # Replace Version
 #=============================================================================
 VP_ORG_VER=2.2.12
-VP_NEW_VER=2.3.1
+VP_NEW_VER=2.3.0
 
 # update version info
 # update manifest version with new numbering for new version

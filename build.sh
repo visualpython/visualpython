@@ -8,6 +8,16 @@
 #    Date            : 2023. 02. 08
 #    Change Date     :
 #
+#=============================================================================
+# Set version and replace it
+#=============================================================================
+VP_ORG_VER=2.2.12
+VP_NEW_VER=2.3.0
+
+# update version info
+grep -REil "VP_ORG_VER=.+$" colab/build.colab.sh jupyterlab/build.jupyterlab.sh jupyternotebook/build.jupyternotebook.sh | xargs sed -i "s/VP_ORG_VER=.\+$/VP_ORG_VER=${VP_ORG_VER}/g"
+grep -REil "VP_NEW_VER=.+$" colab/build.colab.sh jupyterlab/build.jupyterlab.sh jupyternotebook/build.jupyternotebook.sh | xargs sed -i "s/VP_NEW_VER=.\+$/VP_NEW_VER=${VP_NEW_VER}/g"
+
 TEMP_PWD=$PWD
 
 #=============================================================================
@@ -27,6 +37,18 @@ cd $TEMP_PWD/jupyternotebook
 #=============================================================================
 cd $TEMP_PWD/jupyterlab
 ./build.jupyterlab.sh
+
+#=============================================================================
+# Upload (for maintainer only)
+#=============================================================================
+## jupyternotebook
+# python -m twine upload dist/jupyternotebook/dist/*
+
+## jupyterlab
+# python -m twine upload dist/jupyterlab/*
+
+## colab
+## upload on chrome web store with blacklogic.dev
 
 exit 0
 
