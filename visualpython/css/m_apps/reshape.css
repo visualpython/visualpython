@@ -1,0 +1,37 @@
+.vp-rs-df-box {
+    display: grid;
+    grid-template-rows: 30px;
+    grid-row-gap: 5px;
+}
+
+.vp-rs-df-refresh {
+    display: inline-block;
+    cursor: pointer;
+    margin-left: 5px;
+    /* LAB: img to background-image */
+    background: center / contain no-repeat url(../../img/refresh.svg);
+    width: 18px;
+    height: 19px;
+}
+.vp-rs-df-box label {
+    font-weight: bold;
+}
+.vp-rs-df-box select,
+.vp-rs-df-box input {
+    width: 160px;
+}
+
+.vp-rs-type-box {
+    display: grid;
+    grid-template-rows: 30px;
+    grid-row-gap: 5px;
+}
+.vp-rs-type-title {
+    /* background: var(--light-gray-color); */
+    border: 1px solid var(--border-gray-color);
+    height: 30px;
+    line-height: 30px;
+    vertical-align: middle;
+    padding: 0px 10px;
+    font-weight: bold;
+}

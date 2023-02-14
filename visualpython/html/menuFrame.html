@@ -1,0 +1,73 @@
+<!--
+    Project Name    : Visual Python
+    Description     : GUI-based Python code generator
+    File Name       : menuFrame.html
+    Author          : Black Logic
+    Note            : menu frame
+    License         : GNU GPLv3 with Visual Python special exception
+    Date            : 2021. 09. 13
+    Change Date     : 
+-->
+<!-- use body tag to strip comments out on requirejs/text plugin -->
+<body>
+    <div id="vp_menuFrame" class="vp-menu-frame">
+        <!-- Menu Header -->
+        <div id="vp_menuHeader" class="vp-menu-header">
+            <!-- Full Logo as Image -->
+            <!-- CHROME: edited paths --> 
+            <!-- <img src="/nbextensions/visualpython/img/VisualPython_Logo.svg" class="vp-logo"> -->
+            <!-- <img src="${vp_base}/img/VisualPython_Logo.svg" class="vp-logo"> -->
+            <!-- LAB: img to url-->
+            <div class="vp-logo"></div>
+            <!-- <img src="${vp_base}/img/VisualPython_Logo.svg" class="vp-logo"> -->
+    
+            <div id="vp_headerExtraMenuBtn" class="vp-menu-header-button vp-close-on-blur-btn">
+                <div id="vp_headerExtraMenu" class="vp-no-selection vp-close-on-blur">
+                    <ul class="vp-header-extra-menu-list">
+                        <li id="vp_restart" data-menu="restart">
+                            Restart Visual Python
+                        </li>
+                        <li id="vp_checkVersion" data-menu="check-version">
+                            Check for updates
+                        </li>
+                        <li id="vp_viewInnerFunc" data-menu="view-inner-func">
+                            View inner functions
+                        </li>
+                        <hr class="vp-extra-menu-line"/>
+                        <li id="vp_extraMenuAbout" data-menu="about">
+                            <a href="https://visualpython.ai/about" target="_blank">
+                                About Visual Python 
+                            </a>
+                        </li>
+                        <li id="vp_extraMenuVPNote" data-menu="vpnote">
+                            <a href="https://visualpython.ai/vpnotes" target="_blank">
+                                Find VP Notes 
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="vp_versionUpdater" class="vp-version-updater">
+                <span class="fa fa-circle"></span>
+            </div>
+        </div>
+        <!-- Menu Body -->
+        <div id="vp_menuBody" class="vp-menu-body">
+            <div class="vp-menu-search-div">
+                <input id="vp_menuSearchBox" class="vp-input vp-menu-search-box" type="text" placeholder="Search">
+                <!-- LAB: img to url -->
+                <!-- <img class="vp-menu-search-icon" src="${vp_base}/img/search.svg"/> -->
+                <div class="vp-menu-search-icon"></div>
+                <div id="vp_toggleBoard" class="vp-board-toggle-icon" title="Show VP Note"></div>
+            </div>
+            <div class="vp-menugroup-list vp-scrollbar">
+
+            </div>
+        </div>
+        <!-- Menu Footer -->
+        <div id="vp_menuFooter" class="vp-menu-footer">
+            
+        </div>
+    </div>
+</body>

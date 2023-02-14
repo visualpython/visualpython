@@ -1,0 +1,278 @@
+:root {
+    --color: #C4C4C4;
+    --bgcolor: #696969;
+}
+
+/* Import Options box*/
+.vp-import-box {
+    display: grid;
+    grid-template-rows: 30px;
+    grid-row-gap: 5px;
+    border: 1px solid var(--border-gray-color);
+    border-radius: 5px;
+    padding: 10px 0px;
+}
+.vp-import-box label {
+    min-width: 130px;
+    max-width: 300px;
+    vertical-align: middle;
+    text-align: left;
+    font-weight: bold;
+    height: 30px;
+    padding: 2px 5px 2px 16px;
+}
+.vp-import-box input[type="text"] {
+    width: 160px;
+}
+.vp-import-box input[type="number"] {
+    width: 79px;
+}
+.vp-pl-import-run {
+    float: right;
+    margin-right: 15px;
+}
+
+.vp-icon-btn.vp-close-view {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+}
+.vp-option-title {
+    display: inline-block;
+    color: #696969;
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 15.6px;
+    margin: 16px 0px 14px 14px;
+}
+.vp-thead {
+    min-width: 150px;
+    max-width: 300px;
+    height: 25px;
+    line-height: 25px;
+    vertical-align: middle;
+    font-weight: bold;
+    font-size: 14px;
+    text-align: left;
+    padding: 2px 5px 2px 2px;
+}
+
+/* Color Style Select */
+.vp-plot-cmap {
+    width: 160px;
+    height: 30px;
+    border: 0.25px solid var(--border-gray-color);
+    border-radius: 3px;
+    margin-top: 5px;
+    position: relative;
+    display: flex;
+    cursor: pointer;
+    padding: 2px 5px 0px 5px;
+    background-image: url("data:image/svg+xml;utf8,<svg fill='darkgray' height='14' viewBox='0 0 24 24' width='14' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+    background-repeat: no-repeat;
+    background-position-x: 100%;
+    background-position-y: 5px;
+}
+.vp-plot-cmap span {
+    font-size: 1em;
+    font-weight: 700;
+    line-height: 25px;
+    padding-left: 5px;
+}
+.vp-plot-cmap-selector {
+    width: 176px;
+    height: 150px;
+    overflow: auto;
+    position: absolute;
+    /* display: none; */
+    top: 100%;
+    left: 0;
+    right: 0;
+    transition: all 0.5s;
+    background-color: white;
+    border: 0.25px solid var(--color);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 1000;
+}
+.vp-plot-cmap-selector .vp-plot-cmap-item { 
+    width: 100%;
+    height: 40px;
+    /* background-image: attr(data-url url); */
+    /* background-image: url(../../img/pandas/cmap/Accent.JPG); */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    border: 2px solid transparent;
+    position: relative;
+    display: block;
+    cursor: pointer;
+    transition: all 0.5s;
+    color: var(--color);
+
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                supported by Chrome, Edge, Opera and Firefox */
+}
+.vp-plot-cmap-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+.vp-plot-cmap-wrapper.open .vp-plot-cmap-selector {
+    opacity: 1;
+    visibility: visible;
+    /* display: block; */
+    pointer-events: all;
+}
+
+/* Plot Kind */
+.vp-plot-kind {
+    /* background: #F5F5F5; */
+    width: 430px;
+    display: grid;
+    grid-template-rows: repeat(2, 90px);
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: 100px;
+    grid-gap: 2.5px;
+    margin: 5px 0px 30px 10px;
+}
+.vp-plot-item {
+    /* display: flex; */
+    justify-content: center;
+    align-items: center;
+    padding: 3px;
+    box-sizing: border-box;
+    position: relative;
+    font-size: 1em;
+    font-weight: 900;
+    cursor: pointer;
+}
+.vp-plot-item .vp-plot-name {
+    width: 100%;
+    height: 13px;
+    font-family: AppleSDGothicNeo;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 13px;
+    text-align: center;
+    margin-top: 5px;
+}
+.vp-plot-item.selected .vp-plot-thumb {
+    border: 2px solid  var(--highlight-color);
+}
+.vp-plot-item.selected .vp-plot-name {
+    color:  var(--font-highlight) !important;
+}
+.vp-plot-item .vp-plot-thumb {
+    width: 100%;
+    height: 75%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    border: 0.25px solid var(--border-gray-color);
+    border-radius: 3px;
+}
+.vp-plot-item .vp-plot-thumb.plot {
+    background-image: url(../../img/chart/plot.png);
+}
+.vp-plot-item .vp-plot-thumb.bar {
+    background-image: url(../../img/chart/bar.png);
+}
+.vp-plot-item .vp-plot-thumb.barh {
+    background-image: url(../../img/chart/barh.png);
+}
+.vp-plot-item .vp-plot-thumb.hist {
+    background-image: url(../../img/chart/hist.png);
+}
+.vp-plot-item .vp-plot-thumb.boxplot {
+    background-image: url(../../img/chart/boxplot.png);
+}
+.vp-plot-item .vp-plot-thumb.stackplot {
+    background-image: url(../../img/chart/stackplot.png);
+}
+.vp-plot-item .vp-plot-thumb.pie {
+    background-image: url(../../img/chart/pie.png);
+}
+.vp-plot-item .vp-plot-thumb.scatter {
+    background-image: url(../../img/chart/scatter.png);
+}
+.vp-plot-item .vp-plot-thumb.hexbin {
+    background-image: url(../../img/chart/hexbin.png);
+}
+.vp-plot-item .vp-plot-thumb.contour {
+    background-image: url(../../img/chart/contour.png);
+}
+.vp-plot-item .vp-plot-thumb.imshow {
+    background-image: url(../../img/chart/imshow.png);
+}
+.vp-plot-item .vp-plot-thumb.errorbar {
+    background-image: url(../../img/chart/errorbar.png);
+}
+
+/* Variable Viewer */
+.vp-var-view-box {
+    display: none;
+    position: absolute;
+    width: 280px;
+    height: 260px;
+    border: 0.25px solid #C4C4C4;
+    background: #FFFFFF;
+    color: #696969;
+    padding: 5px;
+    z-index: 99;
+    right: 4%;
+}
+.vp-var-view-box .vp-var-view-div {
+    height: 84px;
+    overflow: auto;
+}
+.vp-var-view-box table.vp-option-table.vp-var-view-list,
+.vp-var-view-box table.vp-option-table.vp-var-view-detail {
+    padding: 5px;
+}
+.vp-var-view-box .vp-var-view-list tbody tr:hover {
+    background: #C4C4C4;
+    padding: 3px;
+    cursor: pointer;
+}
+.vp-var-view-box .vp-var-view-list tbody tr.selected {
+    color:  var(--font-highlight);
+}
+.vp-var-view-box .var-view-footer {
+    margin-top: 7px;
+}
+.vp-var-view-box .var-view-footer input[type="text"] {
+    width: 210px;
+}
+
+/* Column Selector */
+.vp-column-select,
+.vp-method-select {
+    border: 0.25px solid #C4C4C4;
+    overflow-y: auto;
+    height: 100px;
+}
+.vp-column-select-item,
+.vp-method-select-item {
+    cursor: pointer;
+    padding: 3px;
+    border-bottom: 0.25px solid var(--border-gray-color);
+}
+.vp-column-select-item.selected,
+.vp-method-select-item.selected {
+    color:  var(--font-highlight);
+    background: var(--light-gray-color);
+}
+
+/* Select Data Button */
+.vp-select-data {
+    width: 80px;
+    height: 30px;
+}

@@ -1,0 +1,51 @@
+<body>
+    <div class="vp-sn-body cm-s-ipython">
+        <div class="vp-sn-header">
+            <label>Snippets</label>
+            <div class="vp-sn-menu">
+                <!-- LAB: img to url -->
+                <!-- <img src="${vp_base}/img/snippets/more.svg" class="vp-close-on-blur-btn"/> -->
+                <div class="vp-sn-menu-more vp-close-on-blur-btn"></div>
+                <div class="vp-sn-menu-box vp-temp-popup-menu vp-close-on-blur">
+                    <div class="vp-sn-menu-item" data-menu="import">Import</div>
+                    <div class="vp-sn-menu-item" data-menu="export">Export</div>
+                    <hr style="margin:0px;"/>
+                    <div class="vp-sn-menu-item" data-menu="default-snippets">Default Snippets</div>
+                </div>
+            </div>
+        </div>
+        <div class="vp-sn-search-box">
+            <input type="text" class="vp-sn-search vp-input" placeholder="Search"/>
+            <!-- LAB: img to url -->
+            <!-- <img class="vp-sn-search-icon" src="${vp_base}/img/search.svg"> -->
+            <div class="vp-sn-search-icon"></div>
+        </div>
+        <div class="vp-sn-func-box">
+            <div class="vp-sn-func-left">
+                <!-- LAB: img to url -->
+                <div class="vp-sn-sort vp-close-on-blur-btn" data-menu="sort" title="Sort">
+                    <!-- <img src="${vp_base}/img/snippets/sort.svg" /> -->
+                </div>
+                <div class="vp-sn-sort-menu-box vp-temp-popup-menu vp-close-on-blur">
+                    <div class="vp-sn-sort-menu-item" data-menu="name">by Names</div>
+                    <div class="vp-sn-sort-menu-item" data-menu="date">by Dates</div>
+                </div>
+            </div>
+            <div class="vp-sn-func-right">
+                <div class="vp-sn-func-export-mode">
+                    <input type="hidden" class="vp-sn-filename" />
+                    <input type="hidden" class="vp-sn-filepath" />
+                    <button class="vp-button cancel vp-sn-export" data-menu="cancel">Cancel</button>
+                    <button class="vp-button activated vp-sn-export" data-menu="export">Export</button>
+                    <input type="checkbox" class="vp-sn-checkbox vp-sn-check-all" />
+                </div>
+                <div class="vp-sn-func-default-mode">
+                    <button class="vp-button vp-sn-create" data-menu="create" title="Create new snippet">+ Snippet</button>
+                </div>
+            </div>
+        </div>
+        <div class="vp-sn-table">
+            
+        </div>
+    </div>
+</body>

@@ -1,0 +1,59 @@
+#vp_var_variableBox table {
+    width: 100%;
+}
+#vp_var_variableBox table tbody tr:hover,
+#vp_var_variableBox table tbody tr.vp-selected {
+    color: var(--font-highlight);
+    background-color: #F5F5F5;
+}
+#vp_var_variableBox table tbody tr td:hover {
+    cursor: pointer;
+}
+#vp_var_variableBox table tbody:empty::after {
+    content: '(No variables available.)';
+    color: var(--highlight-color);
+    font-style: italic;
+}
+#vp_var_variableBox table thead {
+    position: sticky;
+    top: 0;
+    background: white;
+}
+#vp_var_variableBox table td {
+    vertical-align: middle;
+    text-align: left;
+    line-height: 30px;
+    height: 30px;
+    padding: 2px 5px;
+}
+
+#vp_varDetailTable table th, 
+#vp_varDetailTable table td {
+    padding: 5px;
+}
+#vp_varDetailTable table th {
+    background-color: lightgray;
+}
+#vp_varRefresh{
+    margin-left: 7px;
+    /* LAB: img to background-image */
+    background: top / contain no-repeat url(../../img/refresh.svg);
+    height: 100%;
+}
+#vp_varRefresh:hover {
+    cursor: pointer;
+}
+#vp_var_variableBox {
+    width: 100%;
+    height: 150px;
+}
+#vp_varDetailTable:empty::after {
+    content: '(Select variables to preview the data.)';
+    color: var(--highlight-color);
+    font-style: italic;
+}
+#vp_varDetailTable {
+    width: 100%;
+    height: 300px;
+    overflow: auto;
+}

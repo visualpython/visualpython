@@ -1,0 +1,289 @@
+<body>
+    <!-- Creating Subplots : Hide for next version -->
+    <!-- <div>
+        <div>
+            <label class="vp-bold">
+                Creating Subplots
+                <input type="checkbox" class="vp-state" id="createSubplots"/>
+                <span style="height: 15px;"></span>
+            </label>
+            <span id="chartSetting" class="vp-chart-setting vp-no-selection">
+                <i class="fa fa-gear"></i> Setting
+            </span>
+        </div>
+        <div id="subplotBox" class="vp-grid-border-box vp-grid-col-p50" style="display: none;">
+            <div class="vp-grid-col-p50">
+                <div>
+                    <label class="vp-bold" for="figWidth">Figure Size</label><div></div>
+                    <input type="number" class="vp-input sm vp-state" id="figWidth" placeholder="Width"/>
+                    <input type="number" class="vp-input sm vp-state" id="figHeight" placeholder="Height"/>
+                </div>
+                <div>
+                    <label class="vp-bold vp-orange-text" for="figRow">Number of subplots</label><div></div>
+                    <input type="number" class="vp-input sm vp-state" id="figRow" placeholder="Row"/>
+                    <input type="number" class="vp-input sm vp-state" id="figColumn" placeholder="Column"/>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <label class="vp-bold">Sharing axes?</label>
+                </div>
+                <div>
+                    <label><input type="checkbox" class="vp-state" id="shareX" checked/><span>Share X-axis</span></label>
+                    <label><input type="checkbox" class="vp-state" id="shareY" checked/><span>Share Y-axis</span></label>
+                    <button class="vp-button activated vp-create-subplot-btn" id="createSubplotsBtn">Create</button>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <!-- <div class="vp-chart-body" style="margin-top:10px;"> -->
+    <div class="vp-chart-body" >
+        <div class="vp-chart-left-box">
+            <div class="vp-tab-bar figure" data-level="figure">
+                <div class="vp-tab-item vp-focus" data-type="1">Plot</div>
+                <!-- Hide for next version -->
+                <!-- <div class="vp-tab-item" data-type="2">Plot 2</div>
+                <div class="vp-tab-item" data-type="3">Plot 3</div> -->
+
+                <!-- Temporary position : Change its position after enabling Subplots -->
+                <span id="chartSetting" class="vp-chart-setting vp-no-selection">
+                     Setting
+                </span>
+            </div>
+            <div class="vp-tab-page-box figure vp-grid-border-box vp-scrollbar">
+                <div class="vp-tab-page" data-type="1">
+                    <div class="vp-chart-plot-box">
+                        <!-- Chart & Data Selection & Tab option box -->
+                            <div class="vp-tab-bar plot" data-level="plot">
+                                <div class="vp-tab-item vp-focus" data-type="data">Data</div>
+                                <div class="vp-tab-item" data-type="axes">Axes</div>
+                                <div class="vp-tab-item" data-type="info">Info</div>
+                                <div class="vp-tab-item" data-type="style">Style</div>
+                                <div class="vp-tab-item" data-type="code">Code</div>
+                            </div>
+                            <div class="vp-tab-page-box plot vp-grid-border-box vp-scrollbar">
+                                <div class="vp-tab-page vp-grid-box" data-type="data">
+                                    <div class="vp-italic">
+                                        <span class="vp-orange-text">NOTE: </span>Options selected from this tab only apply to subplot 1.
+                                    </div>
+                                    <label for="chartType" class="vp-bold vp-orange-text">Chart Type</label>
+                                    <select id="chartType" class="vp-select vp-state wp100">
+                
+                                    </select>
+                                    <label class="vp-bold">Data</label>
+                                    <div class="vp-grid-col-p50">
+                                        <input type="text" id="data" class="vp-input vp-state"/>
+                                        <label><input type="checkbox" id="setXY" class="vp-state"><span>Set X and Y individually</span></label>
+                                    </div>
+                                    <div class="vp-grid-col-p50">
+                                        <div class="vp-grid-box">
+                                            <label for="x" class="vp-bold">X-axis Value</label>
+                                            <select id="x" class="vp-select vp-state">
+                    
+                                            </select>
+                                        </div>
+                                        <div class="vp-grid-box">
+                                            <label for="y" class="vp-bold">Y-axis Value</label>
+                                            <select id="y" class="vp-select vp-state">
+                    
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="vp-grid-col-p50">
+                                        <div class="vp-grid-box">
+                                            <label for="hue" class="vp-bold">Hue</label>
+                                            <select id="hue" class="vp-select vp-state">
+                        
+                                            </select>
+                                        </div>
+                                        <div class="vp-grid-box sb-option">
+                                            <label for="bins" class="vp-bold">Bins</label>
+                                            <input type="number" class="vp-input vp-state" id="bins" placeholder="Type bins" step="5" min="0" />
+                                        </div>
+                                        <div class="vp-grid-box sb-option">
+                                            <label for="kde" class="vp-bold">Kde</label>
+                                            <select id="kde" class="vp-select vp-state">
+                                                <option value="">Select option...</option>
+                                                <option value="True">True</option>
+                                                <option value="False">False</option>
+                                            </select>
+                                        </div>
+                                        <div class="vp-grid-box sb-option">
+                                            <label for="stat" class="vp-bold">Stat</label>
+                                            <select id="stat" class="vp-state">
+                                                <!-- Auto-create -->
+                                            </select>
+                                        </div>
+                                        <div class="vp-grid-box sb-option" style="grid-column-start: 1;grid-column-end: 3;">
+                                            <hr style="margin:5px;"/>
+                                            <label class="vp-tab-group-title">Sort</label>
+                                            <div class="vp-grid-col-p50">
+                                                <div class="vp-grid-col-95">
+                                                    <label for="sortType">Order</label>
+                                                    <select id="sortType" class="vp-state vp-select m">
+                                                        <option value="">No sorting</option>
+                                                        <option value="descending">Sort in descending order</option>
+                                                        <option value="ascending">Sort in ascending order</option>
+                                                    </select>
+                                                </div>
+                                                <div class="vp-grid-col-95">
+                                                    <label for="sortBy">Sort by</label>
+                                                    <select id="sortBy" class="vp-state vp-select m">
+                                                        <option value="y">y axis</option>
+                                                        <option value="x">x axis</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="vp-grid-col-95 sb-option">
+                                                <label for="sortHue">Hue condition</label>
+                                                <div>
+                                                    <input type="text" id="sortHue" class="vp-input vp-state" placeholder="Type hue condition"/>
+                                                    <label><input type="checkbox" id="sortHueText" class="vp-state" checked/><span>Text</span></label>
+                                                </div>
+                                            </div>
+                                            <hr style="margin:5px;"/>
+                                        </div>
+                                    </div>
+                                    <label for="userOption" class="vp-bold">User Option</label>
+                                    <input type="text" id="userOption" class="vp-input vp-state wp100" placeholder="key=value, ..."/>
+                                </div>
+                                <div class="vp-tab-page vp-grid-box" data-type="axes" style="display: none;">
+                                    <!-- SETTING : axis limit / tick interval / rotate tick labels ... -->
+                                    <div class="vp-grid-col-95">
+                                        <label for="x_limit_from" class="vp-bold">X Limit</label>
+                                        <div class="vp-grid-col-p50">
+                                            <input type="text" id="x_limit_from" class="vp-input m vp-state" placeholder="From" />
+                                            <input type="text" id="x_limit_to" class="vp-input m vp-state" placeholder="To" />
+                                        </div>
+                                    </div>
+                                    <div class="vp-grid-col-95">
+                                        <label for="y_limit_from" class="vp-bold">Y Limit</label>
+                                        <div class="vp-grid-col-p50">
+                                            <input type="text" id="y_limit_from" class="vp-input m vp-state" placeholder="From" />
+                                            <input type="text" id="y_limit_to" class="vp-input m vp-state" placeholder="To" />
+                                        </div>
+                                    </div>
+                                    <hr style="margin:5px;"/>
+                                    <label for="xticks" class="vp-tab-group-title">X ticks</label>
+                                    <div class="vp-grid-col-95">
+                                        <label>Ticks</label>
+                                        <div class="vp-grid-col-p50">
+                                            <input type="text" id="xticks" class="vp-input vp-state" placeholder="X ticks location: [0,1,2]" />
+                                            <input type="text" id="xticks_label" class="vp-input vp-state" 
+                                                placeholder="X ticks label: ['a','b','c']" 
+                                                title="Enter ticks location to use label option" readonly/>
+                                        </div>
+                                    </div>
+                                    <div class="vp-grid-col-95">
+                                        <label for="xticks_rotate">Rotation</label>
+                                        <input type="number" id="xticks_rotate" class="vp-input vp-state" placeholder="45" step="5" />
+                                    </div>
+                                    <div>
+                                        <label><input type="checkbox" id="removeXticks" class="vp-state"/><span>Remove X ticks</span></label>
+                                    </div>
+                                    <label for="yticks" class="vp-tab-group-title">Y ticks</label>
+                                    <div class="vp-grid-col-95">
+                                        <label>Ticks</label>
+                                        <div class="vp-grid-col-p50">
+                                            <input type="text" id="yticks" class="vp-input vp-state" placeholder="Y ticks location: [0,1,2]" />
+                                            <input type="text" id="yticks_label" class="vp-input vp-state" 
+                                                placeholder="Y ticks label: ['a','b','c']" 
+                                                title="Enter ticks location to use label option" readonly/>
+                                        </div>
+                                    </div>
+                                    <div class="vp-grid-col-95">
+                                        <label for="yticks_rotate">Rotation</label>
+                                        <input type="number" id="yticks_rotate" class="vp-input vp-state" placeholder="45" step="5" />
+                                    </div>
+                                    <div>
+                                        <label><input type="checkbox" id="removeYticks" class="vp-state"/><span>Remove Y ticks</span></label>
+                                    </div>
+                                </div>
+                                <div class="vp-tab-page vp-grid-box" data-type="info" style="display: none;">
+                                    <label for="title" class="vp-bold">Title</label>
+                                    <input type="text" id="title" class="vp-input vp-state wp100" placeholder="Title for the chart" />
+                                    <div class="vp-grid-col-p50">
+                                        <div class="vp-grid-box">
+                                            <label for="x_label" class="vp-bold">X Label</label>
+                                            <input type="text" id="x_label" class="vp-input vp-state" placeholder="Type X Label" />
+                                        </div>
+                                        <div class="vp-grid-box">
+                                            <label for="y_label" class="vp-bold">Y Label</label>
+                                            <input type="text" id="y_label" class="vp-input vp-state" placeholder="Type Y Label" />
+                                        </div>
+                                    </div>
+                                    <div class="vp-grid-box sb-option">
+                                        <hr style="margin:5px;"/>
+                                        <label class="vp-tab-group-title">Show values</label>
+                                        <label><input type="checkbox" id="showValues" class="vp-state"/><span>Show values on the top of bar</span></label>
+                                        <div class="vp-grid-col-95">
+                                            <label for="showValuesPrecision">Decimal place</label>
+                                            <input type="number" id="showValuesPrecision" class="vp-state" placeholder="Type decimal places(0~5)" min="0" max="5"/>
+                                        </div>
+                                        <hr style="margin:5px;"/>
+                                    </div>
+                                    <label for="useLegend" class="vp-bold">Legend</label>
+                                    <div class="vp-grid-col-p50">
+                                        <select id="legendPos" class="vp-select vp-state">
+                                            <!-- Legend Position FIXME: -->
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="vp-tab-page vp-grid-box" data-type="style" style="display: none;">
+                                    <!-- STYLE: grid / marker / color -->
+                                    <label for="color" class="vp-bold">Color</label>
+                                    <div>
+                                        <label><input type="checkbox" id="useColor" class="vp-state"/><span>Use Color</span></label>
+                                        <input type="color" id="color" class="vp-state" disabled/>
+                                    </div>
+                                    <hr style="margin:5px;"/>
+                                    <label for="useGrid" class="vp-bold">Grid</label>
+                                    <div>
+                                        <select id="useGrid" class="vp-select vp-state">
+                                            <option value="">Select option...</option>
+                                            <option value="True">True</option>
+                                            <option value="False">False</option>
+                                        </select>
+                                        <input type="color" id="gridColor" class="vp-state"/>
+                                    </div>
+                                    <hr style="margin:5px;"/>
+                                    <label for="useMarker" class="vp-bold">Marker</label>
+                                    <div class="vp-grid-col-p50">
+                                        <select id="markerStyle" class="vp-select vp-state">
+                                            <!-- TODO: -->
+                                            <option></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="vp-tab-page vp-grid-box" data-type="code" style="display: none;">
+                                    <textarea id="userCode1" class="vp-state" placeholder="plt.text(3.0, 2.0, 'Hello Visual Python')
+plt.axvline(x=1, color='b', linestyle='-')
+plt.axhline(y=1, color='r', linestyle='-')"></textarea>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="vp-chart-right-box">
+            <div class="vp-bold">
+                <span class="vp-chart-preview-title">Chart Preview</span> 
+                <span class="vp-chart-preview-option vp-no-selection">
+                    <label><input type="checkbox" id="useSampling" class="vp-state" checked><span>Sampling</span></label>
+                    <select id="sampleCount" class="vp-select s vp-state">
+    
+                    </select>
+                    <label style="margin-left:10px;"><input type="checkbox" id="autoRefresh" class="vp-state" checked><span>Auto Refresh</span></label>
+                    <span id="previewRefresh" class="vp-cursor vp-icon-refresh">
+                        <!-- <img src="${vp_base}/img/refresh.svg"/> -->
+                    </span>
+                </span>
+            </div>
+            <div class="vp-chart-preview-box vp-grid-border-box">
+                <div id="chartPreview" class="vp-chart-preview-content vp-center"></div>
+            </div>
+        </div>
+    </div>
+    
+</body>

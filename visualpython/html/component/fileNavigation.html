@@ -1,0 +1,68 @@
+<!--
+    Project Name    : Visual Python
+    Description     : GUI-based Python code generator
+    File Name       : fileNavigation.html
+    Author          : Black Logic
+    Note            : file Navigation
+    License         : GNU GPLv3 with Visual Python special exception
+    Date            : 2021. 12. 09
+    Change Date     : 
+-->
+<!-- use body tag to strip comments out on requirejs/text plugin -->
+<body>
+    <div id="vp_fileNavigation">
+        <div class='fileNavigationPage-container center-1rem-gray' >
+            <div class="fileNavigationPage-sidebar">
+                <!-- Jupyter Notebook -->
+                <div class="fnp-sidebar-menu notebook lab" data-path="/">Jupyter Home</div>
+                <div class="fnp-sidebar-menu notebook lab" data-path="desktop">Desktop</div>
+                <div class="fnp-sidebar-menu notebook lab" data-path="documents">Documents</div>
+                <div class="fnp-sidebar-menu notebook lab" data-path="downloads">Downloads</div>
+                <div class="fnp-sidebar-menu notebook lab" data-path="userid">User ID (Home)</div>
+                <!-- Chrome extension for colab -->
+                <div class="fnp-sidebar-menu colab" data-path="/">Colab Home</div>
+                <div class="fnp-sidebar-menu colab" data-path="drive">Drive Home</div>
+            </div>
+            <div class='fileNavigationPage-inner flex-column'
+>
+                 <div class='fileNavigationPage-menu'>
+
+                    <!-- <div class="btn-group" id="move_up_down"
+                         style='width: 90px;
+                                display: flex;
+                                flex-direction: column;
+                                justify-content: center;'>
+                        <div class="wp60">
+                            <img class="fileNavigationPage-btn-prev" src="${vp_base}/img/arrow_backward.svg">
+                            <img class="fileNavigationPage-btn-next" src="${vp_base}/img/arrow_forward.svg">
+                        </div>
+                    </div> -->
+
+                    <div class='fileNavigationPage-menu-inner'
+                         style='font-weight: normal;'>
+                        <i id="fnpRootFolder" class="item_icon 
+                                  folder_icon 
+                                  icon-fixed-width"
+                            style='margin:0px;'>
+                        </i>
+                        <div class='fileNavigationPage-menu-block'>
+                            <div class='fileNavigationPage-directory-nowLocation'>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- LAB: img to url-->
+                <div class='fileNavigationPage-closedBtn vp-icon-close-big'>
+                    <!-- <img src="${vp_base}/img/close_big.svg"> -->
+                </div>
+                <div class='fileNavigationPage-directory-container'>
+                   
+                    <div class='fileNavigationPage-body'></div>
+
+                </div>
+                <div class="fileNavigationPage-button"></div>
+
+            </div>
+        </div>
+    </div>
+</body>

@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "checkJs": false,
+        "composite": true,
+        "declaration": true,
+        "esModuleInterop": true,
+        "incremental": true,
+        "module": "CommonJS",
+        "outDir": "lib",
+        "rootDir": "src",
+        "strict": true,
+        "target": "es2017",
+        "types": []
+    },
+    "include": ["src/*"]
+}

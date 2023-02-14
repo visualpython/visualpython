@@ -1,0 +1,35 @@
+.vp-successMessage {
+    position: relative;
+    background-color: white;
+    color: var(--font-highlight);
+    min-width: 150px;
+    padding: 15px;
+    margin-bottom: 20px;
+    margin-top: 15px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    transition: all 0.8s linear;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    z-index: 1400;
+}
+.vp-successMessage-icon {
+    margin-left: 15px;
+    color: var(--font-highlight);
+    /* LAB: img to background-image */
+    background: top / contain no-repeat url(../../img/code.svg);
+    height: 100%;
+}
+#vp_successMessage {
+    position: absolute;
+    font-size: 14px;
+    top: 20px;
+    right: 20px;
+}  

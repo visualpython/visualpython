@@ -1,0 +1,59 @@
+#vp_infoModal {
+    position: fixed;
+    top: 0; 
+    left: 0;
+    width: 100%; 
+    height: 100%; 
+    z-index: 1400;
+    background-color: rgba(0,0,0,.4);
+}
+.vp-infoModal-container {
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform:translate(-50%, -50%);
+    width: 400px; 
+    height: 165px;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+    font-family: AppleSDGothicNeo;
+}
+.vp-infoModal-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 30px;
+}
+.vp-infoModal-input-button:hover {
+    cursor: pointer;
+    transition: 0.7s;
+    outline: 0;
+}
+.vp-infoModal-icon {
+    font-size: 26px;
+    color: var(--font-primary);
+    /* LAB: img to background-image */
+    background-image: url(../../img/info_circle.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 24px;
+    height: 24px;
+}
+.vp-infoModal-titleStr {
+    color: var(--font-primary);
+    font-size: 15px;
+}
+.vp-infoModal-style-flex-column-evenly {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.vp-infoModal-style-flex-row-center {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.vp-infoModal-style-text-center {
+    text-align: center;
+}

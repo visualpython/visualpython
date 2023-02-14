@@ -1,0 +1,38 @@
+<!--
+    Project Name    : Visual Python
+    Description     : GUI-based Python code generator
+    File Name       : variable.html
+    Author          : Black Logic
+    Note            : Apps > Variable template
+    License         : GNU GPLv3 with Visual Python special exception
+    Date            : 2021. 12. 29
+    Change Date     : 
+-->
+<!-- use body tag to strip comments out on requirejs/text plugin -->
+<body>
+    <div id="vp_var_variableBox" class="vp-scrollbar">
+        <table class="vp-option-table vp-option-horizontal-table-layout">
+            <colgroup><col width="150px"/><col width="*"/></colgroup>
+            <thead>
+                <tr>
+                    <th>
+                        <span class="vp-multilang" data-caption-id="varName">Variable Name</span>
+                        <!-- LAB: img to url -->
+                        <span id="vp_varRefresh" title="Refresh the list">
+                            <!-- <img src="${vp_base}/img/refresh.svg"/> -->
+                        </span>
+                    </th>
+                    <th>
+                        <span class="vp-multilang" data-caption-id="dataType">Data Type</span>
+                    </th>
+                </tr>   
+            </thead>
+            <!-- variable list -->
+            <tbody></tbody>
+        </table>
+        <div class="vp_var_announcement"></div>
+    </div>
+    <hr/>
+    <strong><span class="vp-multilang" data-caption-id="varDetailValue">Variable Detail</span></strong>
+    <div id="vp_varDetailTable" class="rendered_html vp-scrollbar"></div> 
+</body>

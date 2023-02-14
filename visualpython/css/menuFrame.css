@@ -1,0 +1,438 @@
+/*
+ *    Project Name    : Visual Python
+ *    Description     : GUI-based Python code generator
+ *    File Name       : menuFrame.css
+ *    Author          : Black Logic
+ *    Note            : stylesheet for menuFrame.html
+ *    License         : GNU GPLv3 with Visual Python special exception
+ *    Date            : 2021. 09. 13
+ *    Change Date     :
+ */
+/* frame parts */
+.vp-menu-frame {
+    width: 51%;
+    height: 100%;
+    min-width: 273px;
+    overflow: hidden;
+
+    position: relative;
+    float: left;
+}
+.vp-menu-header {
+    box-sizing: border-box;
+    width: 100%;
+    height: 50px;
+    padding: 10px;
+    text-align: right;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid var(--border-gray-color);
+}
+.vp-version-updater {
+    display: none;
+    float: right;
+    position: relative;
+    font-size: 13px;
+    font-weight: bold;
+    color: var(--highlight-color);
+    margin: 8px 6px 8px 3px;
+    cursor: pointer;
+}
+.vp-menu-header-button {
+    cursor: pointer;
+	background-image: url(../../visualpython/img/dot_menu.svg);
+	width: 19px;
+	height: 19px;
+	margin: 5px 0px 0px 0px;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center;
+	float: right;
+	position: relative;
+	background-color: #FFFFFF;
+	z-index: 100;
+}
+.vp-menu-body {
+    width: 100%;
+    height: calc(100% - 100px);
+    padding: 0 5px 5px 5px;
+    box-sizing: border-box;
+}
+/* .vp-menu-body > div:nth-child(2) {
+    margin-top: 50px;
+} */
+.vp-menu-search-div {
+    box-sizing: border-box;
+    padding: 10px 0 10px 0px;
+    position: relative;
+    width: 100%;
+    background: white;
+}
+input.vp-menu-search-box {
+    width: calc(100% - 45px);
+    height: 30px;
+    background: #FFFFFF;
+    border: 0.25px solid #e4e4e4;
+    box-sizing: border-box;
+    box-shadow: 1px 1px 2px rgb(0 0 0 / 8%);
+    border-radius: 2px;
+    margin-left: 5px;
+    padding-right: 25px;
+    font-size: 13px;
+}
+.vp-menu-search-icon {
+    width: 20px;
+    height: 20px;
+    position: relative;
+    right: 30px;
+    top: 6px;
+    /* LAB: img to background-image */
+    background-image: url(../img/search.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 100%;
+}
+/* LAB: img to background-image */
+#vp_wrapper.lab .vp-menu-search-icon {
+    position: absolute;
+    right: 45px;
+    top: 15px;
+    background: center / contain no-repeat url(../img/search.svg);
+    height: 20px;
+    width: 20px;
+}
+.vp-board-toggle-icon {
+    width: 26px;
+    height: 26px;
+    position: absolute;
+    top: 11px;
+    right: 4px;
+    cursor: pointer;
+    background-image: url(../img/toggleNote.svg);
+    background-position: center;
+    background-size: contain;
+    background-color: white;
+    border-radius: 5px;
+    display: inline-block;
+}
+.vp-board-toggle-icon.vp-hide {
+    background-image: url(../img/toggleNote_hide.svg);
+}
+.vp-board-toggle-icon:hover {
+    background-image: url(../img/toggleNote.svg);
+}
+.vp-menugroup-list {
+    height: calc(100% - 45px);
+}
+
+.vp-menu-footer {
+    width: 100%;
+    height: 50px;
+    border-top: 1px solid var(--border-gray-color);
+    line-height: 50px;
+}
+
+/* menu header menu */
+#vp_headerExtraMenu {
+    display: none;
+    cursor: auto;
+    margin: 30px 0px 0px 0px;
+    width: 165px;
+    float: right;
+    background: #FFFFFF;
+    border: 0.25px solid var(--border-gray-color);
+    border-radius: 3px;
+    box-sizing: border-box;
+    box-shadow: 1px 1px 2px rgb(0 0 0 / 10%);
+}
+#vp_headerExtraMenu .vp-header-extra-menu-list {
+    list-style: none;
+    margin-block-start: 7px;
+    margin-block-end: 0px;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 0px;
+    color: var(--font-primary);
+}
+#vp_headerExtraMenu .vp-header-extra-menu-list li {
+    overflow: hidden;
+    cursor: pointer;
+    height: 25px;
+    margin-left: 10px;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: left;
+    vertical-align: middle;
+    color: var(--font-primary);
+    background-color: #FFFFFF;
+    margin-bottom: 2px;
+    float: none;
+}
+#vp_headerExtraMenu .vp-header-extra-menu-list li:hover {
+    color: var(--font-highlight);
+}
+/* resizing handle */
+.vp-menu-frame .ui-resizable-handle {
+    position: absolute;
+    margin-right: 5px;
+    right: 0px;
+    top: 0px;
+    width: 10px;
+    height: 100%;
+    cursor: col-resize;
+}
+    
+.vp-logo {
+    float: left;
+    width: 150px;
+    margin: 2px 2px;
+    /* LAB: img to background-image */
+    background: top / contain no-repeat var(--logo-url);
+    height: 100%;
+}
+
+/* Menu Group */
+.vp-menugroup-root {
+    width: calc(100% - 10px);
+    background: var(--light-gray-color);
+    border-radius: 3px;
+    padding: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 5px;
+    cursor: pointer;
+}
+.vp-menugroup-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 58px);
+    grid-template-rows: repeat(auto-fill, 57px);
+    grid-column-gap: 5px;
+    grid-row-gap: 5px;
+    margin: 10px 5px;
+}
+.vp-menugroup {
+    font-weight: bold;
+    margin: 5px;
+}
+.vp-menugroup-box:empty::after {
+    content: '(Empty)';
+    color: var(--gray-color);
+}
+:not(.apps) > .vp-menugroup-box {
+    padding-left: 8px;
+}
+/* Menu Items */
+.vp-menuitem {
+    padding: 3px 10px;
+    width: 90%;
+    cursor: pointer;
+    box-shadow: 1px 1px 1px rgb(0 0 0 / 5%);
+    margin: 5px 0px 0px 10px;
+    background-color: var(--border-gray-color);
+    border-radius: 3px;
+}
+
+/* Menu Items - App */
+.vp-menuitem.apps {
+    width: 56px;
+    height: 56px;
+    text-align: center;
+    box-sizing: border-box;
+    border-radius: 3px;
+    padding: 10px 0px;
+    cursor: pointer;
+    margin: 0;
+}
+.vp-menuitem.apps.vp-color-apps1 {
+    background: #F9B52A;
+}
+.vp-menuitem.apps.vp-color-apps2 {
+    background: #EF8F3C;
+}
+.vp-menuitem.apps.vp-color-apps3 {
+    background: #EB773C;
+}
+.vp-menuitem.apps.vp-color-apps4 {
+    background: #E56139;
+}
+.vp-menuitem.apps.vp-color-apps5 {
+    background: #97AA4E;
+}
+.vp-menuitem.apps.vp-color-apps6 {
+    background: #88B4E9;
+}
+.vp-menuitem.apps.vp-color-apps7 {
+    background: #6C9BD1;
+}
+.vp-menuitem.apps.vp-color-apps8 {
+    background: #578BC7;
+}
+.vp-menuitem.apps.vp-color-preparing {
+    background: var(--gray-color);
+}
+.vp-menuitem.apps img {
+    width: 25px;
+    height: 25px;
+}
+.vp-menuitem-apps-name {
+    color: #FFFFFF;
+    font-size: 10px;
+    margin-top: 3px;
+}
+/* MenuItem - Logic */
+.vp-menuitem.logic-define {
+    background-color: rgb(213, 231, 222);
+}
+.vp-menuitem.logic-control {
+    background-color: rgb(253, 239, 221);
+}
+/* MenuItem - Library */
+.vp-menuitem.library {
+    background-color: rgb(249, 227, 214);
+}
+
+/* Task Bar */
+.vp-menu-task-bar {
+    width: 100%;
+    height: 100%;
+    overflow-y: hidden;
+    padding: 10px;
+}
+/* Task Item */
+.vp-menu-task-item {
+    display: inline-block;
+    position: relative;
+    width: 85px;
+    height: 30px;
+    line-height: 30px;
+    background: var(--light-gray-color);
+    margin-left: 3px;
+    padding-left: 10px;
+    cursor: pointer;
+    border: 0.24px solid #E4E4E4;
+    box-sizing: border-box;
+    border-radius: 2px 2px 0px 0px;
+}
+.vp-menu-task-item.vp-focus{
+    color: var(--font-highlight);
+    background: white;
+    border-bottom: 3px solid #FFCF73;
+}
+.vp-menu-task-item .vp-menu-task-remove {
+    display: inline-block;
+    position: absolute;
+    right: 8px;
+    top: 6px;
+}
+/* .vp-menu-task-item .vp-menu-task-remove,
+.vp-menu-task-item:hover .vp-menu-task-icon {
+    display: none;
+} */
+.vp-menu-task-item span {
+    display: inline-block;
+    width: calc(100% - 25px);
+    line-height: 30px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+/* app icons */
+/* LAB: img to background-image */
+/* Data Analysis */
+.vp-menuitem.apps .apps-icon {
+    width: 100%;
+    height: 25px;
+}
+.vp-menuitem.apps .apps_import {
+    background: top / contain no-repeat url(../img/apps/apps_import.svg);
+}
+.vp-menuitem.apps .apps_file {
+    background: top / contain no-repeat url(../img/apps/apps_file.svg);
+}
+.vp-menuitem.apps .apps_variable {
+    background: top / contain no-repeat url(../img/apps/apps_variable.svg);
+}
+.vp-menuitem.apps .apps_snippets {
+    background: top / contain no-repeat url(../img/apps/apps_snippets.svg);
+}
+.vp-menuitem.apps .apps_frame {
+    background: top / contain no-repeat url(../img/apps/apps_frame.svg);
+}
+.vp-menuitem.apps .apps_subset {
+    background: top / contain no-repeat url(../img/apps/apps_subset.svg);
+}
+.vp-menuitem.apps .apps_instance {
+    background: top / contain no-repeat url(../img/apps/apps_instance.svg);
+}
+.vp-menuitem.apps .apps_groupby {
+    background: top / contain no-repeat url(../img/apps/apps_groupby.svg);
+}
+.vp-menuitem.apps .apps_bind {
+    background: top / contain no-repeat url(../img/apps/apps_bind.svg);
+}
+.vp-menuitem.apps .apps_reshape {
+    background: top / contain no-repeat url(../img/apps/apps_reshape.svg);
+}
+.vp-menuitem.apps .apps_markdown {
+    background: top / contain no-repeat url(../img/apps/apps_markdown.svg);
+}
+.vp-menuitem.apps .apps_pdf {
+    background: top / contain no-repeat url(../img/apps/apps_pymupdf.svg);
+}
+.vp-menuitem.apps .apps_profiling {
+    background: top / contain no-repeat url(../img/apps/apps_profiling.svg);
+}
+/* Visualization */
+.vp-menuitem.apps .visualize_chartStyle {
+    background: top / contain no-repeat url(../img/apps/apps_style.svg);
+}
+.vp-menuitem.apps .pd_plot {
+    background: top / contain no-repeat url(../img/apps/apps_chart.svg);
+}
+.vp-menuitem.apps .visualize_chart {
+    background: top / contain no-repeat url(../img/apps/apps_chart.svg);
+}
+.vp-menuitem.apps .visualize_seaborn {
+    background: top / contain no-repeat url(../img/apps/apps_visualize.svg);
+}
+.vp-menuitem.apps .visualize_plotly {
+    background: top / contain no-repeat url(../img/apps/apps_visualize.svg);
+}
+.vp-menuitem.apps .visualize_wordcloud {
+    background: top / contain no-repeat url(../img/apps/apps_wordcloud.svg);
+}
+/* machine learning */
+.vp-menuitem.apps .ml_dataSet {
+    background: top / contain no-repeat url(../img/apps/apps_dataset.svg);
+}
+.vp-menuitem.apps .ml_dataSplit {
+    background: top / contain no-repeat url(../img/apps/apps_datasplit.svg);
+}
+.vp-menuitem.apps .ml_dataPrep {
+    background: top / contain no-repeat url(../img/apps/apps_dataprep.svg);
+}
+.vp-menuitem.apps .ml_autoML {
+    background: top / contain no-repeat url(../img/apps/apps_automl.svg);
+}
+.vp-menuitem.apps .ml_regression {
+    background: top / contain no-repeat url(../img/apps/apps_regression.svg);
+}
+.vp-menuitem.apps .ml_classification {
+    background: top / contain no-repeat url(../img/apps/apps_classification.svg);
+}
+.vp-menuitem.apps .ml_clustering {
+    background: top / contain no-repeat url(../img/apps/apps_clustering.svg);
+}
+.vp-menuitem.apps .ml_dimensionReduction {
+    background: top / contain no-repeat url(../img/apps/apps_dimension.svg);
+}
+.vp-menuitem.apps .ml_fitPredict {
+    background: top / contain no-repeat url(../img/apps/apps_fit.svg);
+}
+.vp-menuitem.apps .ml_modelInfo {
+    background: top / contain no-repeat url(../img/apps/apps_predict.svg);
+}
+.vp-menuitem.apps .ml_evaluation {
+    background: top / contain no-repeat url(../img/apps/apps_evaluate.svg);
+}

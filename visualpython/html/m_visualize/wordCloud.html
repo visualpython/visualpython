@@ -1,0 +1,64 @@
+<body>
+    <div class="vp-wc-body" >
+        <div class="vp-wc-left-box">
+            <div class="vp-bold">
+                <span class="vp-wc-preview-title vp-orange-text">Required options</span>
+            </div>
+            <div class="vp-wc-option-box">
+                <div class="vp-tab-bar">
+                    <div class="vp-tab-item vp-focus" data-type="data">Data</div>
+                    <div class="vp-tab-item" data-type="wordcloud">WordCloud</div>
+                    <div class="vp-tab-item" data-type="plot">Plot</div>
+                </div>
+                <div class="vp-tab-page-box vp-grid-border-box vp-scrollbar">
+                    <div class="vp-tab-page vp-grid-box" data-type="data">
+                        <label for="data" class="vp-bold vp-orange-text">Data</label>
+                        <div>
+                            <input type="text" id="data" class="vp-input vp-state" required="true"/>
+                            <label><input type="checkbox" id="useFile" class="vp-state"><span>Use file</span></label>
+                            <div id="vp_wcOpenFile" class="vp-file-browser-button" style="display:none;"></div>
+                        </div>
+                        <div class="vp-wc-file-option vp-grid-box">
+                            <label for="encoding" class="vp-bold">File encoding</label>
+                            <input type="text" id="encoding" class="vp-input vp-state" />
+                        </div>
+
+                        <label for="wordCount" class="vp-bold">Number of words</label>
+                        <input type="number" id="wordCount" class="vp-input vp-state" min="0"/>
+
+                    </div>
+                    <div class="vp-tab-page vp-grid-box" data-type="wordcloud" style="display: none;">
+                        <label for="stopWords" class="vp-bold">Stop words</label>
+                        <input type="text" id="stopWords" class="vp-input vp-state" placeholder="word1,word2, ..."/>
+
+                        <label for="fontPath" class="vp-bold">Font path</label>
+                        <input type="text" id="fontPath" class="vp-input vp-state" />
+
+                        <label for="userOption" class="vp-bold">User Option</label>
+                        <input type="text" id="userOption" class="vp-input vp-state wp100" placeholder="key=value, ..."/>
+                    </div>
+                    <div class="vp-tab-page vp-grid-box" data-type="plot" style="display: none;">
+                        <label for="figWidth" class="vp-bold">Figure size</label>
+                        <div>
+                            <input type="number" id="figWidth" class="vp-input vp-state" min="0" placeholder="Width"/>
+                            <input type="number" id="figHeight" class="vp-input vp-state" min="0" placeholder="Height"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <div class="vp-wc-right-box">
+            <div class="vp-bold">
+                <span class="vp-wc-preview-title">Preview</span>
+                <span id="previewRefresh" class="vp-cursor vp-icon-refresh">
+                    <!-- <img src="${vp_base}/img/refresh.svg"/> -->
+                </span>
+            </div>
+            <div class="vp-wc-preview-box vp-grid-border-box">
+                <div id="vp_wcPreview" class="vp-wc-preview-content vp-center"></div>
+            </div>
+        </div>
+    </div>
+    
+</body>

@@ -1,0 +1,104 @@
+/* DataSelector target*/
+.vp-ds-box {
+    display: inline-block;
+}
+.vp-ds-filter {
+    position: relative;
+    /* width: 20px;
+    height: 20px; */
+    right: 25px;
+    cursor: pointer;
+    /* LAB: img to background-image */
+    display: inline-block;
+    background: center / contain no-repeat url(../../img/filter.svg);
+    width: 12px;
+    height: 12px;
+}
+.vp-ds-box input.vp-ds-target {
+    padding-right: 23px;
+}
+.vp-ds-box input.vp-ds-target:disabled {
+    background: var(--light-gray-color) !important;
+    cursor: not-allowed;
+}
+.vp-ds-box input.vp-ds-target:disabled + .vp-ds-filter {
+    cursor: not-allowed;
+}
+/* DataSelector popup */
+.vp-dataselector-base {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1305;
+    background-color: rgba(0,0,0,.4);
+}
+/* CHROME: prevent default box-sizing */
+.vp-dataselector-base * {
+    box-sizing: border-box;
+}
+.vp-dataselector {
+    position: absolute;
+    top: calc(50% - 275px);
+    left: calc(50% - 325px);
+    width: 650px;
+    height: 550px;
+    background: white;
+    border: 1px solid var(--border-gray-color);
+    z-index: 1300;
+    /* font */
+    font-family: AppleSDGothicNeo;
+    font-size: 14px;
+    color: var(--font-primary);
+}
+.vp-ds-data-box {
+    width: 100%;
+    height: 160px;
+    align-content: baseline;
+    align-items: center;
+}
+.vp-ds-type-box,
+.vp-ds-variable-box {
+    border: 0.25px solid var(--border-gray-color);
+    height: 160px;
+    grid-row-gap: 0px;
+    align-content: baseline;
+}
+.vp-ds-type-item,
+.vp-ds-var-item {
+    padding-left: 5px;
+    height: 25px;
+    line-height: 25px;
+    border-bottom: 1px solid var(--border-gray-color);
+}
+.vp-ds-type-item:hover,
+.vp-ds-var-item:hover {
+    background: var(--light-gray-color);
+    color: var(--font-highlight);
+    cursor: pointer;
+}
+.vp-ds-type-item.selected,
+.vp-ds-var-item.selected {
+    background: var(--light-gray-color);
+    color: var(--font-highlight);
+    font-weight: bold;
+}
+.vp-ds-option-box {
+    height: calc(100% - 200px);
+    margin-top: 10px;
+}
+.vp-ds-option-inner-box {
+    height: calc(100% - 30px);
+}
+.vp-ds-df-option-box {
+    height: 100%;
+}
+.vp-ds-df-multiselector {
+    height: calc(100% - 25px);
+}
+.vp-nd-row-box,
+.vp-nd-col-box {
+    height: 160px;
+}

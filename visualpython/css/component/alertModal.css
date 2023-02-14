@@ -1,0 +1,74 @@
+#vp_alertModal {
+    position: fixed;
+    top: 0; 
+    left: 0;
+    width: 100%; 
+    height: 100%; 
+    z-index: 1400;
+    background-color: rgba(0,0,0,.4);
+}
+.vp-alertModal-container {
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform:translate(-50%, -50%);
+    width: 400px; 
+    height: 150px;
+    padding: 15px;
+    background-color: white;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+}
+.vp-alertModal-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 30px;
+}
+.vp-alertModal-input-button {
+    top: 5px;
+    right: 10px;
+    width: 80px;
+    height: 24px;
+    font-family: Apple SD Gothic Neo;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 13px;
+    line-height: 21px;
+    text-align: center;
+    color: #696969;
+    background: #F5F5F5;
+    border: 0.25px solid #C4C4C4;
+    box-sizing: border-box;
+    border-radius: 2px;
+}
+.vp-alertModal-input-button:hover {
+    cursor: pointer;
+    transition: 0.7s;
+    outline: 0;
+}
+.vp-alertModal-icon {
+    font-size: 26px;
+    color: #AE5700;  
+    background-image: url(../../img/triangle-exclamation-solid.svg);
+    background-size: 25px;
+    background-repeat: no-repeat;
+    width: 25px;
+    height: 25px;
+}
+.vp-alertModal-titleStr {
+    color: #AE5700;
+    font-size: 13px;
+    font-weight: 700;
+}
+.vp-alertModal-style-flex-column-evenly {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+.vp-alertModal-style-flex-row-center {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.vp-alertModal-style-text-center {
+    text-align: center;
+}

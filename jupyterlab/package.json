@@ -1,0 +1,67 @@
+{
+  "name": "jupyterlab-visualpython",
+  "version": "2.2.12",
+  "description": "GUI-based Python code generator for Jupyter Lab as an extension",
+  "keywords": [
+    "jupyter",
+    "jupyterlab",
+    "jupyterlab-extension"
+  ],
+  "homepage": "https://github.com/visualpython/visualpython",
+  "bugs": {
+    "url": "https://github.com/visualpython/visualpython/issues"
+  },
+  "license": "GPLv3 with Visual Python special exception",
+  "author": {
+    "name": "BlackLogic",
+    "email": "blacklogic.dev@gmail.com"
+  },
+  "files": [
+    "lib/**/*.{d.ts,css,eot,gif,html,py,jpg,js,js.map,json,png,svg,woff2,ttf,otf}",
+    "style/**/*.{css,js,eot,gif,html,jpg,json,png,svg,woff2,ttf,otf}"
+  ],
+  "main": "lib/index.js",
+  "style": "style/index.css",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/visualpython/visualpython.git"
+  },
+  "scripts": {
+    "build": "npm run build:labextension:dev",
+    "build:prod": "npm run build:labextension",
+    "build:labextension": "jupyter labextension build .",
+    "build:labextension:dev": "jupyter labextension build --development True .",
+    "clean:labextension": "rimraf visualpython/labextension",
+    "clean:all": "npm run clean:labextension",
+    "prepare": "npm run build:prod",
+    "watch": "npm run watch:labextension",
+    "watch:labextension": "jupyter labextension watch ."
+  },
+  "dependencies": {
+    "@jupyterlab/cells": "^3.5.2",
+    "@jupyterlab/notebook": "^3.5.2",
+    "@jupyterlab/ui-components": "^3.4.8",
+    "jquery": "^3.6.3",
+    "jquery-ui": "^1.13.2",
+    "jquery-ui-bundle": "^1.12.1-migrate",
+    "json-loader": "^0.5.7",
+    "module-alias": "^2.2.2",
+    "raw-loader": "^4.0.2",
+    "requirejs": "^2.3.6",
+    "text-loader": "^0.0.1"
+  },
+  "devDependencies": {
+    "@jupyterlab/builder": "^3.0.0",
+    "rimraf": "^3.0.2"
+  },
+  "sideEffects": [
+    "style/*.css",
+    "style/index.js"
+  ],
+  "styleModule": "style/index.js",
+  "jupyterlab": {
+    "extension": true,
+    "outputDir": "visualpython/labextension",
+    "webpackConfig": "./webpack.config.js"
+  }
+}

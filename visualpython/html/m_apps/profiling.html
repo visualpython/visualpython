@@ -1,0 +1,48 @@
+<body>
+    <div class="vp-pf-grid-box">
+        <!-- <div class="vp-pf-prepare-box">
+            <label>Prepare to use Pandas Profiling <a href="https://github.com/pandas-profiling/pandas-profiling" target="_blank"><i class="fa fa-link vp-pf-link" title="Go to pandas-profiling github page"></i></a></label>
+            <div>
+                <button class="vp-button activated vp-pf-install-btn">Install</button>
+                <div class="vp-cursor vp-pf-check-btn" title="Check if installed"><img src="${vp_base}/img/refresh.svg"></div>
+                <button class="vp-button vp-pf-import-btn">Import</button>
+            </div>
+        </div> -->
+        <div class="vp-pf-show-box">
+            <div class="vp-pf-df-box">
+                <label for="vp_pfVariable" class="vp-orange-text">DataFrame</label>
+                <div>
+                    <select id="vp_pfVariable" class="vp-select vp-pf-select">
+                    </select>
+                    
+                    <!-- LAB: img to url -->
+                    <div class="vp-pf-df-refresh" title="Refresh variable list">
+                        <!-- <img src="${vp_base}/img/refresh.svg"> -->
+                    </div>
+                </div>
+                <label for="vp_pfReturn" class="vp-orange-text">Allocate to</label>
+                <input type="text" id="vp_pfReturn" class="vp-input vp-pf-input" placeholder="New variable name" required="true">
+                <label for="vp_pfTitle">Report Title</label>
+                <div>
+                    <input type="text" id="vp_pfTitle" class="vp-input vp-pf-input" placeholder="Title name">
+                    <button class="vp-button activated vp-pf-menu-item" data-type="1">Generate Report</button>
+                </div>
+                <input type="hidden" class="vp-input vp-pf-filename">
+                <input type="hidden" class="vp-input vp-pf-filepath">
+            </div>
+        </div>
+        <div class="vp-pf-list-box">
+            <div class="vp-pf-list-header">
+                <div><label class="vp-pf-list-header-item">Allocated to</label></div>
+                <div><label class="vp-pf-list-header-item">Report Title</label></div>
+                <div><label class="vp-pf-list-header-item"></label></div>
+            </div>
+            <div class="vp-apiblock-scrollbar">
+                <div class="vp-pf-list-body vp-apiblock-scrollbar">
+                </div>
+            </div>
+        </div>
+        
+        
+        </div>
+</body>

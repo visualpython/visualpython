@@ -1,0 +1,100 @@
+<body>
+    <div class="vp-bd-grid-box">
+        <div>
+            <label for="vp_bdType" class="vp-orange-text w100">Bind type</label>
+            <select id="vp_bdType">
+                <option value="concat" selected="">concat</option>
+                <option value="merge">merge</option>
+            </select>
+        </div>
+        <hr style="margin: 5px 0;">
+        <div class="vp-bd-type-box concat">
+            <div>
+                <label for="vp_bdVariable" class="vp-orange-text w100">DataFrame</label>
+                <input type="text" id="vp_bdVariable" placeholder="Select variables" readonly="" required="true"t>
+            </div>
+            <div>
+                <label for="vp_bdJoin" class="w100">Join</label>
+                <select id="vp_bdJoin">
+                    <option value="outer" selected="">Outer</option>
+                    <option value="inner">Inner</option>
+                </select>
+            </div>
+            <div>
+            <label for="vp_bdAxis" class="w100">Axis</label>
+            <select id="vp_bdAxis">
+                <option value="0" selected="">Index</option>
+                <option value="1">Column</option>
+            </select>
+            </div>
+            <div>
+            <label for="vp_bdSort" class="w100">Sort</label>
+            <select id="vp_bdSort">
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+            </select>
+            </div>
+        </div>
+        <div class="vp-bd-type-box merge" style="display: none;">
+            <div>
+                <label for="vp_bdLeftDataframe" class="vp-orange-text w100">Left Data</label>
+                <select id="vp_bdLeftDataframe">
+                </select>
+                
+                <!-- LAB: img to url -->
+                <div class="vp-bd-df-refresh" title="Refresh all dataframe list">
+                    <!-- <img src="${vp_base}/img/refresh.svg"> -->
+                </div>
+            </div>
+            <div>
+                <label for="vp_bdRightDataframe" class="vp-orange-text w100">Right Data</label>
+                <select id="vp_bdRightDataframe">
+                </select>
+            </div>
+            <hr style="margin: 5px 0;">
+            <div>
+                <label for="vp_bdHow" class="w100">How</label>
+                <select id="vp_bdHow">
+                    <option value="inner" selected="" title="Inner join">Inner</option>
+                    <option value="outer" title="Full outer join">Outer</option>
+                    <option value="left" title="Left outer join">Left</option>
+                    <option value="right" title="Right outer join">Right</option>
+                    <option value="cross" title="Cartesian product">Cross</option>
+                </select>
+            </div>
+            <div>
+                <label for="vp_bdOn" class="w100">On</label>
+                <input type="text" id="vp_bdOn" placeholder="Merge key" readonly="">
+            </div>
+            <div>
+                <label for="vp_bdLeftOn" class="w100">Left on</label>
+                <input type="text" id="vp_bdLeftOn" placeholder="Left key" readonly="">
+                <label><input type="checkbox" id="vp_bdLeftIndex"><span>use index</span></label>
+            </div>
+            <div>
+                <label for="vp_bdRightOn" class="w100">Right on</label>
+                <input type="text" id="vp_bdRightOn" placeholder="Right key" readonly="">
+                <label><input type="checkbox" id="vp_bdRightIndex"><span>use index</span></label>
+            </div>
+            <div>
+                <label class="w100">Suffixes</label>
+                <input type="text" id="vp_bdLeftSuffix" placeholder="Left suffix">
+                <input type="text" id="vp_bdRightSuffix" placeholder="Right suffix">
+            </div>
+        </div>
+        <hr style="margin: 5px 0;">
+        <div>
+            <label for="vp_bdUserOption" class="w100">User option</label>
+            <input type="text" id="vp_bdUserOption" placeholder="key=value, ...">
+        </div>
+        <div>
+            <label for="vp_bdAllocateTo" class="w100">Allocate to</label>
+            <input type="text" id="vp_bdAllocateTo" placeholder="New variable name">
+            <label><input type="checkbox" id="vp_bdResetIndex"><span>Reset Index</span></label>
+            <select id="vp_bdWithoutColumn" class="vp-select" style="width: 130px;">
+                <option value="True" selected>Without column</option>
+                <option value="">With column</option>
+            </select>
+        </div>
+    </div>
+</body>

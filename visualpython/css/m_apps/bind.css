@@ -1,0 +1,28 @@
+.vp-bd-grid-box {
+    display: grid;
+    grid-template-rows: 30px;
+    grid-row-gap: 5px;
+}
+.vp-bd-grid-box label {
+    font-weight: bold;
+}
+.vp-bd-grid-box select,
+.vp-bd-grid-box input {
+    width: 160px;
+}
+
+.vp-bd-type-box {
+    display: grid;
+    grid-template-rows: 30px;
+    grid-row-gap: 5px;
+}
+
+.vp-bd-df-refresh {
+    display: inline-block;
+    cursor: pointer;
+    margin-left: 5px;
+    /* LAB: img to background-image */
+    background: center / contain no-repeat url(../../img/refresh.svg);
+    width: 18px;
+    height: 19px;
+}

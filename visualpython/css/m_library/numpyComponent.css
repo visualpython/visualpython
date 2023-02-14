@@ -1,0 +1,139 @@
+.vp-popup-frame .vp-option-page table.vp-option-table {
+    width: 100%;
+}
+.vp-popup-frame .vp-option-page .vp-option-table select.var-multi, select.option-multi {
+    height: 60px;
+}
+
+/* Function Button */
+.vp-popup-frame #vp_functionList .vp_funcButton {
+    background-color: white;
+    padding: 3px 7px 3px 7px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    border: 1px solid #535353;
+}
+.vp-popup-frame #vp_functionList .vp_funcButton:hover {
+    background-color: lightgray;
+}
+.vp-popup-frame #vp_functionList .vp_funcButton.active {
+    color: white;
+    background-color: #535353;
+    cursor: default;
+}
+
+/* Input & Select Design */
+.vp-popup-frame .vp-input {
+    height: 30px;
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    padding: 0px 5px 0px 5px;
+}
+.vp-popup-frame .vp-select {
+    height: 30px;
+    background-color: #F5F5F5;
+    box-sizing: border-box;
+    /* select tag arrow */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding: 0px 5px 0px 5px;
+    cursor: pointer;
+}
+
+/* Select Option Design */
+.vp-popup-frame .vp-select * {
+    background-color: white;
+    color: #696969;
+}
+
+/* Input & Select Design - width m&s */
+.vp-popup-frame .vp-input.m,
+.vp-popup-frame .vp-select.m {
+    width: 116px;
+}
+.vp-popup-frame .vp-input.s,
+.vp-popup-frame .vp-select.s {
+    width: 55px;
+}
+
+/* Range */
+.vp-popup-frame .vp-range {
+    display: inline;
+    width: 116px;
+}
+.vp-popup-frame .vp-textarea {
+    border: 0.25px solid var(--border-gray-color);
+    width: 100%;
+    height: 100px;
+    margin: 0px;
+}
+
+/* Arrow Accordions */
+.vp-popup-frame .vp-option-page .vp-accordian-header {
+    font-weight: bold;
+}
+.vp-popup-frame .vp-option-page .vp-icon-arrow-right,
+.vp-popup-frame .vp-option-page .vp-icon-arrow-down {
+    background-repeat: no-repeat;
+}
+.vp-popup-frame .vp-option-page .vp-spread {
+    min-height: 100px;
+}
+.vp-popup-frame .vp-option-page .vp-minimize {
+    height: 25px;
+    overflow: hidden;
+}
+.vp-popup-frame .vp-pandas-block {
+    border-bottom: 1px solid darkgray;
+}
+
+/* Prefix & Postfix Text Area */
+.vp-popup-frame #vp_prefixBox textarea,
+.vp-popup-frame #vp_postfixBox textarea {
+    outline: none;
+    resize: none;
+    overflow: auto;
+}
+.no-selection {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                supported by Chrome, Edge, Opera and Firefox */
+}
+
+/*
+ *  numpy style
+*/
+.vp-numpy-style-flex-row-center {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.vp-numpy-style-flex-row-wrap {
+    display: flex;
+    flex-direction: row;
+    flex-flow: wrap;
+}
+.vp-numpy-style-flex-row {
+    display: flex;
+    flex-direction: row;
+}
+.vp-numpy-style-flex-column {
+    display: flex;
+    flex-direction: column;
+}
+.vp-numpy-style-flex-column-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.vp-numpy-box-border {
+    border: 1px solid #E4E4E4;
+    border-radius: 5px;
+    box-sizing: border-box;
+    padding: 10px;
+}

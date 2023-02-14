@@ -1,0 +1,335 @@
+:root {
+    --base_color :#696969;
+}
+#vp_fileNavigation {
+    position: fixed;
+    top: 0; 
+    left: 0;
+    width: 100%; 
+    height: 100%; 
+    z-index: 1300;
+    background-color: rgba(0,0,0,.4);
+}
+/* CHROME: set default box-sizing for file navigation area */
+#vp_fileNavigation * {
+    box-sizing: border-box !important;
+}
+.fileNavigationPage-container {
+    position: relative;
+    left: 50%;
+    top: 53%;
+    transform:translate(-50%, -50%);
+    min-width: 600px;
+    min-height: 400px;
+    width: 70%;
+    height: 55%;
+    background-color: white;
+}
+#fnpRootFolder:hover {
+    color: var(--font-highlight);
+    cursor: pointer;
+}
+
+/* Sidebar Menu */
+.fileNavigationPage-sidebar {
+    float: left;
+    width: 25%;
+    height: 100%;
+    background: #F5F5F5;
+    padding-top: 10px;
+}
+.fnp-sidebar-menu.selected {
+    color: var(--font-highlight)
+}
+.fnp-sidebar-menu {
+    padding: 5px 0px 5px 15px;
+    font-family: AppleSDGothicNeo;
+    font-weight: normal;
+    font-size: 15px;
+    color: #696969;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+/* Path Bar */
+.fileNavigationPage-inner {
+    float: right;
+    display: grid;
+    grid-template-rows: min-content auto min-content;
+    width: 75%;
+    height: 100%; 
+}
+.fileNavigationPage-btn-prev:hover{
+    cursor: pointer;
+    transition: 0.7s;
+}
+
+.fileNavigationPage-btn-next:hover{
+    cursor: pointer;
+    transition: 0.7s;
+}
+
+/* Directory List */
+.fileNavigationPage-directory-container {
+    overflow-y: auto;
+    display: flex;
+    flex-direction: row;
+}
+.fileNavigationPage-body {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+}
+.fileNavigationPage-ul {
+    list-style: none;
+    line-height: 2em;
+    font-family: Arial;
+    padding:0px;
+}
+.fileNavigationPage-ul .fileNavigationPage-li {
+    font-size: 14px;
+    position: relative;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 7px;
+    padding-right: 7px;
+    line-height: 22px;
+    border-bottom: 1px solid #ddd;
+}
+.fileNavigationPage-ul .fileNavigationPage-li:before {
+    position: absolute;
+    left: -15px;
+    top: 0px;
+    content: '';
+    display: block;
+    border-left: 1px solid #ddd;
+    height: 1em;
+    border-bottom: 1px solid #ddd;
+    width: 10px;
+}
+.fileNavigationPage-ul .fileNavigationPage-li:after {
+    position: absolute;
+    left: -15px;
+    bottom: -7px;
+    content: '';
+    display: block;
+    height: 100%;
+}
+.fileNavigationPage-ul .fileNavigationPage-li:hover {
+    cursor: pointer;
+    transition: 0.5s;
+    background-color: #EEE;
+}
+.fileNavigationPage-ul .fileNavigationPage-li:last-child:after {
+    display: none;
+}
+.fileNavigationPage-menu {
+    min-height: 35px;
+    height: fit-content;
+    /* padding-left: 10px; */
+    background-color: #EEE;
+    border:  1px solid #ddd;;
+    display: flex; 
+    flex-direction: row;
+    position: relative;
+}
+.fileNavigationPage-menu-inner {
+    display: flex;
+    flex-direction: row;
+    justify-content: center; 
+    margin-left: 10px;
+}
+.fileNavigationPage-menu-inner i {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    padding-top: 5px;
+}
+.fileNavigationPage-menu-block {
+    padding: 5px 35px 0 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-family: AppleSDGothicNeo;
+    font-weight: normal;
+}
+.fileNavigationPage-btn-move-to-folder {
+    position: absolute;
+    top: 2.5px;
+    margin-left: 10px;
+    padding: 2.5px;
+    color: #ecf0f1;
+    background-color: var(--base_color);
+    box-shadow: 0 0 1px rgba(0,0,0,.2), 0 2px 4px rgba(0,0,0,.1);
+    border-radius: 50px;
+    width: 85px;
+    font-size: 15px;
+    text-align: center;
+}
+.fileNavigationPage-btn-move-to-folder:hover {
+    cursor: pointer;
+    transition: 0.7s;
+    color: var(--base_color);
+    border: 1px solid var(--base_color);
+    background-color: #ecf0f1;
+}
+.fileNavigationPage-btn-select-file {
+    position: absolute;
+    top: 2.5px;
+    margin-left: 10px;
+    padding: 2.5px;
+    color: #ecf0f1;
+    background-color: var(--base_color);
+    box-shadow: 0 0 1px rgba(0,0,0,.2), 0 2px 4px rgba(0,0,0,.1);
+    border-radius: 50px;
+    width: 85px;
+    font-size: 15px;
+}
+.fileNavigationPage-btn-select-file:hover {
+    cursor: pointer;
+    transition: 0.7s;
+    color: var(--base_color);
+    border: 1px solid var(--base_color);
+    background-color: #ecf0f1;
+}
+.fileNavigationPage-dir-text {
+    position: relative;
+    padding: 5px;
+    padding-left: 0px;
+    margin-left:5px;
+    white-space: nowrap;
+    color: var(--font-primary);
+    font-size: 13px;
+}
+.fileNavigationPage-dir-text:hover {
+    transition: 0.7s;
+    cursor: pointer;
+}
+.fileNavigationPage-dir-text::after {
+    color: black;
+}
+.fileNavigationPage-dir-text::before {
+    color: black;
+}
+.fileNavigationPage-closedBtn {
+    position: fixed;
+    z-index: 3;
+    right: 10px;
+    top: 5px;
+}
+.fileNavigationPage-closedBtn:hover {
+    cursor: pointer;
+    transition: 0.7s;
+}
+.fileNavigationPage-directory-nowLocation {
+    color: var(--font-primary);
+}
+.fileNavigationPage-directory-nowLocation:hover {
+    cursor: pointer;
+}
+.fileNavigationPage-button {
+    padding: 5px;
+    background: #EEE;
+    border: 1px solid #DDD;
+}
+#vp_fileNavigationInput {
+    width: calc(100% - 220px);
+    font-size: 13px;
+    border-radius: 3px;
+    vertical-align: middle;
+}
+#vp_fileNavigationExt {
+    width: 130px;
+    vertical-align: middle;
+    color: var(--font-primary);
+    font-family: 'AppleSDGothicNeo';
+    font-size: 13px;
+    border-radius: 3px;
+}
+.fileNavigationPage-style-flex-column-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* CHROME: alternatives for fontawesome */
+#vp_fileNavigation .folder_icon {
+    background-image: url(../../img/folder-regular.svg);
+    padding-left: 20px;
+    background-position: left;
+    background-repeat: no-repeat;
+    background-size: 15px;
+}
+#vp_fileNavigation .file_icon {
+    background-image: url(../../img/file-regular.svg);
+    padding-left: 20px;
+    background-position: left;
+    background-repeat: no-repeat;
+    background-size: 12px;
+}
+  
+@font-face {
+    font-family: 'octicons';
+    src: url("data:application/x-font-ttf;charset=utf-8;base64,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") format('truetype');
+    font-weight: normal;
+    font-style: normal;
+} 
+#vp_fileNavigation [class^="icon-"],
+#vp_fileNavigation [class*=" icon-"] {
+    font-family: 'octicons' !important;
+    /* speak: none; */
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+#vp_fileNavigation .icon-squirrel:before {
+    content: "\e900";
+}
+#vp_fileNavigation .icon-repo:before {
+    content: "\e901";
+}
+#vp_fileNavigation .icon-git-branch:before {
+    content: "\e902";
+}
+#vp_fileNavigation .icon-folder:before {
+    content: "\e903";
+    padding-left: 10px;
+    padding-right: 10px;
+}
+#vp_fileNavigation .icon-file:before {
+    content: "\e904";
+    padding-left: 10px;
+    padding-right: 10px;
+}
+#vp_fileNavigation .icon-diff:before {
+    content: "\e905";
+}
+#vp_fileNavigation .icon-tree-down {
+    padding: 5px;
+}
+#vp_fileNavigation .icon-tree-down:before {
+    content: "\e907";
+}
+#vp_fileNavigation .icon-tree-right {
+    padding: 5px;
+}
+#vp_fileNavigation .icon-tree-down:hover,
+#vp_fileNavigation .icon-tree-right:hover {
+    transition: 0.7s;
+    cursor: pointer;
+    background-color: black;
+    color: white;
+}
+#vp_fileNavigation .icon-tree-right:before {
+    content: "\e908";
+}
+#vp_fileNavigation .icon-tree:before {
+    font-family: 'octicons' !important;
+    position: absolute;
+    left: 10px;
+}

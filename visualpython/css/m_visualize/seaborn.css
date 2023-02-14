@@ -1,0 +1,108 @@
+.vp-chart-setting {
+    float: right;
+    color: var(--gray-color);
+    /* padding-top: 5px; */
+    padding-right: 5px;
+    cursor: pointer;
+    background-image: url(../../img/gear-solid.svg);
+    background-size: 15px;
+    background-repeat: no-repeat;
+    padding-left: 20px;
+    margin-top: 5px;
+}
+.vp-chart-setting:hover {
+    color: var(--font-highlight);
+    background-image: url(../../img/gear-solid_hover.svg);
+}
+.vp-create-subplot-btn {
+    float: right;
+}
+.vp-tab-bar {
+    width: 100%;
+    overflow-y: hidden;
+}
+.vp-tab-item {
+    display: inline-block;
+    position: relative;
+    width: 85px;
+    height: 30px;
+    line-height: 30px;
+    background: var(--light-gray-color);
+    cursor: pointer;
+    border: 0.24px solid #E4E4E4;
+    box-sizing: border-box;
+    border-radius: 2px 2px 0px 0px;
+    font-weight: bold;
+    text-align: center;
+}
+.vp-tab-item.vp-focus {
+    color: var(--font-highlight);
+    background: white;
+    border-bottom: 3px solid #FFCF73;
+}
+.vp-tab-page {
+    width: 100%;
+    height: 100%;
+}
+.vp-tab-page-box.figure {
+    height: calc(100% - 30px);
+    align-content: baseline;
+    grid-template-rows: 1fr;
+}
+.vp-tab-page-box.plot {
+    height: calc(100% - 30px);
+    min-height: 352px;
+    align-content: baseline;
+}
+.vp-chart-plot-box {
+    height: 100%;
+}
+.vp-chart-body {
+    display: grid;
+    grid-template-columns: calc(50% - 8px) calc(50% - 8px);
+    grid-template-rows: 1fr;
+    grid-row-gap: 5px;
+    grid-column-gap: 15px;
+    align-items: baseline;
+    align-content: baseline;
+    height: 100%;
+}
+.vp-chart-left-box > label {
+    margin-bottom: 0px;
+}
+.vp-chart-left-box, 
+.vp-chart-right-box {
+    height: 100%;
+}
+.vp-chart-preview-title {
+    line-height: 30px;
+}
+.vp-chart-preview-option {
+    float: right;
+    padding-right: 5px;
+}
+.vp-chart-preview-box {
+    min-height: 352px;
+    width: 100%;
+    height: calc(100% - 30px);
+}
+.vp-chart-preview-content:empty::after {
+    content: 'No preview image';
+    color: var(--gray-color);
+}
+.vp-chart-preview-box img {
+    width: 100%;
+    height: 100%;
+}
+.vp-tab-page label {
+    margin-bottom: 0px;
+}
+.vp-tab-group-title {
+    font-weight: bold;
+    background: var(--light-gray-color);
+}
+.vp-chart-setting-footer {
+    position: absolute;
+    left: 20px;
+    bottom: 15px;
+}

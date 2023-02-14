@@ -1,0 +1,89 @@
+.vp-instance-base {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 90px calc(100% - 90px);
+    grid-template-rows: 1fr;
+    grid-row-gap: 8px;
+}
+.vp-instance-base .vp-ds-button {
+    vertical-align: top;
+    width: 50px;
+}
+.vp-instance-toolbar {
+    /* display: none; */
+    grid-column: 2/3;
+}
+.vp-instance-toolbar .vp-toolbar-button {
+    width: fit-content;
+    height: 24px;
+    background: #F5F5F5;
+    border: 0.25px solid #C4C4C4;
+    box-sizing: border-box;
+    border-radius: 2px;
+}
+.vp-instance-label {
+    grid-column: 1/2;
+    font-weight: bold;
+    margin: 0px;
+
+    line-height: 30px;
+    vertical-align: middle;
+}
+.vp-instance-box {
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+.vp-instance-base > hr {
+    margin: 0px;
+    display: block !important;
+    grid-column: 1/3;
+}
+.vp-ins-container.variable {
+    grid-column: 1/3;
+    height: 250px;
+}
+
+/* UDF Editor - CodeMirror */
+.vp-instance-box .CodeMirror { 
+    display: inline-block;
+    width: calc(100% - 55px);
+    height: 30px;
+    border: 0.25px solid var(--grid-line-color);
+    border-radius: 3px;
+    background-image: repeating-linear-gradient( to right, var(--grid-line-color) 0, var(--grid-line-color) 0.25px, transparent 1px, transparent 5px ), repeating-linear-gradient( to bottom, var(--grid-line-color) 0, var(--grid-line-color) 0.25px, transparent 1px, transparent 5px );
+    background-color: white;
+    overflow: hidden;
+}
+/* .vp-instance-box .CodeMirror.selected {
+    width: 88%;
+    height: 31px;
+} */
+.vp-instance-box .CodeMirror-empty { outline: none; }
+.vp-instance-box .CodeMirror-empty.CodeMirror-focused { outline: none; }
+.vp-instance-box .CodeMirror pre.CodeMirror-placeholder { color: #999; }
+
+/* Hide cursor in read only fields */
+.vp-instance-box .CodeMirror-readonly .CodeMirror-cursor {
+    display: none !important
+}
+/* .CodeMirror-scroll { min-height: 80px; max-height: 80px;} */
+.vp-instance-box .CodeMirror-code .cm-variable {
+    background-color: rgba(47, 133, 90, 0.2);
+}
+.vp-instance-box .CodeMirror-code .cm-property {
+    background-color: rgba(246, 173, 85, 0.2);
+}
+
+/* Scroll Bar */
+.vp-instance-box::-webkit-scrollbar-track {
+    border-radius: 0;
+    background: #eeeeee;
+}
+.vp-instance-box::-webkit-scrollbar-thumb {
+    border-radius: 0;
+    background: #b0b0b0;
+}
+.vp-ds-button {
+    width: 50px;
+}

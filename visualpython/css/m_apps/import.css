@@ -1,0 +1,15 @@
+.vp-tab-button {
+    width: 120px;
+    text-align: center;
+    display: inline-block;
+    border: 0.24px solid var(--border-gray-color);
+    border-radius: 3px;
+    padding: 5px;
+    cursor: pointer;
+    /* LAB: add size */
+    font-size: 13px;
+}
+.vp-tab-button.vp-tab-selected {
+    color: var(--font-highlight);
+    border-bottom: 2px solid var(--highlight-color);
+}

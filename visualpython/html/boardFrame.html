@@ -1,0 +1,54 @@
+<!--
+    Project Name    : Visual Python
+    Description     : GUI-based Python code generator
+    File Name       : boardFrame.html
+    Author          : Black Logic
+    Note            : board frame
+    License         : GNU GPLv3 with Visual Python special exception
+    Date            : 2021. 09. 13
+    Change Date     : 
+-->
+<!-- use body tag to strip comments out on requirejs/text plugin -->
+<body>
+    <div id="vp_boardFrame" class="vp-board-frame">
+        <!-- Board Header -->
+        <div id="vp_boardHeader" class="vp-board-header">
+            <div class="vp-board-title">
+                <input type="text" id="vp_boardTitle" class="vp-input vp-blur-on-enter" placeholder="Untitled"/>
+            </div>
+            <div class="vp-board-header-button vp-close-on-blur-btn">
+                <div class="vp-board-header-button-inner vp-no-selection vp-close-on-blur">
+                    <ul>
+                        <li data-menu="new">New Note</li>
+                        <li data-menu="open">Open</li>
+                        <hr class="vp-extra-menu-line">
+                        <li data-menu="save">Save</li>
+                        <li data-menu="save-as">Save as</li>
+                        <hr class="vp-extra-menu-line">
+                        <li data-menu="run-all">Run All</li>
+                        <li data-menu="code-view">View Code</li>
+                        <li data-menu="code-export">Export Code</li>
+                        <hr class="vp-extra-menu-line">
+                        <li data-menu="clear">Clear Note</li>
+                    </ul>
+                </div>
+            </div>
+            <!-- <div id="vp_noteModeExtraMenuBtn" style="display: block; position: absolute; right: 0;">
+                <div id="vp_noteModeExtraMenu">
+                
+                </div>
+                </div> -->
+        </div>
+        <!-- Board Body -->
+        <div id="vp_boardLoading" class="vp-board-loading vp-loading-spinner">
+        </div>
+        <div id="vp_boardBody" class="vp-board-body vp-scrollbar"></div>
+        <!-- Board Footer -->
+        <div id="vp_boardFooter" class="vp-board-footer">
+            <div class="vp-board-footer-buttons"> 
+                <button class="vp-button vp-board-buttons" data-menu="code" title="Add code block">+ Code</button>
+                <button class="vp-button vp-board-buttons" data-menu="text" title="Add markdown">+ Text</button>
+            </div>
+        </div>
+    </div>
+</body>

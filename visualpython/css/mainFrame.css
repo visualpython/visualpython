@@ -1,0 +1,69 @@
+/*
+ *    Project Name    : Visual Python
+ *    Description     : GUI-based Python code generator
+ *    File Name       : mainFrame.css
+ *    Author          : Black Logic
+ *    Note            : stylesheet for visualpython.html
+ *    License         : GNU GPLv3 with Visual Python special exception
+ *    Date            : 2021. 09. 13
+ *    Change Date     :
+ */
+#vp_wrapper {
+    display: none;
+
+    position: fixed;
+    height: calc(100% - 110px);
+    overflow: hidden;
+    left: unset !important;
+    object-fit: contain; 
+    color: var(--font-primary);
+    font-family: AppleSDGothicNeo;
+    border: 1px solid var(--border-gray-color);
+    top: 110px;
+    right: 0;
+    background: white;
+    z-index: 100;
+}
+#vp_wrapper.colab {
+    /* CHROME: edited to show */
+    display: none;
+
+    position: fixed;
+    /* CHROME: edited height */
+    height: calc(100% - 90px);
+    /* height: calc(100% - 110px); */
+    overflow: hidden;
+    left: unset !important;
+    object-fit: contain; 
+    color: var(--font-primary);
+    font-family: AppleSDGothicNeo;
+    border: 1px solid var(--border-gray-color);
+    /* CHROME: edited top position */
+    top: 64px;
+    /* top: 110px; */
+    right: 0;
+    background: white;
+    z-index: 100;
+}
+/* CHROME: set default box-sizing for vp area */
+div#vp_wrapper.colab * {
+    box-sizing: border-box !important;
+}
+/* LAB: reset position and size */
+#vp_wrapper.lab {
+    position: unset !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 273px !important;
+}
+
+/* resizing handle */
+#vp_wrapper > .ui-resizable-handle {
+    position: absolute;
+    margin-right: 5px;
+    left: 0px;
+    top: 0px;
+    width: 10px;
+    height: 100%;
+    cursor: col-resize;
+}

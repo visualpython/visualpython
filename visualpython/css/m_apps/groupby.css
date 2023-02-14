@@ -1,0 +1,77 @@
+.vp-gb-df-box {
+    display: grid;
+    grid-template-rows: 30px;
+    grid-row-gap: 5px;
+}
+
+.vp-gb-df-refresh {
+    display: inline-block;
+    cursor: pointer;
+    margin-left: 5px;
+    /* LAB: img to background-image */
+    background: center / contain no-repeat url(../../img/refresh.svg);
+    width: 18px;
+    height: 19px;
+}
+.vp-gb-df-box label {
+    font-weight: bold;
+}
+.vp-gb-df-box select,
+.vp-gb-df-box input {
+    width: 160px;
+}
+.vp-gb-by-grouper-box {
+    display: inline-block;
+    padding: 0px 5px;
+}
+.vp-gb-by-number {
+    width: 80px !important;
+}
+
+.vp-gb-adv-box {
+    border: 1px solid var(--border-gray-color);
+    padding: 10px;
+    margin-top: 5px;
+    height: 170px;
+    overflow: auto;
+}
+.vp-gb-adv-item {
+    margin-bottom: 10px;
+}
+.vp-gb-adv-method-box {
+    position: relative;
+    display: inline-block;
+}
+.vp-gb-adv-method {
+    padding-right: 25px;
+}
+.vp-gb-adv-method-return {
+    position: absolute;
+    color: #C4C4C4;
+    right: 7px;
+    top: 7px;
+    cursor: pointer;
+    background: white;
+}
+.vp-gb-adv-item-delete {
+    display: inline-block;
+    padding-left: 5px;
+}
+.vp-gb-naming-box label {
+    height: 30px;
+    line-height: 30px;
+    vertical-align: middle;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+.vp-gb-naming-item label {
+    width: 100px;
+    height: 30px;
+    line-height: 30px;
+    vertical-align: middle;
+    margin-bottom: 5px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    font-weight: bold;
+}

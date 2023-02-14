@@ -1,0 +1,56 @@
+<body>
+    <div class="vp-fe-container">
+        <div class="vp-fe-menu-box vp-close-on-blur" style="display:none;">
+            <div class="vp-fe-menu-item vp-fe-menu-drop" data-type="3">Delete</div>
+            <div class="vp-fe-menu-item vp-fe-menu-rename" data-type="2">Rename</div>
+            <div class="vp-fe-menu-item vp-fe-menu-set-index" data-type="7" data-axis="col">Set Index</div>
+            <div class="vp-fe-menu-item vp-fe-menu-reset-index" data-type="8" data-axis="row">Reset Index</div>
+            <div class="vp-fe-menu-item vp-fe-menu-replace" data-type="9" data-axis="col">Replace</div>
+            <div class="vp-fe-menu-item vp-fe-menu-astype" data-type="10" data-axis="col">As Type</div>
+            <div class="vp-fe-menu-item vp-fe-menu-drop" data-axis="col">Encoding<i class="fa fa-caret-right"
+                style="float: right; margin-top: 7.5px; margin-right: 2px; margin-left: 5px;"></i>
+                <div class="vp-fe-menu-sub-box vp-fe-sub-encoding" style="top: 150px;">
+                    <div class="vp-fe-menu-item vp-fe-menu-label-encoding" data-type="12" data-axis="col">Label Encoding</div>
+                    <div class="vp-fe-menu-item vp-fe-menu-ohe" data-type="6" data-axis="col">One-Hot Encoding</div>
+                </div>
+            </div>
+            <div class="vp-fe-menu-item vp-fe-menu-drop">Data Cleaning<i class="fa fa-caret-right"
+                    style="float: right; margin-top: 7.5px; margin-right: 2px; margin-left: 5px;"></i>
+                <div class="vp-fe-menu-sub-box vp-fe-sub-cleaning" style="top: 120px;">
+                    <div class="vp-fe-menu-item vp-fe-menu-drop-na" data-type="4">Drop NA</div>
+                    <div class="vp-fe-menu-item vp-fe-menu-drop-outlier" data-type="11" data-axis="col">Drop Outlier</div>
+                    <div class="vp-fe-menu-item vp-fe-menu-drop-duplicate" data-type="5" data-axis="col">Drop Duplicates</div>
+                </div>
+            </div>
+            
+            
+            
+        </div>
+        <div class="vp-fe-body">
+            <div class="vp-fe-preview"><textarea id="vp_fePreviewCode" name="code"># Code preview</textarea></div>
+            <div class="vp-fe-df-box">
+                <div>
+                    <label for="vp_feVariable" class="vp-orange-text">DataFrame</label>
+                    <select id="vp_feVariable">
+                    </select>
+                    <!-- LAB: img to url -->
+                    <div class="vp-fe-df-refresh">
+                        <!-- <img src="${vp_base}/img/refresh.svg" /> -->
+                    </div>
+                </div>
+                <div>
+                    <label for="vp_feReturn">Allocate to</label>
+                    <input type="text" class="vp-input" id="vp_feReturn" placeholder="Variable name" />
+                    <label><input type="checkbox" class="vp-state" id="inplace" /><span>Inplace</span></label>
+                </div>
+            </div>
+            <div class="vp-fe-toolbar">
+                <button type="button" class="vp-button vp-fe-toolbar-item" data-type="97">Add Column</button>
+                <button type="button" class="vp-button vp-fe-toolbar-item" data-type="98">Add Row</button>
+            </div>
+            <div class="vp-fe-table no-selection">
+                <!-- Frame table -->
+            </div>
+        </div>
+    </div>
+</body>
