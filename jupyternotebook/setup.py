@@ -10,7 +10,7 @@ name = 'visualpython'
 
 setup(
     name             = name,
-    version          = '2.2.12',
+    version          = '2.3.1',
     packages         = find_packages(),
     package_data     = {"": ["*"], 'visualpython' : ['visualpython.yaml', 'README.md']},
     scripts          = ['visualpython/bin/visualpy', 'visualpython/bin/visualpy.bat'],
@@ -25,4 +25,4 @@ setup(
     platforms        = "Linux, Mac OS X, Windows",
     keywords         = ['VisualPython', 'visualpython', 'visual python', 'Visual Python', 'Visual', 'visual'],
     python_requires  = '>=3.6',
-    )
+)
