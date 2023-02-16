@@ -11,12 +11,13 @@
 #=============================================================================
 # Replace Version
 #=============================================================================
-VP_ORG_VER=2.2.12
+VP_ORG_VER=2.3.0
 VP_NEW_VER=2.3.0
+VP_COLAB_VER=2      # colab specified versioning
 
 # update version info
 # update manifest version with new numbering for new version
-grep -REil ${VP_ORG_VER//\./\\.}\.[0-9] manifest.json | xargs sed -i "s/${VP_ORG_VER//\./\\.}\.[0-9]/${VP_NEW_VER}.1/g"
+grep -REil ${VP_ORG_VER//\./\\.}\.[0-9] manifest.json | xargs sed -i "s/${VP_ORG_VER//\./\\.}\.[0-9]/${VP_NEW_VER}.${VP_COLAB_VER}/g"
 # update version inside visualpython package
 grep -REil ${VP_ORG_VER//\./\\.} visualpython/* | xargs sed -i --follow-symlinks "s/${VP_ORG_VER//\./\\.}/${VP_NEW_VER}/g"
 
@@ -28,7 +29,7 @@ mkdir -p ../dist/colab
 
 # build package
 # sudo apt-get install zip
-zip -r ../dist/colab/visualpython-v$VP_NEW_VER.zip background.js content.js icon.png inject.js manifest.json visualpython
+zip -r ../dist/colab/visualpython-v$VP_NEW_VER.$VP_COLAB_VER.zip * -x build.colab.sh
 
 exit 0
 # End of file
