@@ -202,7 +202,7 @@ define([
 
             // CHROME: TODO: 4: marked is not loaded, before fix it comment it
             if (vpConfig.extensionType === 'notebook') {
-                var marked = require('marked');
+                var marked = require('components/marked/lib/marked');
                 var renderer = new marked.Renderer();
 
                 // get block
@@ -223,7 +223,6 @@ define([
                 });
             } else if (vpConfig.extensionType === 'lab') {
                 var marked = require('marked');
-                var renderer = new marked.Renderer();
 
                 // get block
                 let block = this.getTaskType() == 'block'? this.taskItem: null;
