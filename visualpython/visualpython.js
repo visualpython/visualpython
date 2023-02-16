@@ -15,7 +15,8 @@
 require.config({
     paths: { 
         'vp_base'   : '../nbextensions/visualpython',
-        'css'       : 'vp_base/lib/require/css.min'
+        'css'       : 'vp_base/lib/require/css.min',
+        'mathjaxutils': 'notebook/js/mathjaxutils'
     },
     config: {
         text: {

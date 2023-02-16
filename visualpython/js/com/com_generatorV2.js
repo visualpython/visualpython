@@ -280,7 +280,7 @@ define([
                         'value':opt.value
                     });
                     // cell metadata test
-                    if (value != undefined) {
+                    if (value != undefined && obj.value != undefined) {
                         // set as saved value
                         if (value == opt.value) {
                             $(option).attr({

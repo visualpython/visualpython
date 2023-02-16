@@ -34,6 +34,9 @@ grep -rl "__VP_CSS_LOADER__" lib/visualpython/js/* | xargs sed -i "s/__VP_CSS_LO
 # sudo apt-get install curl
 # curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash   # install nvm
 # nvm install 16.15.1      # install node 16.15.1
+# nvm ls                   # show version
+## solution for [node: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.28` not found error]
+# nvm use 16               # use 16 version 
 #=============================================================================
 # python -m pip install jupyterlab
 # npm install                   # install npm package dependencies

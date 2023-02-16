@@ -17,9 +17,9 @@ define([
     __VP_CSS_LOADER__('vp_base/css/m_library/libraryComponent'), // INTEGRATION: unified version of css loader
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/com_Const',
-    'vp_base/js/com/com_generator',
+    'vp_base/js/com/com_generatorV2',
     'vp_base/data/m_library/pandasLibrary'
-], function(libHtml, libCss, PopupComponent, com_Const, com_generator, pandasLibrary) {
+], function(libHtml, libCss, PopupComponent, com_Const, com_generatorV2, pandasLibrary) {
 
     /**
      * LibraryComponent
@@ -131,7 +131,13 @@ define([
             super.render();
 
             // show interface
-            com_generator.vp_showInterfaceOnPage(this.wrapSelector(), this.package);
+            // com_generator.vp_showInterfaceOnPage(this.wrapSelector(), this.package);
+            com_generatorV2.vp_showInterfaceOnPage(this, this.package, this.state);
+
+            // hide required page if no options
+            if ($.trim($(this.wrapSelector('#vp_inputOutputBox table tbody')).html())=='') {
+                $(this.wrapSelector('.vp-require-box')).hide();
+            }
 
             // hide optional page if no options
             if ($.trim($(this.wrapSelector('#vp_optionBox table tbody')).html())=='') {
@@ -139,8 +145,18 @@ define([
             }
         }
 
+        open() {
+            super.open();
+            // hide optional page if no options
+            if ($.trim($(this.wrapSelector('#vp_optionBox table tbody')).html())=='') {
+                $(this.wrapSelector('.vp-option-box')).hide();
+            }
+        }
+
         generateCode() {
-            return com_generator.vp_codeGenerator(this.uuid, this.package);
+            // return com_generator.vp_codeGenerator(this.uuid, this.package);
+            let code = com_generatorV2.vp_codeGenerator(this, this.package, this.state);
+            return code;
         }
 
     }
