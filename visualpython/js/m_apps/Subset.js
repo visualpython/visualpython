@@ -21,8 +21,8 @@ define([
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/SuggestInput',
     'vp_base/js/com/component/VarSelector',
-    'vp_base/js/com/component/MultiSelector'
-], function(subsetHtml, subsetCss, com_Const, com_String, com_util, PopupComponent, SuggestInput, VarSelector, MultiSelector) {
+    'vp_base/js/com/component/DataSelector'
+], function(subsetHtml, subsetCss, com_Const, com_String, com_util, PopupComponent, SuggestInput, VarSelector, DataSelector) {
 
     /**
      * Subset
@@ -142,7 +142,18 @@ define([
         }
 
         templateForBody() {
-            return subsetHtml;
+            let page = $(subsetHtml);
+
+            let that = this;
+            let allocateSelector = new DataSelector({
+                pageThis: this, id: 'allocateTo', classes: VP_DS_ALLOCATE_TO, placeholder: 'New variable name', required: true,
+                finish: function() {
+                    that.generateCode();
+                }
+            });
+            $(page).find('.' + VP_DS_ALLOCATE_TO).replaceWith(allocateSelector.toTagString());
+
+            return page;
         }
         templateForDataView() {
             let tag = new com_String();

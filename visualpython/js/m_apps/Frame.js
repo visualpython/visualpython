@@ -20,9 +20,9 @@ define([
     'vp_base/js/com/com_util',
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/SuggestInput',
-    'vp_base/js/com/component/VarSelector',
+    'vp_base/js/com/component/DataSelector',
     'vp_base/js/m_apps/Subset'
-], function(frameHtml, frameCss, com_Const, com_String, com_util, PopupComponent, SuggestInput, VarSelector, Subset) {
+], function(frameHtml, frameCss, com_Const, com_String, com_util, PopupComponent, SuggestInput, DataSelector, Subset) {
 
     /**
      * Frame
@@ -516,7 +516,14 @@ define([
         }
 
         templateForBody() {
-            return frameHtml;
+            let page = $(frameHtml);
+
+            let allocateSelector = new DataSelector({
+                pageThis: this, id: 'vp_feReturn', placeholder: 'Variable name', required: true, value: '_vp'
+            });
+            $(page).find('#vp_feReturn').replaceWith(allocateSelector.toTagString());
+
+            return page;
         }
 
         render() {
