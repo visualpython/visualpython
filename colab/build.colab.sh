@@ -12,8 +12,8 @@
 # Replace Version
 #=============================================================================
 VP_ORG_VER=2.3.0
-VP_NEW_VER=2.3.0
-VP_COLAB_VER=2      # colab specified versioning
+VP_NEW_VER=2.3.1
+VP_COLAB_VER=1      # colab specified versioning
 
 # update version info
 # update manifest version with new numbering for new version

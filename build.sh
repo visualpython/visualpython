@@ -11,8 +11,8 @@
 #=============================================================================
 # Set version and replace it
 #=============================================================================
-VP_ORG_VER=2.2.12
-VP_NEW_VER=2.3.0
+VP_ORG_VER=2.3.0
+VP_NEW_VER=2.3.1
 
 # update version info
 grep -REil "VP_ORG_VER=.+$" colab/build.colab.sh jupyterlab/build.jupyterlab.sh jupyternotebook/build.jupyternotebook.sh | xargs sed -i "s/VP_ORG_VER=.\+$/VP_ORG_VER=${VP_ORG_VER}/g"
@@ -49,6 +49,15 @@ cd $TEMP_PWD/jupyterlab
 
 ## colab
 ## upload on chrome web store with blacklogic.dev
+
+#=============================================================================
+# Commit Release (for maintainer only)
+#=============================================================================
+# git add .
+# git commit -m "deploy visualpython ${VP_NEW_VER}"
+# git push origin devops
+# git checkout -b release
+# git push origin release
 
 exit 0
 

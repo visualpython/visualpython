@@ -11,8 +11,8 @@
 #=============================================================================
 # Replace Version and Basic Files
 #=============================================================================
-VP_ORG_VER=2.2.12
-VP_NEW_VER=2.3.0
+VP_ORG_VER=2.3.0
+VP_NEW_VER=2.3.1
 
 # update version info
 grep -REil "version = \"${VP_ORG_VER}\"" pyproject.toml | xargs sed -i "s/version = \"${VP_ORG_VER//\./\\.}\"/version = \"${VP_NEW_VER}\"/g"
