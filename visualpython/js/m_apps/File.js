@@ -19,7 +19,7 @@ define([
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_Const',
     'vp_base/js/com/component/PopupComponent',
-    'vp_base/js/com/com_generator',
+    'vp_base/js/com/com_generatorV2',
     'vp_base/data/m_library/pandasLibrary',
     'vp_base/js/com/component/FileNavigation',
     'vp_base/js/com/component/SuggestInput'
@@ -51,12 +51,14 @@ define([
                 ]
             }
 
-            if (vpConfig.extensionType === 'notebook') {
-                this.dataPath = window.location.origin + com_Const.DATA_PATH + "sample_csv/";
-            } else if (vpConfig.extensionType === 'colab' || vpConfig.extensionType === 'lab') {
-                // this.dataPath = com_Const.DATA_PATH + "sample_csv/";
-                this.dataPath = 'https://raw.githubusercontent.com/visualpython/visualpython/main/data/sample_csv/';
-            }
+            // INTEGRATED: integrate data source from raw.github
+            // if (vpConfig.extensionType === 'notebook') {
+            //     this.dataPath = window.location.origin + com_Const.DATA_PATH + "sample_csv/";
+            // } else if (vpConfig.extensionType === 'colab' || vpConfig.extensionType === 'lab') {
+            //     // this.dataPath = com_Const.DATA_PATH + "sample_csv/";
+            //     this.dataPath = 'https://raw.githubusercontent.com/visualpython/visualpython/main/data/sample_csv/';
+            // }
+            this.dataPath = 'https://raw.githubusercontent.com/visualpython/visualpython/main/visualpython/data/sample_csv/';
 
             this.state = {
                 fileExtension: 'csv',
@@ -102,33 +104,74 @@ define([
                         fileInputId : this.wrapSelector('#vp_fileWrite #fileName')
                     }
                 },
-                'Sample': {
-                    library: 'pandas',
-                    code: "${vp_sampleReturn} = pd.read_csv('" + this.dataPath  + "${vp_sampleFile}'${v})",
-                    input: [
-                        {
-                            name:'vp_sampleFile',
-                            label: 'Sample Data',
-                            component: 'option_select',
-                            options: [
-                                'iris.csv', 'titanic.csv', 'fish.csv', 'campusRecruitment.csv', 
-                                'houseData_500.csv', 'economic_index.csv', 'tips.csv'
-                            ],
-                            options_label: [
-                                'iris', 'titanic', 'fish', 'campusRecruitment', 
-                                'houseData_500', 'economic index', 'tips'
-                            ]
-                        }
-                    ],
-                    output: [
-                        {
-                            name:'vp_sampleReturn',
-                            type:'var',
-                            label:'Allocate to',
-                            required: true
-                        }
+                // 'Sample': {
+                //     library: 'pandas',
+                //     code: "${vp_sampleReturn} = pd.read_csv('" + this.dataPath  + "${vp_sampleFile}'${v})",
+                //     input: [
+                //         {
+                //             name:'vp_sampleFile',
+                //             label: 'Sample Data',
+                //             component: 'option_select',
+                //             options: [
+                //                 'iris.csv', 'titanic.csv', 'fish.csv', 'campusRecruitment.csv', 
+                //                 'houseData_500.csv', 'economic_index.csv', 'tips.csv'
+                //             ],
+                //             options_label: [
+                //                 'iris', 'titanic', 'fish', 'campusRecruitment', 
+                //                 'houseData_500', 'economic index', 'tips'
+                //             ]
+                //         }
+                //     ],
+                //     output: [
+                //         {
+                //             name:'vp_sampleReturn',
+                //             type:'var',
+                //             label:'Allocate to',
+                //             required: true
+                //         }
+                //     ]
+                // }
+                "Sample": {
+                    "library": "pandas",
+                    "code": "${vp_sampleReturn} = pd.read_csv('" + this.dataPath  + "${vp_sampleFile}')",
+                    "options": [
+                      {
+                        "name": "vp_sampleFile",
+                        "label": "Sample Data",
+                        "required": true,
+                        "component": [
+                          "option_select"
+                        ],
+                        "options": [
+                          "iris.csv",
+                          "titanic.csv",
+                          "fish.csv",
+                          "campusRecruitment.csv",
+                          "houseData_500.csv",
+                          "economic_index.csv",
+                          "tips.csv"
+                        ],
+                        "options_label": [
+                          "iris",
+                          "titanic",
+                          "fish",
+                          "campusRecruitment",
+                          "houseData_500",
+                          "economic index",
+                          "tips"
+                        ]
+                      },
+                      {
+                        "name": "vp_sampleReturn",
+                        "label": "Allocate to",
+                        "component": [
+                          "data_select"
+                        ],
+                        "output": true,
+                        "required": true
+                      }
                     ]
-                }
+                  }
             }
         }
 
@@ -277,7 +320,8 @@ define([
     
             // render interface
             // pdGen.vp_showInterfaceOnPage(this.wrapSelector('#vp_file' + pageType), thisPkg);
-            pdGen.vp_showInterfaceOnPage(this.wrapSelector('#vp_file' + pageType), thisPkg);
+            // pdGen.vp_showInterfaceOnPage(this.wrapSelector('#vp_file' + pageType), thisPkg);
+            pdGen.vp_showInterfaceOnPage(this, thisPkg, this.state, parent=('#vp_file' + pageType));
     
             // prepend file type selector
             $(this.wrapSelector(prefix + '#vp_inputOutputBox table tbody')).prepend(
@@ -383,23 +427,26 @@ define([
 
             if (pageType == 'Sample') {
                 // sample csv code
-                var result = pdGen.vp_codeGenerator(this.uuid + ' #vp_fileSample', { ...this.fileState[pageType] }, userOption.toString());
+                // var result = pdGen.vp_codeGenerator(this.uuid + ' #vp_fileSample', { ...this.fileState[pageType] }, userOption.toString());
+                var result = pdGen.vp_codeGenerator(this, { ...this.fileState[pageType] }, this.state, userOption.toString(), parent='#vp_fileSample');
                 sbCode.append(result);
             } else if (pageType == 'Read') {
                 var thisPkg = JSON.parse(JSON.stringify(this.fileState[pageType].package));
-                thisPkg.input.push({
+                thisPkg.options.push({
                     name: 'fileType',
                     type: 'var'
                 });
-                var result = pdGen.vp_codeGenerator(this.uuid + ' #vp_fileRead', thisPkg, userOption.toString());
+                // var result = pdGen.vp_codeGenerator(this.uuid + ' #vp_fileRead', thisPkg, userOption.toString());
+                var result = pdGen.vp_codeGenerator(this, thisPkg, this.state, userOption.toString(), parent='#vp_fileRead');
                 sbCode.append(result);
             } else if (pageType == 'Write') {
                 var thisPkg = JSON.parse(JSON.stringify(this.fileState[pageType].package));
-                thisPkg.input.push({
+                thisPkg.options.push({
                     name: 'fileType',
                     type: 'var'
                 });
-                var result = pdGen.vp_codeGenerator(this.uuid + ' #vp_fileWrite', thisPkg, userOption.toString());
+                // var result = pdGen.vp_codeGenerator(this.uuid + ' #vp_fileWrite', thisPkg, userOption.toString());
+                var result = pdGen.vp_codeGenerator(this, thisPkg, this.state, userOption.toString(), parent='#vp_fileWrite');
                 sbCode.append(result);
             }
 

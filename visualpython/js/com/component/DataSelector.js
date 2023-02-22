@@ -55,12 +55,20 @@ define([
                 value: null,    // pre-defined value
                 finish: null,   // callback after selection
                 select: null,   // callback after selection from suggestInput
-                allowDataType: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], // default allow data types
+                allowDataType: null,
                 // additional options
                 classes: '',
                 placeholder: 'Select variable',
                 required: false,
                 ...this.prop
+            }
+
+            // If null, define default allow data type
+            if (!this.prop.allowDataType) {
+                // default allow data types
+                this.prop.allowDataType = [
+                    'DataFrame', 'Series', 'ndarray', 'list', 'dict'
+                ]
             }
 
             this.state = {
