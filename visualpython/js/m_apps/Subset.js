@@ -467,13 +467,13 @@ define([
             // tag.appendFormatLine('<button type="button" class="{0} {1}" title="{2}"><img src="{3}"/></button>',
             //     VP_DS_SELECT_DEL_ALL_BTN, 'select-col', 'Remove all items', com_Const.IMAGE_PATH + 'arrow_left_double.svg');
             tag.appendFormatLine('<button type="button" class="{0} {1}" title="{2}"><div class="vp-icon-arrow-right-double"></div></button>',
-                VP_DS_SELECT_ADD_ALL_BTN, 'select-row', 'Add all items');
+                VP_DS_SELECT_ADD_ALL_BTN, 'select-col', 'Add all items');
             tag.appendFormatLine('<button type="button" class="{0} {1}"><div class="vp-icon-arrow-right"></div></button>',
-                VP_DS_SELECT_ADD_BTN, 'select-row');
+                VP_DS_SELECT_ADD_BTN, 'select-col');
             tag.appendFormatLine('<button type="button" class="{0} {1}"><div class="vp-icon-arrow-left"></div></button>',
-                VP_DS_SELECT_DEL_BTN, 'select-row');
+                VP_DS_SELECT_DEL_BTN, 'select-col');
             tag.appendFormatLine('<button type="button" class="{0} {1}" title="{2}"><div class="vp-icon-arrow-left-double"></div></button>',
-                VP_DS_SELECT_DEL_ALL_BTN, 'select-row', 'Remove all items');
+                VP_DS_SELECT_DEL_ALL_BTN, 'select-col', 'Remove all items');
             tag.appendLine('</div>'); // VP_DS_SELECT_BTNS
 
             // col select - right
