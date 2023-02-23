@@ -75,8 +75,8 @@
 }
 .vp-cs-add-item-btn {
     display: inline-block;
-    position: absolute;
-    right: 35px;
-    bottom: 63px;
+    position: relative;
+    left: calc(100% - 25px);
+    bottom: 23px;
     cursor: pointer;
 }

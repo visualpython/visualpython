@@ -146,7 +146,7 @@ define([
 
             let that = this;
             let allocateSelector = new DataSelector({
-                pageThis: this, id: 'allocateTo', classes: VP_DS_ALLOCATE_TO, placeholder: 'New variable name', required: true,
+                pageThis: this, id: 'allocateTo', classes: VP_DS_ALLOCATE_TO, placeholder: 'New variable name',
                 finish: function() {
                     that.generateCode();
                 }
