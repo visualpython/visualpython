@@ -202,7 +202,7 @@ define([
 
             // CHROME: TODO: 4: marked is not loaded, before fix it comment it
             if (vpConfig.extensionType === 'notebook') {
-                var marked = require('components/marked/lib/marked');
+                var marked = window.require('components/marked/lib/marked');
                 var renderer = new marked.Renderer();
 
                 // get block
