@@ -1,3 +1,5 @@
 dist/
+colab/visualpython
+jupyternotebook/visualpython
 jupyterlab/lib/visualpython
 test/
