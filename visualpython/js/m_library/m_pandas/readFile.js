@@ -19,7 +19,7 @@ define([
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_Const',
     'vp_base/js/com/component/PopupComponent',
-    'vp_base/js/com/com_generator',
+    'vp_base/js/com/com_generatorV2',
     'vp_base/data/m_library/pandasLibrary',
     'vp_base/js/com/component/FileNavigation',
     'vp_base/js/com/component/SuggestInput'
@@ -48,9 +48,9 @@ define([
                 'csv': 'csv',
                 'excel': 'xlsx',
                 'json': 'json',
-                'pickle': 'pickle'
+                'pickle': ''
             }
-            this.dataPath = window.location.origin + com_Const.DATA_PATH + "sample_csv/";
+            this.dataPath = 'https://raw.githubusercontent.com/visualpython/visualpython/main/visualpython/data/sample_csv/';
             this.fileResultState = {
                 pathInputId : this.wrapSelector('#i0'),
                 fileInputId : this.wrapSelector('#fileName')
@@ -62,6 +62,7 @@ define([
                     'json': 'pd076',
                     'pickle': 'pd079'
                 },
+                selectedType: 'csv',
                 package: null
             };
         }
@@ -145,6 +146,7 @@ define([
                     <div id="vp_inputOutputBox" class="vp-accordian-box">
                         <table class="vp-option-table vp-tbl-gap5">
                             <colgroup><col width="30%"/><col width="*"/></colgroup>
+                            <tbody></tbody>
                         </table>
                     </div>
                 </div>
@@ -153,7 +155,7 @@ define([
                     <div id="vp_optionBox" class="vp-accordian-box">
                         <table class="vp-option-table vp-tbl-gap5">
                             <colgroup><col width="30%"/><col width="*"/></colgroup>
-                            
+                            <tbody></tbody>
                         </table>
                     </div>
                 </div>
@@ -175,8 +177,8 @@ define([
             var that = this;
     
             // clear
-            $(this.wrapSelector('#vp_inputOutputBox table')).html('<colgroup><col width="40%"/><col width="*"/></colgroup>');
-            $(this.wrapSelector('#vp_optionBox table')).html('<colgroup><col width="40%"/><col width="*"/></colgroup>');
+            $(this.wrapSelector('#vp_inputOutputBox table')).html('<colgroup><col width="40%"/><col width="*"/></colgroup><tbody></tbody>');
+            $(this.wrapSelector('#vp_optionBox table')).html('<colgroup><col width="40%"/><col width="*"/></colgroup><tbody></tbody>');
     
             var fileTypeObj = this.fileState['fileTypeId'];
             var selectedType = this.state['selectedType'];
@@ -188,10 +190,11 @@ define([
             this.state.fileExtension = that.fileExtensions[selectedType];
 
             // render interface
-            pdGen.vp_showInterfaceOnPage(this.wrapSelector('.vp-fileio-box'), thisPkg);
+            // pdGen.vp_showInterfaceOnPage(this.wrapSelector('.vp-fileio-box'), thisPkg);
+            pdGen.vp_showInterfaceOnPage(this, thisPkg, this.state);
     
             // prepend file type selector
-            $(this.wrapSelector('#vp_inputOutputBox table')).prepend(
+            $(this.wrapSelector('#vp_inputOutputBox table tbody')).prepend(
                 $('<tr>').append($(`<td><label for="fileType" class="vp-orange-text">File Type</label></td>`))
                     .append($('<td><select id="fileType" class="vp-select"></select></td>'))
             );
@@ -232,11 +235,12 @@ define([
             this.saveState();
 
             var thisPkg = JSON.parse(JSON.stringify(this.fileState.package));
-            thisPkg.input.push({
+            thisPkg.options.push({
                 name: 'fileType',
                 type: 'var'
             });
-            var result = pdGen.vp_codeGenerator(this.uuid, thisPkg);
+            // var result = pdGen.vp_codeGenerator(this.uuid, thisPkg);
+            var result = pdGen.vp_codeGenerator(this, thisPkg, this.state);
             sbCode.append(result);
 
             return sbCode.toString();

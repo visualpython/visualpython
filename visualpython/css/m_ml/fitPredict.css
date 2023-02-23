@@ -1,5 +1,6 @@
 .vp-model-select-box {
     grid-column-gap: 5px;
+    align-items: start;
 }
 .vp-ins-select-title {
     font-weight: bold;

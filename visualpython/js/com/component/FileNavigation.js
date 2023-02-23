@@ -225,8 +225,7 @@ define([
 
             let directoryLi = $('<li class="fileNavigationPage-li"></li>');
             let directoryI = $(`<i class="fileNavigationPage-dir-text 
-                                            item_icon 
-                                            ${type=='dir'?'folder':'file'}_icon 
+                                            vp-${type=='dir'?'folder':'file'}-icon 
                                             icon-fixed-width"
                                     data-type="${type}"
                                     data-path="${path}"

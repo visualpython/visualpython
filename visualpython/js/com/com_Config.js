@@ -782,7 +782,11 @@ define([
         checkVpVersion(background=false) {
             let that = this;
             let nowVersion = this.getVpInstalledVersion();
-            this.getPackageVersion().then(function(latestVersion) {
+            let packageName = 'visualpython';
+            if (this.extensionType === 'lab') {
+                packageName = 'jupyterlab-visualpython';
+            }
+            this.getPackageVersion(packageName).then(function(latestVersion) {
                 if (nowVersion === latestVersion) {
                     // if it's already up to date
                     // hide version update icon
@@ -919,7 +923,7 @@ define([
     /**
      * Version
      */
-    Config.version = "2.3.1";
+    Config.version = "2.3.2";
 
     /**
      * Type of mode

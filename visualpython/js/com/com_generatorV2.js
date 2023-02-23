@@ -121,13 +121,15 @@ define([
      * Generate page interface based on package configuration
      * @param {Component} pageThis
      * @param {*} package 
+     * @param {Object} state [optional]
+     * @param {String} parent [optional] parent selector as string
      */
-    var vp_showInterfaceOnPage = function(pageThis, package, state={}) {
+    var vp_showInterfaceOnPage = function(pageThis, package, state={}, parent='') {
 
         // generate input variable tag
-        var tblInput = $(pageThis.wrapSelector()+' #vp_inputOutputBox table tbody');
+        var tblInput = $(pageThis.wrapSelector() + (parent!==''?(' ' + parent):'') + ' #vp_inputOutputBox table tbody');
         // generate option variable tag
-        var tblOption = $(pageThis.wrapSelector()+' #vp_optionBox table tbody');
+        var tblOption = $(pageThis.wrapSelector() + (parent!==''?(' ' + parent):'') + ' #vp_optionBox table tbody');
 
         package.options && package.options.forEach(function(o, i) {
             var obj = JSON.parse(JSON.stringify(o));
@@ -355,7 +357,7 @@ define([
                 let dataSelector = new DataSelector({
                     pageThis: pageThis, 
                     id: obj.name,
-                    allowDataType: obj.var_type, 
+                    allowDataType: obj.varType, 
                     placeholder: obj.placeholder || 'Select data',
                     value: value,
                     required: obj.required === true
@@ -381,7 +383,7 @@ define([
                     // multiple selection true
                     'multiple': true
                 });
-                vp_generateVarSelect(tag, obj.var_type, obj.value);
+                vp_generateVarSelect(tag, obj.varType, obj.value);
                 content = tag;
                 break;
             case 'col_select':
@@ -463,7 +465,7 @@ define([
      * @param {object} obj
      */
     var vp_generateVarSuggestInput = function(divTag, obj) {
-        var types = obj.var_type;
+        var types = obj.varType;
         var defaultValue = obj.value;
         if (obj.value == undefined && obj.default != undefined) {
             defaultValue = obj.default;
@@ -572,27 +574,28 @@ define([
 
     /**
      * Get tag value
-     * @param {Object} pageThis
-     * @param {*} obj 
-     * @returns {string} tag's value
+     * @param {Object} pageThis parent this object
+     * @param {Object} obj      state object to get tag value 
+     * @param {string} parent   parent selector as string
+     * @returns {string}        tag's value
      */
-    var vp_getTagValue = function(pageThis, obj) {
+    var vp_getTagValue = function(pageThis, obj, parent='') {
         var value = '';
         let componentType = 'input';
         if (obj.component && obj.component.length == 1) {
             componentType = obj.component[0];
         } else {
-            componentType = $(pageThis.wrapSelector('#' + obj.name + '_type')).val();
+            componentType = $(pageThis.wrapSelector(parent + ' #' + obj.name + '_type')).val();
         }
         switch (componentType) {
             case 'option_radio':
-                var input = $(pageThis.wrapSelector("input[name='"+obj.name+"']:checked")).val();
+                var input = $(pageThis.wrapSelector(parent + " input[name='"+obj.name+"']:checked")).val();
                 // same as default
                 if (input == obj.default) break;
                 value = input;
                 break;
             case 'option_checkbox':
-                let checked = $(pageThis.wrapSelector("input[name='"+obj.name+"']:checked")).val();
+                let checked = $(pageThis.wrapSelector(parent + " input[name='"+obj.name+"']:checked")).val();
 
                 for (var i = 0; i < checked.length; i++) {
                     value += "'" + $(checked[i]).val() + "',";
@@ -600,7 +603,7 @@ define([
                 value = value.substr(0, value.length-1);
                 break;
             case 'bool_checkbox':
-                let isChecked = $(pageThis.wrapSelector('#'+obj.name)).prop('checked');
+                let isChecked = $(pageThis.wrapSelector(parent + ' #'+obj.name)).prop('checked');
                 value = isChecked?'True':'False';
                 break;
             case 'input_multi':
@@ -610,7 +613,7 @@ define([
             case 'var_multi':
             case 'col_select':
             case 'dtype':
-                value = $(pageThis.wrapSelector('#'+obj.name)).val();
+                value = $(pageThis.wrapSelector(parent + ' #'+obj.name)).val();
                 break;
             case 'table':
             case 'file':
@@ -618,7 +621,7 @@ define([
             case 'option_suggest':
             case 'input_number':
             default:
-                var input = $(pageThis.wrapSelector('#'+obj.name)).val();
+                var input = $(pageThis.wrapSelector(parent + ' #'+obj.name)).val();
                 // same as default
                 if (input == obj.default) break;
                 value = input;
@@ -630,17 +633,19 @@ define([
      * Generate code
      * @param {Object} pageThis
      * @param {Object} package 
+     * @param {Object} state      [optional]
      * @param {string} etcOptions [optional] userOptionCode addition ex) ", test='TEST'"
+     * @param {string} parent     [optional] parent selector as string
      * @returns {string} generated code / if error, null
      */
-    var vp_codeGenerator = function(pageThis, package, state = {}, etcOptions = '') {
+    var vp_codeGenerator = function(pageThis, package, state = {}, etcOptions = '', parent='') {
         var code = package.code;
         
         try {
             package.options && package.options.forEach(function(v, i) {
                 var val = state[v.name];
                 if (val == undefined || val == '' || val == v.default) {
-                    val = vp_getTagValue(pageThis, v);
+                    val = vp_getTagValue(pageThis, v, parent=parent);
                 }
                 var id = '${' + v.name + '}';
                 if (val == undefined || val.trim() == '') {
@@ -687,7 +692,20 @@ define([
             // prevent code: no allocation variable ( = pd.DataFrame())
             if (code.startsWith(' = ')) {
                 code = code.substr(3);
+            } 
+            // show_result 
+            // get output variables
+            if (_VP_SHOW_RESULT && package.options) {
+                var outputOptList = package.options.filter(x => x.output === true);
+                var outputStr = '';
+                outputOptList.forEach(opt => {
+                    outputStr += (outputStr !== ''?', ':'') + vp_getTagValue(pageThis, opt);
+                })
+                if (outputStr != '') {
+                    code += '\n'+ outputStr;
+                }
             }
+
 
         } catch (e) {
             vpLog.display(VP_LOG_TYPE.ERROR, 'com_generator v2 code generation error ' + e.message);

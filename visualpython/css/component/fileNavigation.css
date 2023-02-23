@@ -254,14 +254,14 @@
 }
 
 /* CHROME: alternatives for fontawesome */
-#vp_fileNavigation .folder_icon {
+#vp_fileNavigation .vp-folder-icon {
     background-image: url(../../img/folder-regular.svg);
     padding-left: 20px;
     background-position: left;
     background-repeat: no-repeat;
     background-size: 15px;
 }
-#vp_fileNavigation .file_icon {
+#vp_fileNavigation .vp-file-icon {
     background-image: url(../../img/file-regular.svg);
     padding-left: 20px;
     background-position: left;

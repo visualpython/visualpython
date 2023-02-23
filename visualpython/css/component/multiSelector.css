@@ -62,10 +62,21 @@
     background: #FFFFFF;
     border: 0.25px solid #E4E4E4;
     border-radius: 3px;
+    cursor: pointer;
 }
 .vp-cs-select-btn-box button:not(:nth-child(1)) {
     margin-top: 5px;
 }
 .vp-cs-select-btn-box button:hover {
     background: #F8F8F8;
+}
+.vp-cs-add-item-name {
+    padding-right: 25px;
+}
+.vp-cs-add-item-btn {
+    display: inline-block;
+    position: relative;
+    left: calc(100% - 25px);
+    bottom: 23px;
+    cursor: pointer;
 }

@@ -55,12 +55,20 @@ define([
                 value: null,    // pre-defined value
                 finish: null,   // callback after selection
                 select: null,   // callback after selection from suggestInput
-                allowDataType: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], // default allow data types
+                allowDataType: null,
                 // additional options
                 classes: '',
                 placeholder: 'Select variable',
                 required: false,
                 ...this.prop
+            }
+
+            // If null, define default allow data type
+            if (!this.prop.allowDataType) {
+                // default allow data types
+                this.prop.allowDataType = [
+                    'DataFrame', 'Series', 'ndarray', 'list', 'dict'
+                ]
             }
 
             this.state = {
@@ -360,7 +368,7 @@ define([
                     <div class="vp-ds-df-multiselector" ${this.state.useIndex===true?'style="display:none;"':''}>
                     </div>
                     <div class="vp-ds-df-index-box" ${this.state.useIndex===false?'style="display:none;"':''}>
-                        <div><label>Index selected.</label>
+                        <div style="height:100%;"><label>Index selected.</label>
                             <div class="vp-cs-select-container no-selection">
                                 <div class="vp-cs-select-left">
                                     <input type="text" class="vp-input wp100" placeholder="Search" value="" readonly>
@@ -376,9 +384,9 @@ define([
                                 -->
                                 <!-- LAB: img to url -->
                                     <button type="button" class="vp-cs-select-add-all-btn" title="Add all items"><div class="vp-icon-arrow-right-double"></div></button>
-                                    <button type="button" class="vp-cs-select-add-btn vp-icon-arrow-right" title="Add selected items"><div class="vp-icon-arrow-right"></div></button>
-                                    <button type="button" class="vp-cs-select-del-btn vp-icon-arrow-left" title="Remove selected items"><div class="vp-icon-arrow-left"></div></button>
-                                    <button type="button" class="vp-cs-select-del-all-btn vp-icon-arrow-left-double" title="Remove all items"><div class="vp-icon-arrow-left-double"></div></button>
+                                    <button type="button" class="vp-cs-select-add-btn" title="Add selected items"><div class="vp-icon-arrow-right"></div></button>
+                                    <button type="button" class="vp-cs-select-del-btn" title="Remove selected items"><div class="vp-icon-arrow-left"></div></button>
+                                    <button type="button" class="vp-cs-select-del-all-btn" title="Remove all items"><div class="vp-icon-arrow-left-double"></div></button>
                                 </div>
                                 <div class="vp-cs-select-right">
                                     <div class="vp-cs-select-box right vp-cs-droppable no-selection vp-scrollbar ui-droppable">
@@ -540,7 +548,7 @@ define([
                     $(this.wrapSelector('.vp-ds-option-inner-box')).html(this.templateForMultiSelector());
                     // column selecting
                     this._columnSelector = new MultiSelector(this.wrapSelector('.vp-ds-df-multiselector'),
-                        { mode: 'columns', parent: [data], selectedList: this.state.indexing }
+                        { mode: 'columns', parent: [data], selectedList: this.state.indexing, allowAdd: true }
                     );
 
                     // bind event
