@@ -69,3 +69,13 @@
 .vp-cs-select-btn-box button:hover {
     background: #F8F8F8;
 }
+.vp-cs-add-item-name {
+    padding-right: 25px;
+}
+.vp-cs-add-item-btn {
+    display: inline-block;
+    position: absolute;
+    right: 35px;
+    bottom: 63px;
+    cursor: pointer;
+}
