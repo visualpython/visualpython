@@ -95,7 +95,8 @@
 .vp-ds-df-option-box {
     height: 100%;
 }
-.vp-ds-df-multiselector {
+.vp-ds-df-multiselector,
+.vp-ds-df-index-box {
     height: calc(100% - 25px);
 }
 .vp-nd-row-box,

@@ -50,7 +50,7 @@ define([
         /**
          * 
          * @param {string} frameSelector        query for parent component
-         * @param {Object} config  parent:[], selectedList=[], includeList=[]
+         * @param {Object} config  parent:[], selectedList=[], includeList=[], excludeList=[], allowAdd=true/false
          */
         constructor(frameSelector, config) {
             super(frameSelector, config, {});
@@ -62,12 +62,13 @@ define([
             // configuration
             this.config = this.state;
 
-            var { mode, type, parent, dataList=[], selectedList=[], includeList=[], excludeList=[] } = this.config;
+            var { mode, type, parent, dataList=[], selectedList=[], includeList=[], excludeList=[], allowAdd=false } = this.config;
             this.mode = mode;   // variable / columns / index / ndarray0 / ndarray1 / methods / data(given data)
             this.parent = parent;
             this.selectedList = selectedList;
             this.includeList = includeList;
             this.excludeList = excludeList;
+            this.allowAdd = allowAdd;
 
             this.dataList = dataList;   // [ { value, code, type }, ... ]
             this.pointer = { start: -1, end: -1 };
@@ -305,6 +306,11 @@ define([
             tag.appendFormatLine('<div class="{0}">', APP_SELECT_RIGHT);
             var selectedList = this.dataList.filter(data => that.selectedList.includes(data.code));
             tag.appendLine(this.renderSelectedBox(selectedList));
+            if (this.allowAdd) {
+                // add item 
+                tag.appendLine('<input type="text" class="vp-cs-add-item-name vp-input wp100" placeholder="New item to add" value="">');
+                tag.appendLine('<div class="vp-cs-add-item-btn vp-icon-plus"></div>');
+            }
             tag.appendLine('</div>');  // APP_SELECT_RIGHT
             tag.appendLine('</div>');  // APP_SELECT_CONTAINER
             return tag.toString();
@@ -360,7 +366,7 @@ define([
                 var addedTags = $(that.wrapSelector('.' + APP_SELECT_RIGHT + ' .' + APP_SELECT_ITEM + '.added'));
                 var addedList = [];
                 for (var i = 0; i < addedTags.length; i++) {
-                    var value = $(addedTags[i]).attr('data-colname');
+                    var value = $(addedTags[i]).attr('data-name');
                     addedList.push(value);
                 }
                 var filteredList = that.dataList.filter(x => x.value.includes(searchValue) && !addedList.includes(x.value));
@@ -488,6 +494,75 @@ define([
                 $(that.wrapSelector('.' + APP_SELECT_ITEM + '.selected')).removeClass('selected');
                 that.pointer = { start: -1, end: -1 };
             });
+
+            // add new item
+            $(this.wrapSelector('.vp-cs-add-item-btn')).on('click', function(event) {
+                let newItemName = $(that.wrapSelector('.vp-cs-add-item-name')).val();
+                that._addNewItem(newItemName);
+            });
+            // add new item (by pushing enter key)
+            $(this.wrapSelector('.vp-cs-add-item-name')).on('keyup', function(event) {
+                var keycode =  event.keyCode 
+                            ? event.keyCode 
+                            : event.which;
+                if (keycode == 13) { // enter
+                    let newItemName = $(this).val();
+                    that._addNewItem(newItemName);
+                }
+            });
+        }
+
+        _addNewItem(newItemName) {
+            if (newItemName && newItemName !== '') {
+                // check if it is already exist
+                // - if it is already added, just select that item
+                // get added items
+                var addedTags = $(this.wrapSelector('.' + APP_SELECT_RIGHT + ' .' + APP_SELECT_ITEM + '.added'));
+                var addedList = [];
+                for (var i = 0; i < addedTags.length; i++) {
+                    var value = $(addedTags[i]).attr('data-name');
+                    addedList.push(value);
+                }
+                if (addedList.includes(newItemName)) {
+                    // just select that item and do nothing
+                    var targetTag = $(this.wrapSelector(`.vp-cs-select-item.added[data-name="${newItemName}"]`));
+                    this.pointer = { start: targetTag.index(), end: -1 };
+                    // un-select others
+                    $(this.wrapSelector('.' + APP_SELECT_ITEM)).removeClass('selected');
+                    targetTag.addClass('selected');
+                    return;
+                }
+                var filteredList = this.dataList.filter(x => x.value === newItemName);
+                if (filteredList.length > 0) {
+                    // already exist -> move it to selected-box
+                    var targetTag = $(this.wrapSelector(`.vp-cs-select-item[data-name="${newItemName}"]`));
+                    $(targetTag).appendTo(
+                        $(this.wrapSelector('.' + APP_SELECT_BOX + '.right'))
+                    );
+                    this.pointer = { start: targetTag.index(), end: -1 };
+                    // un-select others
+                    $(this.wrapSelector('.' + APP_SELECT_ITEM)).removeClass('selected');
+                    targetTag.addClass('added');
+                    targetTag.addClass('selected');
+                    return;
+                }
+
+                // add item
+                let newItemIndex = this.dataList.length;
+                var targetTag = $(`<div class="${APP_SELECT_ITEM} ${APP_DRAGGABLE} added selected" data-idx="${newItemIndex}" data-name="${newItemName}" data-type="object" data-code="'${newItemName}'" title="${newItemName}: Added manually">
+                    <span>${newItemName}</span>
+                </div>`);
+                $(targetTag).appendTo(
+                    $(this.wrapSelector('.' + APP_SELECT_BOX + '.right'))
+                );
+                this.pointer = { start: targetTag.index(), end: -1 };
+                // un-select others
+                $(this.wrapSelector('.' + APP_SELECT_ITEM)).removeClass('selected');
+                // clear item input
+                $(this.wrapSelector('.vp-cs-add-item-name')).val('');
+                // bind draggable
+                this.bindDraggable();
+            }
         }
 
         bindDraggable() {
