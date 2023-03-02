@@ -13,11 +13,10 @@
 #=============================================================================
 VP_ORG_VER=2.3.2
 VP_NEW_VER=2.3.3
-VP_COLAB_VER=1      # colab specified versioning
 
 # update version info
 # update manifest version with new numbering for new version
-grep -REil ${VP_ORG_VER//\./\\.}\.[0-9] manifest.json | xargs sed -i "s/${VP_ORG_VER//\./\\.}\.[0-9]/${VP_NEW_VER}.${VP_COLAB_VER}/g"
+grep -REil ${VP_ORG_VER//\./\\.} manifest.json | xargs sed -i "s/${VP_ORG_VER//\./\\.}\.[0-9]/${VP_NEW_VER}/g"
 # update version inside visualpython package
 grep -REil ${VP_ORG_VER//\./\\.} visualpython/* | xargs sed -i --follow-symlinks "s/${VP_ORG_VER//\./\\.}/${VP_NEW_VER}/g"
 
