@@ -208,7 +208,6 @@ define([
                 vp_config_version: '1.0.0',
                 vp_signature: 'VisualPython',
                 vp_position: {},
-                // CHROME: default to display vp
                 vp_section_display: false,
                 vp_note_display: false,
                 vp_menu_width: Config.MENU_MIN_WIDTH,
@@ -226,8 +225,6 @@ define([
         
             // merge default config
             $.extend(true, this.defaultConfig, this.metadataSettings);
-
-            console.log('test 1', this.defaultConfig);
         }
 
         _readUserCommandList() {
@@ -487,7 +484,7 @@ define([
                     that._checkMounted().then(function() {
                         that._readFromColab(configKey).then(function(result) {
                             let data = result;
-                            if (data == undefined || Object.keys(data).length === 0) {
+                            if (data == undefined || (data instanceof Object && Object.keys(data).length === 0)) {
                                 resolve(data);
                                 return;
                             }
@@ -495,7 +492,7 @@ define([
                                 resolve(data);
                                 return;
                             }
-                            if (data instanceof Object && Object.keys(data).length === 0) {
+                            if (data instanceof Object && Object.keys(data).length > 0) {
                                 resolve(data[dataKey]);
                                 return;
                             }
@@ -511,7 +508,7 @@ define([
                     // LAB: use local .visualpython files
                     that._readFromLab(configKey).then(function(result) {
                         let data = result;
-                        if (data == undefined || Object.keys(data).length === 0) {
+                        if (data == undefined || (data instanceof Object && Object.keys(data).length === 0)) {
                             resolve(data);
                             return;
                         }
@@ -519,7 +516,7 @@ define([
                             resolve(data);
                             return;
                         }
-                        if (data instanceof Object && Object.keys(data).length === 0) {
+                        if (data instanceof Object && Object.keys(data).length > 0) {
                             resolve(data[dataKey]);
                             return;
                         }
@@ -787,7 +784,7 @@ define([
             let nowDate = new Date();
             this.getData('version_timestamp', 'vpcfg').then(function(data) {
                 let doCheckVersion = false;
-                vpLog.display(VP_LOG_TYPE.LOG, 'Checking its version timestamp... : ' + data);
+                vpLog.display(VP_LOG_TYPE.DEVELOP, 'Checking its version timestamp... : ' + data);
                 if (data == undefined || (data instanceof Object && Object.keys(data).length === 0)) {
                     // no timestamp, check version
                     doCheckVersion = true;
@@ -801,7 +798,6 @@ define([
     
                     if (diff >= 1) {
                         // if More than 1 day passed, check version
-                        vpLog.display(VP_LOG_TYPE.LOG, 'timestamp diff : ' + diff);
                         doCheckVersion = true;
                     }
                 }
@@ -962,7 +958,7 @@ define([
     /**
      * Version
      */
-    Config.version = "2.3.2"; // TEST:
+    Config.version = "2.3.2";
 
     /**
      * Type of mode
