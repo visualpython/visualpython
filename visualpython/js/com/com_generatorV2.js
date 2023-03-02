@@ -134,7 +134,7 @@ define([
         package.options && package.options.forEach(function(o, i) {
             var obj = JSON.parse(JSON.stringify(o));
             let newTag = vp_createTag(pageThis, obj, state);
-            if (obj.required) {
+            if (obj.required === true || obj.output === true) {
                 tblInput.append(newTag);
             } else {
                 tblOption.append(newTag);
@@ -142,6 +142,9 @@ define([
         });
 
         // TODO: userOption
+        if (package.code.includes('${etc}')) {
+            
+        }
 
         bindAutoComponentEvent(pageThis);
     }
@@ -163,7 +166,7 @@ define([
         let value = state[name];
         
         var requiredFontStyle = required == true? 'vp-orange-text' : '';
-        var lblTag = $(`<label>${label}</label>`).attr({
+        var lblTag = $(`<label class="vp-bold">${label}</label>`).attr({
             'for': name,
             'class': requiredFontStyle,
             'title': '(' + name + ')'
