@@ -28,7 +28,7 @@ mkdir -p ../dist/colab
 
 # build package
 # sudo apt-get install zip
-zip -r ../dist/colab/visualpython-v$VP_NEW_VER.$VP_COLAB_VER.zip * -x build.colab.sh
+zip -r ../dist/colab/visualpython-v$VP_NEW_VER.zip * -x build.colab.sh
 
 exit 0
 # End of file
