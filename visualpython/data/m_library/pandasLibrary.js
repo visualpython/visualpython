@@ -6315,6 +6315,7 @@ define([
               "option_select"
             ],
             "options": [
+              "",
               "viridis",
               "plasma",
               "inferno",
@@ -6334,6 +6335,7 @@ define([
               "tab20c"
             ],
             "options_label": [
+              "Select option...",
               "viridis",
               "plasma",
               "inferno",

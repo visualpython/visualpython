@@ -305,7 +305,7 @@ define([
             // select - right
             tag.appendFormatLine('<div class="{0}">', APP_SELECT_RIGHT);
             var selectedList = this.dataList.filter(data => that.selectedList.includes(data.code));
-            tag.appendLine(this.renderSelectedBox(this.selectedList));
+            tag.appendLine(this.renderSelectedBox(selectedList));
             if (this.allowAdd) {
                 // add item 
                 tag.appendLine('<input type="text" class="vp-cs-add-item-name vp-input wp100" placeholder="New item to add" value="">');
@@ -343,8 +343,8 @@ define([
             dataList && dataList.forEach((data, idx) => {
                 // for column : data.array parsing
                 var info = com_util.safeString(data.array);
-                if (info) {
-                    info = data.value + ':\n';
+                if (info && info != 'undefined') {
+                    info = data.value + ':\n' + info;
                 } else {
                     info = '';
                 }
