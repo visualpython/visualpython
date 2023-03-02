@@ -19,7 +19,7 @@ Try Visual Python if you would like to: <br>
 * save & reuse repeatedly used codes(snippets). <br>
 
 <br>
-<img src="https://github.com/visualpython/visualpython/blob/main/img/Visual%20Python_2.2.8.gif?raw=true" width="95%">
+<img src="https://raw.githubusercontent.com/visualpython/visualpython/main/visualpython/img/Visual%20Python_2.2.8.gif" width="95%">
 
 ## Getting Started with Jupyter Lab
 
