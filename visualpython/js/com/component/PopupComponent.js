@@ -92,7 +92,6 @@ define([
             this.id = this.state.config.id;
             this.name = this.state.config.name;
             this.path = this.state.config.path;
-            this.category = this.state.config.category;
             
 
             this.config = {
@@ -531,8 +530,7 @@ define([
         template() { 
             this.$pageDom = $(popupComponentHtml.replaceAll('${vp_base}', com_Const.BASE_PATH));
             // set title
-            // this.$pageDom.find('.vp-popup-title').text(this.category + ' > ' + this.name);
-            this.$pageDom.find('.vp-popup-title').html(`<span style="color: var(--gray-color);font-size: 12px;">${this.category} > </span><span>${this.name}</span>`);
+            this.$pageDom.find('.vp-popup-title').text(this.name);
             // set body
             let bodyTemplate = this.templateForBody();
             // CHROME: check url keyword and replace it

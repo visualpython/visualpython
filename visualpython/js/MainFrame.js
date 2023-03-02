@@ -478,10 +478,10 @@ define([
                     let parentBlock = null;
                     let prevBlock = null;
                     loadStateList.forEach(obj => {
-                        let { file, blockType, menuId, menuState, menuConfig, argIdx, position, afterAction } = obj;
+                        let { blockType, menuId, menuState, menuConfig, argIdx, position, afterAction } = obj;
                         // get OptionComponent Object
                         // LAB: relative path needed
-                        let OptionComponent = require('./' + file);
+                        let OptionComponent = require('./' + menuConfig.file);
                         if (OptionComponent) {
                             let taskState = menuState.taskState;
                             let blockState = menuState.blockState;
