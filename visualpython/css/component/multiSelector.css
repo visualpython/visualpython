@@ -80,3 +80,9 @@
     bottom: 23px;
     cursor: pointer;
 }
+.vp-cs-del-item {
+    position: relative;
+    float: right;
+    top: 4px;
+    cursor: pointer;
+}

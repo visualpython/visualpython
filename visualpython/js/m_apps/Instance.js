@@ -18,8 +18,9 @@ define([
     'vp_base/js/com/com_String',
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/InstanceEditor',
+    'vp_base/js/com/component/DataSelector',
     'vp_base/js/m_apps/Subset'
-], function(insHtml, insCss, com_String, PopupComponent, InstanceEditor, Subset) {
+], function(insHtml, insCss, com_String, PopupComponent, InstanceEditor, DataSelector, Subset) {
 
     const MAX_STACK_SIZE = 20;
 
@@ -178,6 +179,13 @@ define([
         templateForBody() {
             let page = $(insHtml);
             $(page).find('#vp_instanceVariable').val(this.state.vp_instanceVariable);
+
+            let allocateSelector = new DataSelector({
+                pageThis: this, id: 'vp_instanceAllocate', placeholder: 'Variable name'
+            });
+            $(page).find('#vp_instanceAllocate').replaceWith(allocateSelector.toTagString());
+
+
             return page;
         }
 
