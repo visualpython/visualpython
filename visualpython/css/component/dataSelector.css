@@ -55,14 +55,14 @@
 }
 .vp-ds-data-box {
     width: 100%;
-    height: 150px;
+    height: 160px;
     align-content: baseline;
     align-items: center;
 }
 .vp-ds-type-box,
 .vp-ds-variable-box {
     border: 0.25px solid var(--border-gray-color);
-    height: 150px;
+    height: 160px;
     grid-row-gap: 0px;
     align-content: baseline;
 }
@@ -90,7 +90,7 @@
     margin-top: 10px;
 }
 .vp-ds-option-inner-box {
-    height: calc(100% - 35px);
+    height: calc(100% - 30px);
 }
 .vp-ds-df-option-box {
     height: 100%;
