@@ -209,7 +209,7 @@ define([
                 vp_signature: 'VisualPython',
                 vp_position: {},
                 // CHROME: default to display vp
-                vp_section_display: true,
+                vp_section_display: false,
                 vp_note_display: false,
                 vp_menu_width: Config.MENU_MIN_WIDTH,
                 vp_note_width: Config.BOARD_MIN_WIDTH
@@ -226,6 +226,8 @@ define([
         
             // merge default config
             $.extend(true, this.defaultConfig, this.metadataSettings);
+
+            console.log('test 1', this.defaultConfig);
         }
 
         _readUserCommandList() {
@@ -485,7 +487,7 @@ define([
                     that._checkMounted().then(function() {
                         that._readFromColab(configKey).then(function(result) {
                             let data = result;
-                            if (data == undefined || data == {}) {
+                            if (data == undefined || Object.keys(data).length === 0) {
                                 resolve(data);
                                 return;
                             }
@@ -493,7 +495,7 @@ define([
                                 resolve(data);
                                 return;
                             }
-                            if (Object.keys(data).length > 0) {
+                            if (data instanceof Object && Object.keys(data).length === 0) {
                                 resolve(data[dataKey]);
                                 return;
                             }
@@ -509,7 +511,7 @@ define([
                     // LAB: use local .visualpython files
                     that._readFromLab(configKey).then(function(result) {
                         let data = result;
-                        if (data == undefined || data == {}) {
+                        if (data == undefined || Object.keys(data).length === 0) {
                             resolve(data);
                             return;
                         }
@@ -517,7 +519,7 @@ define([
                             resolve(data);
                             return;
                         }
-                        if (Object.keys(data).length > 0) {
+                        if (data instanceof Object && Object.keys(data).length === 0) {
                             resolve(data[dataKey]);
                             return;
                         }
@@ -779,6 +781,41 @@ define([
             return Config.version;
         }
 
+        checkVersionTimestamp = function() {
+            let that = this;
+            // check version timestamp
+            let nowDate = new Date();
+            this.getData('version_timestamp', 'vpcfg').then(function(data) {
+                let doCheckVersion = false;
+                vpLog.display(VP_LOG_TYPE.LOG, 'Checking its version timestamp... : ' + data);
+                if (data == undefined || (data instanceof Object && Object.keys(data).length === 0)) {
+                    // no timestamp, check version
+                    doCheckVersion = true;
+                } else if (data != '') {
+                    let lastCheck = new Date(parseInt(data));
+                    let diffCheck_now = new Date(nowDate.getFullYear(), nowDate.getMonth() + 1, nowDate.getDate());
+                    let diffCheck_last = new Date(lastCheck.getFullYear(), lastCheck.getMonth() + 1, lastCheck.getDate());
+    
+                    let diff = Math.abs(diffCheck_now.getTime() - diffCheck_last.getTime());
+                    diff = Math.ceil(diff / (1000 * 3600 * 24));
+    
+                    if (diff >= 1) {
+                        // if More than 1 day passed, check version
+                        vpLog.display(VP_LOG_TYPE.LOG, 'timestamp diff : ' + diff);
+                        doCheckVersion = true;
+                    }
+                }
+    
+                // check version and update version_timestamp
+                if (doCheckVersion == true) {
+                    that.checkVpVersion(true);
+                }
+    
+            }).catch(function(err) {
+                vpLog.display(VP_LOG_TYPE.ERROR, err);
+            })
+        }
+
         checkVpVersion(background=false) {
             let that = this;
             let nowVersion = this.getVpInstalledVersion();
@@ -818,6 +855,8 @@ define([
                             switch (clickedBtnIdx) {
                                 case 0:
                                     // cancel
+                                    // update version_timestamp
+                                    that.setData({ 'version_timestamp': new Date().getTime() }, 'vpcfg');
                                     break;
                                 case 1:
                                     // update
@@ -923,7 +962,7 @@ define([
     /**
      * Version
      */
-    Config.version = "2.3.2";
+    Config.version = "2.3.2"; // TEST:
 
     /**
      * Type of mode
