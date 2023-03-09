@@ -1,6 +1,4 @@
 dist/
 jupyterlab/lib/visualpython
-colab/visualpython
-jupyternotebook/visualpython
 test/
 .gitignore
