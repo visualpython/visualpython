@@ -187,6 +187,10 @@ define([
                 'Counter': {
                     code: 'from collections import Counter',
                     type: 'package'
+                },
+                'joblib': {
+                    code: 'import joblib',
+                    type: 'package'
                 }
             }
 

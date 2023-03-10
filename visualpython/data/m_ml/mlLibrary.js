@@ -649,6 +649,25 @@ define([
                 { name: 'learning_rate', component: ['input_number'], default: 200.0, usePair: true },
                 { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true }
             ]
+        },
+        /** Save/Load */
+        'model_save': {
+            name: 'Save model',
+            import: 'import joblib',
+            code: "joblib.dump(${target}, ${savePath})",
+            options: [
+                { name: 'target', component: ['data_select'], placeholder: 'Select model'},
+                { name: 'savePath', component: ['file-save'], placeholder: 'Select path'}
+            ]
+        },
+        'model_load': {
+            name: 'Load model',
+            import: 'import joblib',
+            code: "${allocateTo} = joblib.load(${loadPath})",
+            options: [
+                { name: 'loadPath', component: ['file-open'], placeholder: 'Select path'},
+                { name: 'allocateTo', component: ['data_select'], placeholder: 'New variable to load'}
+            ]
         }
     }
 
