@@ -250,7 +250,7 @@ define([
                     let extension = name.substring(name.lastIndexOf('.') + 1);
                     let allowExtensionList = that.state.extensions;
                     // if it is not allowed extension
-                    if (!allowExtensionList.includes(extension)) {
+                    if (allowExtensionList.length > 0 && !allowExtensionList.includes(extension)) {
                         // TODO: alert
                         //vpCommon.renderAlertModal('Not supported file type');
                         return;
@@ -404,9 +404,13 @@ define([
             page.appendFormatLine('<input id="{0}" type="text" class="vp-input" placeholder="{1}" value="{2}"/>'
                                 , 'vp_fileNavigationInput', 'New File Name', this.state.fileName);
             page.appendFormatLine('<select id="{0}" class="vp-select">', 'vp_fileNavigationExt');
-            this.state.extensions.forEach(ext => {
-                page.appendFormatLine('<option value="{0}">{1}</option>', ext, ext);
-            });
+            if (this.state.extensions && this.state.extensions.length > 0) {
+                this.state.extensions.forEach(ext => {
+                    page.appendFormatLine('<option value="{0}">*.{1}</option>', ext, ext);
+                });
+            } else {
+                page.appendLine('<option value="">All files(*.*)</option>');
+            }
             page.appendLine('</select>');
             page.appendFormatLine('<button class="{0} vp-button" data-menu="{1}">{2}</button>', 'vp-filenavi-btn', 'select', 'Select');
             $('.fileNavigationPage-button').html(page.toString());
@@ -426,6 +430,9 @@ define([
                     // select file
                     let { fileName, filePath } = that.state;
                     let selectedExt = $(that.wrapSelector('#vp_fileNavigationExt')).val();
+                    if (selectedExt == undefined || selectedExt == null) {
+                        selectedExt = '';
+                    }
                     let fileExtIdx = fileName.lastIndexOf('.');
                     // if no extension, add it
                     if (selectedExt != '' && (fileExtIdx < 0 || fileName.substring(fileExtIdx + 1) != selectedExt)) {

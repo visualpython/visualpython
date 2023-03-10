@@ -877,18 +877,21 @@ define([
                 {
                     name: 'i0',
                     label: 'Select File',
-                    component: ['file'],
+                    component: ['file-open'],
                     required: true
                 },
                 {
                     name: 'o0',
-                    label: 'Allocate to'
+                    label: 'Allocate to',
+                    output: true
                 },
                 {
                     name: 'mode',
                     label: 'Mode',
                     usePair: true,
-                    component: ['option_select']
+                    component: ['option_suggest'],
+                    type: 'text',
+                    options: ['r', 'w', 'a']
                 },
                 {
                     name: 'buffering',
@@ -906,7 +909,7 @@ define([
                     placeholder: 'encoding option'
                 },
                 {
-                    name: 'error',
+                    name: 'errors',
                     label: 'Errors',
                     usePair: true,
                     component: ['option_suggest'],
