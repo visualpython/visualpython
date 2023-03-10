@@ -41,10 +41,10 @@
 }
 .vp-dataselector {
     position: absolute;
-    top: calc(50% - 275px);
+    top: calc(50% - 290px);
     left: calc(50% - 325px);
     width: 650px;
-    height: 550px;
+    height: 580px;
     background: white;
     border: 1px solid var(--border-gray-color);
     z-index: 1300;
@@ -55,14 +55,14 @@
 }
 .vp-ds-data-box {
     width: 100%;
-    height: 150px;
+    height: 130px;
     align-content: baseline;
     align-items: center;
 }
 .vp-ds-type-box,
 .vp-ds-variable-box {
     border: 0.25px solid var(--border-gray-color);
-    height: 150px;
+    height: 130px;
     grid-row-gap: 0px;
     align-content: baseline;
 }
@@ -90,7 +90,7 @@
     margin-top: 10px;
 }
 .vp-ds-option-inner-box {
-    height: calc(100% - 35px);
+    height: calc(100% - 80px);
 }
 .vp-ds-df-option-box {
     height: 100%;
