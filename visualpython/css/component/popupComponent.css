@@ -73,6 +73,10 @@
     color: var(--font-primary);
     cursor: pointer;
 }
+.vp-popup-category {
+    color: var(--font-primary);
+    font-size: 12px;
+}
 .vp-popup-frame.vp-focused .vp-popup-title {
     font-family: 'AppleSDGothicNeo';
     color: var(--font-highlight);
@@ -193,12 +197,14 @@
 .vp-popup-button[data-type="run"] {
     display: inline-block;
     width: 60px;
+    min-width: 60px;
     border-radius: 3px 0px 0px 3px;
     border-right: 0.25px solid white !important;
 }
 .vp-popup-button[data-type="show-detail"] {
     display: inline-block;
     width: 20px;
+    min-width: 20px;
     height: 28px;
     border-radius: 0px 3px 3px 0px;
     padding: 0px 2px 0px 0px;
@@ -267,6 +273,7 @@
 	padding-left: 20px;
 	cursor: pointer;
     height: 15px;
+    line-height: 15px;
     vertical-align: middle;
 }
 .vp-popup-frame input[type=checkbox]:not(.vp-checkbox):disabled + label,
