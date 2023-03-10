@@ -1434,7 +1434,7 @@ define([
                                 // add column
                                 // LAB: img to url
                                 // table.appendFormatLine('<th class="{0}"><img src="{1}"/></th>', VP_FE_ADD_COLUMN, com_Const.IMAGE_PATH + 'plus.svg');
-                                table.appendFormatLine('<th class="{0} {1}"></th>', VP_FE_ADD_COLUMN, 'vp-icon-plus');
+                                table.appendFormatLine('<th class="{0}"><div class="{1}"></div></th>', VP_FE_ADD_COLUMN, 'vp-icon-plus');
                 
                                 table.appendLine('</tr>');
                                 table.appendLine('</thead>');
@@ -1467,7 +1467,7 @@ define([
                                 table.appendLine('<tr>');
                                 // LAB: img to url
                                 // table.appendFormatLine('<th class="{0}"><img src="{1}"/></th>', VP_FE_ADD_ROW, com_Const.IMAGE_PATH + 'plus.svg');
-                                table.appendFormatLine('<th class="{0} {1}"></th>', VP_FE_ADD_ROW, 'vp-icon-plus');
+                                table.appendFormatLine('<th class="{0}"><div class="{1}"></div></th>', VP_FE_ADD_ROW, 'vp-icon-plus');
                                 table.appendLine('</tr>');
                                 table.appendLine('</tbody>');
                                 $(that.wrapSelector('.' + VP_FE_TABLE)).replaceWith(function() {

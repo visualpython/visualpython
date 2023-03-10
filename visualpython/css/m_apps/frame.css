@@ -127,7 +127,7 @@
 .vp-fe-table thead th {
     position: sticky;
     top: 0;
-    background: #FFFFFF;
+    background-color: #FFFFFF;
     border-bottom: 1px solid #E4E4E4;
 
     text-align: right;
