@@ -532,7 +532,7 @@ define([
             this.$pageDom = $(popupComponentHtml.replaceAll('${vp_base}', com_Const.BASE_PATH));
             // set title
             // this.$pageDom.find('.vp-popup-title').text(this.category + ' > ' + this.name);
-            this.$pageDom.find('.vp-popup-title').html(`<span style="color: var(--gray-color);font-size: 12px;">${this.category} > </span><span>${this.name}</span>`);
+            this.$pageDom.find('.vp-popup-title').html(`<span class="vp-popup-category">${this.category} > </span><span>${this.name}</span>`);
             // set body
             let bodyTemplate = this.templateForBody();
             // CHROME: check url keyword and replace it
