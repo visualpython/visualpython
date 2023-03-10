@@ -21,14 +21,14 @@ define([
      */
     var ML_LIBRARIES = {
         /** Data Sets */
-        'load_boston': {
-            name: 'load_boston',
-            import: 'from sklearn.datasets import load_boston',
-            code: 'load_boston()',
-            options: [
+        // 'load_boston': {
+        //     name: 'load_boston',
+        //     import: 'from sklearn.datasets import load_boston',
+        //     code: 'load_boston()',
+        //     options: [
 
-            ]
-        },
+        //     ]
+        // },
         'load_iris': {
             name: 'load_iris',
             import: 'from sklearn.datasets import load_iris',
