@@ -135,7 +135,7 @@ define([
                 let vpWidth = $('#vp_wrapper')[0].getBoundingClientRect().width;
                 let vpHeight = $(window).height() - jupyterHeadHeight;
 
-                $('#vp_wrapper').css( { height: vpHeight + 'px' });
+                $('#vp_wrapper').css( { height: vpHeight + 'px', top: jupyterHeadHeight + 'px' });
                 this._resizeNotebook(vpWidth);
             } else if (vpConfig.extensionType === 'colab') {
                 let colabHeaderVisible = $('#header').is(':visible');
