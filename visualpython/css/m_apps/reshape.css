@@ -27,8 +27,8 @@
     grid-row-gap: 5px;
 }
 .vp-rs-type-title {
-    /* background: var(--light-gray-color); */
-    border: 1px solid var(--border-gray-color);
+    /* background: var(--vp-light-gray-color); */
+    border: 1px solid var(--vp-border-gray-color);
     height: 30px;
     line-height: 30px;
     vertical-align: middle;

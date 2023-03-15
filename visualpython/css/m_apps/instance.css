@@ -49,10 +49,10 @@
     display: inline-block;
     width: calc(100% - 55px);
     height: 30px;
-    border: 0.25px solid var(--grid-line-color);
+    border: 0.25px solid var(--vp-grid-line-color);
     border-radius: 3px;
-    background-image: repeating-linear-gradient( to right, var(--grid-line-color) 0, var(--grid-line-color) 0.25px, transparent 1px, transparent 5px ), repeating-linear-gradient( to bottom, var(--grid-line-color) 0, var(--grid-line-color) 0.25px, transparent 1px, transparent 5px );
-    background-color: white;
+    background-image: repeating-linear-gradient( to right, var(--vp-grid-line-color) 0, var(--vp-grid-line-color) 0.25px, transparent 1px, transparent 5px ), repeating-linear-gradient( to bottom, var(--vp-grid-line-color) 0, var(--vp-grid-line-color) 0.25px, transparent 1px, transparent 5px );
+    background-color: var(--vp-background-color);
     overflow: hidden;
 }
 /* .vp-instance-box .CodeMirror.selected {

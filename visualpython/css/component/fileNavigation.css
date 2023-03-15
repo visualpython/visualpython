@@ -23,10 +23,10 @@
     min-height: 400px;
     width: 70%;
     height: 55%;
-    background-color: white;
+    background-color: var(--vp-background-color);
 }
 #fnpRootFolder:hover {
-    color: var(--font-highlight);
+    color: var(--vp-font-highlight);
     cursor: pointer;
 }
 
@@ -39,7 +39,7 @@
     padding-top: 10px;
 }
 .fnp-sidebar-menu.selected {
-    color: var(--font-highlight)
+    color: var(--vp-font-highlight)
 }
 .fnp-sidebar-menu {
     padding: 5px 0px 5px 15px;
@@ -199,7 +199,7 @@
     padding-left: 0px;
     margin-left:5px;
     white-space: nowrap;
-    color: var(--font-primary);
+    color: var(--vp-font-primary);
     font-size: 13px;
 }
 .fileNavigationPage-dir-text:hover {
@@ -223,7 +223,7 @@
     transition: 0.7s;
 }
 .fileNavigationPage-directory-nowLocation {
-    color: var(--font-primary);
+    color: var(--vp-font-primary);
 }
 .fileNavigationPage-directory-nowLocation:hover {
     cursor: pointer;
@@ -242,7 +242,7 @@
 #vp_fileNavigationExt {
     width: 130px;
     vertical-align: middle;
-    color: var(--font-primary);
+    color: var(--vp-font-primary);
     font-family: 'AppleSDGothicNeo';
     font-size: 13px;
     border-radius: 3px;

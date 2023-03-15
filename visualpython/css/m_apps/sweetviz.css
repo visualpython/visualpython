@@ -10,13 +10,13 @@
     grid-template-columns: 50% 50%;
     align-items: baseline;
     align-content: center;
-    border: 1px solid #E4E4E4;
+    border: 1px solid var(--vp-border-gray-color);
     border-radius: 5px;
     box-sizing: border-box;
     padding: 15px;
 }
 .vp-sv-link {
-    color: var(--highlight-color);
+    color: var(--vp-highlight-color);
 }
 .vp-sv-install-btn{
     margin-left: 7px;
@@ -32,7 +32,7 @@
     display: grid;
     /* grid-template-rows: min-content min-content; */
     grid-row-gap: 10px;
-    border: 1px solid #E4E4E4;
+    border: 1px solid var(--vp-border-gray-color);
     border-radius: 5px;
     box-sizing: border-box;
     padding: 15px;
@@ -70,7 +70,7 @@
     display: grid;
     grid-template-rows: 20px calc(100% - 30px);
     grid-row-gap: 5px;
-    border: 1px solid #E4E4E4;
+    border: 1px solid var(--vp-border-gray-color);
     border-radius: 5px;
     box-sizing: border-box;
     padding: 15px;
@@ -94,7 +94,7 @@
     line-height: 30px;
 }
 .vp-sv-list-item:hover {
-    background: var(--light-gray-color);
+    background: var(--vp-light-gray-color);
     cursor: pointer;
 }
 .vp-sv-list-button-box {

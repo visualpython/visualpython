@@ -29,17 +29,17 @@
     width: 85px;
     height: 30px;
     line-height: 30px;
-    background: var(--light-gray-color);
+    background: var(--vp-light-gray-color);
     cursor: pointer;
-    border: 0.24px solid #E4E4E4;
+    border: 0.24px solid var(--vp-border-gray-color);
     box-sizing: border-box;
     border-radius: 2px 2px 0px 0px;
     font-weight: bold;
     text-align: center;
 }
 .vp-tab-item.vp-focus {
-    color: var(--font-highlight);
-    background: white;
+    color: var(--vp-font-highlight);
+    background: var(--vp-background-color);
     border-bottom: 3px solid #FFCF73;
 }
 .vp-tab-page {
@@ -65,7 +65,7 @@
 }
 .vp-wc-preview-content:empty::after {
     content: 'No preview image';
-    color: var(--gray-color);
+    color: var(--vp-gray-color);
 }
 .vp-wc-preview-box img {
     width: 100%;

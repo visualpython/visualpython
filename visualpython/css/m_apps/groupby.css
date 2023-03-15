@@ -29,7 +29,7 @@
 }
 
 .vp-gb-adv-box {
-    border: 1px solid var(--border-gray-color);
+    border: 1px solid var(--vp-border-gray-color);
     padding: 10px;
     margin-top: 5px;
     height: 170px;
@@ -70,7 +70,7 @@
     right: 7px;
     top: 7px;
     cursor: pointer;
-    background: white;
+    background: var(--vp-background-color);
 }
 .vp-gb-adv-item-delete {
     display: inline-block;

@@ -3,10 +3,10 @@
 	width: 100%;
 	min-height: 30px;
 	background-color: rgb(247 247 247);
-	border-top: 0.25px solid #E4E4E4;
-	border-right: 0.25px solid #E4E4E4;
+	border-top: 0.25px solid var(--vp-border-gray-color);
+	border-right: 0.25px solid var(--vp-border-gray-color);
 	border-bottom: none;
-	border-left: 0.25px solid #E4E4E4;
+	border-left: 0.25px solid var(--vp-border-gray-color);
 }
 .vp-markdown-editor-toolbar .vp-markdown-editor-toolbar-btn-title {
 	background-image: url(../../img/font-size-2.svg);
@@ -133,5 +133,5 @@
 }
 .vp-divide-bot:empty::after {
 	content: '(Nothing to preview)';
-	color: var(--gray-color);
+	color: var(--vp-gray-color);
 }
