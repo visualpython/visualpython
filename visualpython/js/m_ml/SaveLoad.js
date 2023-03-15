@@ -38,7 +38,9 @@ define([
                 modelio: 'model_save', // model_save / model_load
                 target: '',
                 allocateTo: '',
-                path: '',
+                userOption: '',
+                savePath: '',
+                loadPath: '',
                 ...this.state
             }
             
@@ -54,7 +56,14 @@ define([
                 let modelio = $(this).val();
                 that.state.modelio = modelio;
                 $(that.wrapSelector('.vp-modelio-option-box')).html(that.templateForOption(modelio));
+
+                $(that.wrapSelector('#userOption')).val('');
             });
+
+            // user option
+            $(this.wrapSelector('#userOption')).on('change', function() {
+                that.state.userOption = $(this).val();
+            })
         }
 
         templateForBody() {
@@ -62,6 +71,9 @@ define([
 
             // render option page
             $(page).find('.vp-modelio-option-box').html(this.templateForOption(this.state.modelio));
+
+            $(page).find('#modelio').val(this.state.modelio);
+            $(page).find('#userOption').val(this.state.userOption);
 
             return page;
         }
@@ -95,7 +107,11 @@ define([
         generateCode() {
             let { modelio, userOption } = this.state;
             let code = new com_String();
-            let modelCode = com_generator.vp_codeGenerator(this, this.mlConfig[modelio], this.state);
+            if (userOption && userOption != '') {
+                userOption = ', ' + userOption;
+            }
+
+            let modelCode = com_generator.vp_codeGenerator(this, this.mlConfig[modelio], this.state, userOption);
             code.append(modelCode);
             return code.toString();
         }

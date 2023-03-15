@@ -459,6 +459,7 @@ define([
                 div.append(input);
                 div.append(fileBrowerButton);
 
+                $(document).off('click', pageThis.wrapSelector(`.vp-file-browser-button[data-parent="${obj.name}"]`));
                 $(document).on('click', pageThis.wrapSelector(`.vp-file-browser-button[data-parent="${obj.name}"]`), function() {
                     let fileNavi = new FileNavigation({
                         type: 'save',
@@ -497,6 +498,7 @@ define([
                 div.append(input);
                 div.append(fileBrowerButton);
 
+                $(document).off('click', pageThis.wrapSelector(`.vp-file-browser-button[data-parent="${obj.name}"]`));
                 $(document).on('click', pageThis.wrapSelector(`.vp-file-browser-button[data-parent="${obj.name}"]`), function() {
                     let fileNavi = new FileNavigation({
                         type: 'open',
