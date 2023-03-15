@@ -64,18 +64,18 @@ define([
             ]
 
             this.methodList = [
-                { label: 'None', value: '' },
-                { label: 'count', value: 'count' },
-                { label: 'first', value: 'first' },
-                { label: 'last', value: 'last' },
-                { label: 'size', value: 'size' },
-                { label: 'std', value: 'std' },
-                { label: 'sum', value: 'sum' },
-                { label: 'max', value: 'max' },
-                { label: 'mean', value: 'mean' },
-                { label: 'median', value: 'median' },
-                { label: 'min', value: 'min' },
-                { label: 'quantile', value: 'quantile' },
+                // { label: 'None', value: '' },
+                { label: 'count', value: "'count'" },
+                { label: 'first', value: "'first'" },
+                { label: 'last', value: "'last'" },
+                { label: 'size', value: "'size'" },
+                { label: 'std', value: "'std'" },
+                { label: 'sum', value: "'sum'" },
+                { label: 'max', value: "'max'" },
+                { label: 'mean', value: "'mean'" },
+                { label: 'median', value: "'median'" },
+                { label: 'min', value: "'min'" },
+                { label: 'quantile', value: "'quantile'" },
             ]
 
             this.state = {
@@ -92,6 +92,8 @@ define([
 
                 advPageDom: '',
                 advColList: [],
+                advMethodList: [],
+                advMethodUserList: [],
                 advNamingList: [],
                 ...this.state
             };
@@ -184,7 +186,9 @@ define([
 
             // display select button event
             $(document).on('click', this.wrapSelector('#vp_gbDisplay'), function() {
-                that.openColumnSelector($(that.wrapSelector('#vp_gbDisplay')), 'Select columns to display');
+                // exclude groupby columns
+                let excludeList = that.state.groupby.map(x => x.code);
+                that.openColumnSelector($(that.wrapSelector('#vp_gbDisplay')), 'Select columns to display', [], excludeList);
             });
 
             // method select event
@@ -276,33 +280,71 @@ define([
                 if (includeList && includeList.length > 0) {
                     includeList = includeList.map(col => col.code);
                 }
-                that.openColumnSelector($(this).parent().find('.vp-gb-adv-col'), 'Select columns', includeList);
+                // exclude groupby columns
+                let excludeList = that.state.groupby.map(x => x.code);
+                that.openColumnSelector($(this).parent().find('.vp-gb-adv-col'), 'Select columns', includeList, excludeList);
             });
 
             // select method
-            $(document).on('change', this.wrapSelector('.vp-gb-adv-method-selector'), function() {
-                var method = $(this).val();
-                var parentDiv = $(this).parent();
-                if (method == 'typing') {
-                    // change it to typing input
-                    $(parentDiv).find('.vp-gb-adv-method-selector').hide();
-                    $(parentDiv).find('.vp-gb-adv-method').val('');
-                    $(parentDiv).find('.vp-gb-adv-method-box').show();
-                } else {
-                    $(parentDiv).find('.vp-gb-adv-method').val(com_util.formatString("'{0}'", method));
-                }
+            $(document).on('click', this.wrapSelector('.vp-gb-adv-method'), function() {
+                // var method = $(this).val();
+                // var parentDiv = $(this).parent();
+                // if (method == 'typing') {
+                //     // change it to typing input
+                //     $(parentDiv).find('.vp-gb-adv-method-selector').hide();
+                //     $(parentDiv).find('.vp-gb-adv-method').val('');
+                //     $(parentDiv).find('.vp-gb-adv-method-box').show();
+                // } else {
+                //     $(parentDiv).find('.vp-gb-adv-method').val(com_util.formatString("'{0}'", method));
+                // }
+                that.openMethodSelector($(this).parent().find('.vp-gb-adv-method'), 'Select methods');
             });
 
             // return to selecting method
-            $(document).on('click', this.wrapSelector('.vp-gb-adv-method-return'), function() {
-                var defaultValue = '';
-                var parentDiv = $(this).parent().parent();
-                $(parentDiv).find('.vp-gb-adv-method-selector').val(defaultValue);
-                $(parentDiv).find('.vp-gb-adv-method').val(defaultValue);
-                // show and hide
-                $(parentDiv).find('.vp-gb-adv-method-selector').show();
-                $(parentDiv).find('.vp-gb-adv-method-box').hide();
+            // $(document).on('click', this.wrapSelector('.vp-gb-adv-method-return'), function() {
+            //     var defaultValue = '';
+            //     var parentDiv = $(this).parent().parent();
+            //     $(parentDiv).find('.vp-gb-adv-method-selector').val(defaultValue);
+            //     $(parentDiv).find('.vp-gb-adv-method').val(defaultValue);
+            //     // show and hide
+            //     $(parentDiv).find('.vp-gb-adv-method-selector').show();
+            //     $(parentDiv).find('.vp-gb-adv-method-box').hide();
+            // });
+            // advanced item - method change event
+            $(document).on('change', this.wrapSelector('.vp-gb-adv-method'), function(event) {
+                var { list, userList } = event;
+                var idx = $(that.wrapSelector('.vp-gb-adv-method')).index(this);
+                that.state.advMethodList[idx] = list;
+                that.state.advMethodUserList[idx] = userList;
             });
+
+            // advanced item - user method add event
+            $(document).on('click', this.wrapSelector('#vp_gbMethodUserAdd'), function(event) {
+                let userMethod = $(that.wrapSelector('#vp_gbMethodUser')).val();
+                let useText = $(that.wrapSelector('#vp_gbMethodUserAsText')).prop('checked');
+                let userCode = userMethod;
+                if (useText) {
+                    userCode = "'" + userMethod + "'";
+                }
+                that._addUserMethod(userCode);
+            });
+
+            // advanced item - user method add event by enter
+            $(document).on('keyup', this.wrapSelector('#vp_gbMethodUser'), function(event) {
+                var keycode =  event.keyCode 
+                            ? event.keyCode 
+                            : event.which;
+                if (keycode == 13) { // enter
+                    let userMethod = $(this).val();
+                    let useText = $(that.wrapSelector('#vp_gbMethodUserAsText')).prop('checked');
+                    let userCode = userMethod;
+                    if (useText) {
+                        userCode = "'" + userMethod + "'";
+                    }
+                    that._addUserMethod(userCode);
+                }
+            });
+            
 
             // advanced item - naming change event
             $(document).on('change', this.wrapSelector('.vp-gb-adv-naming'), function(event) {
@@ -318,8 +360,10 @@ define([
                 if (columns && columns.length > 0) {
                     columns = columns.map(col => col.code);
                 }
-                var method = $(parentDiv).find('.vp-gb-adv-method').val();
-                if (!method || method == '' || method == "''") {
+                var method = $(parentDiv).find('.vp-gb-adv-method').data('list');
+                var userMethod = $(parentDiv).find('.vp-gb-adv-method').data('userList');
+                method = [ ...method, ...userMethod ];
+                if (method == undefined || method.length <= 0) {
                     // set focus on selecting method tag
                     $(parentDiv).find('.vp-gb-adv-method').focus();
                     return;
@@ -333,6 +377,20 @@ define([
                     $(this).closest('.vp-gb-adv-item').remove();
                 }
             });
+        }
+
+        _addUserMethod(userMethod) {
+            var addedMethodTag = $(this.wrapSelector(`.vp-gb-method-user-func[value="${userMethod}"]`));
+            if (addedMethodTag.length > 0) {
+                // already added
+                addedMethodTag.prop('checked', true);
+                $(this.wrapSelector('#vp_gbMethodUser')).val('');
+                return;
+            }
+            $(`<label><input type="checkbox" class="vp-gb-method-user-func" value="${userMethod}" checked/><span>${userMethod}</span><label>`)
+                .appendTo($(this.wrapSelector('.vp-gb-method-user-box')));
+
+            $(this.wrapSelector('#vp_gbMethodUser')).val('');
         }
 
         /**
@@ -359,8 +417,9 @@ define([
             $(document).off('click', this.wrapSelector('#vp_gbAdvAdd'));
             $(document).off('change', this.wrapSelector('.vp-gb-adv-col'));
             $(document).off('click', this.wrapSelector('.vp-gb-adv-col'));
-            $(document).off('change', this.wrapSelector('.vp-gb-adv-method-selector'));
-            $(document).off('click', this.wrapSelector('.vp-gb-adv-method-return'));
+            // $(document).off('change', this.wrapSelector('.vp-gb-adv-method-selector'));
+            $(document).off('click', this.wrapSelector('.vp-gb-adv-method'));
+            // $(document).off('click', this.wrapSelector('.vp-gb-adv-method-return'));
             $(document).off('change', this.wrapSelector('.vp-gb-adv-naming'));
             $(document).off('click', this.wrapSelector('.vp-gb-adv-naming'));
             $(document).off('click', this.wrapSelector('.vp-gb-adv-item-delete'));
@@ -412,34 +471,31 @@ define([
             page.appendFormatLine('<div class="{0}">', 'vp-gb-adv-item');
             // target columns
             page.appendFormatLine('<input type="text" class="{0}" placeholder="{1}" title="{2}" readonly/>'
-                                , 'vp-gb-adv-col', 'Column list', 'Apply All columns, if not selected');
+                                , 'vp-gb-adv-col', 'All columns', 'Apply All columns, if not selected');
             // method select
-            page.appendFormatLine('<select class="{0}">', 'vp-gb-adv-method-selector');
-            var defaultMethod = '';
-            page.appendFormatLine('<option value="{0}">{1}</option>', '', 'Select method type');
-            page.appendFormatLine('<option value="{0}">{1}</option>', 'typing', 'Typing');
-            page.appendLine('<option disabled>-----------------------</option>');
-            this.methodList.forEach(method => {
-                if (method.value == '') {
-                    return;
-                }
-                page.appendFormatLine('<option value="{0}">{1}</option>', method.value, method.label);
-            });
-            page.appendLine('</select>');
+            // page.appendFormatLine('<select class="{0}">', 'vp-gb-adv-method-selector');
+            // var defaultMethod = '';
+            // page.appendFormatLine('<option value="{0}">{1}</option>', '', 'Select method type');
+            // page.appendFormatLine('<option value="{0}">{1}</option>', 'typing', 'Typing');
+            // page.appendLine('<option disabled>-----------------------</option>');
+            // this.methodList.forEach(method => {
+            //     if (method.value == '') {
+            //         return;
+            //     }
+            //     page.appendFormatLine('<option value="{0}">{1}</option>', method.value, method.label);
+            // });
+            // page.appendLine('</select>');
+            page.appendFormatLine('<input type="text" class="{0}" placeholder="{1}" title="{2}" readonly/>'
+                                , 'vp-gb-adv-method', 'Select methods to apply', '');
             page.appendFormatLine('<div class="{0}" style="display: none;">', 'vp-gb-adv-method-box');
-            page.appendFormatLine('<input type="text" class="{0}" placeholder="{1}" value="{2}"/>', 'vp-gb-adv-method', 'Type function name', "'" + defaultMethod + "'");
+            // page.appendFormatLine('<input type="text" class="{0}" placeholder="{1}" value="{2}"/>', 'vp-gb-adv-method', 'Type function name', "'" + defaultMethod + "'");
             // page.appendFormatLine('<i class="fa fa-search {0}"></i>', 'vp-gb-adv-method-return');
-            // LAB: img to url
-            // page.appendFormatLine('<img src="{0}" class="{1}" title="{2}">'
-            //                     , com_Const.IMAGE_PATH + 'arrow_left.svg', 'vp-gb-adv-method-return', 'Return to select method');
-            page.appendFormatLine('<div class="{0} {1}" title="{2}"></div>'
-                                , 'vp-icon-arrow-left', 'vp-gb-adv-method-return', 'Return to select method');
+            // page.appendFormatLine('<div class="{0} {1}" title="{2}"></div>'
+            //                     , 'vp-icon-arrow-left', 'vp-gb-adv-method-return', 'Return to select method');
             page.appendLine('</div>');
             // naming
-            page.appendFormatLine('<input type="text" class="{0}" placeholder="{1}" data-dict={} readonly/>', 'vp-gb-adv-naming', 'Display name');
+            page.appendFormatLine('<input type="text" class="{0}" placeholder="{1}" title="{2}" data-dict={} readonly/>', 'vp-gb-adv-naming', 'Click to rename columns', 'Click to rename columns');
             // delete button
-            // LAB: img to url
-            // page.appendFormatLine('<div class="{0} {1}"><img src="{2}"/></div>', 'vp-gb-adv-item-delete', 'vp-cursor', com_Const.IMAGE_PATH + 'close_small.svg');
             page.appendFormatLine('<div class="{0} {1} {2}"></div>', 'vp-gb-adv-item-delete', 'vp-cursor', 'vp-icon-close-small');
             page.appendLine('</div>');
             return page.toString();
@@ -543,46 +599,96 @@ define([
          * Render column selector using MultiSelector module
          * @param {Array<string>} previousList previous selected columns
          * @param {Array<string>} includeList columns to include 
+         * @param {Array<string>} excludeList columns to exclude 
          */
-        renderMultiSelector(previousList, includeList) {
+        renderMultiSelector(previousList, includeList, excludeList) {
             this.popup.ColSelector = new MultiSelector(this.wrapSelector('.vp-inner-popup-body'),
-                { mode: 'columns', parent: [this.state.variable], selectedList: previousList, includeList: includeList }
+                { mode: 'columns', parent: [this.state.variable], selectedList: previousList, includeList: includeList, excludeList: excludeList }
             );
+        }
+
+        /**
+         * Render method selector
+         * @param {Array<string>} previousList previously selected methods ["'count'", ... ]
+         * @param {Array<object>} userList     previously added user methods ["np.sum", "'sum'", ...]
+         */
+        renderMethodSelector(previousList = [], userList = []) {
+            var page = new com_String();
+            page.appendFormatLine('<div class="{0}">', 'vp-gb-method-selector');
+            // method list
+            page.appendFormatLine('<div class="{0}">', 'vp-gb-method-box');
+            this.methodList.forEach(method => {
+                var checked = "";
+                if (previousList && previousList.includes(method.value)) {
+                    checked = "checked"
+                }
+                page.appendFormatLine('<label><input class="vp-gb-method-checkbox" type="checkbox" value="{0}" {1}/><span>{2}</span></label>'
+                                    , method.value, checked, method.label);
+            });
+            page.appendLine('</div>');
+            page.appendLine('<hr style="margin: 5px 0;">');
+            // user method list
+            page.appendFormatLine('<div class="{0}">', 'vp-gb-method-user-box');     
+            userList && userList.forEach(userFunc => {
+                page.appendFormatLine('<label><input class="vp-gb-method-user-func" type="checkbox" value="{0}" checked/><span>{1}</span></label>'
+                                    , userFunc, userFunc);
+            });
+            page.appendLine('</div>');
+            page.appendLine('<hr style="margin: 5px 0;">');
+            // add user method
+            page.appendFormatLine('<div class="{0}">', 'vp-gb-method-user');
+            page.appendFormatLine('<label class="vp-bold">{0}</label>', 'User option');
+            page.appendFormatLine('<input type="text" placeholder="{0}" id="vp_gbMethodUser"/>', 'Type user method');
+            page.appendFormatLine('<label><input id="vp_gbMethodUserAsText" type="checkbox" checked/><span>{0}</span></label>'
+                                , 'Text');
+            page.appendLine('<button id="vp_gbMethodUserAdd" class="vp-button">Add</button>');
+            page.appendLine('</div>');
+            page.appendLine('</div>');
+            $(this.wrapSelector('.vp-inner-popup-body')).html(page.toString());
         }
 
         /**
          * Render naming box
          * @param {Array<string>} columns 
-         * @param {string} method 
+         * @param {Array<string>} method 
          * @param {Object} previousDict 
          * @returns 
          */
-         renderNamingBox(columns, method, previousDict) {
+         renderNamingBox(columns, methods, previousDict) {
             var page = new com_String();
             page.appendFormatLine('<div class="{0}">', 'vp-gb-naming-box');
             if (columns && columns.length > 0) {
-                page.appendFormatLine('<label>Replace {0} as ...</label>', method);
                 columns.forEach(col => {
-                    page.appendFormatLine('<div class="{0}">', 'vp-gb-naming-item');
+                    page.appendLine('<div class="vp-grid-border-box mb5">');
                     page.appendFormatLine('<label>{0}</label>', col);
-                    var previousValue = '';
-                    if (previousDict[col]) {
-                        previousValue = previousDict[col];
-                    }
-                    page.appendFormatLine('<input type="text" class="{0}" placeholder="{1}" value="{2}" data-code="{3}"/>'
-                                        , 'vp-gb-naming-text', 'Name to replace ' + method, previousValue, col);
+                    methods.forEach(met => {
+                        page.appendFormatLine('<div class="{0}">', 'vp-gb-naming-item');
+                        page.appendFormatLine('<label>{0}</label>', met);
+                        var previousValue = '';
+                        var key = col + '.' + met;
+                        if (previousDict[key]) {
+                            previousValue = previousDict[key];
+                        }
+                        page.appendFormatLine('<input type="text" class="{0}" placeholder="{1}" value="{2}" data-code="{3}"/>'
+                                            , 'vp-gb-naming-text', 'Name to replace ' + met, previousValue, key);
+                        page.appendLine('</div>');
+                    });
                     page.appendLine('</div>');
                 });
             } else {
-                var previousValue = '';
-                if (previousDict[method]) {
-                    previousValue = previousDict[method];
-                }
-                page.appendFormatLine('<div class="{0}">', 'vp-gb-naming-item');
-                page.appendFormatLine('<label>{0}</label>', method);
-                page.appendFormatLine('<input type="text" class="{0}" placeholder="{1}" value="{2}" data-code="{3}"/>'
-                                    , 'vp-gb-naming-text', 'Name to replace ' + method, previousValue, method);
-                page.appendLine('</div>');
+                page.appendLine('<label>Rename methods</label>');
+                methods.forEach(met => {
+                    page.appendFormatLine('<div class="{0}">', 'vp-gb-naming-item');
+                    page.appendFormatLine('<label>{0}</label>', met);
+                    var previousValue = '';
+                    var key = met;
+                    if (previousDict[key]) {
+                        previousValue = previousDict[key];
+                    }
+                    page.appendFormatLine('<input type="text" class="{0}" placeholder="{1}" value="{2}" data-code="{3}"/>'
+                                        , 'vp-gb-naming-text', 'Name to replace ' + met, previousValue, key);
+                    page.appendLine('</div>');
+                });
             }
             page.appendLine('</div>');
             $(this.wrapSelector('.vp-inner-popup-body')).html(page.toString());
@@ -664,22 +770,26 @@ define([
                         if (advColumns && advColumns.length > 0) {
                             advColumns = advColumns.map(col => col.code);
                         }
-                        var advMethod = $(advItemTags[i]).find('.vp-gb-adv-method').val();
+                        var advMethod = $(advItemTags[i]).find('.vp-gb-adv-method').data('list');
+                        var advUserMethod = $(advItemTags[i]).find('.vp-gb-adv-method').data('userList');
+                        advMethod = [ ...advMethod, ...advUserMethod ];
                         var advNaming = $(advItemTags[i]).find('.vp-gb-adv-naming').data('dict');
-                        if (!advMethod || advMethod == '' || advMethod == "''") {
+                        if (!advMethod || advMethod.length <= 0) {
                             continue;
                         }
                         if (advColumns && advColumns.length > 0) {
                             advColumns.forEach(col => {
-                                var naming = advNaming[col];
-                                if (naming && naming != '') {
-                                    naming = "'" + naming + "'";
-                                }
-                                if (Object.keys(advColumnDict).includes(col)) {
-                                    advColumnDict[col].push({ method: advMethod, naming: naming})
-                                } else {
-                                    advColumnDict[col] = [{ method: advMethod, naming: naming}];
-                                }
+                                advMethod.forEach(method => {
+                                    var naming = advNaming[col + '.' + method];
+                                    if (naming && naming != '') {
+                                        naming = "'" + naming + "'";
+                                    }
+                                    if (Object.keys(advColumnDict).includes(col)) {
+                                        advColumnDict[col].push({ method: method, naming: naming})
+                                    } else {
+                                        advColumnDict[col] = [{ method: method, naming: naming}];
+                                    }
+                                });
                             });
 
                         } else {
@@ -687,7 +797,13 @@ define([
                             if (naming && naming != '') {
                                 naming = "'" + naming + "'";
                             }
-                            advColumnDict['nothing'].push({ method: advMethod, naming: naming});
+                            advMethod.forEach(method => {
+                                var naming = advNaming[method];
+                                if (naming && naming != '') {
+                                    naming = "'" + naming + "'";
+                                }
+                                advColumnDict['nothing'].push({ method: method, naming: naming});
+                            });
                         }
                     }
 
@@ -789,7 +905,7 @@ define([
             var {
                 variable, groupby, useGrouper, grouperNumber, grouperPeriod, 
                 display, method, advanced, allocateTo, toFrame, resetIndex,
-                advPageDom, advColList, advNamingList
+                advPageDom, advColList, advNamingList, advMethodList, advMethodUserList
             } = this.state;
 
             $(this.wrapSelector('#vp_gbVariable')).val(variable);
@@ -820,6 +936,12 @@ define([
             
             advColList.forEach((arr, idx) => {
                 $($(this.wrapSelector('.vp-gb-adv-col'))[idx]).data('list', arr);
+            });
+            advMethodList.forEach((arr, idx) => {
+                $($(this.wrapSelector('.vp-gb-adv-method'))[idx]).data('list', arr);
+            });
+            advMethodUserList.forEach((arr, idx) => {
+                $($(this.wrapSelector('.vp-gb-adv-method'))[idx]).data('userList', arr);
             });
             advNamingList.forEach((obj, idx) => {
                 $($(this.wrapSelector('.vp-gb-adv-naming'))[idx]).data('dict', obj);
@@ -859,17 +981,32 @@ define([
          * @param {Object} targetSelector 
          * @param {string} title 
          * @param {Array<string>} includeList 
+         * @param {Array<string>} excludeList 
          */
-        openColumnSelector(targetSelector, title='Select columns', includeList=[]) {
+        openColumnSelector(targetSelector, title='Select columns', includeList=[], excludeList=[]) {
             this.popup.type = 'column';
             this.popup.targetSelector = targetSelector;
             var previousList = this.popup.targetSelector.data('list');
             if (previousList) {
                 previousList = previousList.map(col => col.code)
             }
-            this.renderMultiSelector(previousList, includeList);
+            this.renderMultiSelector(previousList, includeList, excludeList);
             this.openInnerPopup(title);
         }   
+
+        /**
+         * Open Inner popup page for method selection
+         * @param {Object} targetSelector 
+         * @param {string} title 
+         */
+        openMethodSelector(targetSelector, title='Select methods') {
+            this.popup.type = 'method';
+            this.popup.targetSelector = targetSelector;
+            var previousList = this.popup.targetSelector.data('list');
+            var userList = this.popup.targetSelector.data('userList');
+            this.renderMethodSelector(previousList, userList);
+            this.openInnerPopup(title);
+        }
 
         /**
          * Open Naming popup page
@@ -893,7 +1030,31 @@ define([
                 $(this.popup.targetSelector).data('list', dataList);
                 $(this.popup.targetSelector).trigger({ type: 'change', dataList: dataList });
                 this.closeInnerPopup();
-            } else {
+            } else if (this.popup.type == 'method') {
+                var methodList = [];
+                var tags = $(this.wrapSelector('.vp-gb-method-checkbox:checked'));
+                for (var i = 0; i < tags.length; i++) {
+                    var val = $(tags[i]).val();
+                    if (val && val != '') {
+                        methodList.push(val);
+                    }
+                }
+
+                var userList = [];
+                tags = $(this.wrapSelector('.vp-gb-method-user-func:checked'));
+                for (var i = 0; i < tags.length; i++) {
+                    var val = $(tags[i]).val();
+                    if (val && val != '') {
+                        userList.push(val);
+                    }
+                }
+                var targetValue = [ ...methodList, ...userList ].join(',');
+                $(this.popup.targetSelector).val(targetValue);
+                $(this.popup.targetSelector).data('list', methodList);
+                $(this.popup.targetSelector).data('userList', userList);
+                $(this.popup.targetSelector).trigger({ type: 'change', list: methodList, userList: userList });
+                this.closeInnerPopup();
+            } else if (this.popup.type == 'naming') {
                 var dict = {};
                 // get dict
                 var tags = $(this.wrapSelector('.vp-gb-naming-text'));
