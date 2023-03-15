@@ -72,6 +72,7 @@
 }
 .vp-cs-add-item-name {
     padding-right: 25px;
+    width: 100%;
 }
 .vp-cs-add-item-btn {
     display: inline-block;
