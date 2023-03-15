@@ -92,7 +92,6 @@ define([
             this.id = this.state.config.id;
             this.name = this.state.config.name;
             this.path = this.state.config.path;
-            this.category = this.state.config.category;
             
 
             this.config = {
