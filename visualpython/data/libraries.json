@@ -3051,14 +3051,14 @@
                         }
                     },
                     {
-                        "id"   : "apps_profiling",
+                        "id"   : "apps_sweetviz",
                         "type" : "function",
                         "level": 1,
-                        "name" : "Profiling",
-                        "tag"  : "PROFILING,PANDAS PROFILING,APPS",
-                        "path" : "visualpython - apps - profiling",
-                        "desc" : "Pandas Profiling",
-                        "file" : "m_apps/Profiling",
+                        "name" : "Sweetviz",
+                        "tag"  : "SWEETVIZ,APPS",
+                        "path" : "visualpython - apps - sweetviz",
+                        "desc" : "Sweetviz",
+                        "file" : "m_apps/Sweetviz",
                         "apps" : {
                             "color": 4,
                             "icon": "apps/apps_profiling.svg"

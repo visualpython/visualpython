@@ -65,6 +65,17 @@ def _vp_get_variable_info(v):
         return {'ndim': v.ndim}
     return {}
 
+def _vp_get_sweetviz_list():
+    """
+    Get sweetviz variable list
+    """
+    varList = _vp_get_variables_list(['DataframeReport'])
+    result = []
+    for v in varList:
+        title = eval(v['varName']).source_name
+        result.append({ 'varName': v['varName'], 'title': title })
+    return result
+
 def _vp_get_profiling_list():
     """
     Get profiling variable list
@@ -74,7 +85,6 @@ def _vp_get_profiling_list():
     for v in varList:
         title = eval(v['varName']).get_description()['analysis']['title']
         result.append({ 'varName': v['varName'], 'title': title })
-
     return result
 
 import numpy as _vp_np

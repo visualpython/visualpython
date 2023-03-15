@@ -591,6 +591,19 @@ define([
                 })
             });
         }
+
+        getSweetvizList() {
+            var that = this;
+            return new Promise(function(resolve, reject) {
+                that.execute('_vp_print(_vp_get_sweetviz_list())')
+                .then(function(resultObj) {
+                    resolve(resultObj);
+                }).catch(function(err) {
+                    // reject
+                    reject(err);
+                })
+            });
+        }
     
         getProfilingList() {
             var that = this;

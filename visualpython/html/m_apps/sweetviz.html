@@ -1,0 +1,55 @@
+<body>
+    <div class="vp-sv-grid-box">
+        <!-- <div class="vp-sv-prepare-box">
+            <label>Prepare to use Pandas Profiling <a href="https://github.com/pandas-profiling/pandas-profiling" target="_blank"><i class="fa fa-link vp-sv-link" title="Go to pandas-profiling github page"></i></a></label>
+            <div>
+                <button class="vp-button activated vp-sv-install-btn">Install</button>
+                <div class="vp-cursor vp-sv-check-btn" title="Check if installed"><img src="${vp_base}/img/refresh.svg"></div>
+                <button class="vp-button vp-sv-import-btn">Import</button>
+            </div>
+        </div> -->
+        <div class="vp-sv-show-box">
+            <div class="vp-sv-df-box">
+                <label for="vp_pfVariable" class="vp-orange-text">DataFrame</label>
+                <div>
+                    <select id="vp_pfVariable" class="vp-select vp-sv-select">
+                    </select>
+                    
+                    <!-- LAB: img to url -->
+                    <div class="vp-sv-df-refresh" title="Refresh variable list">
+                        <!-- <img src="${vp_base}/img/refresh.svg"> -->
+                    </div>
+                </div>
+                <label for="vp_pfReturn" class="vp-orange-text">Allocate to</label>
+                <input type="text" id="vp_pfReturn" class="vp-input vp-sv-input" placeholder="New variable name" required="true">
+                <label for="vp_pfPath" class="vp-orange-text">File path</label>
+                <div>
+                    <input type="text" id="vp_pfPath" class="vp-input vp-sv-input" placeholder="SWEETVIZ_REPORT.html">
+                    <div class="vp-file-browser-button" id="vp_pfPathButton" data-parent="vp_pfPath"></div>
+                </div>
+                <label for="vp_pfOpenBrowser" class="vp-orange-text">Open browser</label>
+                <label><input type="checkbox" id="vp_pfOpenBrowser" class="vp-input vp-sv-input" checked><span></span></label>
+                <label for="vp_pfTitle">Report Title</label>
+                <div>
+                    <input type="text" id="vp_pfTitle" class="vp-input vp-sv-input" placeholder="Title name">
+                    <button class="vp-button activated vp-sv-menu-item" data-type="1">Generate Report</button>
+                </div>
+                <input type="hidden" class="vp-input vp-sv-filename">
+                <input type="hidden" class="vp-input vp-sv-filepath">
+            </div>
+        </div>
+        <div class="vp-sv-list-box">
+            <div class="vp-sv-list-header">
+                <div><label class="vp-sv-list-header-item">Allocated to</label></div>
+                <div><label class="vp-sv-list-header-item">Report Title</label></div>
+                <div><label class="vp-sv-list-header-item"></label></div>
+            </div>
+            <div class="vp-apiblock-scrollbar">
+                <div class="vp-sv-list-body vp-apiblock-scrollbar">
+                </div>
+            </div>
+        </div>
+        
+        
+        </div>
+</body>

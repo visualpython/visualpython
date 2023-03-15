@@ -1,0 +1,105 @@
+.vp-sv-grid-box {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    grid-row-gap: 5px;
+    grid-template-rows: 185px auto;
+}
+.vp-sv-prepare-box {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    align-items: baseline;
+    align-content: center;
+    border: 1px solid #E4E4E4;
+    border-radius: 5px;
+    box-sizing: border-box;
+    padding: 15px;
+}
+.vp-sv-link {
+    color: var(--highlight-color);
+}
+.vp-sv-install-btn{
+    margin-left: 7px;
+}
+.vp-sv-check-btn {
+    display: inline-block;
+    margin-left: 5px;
+}
+.vp-sv-import-btn {
+    margin-left: 10px;
+}
+.vp-sv-show-box {
+    display: grid;
+    /* grid-template-rows: min-content min-content; */
+    grid-row-gap: 10px;
+    border: 1px solid #E4E4E4;
+    border-radius: 5px;
+    box-sizing: border-box;
+    padding: 15px;
+}
+.vp-sv-df-box {
+    display: grid;
+    grid-template-columns: 95px auto;
+    grid-row-gap: 3px;
+    align-items: baseline;
+    align-content: space-evenly;
+}
+.vp-pf #vp_pfVariable { 
+    width: 62%;
+    height: 30px;
+}
+.vp-sv-df-refresh {
+    display: inline-block;
+    cursor: pointer;
+    padding-left: 4px;
+    /* LAB: img to background-image */
+    background: center / contain no-repeat url(../../img/refresh.svg);
+    width: 18px;
+    height: 19px;
+}
+.vp-sv-input, .vp-sv-select {
+    width: 62%;
+}
+.vp-sv-menu-item {
+    width: 112px !important;
+    margin-left: 5px;
+}
+
+/** List box */
+.vp-sv-list-box {
+    display: grid;
+    grid-template-rows: 20px calc(100% - 30px);
+    grid-row-gap: 5px;
+    border: 1px solid #E4E4E4;
+    border-radius: 5px;
+    box-sizing: border-box;
+    padding: 15px;
+}
+.vp-sv-list-header {
+    display: grid;
+    grid-template-columns: 35% 35% 30%;
+}
+.vp-sv-list-header-item {
+    font-weight: bold;
+}
+.vp-sv-list-body {
+    display: grid;
+    grid-template-rows: 30px;
+    overflow: auto;
+}
+.vp-sv-list-item {
+    display: grid;
+    grid-template-columns: 35% 35% 30%;
+    border: 0;
+    line-height: 30px;
+}
+.vp-sv-list-item:hover {
+    background: var(--light-gray-color);
+    cursor: pointer;
+}
+.vp-sv-list-button-box {
+    text-align: right;
+}
+.vp-sv-list-menu-item {
+    display: inline-block;
+}

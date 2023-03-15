@@ -380,6 +380,9 @@ input.vp-menu-search-box {
 .vp-menuitem.apps .apps_pdf {
     background: top / contain no-repeat url(../img/apps/apps_pymupdf.svg);
 }
+.vp-menuitem.apps .apps_sweetviz {
+    background: top / contain no-repeat url(../img/apps/apps_profiling.svg);
+}
 .vp-menuitem.apps .apps_profiling {
     background: top / contain no-repeat url(../img/apps/apps_profiling.svg);
 }
