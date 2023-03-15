@@ -926,7 +926,8 @@ define([
                 etcOptionCode.push(com_util.formatString("marker='{0}'", markerStyle));
             }
             if (showValues === true && chartType === 'barplot') {
-                etcOptionCode.push('ci=None');
+                // etcOptionCode.push('ci=None'); // changed to errorbar
+                etcOptionCode.push('errorbar=None');
             }
             if (setXY === false && sortType !== '') {
                 let sortCode = '';
