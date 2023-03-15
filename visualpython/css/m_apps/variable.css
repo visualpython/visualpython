@@ -3,7 +3,7 @@
 }
 #vp_var_variableBox table tbody tr:hover,
 #vp_var_variableBox table tbody tr.vp-selected {
-    color: var(--font-highlight);
+    color: var(--vp-font-highlight);
     background-color: #F5F5F5;
 }
 #vp_var_variableBox table tbody tr td:hover {
@@ -11,13 +11,13 @@
 }
 #vp_var_variableBox table tbody:empty::after {
     content: '(No variables available.)';
-    color: var(--highlight-color);
+    color: var(--vp-highlight-color);
     font-style: italic;
 }
 #vp_var_variableBox table thead {
     position: sticky;
     top: 0;
-    background: white;
+    background: var(--vp-background-color);
 }
 #vp_var_variableBox table td {
     vertical-align: middle;
@@ -49,7 +49,7 @@
 }
 #vp_varDetailTable:empty::after {
     content: '(Select variables to preview the data.)';
-    color: var(--highlight-color);
+    color: var(--vp-highlight-color);
     font-style: italic;
 }
 #vp_varDetailTable {

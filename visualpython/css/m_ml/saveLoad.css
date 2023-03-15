@@ -1,0 +1,7 @@
+.vp-popup-frame select.vp-modelio-type {
+    border: 2px solid #FFCF73;
+    width: 100%;
+    height: 35px;
+    background-position: 97% 50%;
+    cursor: pointer;
+}

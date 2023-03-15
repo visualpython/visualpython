@@ -2,9 +2,9 @@
 Pandas Objects Command
 """
 import pandas as _vp_pd
-import IPython
+import IPython as _vp_ipython
 # LAB: prevent import error
-_ipython_version = IPython.version_info
+_ipython_version = _vp_ipython.version_info
 if _ipython_version[0] < 7 or ( _ipython_version[0] == 7 and _ipython_version[1] <= 13 ):
     from IPython.core.display import display
 else:

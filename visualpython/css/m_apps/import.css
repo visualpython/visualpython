@@ -2,7 +2,7 @@
     width: 120px;
     text-align: center;
     display: inline-block;
-    border: 0.24px solid var(--border-gray-color);
+    border: 0.24px solid var(--vp-border-gray-color);
     border-radius: 3px;
     padding: 5px;
     cursor: pointer;
@@ -10,6 +10,6 @@
     font-size: 13px;
 }
 .vp-tab-button.vp-tab-selected {
-    color: var(--font-highlight);
-    border-bottom: 2px solid var(--highlight-color);
+    color: var(--vp-font-highlight);
+    border-bottom: 2px solid var(--vp-highlight-color);
 }

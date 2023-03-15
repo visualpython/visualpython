@@ -10,13 +10,13 @@
     grid-template-columns: 50% 50%;
     align-items: baseline;
     align-content: center;
-    border: 1px solid #E4E4E4;
+    border: 1px solid var(--vp-border-gray-color);
     border-radius: 5px;
     box-sizing: border-box;
     padding: 15px;
 }
 .vp-pdf-link {
-    color: var(--highlight-color);
+    color: var(--vp-highlight-color);
 }
 .vp-pdf-install-btn{
     margin-left: 7px;
@@ -31,7 +31,7 @@
 .vp-pdf-show-box {
     display: grid;
     grid-row-gap: 10px;
-    border: 1px solid #E4E4E4;
+    border: 1px solid var(--vp-border-gray-color);
     border-radius: 5px;
     box-sizing: border-box;
     padding: 15px;

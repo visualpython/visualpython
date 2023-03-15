@@ -8,7 +8,7 @@
 }
 .vp-ins-select-title {
     font-weight: bold;
-    color: var(--font-highlight);
+    color: var(--vp-font-highlight);
     padding: 5px 5px 5px 0px;
 }
 .vp-ins-select-container input.vp-ins-search {
@@ -22,7 +22,7 @@
 }
 .vp-ins-select-box {
     margin-top: 5px;
-    border: 0.25px solid var(--border-gray-color);
+    border: 0.25px solid var(--vp-border-gray-color);
 }
 .vp-ins-select-list {
     height: 145px;
@@ -49,11 +49,11 @@
     padding-top: 3px;
     padding-bottom: 3px;
     cursor: pointer;
-    border-bottom: 0.25px solid var(--light-gray-color);
+    border-bottom: 0.25px solid var(--vp-light-gray-color);
 }
 .vp-ins-select-item.selected {
-    color : var(--font-highlight);
-    background: var(--light-gray-color);
+    color : var(--vp-font-highlight);
+    background: var(--vp-light-gray-color);
 }
 .vp-ins-select-item span {
     background: #e0e0e0;
@@ -62,10 +62,10 @@
     margin-right: 5px;
 }
 .vp-ins-select-item:hover {
-    background: var(--light-gray-color);
+    background: var(--vp-light-gray-color);
 }
 .vp-ins-select-item:hover span {
-    background: var(--highlight-color);
+    background: var(--vp-highlight-color);
     color: #FFFFFF;
 }
 .vp-ins-option-box.api {
@@ -76,7 +76,7 @@
 }
 .vp-ins-parameter-box:empty::after {
     content: '(Empty)';
-    color: var(--gray-color);
+    color: var(--vp-gray-color);
 }
 .vp-ins-parameter {
     width: 100% !important;

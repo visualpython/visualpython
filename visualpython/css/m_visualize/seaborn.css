@@ -1,6 +1,6 @@
 .vp-chart-setting {
     float: right;
-    color: var(--gray-color);
+    color: var(--vp-gray-color);
     /* padding-top: 5px; */
     padding-right: 5px;
     cursor: pointer;
@@ -11,7 +11,7 @@
     margin-top: 5px;
 }
 .vp-chart-setting:hover {
-    color: var(--font-highlight);
+    color: var(--vp-font-highlight);
     background-image: url(../../img/gear-solid_hover.svg);
 }
 .vp-create-subplot-btn {
@@ -27,17 +27,17 @@
     width: 85px;
     height: 30px;
     line-height: 30px;
-    background: var(--light-gray-color);
+    background: var(--vp-light-gray-color);
     cursor: pointer;
-    border: 0.24px solid #E4E4E4;
+    border: 0.24px solid var(--vp-border-gray-color);
     box-sizing: border-box;
     border-radius: 2px 2px 0px 0px;
     font-weight: bold;
     text-align: center;
 }
 .vp-tab-item.vp-focus {
-    color: var(--font-highlight);
-    background: white;
+    color: var(--vp-font-highlight);
+    background: var(--vp-background-color);
     border-bottom: 3px solid #FFCF73;
 }
 .vp-tab-page {
@@ -88,7 +88,7 @@
 }
 .vp-chart-preview-content:empty::after {
     content: 'No preview image';
-    color: var(--gray-color);
+    color: var(--vp-gray-color);
 }
 .vp-chart-preview-box img {
     width: 100%;
@@ -99,7 +99,7 @@
 }
 .vp-tab-group-title {
     font-weight: bold;
-    background: var(--light-gray-color);
+    background: var(--vp-light-gray-color);
 }
 .vp-chart-setting-footer {
     position: absolute;

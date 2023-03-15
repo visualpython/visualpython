@@ -1,45 +1,27 @@
 /*
  *    Project Name    : Visual Python
  *    Description     : GUI-based Python code generator
- *    File Name       : Profiling.js
+ *    File Name       : Sweetviz.js
  *    Author          : Black Logic
- *    Note            : Apps > Profiling
+ *    Note            : Apps > Sweetviz
  *    License         : GNU GPLv3 with Visual Python special exception
  *    Date            : 2021. 11. 18
  *    Change Date     :
  */
 
-/** DEPRECATED on v2.3.4
- * - libraries.json
-    {
-        "id"   : "apps_profiling",
-        "type" : "function",
-        "level": 1,
-        "name" : "Profiling",
-        "tag"  : "PROFILING,PANDAS PROFILING,APPS",
-        "path" : "visualpython - apps - profiling",
-        "desc" : "Pandas Profiling",
-        "file" : "m_apps/Profiling",
-        "apps" : {
-            "color": 4,
-            "icon": "apps/apps_profiling.svg"
-        }
-    }
- */
-
 //============================================================================
-// [CLASS] Profiling
+// [CLASS] Sweetviz
 //============================================================================
 define([
-    __VP_TEXT_LOADER__('vp_base/html/m_apps/profiling.html'), // INTEGRATION: unified version of text loader
-    __VP_CSS_LOADER__('vp_base/css/m_apps/profiling'), // INTEGRATION: unified version of css loader
+    __VP_TEXT_LOADER__('vp_base/html/m_apps/sweetviz.html'), // INTEGRATION: unified version of text loader
+    __VP_CSS_LOADER__('vp_base/css/m_apps/sweetviz'), // INTEGRATION: unified version of css loader
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_interface',
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/SuggestInput',
     'vp_base/js/com/component/FileNavigation'
-], function(proHTML, proCss, com_Const, com_String, com_interface, PopupComponent, SuggestInput, FileNavigation) {
+], function(svHtml, svCss, com_Const, com_String, com_interface, PopupComponent, SuggestInput, FileNavigation) {
 
     const PROFILE_TYPE = {
         NONE: -1,
@@ -53,9 +35,9 @@ define([
     }
 
     /**
-     * Profiling
+     * Sweetviz
      */
-    class Profiling extends PopupComponent {
+    class Sweetviz extends PopupComponent {
         _init() {
             super._init();
             /** Write codes executed before rendering */
@@ -65,9 +47,16 @@ define([
             this.config.dataview = false;
             this.config.runButton = false;
             this.config.size = { width: 500, height: 500 };
-            this.config.checkModules = ['ProfileReport'];
+            this.config.checkModules = ['sweetviz'];
 
             this.selectedReport = '';
+        }
+
+        _unbindEvent() {
+            super._unbindEvent();
+            $(this.wrapSelector('.vp-sv-df-refresh')).off('click');
+            $(this.wrapSelector('#vp_pfPathButton')).off('click');
+            $(this.wrapSelector('.vp-sv-menu-item')).off('click');
         }
 
         _bindEvent() {
@@ -76,12 +65,28 @@ define([
             let that = this;
 
             // refresh df
-            $(this.wrapSelector('.vp-pf-df-refresh')).on('click', function() {
+            $(this.wrapSelector('.vp-sv-df-refresh')).on('click', function() {
                 that.loadVariableList();
             });
 
+            // click path
+            $(this.wrapSelector('#vp_pfPathButton')).on('click', function() {
+                let fileNavi = new FileNavigation({
+                    type: 'save',
+                    extensions: ['html'],
+                    finish: function(filesPath, status, error) {
+                        let {file, path} = filesPath[0];
+
+                        // set text
+                        $(that.wrapSelector('#vp_pfPath')).data('file', file);
+                        $(that.wrapSelector('#vp_pfPath')).val(path);
+                    }
+                });
+                fileNavi.open();
+            });
+
             // click menu
-            $(this.wrapSelector('.vp-pf-menu-item')).on('click', function() {
+            $(this.wrapSelector('.vp-sv-menu-item')).on('click', function() {
                 // check required filled
                 if (that.checkRequiredOption() === false) {
                     return ;
@@ -91,18 +96,34 @@ define([
                 var df = $(that.wrapSelector('#vp_pfVariable')).val();
                 var saveas = $(that.wrapSelector('#vp_pfReturn')).val();
                 if (saveas == '') {
-                    saveas = '_vp_profile';
+                    saveas = '_vp_sweetviz';
                 }
                 var title = $(that.wrapSelector('#vp_pfTitle')).val();
+                var filePath = $(that.wrapSelector('#vp_pfPath')).val();
+                var openBrowser = $(that.wrapSelector('#vp_pfOpenBrowser')).prop('checked');
                 var code = new com_String();
                 switch(parseInt(type)) {
                     case PROFILE_TYPE.GENERATE:
-                        code.appendFormatLine("{0} = ProfileReport({1}, title='{2}')", saveas, df, title);
+                        // generate with/out title
+                        if (title && title != '') {
+                            code.appendFormatLine("{0} = sweetviz.analyze([{1}, '{2}'])", saveas, df, title);
+                        } else {
+                            code.appendFormatLine("{0} = sweetviz.analyze({1})", saveas, df);
+                        }
+                        // show html
+                        code.appendFormat("{0}.show_html(", saveas);
+                        if (filePath && filePath != '') {
+                            code.appendFormat("filepath='{0}'", filePath);
+                        }
+                        if (openBrowser === false) {
+                            code.append(", open_browser=False");
+                        }
+                        code.appendLine(')');
                         code.append(saveas);
                         break;
                 }
                 that.checkAndRunModules(true).then(function() {
-                    com_interface.insertCell('code', code.toString(), true, 'Data Analysis > Profiling');
+                    com_interface.insertCell('code', code.toString(), true, 'Data Analysis > Sweetviz');
                     that.loadReportList();
                 });
             });
@@ -111,17 +132,16 @@ define([
         bindReportListEvent() {
             let that = this;
             // click list item menu
-            $(this.wrapSelector('.vp-pf-list-menu-item')).off('click');
-            $(this.wrapSelector('.vp-pf-list-menu-item')).on('click', function(evt) {
+            $(this.wrapSelector('.vp-sv-list-menu-item')).off('click');
+            $(this.wrapSelector('.vp-sv-list-menu-item')).on('click', function(evt) {
                 var menu = $(this).data('menu');
-                var itemTag = $(this).closest('.vp-pf-list-item');
+                var itemTag = $(this).closest('.vp-sv-list-item');
                 var varName = $(itemTag).data('name');
-                var title = $(itemTag).data('title');
 
                 var code = new com_String();
                 switch(menu) {
                     case LIST_MENU_ITEM.SHOW:
-                        code.appendFormat("{0}.to_notebook_iframe()", varName);
+                        code.appendFormat("{0}.show_notebook()", varName);
                         break;
                     case LIST_MENU_ITEM.DELETE:
                         code.appendFormat("del {0}", varName);
@@ -136,11 +156,11 @@ define([
                                     var fileName = fileObj.file;
                                     var path = fileObj.path;
                                     if (varName == '') {
-                                        varName = '_vp_profile';
+                                        varName = '_vp_sweetviz';
                                     }
                                     var code = new com_String();
-                                    code.appendFormat("{0}.to_file('{1}')", varName, path);
-                                    com_interface.insertCell('code', code.toString(), true, 'Data Analysis > Profiling');
+                                    code.appendFormat("{0}.show_html(filepath='{1}')", varName, path);
+                                    com_interface.insertCell('code', code.toString(), true, 'Data Analysis > Sweetviz');
                     
                                     that.selectedReport = '';
                                 });
@@ -151,13 +171,13 @@ define([
                     default:
                         return;
                 }
-                com_interface.insertCell('code', code.toString(), true, 'Data Analysis > Profiling');
+                com_interface.insertCell('code', code.toString(), true, 'Data Analysis > Sweetviz');
                 that.loadReportList();
             });
         }
 
         templateForBody() {
-            return proHTML;
+            return svHtml;
         }
 
         render() {
@@ -170,13 +190,13 @@ define([
 
         generateInstallCode() {
             return [
-                '!pip install pandas-profiling'
+                '!pip install sweetviz'
             ];
         }
 
         generateImportCode() {
             return [
-                'from pandas_profiling import ProfileReport'
+                'import sweetviz'
             ];
         }
 
@@ -199,7 +219,7 @@ define([
                     });
                     $(that.wrapSelector('#vp_pfVariable')).trigger('change');
                 } catch (ex) {
-                    vpLog.display(VP_LOG_TYPE.ERROR, 'Profiling:', result);
+                    vpLog.display(VP_LOG_TYPE.ERROR, 'Sweetviz:', result);
                 }
             });
         }
@@ -209,24 +229,12 @@ define([
             if (beforeValue == null) {
                 beforeValue = '';
             }
-            // var tag = new com_String();
-            // tag.appendFormatLine('<select id="{0}" class="vp-select vp-pf-select">', 'vp_pfVariable');
-            // varList.forEach(vObj => {
-            //     // varName, varType
-            //     var label = vObj.varName;
-            //     tag.appendFormatLine('<option value="{0}" data-type="{1}" {2}>{3}</option>'
-            //                         , vObj.varName, vObj.varType
-            //                         , beforeValue == vObj.varName?'selected':''
-            //                         , label);
-            // });
-            // tag.appendLine('</select>'); // VP_VS_VARIABLES
-            // return tag.toString();
 
             let mappedList = varList.map(obj => { return { label: obj.varName, value: obj.varName, dtype: obj.varType } });
 
             var variableInput = new SuggestInput();
             variableInput.setComponentID('vp_pfVariable');
-            variableInput.addClass('vp-pf-select');
+            variableInput.addClass('vp-sv-select');
             variableInput.setPlaceholder('Select variable');
             variableInput.setSuggestList(function () { return mappedList; });
             variableInput.setNormalFilter(true);
@@ -257,16 +265,16 @@ define([
                     disable = true;
                     break;
             }
-            $(this.wrapSelector('.vp-pf-install-btn')).text(message);
+            $(this.wrapSelector('.vp-sv-install-btn')).text(message);
             if (disable) {
                 // set state as 'Checking'
                 // set disabled
-                if (!$(this.wrapSelector('.vp-pf-install-btn')).hasClass('disabled')) {
-                    $(this.wrapSelector('.vp-pf-install-btn')).addClass('disabled');
+                if (!$(this.wrapSelector('.vp-sv-install-btn')).hasClass('disabled')) {
+                    $(this.wrapSelector('.vp-sv-install-btn')).addClass('disabled');
                 }
             } else {
                 // set enabled
-                $(this.wrapSelector('.vp-pf-install-btn')).removeClass('disabled');
+                $(this.wrapSelector('.vp-sv-install-btn')).removeClass('disabled');
             }
         }
 
@@ -277,7 +285,7 @@ define([
             this.checking = true;
     
             // check installed
-            vpKernel.execute('!pip show pandas-profiling').then(function(resultObj) {
+            vpKernel.execute('!pip show sweetviz').then(function(resultObj) {
                 let { result, msg } = resultObj;
                 if (!that.checking) {
                     return;
@@ -297,19 +305,19 @@ define([
         loadReportList() {
             var that = this;
             // load using kernel
-            vpKernel.getProfilingList().then(function(resultObj) {
+            vpKernel.getSweetvizList().then(function(resultObj) {
                 try {
                     let { result } = resultObj;
                     var varList = JSON.parse(result);
                     // render variable list
                     // replace
-                    $(that.wrapSelector('.vp-pf-list-box')).replaceWith(function() {
+                    $(that.wrapSelector('.vp-sv-list-box')).replaceWith(function() {
                         return that.renderReportList(varList);
                     });
 
                     that.bindReportListEvent();
                 } catch (ex) {
-                    vpLog.display(VP_LOG_TYPE.ERROR, 'Profiling:', result);
+                    vpLog.display(VP_LOG_TYPE.ERROR, 'Sweetviz:', result);
                     // console.log(ex);
                 }
             });
@@ -317,44 +325,44 @@ define([
 
         renderReportList = function(reportList=[]) {
             var page = new com_String();
-            page.appendFormatLine('<div class="{0}">', 'vp-pf-list-box');
-            page.appendFormatLine('<div class="{0}">', 'vp-pf-list-header');
-            page.appendFormatLine('<div><label class="{0}">{1}</label></div>', 'vp-pf-list-header-item', 'Allocated to');
-            page.appendFormatLine('<div><label class="{0}">{1}</label></div>', 'vp-pf-list-header-item', 'Report Title');
-            page.appendFormatLine('<div><label class="{0}">{1}</label></div>', 'vp-pf-list-header-item', '');
+            page.appendFormatLine('<div class="{0}">', 'vp-sv-list-box');
+            page.appendFormatLine('<div class="{0}">', 'vp-sv-list-header');
+            page.appendFormatLine('<div><label class="{0}">{1}</label></div>', 'vp-sv-list-header-item', 'Allocated to');
+            page.appendFormatLine('<div><label class="{0}">{1}</label></div>', 'vp-sv-list-header-item', 'Report Title');
+            page.appendFormatLine('<div><label class="{0}">{1}</label></div>', 'vp-sv-list-header-item', '');
             page.appendLine('</div>');
             page.appendFormatLine('<div class="{0}">', 'vp-apiblock-scrollbar');
-            page.appendFormatLine('<div class="{0} {1}">', 'vp-pf-list-body', 'vp-apiblock-scrollbar');
+            page.appendFormatLine('<div class="{0} {1}">', 'vp-sv-list-body', 'vp-apiblock-scrollbar');
             reportList.forEach((report, idx) => {
                 var { varName, title } = report;
-                page.appendFormatLine('<div class="{0}" data-name="{1}" data-title="{2}">', 'vp-pf-list-item', varName, title);
+                page.appendFormatLine('<div class="{0}" data-name="{1}" data-title="{2}">', 'vp-sv-list-item', varName, title);
                 page.appendFormatLine('<div>{0}</div>', varName);
                 page.appendFormatLine('<div>{0}</div>', title);
                 // button box
-                page.appendFormatLine('<div class="{0}">', 'vp-pf-list-button-box');
+                page.appendFormatLine('<div class="{0}">', 'vp-sv-list-button-box');
                 // LAB: img to url
                 // page.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}"><img src="{3}"/></div>'
-                //                         , 'vp-pf-list-menu-item', LIST_MENU_ITEM.SHOW, 'Show report', com_Const.IMAGE_PATH + 'snippets/run.svg');
+                //                         , 'vp-sv-list-menu-item', LIST_MENU_ITEM.SHOW, 'Show report', com_Const.IMAGE_PATH + 'snippets/run.svg');
                 // page.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}"><img src="{3}"/></div>'
-                //                         , 'vp-pf-list-menu-item', LIST_MENU_ITEM.DELETE, 'Delete report', com_Const.IMAGE_PATH + 'delete.svg');
+                //                         , 'vp-sv-list-menu-item', LIST_MENU_ITEM.DELETE, 'Delete report', com_Const.IMAGE_PATH + 'delete.svg');
                 // page.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}"><img src="{3}"/></div>'
-                //                         , 'vp-pf-list-menu-item', LIST_MENU_ITEM.SAVE, 'Save report', com_Const.IMAGE_PATH + 'snippets/export.svg');
+                //                         , 'vp-sv-list-menu-item', LIST_MENU_ITEM.SAVE, 'Save report', com_Const.IMAGE_PATH + 'snippets/export.svg');
                 page.appendFormatLine('<div class="{0} {1}" data-menu="{2}" title="{3}"></div>'
-                                        , 'vp-pf-list-menu-item', 'vp-icon-run', LIST_MENU_ITEM.SHOW, 'Show report');
+                                        , 'vp-sv-list-menu-item', 'vp-icon-run', LIST_MENU_ITEM.SHOW, 'Show report');
                 page.appendFormatLine('<div class="{0} {1}" data-menu="{2}" title="{3}"></div>'
-                                        , 'vp-pf-list-menu-item', 'vp-icon-delete', LIST_MENU_ITEM.DELETE, 'Delete report');
+                                        , 'vp-sv-list-menu-item', 'vp-icon-delete', LIST_MENU_ITEM.DELETE, 'Delete report');
                 page.appendFormatLine('<div class="{0} {1}" data-menu="{2}" title="{3}"></div>'
-                                        , 'vp-pf-list-menu-item', 'vp-icon-export', LIST_MENU_ITEM.SAVE, 'Save report');
+                                        , 'vp-sv-list-menu-item', 'vp-icon-export', LIST_MENU_ITEM.SAVE, 'Save report');
                 page.appendLine('</div>');
                 page.appendLine('</div>');
             });
             page.appendLine('</div>'); // VP_PF_LIST_BODY
             page.appendLine('</div>');
-            page.appendLine('</div>'); // 'vp-pf-list-box'
+            page.appendLine('</div>'); // 'vp-sv-list-box'
             return page.toString();
         }
 
     }
 
-    return Profiling;
+    return Sweetviz;
 });

@@ -1,6 +1,6 @@
 /* UDF Editor - CodeMirror */
 .vp-sn-body .CodeMirror { border: 1px solid silver; }
-.vp-sn-body .CodeMirror.CodeMirror-focused { border: 1px solid var(--highlight-color); }
+.vp-sn-body .CodeMirror.CodeMirror-focused { border: 1px solid var(--vp-highlight-color); }
 .vp-sn-body .CodeMirror-empty { outline: 1px solid #c22; }
 .vp-sn-body .CodeMirror-empty.CodeMirror-focused { outline: none; }
 .vp-sn-body .CodeMirror pre.CodeMirror-placeholder { color: #999; }
@@ -81,9 +81,9 @@
     width: 130px;
     top: 23px;
     right: 0px;
-    border: 0.25px solid var(--border-gray-color);
+    border: 0.25px solid var(--vp-border-gray-color);
     border-radius: 3px;
-    background: #FFFFFF;
+    background: var(--vp-background-color);
     padding: 5px;
     z-index: 5;
 }
@@ -95,7 +95,7 @@
     cursor: pointer;
 }
 .vp-sn-menu-item:hover {
-    color: var(--font-highlight);
+    color: var(--vp-font-highlight);
 }
 .vp-sn-search-box {
     position: relative;
@@ -137,8 +137,8 @@
     width: 90px;
     /* width: 80px;
     height: 50px; */
-    border: 0.25px solid var(--border-gray-color);
-    background: #FFFFFF;
+    border: 0.25px solid var(--vp-border-gray-color);
+    background: var(--vp-background-color);
     padding: 5px;
     z-index: 5;
 }
@@ -149,7 +149,7 @@
     cursor: pointer;
 }
 .vp-sn-sort-menu-item:hover {
-    color: var(--font-highlight);
+    color: var(--vp-font-highlight);
 }
 .vp-sn-func-export-mode {
     display: none;
@@ -198,7 +198,7 @@
     height: 30px;
     line-height: 30px;
     padding: 0px 7px;
-    border: 0.25px solid var(--border-gray-color);
+    border: 0.25px solid var(--vp-border-gray-color);
     box-sizing: border-box;
     cursor: pointer;
 }
@@ -225,15 +225,15 @@
     cursor: pointer;
 }
 .vp-sn-item-header.selected input.vp-sn-item-title {
-    color: var(--font-highlight);
+    color: var(--vp-font-highlight);
 }
 .vp-sn-item-header input.vp-sn-item-title:focus {
     transition: 0.7s;
-    border: 0.5px solid var(--highlight-color) !important;
+    border: 0.5px solid var(--vp-highlight-color) !important;
     cursor: text;
 }
 .vp-sn-imported-item {
-    color: var(--highlight-color);
+    color: var(--vp-highlight-color);
 }
 .vp-sn-item-menu {
     float: right;
@@ -246,7 +246,7 @@
 .vp-sn-item-code { 
     display: none;
     position: relative;
-    border: 0.25px solid var(--border-gray-color);
+    border: 0.25px solid var(--vp-border-gray-color);
 }
 .vp-sn-item-code .CodeMirror {
     min-height: 50px;

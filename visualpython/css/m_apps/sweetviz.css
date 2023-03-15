@@ -1,11 +1,11 @@
-.vp-pf-grid-box {
+.vp-sv-grid-box {
     display: grid;
     width: 100%;
     height: 100%;
     grid-row-gap: 5px;
-    grid-template-rows: 140px auto;
+    grid-template-rows: 185px auto;
 }
-.vp-pf-prepare-box {
+.vp-sv-prepare-box {
     display: grid;
     grid-template-columns: 50% 50%;
     align-items: baseline;
@@ -15,20 +15,20 @@
     box-sizing: border-box;
     padding: 15px;
 }
-.vp-pf-link {
+.vp-sv-link {
     color: var(--vp-highlight-color);
 }
-.vp-pf-install-btn{
+.vp-sv-install-btn{
     margin-left: 7px;
 }
-.vp-pf-check-btn {
+.vp-sv-check-btn {
     display: inline-block;
     margin-left: 5px;
 }
-.vp-pf-import-btn {
+.vp-sv-import-btn {
     margin-left: 10px;
 }
-.vp-pf-show-box {
+.vp-sv-show-box {
     display: grid;
     /* grid-template-rows: min-content min-content; */
     grid-row-gap: 10px;
@@ -37,7 +37,7 @@
     box-sizing: border-box;
     padding: 15px;
 }
-.vp-pf-df-box {
+.vp-sv-df-box {
     display: grid;
     grid-template-columns: 95px auto;
     grid-row-gap: 3px;
@@ -48,7 +48,7 @@
     width: 62%;
     height: 30px;
 }
-.vp-pf-df-refresh {
+.vp-sv-df-refresh {
     display: inline-block;
     cursor: pointer;
     padding-left: 4px;
@@ -57,16 +57,16 @@
     width: 18px;
     height: 19px;
 }
-.vp-pf-input, .vp-pf-select {
+.vp-sv-input, .vp-sv-select {
     width: 62%;
 }
-.vp-pf-menu-item {
+.vp-sv-menu-item {
     width: 112px !important;
     margin-left: 5px;
 }
 
 /** List box */
-.vp-pf-list-box {
+.vp-sv-list-box {
     display: grid;
     grid-template-rows: 20px calc(100% - 30px);
     grid-row-gap: 5px;
@@ -75,31 +75,31 @@
     box-sizing: border-box;
     padding: 15px;
 }
-.vp-pf-list-header {
+.vp-sv-list-header {
     display: grid;
     grid-template-columns: 35% 35% 30%;
 }
-.vp-pf-list-header-item {
+.vp-sv-list-header-item {
     font-weight: bold;
 }
-.vp-pf-list-body {
+.vp-sv-list-body {
     display: grid;
     grid-template-rows: 30px;
     overflow: auto;
 }
-.vp-pf-list-item {
+.vp-sv-list-item {
     display: grid;
     grid-template-columns: 35% 35% 30%;
     border: 0;
     line-height: 30px;
 }
-.vp-pf-list-item:hover {
+.vp-sv-list-item:hover {
     background: var(--vp-light-gray-color);
     cursor: pointer;
 }
-.vp-pf-list-button-box {
+.vp-sv-list-button-box {
     text-align: right;
 }
-.vp-pf-list-menu-item {
+.vp-sv-list-menu-item {
     display: inline-block;
 }

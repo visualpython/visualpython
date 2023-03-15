@@ -1,6 +1,6 @@
 /* UDF Editor - CodeMirror */
 .vp-if-body .CodeMirror { border: 1px solid silver; }
-.vp-if-body .CodeMirror.CodeMirror-focused { border: 1px solid var(--highlight-color); }
+.vp-if-body .CodeMirror.CodeMirror-focused { border: 1px solid var(--vp-highlight-color); }
 .vp-if-body .CodeMirror-empty { outline: 1px solid #c22; }
 .vp-if-body .CodeMirror-empty.CodeMirror-focused { outline: none; }
 .vp-if-body .CodeMirror pre.CodeMirror-placeholder { color: #999; }
@@ -28,9 +28,9 @@
     width: 130px;
     top: 23px;
     right: 0px;
-    border: 0.25px solid var(--border-gray-color);
+    border: 0.25px solid var(--vp-border-gray-color);
     border-radius: 3px;
-    background: #FFFFFF;
+    background: var(--vp-background-color);
     padding: 5px;
     z-index: 5;
 }
@@ -42,7 +42,7 @@
     cursor: pointer;
 }
 .vp-if-menu-item:hover {
-    color: var(--font-highlight);
+    color: var(--vp-font-highlight);
 }
 .vp-if-search-box {
     position: relative;
@@ -82,7 +82,7 @@
     height: 30px;
     line-height: 30px;
     padding: 0px 7px;
-    border: 0.25px solid var(--border-gray-color);
+    border: 0.25px solid var(--vp-border-gray-color);
     box-sizing: border-box;
     cursor: pointer;
 }
@@ -109,11 +109,11 @@
     cursor: pointer;
 }
 .vp-if-item-header.selected input.vp-if-item-title {
-    color: var(--font-highlight);
+    color: var(--vp-font-highlight);
 }
 .vp-if-item-header input.vp-if-item-title:focus {
     transition: 0.7s;
-    border: 0.5px solid var(--highlight-color) !important;
+    border: 0.5px solid var(--vp-highlight-color) !important;
     cursor: text;
 }
 .vp-if-item-menu {
@@ -127,5 +127,5 @@
 .vp-if-item-code { 
     display: none;
     position: relative;
-    border: 0.25px solid var(--border-gray-color);
+    border: 0.25px solid var(--vp-border-gray-color);
 }

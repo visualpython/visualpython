@@ -1,7 +1,7 @@
 .vp-successMessage {
     position: relative;
-    background-color: white;
-    color: var(--font-highlight);
+    background-color: var(--vp-background-color);
+    color: var(--vp-font-highlight);
     min-width: 150px;
     padding: 15px;
     margin-bottom: 20px;
@@ -22,7 +22,7 @@
 }
 .vp-successMessage-icon {
     margin-left: 15px;
-    color: var(--font-highlight);
+    color: var(--vp-font-highlight);
     /* LAB: img to background-image */
     background: top / contain no-repeat url(../../img/code.svg);
     height: 100%;

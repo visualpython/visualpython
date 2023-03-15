@@ -18,7 +18,7 @@
     padding-right: 23px;
 }
 .vp-ds-box input.vp-ds-target:disabled {
-    background: var(--light-gray-color) !important;
+    background: var(--vp-light-gray-color) !important;
     cursor: not-allowed;
 }
 .vp-ds-box input.vp-ds-target:disabled + .vp-ds-filter {
@@ -41,28 +41,28 @@
 }
 .vp-dataselector {
     position: absolute;
-    top: calc(50% - 275px);
+    top: calc(50% - 290px);
     left: calc(50% - 325px);
     width: 650px;
-    height: 550px;
-    background: white;
-    border: 1px solid var(--border-gray-color);
+    height: 580px;
+    background: var(--vp-background-color);
+    border: 1px solid var(--vp-border-gray-color);
     z-index: 1300;
     /* font */
     font-family: AppleSDGothicNeo;
     font-size: 14px;
-    color: var(--font-primary);
+    color: var(--vp-font-primary);
 }
 .vp-ds-data-box {
     width: 100%;
-    height: 160px;
+    height: 130px;
     align-content: baseline;
     align-items: center;
 }
 .vp-ds-type-box,
 .vp-ds-variable-box {
-    border: 0.25px solid var(--border-gray-color);
-    height: 160px;
+    border: 0.25px solid var(--vp-border-gray-color);
+    height: 130px;
     grid-row-gap: 0px;
     align-content: baseline;
 }
@@ -71,18 +71,18 @@
     padding-left: 5px;
     height: 25px;
     line-height: 25px;
-    border-bottom: 1px solid var(--border-gray-color);
+    border-bottom: 1px solid var(--vp-border-gray-color);
 }
 .vp-ds-type-item:hover,
 .vp-ds-var-item:hover {
-    background: var(--light-gray-color);
-    color: var(--font-highlight);
+    background: var(--vp-light-gray-color);
+    color: var(--vp-font-highlight);
     cursor: pointer;
 }
 .vp-ds-type-item.selected,
 .vp-ds-var-item.selected {
-    background: var(--light-gray-color);
-    color: var(--font-highlight);
+    background: var(--vp-light-gray-color);
+    color: var(--vp-font-highlight);
     font-weight: bold;
 }
 .vp-ds-option-box {
@@ -90,7 +90,7 @@
     margin-top: 10px;
 }
 .vp-ds-option-inner-box {
-    height: calc(100% - 30px);
+    height: calc(100% - 80px);
 }
 .vp-ds-df-option-box {
     height: 100%;

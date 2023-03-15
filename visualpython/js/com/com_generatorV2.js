@@ -13,8 +13,9 @@ define([
     'vp_base/js/com/com_makeDom',
     'vp_base/js/com/component/SuggestInput',
     'vp_base/js/com/component/VarSelector2',
-    'vp_base/js/com/component/DataSelector'
-], function (com_util, com_makeDom, SuggestInput, VarSelector2, DataSelector) {
+    'vp_base/js/com/component/DataSelector',
+    'vp_base/js/com/component/FileNavigation'
+], function (com_util, com_makeDom, SuggestInput, VarSelector2, DataSelector, FileNavigation) {
     /**
      * show result after code executed
      */
@@ -41,7 +42,9 @@ define([
         'textarea': 'Input textarea',
         'input_number': 'Input number',
         'input_text': 'Input text', 
-        'input': 'Input value'
+        'input': 'Input value',
+        'file_save': 'Select file',
+        'file_load': 'Select file'
     }
 
     const _VP_BOOL_OPTIONS = [
@@ -431,9 +434,85 @@ define([
                 }
                 content = input;
                 break;
+            case 'file-save':
+                var input = $('<input/>').attr({
+                    type: 'text',
+                    class: 'vp-input input-single vp-state',
+                    id: obj.name,
+                    placeholder: (obj.placeholder==undefined?'Input Data':obj.placeholder),
+                    value: (obj.default==undefined?'':obj.default),
+                    title: (obj.help==undefined?'':obj.help),
+                    required: obj.required == true
+                });
+                // cell metadata test
+                if (value != undefined) {
+                    // set as saved value
+                    $(input).attr({
+                        'value': value
+                    });
+                }
+                var fileBrowerButton = $(`<div class="vp-file-browser-button" data-parent="${obj.name}"></div>`);
+                var div = $('<div></div>');
+                div.append(input);
+                div.append(fileBrowerButton);
+
+                $(document).off('click', pageThis.wrapSelector(`.vp-file-browser-button[data-parent="${obj.name}"]`));
+                $(document).on('click', pageThis.wrapSelector(`.vp-file-browser-button[data-parent="${obj.name}"]`), function() {
+                    let fileNavi = new FileNavigation({
+                        type: 'save',
+                        extensions: (obj.fileExtension==undefined?[]:[obj.fileExtension]),
+                        finish: function(filesPath, status, error) {
+                            let {file, path} = filesPath[0];
+    
+                            // set text
+                            $(pageThis.wrapSelector('#' + obj.name)).data('file', file);
+                            $(pageThis.wrapSelector('#' + obj.name)).val(path);
+                        }
+                    });
+                    fileNavi.open();
+                });
+                content = div;
+                break;
+            case 'file-open':
+                var input = $('<input/>').attr({
+                    type: 'text',
+                    class: 'vp-input input-single vp-state',
+                    id: obj.name,
+                    placeholder: (obj.placeholder==undefined?'Input Data':obj.placeholder),
+                    value: (obj.default==undefined?'':obj.default),
+                    title: (obj.help==undefined?'':obj.help),
+                    required: obj.required == true
+                });
+                // cell metadata test
+                if (value != undefined) {
+                    // set as saved value
+                    $(input).attr({
+                        'value': value
+                    });
+                }
+                var fileBrowerButton = $(`<div class="vp-file-browser-button" data-parent="${obj.name}"></div>`);
+                var div = $('<div></div>');
+                div.append(input);
+                div.append(fileBrowerButton);
+
+                $(document).off('click', pageThis.wrapSelector(`.vp-file-browser-button[data-parent="${obj.name}"]`));
+                $(document).on('click', pageThis.wrapSelector(`.vp-file-browser-button[data-parent="${obj.name}"]`), function() {
+                    let fileNavi = new FileNavigation({
+                        type: 'open',
+                        extensions: (obj.fileExtension==undefined?[]:[obj.fileExtension]),
+                        finish: function(filesPath, status, error) {
+                            let {file, path} = filesPath[0];
+    
+                            // set text
+                            $(pageThis.wrapSelector('#' + obj.name)).data('file', file);
+                            $(pageThis.wrapSelector('#' + obj.name)).val(path);
+                        }
+                    });
+                    fileNavi.open();
+                });
+                content = div;
+                break;
             case 'table':
-                // break;
-            case 'file':
                 // break;
             // default : input_single
             default:
@@ -615,8 +694,9 @@ define([
             case 'dtype':
                 value = $(pageThis.wrapSelector(parent + ' #'+obj.name)).val();
                 break;
+            case 'file-open':
+            case 'file-save':
             case 'table':
-            case 'file':
             case 'option_select':
             case 'option_suggest':
             case 'input_number':
@@ -656,7 +736,8 @@ define([
                     code = code.split(id).join('');
                 } else {
                     // text quotation
-                    if (v.type == 'text') {
+                    if (v.type == 'text' 
+                        || (v.component != undefined && (v.component.includes('file-open') || v.component.includes('file-save')))) {
                         val = "'"+val+"'";
                     } 
                     // code completion

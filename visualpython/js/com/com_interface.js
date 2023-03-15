@@ -32,7 +32,7 @@ define([
      * @param {boolean} exec true(default) / false
      * @param {int} sigNum 
      */
-    var insertCell = function(type, command, exec=true, sigText='') {
+    var insertCell = async function(type, command, exec=true, sigText='') {
         // Add signature
         if (type == 'code') {
             if (sigText !== '') {
@@ -106,6 +106,7 @@ define([
             // CHROME: TODO:
         } else if (vpConfig.extensionType === 'lab') {
             var { NotebookActions } = require('@jupyterlab/notebook');
+            var { signalToPromise } = require('@jupyterlab/coreutils');
             var notebookPanel = vpKernel.getLabNotebookPanel();
             if (notebookPanel && notebookPanel.sessionContext){
                 var sessionContext = notebookPanel.sessionContext;	
@@ -122,7 +123,6 @@ define([
                     notebookModel.cells.insert(newCellIndex, cellModel);				
                     notebook.activeCellIndex = newCellIndex;
             
-                    var cell = notebook.activeCell;
                     if (exec == true) {
                         try{
                             NotebookActions.run(notebook, sessionContext);
@@ -131,10 +131,7 @@ define([
                         }
                     }
                     // move to executed cell
-                    let activeCell = notebookPanel.content.activeCell;
-                    let activeCellTop = $(activeCell.node).position().top;
-                    // scroll to current cell top
-                    $(notebookPanel.layout.widgets[2].node).animate({scrollTop: activeCellTop},"fast");
+                    $(vpKernel.getLabNotebookPanel().content.activeCell.node)[0].scrollIntoView(true);
                 } else if (sessionType === 'console') {
                     var labConsole = notebookPanel.content;
                     var widget = labConsole.widgets[0];
@@ -156,7 +153,6 @@ define([
                 com_util.renderAlertModal('Visual Python only supports Notebook and Console type.  Please use appropriate type of file to use it.');
             }
         }
-
         com_util.renderSuccessMessage('Your code is successfully generated.');
     }
 
@@ -268,7 +264,6 @@ define([
                         var console = notebookPanel.content;
                         var cellModel = console.contentFactory.createCell(type, {});
                         cellModel.value.text = command;
-
                     } 
                 } else {
                     // No session found
@@ -287,8 +282,8 @@ define([
             // LAB: TODO:
             let activeCell = notebookPanel.content.activeCell;
             let activeCellTop = $(activeCell.node).position().top;
-            // scroll to current cell top
-            $(notebookPanel.layout.widgets[2].node).animate({scrollTop: activeCellTop},"fast");
+            // scroll to current cell
+            $(vpKernel.getLabNotebookPanel().content.activeCell.node)[0].scrollIntoView(true);
         }
 
         com_util.renderSuccessMessage('Your code is successfully generated.');

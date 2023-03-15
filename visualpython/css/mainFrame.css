@@ -16,12 +16,12 @@
     overflow: hidden;
     left: unset !important;
     object-fit: contain; 
-    color: var(--font-primary);
+    color: var(--vp-font-primary);
     font-family: AppleSDGothicNeo;
-    border: 1px solid var(--border-gray-color);
+    border: 1px solid var(--vp-border-gray-color);
     top: 110px;
     right: 0;
-    background: white;
+    background: var(--vp-background-color);
     z-index: 100;
 }
 #vp_wrapper.colab {
@@ -35,14 +35,14 @@
     overflow: hidden;
     left: unset !important;
     object-fit: contain; 
-    color: var(--font-primary);
+    color: var(--vp-font-primary);
     font-family: AppleSDGothicNeo;
-    border: 1px solid var(--border-gray-color);
+    border: 1px solid var(--vp-border-gray-color);
     /* CHROME: edited top position */
     top: 64px;
     /* top: 110px; */
     right: 0;
-    background: white;
+    background: var(--vp-background-color);
     z-index: 100;
 }
 /* CHROME: set default box-sizing for vp area */

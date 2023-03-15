@@ -11,8 +11,8 @@
 #=============================================================================
 # Replace Version
 #=============================================================================
-VP_ORG_VER=2.3.2
-VP_NEW_VER=2.3.3
+VP_ORG_VER=2.3.3
+VP_NEW_VER=2.3.4
 
 # update version info
 # update manifest version with new numbering for new version
@@ -28,7 +28,7 @@ mkdir -p ../dist/colab
 
 # build package
 # sudo apt-get install zip
-zip -r ../dist/colab/visualpython-v$VP_NEW_VER.$VP_COLAB_VER.zip * -x build.colab.sh
+zip -r ../dist/colab/visualpython-v$VP_NEW_VER.zip * -x build.colab.sh
 
 exit 0
 # End of file

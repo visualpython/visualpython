@@ -33,7 +33,7 @@ define([
             this.config.checkModules = ['pd'];
 
             this.state = {
-                loadType: 'load_boston',
+                loadType: 'load_iris',
                 userOption: '',
                 allocateTo: 'ldata',
                 ...this.state
@@ -42,7 +42,8 @@ define([
             this.mlConfig = ML_LIBRARIES;
             this.loadTypeList = {
                 'Load Data': [
-                    'load_boston', 'load_iris', 'load_diabetes', 'load_digits', 'load_linnerud', 'load_wine', 'load_breast_cancer'
+                    // 'load_boston', // `load_boston` has been removed from scikit-learn since version 1.2. 
+                    'load_iris', 'load_diabetes', 'load_digits', 'load_linnerud', 'load_wine', 'load_breast_cancer'
                 ],
                 'Create Data': [
                     'make_classification', 'make_blobs', 'make_circles', 'make_moons'

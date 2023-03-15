@@ -530,7 +530,8 @@ define([
         template() { 
             this.$pageDom = $(popupComponentHtml.replaceAll('${vp_base}', com_Const.BASE_PATH));
             // set title
-            this.$pageDom.find('.vp-popup-title').text(this.name);
+            // this.$pageDom.find('.vp-popup-title').text(this.category + ' > ' + this.name);
+            this.$pageDom.find('.vp-popup-title').html(`<span class="vp-popup-category">${this.category} > </span><span>${this.name}</span>`);
             // set body
             let bodyTemplate = this.templateForBody();
             // CHROME: check url keyword and replace it

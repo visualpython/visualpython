@@ -21,14 +21,14 @@ define([
      */
     var ML_LIBRARIES = {
         /** Data Sets */
-        'load_boston': {
-            name: 'load_boston',
-            import: 'from sklearn.datasets import load_boston',
-            code: 'load_boston()',
-            options: [
+        // 'load_boston': {
+        //     name: 'load_boston',
+        //     import: 'from sklearn.datasets import load_boston',
+        //     code: 'load_boston()',
+        //     options: [
 
-            ]
-        },
+        //     ]
+        // },
         'load_iris': {
             name: 'load_iris',
             import: 'from sklearn.datasets import load_iris',
@@ -648,6 +648,25 @@ define([
                 { name: 'n_components', component: ['input_number'], placeholder: 'None', usePair: true },
                 { name: 'learning_rate', component: ['input_number'], default: 200.0, usePair: true },
                 { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true }
+            ]
+        },
+        /** Save/Load */
+        'model_save': {
+            name: 'Save model',
+            import: 'import joblib',
+            code: "joblib.dump(${target}, ${savePath}${etc})",
+            options: [
+                { name: 'target', component: ['data_select'], placeholder: 'Select model'},
+                { name: 'savePath', component: ['file-save'], placeholder: 'Select path'}
+            ]
+        },
+        'model_load': {
+            name: 'Load model',
+            import: 'import joblib',
+            code: "${allocateTo} = joblib.load(${loadPath}${etc})",
+            options: [
+                { name: 'loadPath', component: ['file-open'], placeholder: 'Select path'},
+                { name: 'allocateTo', component: ['data_select'], placeholder: 'New variable to load'}
             ]
         }
     }

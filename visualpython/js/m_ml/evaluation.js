@@ -215,7 +215,7 @@ define([
 
         generateCode() {
             let codeCells = [
-                ...this.generateImportCode() // run import codes
+                // ...this.generateImportCode() // run import codes
             ];
             let code = new com_String();
             let { 

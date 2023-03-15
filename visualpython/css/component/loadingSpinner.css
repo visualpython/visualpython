@@ -16,7 +16,7 @@
     border-top: 1.1em solid #f6ad55;
     border-right: 1.1em solid #f6ad55;
     border-bottom: 1.1em solid #f6ad55;
-    border-left: 1.1em solid #ffffff;
+    border-left: 1.1em solid var(--vp-background-color);
     -webkit-transform: translateZ(0);
     -ms-transform: translateZ(0);
     transform: translateZ(0);

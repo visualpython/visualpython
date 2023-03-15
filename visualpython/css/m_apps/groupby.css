@@ -29,11 +29,18 @@
 }
 
 .vp-gb-adv-box {
-    border: 1px solid var(--border-gray-color);
+    border: 1px solid var(--vp-border-gray-color);
     padding: 10px;
     margin-top: 5px;
     height: 170px;
     overflow: auto;
+}
+.vp-gb-adv-head {
+
+}
+.vp-gb-adv-head label {
+    width: 160px;
+    font-weight: bold;
 }
 .vp-gb-adv-item {
     margin-bottom: 10px;
@@ -41,6 +48,18 @@
 .vp-gb-adv-method-box {
     position: relative;
     display: inline-block;
+}
+.vp-gb-method-selector {
+    display: grid;
+    grid-template-rows: 75px 10px 75px 10px 35px;
+}
+.vp-gb-method-box {
+    display: grid;
+    grid-template-columns: 85px 85px 85px 85px;
+}
+.vp-gb-method-user-box {
+    display: grid;
+    grid-template-columns: 85px 85px 85px 85px;
 }
 .vp-gb-adv-method {
     padding-right: 25px;
@@ -51,7 +70,7 @@
     right: 7px;
     top: 7px;
     cursor: pointer;
-    background: white;
+    background: var(--vp-background-color);
 }
 .vp-gb-adv-item-delete {
     display: inline-block;
