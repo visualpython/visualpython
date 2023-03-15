@@ -11,8 +11,8 @@
 #=============================================================================
 # Replace Version
 #=============================================================================
-VP_ORG_VER=2.3.2
-VP_NEW_VER=2.3.3
+VP_ORG_VER=2.3.3
+VP_NEW_VER=2.3.4
 
 # update version info
 # update manifest version with new numbering for new version
