@@ -978,11 +978,11 @@ define([
                     sessionId = panelId;
                 }
             }
-            var movingBlock = this._blockList[sessionId].boardList[startIdx];
+            var movingBlock = this._blockList[sessionId].blockList[startIdx];
             if (movingBlock) {
                 let groupBlocks = this.getGroupedBlocks(movingBlock);
-                this._blockList[sessionId].boardList.splice(startIdx, groupBlocks.length);
-                this._blockList[sessionId].boardList.splice(endIdx, 0, ...groupBlocks);
+                this._blockList[sessionId].blockList.splice(startIdx, groupBlocks.length);
+                this._blockList[sessionId].blockList.splice(endIdx, 0, ...groupBlocks);
                 // move tag
                 if (parentBlock != null) {
                     // set this movingBlock as child of parentBlock
