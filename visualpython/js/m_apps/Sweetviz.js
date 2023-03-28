@@ -100,7 +100,7 @@ define([
                 }
                 var title = $(that.wrapSelector('#vp_pfTitle')).val();
                 var filePath = $(that.wrapSelector('#vp_pfPath')).val();
-                var openBrowser = $(that.wrapSelector('#vp_pfOpenBrowser')).prop('checked');
+                // var openBrowser = $(that.wrapSelector('#vp_pfOpenBrowser')).prop('checked');
                 var code = new com_String();
                 switch(parseInt(type)) {
                     case PROFILE_TYPE.GENERATE:
@@ -110,14 +110,14 @@ define([
                         } else {
                             code.appendFormatLine("{0} = sweetviz.analyze({1})", saveas, df);
                         }
-                        // show html
-                        code.appendFormat("{0}.show_html(", saveas);
+                        // show notebook
+                        code.appendFormat("{0}.show_notebook(", saveas);
                         if (filePath && filePath != '') {
                             code.appendFormat("filepath='{0}'", filePath);
                         }
-                        if (openBrowser === false) {
-                            code.append(", open_browser=False");
-                        }
+                        // if (openBrowser === false) {
+                        //     code.append(", open_browser=False");
+                        // }
                         code.appendLine(')');
                         code.append(saveas);
                         break;
