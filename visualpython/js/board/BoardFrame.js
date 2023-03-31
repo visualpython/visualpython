@@ -25,18 +25,18 @@ define([
     './Block',
     './BlockMenu',
     './CodeView'
-], function(boardFrameHtml, boardFrameCss, com_Config, com_Const, com_String, com_util, com_interface, 
-            Component, FileNavigation, Block, BlockMenu, CodeView) {
-	'use strict';
+], function (boardFrameHtml, boardFrameCss, com_Config, com_Const, com_String, com_util, com_interface,
+    Component, FileNavigation, Block, BlockMenu, CodeView) {
+    'use strict';
     //========================================================================
     // Define Variable
     //========================================================================
     const BLOCK_PADDING = 20;
-	
+
     /**
      * BoardFrame
      */
-     class BoardFrame extends Component{
+    class BoardFrame extends Component {
         //========================================================================
         // Constructor
         //========================================================================
@@ -119,7 +119,20 @@ define([
             return true;
         }
 
-        addToBlockList(newVal, position=-1) {
+        //This method returns the block that is in the position of the block deleted
+        getBlock = (blockNumber) => {
+            if (blockNumber == this._blockList.default.blockList.length + 1) {
+                blockNumber = blockNumber - 1;
+            }
+            for (const obj in this._blockList.default.blockList) {
+                if (this._blockList.default.blockList[obj].state.blockNumber == blockNumber) {
+                    return this._blockList.default.blockList[obj];
+                }
+            }
+        }
+
+
+        addToBlockList(newVal, position = -1) {
             let sessionId = 'default';
             // LAB: get session id
             if (vpConfig.extensionType === 'lab') {
@@ -144,7 +157,7 @@ define([
                 } else {
                     this._blockList[sessionId] = {
                         title: '',
-                        blockList: [ newVal ]
+                        blockList: [newVal]
                     };
                 }
             }
@@ -200,7 +213,7 @@ define([
             } else {
                 this._blockList[sessionId] = {
                     title: newTitle,
-                    blockList: [ ]
+                    blockList: []
                 };
             }
         }
@@ -208,12 +221,12 @@ define([
         _bindEvent() {
             let that = this;
             // board menu toggle button
-            $(this.wrapSelector('.vp-board-header-button')).on('click', function(evt) {
+            $(this.wrapSelector('.vp-board-header-button')).on('click', function (evt) {
                 $(that.wrapSelector('.vp-board-header-button-inner')).toggle();
                 evt.stopPropagation();
             });
             // board menu button click
-            $(this.wrapSelector('.vp-board-header-button-inner ul li')).on('click', function() {
+            $(this.wrapSelector('.vp-board-header-button-inner ul li')).on('click', function () {
                 let menu = $(this).data('menu');
                 switch (menu) {
                     case 'new':
@@ -243,7 +256,7 @@ define([
                 }
             });
             // footer +code, +text button
-            $('.vp-board-footer-buttons button').on('click', function() {
+            $('.vp-board-footer-buttons button').on('click', function () {
                 let menu = $(this).data('menu');
                 if (menu === 'code') {
                     // code
@@ -264,14 +277,14 @@ define([
                 }
             });
             // change of boardTitle
-            $(this.wrapSelector('#vp_boardTitle')).on('change', function() {
+            $(this.wrapSelector('#vp_boardTitle')).on('change', function () {
                 let fileName = $(this).val();
                 that.setTitle(fileName); // LAB: session note title
                 that.tmpState.boardTitle = fileName;
                 that.tmpState.boardPath = null;
             });
             // click board - blur block
-            $(this.wrapSelector()).on('click', function() {
+            $(this.wrapSelector()).on('click', function () {
                 that.blurAllblock();
             });
         }
@@ -293,7 +306,7 @@ define([
                 revert: false,
                 cursor: 'move',
                 handle: '.vp-block-header',
-                helper: function(evt, currentItem) {
+                helper: function (evt, currentItem) {
                     let header = currentItem.data('name');
                     let tag = new com_String();
                     tag.appendLine('<div class="vp-sortable-helper" style="z-index: 199;">');
@@ -302,7 +315,7 @@ define([
                     return tag.toString();
                 },
                 placeholder: {
-                    element: function(currentItem) {
+                    element: function (currentItem) {
                         let block = currentItem.data('block');
                         let color = currentItem.data('color');
                         targetId = currentItem.data('menu');
@@ -321,13 +334,13 @@ define([
                             return tag.toString();
                         }
                     },
-                    update: function(container, p) {
+                    update: function (container, p) {
                         // container: container
                         // p: placeholder object
                         return;
                     }
                 },
-                start: function(evt, ui) {
+                start: function (evt, ui) {
                     position = ui.item.index();
                     targetBlock = that.blockList[position];
                     if (targetBlock) {
@@ -345,10 +358,10 @@ define([
                         ui.item.hide();
                     }
                 },
-                sort: function(evt, ui) {
+                sort: function (evt, ui) {
                     let tmpPos = ui.placeholder.index();
-                    let currCursorX = evt.clientX; 
-                    let currCursorY = evt.clientY; 
+                    let currCursorX = evt.clientX;
+                    let currCursorY = evt.clientY;
 
                     if (position < tmpPos && groupedBlocks) {
                         tmpPos += (1 - groupedBlocks.length);
@@ -357,26 +370,26 @@ define([
                     // sorting is not allowed for sub blocks (elif, else, except, finally)
                     if (revert) {
                         ui.placeholder.removeClass('vp-block-group');
-                        ui.placeholder.insertAfter($('.vp-block:not(.vp-draggable-helper):not(.vp-sortable-placeholder):nth('+(position - 1)+')'));
+                        ui.placeholder.insertAfter($('.vp-block:not(.vp-draggable-helper):not(.vp-sortable-placeholder):nth(' + (position - 1) + ')'));
                         return;
                     }
 
-                    let befBlockTag = $('.vp-block:not(.vp-draggable-helper):not(.vp-sortable-placeholder):nth('+(tmpPos - 1)+')');
+                    let befBlockTag = $('.vp-block:not(.vp-draggable-helper):not(.vp-sortable-placeholder):nth(' + (tmpPos - 1) + ')');
                     if (befBlockTag && befBlockTag.length > 0) {
                         let befBlock = befBlockTag.data('block');
                         let befGroupBlock = befBlock.getGroupBlock();
                         let rect = befBlockTag[0].getBoundingClientRect();
                         let befStart = rect.y;
                         let befRange = rect.y + rect.height;
-                        let befGroupRange = befRange + (rect.height/2);
+                        let befGroupRange = befRange + (rect.height / 2);
                         let befDepth = befBlock.getChildDepth();
-                        
+
                         let isMarkdown = false; // if befBlock or thisBlock is markdown
                         // check if thisBlock is markdown block or befBlock is markdown block
                         if (targetId == 'apps_markdown' || (befBlock && befBlock.id == 'apps_markdown')) {
                             isMarkdown = true;
                         }
-                        
+
                         if (isMarkdown) {
                             let befGroupedBlocks = befGroupBlock.getGroupedBlocks();
                             let befGroupLastBlock = befGroupedBlocks[befGroupedBlocks.length - 1]; // last block of previous group
@@ -393,7 +406,7 @@ define([
                                 parentBlock = befBlock;
                                 depth = befDepth;
                                 ui.placeholder.removeClass('vp-block-group');
-                                ui.placeholder.css({ 'padding-left': depth*BLOCK_PADDING + 'px'});
+                                ui.placeholder.css({ 'padding-left': depth * BLOCK_PADDING + 'px' });
                                 return;
                             }
                             if (befRange <= currCursorY && currCursorY < befGroupRange) {
@@ -401,7 +414,7 @@ define([
                                 parentBlock = befGroupBlock;
                                 depth = befGroupBlock.getChildDepth();
                                 ui.placeholder.removeClass('vp-block-group');
-                                ui.placeholder.css({ 'padding-left': depth*BLOCK_PADDING + 'px'});
+                                ui.placeholder.css({ 'padding-left': depth * BLOCK_PADDING + 'px' });
                                 return;
                             }
                         }
@@ -410,11 +423,11 @@ define([
                         if (!ui.placeholder.hasClass('vp-block-group')) {
                             ui.placeholder.addClass('vp-block-group');
                         }
-                        ui.placeholder.css({ 'padding-left': 0});
+                        ui.placeholder.css({ 'padding-left': 0 });
                         depth = 0;
                     }
                 },
-                stop: function(evt, ui) {
+                stop: function (evt, ui) {
                     var spos = position;
                     var epos = ui.item.index();
 
@@ -481,7 +494,7 @@ define([
 
             if (vpConfig.extensionType === 'lab') {
                 let that = this;
-                vpLab.shell._currentChanged.connect(function(sender, value) {
+                vpLab.shell._currentChanged.connect(function (sender, value) {
                     // if lab tab changed, reset title and reload board
                     that.reloadBlockList();
                 });
@@ -527,7 +540,7 @@ define([
 
         renderInfo() {
             let num = 1;
-            $('.vp-block.vp-block-group').each(function(i, block) {
+            $('.vp-block.vp-block-group').each(function (i, block) {
                 let numInfo = $(block).find('.vp-block-num-info');
                 $(numInfo).html(num++);
             });
@@ -544,7 +557,7 @@ define([
             // save as metadata
             vpConfig.setMetadata({ vp_note_display: true, vp_note_width: boardWidth });
         }
-        
+
         hide() {
             // hide note area
             $(this.wrapSelector()).hide();
@@ -558,7 +571,7 @@ define([
             // save as metadata
             vpConfig.setMetadata({ vp_note_display: false, vp_note_width: boardWidth });
         }
-        
+
         showLoadingBar() {
             $(this.wrapSelector('#vp_boardLoading')).show();
         }
@@ -584,12 +597,12 @@ define([
             if (this.checkNote()) {
                 // render update modal
                 com_util.renderModal({
-                    title: 'Unsaved changes', 
+                    title: 'Unsaved changes',
                     message: 'Do you want to save?',
                     buttons: ['Cancel', 'No', 'Save'],
                     defaultButtonIdx: 0,
                     buttonClass: ['cancel', '', 'activated'],
-                    finish: function(clickedBtnIdx) {
+                    finish: function (clickedBtnIdx) {
                         switch (clickedBtnIdx) {
                             case 0:
                                 // cancel - do nothing
@@ -600,7 +613,7 @@ define([
                                 break;
                             case 2:
                                 // save
-                                that.saveAsNote(function() {
+                                that.saveAsNote(function () {
                                     that.createNewNote();
                                 });
                                 break;
@@ -633,73 +646,73 @@ define([
 
             let that = this;
             // open file navigation
-            let fileNavi = new FileNavigation({ 
+            let fileNavi = new FileNavigation({
                 type: 'open',
                 extensions: ['vp'],
-                finish: function(filesPath, status, error) {
+                finish: function (filesPath, status, error) {
                     // clear board before open note
                     that.clearBoard();
-                    
+
                     let vpFilePath = filesPath[0].path;
                     let vpFileName = filesPath[0].file;
                     // read file
                     if (vpConfig.extensionType === 'lab') {
                         // LAB: read file using python open
-                        vpKernel.readFile(vpFilePath).then(function(resultObj) {
+                        vpKernel.readFile(vpFilePath).then(function (resultObj) {
                             try {
                                 var jsonList = JSON.parse(resultObj.result);
                                 // load blocks
                                 that.jsonToBlock(jsonList);
-    
+
                                 var indexVp = vpFileName.indexOf('.vp');
-                                var saveFileName = vpFileName.slice(0,indexVp);
-                
+                                var saveFileName = vpFileName.slice(0, indexVp);
+
                                 // show title of board and path
                                 $('#vp_boardTitle').val(saveFileName);
                                 that.setTitle(saveFileName); // LAB: session note title
                                 that.tmpState.boardTitle = saveFileName;
                                 that.tmpState.boardPath = vpFilePath;
-    
+
                                 com_util.renderSuccessMessage('Successfully opened file. (' + vpFileName + ')');
                             } catch (ex) {
                                 com_util.renderAlertModal('Not applicable file contents with vp format! (JSON)');
                             }
-                        }).catch(function(err) {
+                        }).catch(function (err) {
                             vpLog.display(VP_LOG_TYPE.ERROR, err);
                         })
                     } else {
-                        fetch(vpFilePath).then(function(file) {
+                        fetch(vpFilePath).then(function (file) {
                             if (file.status != 200) {
-                                com_util.renderAlertModal('The file format is not valid. (file: '+file+')');
+                                com_util.renderAlertModal('The file format is not valid. (file: ' + file + ')');
                                 return;
                             }
-                    
-                            file.text().then(function(data) {
+
+                            file.text().then(function (data) {
                                 // var parsedData = decodeURIComponent(data);
                                 try {
                                     var jsonList = JSON.parse(data);
                                     // load blocks
                                     that.jsonToBlock(jsonList);
-        
+
                                     var indexVp = vpFileName.indexOf('.vp');
-                                    var saveFileName = vpFileName.slice(0,indexVp);
-                    
+                                    var saveFileName = vpFileName.slice(0, indexVp);
+
                                     // show title of board and path
                                     $('#vp_boardTitle').val(saveFileName);
                                     that.setTitle(saveFileName); // LAB: session note title
                                     that.tmpState.boardTitle = saveFileName;
                                     that.tmpState.boardPath = vpFilePath;
-        
+
                                     com_util.renderSuccessMessage('Successfully opened file. (' + vpFileName + ')');
                                 } catch (ex) {
                                     com_util.renderAlertModal('Not applicable file contents with vp format! (JSON)');
                                 }
                             });
-                        }).catch(function(err) {
+                        }).catch(function (err) {
                             vpLog.display(VP_LOG_TYPE.ERROR, err);
                         });
                     }
-                    
+
                 }
             });
             fileNavi.open();
@@ -724,11 +737,11 @@ define([
         saveAsNote(callback) {
             let that = this;
             // save file navigation
-            let fileNavi = new FileNavigation({ 
+            let fileNavi = new FileNavigation({
                 type: 'save',
                 fileName: this.tmpState.boardTitle,
                 extensions: ['vp'],
-                finish: function(filesPath, status, error) {
+                finish: function (filesPath, status, error) {
                     let boardTitle = filesPath[0].file;
                     let boardPath = filesPath[0].path;
 
@@ -753,7 +766,7 @@ define([
             });
             fileNavi.open();
         }
-        runBlock(block, execute=true, addcell=true) {
+        runBlock(block, execute = true, addcell = true) {
             if (block.id == 'apps_markdown') {
                 // if markdown, run single
                 return block.popup.run(execute, addcell);
@@ -763,7 +776,7 @@ define([
             let code = new com_String();
             let indentCount = this.state.indentCount;
             groupedBlocks.forEach((groupBlock, idx) => {
-                let prevNewLine = idx > 0?'\n':'';
+                let prevNewLine = idx > 0 ? '\n' : '';
                 let indent = ' '.repeat((groupBlock.depth - rootBlockDepth) * indentCount);
                 let thisBlockCode = groupBlock.popup.generateCode();
                 if (Array.isArray(thisBlockCode)) {
@@ -811,7 +824,7 @@ define([
                         groupCode = '#' + groupCode.replaceAll('\n', '\n# ');
                     }
                     overallCode.appendFormatLine('# Visual Python: {0} > {1}', block.name, block.name,
-                        block.id == 'apps_markdown'? ' - Markdown':'');
+                        block.id == 'apps_markdown' ? ' - Markdown' : '');
                     overallCode.append(groupCode);
                 }
             });
@@ -819,7 +832,7 @@ define([
         }
         viewCode() {
             let overallCode = this.getOverallCode();
-            let codeview = new CodeView({ 
+            let codeview = new CodeView({
                 codeview: overallCode,
                 config: {
                     id: 'boardCodeview',
@@ -836,7 +849,7 @@ define([
                 type: 'save',
                 fileName: this.tmpState.boardTitle,
                 extensions: ['py'],
-                finish: function(filesPath, status, error) {
+                finish: function (filesPath, status, error) {
                     let fileName = filesPath[0].file;
                     let filePath = filesPath[0].path;
 
@@ -868,12 +881,12 @@ define([
             if (this.checkNote()) {
                 // render update modal
                 com_util.renderModal({
-                    title: 'Unsaved changes', 
+                    title: 'Unsaved changes',
                     message: 'Do you want to save?',
                     buttons: ['Cancel', "No", 'Save'],
                     defaultButtonIdx: 0,
                     buttonClass: ['cancel', '', 'activated'],
-                    finish: function(clickedBtnIdx) {
+                    finish: function (clickedBtnIdx) {
                         switch (clickedBtnIdx) {
                             case 0:
                                 // cancel - do nothing
@@ -884,7 +897,7 @@ define([
                                 break;
                             case 2:
                                 // save
-                                that.saveAsNote(function() {
+                                that.saveAsNote(function () {
                                     that.clearBoard();
                                 });
                                 break;
@@ -922,7 +935,7 @@ define([
             return createdBlock;
         }
 
-        addBlock(option, position=-1, blockState={}) {
+        addBlock(option, position = -1, blockState = {}) {
             let block = new Block(this, { task: option, ...blockState });
             option.setTaskItem(block);
             if (position < 0) {
@@ -962,6 +975,11 @@ define([
             });
             // render block list  
             this.reloadBlockList();
+            //This part of code is to fix the position of the scrollbar to the deleted element
+            if(this._blockList.default.blockList.length!=0){
+                let tempBlock = this.getBlock(blockToRemove.state.blockNumber);
+                this.scrollToBlock(tempBlock);
+            }
         }
 
         /**
@@ -969,7 +987,7 @@ define([
          * @param {int} startIdx 
          * @param {int} endIdx 
          */
-        moveBlock(startIdx, endIdx, parentBlock=null) {
+        moveBlock(startIdx, endIdx, parentBlock = null) {
             let sessionId = 'default';
             // LAB: get session id
             if (vpConfig.extensionType === 'lab') {
@@ -1006,7 +1024,7 @@ define([
                 groupedBlockStateList.push({
                     blockType: 'block',
                     menuId: menuId,
-                    menuState: { 
+                    menuState: {
                         taskState: JSON.parse(JSON.stringify(popupState)),
                         blockState: {
                             isGroup: groupBlock.isGroup,
@@ -1069,7 +1087,7 @@ define([
         }
 
         scrollToBlock(block) {
-            $(this.wrapSelector('#vp_boardBody')).animate({scrollTop: $(block.getTag()).position().top}, "fast");
+            $(this.wrapSelector('#vp_boardBody')).animate({ scrollTop: $(block.getTag()).position().top }, "fast");
         }
         //========================================================================
         // Block sub block control
@@ -1078,8 +1096,8 @@ define([
             let groupedBlocks = block.getGroupedBlocks();
             let elseBlock = groupedBlocks.filter(obj => (obj.id === 'lgCtrl_else' && obj.depth === block.depth));
             let finallyBlock = groupedBlocks.find(obj => (obj.id === 'lgCtrl_finally' && obj.depth === block.depth));
-            block.state.elseFlag = elseBlock!=undefined?true:false;
-            block.state.finallyFlag = finallyBlock!=undefined?true:false;
+            block.state.elseFlag = elseBlock != undefined ? true : false;
+            block.state.finallyFlag = finallyBlock != undefined ? true : false;
         }
         toggleElseBlock(block) {
             const blockIdx = this.blockList.indexOf(block);
@@ -1099,14 +1117,14 @@ define([
                     isGroup: false,
                     depth: block.depth
                 }
-                this.prop.parent.createPopup([{ 
-                    blockType: 'block', 
-                    menuId: 'lgCtrl_else', 
-                    menuState: { blockState: blockState }, 
+                this.prop.parent.createPopup([{
+                    blockType: 'block',
+                    menuId: 'lgCtrl_else',
+                    menuState: { blockState: blockState },
                     position: position
                 }]);
                 block.state.elseFlag = true;
-                setTimeout(function() {
+                setTimeout(function () {
                     block.focusItem();
                 }, 100);
             } else {
@@ -1116,7 +1134,7 @@ define([
                     this.removeBlock(elseBlock[0]);
                 }
                 // focus it
-                setTimeout(function() {
+                setTimeout(function () {
                     block.focusItem();
                 }, 100);
             }
@@ -1126,7 +1144,7 @@ define([
             const blockIdx = this.blockList.indexOf(block);
             let groupedBlocks = block.getGroupedBlocks();
             let position = blockIdx + groupedBlocks.length; // add position
-            
+
             // check if it has finally block
             let finallyFlag = block.state.finallyFlag;
             if (!finallyFlag) {
@@ -1136,13 +1154,13 @@ define([
                     depth: block.depth
                 }
                 this.prop.parent.createPopup([{
-                    blockType: 'block', 
-                    menuId: 'lgCtrl_finally', 
-                    menuState: { blockState: blockState }, 
+                    blockType: 'block',
+                    menuId: 'lgCtrl_finally',
+                    menuState: { blockState: blockState },
                     position: position
                 }]);
                 block.state.finallyFlag = true;
-                setTimeout(function() {
+                setTimeout(function () {
                     block.focusItem();
                 }, 100);
             } else {
@@ -1152,7 +1170,7 @@ define([
                     this.removeBlock(finallyBlock);
                 }
                 // focus it
-                setTimeout(function() {
+                setTimeout(function () {
                     block.focusItem();
                 }, 100);
             }
@@ -1174,12 +1192,12 @@ define([
                 depth: block.depth
             }
             this.prop.parent.createPopup([{
-                blockType: 'block', 
-                menuId: 'lgCtrl_elif', 
+                blockType: 'block',
+                menuId: 'lgCtrl_elif',
                 menuState: { blockState: blockState },
                 position: position
             }]);
-            setTimeout(function() {
+            setTimeout(function () {
                 block.focusItem();
             }, 100);
         }
@@ -1206,12 +1224,12 @@ define([
                 depth: block.depth
             }
             this.prop.parent.createPopup([{
-                blockType: 'block', 
-                menuId: 'lgCtrl_except', 
+                blockType: 'block',
+                menuId: 'lgCtrl_except',
                 menuState: { blockState: blockState },
                 position: position
             }]);
-            setTimeout(function() {
+            setTimeout(function () {
                 block.focusItem();
             }, 100);
         }
@@ -1244,10 +1262,10 @@ define([
                     }
                 };
                 blockList.push({
-                    blockType: 'block', 
-                    menuId: taskId, 
-                    menuState: state, 
-                    position: idx, 
+                    blockType: 'block',
+                    menuId: taskId,
+                    menuState: state,
+                    position: idx,
                     createChild: false
                 });
             });
