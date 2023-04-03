@@ -3,8 +3,10 @@ define([
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
-    'vp_base/js/com/component/SuggestInput'
-], function(insCss, com_Const, com_String, com_util, SuggestInput) {
+    'vp_base/js/com/component/SuggestInput',
+    'vp_base/data/m_library/instanceLibrary',
+    'vp_base/js/com/component/LibraryComponent'
+], function(insCss, com_Const, com_String, com_util, SuggestInput, instanceLibrary, LibraryComponent) {
 
 
     // temporary const
@@ -35,12 +37,17 @@ define([
      * @constructor
      */
     class InstanceEditor {
-        constructor(pageThis, targetId, containerId = 'vp_wrapper', popup = false) {
+        constructor(pageThis, targetId, containerId = 'vp_wrapper', config = {}) {
             this.pageThis = pageThis;
             this.targetId = targetId;
             this.uuid = 'u' + com_util.getUUID();
             this.containerId = containerId;
-            this.popup = popup;
+            this.config = {
+                popup: false,
+                showAlert: false, // show alert by modal or not
+                targetType: 'instance', // instance / outside
+                ...config
+            }
 
             this.state = {
                 code: '',
@@ -70,7 +77,6 @@ define([
             return this.state.list;
         }
         init() {
-
             this.reload();
         }
         wrapSelector(selector = '') {
@@ -166,6 +172,7 @@ define([
             tag.appendFormatLine('<div class="{0}">', VP_INS_PARAMETER_BOX);
             tag.appendFormatLine('<input type="text" class="{0}" placeholder="{1}"/>',
                 VP_INS_PARAMETER, 'input parameter');
+            tag.appendFormatLine('<button class="vp-button disabled {0}">Option</button>', 'vp-ins-opt-button');
             tag.appendLine('</div>'); // VP_INS_PARAMETER
 
             tag.appendLine('</div>'); // VP_INS_BOX END
@@ -279,6 +286,14 @@ define([
                     }
                 }
             });
+
+            // open option popup
+            $(document).on('click', this.wrapSelector('.vp-ins-opt-button:not(.disabled)'), function(event) {
+                // TODO: pdIdt_head to general
+                if (that.optionPopup) {
+                    that.optionPopup.open();
+                }
+            });
         }
         reload(callback = undefined) {
             var that = this;
@@ -292,8 +307,15 @@ define([
 
             if (variable == '') {
                 if (!this.isFirstPage) {
-                    this.renderFirstPage();
-                    this.isFirstPage = true;
+                    // if it's outside mode
+                    if (this.config.targetType === 'outside') {
+                        this.isFirstPage = false;
+                        this.renderPage();
+                        return;
+                    } else {
+                        this.renderFirstPage();
+                        this.isFirstPage = true;
+                    }
                 }
             } else {
                 this.isFirstPage = false;
@@ -408,8 +430,44 @@ define([
 
                     // get parameter
                     var splitList = variable.split('.');
+                    var hasOption = false;
+
                     if (splitList && splitList.length > 0) {
                         var lastSplit = splitList[splitList.length - 1];
+                        // get target code
+                        var methodName = lastSplit.match(/[a-zA-Z_]+/i)[0];
+                        var targetCode = splitList.slice(0, splitList.length - 1).join('.');
+                        if ((varType in instanceLibrary.INSTANCE_MATCHING_LIBRARY) && (methodName in instanceLibrary.INSTANCE_MATCHING_LIBRARY[varType])) {
+                            // get target library
+                            var targetLib = instanceLibrary.INSTANCE_MATCHING_LIBRARY[varType][methodName];
+                            var targetId = targetLib.target;
+                            that.optionPopup = new LibraryComponent({ 
+                                [targetId]: targetCode,
+                                config: { 
+                                    name: methodName, category: 'Instance',
+                                    saveOnly: true,
+                                    id: targetLib.id
+                                } 
+                            },
+                            { 
+                                pageThis: that,
+                                useInputVariable: true,
+                                targetSelector: that.pageThis.wrapSelector('#' + that.targetId),
+                                finish: function(code) {
+                                    // TODO: save state
+
+                                    $(that.pageThis.wrapSelector('#' + that.targetId)).trigger({
+                                        type: "instance_editor_replaced",
+                                        originCode: that.state.code,
+                                        newCode: code
+                                    });
+                                }
+                            });
+                            hasOption = true;
+                        } else {
+                            that.optionPopup = null;
+                        }
+                        
                         // if bracket is at the end of code
                         var matchList = lastSplit.match(/\(.*?\)$/gi);
                         if (matchList != null && matchList.length > 0) {
@@ -418,12 +476,27 @@ define([
                             var parameter = lastBracket.substr(1, lastBracket.length - 2);
                             $(that.wrapSelector('.' + VP_INS_PARAMETER)).val(parameter);
                             $(that.wrapSelector('.' + VP_INS_PARAMETER)).show();
+                            if (hasOption) {
+                                if ($(that.wrapSelector('.vp-ins-opt-button')).hasClass('disabled')) {
+                                    $(that.wrapSelector('.vp-ins-opt-button')).removeClass('disabled');
+                                }
+                            } else {
+                                if (!$(that.wrapSelector('.vp-ins-opt-button')).hasClass('disabled')) {
+                                    $(that.wrapSelector('.vp-ins-opt-button')).addClass('disabled');
+                                }
+                            }
                         } else {
                             $(that.wrapSelector('.' + VP_INS_PARAMETER)).val('');
                             $(that.wrapSelector('.' + VP_INS_PARAMETER)).hide();
+                            if (!$(that.wrapSelector('.vp-ins-opt-button')).hasClass('disabled')) {
+                                $(that.wrapSelector('.vp-ins-opt-button')).addClass('disabled');
+                            }
                         }
                     } else {
                         $(that.wrapSelector('.' + VP_INS_PARAMETER)).hide();
+                        if (!$(that.wrapSelector('.vp-ins-opt-button')).hasClass('disabled')) {
+                            $(that.wrapSelector('.vp-ins-opt-button')).addClass('disabled');
+                        }
                     }
                 }
 
@@ -434,8 +507,12 @@ define([
             }).catch(function(resultObj) {
                 let { result } = resultObj;
                 // show alert if this is visible
-                if (that.pageThis.isHidden() == false) {
+                if (that.pageThis.isHidden() == false && that.config.showAlert == true) {
                     com_util.renderAlertModal(result.ename + ': ' + result.evalue);
+                }
+                // hide
+                if (!$(that.wrapSelector('.vp-ins-opt-button')).hasClass('disabled')) {
+                    $(that.wrapSelector('.vp-ins-opt-button')).addClass('disabled');
                 }
                 // callback
                 if (callback) {

@@ -1,16 +1,30 @@
 <body>
-    <div class="vp-instance-base cm-s-ipython">
-        <label for="vp_instanceVariable" class="vp-instance-label variable">Variable</label>
-        <div class="vp-instance-box variable">
-            <textarea id="vp_instanceVariable" name="code"></textarea>
-        </div>
-        <div class="vp-ins-container variable" id="vp_variableInsEditContainer">
-            <!-- vpInstanceEditor -->
-        </div>
+    <div class="vp-instance-body">
+        <div class="vp-instance-left-box vp-instance-base cm-s-ipython">
+            <div class="vp-instance-target-box vp-grid-col-110">
+                <label for="vp_instanceTarget" class="vp-instance-label variable">Target variable</label>
+                <input type="text" id="vp_instanceTarget" placeholder="Select variable"/>
+            </div>
+            <div class="vp-instance-box variable">
+                <textarea id="vp_instanceVariable" name="code"></textarea>
+            </div>
+            <div class="vp-ins-container variable" id="vp_variableInsEditContainer">
+                <!-- vpInstanceEditor -->
+            </div>
 
-        <hr style="margin: 0px;"/>
+            <hr style="margin: 0px;"/>
 
-        <label for="vp_instanceAllocate" class="vp-instance-label allocate">Allocate to</label>
-        <input type="text" id="vp_instanceAllocate" placeholder="Variable name"/>
+            <label for="vp_instanceAllocate" class="vp-instance-label allocate">Allocate to</label>
+            <input type="text" id="vp_instanceAllocate" placeholder="Variable name"/>
+        </div>
+        <div class="vp-instance-right-box">
+            <div class="vp-bold">
+                <span class="vp-instance-preview-title">Instance Preview</span>
+            </div>
+            <div class="vp-instance-preview-box vp-grid-border-box">
+                <div id="instancePreview" class="vp-instance-preview-content rendered_html vp-center"></div>
+            </div>
+        </div>
     </div>
+    
 </body>

@@ -89,10 +89,13 @@ define([
 
         _init() {
             this.eventTarget = '#vp_wrapper';
-            this.id = this.state.config.id;
-            this.name = this.state.config.name;
-            this.path = this.state.config.path;
-            this.category = this.state.config.category;
+            var { config, ...state } = this.state;
+            this.state = state;
+            var { id, name, path, category, ...restConfig } = config;
+            this.id = id;
+            this.name = name;
+            this.path = path;
+            this.category = category;
             
 
             this.config = {
@@ -110,8 +113,9 @@ define([
                 footer: true,
                 position: { right: 10, top: 120 },
                 size: { width: 400, height: 550 },
-                saveOnly: false,
+                saveOnly: false, // apply mode
                 checkModules: [] // module aliases or function names
+                , ...restConfig
             };
 
             // check BoardFrame width and set initial position of popup
@@ -895,6 +899,10 @@ define([
         }
 
         save() {
+            if (this.prop.finish && typeof this.prop.finish == 'function') {
+                var code = this.generateCode();
+                this.prop.finish(code);
+            }
             $(this.eventTarget).trigger({
                 type: 'apply_option_page', 
                 blockType: 'block',

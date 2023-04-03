@@ -899,11 +899,11 @@ define([
 
         getCode(replaceDict={}) {
             let code = new com_String();
-            if (this.state.config.import != undefined) {
-                code.appendLine(this.state.config.import);
+            if (this.config.import != undefined) {
+                code.appendLine(this.config.import);
                 code.appendLine();
             }
-            let modelCode = com_generator.vp_codeGenerator(this.pageThis, this.state.config, this.pageThis.state);
+            let modelCode = com_generator.vp_codeGenerator(this.pageThis, this.config, this.pageThis.state);
             Object.keys(replaceDict).forEach(key => {
                 modelCode = modelCode.replace(key, replaceDict[key]);
             });

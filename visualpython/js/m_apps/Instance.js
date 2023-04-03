@@ -16,11 +16,12 @@ define([
     __VP_TEXT_LOADER__('vp_base/html/m_apps/instance.html'), // INTEGRATION: unified version of text loader
     __VP_CSS_LOADER__('vp_base/css/m_apps/instance'), // INTEGRATION: unified version of css loader
     'vp_base/js/com/com_String',
+    'vp_base/js/com/com_util',
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/InstanceEditor',
     'vp_base/js/com/component/DataSelector',
     'vp_base/js/m_apps/Subset'
-], function(insHtml, insCss, com_String, PopupComponent, InstanceEditor, DataSelector, Subset) {
+], function(insHtml, insCss, com_String, com_util, PopupComponent, InstanceEditor, DataSelector, Subset) {
 
     const MAX_STACK_SIZE = 20;
 
@@ -32,10 +33,11 @@ define([
             super._init();
             /** Write codes executed before rendering */
             this.config.dataview = false;
-            this.config.sizeLevel = 1;
+            this.config.size = { width: 1064, height: 550 };
             this.config.checkModules = ['pd'];
 
             this.state = {
+                target: '',
                 vp_instanceVariable: '',
                 variable: {
                     stack: []
@@ -54,6 +56,12 @@ define([
         _bindEvent() {
             super._bindEvent();
             let that = this;
+            // target change
+            $(this.wrapSelector('#vp_instanceTarget')).on('change', function(event) {
+                let value = $(this).val();
+                that.updateValue(value);
+                that.reloadInsEditor('variable');
+            });
             // clear
             $(this.wrapSelector('#vp_instanceClear')).on('click', function(event) {
                 that.addStack();
@@ -177,8 +185,25 @@ define([
         }
 
         templateForBody() {
+            let that = this;
             let page = $(insHtml);
             $(page).find('#vp_instanceVariable').val(this.state.vp_instanceVariable);
+
+            let targetSelector = new DataSelector({
+                pageThis: this, id: 'vp_instanceTarget', placeholder: 'Select variable',
+                allowDataType: [
+                    'DataFrame', 'Series', 'dict', 'list', 'int'
+                ],
+                finish: function(value, dtype) {
+                    $(that.wrapSelector('#vp_instanceTarget')).trigger({type: 'change', value: value});
+                },
+                select: function(value, dtype) {
+                    $(that.wrapSelector('#vp_instanceTarget')).trigger({type: 'change', value: value});
+                    // that.updateValue(value);
+                    // that.reloadInsEditor('variable');
+                }
+            });
+            $(page).find('#vp_instanceTarget').replaceWith(targetSelector.toTagString());
 
             let allocateSelector = new DataSelector({
                 pageThis: this, id: 'vp_instanceAllocate', placeholder: 'Variable name'
@@ -195,7 +220,7 @@ define([
             let that = this;
 
             // vpSubsetEditor
-            this.subsetEditor = new Subset({ pandasObject: '', config: { name: 'Subset' } }, 
+            this.subsetEditor = new Subset({ pandasObject: '', config: { name: 'Subset', category: this.name } }, 
                 { 
                     useInputVariable: true,
                     targetSelector: this.wrapSelector('#vp_instanceVariable'),
@@ -211,7 +236,7 @@ define([
             this.ALLOW_SUBSET_TYPES = this.subsetEditor.getAllowSubsetTypes();
 
             // vpInstanceEditor
-            this.insEditor = new InstanceEditor(this, "vp_instanceVariable", 'vp_variableInsEditContainer');
+            this.insEditor = new InstanceEditor(this, "vp_instanceVariable", 'vp_variableInsEditContainer', { targetType: 'outside' });
 
             this.insEditor.show();
 
@@ -268,6 +293,56 @@ define([
                 cm.setCursor({ line: 0, ch: value.length});
             }
             this.state.vp_instanceVariable = value;
+
+            // show preview
+            this.loadPreview(value);
+        }
+
+        loadPreview(code) {
+            let that = this;
+            if (!code || code === '') {
+                $(that.wrapSelector('#instancePreview')).html('');
+                return;
+            }
+            // show variable information on clicking variable
+            vpKernel.execute(code).then(function(resultObj) {
+                let { result, type, msg } = resultObj;
+                if (msg.content.data) {
+                    var textResult = msg.content.data["text/plain"];
+                    var htmlResult = msg.content.data["text/html"];
+                    var imgResult = msg.content.data["image/png"];
+                    
+                    $(that.wrapSelector('#instancePreview')).html('');
+                    if (htmlResult != undefined) {
+                        // 1. HTML tag
+                        $(that.wrapSelector('#instancePreview')).append(htmlResult);
+                    } else if (imgResult != undefined) {
+                        // 2. Image data (base64)
+                        var imgTag = '<img src="data:image/png;base64, ' + imgResult + '">';
+                        $(that.wrapSelector('#instancePreview')).append(imgTag);
+                    } else if (textResult != undefined) {
+                        // 3. Text data
+                        var preTag = document.createElement('pre');
+                        $(preTag).text(textResult);
+                        $(that.wrapSelector('#instancePreview')).html(preTag);
+                    }
+                } else {
+                    var errorContent = '';
+                    if (msg.content.ename) {
+                        errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue, msg.content.detail);
+                    }
+                    $(that.wrapSelector('#instancePreview')).html(errorContent);
+                    vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
+                }
+            }).catch(function(resultObj) {
+                let { msg } = resultObj;
+                var errorContent = '';
+                if (msg.content.ename) {
+                    errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue, msg.content.detail);
+                }
+                $(that.wrapSelector('#instancePreview')).html(errorContent);
+                vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
+            });
         }
 
         addStack() {
