@@ -78,8 +78,12 @@
     content: '(Empty)';
     color: var(--vp-gray-color);
 }
-.vp-ins-parameter {
-    width: 100% !important;
+div.vp-ins-parameter-box input.vp-ins-parameter {
+    width: calc(100% - 70px);
+}
+button.vp-ins-opt-button {
+    width: 65px;
+    min-width: 65px;
 }
 .vp-create-var-box {
     position: relative;

@@ -3063,6 +3063,20 @@
                             "color": 4,
                             "icon": "apps/apps_profiling.svg"
                         }
+                    },
+                    {
+                        "id"   : "apps_pandasOption",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Pandas Option",
+                        "tag"  : "PANDAS OPTION,APPS",
+                        "path" : "visualpython - apps - pandasoption",
+                        "desc" : "Pandas options",
+                        "file" : "m_apps/PandasOption",
+                        "apps" : {
+                            "color": 4,
+                            "icon": "apps/apps_pandasOption.svg"
+                        }
                     }
                 ]
             },

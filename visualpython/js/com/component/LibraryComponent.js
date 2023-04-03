@@ -31,7 +31,7 @@ define([
             this.config.dataview = false;
             this.config.sizeLevel = 1;
             
-            this.packageId = this.state.config.id;
+            this.packageId = this.id;
             // deep copy package info
             this.package = null;
             try {

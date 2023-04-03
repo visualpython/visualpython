@@ -389,7 +389,7 @@ define([
                     // multiple selection true
                     'multiple': true
                 });
-                vp_generateVarSelect(tag, obj.varType, obj.value);
+                vp_generateVarSelect(tag, obj.var_type, obj.value);
                 content = tag;
                 break;
             case 'col_select':
@@ -688,11 +688,18 @@ define([
                 let isChecked = $(pageThis.wrapSelector(parent + ' #'+obj.name)).prop('checked');
                 value = isChecked?'True':'False';
                 break;
+            case 'var_multi':
+                let multiValue = $(pageThis.wrapSelector(parent + ' #'+obj.name)).val();
+                if (multiValue && multiValue.length > 0) {
+                    value = multiValue.join(', ');
+                } else {
+                    value = '';
+                }
+                break;
             case 'input_multi':
             case 'bool_select':
             case 'data_select':
             case 'var_select':
-            case 'var_multi':
             case 'col_select':
             case 'dtype':
                 value = $(pageThis.wrapSelector(parent + ' #'+obj.name)).val();

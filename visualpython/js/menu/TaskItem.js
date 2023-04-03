@@ -64,8 +64,9 @@ define([
         _getOptionInfo() {
             let task = this.state.task;
             let info = {};
-            if (task && task.state && task.state.config) {
-                let { id, name, desc, apps }= task.state.config;
+            if (task && task.state && task.config) {
+                let { id, name } = task;
+                let { desc, apps }= task.config;
                 info = { 
                     id:     id,
                     title:  name, 

@@ -1,0 +1,34 @@
+<body>
+    <div class="vp-grid-border-box vp-pandas-option-body">
+        <div class="vp-grid-col-110">
+            <label for="min_rows" class="">Min/Max Rows</label>
+            <div>
+                <input type="number" id="min_rows" class="vp-input m vp-state" placeholder="10 (min)">
+                <input type="number" id="max_rows" class="vp-input m vp-state" placeholder="60 (max)">
+            </div>
+            <label for="min_columns" class="">Max columns</label>
+            <input type="number" id="max_columns" class="vp-input m vp-state" placeholder="0">
+            <label for="max_colwidth" class="">Max colwidth</label>
+            <input type="number" id="max_colwidth" class="vp-input m vp-state" placeholder="50">
+        </div>
+        <hr style="margin: 5px 0;">
+        <div class="vp-grid-col-110">
+            <label for="float_format" class="">Float format</label>
+            <input type="number" class="vp-input vp-state" id="float_format" placeholder="None">
+            <label for="precision" class="">Precision</label>
+            <input type="number" class="vp-input vp-state" id="precision" placeholder="6">
+            <label for="chop_threshold" class="">Chop threshold</label>
+            <input type="number" class="vp-input vp-state" id="chop_threshold" placeholder="None">
+            <label for="expand_frame_repr" class="">Expand frame</label>
+            <select id="expand_frame_repr" class="vp-select vp-state">
+                <option value="">Select option...</option>
+                <option value="True">True (default)</option>
+                <option value="False">False</option>
+            </select>
+        </div>
+    </div>
+    <label class="mt5">
+        <input type="checkbox" id="setDefault">
+        <span title="Set chart setting to default.">Set Default</span>
+    </label>
+</body>
