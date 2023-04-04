@@ -304,6 +304,7 @@ define([
                 return;
             }
             this.state.code = variable;
+            var prevVarType = that.state.type;
 
             if (variable == '') {
                 if (!this.isFirstPage) {
@@ -338,7 +339,10 @@ define([
 
                 var varType = varObj.type;
                 var varList = varObj.list;
-                var prevVarType = that.state.type;
+                if (varType == 'module') {
+                    // get module name
+                    varType = varObj.name;
+                }
 
                 that.state.type = varType;
                 that.state.list = varList;
@@ -431,45 +435,49 @@ define([
 
                     // get parameter
                     var splitList = variable.split('.');
-                    var hasOption = false;
+                    // var hasOption = false;
 
                     if (splitList && splitList.length > 0) {
                         var lastSplit = splitList[splitList.length - 1];
-                        // get target code
-                        var methodName = lastSplit.match(/[a-zA-Z_]+/i)[0];
-                        var targetCode = splitList.slice(0, splitList.length - 1).join('.');
-                        if ((prevVarType in instanceLibrary.INSTANCE_MATCHING_LIBRARY) && (methodName in instanceLibrary.INSTANCE_MATCHING_LIBRARY[prevVarType])) {
-                            // get target library
-                            var targetLib = instanceLibrary.INSTANCE_MATCHING_LIBRARY[prevVarType][methodName];
-                            var targetId = targetLib.target;
-                            that.optionPopup = new LibraryComponent({ 
-                                [targetId]: targetCode,
-                                config: { 
-                                    name: methodName, category: 'Instance',
-                                    id: targetLib.id,
-                                    saveOnly: true,
-                                    noOutput: true
-                                } 
-                            },
-                            { 
-                                pageThis: that,
-                                useInputVariable: true,
-                                targetSelector: that.pageThis.wrapSelector('#' + that.targetId),
+                        // // get target code
+                        // var methodName = lastSplit.match(/[a-zA-Z_]+/i)[0];
+                        // var targetCode = splitList.slice(0, splitList.length - 1).join('.');
+                        // if ((prevVarType in instanceLibrary.INSTANCE_MATCHING_LIBRARY) && (methodName in instanceLibrary.INSTANCE_MATCHING_LIBRARY[prevVarType])) {
+                        //     // get target library
+                        //     var targetLib = instanceLibrary.INSTANCE_MATCHING_LIBRARY[prevVarType][methodName];
+                        //     var targetId = targetLib.target;
+                        //     var popupState = {
+                        //         config: { 
+                        //             name: methodName, category: 'Instance',
+                        //             id: targetLib.id,
+                        //             saveOnly: true,
+                        //             noOutput: true
+                        //         }
+                        //     }
+                        //     // add targetid as state if exists
+                        //     if (targetId) {
+                        //         popupState[targetId] = targetCode;
+                        //     }
+                        //     that.optionPopup = new LibraryComponent(popupState,
+                        //     { 
+                        //         pageThis: that,
+                        //         useInputVariable: true,
+                        //         targetSelector: that.pageThis.wrapSelector('#' + that.targetId),
 
-                                finish: function(code) {
-                                    // TODO: save state
+                        //         finish: function(code) {
+                        //             // TODO: save state
 
-                                    $(that.pageThis.wrapSelector('#' + that.targetId)).trigger({
-                                        type: "instance_editor_replaced",
-                                        originCode: that.state.code,
-                                        newCode: code
-                                    });
-                                }
-                            });
-                            hasOption = true;
-                        } else {
-                            that.optionPopup = null;
-                        }
+                        //             $(that.pageThis.wrapSelector('#' + that.targetId)).trigger({
+                        //                 type: "instance_editor_replaced",
+                        //                 originCode: that.state.code,
+                        //                 newCode: code
+                        //             });
+                        //         }
+                        //     });
+                        //     hasOption = true;
+                        // } else {
+                        //     that.optionPopup = null;
+                        // }
                         
                         // if bracket is at the end of code
                         var matchList = lastSplit.match(/\(.*?\)$/gi);
@@ -479,27 +487,27 @@ define([
                             var parameter = lastBracket.substr(1, lastBracket.length - 2);
                             $(that.wrapSelector('.' + VP_INS_PARAMETER)).val(parameter);
                             $(that.wrapSelector('.' + VP_INS_PARAMETER)).prop('disabled', false);
-                            if (hasOption) {
-                                if ($(that.wrapSelector('.vp-ins-opt-button')).hasClass('disabled')) {
-                                    $(that.wrapSelector('.vp-ins-opt-button')).removeClass('disabled');
-                                }
-                            } else {
-                                if (!$(that.wrapSelector('.vp-ins-opt-button')).hasClass('disabled')) {
-                                    $(that.wrapSelector('.vp-ins-opt-button')).addClass('disabled');
-                                }
-                            }
+                            // if (hasOption) {
+                            //     if ($(that.wrapSelector('.vp-ins-opt-button')).hasClass('disabled')) {
+                            //         $(that.wrapSelector('.vp-ins-opt-button')).removeClass('disabled');
+                            //     }
+                            // } else {
+                            //     if (!$(that.wrapSelector('.vp-ins-opt-button')).hasClass('disabled')) {
+                            //         $(that.wrapSelector('.vp-ins-opt-button')).addClass('disabled');
+                            //     }
+                            // }
                         } else {
                             $(that.wrapSelector('.' + VP_INS_PARAMETER)).val('');
                             $(that.wrapSelector('.' + VP_INS_PARAMETER)).prop('disabled', true);
-                            if (!$(that.wrapSelector('.vp-ins-opt-button')).hasClass('disabled')) {
-                                $(that.wrapSelector('.vp-ins-opt-button')).addClass('disabled');
-                            }
+                            // if (!$(that.wrapSelector('.vp-ins-opt-button')).hasClass('disabled')) {
+                            //     $(that.wrapSelector('.vp-ins-opt-button')).addClass('disabled');
+                            // }
                         }
                     } else {
                         $(that.wrapSelector('.' + VP_INS_PARAMETER)).prop('disabled', true);
-                        if (!$(that.wrapSelector('.vp-ins-opt-button')).hasClass('disabled')) {
-                            $(that.wrapSelector('.vp-ins-opt-button')).addClass('disabled');
-                        }
+                        // if (!$(that.wrapSelector('.vp-ins-opt-button')).hasClass('disabled')) {
+                        //     $(that.wrapSelector('.vp-ins-opt-button')).addClass('disabled');
+                        // }
                     }
                 }
 
@@ -520,6 +528,68 @@ define([
                 // callback
                 if (callback) {
                     callback('');
+                }
+            }).finally(function() {
+
+                // get parameter
+                var splitList = variable.split('.');
+                var hasOption = false;
+
+                if (splitList && splitList.length > 0) {
+                    var lastSplit = splitList[splitList.length - 1];
+                    // get target code
+                    var methodName = lastSplit.match(/[a-zA-Z_]+/i)[0];
+                    var targetCode = splitList.slice(0, splitList.length - 1).join('.');
+                    if ((prevVarType in instanceLibrary.INSTANCE_MATCHING_LIBRARY) && (methodName in instanceLibrary.INSTANCE_MATCHING_LIBRARY[prevVarType])) {
+                        // get target library
+                        var targetLib = instanceLibrary.INSTANCE_MATCHING_LIBRARY[prevVarType][methodName];
+                        var targetId = targetLib.target;
+                        var popupState = {
+                            config: { 
+                                name: methodName, category: 'Instance',
+                                id: targetLib.id,
+                                saveOnly: true,
+                                noOutput: true
+                            }
+                        }
+                        // add targetid as state if exists
+                        if (targetId) {
+                            popupState[targetId] = targetCode;
+                        }
+                        that.optionPopup = new LibraryComponent(popupState,
+                        { 
+                            pageThis: that,
+                            useInputVariable: true,
+                            targetSelector: that.pageThis.wrapSelector('#' + that.targetId),
+
+                            finish: function(code) {
+                                // TODO: save state
+
+                                $(that.pageThis.wrapSelector('#' + that.targetId)).trigger({
+                                    type: "instance_editor_replaced",
+                                    originCode: that.state.code,
+                                    newCode: code
+                                });
+                            }
+                        });
+                        hasOption = true;
+                    } else {
+                        that.optionPopup = null;
+                    }
+
+                    if (hasOption) {
+                        if ($(that.wrapSelector('.vp-ins-opt-button')).hasClass('disabled')) {
+                            $(that.wrapSelector('.vp-ins-opt-button')).removeClass('disabled');
+                        }
+                    } else {
+                        if (!$(that.wrapSelector('.vp-ins-opt-button')).hasClass('disabled')) {
+                            $(that.wrapSelector('.vp-ins-opt-button')).addClass('disabled');
+                        }
+                    }
+                } else {
+                    if (!$(that.wrapSelector('.vp-ins-opt-button')).hasClass('disabled')) {
+                        $(that.wrapSelector('.vp-ins-opt-button')).addClass('disabled');
+                    }
                 }
             });
 

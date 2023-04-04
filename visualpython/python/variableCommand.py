@@ -20,8 +20,14 @@ def _vp_load_instance(var=''):
     else:
         varList = dir(eval(var))
         query = var + '.'
+
+        varType = type(eval(var)).__name__
         # result = { 'type': type(eval(var)).__name__, 'list': [{'name': v, 'type': type(eval(var + '.' + v)).__name__} for v in _vp_vars if (not v.startswith('_')) and (v not in _VP_NOT_USING_VAR)] }
-        result = {'type': type(eval(var)).__name__, 'list': []}
+        if varType == 'module':
+            varName = eval(var).__name__
+            result = {'type': type(eval(var)).__name__, 'name': varName, 'list': []}
+        else:
+            result = {'type': type(eval(var)).__name__, 'list': []}
 
     tmpList = []
     for v in varList:
