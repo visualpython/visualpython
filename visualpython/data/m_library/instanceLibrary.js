@@ -34,6 +34,10 @@ define([
                 'id': 'pdIdt_describe',
                 'target': 'i0'
             },
+            'groupby': {
+                'id': 'pdGrp_groupby',
+                'target': 'i0'
+            },
             'sum': {
                 'id': 'pdGrp_sum',
                 'target': 'i0'
@@ -98,6 +102,22 @@ define([
                 'id': 'pdEdtRC_dropRowCol',
                 'target': 'i0'
             },
+            'reindex': {
+                'id': 'pdFunc_reindex',
+                'target': 'i0'
+            },
+            'set_index': {
+                'id': 'pdFunc_setIndex',
+                'target': 'i0'
+            },
+            'reset_index': {
+                'id': 'pdFunc_resetIndex',
+                'target': 'i0'
+            },
+            'replace': {
+                'id': 'pdFunc_replace',
+                'target': 'i0'
+            },
         },
         'Series': {
             'head': {
@@ -122,6 +142,10 @@ define([
             },
             'describe': {
                 'id': 'pdIdt_describe',
+                'target': 'i0'
+            },
+            'groupby': {
+                'id': 'pdGrp_groupby',
                 'target': 'i0'
             },
             'sum': {
@@ -239,6 +263,26 @@ define([
             'describe': {
                 'id': 'pdIdt_describe',
                 'target': 'i0'
+            },
+        },
+        'pandas': {
+            'merge': {
+                'id': 'pdFunc_merge'
+            },
+            'concat': {
+                'id': 'pdFunc_concat'
+            },
+            'isnull': {
+                'id': 'pdFunc_isNull'
+            },
+            'notnull': {
+                'id': 'pdFunc_notNull'
+            },
+            'cut': {
+                'id': 'pdFunc_cut'
+            },
+            'qcut': {
+                'id': 'pdFunc_qcut'
             },
         }
     }
