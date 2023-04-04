@@ -47,19 +47,22 @@ def _vp_get_type(var=None):
     return str(type(var).__name__)
 
 
-def _vp_get_variables_list(types, exclude_types=[]):
+def _vp_get_variables_list(types, exclude_types=[], allow_module=False):
     """
     Get Variable list in types
     """
     # notUsingVariables = ['_html', '_nms', 'NamespaceMagics', '_Jupyter', 'In', 'Out', 'exit', 'quit', 'get_ipython']
     # notUsingTypes = ['module', 'function', 'builtin_function_or_method', 'instance', '_Feature', 'type', 'ufunc']
+    not_using_types = _VP_NOT_USING_TYPES
 
     varList = []
     searchList = globals()
     if (type(types) == list) and (len(types) > 0):
         varList = [{'varName': v, 'varType': type(eval(v)).__name__, 'varInfo': _vp_get_variable_info(eval(v))} for v in searchList if (not v.startswith('_')) & (v not in _VP_NOT_USING_VAR) & (type(eval(v)).__name__ not in exclude_types) & (type(eval(v)).__name__ in types)]
     else:
-        varList = [{'varName': v, 'varType': type(eval(v)).__name__, 'varInfo': _vp_get_variable_info(eval(v))} for v in searchList if (not v.startswith('_')) & (v not in _VP_NOT_USING_VAR) & (type(eval(v)).__name__ not in exclude_types) & (type(eval(v)).__name__ not in _VP_NOT_USING_TYPES)]
+        if allow_module == True:
+            not_using_types.remove('module')
+        varList = [{'varName': v, 'varType': type(eval(v)).__name__, 'varInfo': _vp_get_variable_info(eval(v))} for v in searchList if (not v.startswith('_')) & (v not in _VP_NOT_USING_VAR) & (type(eval(v)).__name__ not in exclude_types) & (type(eval(v)).__name__ not in not_using_types)]
 
     return varList
 

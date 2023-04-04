@@ -654,13 +654,13 @@ define([
             });
         }
 
-        getDataList(dataTypeList=[], excludeList=[]) {
+        getDataList(dataTypeList=[], excludeList=[], allowModule=false) {
             // use function command to get variable list of selected data types
             var cmdSB = '_vp_print(_vp_get_variables_list(None))';
             if (!dataTypeList || dataTypeList.length <= 0) {
                 dataTypeList = [];
             }
-            cmdSB = com_util.formatString('_vp_print(_vp_get_variables_list({0}, {1}))', JSON.stringify(dataTypeList), JSON.stringify(excludeList));
+            cmdSB = com_util.formatString('_vp_print(_vp_get_variables_list({0}, {1}, {2}))', JSON.stringify(dataTypeList), JSON.stringify(excludeList), allowModule?'True':'False');
             
             var that = this;
             return new Promise(function(resolve, reject) {

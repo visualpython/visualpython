@@ -55,11 +55,12 @@ define([
                 value: null,    // pre-defined value
                 finish: null,   // callback after selection (value, dtype)
                 select: null,   // callback after selection from suggestInput (value, dtype)
-                allowDataType: null,
+                allowDataType: null, // list of allowed data types
                 // additional options
                 classes: '',
                 placeholder: 'Select variable',
                 required: false,
+                allowModule: false,
                 ...this.prop
             }
 
@@ -312,13 +313,18 @@ define([
         loadVariables() {
             let that = this;
             // Searchable variable types
-            let types = [
+            let types = [];
+            if (this.prop.allowModule) {
+                types = ['module'];
+            }
+            types = [
+                ...types,
                 ...vpConfig.getDataTypes(),
                 // ML Data types
                 ...vpConfig.getMLDataTypes()
             ];
             
-            vpKernel.getDataList(types).then(function(resultObj) {
+            vpKernel.getDataList(types, [], this.prop.allowModule).then(function(resultObj) {
                 var varList = JSON.parse(resultObj.result);
                 // re-mapping variable list
                 varList = varList.map(obj => { 
