@@ -2511,6 +2511,28 @@
                                         "useAuto" : true
                                     },
                                     {
+                                        "id": "pdFunc_cut",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "cut",
+                                        "path": "visualpython - library - pandas - general functions - cut",
+                                        "desc": "",
+                                        "tag": "CUT",
+                                        "file": "m_library/m_pandas/cut",
+                                        "useAuto" : true
+                                    },
+                                    {
+                                        "id": "pdFunc_qcut",
+                                        "type": "function",
+                                        "level": 3,
+                                        "name": "qcut",
+                                        "path": "visualpython - library - pandas - general functions - qcut",
+                                        "desc": "",
+                                        "tag": "QCUT",
+                                        "file": "m_library/m_pandas/qcut",
+                                        "useAuto" : true
+                                    },
+                                    {
                                         "id": "pdFunc_replace",
                                         "type": "function",
                                         "level": 3,
