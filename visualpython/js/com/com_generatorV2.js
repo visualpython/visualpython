@@ -363,7 +363,7 @@ define([
                 let dataSelector = new DataSelector({
                     pageThis: pageThis, 
                     id: obj.name,
-                    allowDataType: obj.varType, 
+                    allowDataType: obj.var_type, 
                     placeholder: obj.placeholder || 'Select data',
                     value: value,
                     required: obj.required === true
@@ -376,6 +376,7 @@ define([
                     type: 'text',
                     id: obj.name,
                     class: 'vp-input vp-state',
+                    placeholder: obj.placeholder || 'Select data',
                     required: obj.required === true
                 });
                 vp_generateVarSuggestInput(pageThis.wrapSelector(), obj);
@@ -784,6 +785,13 @@ define([
             if (code.startsWith(' = ')) {
                 code = code.substr(3);
             } 
+            // prevent code: without allocation code (${o0} = code)
+            let outputCodeMatch = code.match(/^\$\{.+\} = /);
+            if (outputCodeMatch) {
+                let matchLength = outputCodeMatch[0].length;
+                let matchStartIdx = outputCodeMatch['index'];
+                code = code.substr(matchStartIdx + matchLength);
+            }
             // show_result 
             // get output variables
             if (_VP_SHOW_RESULT && package.options) {
