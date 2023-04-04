@@ -914,7 +914,7 @@ define([
          * @param {String} configType vpudf, vpcfg 
          * @returns 
          */
-        setLabConfig(content, configType='vpudf') {
+        setLabConfig(content={}, configType='vpudf') {
             var that = this;
             var configFile = '';
             switch (configType) {
@@ -930,7 +930,7 @@ define([
             }
             // write file
             var sbfileSaveCmd = new com_String();
-            sbfileSaveCmd.appendFormat("_vp_set_lab_vpcfg('{0}', '{1}')", configFile, content);
+            sbfileSaveCmd.appendFormat("_vp_set_lab_vpcfg('{0}', {1})", configFile, content);
             return new Promise(function(resolve, reject) {
                 that.execute(sbfileSaveCmd.toString())
                 .then(function(resultObj) {

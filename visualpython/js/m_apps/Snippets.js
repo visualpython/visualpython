@@ -126,7 +126,41 @@ define([
                             filesPath.forEach(fileObj => {
                                 var fileName = fileObj.file;
                                 var selectedPath = fileObj.path;
-                                fetch(selectedPath).then(function(file) {
+                                if (vpConfig.extensionType === 'lab') {
+                                    vpKernel.readFile(selectedPath).then(function(resultObj) {
+                                        try {
+                                            var snippetData = JSON.parse(resultObj.result);
+                                            var timestamp = new Date().getTime();
+        
+                                            var keys = Object.keys(snippetData);
+                                            var importKeys = [];
+                                            var newSnippet = {};
+                                            keys.forEach(key => {
+                                                var importKey = key;
+                                                var importNo = 1;
+                                                var titleList = Object.keys(that.codemirrorList);
+                                                // set duplicate title
+                                                while(titleList.includes(importKey)) {
+                                                    importKey = key + '_imported' + importNo;
+                                                    importNo += 1;
+                                                }
+                                                newSnippet = { ...newSnippet, [importKey]: { code: snippetData[key], timestamp: timestamp } };
+        
+                                                importKeys.push(importKey);
+                                            });
+                                            vpConfig.setData(newSnippet).then(function() {
+                                                that.importedList = [ ...importKeys ];
+                                                that.loadUdfList();
+                                                com_util.renderSuccessMessage(fileName + ' imported ');
+                                            });
+                                        } catch (ex) {
+                                            com_util.renderAlertModal('Not applicable file contents with vp format! (JSON)');
+                                        }
+                                    }).catch(function(err) {
+                                        vpLog.display(VP_LOG_TYPE.ERROR, err);
+                                    });
+                                } else {
+                                    fetch(selectedPath).then(function(file) {
                                     if (file.status != 200) {
                                         alert("The file format is not valid.");
                                         return;
@@ -159,6 +193,8 @@ define([
                                         com_util.renderSuccessMessage(fileName + ' imported ');
                                     });
                                 });
+                                }
+                                
                             });
                             
                         }
