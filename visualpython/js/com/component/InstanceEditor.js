@@ -338,6 +338,7 @@ define([
 
                 var varType = varObj.type;
                 var varList = varObj.list;
+                var prevVarType = that.state.type;
 
                 that.state.type = varType;
                 that.state.list = varList;
@@ -437,22 +438,24 @@ define([
                         // get target code
                         var methodName = lastSplit.match(/[a-zA-Z_]+/i)[0];
                         var targetCode = splitList.slice(0, splitList.length - 1).join('.');
-                        if ((varType in instanceLibrary.INSTANCE_MATCHING_LIBRARY) && (methodName in instanceLibrary.INSTANCE_MATCHING_LIBRARY[varType])) {
+                        if ((prevVarType in instanceLibrary.INSTANCE_MATCHING_LIBRARY) && (methodName in instanceLibrary.INSTANCE_MATCHING_LIBRARY[prevVarType])) {
                             // get target library
-                            var targetLib = instanceLibrary.INSTANCE_MATCHING_LIBRARY[varType][methodName];
+                            var targetLib = instanceLibrary.INSTANCE_MATCHING_LIBRARY[prevVarType][methodName];
                             var targetId = targetLib.target;
                             that.optionPopup = new LibraryComponent({ 
                                 [targetId]: targetCode,
                                 config: { 
                                     name: methodName, category: 'Instance',
+                                    id: targetLib.id,
                                     saveOnly: true,
-                                    id: targetLib.id
+                                    noOutput: true
                                 } 
                             },
                             { 
                                 pageThis: that,
                                 useInputVariable: true,
                                 targetSelector: that.pageThis.wrapSelector('#' + that.targetId),
+
                                 finish: function(code) {
                                     // TODO: save state
 
@@ -475,7 +478,7 @@ define([
                             // remove first/last brackets
                             var parameter = lastBracket.substr(1, lastBracket.length - 2);
                             $(that.wrapSelector('.' + VP_INS_PARAMETER)).val(parameter);
-                            $(that.wrapSelector('.' + VP_INS_PARAMETER)).show();
+                            $(that.wrapSelector('.' + VP_INS_PARAMETER)).prop('disabled', false);
                             if (hasOption) {
                                 if ($(that.wrapSelector('.vp-ins-opt-button')).hasClass('disabled')) {
                                     $(that.wrapSelector('.vp-ins-opt-button')).removeClass('disabled');
@@ -487,13 +490,13 @@ define([
                             }
                         } else {
                             $(that.wrapSelector('.' + VP_INS_PARAMETER)).val('');
-                            $(that.wrapSelector('.' + VP_INS_PARAMETER)).hide();
+                            $(that.wrapSelector('.' + VP_INS_PARAMETER)).prop('disabled', true);
                             if (!$(that.wrapSelector('.vp-ins-opt-button')).hasClass('disabled')) {
                                 $(that.wrapSelector('.vp-ins-opt-button')).addClass('disabled');
                             }
                         }
                     } else {
-                        $(that.wrapSelector('.' + VP_INS_PARAMETER)).hide();
+                        $(that.wrapSelector('.' + VP_INS_PARAMETER)).prop('disabled', true);
                         if (!$(that.wrapSelector('.vp-ins-opt-button')).hasClass('disabled')) {
                             $(that.wrapSelector('.vp-ins-opt-button')).addClass('disabled');
                         }

@@ -132,6 +132,10 @@ define([
 
             // show interface
             // com_generator.vp_showInterfaceOnPage(this.wrapSelector(), this.package);
+            if (this.config.noOutput && this.config.noOutput === true) {
+                // no allocateTo
+                this.package.options = this.package.options.filter(x => x.output != true);
+            }
             com_generatorV2.vp_showInterfaceOnPage(this, this.package, this.state);
 
             // hide required page if no options

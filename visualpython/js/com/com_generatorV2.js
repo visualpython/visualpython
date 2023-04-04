@@ -785,6 +785,13 @@ define([
             if (code.startsWith(' = ')) {
                 code = code.substr(3);
             } 
+            // prevent code: without allocation code (${o0} = code)
+            let outputCodeMatch = code.match(/^\$\{.+\} = /);
+            if (outputCodeMatch) {
+                let matchLength = outputCodeMatch[0].length;
+                let matchStartIdx = outputCodeMatch['index'];
+                code = code.substr(matchStartIdx + matchLength);
+            }
             // show_result 
             // get output variables
             if (_VP_SHOW_RESULT && package.options) {
