@@ -60,7 +60,7 @@ define([
             $(this.wrapSelector('#vp_instanceTarget')).on('change', function(event) {
                 let value = $(this).val();
                 that.updateValue(value);
-                that.reloadInsEditor('variable');
+                that.reloadInsEditor();
             });
             // clear
             $(this.wrapSelector('#vp_instanceClear')).on('click', function(event) {
@@ -148,7 +148,7 @@ define([
                 var selectedVariable = event.varName;
                 let fullCode = nowCode + selectedVariable;
                 that.updateValue(fullCode);
-                that.reloadInsEditor('variable');
+                that.reloadInsEditor();
             });
 
             // instance_editor_replaced - variable
@@ -157,7 +157,7 @@ define([
 
                 var newCode = event.newCode;
                 that.updateValue(newCode);
-                that.reloadInsEditor('variable');
+                that.reloadInsEditor();
             });
 
             // co-op with Subset
@@ -192,15 +192,16 @@ define([
             let targetSelector = new DataSelector({
                 pageThis: this, id: 'vp_instanceTarget', placeholder: 'Select variable',
                 allowDataType: [
-                    'DataFrame', 'Series', 'dict', 'list', 'int'
+                    'module', 'DataFrame', 'Series', 'dict', 'list', 'int'
                 ],
+                allowModule: true,
                 finish: function(value, dtype) {
                     $(that.wrapSelector('#vp_instanceTarget')).trigger({type: 'change', value: value});
                 },
                 select: function(value, dtype) {
                     $(that.wrapSelector('#vp_instanceTarget')).trigger({type: 'change', value: value});
                     // that.updateValue(value);
-                    // that.reloadInsEditor('variable');
+                    // that.reloadInsEditor();
                 }
             });
             $(page).find('#vp_instanceTarget').replaceWith(targetSelector.toTagString());
@@ -369,7 +370,7 @@ define([
             return lastValue;
         }
 
-        reloadInsEditor(type='') {
+        reloadInsEditor() {
             var that = this;
             var tempPointer = this.pointer;
             var callbackFunction = function (varObj) {
