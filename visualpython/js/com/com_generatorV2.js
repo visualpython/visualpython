@@ -363,7 +363,7 @@ define([
                 let dataSelector = new DataSelector({
                     pageThis: pageThis, 
                     id: obj.name,
-                    allowDataType: obj.varType, 
+                    allowDataType: obj.var_type, 
                     placeholder: obj.placeholder || 'Select data',
                     value: value,
                     required: obj.required === true
