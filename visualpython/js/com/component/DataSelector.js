@@ -53,13 +53,14 @@ define([
                 pageThis: null, // target's page object
                 id: '',         // target id
                 value: null,    // pre-defined value
-                finish: null,   // callback after selection
-                select: null,   // callback after selection from suggestInput
-                allowDataType: null,
+                finish: null,   // callback after selection (value, dtype)
+                select: null,   // callback after selection from suggestInput (value, dtype)
+                allowDataType: null, // list of allowed data types
                 // additional options
                 classes: '',
                 placeholder: 'Select variable',
                 required: false,
+                allowModule: false,
                 ...this.prop
             }
 
@@ -175,59 +176,63 @@ define([
         _bindAutocomplete(varList) {
             let that = this;
 
-            $(com_util.formatString(".vp-ds-box-{0} input.vp-ds-target", that.uuid)).autocomplete({
-                autoFocus: true,
-                minLength: 0,
-                source: function (req, res) {
-                    var srcList = varList;
-                    var returlList = new Array();
-                    for (var idx = 0; idx < srcList.length; idx++) {
-                        // srcList as object array
-                        if (srcList[idx].label.toString().toLowerCase().includes(req.term.trim().toLowerCase())) {
-                            returlList.push(srcList[idx]);
+            try {  
+                $(com_util.formatString(".vp-ds-box-{0} input.vp-ds-target", that.uuid)).autocomplete({
+                    autoFocus: true,
+                    minLength: 0,
+                    source: function (req, res) {
+                        var srcList = varList;
+                        var returlList = new Array();
+                        for (var idx = 0; idx < srcList.length; idx++) {
+                            // srcList as object array
+                            if (srcList[idx].label.toString().toLowerCase().includes(req.term.trim().toLowerCase())) {
+                                returlList.push(srcList[idx]);
+                            }
                         }
+                        res(returlList);
+                    },
+                    select: function (evt, ui) {
+                        let result = true;
+                        // trigger change
+                        $(this).val(ui.item.value);
+                        $(this).data('type', ui.item.dtype);
+
+                        that.state.filterType = 'All';
+                        that.state.data = ui.item.value;
+                        that.state.dataType = ui.item.dtype;
+                        that.state.returnDataType = ui.item.dtype;
+
+                        that.prop.pageThis.state[that.prop.id] = ui.item.value;
+                        that.prop.pageThis.state[that.prop.id + '_state'] = that.state;
+
+                        // select event
+                        if (that.prop.select && typeof that.prop.select == 'function') {
+                            result = that.prop.select(ui.item.value, ui.item.dtype);
+                        }
+                        $(this).trigger('change');
+
+                        if (result != undefined) {
+                            return result;
+                        }
+                        return true;
+                    },
+                    search: function(evt, ui) {
+                        return true;
                     }
-                    res(returlList);
-                },
-                select: function (evt, ui) {
-                    let result = true;
-                    // trigger change
-                    $(this).val(ui.item.value);
-                    $(this).data('type', ui.item.dtype);
-
-                    that.state.filterType = 'All';
-                    that.state.data = ui.item.value;
-                    that.state.dataType = ui.item.dtype;
-                    that.state.returnDataType = ui.item.dtype;
-
-                    that.prop.pageThis.state[that.prop.id] = ui.item.value;
-                    that.prop.pageThis.state[that.prop.id + '_state'] = that.state;
-
-                    // select event
-                    if (that.prop.select && typeof that.prop.select == 'function') {
-                        result = that.prop.select(ui.item.value, ui.item.dtype);
-                    }
-                    $(this).trigger('change');
-
-                    if (result != undefined) {
-                        return result;
-                    }
-                    return true;
-                },
-                search: function(evt, ui) {
-                    return true;
-                }
-            }).focus(function () {
-                $(this).select();
-                $(this).autocomplete('search', $(this).val());
-            }).click(function () {
-                $(this).select();
-                $(this).autocomplete('search', $(this).val());
-            }).autocomplete('instance')._renderItem = function(ul, item) {
-                return $('<li>').attr('data-value', item.value)
-                        .append(`<div class="vp-sg-item">${item.label}<label class="vp-gray-text vp-cursor">&nbsp;| ${item.dtype}</label></div>`)
-                        .appendTo(ul);
-            };
+                }).focus(function () {
+                    $(this).select();
+                    $(this).autocomplete('search', $(this).val());
+                }).click(function () {
+                    $(this).select();
+                    $(this).autocomplete('search', $(this).val());
+                }).autocomplete('instance')._renderItem = function(ul, item) {
+                    return $('<li>').attr('data-value', item.value)
+                            .append(`<div class="vp-sg-item">${item.label}<label class="vp-gray-text vp-cursor">&nbsp;| ${item.dtype}</label></div>`)
+                            .appendTo(ul);
+                };
+            } catch (ex) {
+                vpLog.display(VP_LOG_TYPE.ERROR, ex);
+            }
         }
 
         _bindEventForPopup() {
@@ -308,13 +313,18 @@ define([
         loadVariables() {
             let that = this;
             // Searchable variable types
-            let types = [
+            let types = [];
+            if (this.prop.allowModule) {
+                types = ['module'];
+            }
+            types = [
+                ...types,
                 ...vpConfig.getDataTypes(),
                 // ML Data types
                 ...vpConfig.getMLDataTypes()
             ];
             
-            vpKernel.getDataList(types).then(function(resultObj) {
+            vpKernel.getDataList(types, [], this.prop.allowModule).then(function(resultObj) {
                 var varList = JSON.parse(resultObj.result);
                 // re-mapping variable list
                 varList = varList.map(obj => { 

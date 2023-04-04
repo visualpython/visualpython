@@ -31,11 +31,11 @@ define([
             this.config.dataview = false;
             this.config.sizeLevel = 1;
             
-            this.packageId = this.state.config.id;
+            this.packageId = this.id;
             // deep copy package info
             this.package = null;
             try {
-                let packageName = this.state.config.path.split(' - ')[2];
+                let packageName = this.path.split(' - ')[2];
                 let findPackage = null;
                 if (packageName == 'numpy') {
                     findPackage = numpyLibrary.NUMPY_LIBRARIES[this.packageId];

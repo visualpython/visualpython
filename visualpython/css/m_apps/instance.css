@@ -1,13 +1,33 @@
+.vp-instance-body {
+    display: grid;
+    grid-template-columns: calc(50% - 8px) calc(50% - 8px);
+    grid-template-rows: 1fr;
+    grid-row-gap: 5px;
+    grid-column-gap: 15px;
+    align-items: baseline;
+    align-content: baseline;
+    height: 100%;
+}
+.vp-instance-left-box, 
+.vp-instance-right-box {
+    height: 100%;
+}
 .vp-instance-base {
     display: grid;
     width: 100%;
     grid-template-columns: 90px calc(100% - 90px);
-    grid-template-rows: 1fr;
+    /* grid-template-rows: 1fr; */
+    grid-template-rows: min-content;
     grid-row-gap: 8px;
 }
 .vp-instance-base .vp-ds-button {
     vertical-align: top;
-    width: 50px;
+    min-width: 50px;
+    width: 60px;
+}
+.vp-instance-target-box {
+    grid-column-start: 1;
+    grid-column-end: 3;
 }
 .vp-instance-toolbar {
     /* display: none; */
@@ -47,7 +67,7 @@
 /* UDF Editor - CodeMirror */
 .vp-instance-box .CodeMirror { 
     display: inline-block;
-    width: calc(100% - 55px);
+    width: calc(100% - 65px);
     height: 30px;
     border: 0.25px solid var(--vp-grid-line-color);
     border-radius: 3px;
@@ -86,4 +106,22 @@
 }
 .vp-ds-button {
     width: 50px;
+}
+
+/* Preview box */
+.vp-instance-preview-title {
+    line-height: 30px;
+}
+.vp-instance-preview-box {
+    min-height: 352px;
+    width: 100%;
+    height: calc(100% - 30px);
+}
+.vp-instance-preview-content:empty::after {
+    content: 'No preview data';
+    color: var(--vp-gray-color);
+}
+.vp-instance-preview-box img {
+    width: 100%;
+    height: 100%;
 }

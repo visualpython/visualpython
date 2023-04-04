@@ -5,6 +5,7 @@ File Navigation Commands
 import os as _vp_os 
 import stat as _vp_stat
 import ctypes as _vp_ctypes
+import json as _vp_json
 
 def _vp_get_userprofile_path():
     """
@@ -197,7 +198,7 @@ def _vp_get_lab_vpcfg_path():
         return _vpcfg_path
     return ''
 
-def _vp_set_lab_vpcfg(configFile, content):
+def _vp_set_lab_vpcfg(configFile, content={}):
     if _vp_os.name == 'nt':
         # windows
         _user_path = _vp_get_userprofile_path()
@@ -207,7 +208,7 @@ def _vp_set_lab_vpcfg(configFile, content):
     _vpcfg_path = _vp_os.path.join(_user_path, '.visualpython')
     _vp_os.makedirs(_vpcfg_path, exist_ok=True)
     with open(_vp_os.path.join(_vpcfg_path, configFile), "w") as f:
-        f.write(content)
+        f.write(_vp_json.dumps(content))
     return True
 
 def _vp_read_file(filePath):

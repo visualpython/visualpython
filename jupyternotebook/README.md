@@ -113,4 +113,4 @@ To create an environment where everyone can learn and use big data analytical sk
 Love Visual Python? <br>
 Your support will help us continue to actively develop and improve Visual Python.☕
 
-<a href="https://www.buymeacoffee.com/visualpython" target="_blank"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=visualpython&button_colour=ffa238&font_colour=000000&font_family=Comic&outline_colour=000000&coffee_colour=FFDD00"></a>
+[![donate_banner](https://user-images.githubusercontent.com/83636412/229679467-4fee93a2-d6d2-4229-a53c-80a5eb2b9240.png)](https://github.com/sponsors/visualpython?frequency=recurring)

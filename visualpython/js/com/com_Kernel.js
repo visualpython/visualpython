@@ -654,13 +654,13 @@ define([
             });
         }
 
-        getDataList(dataTypeList=[], excludeList=[]) {
+        getDataList(dataTypeList=[], excludeList=[], allowModule=false) {
             // use function command to get variable list of selected data types
             var cmdSB = '_vp_print(_vp_get_variables_list(None))';
             if (!dataTypeList || dataTypeList.length <= 0) {
                 dataTypeList = [];
             }
-            cmdSB = com_util.formatString('_vp_print(_vp_get_variables_list({0}, {1}))', JSON.stringify(dataTypeList), JSON.stringify(excludeList));
+            cmdSB = com_util.formatString('_vp_print(_vp_get_variables_list({0}, {1}, {2}))', JSON.stringify(dataTypeList), JSON.stringify(excludeList), allowModule?'True':'False');
             
             var that = this;
             return new Promise(function(resolve, reject) {
@@ -914,7 +914,7 @@ define([
          * @param {String} configType vpudf, vpcfg 
          * @returns 
          */
-        setLabConfig(content, configType='vpudf') {
+        setLabConfig(content={}, configType='vpudf') {
             var that = this;
             var configFile = '';
             switch (configType) {
@@ -930,7 +930,7 @@ define([
             }
             // write file
             var sbfileSaveCmd = new com_String();
-            sbfileSaveCmd.appendFormat("_vp_set_lab_vpcfg('{0}', '{1}')", configFile, content);
+            sbfileSaveCmd.appendFormat("_vp_set_lab_vpcfg('{0}', {1})", configFile, content);
             return new Promise(function(resolve, reject) {
                 that.execute(sbfileSaveCmd.toString())
                 .then(function(resultObj) {

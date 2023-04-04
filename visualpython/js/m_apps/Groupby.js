@@ -64,18 +64,18 @@ define([
             ]
 
             this.methodList = [
-                // { label: 'None', value: '' },
-                { label: 'count', value: "'count'" },
-                { label: 'first', value: "'first'" },
-                { label: 'last', value: "'last'" },
-                { label: 'size', value: "'size'" },
-                { label: 'std', value: "'std'" },
-                { label: 'sum', value: "'sum'" },
-                { label: 'max', value: "'max'" },
-                { label: 'mean', value: "'mean'" },
-                { label: 'median', value: "'median'" },
-                { label: 'min', value: "'min'" },
-                { label: 'quantile', value: "'quantile'" },
+                { label: 'None', value: '' },
+                { label: 'count', value: "count" },
+                { label: 'first', value: "first" },
+                { label: 'last', value: "last" },
+                { label: 'size', value: "size" },
+                { label: 'std', value: "std" },
+                { label: 'sum', value: "sum" },
+                { label: 'max', value: "max" },
+                { label: 'mean', value: "mean" },
+                { label: 'median', value: "median" },
+                { label: 'min', value: "min" },
+                { label: 'quantile', value: "quantile" },
             ]
 
             this.state = {
@@ -617,13 +617,17 @@ define([
             page.appendFormatLine('<div class="{0}">', 'vp-gb-method-selector');
             // method list
             page.appendFormatLine('<div class="{0}">', 'vp-gb-method-box');
-            this.methodList.forEach(method => {
+            this.methodList.forEach((method, idx) => {
+                if (idx == 0) {
+                    return ;
+                }
+                var methodStr = "'" + method.value + "'";
                 var checked = "";
-                if (previousList && previousList.includes(method.value)) {
+                if (previousList && previousList.includes(methodStr)) {
                     checked = "checked"
                 }
                 page.appendFormatLine('<label><input class="vp-gb-method-checkbox" type="checkbox" value="{0}" {1}/><span>{2}</span></label>'
-                                    , method.value, checked, method.label);
+                                    , methodStr, checked, method.label);
             });
             page.appendLine('</div>');
             page.appendLine('<hr style="margin: 5px 0;">');
@@ -772,6 +776,12 @@ define([
                         }
                         var advMethod = $(advItemTags[i]).find('.vp-gb-adv-method').data('list');
                         var advUserMethod = $(advItemTags[i]).find('.vp-gb-adv-method').data('userList');
+                        if (!advMethod || advMethod == null) {
+                            advMethod = [];
+                        }
+                        if (!advUserMethod || advUserMethod == null) {
+                            advUserMethod = [];
+                        }
                         advMethod = [ ...advMethod, ...advUserMethod ];
                         var advNaming = $(advItemTags[i]).find('.vp-gb-adv-naming').data('dict');
                         if (!advMethod || advMethod.length <= 0) {

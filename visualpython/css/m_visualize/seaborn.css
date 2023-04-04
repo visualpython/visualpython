@@ -1,18 +1,20 @@
 .vp-chart-setting {
     float: right;
-    color: var(--vp-gray-color);
+    color: var(--vp-font-primary);
     /* padding-top: 5px; */
     padding-right: 5px;
     cursor: pointer;
-    background-image: url(../../img/gear-solid.svg);
+    background-image: url(../../img/setting.svg);
     background-size: 15px;
     background-repeat: no-repeat;
-    padding-left: 20px;
+    padding-left: 24px;
     margin-top: 5px;
+    background-size: contain;
+    line-height: 22px;
 }
 .vp-chart-setting:hover {
     color: var(--vp-font-highlight);
-    background-image: url(../../img/gear-solid_hover.svg);
+    background-image: url(../../img/setting_activated.svg);
 }
 .vp-create-subplot-btn {
     float: right;

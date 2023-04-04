@@ -1145,13 +1145,6 @@ define([
                     that.focus();
                 });
                 $(this.targetSelector).on('apply_option_page', function(evt) {
-                    let code = that.generateCode();
-
-                    // if finish callback is available
-                    if (that.finish && typeof that.finish == 'function') {
-                        that.finish(code);
-                    }
-                    
                     that.close();
                 });
             }

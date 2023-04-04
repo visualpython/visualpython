@@ -360,7 +360,7 @@ define([
                 let dataSelector = new DataSelector({
                     pageThis: pageThis, 
                     id: obj.name,
-                    allowDataType: obj.varType, 
+                    allowDataType: obj.var_type, 
                     placeholder: obj.placeholder || 'Select data',
                     value: value,
                     required: obj.required === true
@@ -373,6 +373,7 @@ define([
                     type: 'text',
                     id: obj.name,
                     class: 'vp-input vp-state',
+                    placeholder: obj.placeholder || 'Select data',
                     required: obj.required === true
                 });
                 vp_generateVarSuggestInput(pageThis.wrapSelector(), obj);
@@ -386,7 +387,7 @@ define([
                     // multiple selection true
                     'multiple': true
                 });
-                vp_generateVarSelect(tag, obj.varType, obj.value);
+                vp_generateVarSelect(tag, obj.var_type, obj.value);
                 content = tag;
                 break;
             case 'col_select':
@@ -685,11 +686,18 @@ define([
                 let isChecked = $(pageThis.wrapSelector(parent + ' #'+obj.name)).prop('checked');
                 value = isChecked?'True':'False';
                 break;
+            case 'var_multi':
+                let multiValue = $(pageThis.wrapSelector(parent + ' #'+obj.name)).val();
+                if (multiValue && multiValue.length > 0) {
+                    value = multiValue.join(', ');
+                } else {
+                    value = '';
+                }
+                break;
             case 'input_multi':
             case 'bool_select':
             case 'data_select':
             case 'var_select':
-            case 'var_multi':
             case 'col_select':
             case 'dtype':
                 value = $(pageThis.wrapSelector(parent + ' #'+obj.name)).val();
@@ -774,6 +782,13 @@ define([
             if (code.startsWith(' = ')) {
                 code = code.substr(3);
             } 
+            // prevent code: without allocation code (${o0} = code)
+            let outputCodeMatch = code.match(/^\$\{.+\} = /);
+            if (outputCodeMatch) {
+                let matchLength = outputCodeMatch[0].length;
+                let matchStartIdx = outputCodeMatch['index'];
+                code = code.substr(matchStartIdx + matchLength);
+            }
             // show_result 
             // get output variables
             if (_VP_SHOW_RESULT && package.options) {

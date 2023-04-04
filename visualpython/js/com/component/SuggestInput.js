@@ -109,7 +109,7 @@ define([
             // make attributes
             var attributes = Object.keys(this._attributes).map(key => key + '="' + this._attributes[key] + '"').join(" ");
 
-            sbTagString.appendFormatLine(`<input type='text' class='{0} {1} {2}' {3} placeholder='{4}' value="{5}" {6}/>`,
+            sbTagString.appendFormatLine(`<input type="text" class="{0} {1} {2}" {3} placeholder="{4}" value="{5}" {6}/>`,
                 that.uuid, 'suggest-input-uninit', that._additionalClass, that._compID == "" ? "" : com_util.formatString("id='{0}'", that._compID), that._placeholder, that._value, attributes);
 
             $(document).on(com_util.formatString("focus.init-{0}", that.uuid), com_util.formatString(".{0}.{1}", that.uuid, 'suggest-input-uninit'), function () {

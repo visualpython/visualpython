@@ -501,6 +501,7 @@
     text-align: right;
 }
 .vp-popup-body-top-bar-item {
+    color: var(--vp-font-primary);
     margin-bottom: 5px;
     height: 22px;
     line-height: 22px;

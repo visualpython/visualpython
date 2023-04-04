@@ -24,6 +24,9 @@ define([
      *      }
      * ]
      */
+    /** Last edited standard version */
+    var PANDAS_VERSION = '2.0.0';
+
     var PANDAS_FUNCTION = {
       "pdPdo_series": {
         "name": "Series",
@@ -159,7 +162,7 @@ define([
         "name": "Read CSV",
         "library": "pandas",
         "description": "",
-        "code": "${o0} = pd.read_csv(${i0}${encoding}${header}${sep}${names}${usecols}${index_col}${na_values}${skiprows}${chunksize}${etc})",
+        "code": "${o0} = pd.read_csv(${i0}${encoding}${header}${sep}${names}${usecols}${index_col}${na_values}${skiprows}${nrows}${chunksize}${etc})",
         "options": [
           {
             "name": "i0",
@@ -225,6 +228,14 @@ define([
           {
             "name": "skiprows",
             "label": "Rows To Skip",
+            "usePair": true
+          },
+          {
+            "name": "nrows",
+            "label": "Number of rows",
+            "component": [
+              "input_number"
+            ],
             "usePair": true
           },
           {
@@ -2396,6 +2407,9 @@ define([
           {
             "name": "i0",
             "label": "Target Variable",
+            "component": [
+              "data_select"
+            ],
             "required": true
           },
           {
@@ -2412,7 +2426,7 @@ define([
         "name": "Info",
         "library": "pandas",
         "description": "DataFrame info(info per columns, data type, memory usage, ...)",
-        "code": "${o0} = ${i0}.info()",
+        "code": "${o0} = ${i0}.info(${verbose}${etc})",
         "options": [
           {
             "name": "i0",
@@ -2432,6 +2446,14 @@ define([
             "component": [
               "data_select"
             ]
+          },
+          {
+            "name": "verbose",
+            "label": "Verbose",
+            "component": [
+              "bool_select"
+            ],
+            "usePair": true
           }
         ]
       },
@@ -2439,7 +2461,7 @@ define([
         "name": "Describe",
         "library": "pandas",
         "description": "",
-        "code": "${o0} = ${i0}.describe()",
+        "code": "${o0} = ${i0}.describe(${include}${exclude})",
         "options": [
           {
             "name": "i0",
@@ -2460,6 +2482,20 @@ define([
             "component": [
               "data_select"
             ]
+          },
+          {
+            "name": "include",
+            "label": "Include",
+            "component": [ "var_select" ],
+            "placeholder": "'all' or dtypes list",
+            "usePair": true
+          },
+          {
+            "name": "exclude",
+            "label": "Exclude",
+            "component": [ "var_select" ],
+            "placeholder": "'all' or dtypes list",
+            "usePair": true
           }
         ]
       },
@@ -4028,19 +4064,25 @@ define([
           }
         ]
       },
-      "pd088": {
+      "pdFunc_cut": {
         "name": "Cut",
         "library": "pandas",
         "description": "Cut data for ranging",
-        "code": "${o0} = pd.cut(${i0}, ${i1}${right}${labels}${precision})",
+        "code": "${o0} = pd.cut(${x}, ${bins}${right}${labels}${precision})",
         "options": [
           {
-            "name": "i0",
+            "name": "x",
             "label": "1-dimension Array",
+            "component": [
+              "data_select"
+            ],
+            "var_type": [
+              "Series", "list"
+            ],
             "required": true
           },
           {
-            "name": "i1",
+            "name": "bins",
             "label": "Divide By",
             "required": true
           },
@@ -4074,23 +4116,26 @@ define([
           }
         ]
       },
-      "pd089": {
+      "pdFunc_qcut": {
         "name": "Qcut",
         "library": "pandas",
         "description": "Q-cut",
-        "code": "${o0} = pd.qcut(${i0}, ${i1}${labels}${precision})",
+        "code": "${o0} = pd.qcut(${x}, ${q}${labels}${precision})",
         "options": [
           {
-            "name": "i0",
+            "name": "x",
             "label": "List/Series",
             "required": true,
+            "component": [
+              "data_select"
+            ],
             "var_type": [
               "list",
               "Series"
             ]
           },
           {
-            "name": "i1",
+            "name": "q",
             "label": "Divide By",
             "required": true
           },
@@ -6474,7 +6519,7 @@ define([
         "name": "Read Excel",
         "library": "pandas",
         "description": "excel to pandas object",
-        "code": "${o0} = pd.read_excel(${i0}${sheet_name}${etc})",
+        "code": "${o0} = pd.read_excel(${i0}${sheet_name}${index_col}${etc})",
         "options": [
           {
             "name": "i0",
@@ -6498,7 +6543,12 @@ define([
             "label": "Sheet Name",
             "type": "text",
             "usePair": true
-          }
+          },
+          {
+            "name": "index_col",
+            "label": "Column To Use As Index",
+            "usePair": true
+          },
         ]
       },
       "pd124": {

@@ -173,10 +173,9 @@ input.vp-menu-search-box {
 /* resizing handle */
 .vp-menu-frame .ui-resizable-handle {
     position: absolute;
-    margin-right: 5px;
     right: 0px;
     top: 0px;
-    width: 10px;
+    width: 5px;
     height: 100%;
     cursor: col-resize;
 }
@@ -238,7 +237,7 @@ input.vp-menu-search-box {
     text-align: center;
     box-sizing: border-box;
     border-radius: 3px;
-    padding: 10px 0px;
+    padding: 7.5px 0px;
     cursor: pointer;
     margin: 0;
 }
@@ -276,7 +275,14 @@ input.vp-menu-search-box {
 .vp-menuitem-apps-name {
     color: #FFFFFF;
     font-size: 10px;
-    margin-top: 3px;
+    /* margin-top: 3px; */
+
+    display: flex;
+    align-items: center;
+    width: 56px;
+    height: 20px;
+    line-height: 9px;
+    justify-content: center;
 }
 /* MenuItem - Logic */
 .vp-menuitem.logic-define {
@@ -342,7 +348,7 @@ input.vp-menu-search-box {
 /* Data Analysis */
 .vp-menuitem.apps .apps-icon {
     width: 100%;
-    height: 25px;
+    height: 24px;
 }
 .vp-menuitem.apps .apps_import {
     background: top / contain no-repeat url(../img/apps/apps_import.svg);
@@ -385,6 +391,9 @@ input.vp-menu-search-box {
 }
 .vp-menuitem.apps .apps_profiling {
     background: top / contain no-repeat url(../img/apps/apps_profiling.svg);
+}
+.vp-menuitem.apps .apps_pandasOption {
+    background: top / contain no-repeat url(../img/apps/apps_pandasOption.svg);
 }
 /* Visualization */
 .vp-menuitem.apps .visualize_chartStyle {

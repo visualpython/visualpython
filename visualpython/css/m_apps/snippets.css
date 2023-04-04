@@ -69,11 +69,13 @@
     float: right;
     cursor: pointer;
     position: relative;
+    height: 25px;
 }
 .vp-sn-menu-more {
     /* LAB: img to background-image */
     background: top / contain no-repeat url(../../img/snippets/more.svg);
     height: 100%;
+    width: 25px;
 }
 .vp-sn-menu-box {
     display: none;
@@ -129,7 +131,8 @@
     cursor: pointer;
     /* LAB: img to background-image */
     background: top / contain no-repeat url(../../img/snippets/sort.svg);
-    height: 100%;
+    height: 22px;
+    width: 22px;
 }
 .vp-sn-sort-menu-box {
     display: none;
