@@ -82,9 +82,10 @@ define([
 
             let setDefault = $(this.wrapSelector('#setDefault')).prop('checked');
             if (setDefault == true) {
-                Object.keys(this.state).forEach((key) => {
-                    code.push(com_util.formatString("pd.reset_option('display.{0}')", key));
-                })
+                // Object.keys(this.state).forEach((key) => {
+                //     code.push(com_util.formatString("pd.reset_option('display.{0}')", key));
+                // })
+                code.push("pd.reset_option('^display')");
             } else {
                 Object.keys(this.state).forEach((key) => {
                     if (that.state[key] && that.state[key] != '') {
