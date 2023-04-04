@@ -162,7 +162,7 @@ define([
         "name": "Read CSV",
         "library": "pandas",
         "description": "",
-        "code": "${o0} = pd.read_csv(${i0}${encoding}${header}${sep}${names}${usecols}${index_col}${na_values}${skiprows}${chunksize}${etc})",
+        "code": "${o0} = pd.read_csv(${i0}${encoding}${header}${sep}${names}${usecols}${index_col}${na_values}${skiprows}${nrows}${chunksize}${etc})",
         "options": [
           {
             "name": "i0",
@@ -228,6 +228,14 @@ define([
           {
             "name": "skiprows",
             "label": "Rows To Skip",
+            "usePair": true
+          },
+          {
+            "name": "nrows",
+            "label": "Number of rows",
+            "component": [
+              "input_number"
+            ],
             "usePair": true
           },
           {
@@ -6511,7 +6519,7 @@ define([
         "name": "Read Excel",
         "library": "pandas",
         "description": "excel to pandas object",
-        "code": "${o0} = pd.read_excel(${i0}${sheet_name}${etc})",
+        "code": "${o0} = pd.read_excel(${i0}${sheet_name}${index_col}${etc})",
         "options": [
           {
             "name": "i0",
@@ -6535,7 +6543,12 @@ define([
             "label": "Sheet Name",
             "type": "text",
             "usePair": true
-          }
+          },
+          {
+            "name": "index_col",
+            "label": "Column To Use As Index",
+            "usePair": true
+          },
         ]
       },
       "pd124": {
