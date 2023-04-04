@@ -173,10 +173,9 @@ input.vp-menu-search-box {
 /* resizing handle */
 .vp-menu-frame .ui-resizable-handle {
     position: absolute;
-    margin-right: 5px;
     right: 0px;
     top: 0px;
-    width: 10px;
+    width: 5px;
     height: 100%;
     cursor: col-resize;
 }
