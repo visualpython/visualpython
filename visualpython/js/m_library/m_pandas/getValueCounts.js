@@ -33,12 +33,12 @@ define([
             super.render();
             
             // add var selector
-            var varSelector = new VarSelector(['DataFrame', 'Series', 'Index'], 'DataFrame', false);
-            varSelector.setComponentId('i0');
-            varSelector.addClass('vp-state');
-            varSelector.setUseColumn(true);
-            varSelector.setValue(this.state.i0);
-            $(this.wrapSelector('#i0')).replaceWith(varSelector.render());
+            // var varSelector = new VarSelector(['DataFrame', 'Series', 'Index'], 'DataFrame', false);
+            // varSelector.setComponentId('i0');
+            // varSelector.addClass('vp-state');
+            // varSelector.setUseColumn(true);
+            // varSelector.setValue(this.state.i0);
+            // $(this.wrapSelector('#i0')).replaceWith(varSelector.render());
         }
     }
 
