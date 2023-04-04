@@ -96,7 +96,6 @@ define([
             this.name = name;
             this.path = path;
             this.category = category;
-            
 
             this.config = {
                 sizeLevel: 0,          // 0: 400x400 / 1: 500x500 / 2: 600x500 / 3: 750x500
