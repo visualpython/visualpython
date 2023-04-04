@@ -24,6 +24,9 @@ define([
      *      }
      * ]
      */
+    /** Last edited standard version */
+    var PANDAS_VERSION = '2.0.0';
+
     var PANDAS_FUNCTION = {
       "pdPdo_series": {
         "name": "Series",
@@ -2396,6 +2399,9 @@ define([
           {
             "name": "i0",
             "label": "Target Variable",
+            "component": [
+              "data_select"
+            ],
             "required": true
           },
           {
@@ -2412,7 +2418,7 @@ define([
         "name": "Info",
         "library": "pandas",
         "description": "DataFrame info(info per columns, data type, memory usage, ...)",
-        "code": "${o0} = ${i0}.info()",
+        "code": "${o0} = ${i0}.info(${verbose}${etc})",
         "options": [
           {
             "name": "i0",
@@ -2432,6 +2438,14 @@ define([
             "component": [
               "data_select"
             ]
+          },
+          {
+            "name": "verbose",
+            "label": "Verbose",
+            "component": [
+              "bool_select"
+            ],
+            "usePair": true
           }
         ]
       },
@@ -2439,7 +2453,7 @@ define([
         "name": "Describe",
         "library": "pandas",
         "description": "",
-        "code": "${o0} = ${i0}.describe()",
+        "code": "${o0} = ${i0}.describe(${include}${exclude})",
         "options": [
           {
             "name": "i0",
@@ -2460,6 +2474,20 @@ define([
             "component": [
               "data_select"
             ]
+          },
+          {
+            "name": "include",
+            "label": "Include",
+            "component": [ "var_select" ],
+            "placeholder": "'all' or dtypes list",
+            "usePair": true
+          },
+          {
+            "name": "exclude",
+            "label": "Exclude",
+            "component": [ "var_select" ],
+            "placeholder": "'all' or dtypes list",
+            "usePair": true
           }
         ]
       },
