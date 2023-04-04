@@ -376,6 +376,7 @@ define([
                     type: 'text',
                     id: obj.name,
                     class: 'vp-input vp-state',
+                    placeholder: obj.placeholder || 'Select data',
                     required: obj.required === true
                 });
                 vp_generateVarSuggestInput(pageThis.wrapSelector(), obj);
