@@ -4056,19 +4056,25 @@ define([
           }
         ]
       },
-      "pd088": {
+      "pdFunc_cut": {
         "name": "Cut",
         "library": "pandas",
         "description": "Cut data for ranging",
-        "code": "${o0} = pd.cut(${i0}, ${i1}${right}${labels}${precision})",
+        "code": "${o0} = pd.cut(${x}, ${bins}${right}${labels}${precision})",
         "options": [
           {
-            "name": "i0",
+            "name": "x",
             "label": "1-dimension Array",
+            "component": [
+              "data_select"
+            ],
+            "var_type": [
+              "Series", "list"
+            ],
             "required": true
           },
           {
-            "name": "i1",
+            "name": "bins",
             "label": "Divide By",
             "required": true
           },
@@ -4102,23 +4108,26 @@ define([
           }
         ]
       },
-      "pd089": {
+      "pdFunc_qcut": {
         "name": "Qcut",
         "library": "pandas",
         "description": "Q-cut",
-        "code": "${o0} = pd.qcut(${i0}, ${i1}${labels}${precision})",
+        "code": "${o0} = pd.qcut(${x}, ${q}${labels}${precision})",
         "options": [
           {
-            "name": "i0",
+            "name": "x",
             "label": "List/Series",
             "required": true,
+            "component": [
+              "data_select"
+            ],
             "var_type": [
               "list",
               "Series"
             ]
           },
           {
-            "name": "i1",
+            "name": "q",
             "label": "Divide By",
             "required": true
           },
