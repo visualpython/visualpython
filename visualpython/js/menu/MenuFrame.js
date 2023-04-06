@@ -257,8 +257,8 @@ define([
                     }
                 } else {
                     // functions : MenuItem
+                    that.menuLibrariesFlatten.push(child);
                     if (!child.hide) {
-                        that.menuLibrariesFlatten.push(child);
                         var menuItem = new MenuItem($(body), child);
                     }
                 }
