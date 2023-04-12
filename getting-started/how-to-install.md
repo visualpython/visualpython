@@ -17,7 +17,7 @@ description: This document will show how to install Visual Python.
 **1. Install package from**
 
 ```
-pip install juptyerlab-visualpython
+pip install jupyterlab-visualpython
 ```
 
 **2. Activate Visual Python on Jupyter Lab**
