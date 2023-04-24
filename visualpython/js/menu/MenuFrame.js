@@ -236,6 +236,9 @@ define([
             //     }
             // }
             // this.$pageDom = $(replaceHtml);
+            
+            // add hover title for logo
+            this.$pageDom.find('.vp-logo').prop('title', com_Const.TOOLBAR_BTN_INFO.HELP);
             return this.$pageDom;
         }
 
