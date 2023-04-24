@@ -33,11 +33,11 @@ define([
             this.config.checkModules = ['pd'];
 
             this.state = {
+                filter_warning: '',
                 min_rows: '',
                 max_rows: '',
                 max_cols: '',
                 max_colwidth: '',
-                float_format: '',
                 precision: '',
                 chop_threshold: '',
                 expand_frame_repr: '',
@@ -56,10 +56,23 @@ define([
 
                 if (checked) {
                     // disable input
-                    $(that.wrapSelector('.vp-pandas-option-body input')).prop('disabled', true);
+                    $(that.wrapSelector('.vp-po-option input:not([type="checkbox"])')).prop('disabled', true);
                 } else {
                     // enable input
-                    $(that.wrapSelector('.vp-pandas-option-body input')).prop('disabled', false);
+                    $(that.wrapSelector('.vp-po-option input:not([type="checkbox"])')).prop('disabled', false);
+                }
+            });
+
+            // setting popup - reset warning
+            $(this.wrapSelector('#resetWarning')).on('change', function() {
+                let checked = $(this).prop('checked');
+
+                if (checked) {
+                    // disable input
+                    $(that.wrapSelector('.vp-po-warning input:not([type="checkbox"])')).prop('disabled', true);
+                } else {
+                    // enable input
+                    $(that.wrapSelector('.vp-po-warning input:not([type="checkbox"])')).prop('disabled', false);
                 }
             });
         }
@@ -81,15 +94,22 @@ define([
             let code = [];
 
             let setDefault = $(this.wrapSelector('#setDefault')).prop('checked');
+            let resetWarning = $(this.wrapSelector('#resetWarning')).prop('checked');
             if (setDefault == true) {
                 // Object.keys(this.state).forEach((key) => {
                 //     code.push(com_util.formatString("pd.reset_option('display.{0}')", key));
                 // })
                 code.push("pd.reset_option('^display')");
-            } else {
+            } else if (resetWarning) {
+                code.push("import warnings\nwarnings.resetwarnings()");
+            } else{
                 Object.keys(this.state).forEach((key) => {
                     if (that.state[key] && that.state[key] != '') {
-                        code.push(com_util.formatString("pd.set_option('display.{0}', {1})", key, that.state[key]));
+                        if (key === 'filter_warning') {
+                            code.push(com_util.formatString("import warnings\nwarnings.simplefilter(action='{0}', category=Warning)", that.state[key]));
+                        } else {
+                            code.push(com_util.formatString("pd.set_option('display.{0}', {1})", key, that.state[key]));
+                        }
                     }
                 })
             }
