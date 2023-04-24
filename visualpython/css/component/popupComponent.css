@@ -81,6 +81,24 @@
     font-family: 'AppleSDGothicNeo';
     color: var(--vp-font-highlight);
 }
+.vp-popup-docs {
+    position: absolute;
+    width: 15px;
+    height: 20px;
+    top: 4px;
+    right: 85px;
+    z-index: 3;
+    line-height: 20px;
+    text-align: center;
+    cursor: pointer;
+    color: var(--vp-gray-color);
+}
+.vp-popup-docs > div {
+    width: 20px;
+    height: 20px;
+    /* LAB: img to background-image */
+    background: center / contain no-repeat url(../../img/docs.svg);
+}
 .vp-popup-maximize {
     position: absolute;
     width: 15px;
