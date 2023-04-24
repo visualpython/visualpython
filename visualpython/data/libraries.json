@@ -2933,14 +2933,14 @@
                         }
                     },
                     {
-                        "id"   : "apps_variable",
+                        "id"   : "apps_information",
                         "type" : "function",
                         "level": 1,
-                        "name" : "Variable",
-                        "tag"  : "VARIABLE,APPS",
-                        "path" : "visualpython - apps - variable",
-                        "desc" : "Variable",
-                        "file" : "m_apps/Variable",
+                        "name" : "Information",
+                        "tag"  : "INFORMATION,APPS",
+                        "path" : "visualpython - apps - information",
+                        "desc" : "Data information",
+                        "file" : "m_apps/Information",
                         "apps" : {
                             "color": 1,
                             "icon": "apps/apps_variable.svg"

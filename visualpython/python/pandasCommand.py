@@ -99,8 +99,6 @@ def _vp_display_dataframe_info(df):
     Get info of dataframe
     """
     # display(df.shape)
-    _notnull = df.notnull().sum()
-    _types = df.dtypes
     _desc = df.describe().T
-    _info = _vp_pd.concat([_notnull, _types], axis=1, keys=['Non-Null Count','Dtype'])
-    display(_vp_pd.concat([_info, _desc], axis=1))
+    _info = _vp_pd.DataFrame({'Non-Null Count': df.notnull().sum(), 'Dtype': df.dtypes})
+    display(_vp_pd.concat([_info, _desc], axis=1).fillna(''))
