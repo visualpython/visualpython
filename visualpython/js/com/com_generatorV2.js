@@ -861,7 +861,7 @@ define([
         vpKernel.getColumnList(varName).then(function(resultObj) {
             try {
                 let { result, type, msg } = resultObj;
-                var varResult = JSON.parse(result);
+                var { list } = JSON.parse(result);
 
                 // check if it needs to add index option
                 let addIndex = false;
@@ -871,9 +871,9 @@ define([
                     addIndex = columnWithIndex;
                 }
                 if (addIndex == true) {
-                    varResult = [
+                    list = [
                         {value: varName + '.index', label: 'index'},
-                        ...varResult
+                        ...list
                     ]
                 }
 
@@ -885,9 +885,9 @@ define([
                     addEmpty = columnWithEmpty;
                 }
                 if (addEmpty == true) {
-                    varResult = [
+                    list = [
                         {value: '', label: 'Select option...'},
-                        ...varResult
+                        ...list
                     ]
                 }
 
@@ -903,7 +903,7 @@ define([
                         suggestInputX.setComponentID(columnInputId);
                         suggestInputX.addClass('vp-input vp-state');
                         suggestInputX.setPlaceholder("column name");
-                        suggestInputX.setSuggestList(function() { return varResult; }); //FIXME:
+                        suggestInputX.setSuggestList(function() { return list; }); //FIXME:
                         suggestInputX.setNormalFilter(false);
                         suggestInputX.setValue(defaultValue);
                         $(selector + ' #' + columnInputId).replaceWith(function() {

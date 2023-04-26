@@ -168,8 +168,8 @@ define([
                 vpKernel.getColumnList(parent).then(function(resultObj) {
                     let { result } = resultObj;
                     try {
-                        var colList = JSON.parse(result);
-                        colList = colList.map(function(x) {
+                        var { list } = JSON.parse(result);
+                        list = list.map(function(x) {
                             return {
                                 ...x,
                                 value: x.label,
@@ -177,7 +177,7 @@ define([
                                 type: x.dtype
                             };
                         });
-                        callback(colList);
+                        callback(list);
                     } catch (e) {
                         callback([]);
                     }
@@ -189,7 +189,7 @@ define([
             vpKernel.getRowList(parent).then(function(resultObj) {
                 let { result } = resultObj;
                 try {
-                    var rowList = JSON.parse(result);
+                    var { list:rowList } = JSON.parse(result);
                     rowList = rowList.map(function(x) {
                         return {
                             ...x,

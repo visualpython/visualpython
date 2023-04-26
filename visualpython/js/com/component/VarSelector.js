@@ -239,7 +239,7 @@ define([
             vpKernel.getColumnList(varName).then(function(resultObj) {
                 try {
                     let { result, type, msg } = resultObj;
-                    var varResult = JSON.parse(result);
+                    var { list } = JSON.parse(result);
 
                     let newTag = new com_String();
                     newTag.appendFormatLine('<select class="{0} {1} {2}" {3}>', 
@@ -247,7 +247,7 @@ define([
                         (that.useColumn == true && that.defaultType == 'DataFrame'?'':'style="display: none;"'));
                     newTag.appendFormatLine('<option value="{0}" data-dtype="{1}">{2}</option>',
                         '', '', '');
-                    varResult && varResult.forEach(col => {
+                    list && list.forEach(col => {
                         // label, value, dtype, array, location, category
                         newTag.appendFormatLine('<option value="{0}" data-dtype="{1}" {2}>{3}</option>',
                             col.value, col.dtype, 

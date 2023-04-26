@@ -324,7 +324,7 @@ define([
                     let subsetVariable = com_util.formatString('{0}.iloc[{1}:{2}]', that.state.pandasObject, start, end);
                     vpKernel.getRowList(subsetVariable).then(function (resultObj) {
                         let { result } = resultObj;
-                        var rowList = JSON.parse(result);
+                        var { list:rowList } = JSON.parse(result);
                         rowList = rowList.map(function (x) {
                             return {
                                 ...x,
@@ -1179,15 +1179,15 @@ define([
                     // get result and load column list
                     vpKernel.getColumnList(varName).then(function (resultObj) {
                         let { result } = resultObj;
-                        var colList = JSON.parse(result);
-                        colList = colList.map(function (x) {
+                        var { list } = JSON.parse(result);
+                        list = list.map(function (x) {
                             return {
                                 ...x,
                                 value: x.label,
                                 code: x.value,
                             };
                         });
-                        that.loadColumnList(colList);
+                        that.loadColumnList(list);
                         that.bindDraggable('col');
                         that.generateCode();
                     });
@@ -1196,7 +1196,7 @@ define([
                     let subsetVariable = com_util.formatString('{0}.iloc[:{1}]', varName, that.state.rowLimit);
                     vpKernel.getRowList(subsetVariable).then(function (resultObj) {
                         let { result } = resultObj;
-                        var rowList = JSON.parse(result);
+                        var { list:rowList } = JSON.parse(result);
                         rowList = rowList.map(function (x) {
                             return {
                                 ...x,
@@ -1229,7 +1229,7 @@ define([
                     let subsetVariable = com_util.formatString('{0}.iloc[:{1}]', varName, that.state.rowLimit);
                     vpKernel.getRowList(subsetVariable).then(function (resultObj) {
                         let { result } = resultObj;
-                        var rowList = JSON.parse(result);
+                        var { list:rowList } = JSON.parse(result);
                         rowList = rowList.map(function (x) {
                             return {
                                 ...x,

@@ -583,7 +583,7 @@ define([
         vpKernel.getColumnList(varName).then(function(resultObj) {
             try {
                 let { result, type, msg } = resultObj;
-                var varResult = JSON.parse(result);
+                var { list } = JSON.parse(result);
 
                 // columns using suggestInput
                 columnInputIdList && columnInputIdList.forEach(columnInputId => {
@@ -591,7 +591,7 @@ define([
                     suggestInputX.setComponentID(columnInputId);
                     suggestInputX.addClass('vp-input vp-state');
                     suggestInputX.setPlaceholder("column name");
-                    suggestInputX.setSuggestList(function() { return varResult; }); //FIXME:
+                    suggestInputX.setSuggestList(function() { return list; }); //FIXME:
                     suggestInputX.setNormalFilter(false);
                     suggestInputX.setValue($(selector + ' #' + columnInputId).val());
                     $(selector + ' #' + columnInputId).replaceWith(function() {

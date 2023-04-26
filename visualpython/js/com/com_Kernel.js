@@ -79,20 +79,20 @@ define([
                                                 if (msg.content['name'] == 'stderr') {
                                                     reject(msg);
                                                 } else {
-                                                    if (msg.content['text']) {
-                                                        result = String(msg.content['text']);
-                                                        type = 'text';
-                                                    } else if (msg.content.data) {
-                                                        if (msg.content.data['text/plain']) {
-                                                            result = String(msg.content.data['text/plain']);
-                                                            type = 'text/plain';
-                                                        } else if (msg.content.data['text/html']) {
+                                                    if (msg.content.data) {
+                                                        if (msg.content.data['text/html']) {
                                                             result = String(msg.content.data['text/html']);
                                                             type = 'text/html';
                                                         } else if (msg.content.data['image/png']) {
                                                             result = String(msg.content.data['image/png']);
                                                             type = 'image/png';
+                                                        } else if (msg.content.data['text/plain']) {
+                                                            result = String(msg.content.data['text/plain']);
+                                                            type = 'text/plain';
                                                         }
+                                                    } else if (msg.content['text']) {
+                                                        result = String(msg.content['text']);
+                                                        type = 'text';
                                                     }
                                                     resolve({result: result, type: type, msg: msg});
                                                 }

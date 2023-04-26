@@ -33,7 +33,7 @@ define([
             super._init();
             /** Write codes executed before rendering */
             this.config.dataview = false;
-            this.config.size = { width: 1064, height: 550 };
+            this.config.sizeLevel = 4;
             this.config.checkModules = ['pd'];
 
             this.state = {
@@ -197,11 +197,13 @@ define([
                 allowModule: true,
                 finish: function(value, dtype) {
                     $(that.wrapSelector('#vp_instanceTarget')).trigger({type: 'change', value: value});
+                    that.updateValue(value);
+                    that.reloadInsEditor();
                 },
                 select: function(value, dtype) {
                     $(that.wrapSelector('#vp_instanceTarget')).trigger({type: 'change', value: value});
-                    // that.updateValue(value);
-                    // that.reloadInsEditor();
+                    that.updateValue(value);
+                    that.reloadInsEditor();
                 }
             });
             $(page).find('#vp_instanceTarget').replaceWith(targetSelector.toTagString());
@@ -210,7 +212,6 @@ define([
                 pageThis: this, id: 'vp_instanceAllocate', placeholder: 'Variable name'
             });
             $(page).find('#vp_instanceAllocate').replaceWith(allocateSelector.toTagString());
-
 
             return page;
         }
@@ -373,6 +374,7 @@ define([
         reloadInsEditor() {
             var that = this;
             var tempPointer = this.pointer;
+            this.subsetEditor.disableButton();
             var callbackFunction = function (varObj) {
                 var varType = varObj.type;
     
@@ -382,8 +384,6 @@ define([
                     let nowCode = (cmObj && cmObj.cm)?cmObj.cm.getValue():'';
                     that.subsetEditor.state.pandasObject = nowCode;
                     that.subsetEditor.enableButton();
-                } else {
-                    that.subsetEditor.disableButton();
                 }
             };
     

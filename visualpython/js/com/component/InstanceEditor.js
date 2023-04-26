@@ -523,19 +523,22 @@ define([
                         $(that.wrapSelector('.' + VP_INS_PARAMETER)).prop('disabled', true);
                     }
                 }
+
+                // callback
+                if (callback) {
+                    callback(varObj);
+                }
             }).catch(function(resultObj) {
                 let { result } = resultObj;
                 // show alert if this is visible
                 if (that.pageThis.isHidden() == false && that.config.showAlert == true) {
                     com_util.renderAlertModal(result.ename + ': ' + result.evalue);
                 }
-            }).finally(function() {
                 // callback
                 if (callback) {
-                    callback('');
+                    callback({});
                 }
             });
-
 
         }
         show() {
