@@ -66,7 +66,16 @@ define([
                     child: [
                         { id: 'null_count', label: 'Null count', 
                             code: "pd.DataFrame({'Null Count': ${data}.isnull().sum(), 'Non-Null Count': ${data}.notnull().sum()})", dtype: ['DataFrame', 'Series'] },
-                        { id: 'duplicates', label: 'Duplicated', code: '${data}.duplicated()', dtype: ['DataFrame', 'Series'] },
+                        // { id: 'duplicates', label: 'Duplicated', code: '${data}.duplicated()', dtype: ['DataFrame', 'Series'] },
+                        { id: 'duplicates', label: 'Duplicated', code: "with pd.option_context('display.max_colwidth', None):\
+                            \n    _duplicated = ([${data}.duplicated().sum()] + [${data}[col].duplicated().sum() for col in df.columns])\
+                            \n    _duplicated_df = pd.DataFrame({\
+                            \n        'Rows':[len(${data})]*len(_duplicated),\
+                            \n        'Unique':[len(${data}) - dups for dups in _duplicated],\
+                            \n        'Duplicated': _duplicated,\
+                            \n        'Duplicated values': [' + '.join(${data}.columns.to_list())] + ${data}.columns.to_list()\
+                            \n    }, index=['Combination']+${data}.columns.to_list())\
+                            \n    display(_duplicated_df)", dtype: ['DataFrame', 'Series'] },
                         { id: 'unique', label: 'Unique', code: '${data}.unique()', dtype: ['Series'] },
                         { id: 'value_counts', label: 'Value counts', code: '${data}.value_counts()', dtype: ['DataFrame', 'Series'] },
                     ]
@@ -279,7 +288,7 @@ define([
                         let { id, label, dtype } = itemObj;
                         let enabled = dtype.includes(currentDtype);
                         let selected = that.state.menuItem.includes(id);
-                        // FIXME: disable item depends on dtype
+                        // disable item depends on dtype
                         $menu.find('.vp-dropdown-content')
                             .append($(`<div class="vp-dropdown-item vp-information-menu ${enabled?'':'disabled'} ${selected?'selected':''}" data-menu="${id}" data-parent="${menuObj.id}">${label}</div>`));
                     });
