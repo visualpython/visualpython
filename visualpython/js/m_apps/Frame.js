@@ -13,8 +13,8 @@
 // [CLASS] Frame
 //============================================================================
 define([
-    __VP_TEXT_LOADER__('vp_base/html/m_apps/frame.html'), // INTEGRATION: unified version of text loader
-    __VP_CSS_LOADER__('vp_base/css/m_apps/frame'), // INTEGRATION: unified version of css loader
+    __VP_TEXT_LOADER__('vp_base/html/m_apps/frame.html'),   // INTEGRATION: unified version of text loader
+    __VP_CSS_LOADER__('vp_base/css/m_apps/frame'),          // INTEGRATION: unified version of css loader
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
@@ -39,6 +39,8 @@ define([
                 tempObj: '_vp',
                 returnObj: '_vp',
                 inplace: false,
+                menu: '',
+                menuItem: '',
                 columnList: [],
                 indexList: [],
                 selected: [],
@@ -65,13 +67,77 @@ define([
                 'bool', 'str'
             ];
 
+            // {
+            //     id: 'id',
+            //     label: 'menu label',
+            //     child: [
+            //         { 
+            //             id: 'id', label: 'label', code: 'code', 
+            //             axis: 'col/row', single_select: true/false,
+            //             numeric_only: true/false 
+            //         }
+            //     ]
+            // }
+            this.menuList = [
+                {
+                    id: 'edit',
+                    label: 'Edit',
+                    child: [
+                        { id: 'add', label: 'Add', code: '', menuType: FRAME_EDIT_TYPE.ADD_COL },
+                        { id: 'delete', label: 'Delete', code: '', menuType: FRAME_EDIT_TYPE.DROP },
+                        { id: 'rename', label: 'Rename', code: '', menuType: FRAME_EDIT_TYPE.RENAME },
+                        { id: 'asType', label: 'As type', code: '', axis: 'col', menuType: FRAME_EDIT_TYPE.AS_TYPE },
+                        { id: 'replace', label: 'Replace', code: '', axis: 'col', single_select: true, menuType: FRAME_EDIT_TYPE.REPLACE },
+                        { id: 'discretize', label: 'Discretize', code: '', axis: 'col', single_select: true, numeric_only: true, menuType: FRAME_EDIT_TYPE.DISCRETIZE }
+                    ]
+                },
+                {
+                    id: 'transform',
+                    label: 'Transform',
+                    child: [
+                        { id: 'set_index', label: 'Set index', code: '', axis: 'col', menuType: FRAME_EDIT_TYPE.SET_IDX },
+                        { id: 'reset_index', label: 'Reset index', code: '', axis: 'row', menuType: FRAME_EDIT_TYPE.RESET_IDX },
+                        { id: 'data_shift', label: 'Data shift', code: '', axis: 'col', menuType: FRAME_EDIT_TYPE.DATA_SHIFT }
+                    ]
+                },
+                {
+                    id: 'sort',
+                    label: 'Sort',
+                    axis: 'col',
+                    child: [
+                        { id: 'sort_index', label: 'Sort index', code: '', axis: 'col', menuType: FRAME_EDIT_TYPE.SORT_INDEX },
+                        { id: 'sort_values', label: 'Sort values', code: '', axis: 'col', menuType: FRAME_EDIT_TYPE.SORT_VALUES },
+                    ]
+                },
+                {
+                    id: 'encoding',
+                    label: 'Encoding',
+                    axis: 'col',
+                    child: [
+                        { id: 'label_encoding', label: 'Label encoding', code: '', axis: 'col', menuType: FRAME_EDIT_TYPE.LABEL_ENCODING },
+                        { id: 'one_hot_encoding', label: 'Onehot encoding', code: '', axis: 'col', menuType: FRAME_EDIT_TYPE.ONE_HOT_ENCODING },
+                    ]
+                },
+                {
+                    id: 'data_cleaning',
+                    label: 'Data cleaning',
+                    axis: 'col',
+                    child: [
+                        { id: 'fillna', label: 'Fill NA', code: '', axis: 'col', menuType: FRAME_EDIT_TYPE.FILL_NA },
+                        { id: 'dropna', label: 'Drop NA', code: '', axis: 'col', menuType: FRAME_EDIT_TYPE.DROP_NA },
+                        { id: 'drop_outlier', label: 'Drop outlier', code: '', axis: 'col', menuType: FRAME_EDIT_TYPE.DROP_OUT },
+                        { id: 'drop_duplicates', label: 'Drop duplicates', code: '', axis: 'col', menuType: FRAME_EDIT_TYPE.DROP_DUP },
+                    ]
+                },
+            ];
+
             // Add/Replace - subset
             this.subsetCm = null;
             this.subsetEditor = null;
 
             this.loading = false;
 
-            this._addCodemirror('previewCode', this.wrapSelector('#vp_fePreviewCode'), 'readonly');
+            // this._addCodemirror('previewCode', this.wrapSelector('#vp_fePreviewCode'), 'readonly');
         }
 
         loadState() {
@@ -214,6 +280,96 @@ define([
                 that.showMenu(tblPos.left + thisRect.width, tblPos.top + thisPos.top - scrollTop);
             });
 
+            // select column group
+            $(document).on('click', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN_GROUP), function(evt) {
+                evt.stopPropagation();
+
+                let hasSelected = $(this).hasClass('selected');
+                let colLabel = $(this).data('label');
+                let firstIdx = $(that.wrapSelector(`.${VP_FE_TABLE} th[data-parent="${colLabel}"]:first`)).index();
+                let lastIdx = $(that.wrapSelector(`.${VP_FE_TABLE} th[data-parent="${colLabel}"]:last`)).index();
+                if (firstIdx === lastIdx) {
+                    lastIdx = -1;
+                }
+
+                $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW)).removeClass('selected');
+
+                if (vpEvent.keyManager.keyCheck.ctrlKey) {
+                    if (!hasSelected) {
+                        that.state.selection = { start: firstIdx, end: -1 };
+                        $(this).addClass('selected');
+                        $(that.wrapSelector(`.${VP_FE_TABLE} th[data-parent="${colLabel}"]`)).addClass('selected');
+                        var newAxis = $(this).data('axis');
+                        that.state.axis = newAxis;
+                    } else {
+                        $(this).removeClass('selected');
+                        $(that.wrapSelector(`.${VP_FE_TABLE} th[data-parent="${colLabel}"]`)).removeClass('selected');
+                    }
+                } else if (vpEvent.keyManager.keyCheck.shiftKey) {
+                    var axis = that.state.axis;
+                    var startIdx = that.state.selection.start;
+                    if (axis != FRAME_AXIS.COLUMN) {
+                        startIdx = -1;
+                    }
+                    
+                    if (startIdx == -1) {
+                        // no selection
+                        that.state.selection = { start: firstIdx, end: -1 };
+                    } else if (startIdx > firstIdx) {
+                        // add selection from idx to startIdx
+                        var tags = $(that.wrapSelector('.' + VP_FE_TABLE_COLUMN));
+                        let parentSet = new Set();
+                        for (var i = firstIdx; i <= startIdx; i++) {
+                            $(tags[i]).addClass('selected');
+                            parentSet.add($(tags[i]).data('parent'));
+                        }
+                        parentSet.forEach(parentKey => {
+                            let length = $(that.wrapSelector(`.${VP_FE_TABLE} th[data-parent="${parentKey}"]`)).length;
+                            let selectedLength = $(that.wrapSelector(`.${VP_FE_TABLE} th.selected[data-parent="${parentKey}"]`)).length;
+                            if (length === selectedLength) {
+                                $(that.wrapSelector(`.${VP_FE_TABLE} th[data-label="${parentKey}"]`)).addClass('selected');
+                            } else {
+                                $(that.wrapSelector(`.${VP_FE_TABLE} th[data-label="${parentKey}"]`)).removeClass('selected');
+                            }
+                        });
+                        that.state.selection = { start: startIdx, end: firstIdx };
+                    } else if (startIdx <= firstIdx) {
+                        // add selection from startIdx to idx
+                        var tags = $(that.wrapSelector('.' + VP_FE_TABLE_COLUMN));
+                        let parentSet = new Set();
+                        for (var i = startIdx; i <= lastIdx; i++) {
+                            $(tags[i]).addClass('selected');
+                            parentSet.add($(tags[i]).data('parent'));
+                        }
+                        parentSet.forEach(parentKey => {
+                            let length = $(that.wrapSelector(`.${VP_FE_TABLE} th[data-parent="${parentKey}"]`)).length;
+                            let selectedLength = $(that.wrapSelector(`.${VP_FE_TABLE} th.selected[data-parent="${parentKey}"]`)).length;
+                            if (length === selectedLength) {
+                                $(that.wrapSelector(`.${VP_FE_TABLE} th[data-label="${parentKey}"]`)).addClass('selected');
+                            } else {
+                                $(that.wrapSelector(`.${VP_FE_TABLE} th[data-label="${parentKey}"]`)).removeClass('selected');
+                            }
+                        });
+                        that.state.selection = { start: startIdx, end: lastIdx };
+                    }
+                } else {
+                    $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN)).removeClass('selected');
+                    $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN_GROUP)).removeClass('selected');
+                    if (!hasSelected) {
+                        $(this).addClass('selected');
+                        $(that.wrapSelector(`.${VP_FE_TABLE} th[data-parent="${colLabel}"]`)).addClass('selected');
+                        that.state.selection = { start: firstIdx, end: lastIdx };
+                        var newAxis = $(this).data('axis');
+                        that.state.axis = newAxis;
+                    } else {
+                        $(this).removeClass('selected');
+                        $(that.wrapSelector(`.${VP_FE_TABLE} th[data-parent="${colLabel}"]`)).removeClass('selected');
+                    }
+                }
+                that.loadInfo();
+
+            });
+
             // select column
             $(document).on('click', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN), function(evt) {
                 evt.stopPropagation();
@@ -260,6 +416,7 @@ define([
                     }
                 } else {
                     $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN)).removeClass('selected');
+                    $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN_GROUP)).removeClass('selected');
                     if (!hasSelected) {
                         $(this).addClass('selected');
                         that.state.selection = { start: idx, end: -1 };
@@ -369,6 +526,12 @@ define([
                     case FRAME_EDIT_TYPE.RENAME:
                     case FRAME_EDIT_TYPE.REPLACE:
                     case FRAME_EDIT_TYPE.AS_TYPE:
+                    case FRAME_EDIT_TYPE.DISCRETIZE:
+                    case FRAME_EDIT_TYPE.DATA_SHIFT:
+                    case FRAME_EDIT_TYPE.SORT_INDEX:
+                    case FRAME_EDIT_TYPE.SORT_VALUES:
+                    case FRAME_EDIT_TYPE.FILL_NA:
+                    case FRAME_EDIT_TYPE.DROP_NA:
                         that.openInputPopup(editType);
                         break;
                     case FRAME_EDIT_TYPE.DROP_OUT:
@@ -405,10 +568,10 @@ define([
                     var df = $(this).val();
                     vpKernel.getColumnList(df).then(function(resultObj) {
                         let { result } = resultObj;
-                        var colList = JSON.parse(result);
+                        var { list } = JSON.parse(result);
                         var tag = new com_String();
                         tag.appendFormatLine('<select class="{0}">', 'vp-inner-popup-var1col');
-                        colList && colList.forEach(col => {
+                        list && list.forEach(col => {
                             tag.appendFormatLine('<option data-code="{0}" value="{1}">{2}</option>'
                                     , col.value, col.label, col.label);
                         });
@@ -428,10 +591,10 @@ define([
                     var df = $(this).val();
                     vpKernel.getColumnList(df).then(function(resultObj) {
                         let { result } = resultObj;
-                        var colList = JSON.parse(result);
+                        var { list } = JSON.parse(result);
                         var tag = new com_String();
                         tag.appendFormatLine('<select class="{0}">', 'vp-inner-popup-var2col');
-                        colList && colList.forEach(col => {
+                        list && list.forEach(col => {
                             tag.appendFormatLine('<option data-code="{0}" value="{1}">{2}</option>'
                                     , col.value, col.label, col.label);
                         });
@@ -537,6 +700,8 @@ define([
             } = this.state;
 
             this.loadVariableList();
+
+            this.renderToolbar();
     
             $(this.wrapSelector('#vp_feVariable')).val(originObj);
     
@@ -550,6 +715,9 @@ define([
                 // this.state.steps = [];
                 this.loadCode(code);
             }
+
+            // resize codeview
+            $(this.wrapSelector('.vp-popup-codeview-box')).css({'height': '300px'})
         }
 
         renderVariableList(varList, defaultValue='') {
@@ -569,6 +737,30 @@ define([
             variableInput.setValue(defaultValue);
             $(this.wrapSelector('#vp_feVariable')).replaceWith(function() {
                 return variableInput.toTagString();
+            });
+        }
+
+        renderToolbar() {
+            let that = this;
+            $(this.wrapSelector('.vp-fe-toolbox')).html('');
+            // add menu list
+            this.menuList & this.menuList.forEach(menuObj => {
+                // show menu list dynamically
+                let { id, label, child, dtype } = menuObj;
+                let enabled = true; //dtype.includes(currentDtype); // FIXME: consider column/row or single/multi select
+                let selected = id === that.state.menu;
+                let $menu = $(`<div class="vp-dropdown ${enabled?'':'disabled'}">
+                    <div class="vp-drop-button ${enabled?'':'disabled'} ${selected?'selected':''}" data-menu="${id}">${label}</div>
+                    <div class="vp-dropdown-content"></div>
+                </div>`);
+                child && child.forEach(itemObj => {
+                    let { id, label, dtype, menuType } = itemObj;
+                    let enabled = true; //dtype.includes(currentDtype); // FIXME: consider column/row or single/multi select
+                    let selected = that.state.menuItem === id;
+                    $menu.find('.vp-dropdown-content')
+                        .append($(`<div class="vp-dropdown-item ${VP_FE_MENU_ITEM} ${enabled?'':'disabled'} ${selected?'selected':''}" data-menu="${id}" data-type="${menuType}" data-parent="${menuObj.id}">${label}</div>`));
+                });
+                $(this.wrapSelector('.vp-fe-toolbox')).append($menu);
             });
         }
 
@@ -811,12 +1003,31 @@ define([
                 content.appendLine('<tr>');
                 content.appendFormatLine('<th><label>{0}</label></th>', col.label);
                 content.appendFormatLine('<td><input type="text" class="{0}"/>', 'vp-inner-popup-input' + idx);
-                content.appendFormatLine('<label><input type="checkbox" class="{0}" checked/><span>{1}</span></label>', 'vp-inner-popup-istext' + idx, 'Text');
+                content.appendFormatLine('<label><input type="checkbox" class="{0}" checked/><span>{1}</span></label></td>', 'vp-inner-popup-istext' + idx, 'Text');
                 content.appendLine('</tr>');
             });
             content.appendLine('</table>');
             content.appendLine('</div>');
 
+            // set content
+            $(this.wrapSelector('.vp-inner-popup-body')).html(content.toString());
+            return content.toString();
+        }
+
+        renderSortPage() {
+            var content = new com_String();
+            content.appendFormatLine('<div class="{0}">', 'vp-inner-popup-sort-page');
+            content.appendLine('<table>');
+            content.appendLine('<colgroup><col width="100px"><col width="*"></colgroup>');
+            content.appendLine('<tr>');
+            content.appendFormatLine('<th><label>{0}</label></th>', 'Ascending');
+            content.appendFormatLine('<td><select class="{0}">', 'vp-inner-popup-isascending');
+            content.appendFormatLine('<option value="{0}">{1}</option>', "True", "True (default)");
+            content.appendFormatLine('<option value="{0}">{1}</option>', "False", "False");
+            content.appendLine('</select></td>');
+            content.appendLine('</tr>');
+            content.appendLine('</table>');
+            content.appendLine('</div>');
             // set content
             $(this.wrapSelector('.vp-inner-popup-body')).html(content.toString());
             return content.toString();
@@ -941,6 +1152,14 @@ define([
                     title = 'Rename';
                     content = this.renderRenamePage();
                     break;
+                case FRAME_EDIT_TYPE.SORT_INDEX:
+                    title = 'Sort by index';
+                    content = this.renderSortPage();
+                    break;
+                case FRAME_EDIT_TYPE.SORT_VALUES:
+                    title = 'Sort by values';
+                    content = this.renderSortPage();
+                    break;
                 case FRAME_EDIT_TYPE.REPLACE:
                     title = 'Replace';
                     // content = this.renderReplacePage();
@@ -1003,12 +1222,12 @@ define([
             // set column list
             vpKernel.getColumnList(this.state.tempObj).then(function(resultObj) {
                 let { result } = resultObj;
-                var colList = JSON.parse(result);
+                var { list } = JSON.parse(result);
                 var tag1 = new com_String();
                 var tag2 = new com_String();
                 tag1.appendFormatLine('<select class="{0}">', 'vp-inner-popup-var1col');
                 tag2.appendFormatLine('<select class="{0}">', 'vp-inner-popup-var2col');
-                colList && colList.forEach(col => {
+                list && list.forEach(col => {
                     tag1.appendFormatLine('<option data-code="{0}" value="{1}">{2}</option>'
                             , col.value, col.label, col.label);
                     tag2.appendFormatLine('<option data-code="{0}" value="{1}">{2}</option>'
@@ -1093,6 +1312,10 @@ define([
                         };
                     });
                     break;
+                case FRAME_EDIT_TYPE.SORT_INDEX:
+                case FRAME_EDIT_TYPE.SORT_VALUES:
+                    content['ascending'] = $(this.wrapSelector('.vp-inner-popup-isascending')).val();
+                    break;
                 // case FRAME_EDIT_TYPE.REPLACE:
                 //     var useregex = $(this.wrapSelector('.vp-inner-popup-use-regex')).prop('checked');
                 //     content['useregex'] = useregex;
@@ -1156,7 +1379,7 @@ define([
     
             // get selected columns/indexes
             var selected = [];
-            $(this.wrapSelector('.' + VP_FE_TABLE + ' th.selected')).each((idx, tag) => {
+            $(this.wrapSelector(`.${VP_FE_TABLE} th:not(.${VP_FE_TABLE_COLUMN_GROUP}).selected`)).each((idx, tag) => {
                 var label = $(tag).text();
                 var code = $(tag).data('code');
                 var type = $(tag).data('type');
@@ -1304,6 +1527,16 @@ define([
                         code.appendFormat("{0}.reset_index(inplace=True)", tempObj);
                     }
                     break;
+                case FRAME_EDIT_TYPE.SORT_INDEX:
+                    if (axis == FRAME_AXIS.COLUMN) {
+                        code.appendFormat("{0}.sort_index(ascending={1})", tempObj, content.ascending);
+                    }
+                    break;
+                case FRAME_EDIT_TYPE.SORT_VALUES:
+                    if (axis == FRAME_AXIS.COLUMN) {
+                        code.appendFormat("{0}.sort_values(by={1}, ascending={2})", tempObj, selectedName, content.ascending);
+                    }
+                    break;
                 case FRAME_EDIT_TYPE.ADD_COL:
                 case FRAME_EDIT_TYPE.REPLACE:
                     // if no name entered
@@ -1408,7 +1641,8 @@ define([
                     vpKernel.getColumnList(tempObj).then(function(colResObj) {
                         try {
                             let columnResult = colResObj.result;
-                            var columnList = JSON.parse(columnResult);
+                            var columnInfo = JSON.parse(columnResult);
+                            let { name:columnName='', level:columnLevel, list:columnList } = columnInfo;
                             // var columnList = data.columns;
                             var indexList = data.index;
                             var dataList = data.data;
@@ -1421,22 +1655,60 @@ define([
                                 var table = new com_String();
                                 // table.appendFormatLine('<table border="{0}" class="{1}">', 1, 'dataframe');
                                 table.appendLine('<thead>');
-                                table.appendLine('<tr><th></th>');
-                                columnList && columnList.forEach(col => {
-                                    var colCode = col.code;
-                                    var colClass = '';
-                                    if (that.state.axis == FRAME_AXIS.COLUMN && that.state.selected.map(col=>col.code).includes(colCode)) {
-                                        colClass = 'selected';
+                                if (columnLevel > 1) {
+                                    for (let colLevIdx = 0; colLevIdx < columnLevel; colLevIdx++) {
+                                        table.appendLine('<tr><th></th>');
+                                        let colIdx = 0;
+                                        let colSpan = 1;
+                                        while (colIdx < columnList.length) {
+                                            let col = columnList[colIdx];
+                                            let colCode = col.code.slice(0, colLevIdx + 1).join(',');
+                                            let nextCol = columnList[colIdx + 1];
+                                            if (nextCol && nextCol.code.slice(0, colLevIdx + 1).join(',') === colCode) {
+                                                colSpan++;
+                                            } else {
+                                                let colClass = '';
+                                                let selected = ''; // set class if it's leaf node of columns on multi-level
+                                                if (that.state.axis == FRAME_AXIS.COLUMN && that.state.selected.map(col=>col.code[colLevIdx]).includes(colCode)) {
+                                                    selected = 'selected';
+                                                }
+                                                if ((columnLevel - 1) === colLevIdx) {
+                                                    colClass = VP_FE_TABLE_COLUMN;
+                                                } else {
+                                                    colClass = VP_FE_TABLE_COLUMN_GROUP;
+                                                }
+                                                table.appendFormatLine('<th data-code="({0})" data-axis="{1}" data-type="{2}" data-parent="{3}" data-label="{4}" class="{5} {6}" colspan="{7}">{8}</th>'
+                                                                , colCode, FRAME_AXIS.COLUMN, col.type, col.label[colLevIdx-1], col.label[colLevIdx], colClass, selected, colSpan, col.label[colLevIdx]);
+                                                colSpan = 1;
+                                            }
+                                            colIdx++;
+                                        }
+    
+                                        // add column
+                                        // LAB: img to url
+                                        // table.appendFormatLine('<th class="{0}"><img src="{1}"/></th>', VP_FE_ADD_COLUMN, com_Const.IMAGE_PATH + 'plus.svg');
+                                        if (colLevIdx === 0) {
+                                            table.appendFormatLine('<th class="{0}"><div class="{1}"></div></th>', VP_FE_ADD_COLUMN, 'vp-icon-plus');
+                                        }
+                        
+                                        table.appendLine('</tr>');
                                     }
-                                    table.appendFormatLine('<th data-code="{0}" data-axis="{1}" data-type="{2}" class="{3} {4}">{5}</th>'
-                                                            , colCode, FRAME_AXIS.COLUMN, col.type, VP_FE_TABLE_COLUMN, colClass, col.label);
-                                });
-                                // add column
-                                // LAB: img to url
-                                // table.appendFormatLine('<th class="{0}"><img src="{1}"/></th>', VP_FE_ADD_COLUMN, com_Const.IMAGE_PATH + 'plus.svg');
-                                table.appendFormatLine('<th class="{0}"><div class="{1}"></div></th>', VP_FE_ADD_COLUMN, 'vp-icon-plus');
-                
-                                table.appendLine('</tr>');
+                                } else {
+                                    table.appendLine('<tr><th></th>');
+                                    columnList && columnList.forEach(col => {
+                                        var colCode = col.code;
+                                        var colClass = '';
+                                        if (that.state.axis == FRAME_AXIS.COLUMN && that.state.selected.map(col=>col.code).includes(colCode)) {
+                                            colClass = 'selected';
+                                        }
+                                        table.appendFormatLine('<th data-code="{0}" data-axis="{1}" data-type="{2}" data-label="{3}" class="{4} {5}">{6}</th>'
+                                                                , colCode, FRAME_AXIS.COLUMN, col.type, col.label, VP_FE_TABLE_COLUMN, colClass, col.label);
+                                    });
+                                    // add column
+                                    table.appendFormatLine('<th class="{0}"><div class="{1}"></div></th>', VP_FE_ADD_COLUMN, 'vp-icon-plus');
+                    
+                                    table.appendLine('</tr>');
+                                }
                                 table.appendLine('</thead>');
                                 table.appendLine('<tbody>');
                 
@@ -1608,6 +1880,7 @@ define([
 
     const VP_FE_TABLE = 'vp-fe-table';
     const VP_FE_TABLE_COLUMN = 'vp-fe-table-column';
+    const VP_FE_TABLE_COLUMN_GROUP = 'vp-fe-table-column-group';
     const VP_FE_TABLE_ROW = 'vp-fe-table-row';
     const VP_FE_ADD_COLUMN = 'vp-fe-add-column';
     const VP_FE_ADD_ROW = 'vp-fe-add-row';
@@ -1627,22 +1900,29 @@ define([
         NONE: -1,
         INIT: 0,
 
-        RENAME: 2,
+        ADD_COL: 97,
+        ADD_ROW: 98,
         DROP: 3,
-        DROP_NA: 4,
-        DROP_DUP: 5,
-        DROP_OUT: 11, 
+        RENAME: 2,
+        AS_TYPE: 10,
+        REPLACE: 9,
+        DISCRETIZE: 15,
+
+        SET_IDX: 7,
+        RESET_IDX: 8,
+        DATA_SHIFT: 14,
+
+        SORT_INDEX: 16,
+        SORT_VALUES: 17,
 
         ONE_HOT_ENCODING: 6,
         LABEL_ENCODING: 12,
 
-        SET_IDX: 7,
-        RESET_IDX: 8,
-        REPLACE: 9,
-        AS_TYPE: 10,
+        FILL_NA: 13,
+        DROP_NA: 4,
+        DROP_OUT: 11, 
+        DROP_DUP: 5,
 
-        ADD_COL: 97,
-        ADD_ROW: 98,
         SHOW: 99
     }
 
