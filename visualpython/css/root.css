@@ -88,6 +88,10 @@ input.vp-input {
 input.vp-input::placeholder {
 	color: var(--vp-gray-color);
 }
+input.vp-input:disabled, 
+select.vp-select:disabled {
+    cursor: not-allowed;
+}
 
 /* image icons */
 /* LAB: img to background-image */
