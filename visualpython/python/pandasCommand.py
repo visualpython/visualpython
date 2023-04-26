@@ -15,7 +15,7 @@ def _vp_get_rows_list(df):
     """
     Get Rows List with Detail Information
     """
-    rowList = []
+    rowInfo = { 'name': df.index.name, 'level': df.index.nlevels, 'list': [] }
     indexType = str(df.index.dtype)
     # make dict for rows info
     for i, r in enumerate(df.index):
@@ -28,18 +28,21 @@ def _vp_get_rows_list(df):
             rInfo['label'] = str(r)
             rInfo['value'] = "'{}'".format(r)
             rInfo['index_dtype'] = indexType # datetime64[ns] TODO: exception consideration needed
-        rowList.append(rInfo)
-    return rowList
+        rowInfo['list'].append(rInfo)
+    return rowInfo
 
 def _vp_get_columns_list(df):
     """
     Get Columns List with Detail Information
     """
-    colList = []
+    colInfo = { 'name': list(df.columns.names), 'level': df.columns.nlevels, 'list': [] }
     for i, c in enumerate(df.columns):
         cInfo = { 'label': c, 'value': c, 'dtype': str(df[c].dtype), 'array': str(df[c].array), 'location': i }
         # value
-        if type(c).__name__ == 'str':
+        if type(c).__name__ == 'list' or type(c).__name__ == 'tuple':
+            cInfo['label'] = list(c)
+            cInfo['value'] = ["'{}'".format(ci) if type(ci).__name__ == 'str' else str(ci) if type(ci).__name__ == 'Timestamp' else ci for ci in c]
+        elif type(c).__name__ == 'str':
             cInfo['value'] = "'{}'".format(c)
         elif type(c).__name__ == 'Timestamp':
             cInfo['value'] = str(c)
@@ -52,8 +55,8 @@ def _vp_get_columns_list(df):
                 cInfo['category'] = []
         else:
             cInfo['category'] = []
-        colList.append(cInfo)
-    return colList
+        colInfo['list'].append(cInfo)
+    return colInfo
 
 def _vp_get_multi_columns_list(dfs = []):
     """
