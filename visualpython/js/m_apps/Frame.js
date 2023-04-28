@@ -648,33 +648,125 @@ define([
             $(document).off('change', this.wrapSelector('.vp-inner-popup-var2'));
         }
 
-        bindEventForPopupPage() {
+        bindEventForPopupPage(menuType) {
             var that = this;
-            ///// add page
-            // 1. add type
-            $(this.wrapSelector('.vp-inner-popup-addtype')).on('change', function() {
-                var tab = $(this).val();
-                $(that.wrapSelector('.vp-inner-popup-tab')).hide();
-                $(that.wrapSelector('.vp-inner-popup-tab.' + tab)).show();
-            });
-    
-            // 2-1. hide column selection box
-            $(this.wrapSelector('.vp-inner-popup-var1box .vp-vs-data-type')).on('change', function() {
-                var type = $(this).val();
-                if (type == 'DataFrame') {
-                    $(that.wrapSelector('.vp-inner-popup-var1col')).show();
-                } else {
-                    $(that.wrapSelector('.vp-inner-popup-var1col')).hide();
-                }
-            });
-    
-            $(this.wrapSelector('.vp-inner-popup-var2box .vp-vs-data-type')).on('change', function() {
-                var type = $(this).val();
-                if (type == 'DataFrame') {
-                    $(that.wrapSelector('.vp-inner-popup-var2col')).show();
-                } else {
-                    $(that.wrapSelector('.vp-inner-popup-var2col')).hide();
-                }
+
+            if (menuType === FRAME_EDIT_TYPE.ADD_COL
+                || menuType === FRAME_EDIT_TYPE.ADD_ROW
+                || menuType === FRAME_EDIT_TYPE.REPLACE) {
+                ///// add page
+                // 1. add type
+                $(this.wrapSelector('.vp-inner-popup-addtype')).on('change', function() {
+                    var tab = $(this).val();
+                    $(that.wrapSelector('.vp-inner-popup-tab')).hide();
+                    $(that.wrapSelector('.vp-inner-popup-tab.' + tab)).show();
+                });
+        
+                // 2-1. hide column selection box
+                $(this.wrapSelector('.vp-inner-popup-var1box .vp-vs-data-type')).on('change', function() {
+                    var type = $(this).val();
+                    if (type == 'DataFrame') {
+                        $(that.wrapSelector('.vp-inner-popup-var1col')).show();
+                    } else {
+                        $(that.wrapSelector('.vp-inner-popup-var1col')).hide();
+                    }
+                });
+        
+                $(this.wrapSelector('.vp-inner-popup-var2box .vp-vs-data-type')).on('change', function() {
+                    var type = $(this).val();
+                    if (type == 'DataFrame') {
+                        $(that.wrapSelector('.vp-inner-popup-var2col')).show();
+                    } else {
+                        $(that.wrapSelector('.vp-inner-popup-var2col')).hide();
+                    }
+                });
+            } else if (menuType === FRAME_EDIT_TYPE.DISCRETIZE) {
+                // change bins
+                $(this.wrapSelector('.vp-inner-popup-bins')).on('change', function() {
+                    let binsCount = $(this).val();
+                    that.handleDiscretizeEdges(binsCount);
+                });
+
+                // change cut to qcut(quantile based discretization)
+                $(this.wrapSelector('.vp-inner-popup-qcut')).on('change', function() {
+                    let qcut = $(this).prop('checked');
+                    // disable right and range table
+                    if (qcut === true) {
+                        $(that.wrapSelector('.vp-inner-popup-right')).prop('disabled', true);
+                        $(that.wrapSelector('.vp-inner-popup-range-table input:not(.vp-inner-popup-label):disabled')).addClass('already-disabled');
+                        $(that.wrapSelector('.vp-inner-popup-range-table input:not(.vp-inner-popup-label)')).prop('disabled', true);
+                    } else {
+                        $(that.wrapSelector('.vp-inner-popup-right')).prop('disabled', false);
+                        $(that.wrapSelector('.vp-inner-popup-range-table input:not(.vp-inner-popup-label):not(.already-disabled)')).prop('disabled', false);
+                        $(that.wrapSelector('.vp-inner-popup-range-table input:not(.vp-inner-popup-label).already-disabled')).removeClass('already-disabled');
+                    }
+                });
+
+                // change right option
+                $(this.wrapSelector('.vp-inner-popup-right')).on('change', function() {
+                    let binsCount = $(that.wrapSelector('.vp-inner-popup-bins')).val();
+                    let right = $(this).prop('checked');
+                    that.handleDiscretizeEdges(binsCount, right);
+                });
+            }
+            
+        }
+
+        handleDiscretizeEdges(binsCount=1, right=true) {
+            let that = this;
+            $(this.wrapSelector('.vp-inner-popup-range-table tbody')).html('');
+            $(this.wrapSelector('.vp-inner-popup-islabelchanged')).val("false");
+            $(that.wrapSelector('.vp-inner-popup-isedgechanged')).val("false");
+
+            let code = new com_String();
+            code.appendFormatLine("_out, _bins = pd.cut({0}[{1}], bins={2}, right={3}, retbins=True)"
+                , this.state.tempObj, this.state.selected[0].code, binsCount, right?'True':'False');
+            code.append("_vp_print({'labels': [str(o) for o in _out.cat.categories], 'edges': list(_bins)})");
+            vpKernel.execute(code.toString()).then(function(resultObj) {
+                let { result } = resultObj;
+                let { labels, edges } = JSON.parse(result);
+
+                let edgeTbody = new com_String();
+                labels && labels.forEach((label, idx) => {
+                    let leftDisabled = 'disabled';
+                    let rightDisabled = '';
+                    if (idx === (labels.length - 1)) {
+                        rightDisabled = 'disabled';
+                    }
+                    if (right===false) {
+                        [leftDisabled, rightDisabled] = [rightDisabled, leftDisabled];
+                    }
+                    edgeTbody.append('<tr>');
+                    edgeTbody.appendFormatLine('<td><input type="text" class="vp-input m vp-inner-popup-label" data-idx="{0}" value="{1}"/></td>', idx, label);
+                    edgeTbody.appendLine('<td>:</td>');
+                    edgeTbody.appendFormatLine('<td><input type="number" class="vp-input m vp-inner-popup-left-edge" data-idx="{0}" value="{1}" {2}/></td>', idx, edges[idx], leftDisabled);
+                    edgeTbody.appendLine('<td>~</td>');
+                    edgeTbody.appendFormatLine('<td><input type="number" class="vp-input m vp-inner-popup-right-edge" data-idx="{0}" value="{1}" {2}/></td>', idx + 1, edges[idx+1], rightDisabled);
+                    edgeTbody.append('</tr>');
+                });
+                $(that.wrapSelector('.vp-inner-popup-range-table tbody')).html(edgeTbody.toString());
+
+                // label change event
+                $(that.wrapSelector('.vp-inner-popup-label')).change(function() {
+                    $(that.wrapSelector('.vp-inner-popup-islabelchanged')).val("true");
+                });
+
+                // edge change event
+                $(that.wrapSelector('.vp-inner-popup-left-edge')).change(function() {
+                    let idx = $(this).data('idx');
+                    let val = $(this).val();
+                    $(that.wrapSelector(`.vp-inner-popup-right-edge[data-idx=${idx}]`)).val(val);
+                    $(that.wrapSelector('.vp-inner-popup-isedgechanged')).val("true");
+                });
+                $(that.wrapSelector('.vp-inner-popup-right-edge')).change(function() {
+                    let idx = $(this).data('idx');
+                    let val = $(this).val();
+                    $(that.wrapSelector(`.vp-inner-popup-left-edge[data-idx=${idx}]`)).val(val);
+                    $(that.wrapSelector('.vp-inner-popup-isedgechanged')).val("true");
+                });
+
+            }).catch(function(errObj) {
+                // TODO:
             });
         }
 
@@ -1014,6 +1106,53 @@ define([
             return content.toString();
         }
 
+        renderDiscretizePage() {
+            var content = new com_String();
+            content.appendLine(`
+            <div class="vp-inner-popup-discretize-page vp-grid-box">
+                <div class="vp-grid-col-110">
+                    <label class="vp-orange-text">Column name</label>
+                    <input type="text" class="vp-input" value="${this.state.selected[0].label}" disabled />
+                    <label>Bins count</label>
+                    <input type="number" class="vp-input vp-inner-popup-bins" placeholder="Input count of bins"/>
+                </div>
+                <label title="pd.qcut() option">
+                    <input type="checkbox" class="vp-inner-popup-qcut">
+                    <span>Quantile-based discretization</span>
+                </label>
+                <label title="right option">
+                    <input type="checkbox" class="vp-inner-popup-right" checked>
+                    <span>Include the rightmost edge</span>
+                </label>
+                <hr style="margin: 5px 0;"/>
+                <table class="vp-tbl-gap5 vp-inner-popup-range-table">
+                    <colgroup><col width="116px"><col width="5px"><col width="116px"><col width="5px"><col width="*"></colgroup>
+                    <thead>
+                        <tr>
+                            <th>Label</th>
+                            <th></th>
+                            <th>Left edge</th>
+                            <th></th>
+                            <th>Right edge</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <label title="Set all labels as text">
+                    <input type="checkbox" class="vp-inner-popup-labelastext" checked>
+                    <span>Label as Text</span>
+                </label>
+                <input type="hidden" class="vp-inner-popup-islabelchanged" value=false />
+                <input type="hidden" class="vp-inner-popup-isedgechanged" value=false />
+            </div>
+            `)
+
+            // set content
+            $(this.wrapSelector('.vp-inner-popup-body')).html(content.toString());
+            return content.toString();
+        }
+
         renderSortPage() {
             var content = new com_String();
             content.appendFormatLine('<div class="{0}">', 'vp-inner-popup-sort-page');
@@ -1152,6 +1291,16 @@ define([
                     title = 'Rename';
                     content = this.renderRenamePage();
                     break;
+                case FRAME_EDIT_TYPE.DISCRETIZE:
+                    title = 'Discretize';
+                    size = { width: 450, height: 450 };
+                    content = this.renderDiscretizePage();
+                    break;
+                case FRAME_EDIT_TYPE.DATA_SHIFT:
+                    title = 'Data shift';
+                    // TODO:
+                    content = 'WIP';
+                    break;
                 case FRAME_EDIT_TYPE.SORT_INDEX:
                     title = 'Sort by index';
                     content = this.renderSortPage();
@@ -1206,6 +1355,11 @@ define([
                     title = 'Convert type';
                     content = this.renderAsType();
                     break;
+                case FRAME_EDIT_TYPE.FILL_NA:
+                    title = 'Fill NA';
+                    // TODO:
+                    content = 'WIP';
+                    break;
                 default:
                     type = FRAME_EDIT_TYPE.NONE;
                     break;
@@ -1217,7 +1371,7 @@ define([
             $(this.wrapSelector('.vp-inner-popup-box')).css(size);
             
             // bindEventForAddPage
-            this.bindEventForPopupPage();
+            this.bindEventForPopupPage(type);
 
             // set column list
             vpKernel.getColumnList(this.state.tempObj).then(function(resultObj) {
@@ -1343,6 +1497,30 @@ define([
                             value: value
                         };
                     });
+                    break;
+                case FRAME_EDIT_TYPE.DISCRETIZE:
+                    content['bins'] = $(this.wrapSelector('.vp-inner-popup-bins')).val();
+                    content['isqcut'] = $(this.wrapSelector('.vp-inner-popup-qcut')).prop('checked');
+                    content['isright'] = $(this.wrapSelector('.vp-inner-popup-right')).prop('checked');
+                    let labelastext = $(this.wrapSelector('.vp-inner-popup-labelastext')).prop('checked');
+                    let islabelchanged = $(this.wrapSelector('.vp-inner-popup-islabelchanged')).val() === 'true';
+                    let isedgechanged = $(this.wrapSelector('.vp-inner-popup-isedgechanged')).val() === 'true';
+                    let rangeTableTags = $(this.wrapSelector('.vp-inner-popup-range-table tbody tr'));
+                    let labels = [];
+                    let edges = [];
+                    rangeTableTags && rangeTableTags.each((idx, tag) => {
+                        if (islabelchanged === true) {
+                            labels.push(com_util.convertToStr($(tag).find('.vp-inner-popup-label').val(), labelastext));
+                        }
+                        if (content['isqcut'] === false && isedgechanged === true) {
+                            edges.push($(tag).find('.vp-inner-popup-left-edge').val());
+                            if (idx === (rangeTableTags.length - 1)) {
+                                edges.push($(tag).find('.vp-inner-popup-right-edge').val());
+                            }
+                        }
+                    });
+                    content['labels'] = labels;
+                    content['edges'] = edges;
                     break;
                 default:
                     break;
@@ -1600,6 +1778,28 @@ define([
                         }
                     });
                     code.appendFormat("{0} = {1}.astype({{2}})", tempObj, tempObj, astypeStr.toString());
+                    break;
+                case FRAME_EDIT_TYPE.DISCRETIZE:
+                    let method = 'cut';
+                    let bins = content['bins'];
+                    if (content['isqcut'] === true) {
+                        method = 'qcut';
+                    } else {
+                        if (content['isedgechanged'] === true) {
+                            bins = "[" + content['edges'].join(',') + "]";
+                        }
+                    }
+
+                    code.appendFormat("{0}[{1}] = pd.{2}({3}[{4}], {5}"
+                        , tempObj, selectedName, method, tempObj, selectedName, bins);
+
+                    if (method === 'cut' && content['isright'] === false) {
+                        code.append(", right=False");
+                    }
+                    if (content['labels'] && content['labels'].length > 0) {
+                        code.appendFormat(", labels=[{0}]", content['labels'].join(', '));
+                    }
+                    code.append(')');
                     break;
                 case FRAME_EDIT_TYPE.SHOW:
                     break;
