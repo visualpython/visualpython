@@ -80,7 +80,7 @@ input.vp-input {
     height: 30px;
     padding: 3px 7px;
     color: var(--vp-font-primary);
-    background: var(--vp-background-color);
+    background-color: var(--vp-background-color);
     outline-color: var(--vp-highlight-color);
     border: 0.25px solid var(--vp-border-gray-color);
     box-sizing: border-box;
@@ -90,6 +90,7 @@ input.vp-input::placeholder {
 }
 input.vp-input:disabled, 
 select.vp-select:disabled {
+    background-color: var(--vp-light-gray-color);
     cursor: not-allowed;
 }
 
