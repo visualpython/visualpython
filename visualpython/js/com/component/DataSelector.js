@@ -25,6 +25,7 @@ define([
     //     pageThis: this,
     //     id: 'targetId',
     //     classes: '',
+    //     attrs: '', // data-idx, ...
     //     placeholder: '',
     //     select: function(value, dtype) {
     //         ;
@@ -58,6 +59,7 @@ define([
                 allowDataType: null, // list of allowed data types
                 // additional options
                 classes: '',
+                attrs: '',
                 placeholder: 'Select variable',
                 required: false,
                 allowModule: false,
@@ -361,6 +363,7 @@ define([
             return `
                 <div class="vp-ds-box vp-ds-box-${this.uuid} vp-ds-uninit">
                     <input type="text" class="vp-ds-target vp-input vp-state ${this.prop.classes}" 
+                            ${this.prop.attrs} 
                             id="${this.prop.id}" value="${value}" 
                             placeholder="${this.prop.placeholder}" ${this.prop.required?'required="required"':''}/>
                     <span class="vp-ds-filter">

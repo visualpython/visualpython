@@ -153,7 +153,7 @@ define([
             item.appendFormatLine('<div class="{0}" data-title="{1}">', 'vp-if-item', title, title);
             item.appendFormatLine('<div class="{0}" title="{1}">', 'vp-if-item-header', description);
             item.appendFormatLine('<div class="{0}"></div>', 'vp-if-indicator');
-            item.appendFormatLine('<input type="text" class="vp-input {0}" value="{1}" disabled/>', 'vp-if-item-title', title);
+            item.appendFormatLine('<input type="text" class="vp-input {0}" value="{1}" readonly/>', 'vp-if-item-title', title);
             item.appendFormatLine('<div class="{0}">', 'vp-if-item-menu');
             // LAB: img to url
             // item.appendFormatLine('<div class="{0}" data-menu="{1}" title="{2}">'

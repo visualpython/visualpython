@@ -330,54 +330,58 @@ define([
             if (splitList && splitList.length > 0) {
                 var lastSplit = splitList[splitList.length - 1];
                 // get target code
-                var methodName = lastSplit.match(/[a-zA-Z_]+/i)[0];
-                var targetCode = splitList.slice(0, splitList.length - 1).join('.');
-                if ((prevVarType in instanceLibrary.INSTANCE_MATCHING_LIBRARY) && (methodName in instanceLibrary.INSTANCE_MATCHING_LIBRARY[prevVarType])) {
-                    // get target library
-                    var targetLib = instanceLibrary.INSTANCE_MATCHING_LIBRARY[prevVarType][methodName];
-                    var targetId = targetLib.target;
-                    var popupState = {
-                        config: { 
-                            name: methodName, category: 'Instance',
-                            id: targetLib.id,
-                            saveOnly: true,
-                            noOutput: true
-                        }
-                    }
-                    // add targetid as state if exists
-                    if (targetId) {
-                        popupState[targetId] = targetCode;
-                    }
-                    that.optionPopup = new LibraryComponent(popupState,
-                        { 
-                            pageThis: that,
-                            useInputVariable: true,
-                            targetSelector: that.pageThis.wrapSelector('#' + that.targetId),
-
-                            finish: function(code) {
-                                // set parameter
-                                let lastSplit = code?.split('.')?.pop();
-                                // if bracket is at the end of code
-                                let matchList = lastSplit.match(/\(.*?\)$/gi);
-                                if (matchList != null && matchList.length > 0) {
-                                    let lastBracket = matchList[matchList.length - 1];
-                                    // remove first/last brackets
-                                    let parameter = lastBracket.substr(1, lastBracket.length - 2);
-                                    $(that.wrapSelector('.' + VP_INS_PARAMETER)).val(parameter);
-                                }
-
-                                $(that.pageThis.wrapSelector('#' + that.targetId)).trigger({
-                                    type: "instance_editor_replaced",
-                                    originCode: that.state.code,
-                                    newCode: code
-                                });
+                var methodMatch = lastSplit.match(/[a-zA-Z_]+/i);
+                if (methodMatch) {
+                    var methodName = methodMatch[0];
+                    var targetCode = splitList.slice(0, splitList.length - 1).join('.');
+                    if ((prevVarType in instanceLibrary.INSTANCE_MATCHING_LIBRARY) && (methodName in instanceLibrary.INSTANCE_MATCHING_LIBRARY[prevVarType])) {
+                        // get target library
+                        var targetLib = instanceLibrary.INSTANCE_MATCHING_LIBRARY[prevVarType][methodName];
+                        var targetId = targetLib.target;
+                        var popupState = {
+                            config: { 
+                                name: methodName, category: 'Instance',
+                                id: targetLib.id,
+                                saveOnly: true,
+                                noOutput: true
                             }
                         }
-                    );
-                    hasOption = true;
-                } else {
-                    that.optionPopup = null;
+                        // add targetid as state if exists
+                        if (targetId) {
+                            popupState[targetId] = targetCode;
+                        }
+                        that.optionPopup = new LibraryComponent(popupState,
+                            { 
+                                pageThis: that,
+                                useInputVariable: true,
+                                targetSelector: that.pageThis.wrapSelector('#' + that.targetId),
+
+                                finish: function(code) {
+                                    // set parameter
+                                    let lastSplit = code?.split('.')?.pop();
+                                    // if bracket is at the end of code
+                                    let matchList = lastSplit.match(/\(.*?\)$/gi);
+                                    if (matchList != null && matchList.length > 0) {
+                                        let lastBracket = matchList[matchList.length - 1];
+                                        // remove first/last brackets
+                                        let parameter = lastBracket.substr(1, lastBracket.length - 2);
+                                        $(that.wrapSelector('.' + VP_INS_PARAMETER)).val(parameter);
+                                    }
+
+                                    $(that.pageThis.wrapSelector('#' + that.targetId)).trigger({
+                                        type: "instance_editor_replaced",
+                                        originCode: that.state.code,
+                                        newCode: code
+                                    });
+                                }
+                            }
+                        );
+                        hasOption = true;
+                    } else {
+                        that.optionPopup = null;
+                    }
                 }
+                
 
                 if (hasOption) {
                     if ($(that.wrapSelector('.vp-ins-opt-button')).hasClass('disabled')) {

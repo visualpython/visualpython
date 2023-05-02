@@ -2938,7 +2938,7 @@
                         "id"   : "apps_information",
                         "type" : "function",
                         "level": 1,
-                        "name" : "Information",
+                        "name" : "Data Info",
                         "tag"  : "INFORMATION,APPS",
                         "path" : "visualpython - apps - information",
                         "desc" : "Data information",

@@ -370,7 +370,7 @@ define([
                         if(selected || that.clicked > 1) {
                             // double click or clicked after selection
                             // enable input
-                            $(thisHeader).find('.vp-sn-item-title').prop('disabled', false);
+                            $(thisHeader).find('.vp-sn-item-title').prop('readonly', false);
                             $(thisHeader).find('.vp-sn-item-title').select();
                             $(thisHeader).find('.vp-sn-item-title').focus();
 
@@ -457,7 +457,7 @@ define([
                 }
 
                 // disable
-                $(this).prop('disabled', true);
+                $(this).prop('readonly', true);
             });
 
             // item menu click
@@ -618,7 +618,7 @@ define([
             item.appendFormatLine('<div class="{0}" data-title="{1}" data-timestamp="{2}">', 'vp-sn-item', title, timestamp);
             item.appendFormatLine('<div class="{0}">', 'vp-sn-item-header');
             item.appendFormatLine('<div class="{0}"></div>', 'vp-sn-indicator');
-            item.appendFormatLine('<input type="text" class="vp-input {0}" value="{1}" disabled/>', 'vp-sn-item-title', title);
+            item.appendFormatLine('<input type="text" class="vp-input {0}" value="{1}" readonly/>', 'vp-sn-item-title', title);
             if (hasImported) {
                 item.appendFormatLine('<i class="{0}"></i>', 'fa fa-circle vp-sn-imported-item');
             }

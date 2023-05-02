@@ -41,7 +41,9 @@ define([
                 inplace: false,
                 menu: '',
                 menuItem: '',
+                columnLevel: 1,
                 columnList: [],
+                indexLevel: 1,
                 indexList: [],
                 selected: [],
                 axis: FRAME_AXIS.NONE,
@@ -83,50 +85,52 @@ define([
                     id: 'edit',
                     label: 'Edit',
                     child: [
-                        { id: 'add', label: 'Add', code: '', menuType: FRAME_EDIT_TYPE.ADD_COL },
-                        { id: 'delete', label: 'Delete', code: '', menuType: FRAME_EDIT_TYPE.DROP },
-                        { id: 'rename', label: 'Rename', code: '', menuType: FRAME_EDIT_TYPE.RENAME },
-                        { id: 'asType', label: 'As type', code: '', axis: 'col', menuType: FRAME_EDIT_TYPE.AS_TYPE },
-                        { id: 'replace', label: 'Replace', code: '', axis: 'col', single_select: true, menuType: FRAME_EDIT_TYPE.REPLACE },
-                        { id: 'discretize', label: 'Discretize', code: '', axis: 'col', single_select: true, numeric_only: true, menuType: FRAME_EDIT_TYPE.DISCRETIZE }
+                        { id: 'add_col', label: 'Add column', selection: FRAME_SELECT_TYPE.NONE, menuType: FRAME_EDIT_TYPE.ADD_COL },
+                        { id: 'add_row', label: 'Add row', selection: FRAME_SELECT_TYPE.NONE, menuType: FRAME_EDIT_TYPE.ADD_ROW },
+                        { id: 'delete', label: 'Delete', selection: FRAME_SELECT_TYPE.MULTI, menuType: FRAME_EDIT_TYPE.DROP },
+                        { id: 'rename', label: 'Rename', selection: FRAME_SELECT_TYPE.NONE, menuType: FRAME_EDIT_TYPE.RENAME },
+                        { id: 'asType', label: 'As type', selection: FRAME_SELECT_TYPE.NONE, axis: FRAME_AXIS.COLUMN, menuType: FRAME_EDIT_TYPE.AS_TYPE },
+                        { id: 'replace', label: 'Replace', selection: FRAME_SELECT_TYPE.SINGLE, axis: FRAME_AXIS.COLUMN, menuType: FRAME_EDIT_TYPE.REPLACE },
+                        { id: 'discretize', label: 'Discretize', selection: FRAME_SELECT_TYPE.SINGLE, axis: FRAME_AXIS.COLUMN, numeric_only: true, menuType: FRAME_EDIT_TYPE.DISCRETIZE }
                     ]
                 },
                 {
                     id: 'transform',
                     label: 'Transform',
                     child: [
-                        { id: 'set_index', label: 'Set index', code: '', axis: 'col', menuType: FRAME_EDIT_TYPE.SET_IDX },
-                        { id: 'reset_index', label: 'Reset index', code: '', axis: 'row', menuType: FRAME_EDIT_TYPE.RESET_IDX },
-                        { id: 'data_shift', label: 'Data shift', code: '', axis: 'col', menuType: FRAME_EDIT_TYPE.DATA_SHIFT }
+                        { id: 'set_index', label: 'Set index', axis: FRAME_AXIS.COLUMN, selection: FRAME_SELECT_TYPE.MULTI, menuType: FRAME_EDIT_TYPE.SET_IDX },
+                        { id: 'reset_index', label: 'Reset index', selection: FRAME_SELECT_TYPE.NONE, menuType: FRAME_EDIT_TYPE.RESET_IDX },
+                        { id: 'data_shift', label: 'Data shift', axis: FRAME_AXIS.COLUMN, selection: FRAME_SELECT_TYPE.NONE, menuType: FRAME_EDIT_TYPE.DATA_SHIFT }
                     ]
                 },
                 {
                     id: 'sort',
                     label: 'Sort',
-                    axis: 'col',
+                    axis: FRAME_AXIS.COLUMN,
                     child: [
-                        { id: 'sort_index', label: 'Sort index', code: '', axis: 'col', menuType: FRAME_EDIT_TYPE.SORT_INDEX },
-                        { id: 'sort_values', label: 'Sort values', code: '', axis: 'col', menuType: FRAME_EDIT_TYPE.SORT_VALUES },
+                        { id: 'sort_index', label: 'Sort index', selection: FRAME_SELECT_TYPE.NONE, menuType: FRAME_EDIT_TYPE.SORT_INDEX },
+                        { id: 'sort_values', label: 'Sort values', axis: FRAME_AXIS.COLUMN, selection: FRAME_SELECT_TYPE.MULTI, menuType: FRAME_EDIT_TYPE.SORT_VALUES },
                     ]
                 },
                 {
                     id: 'encoding',
                     label: 'Encoding',
-                    axis: 'col',
+                    axis: FRAME_AXIS.COLUMN,
+                    selection: FRAME_SELECT_TYPE.SINGLE, 
                     child: [
-                        { id: 'label_encoding', label: 'Label encoding', code: '', axis: 'col', menuType: FRAME_EDIT_TYPE.LABEL_ENCODING },
-                        { id: 'one_hot_encoding', label: 'Onehot encoding', code: '', axis: 'col', menuType: FRAME_EDIT_TYPE.ONE_HOT_ENCODING },
+                        { id: 'label_encoding', label: 'Label encoding', axis: FRAME_AXIS.COLUMN, selection: FRAME_SELECT_TYPE.SINGLE, menuType: FRAME_EDIT_TYPE.LABEL_ENCODING },
+                        { id: 'one_hot_encoding', label: 'Onehot encoding', axis: FRAME_AXIS.COLUMN, selection: FRAME_SELECT_TYPE.SINGLE, menuType: FRAME_EDIT_TYPE.ONE_HOT_ENCODING },
                     ]
                 },
                 {
                     id: 'data_cleaning',
                     label: 'Data cleaning',
-                    axis: 'col',
+                    axis: FRAME_AXIS.COLUMN,
                     child: [
-                        { id: 'fillna', label: 'Fill NA', code: '', axis: 'col', menuType: FRAME_EDIT_TYPE.FILL_NA },
-                        { id: 'dropna', label: 'Drop NA', code: '', axis: 'col', menuType: FRAME_EDIT_TYPE.DROP_NA },
-                        { id: 'drop_outlier', label: 'Drop outlier', code: '', axis: 'col', menuType: FRAME_EDIT_TYPE.DROP_OUT },
-                        { id: 'drop_duplicates', label: 'Drop duplicates', code: '', axis: 'col', menuType: FRAME_EDIT_TYPE.DROP_DUP },
+                        { id: 'fillna', label: 'Fill NA', axis: FRAME_AXIS.COLUMN, selection: FRAME_SELECT_TYPE.NONE, menuType: FRAME_EDIT_TYPE.FILL_NA },
+                        { id: 'dropna', label: 'Drop NA', axis: FRAME_AXIS.COLUMN, selection: FRAME_SELECT_TYPE.NONE, menuType: FRAME_EDIT_TYPE.DROP_NA },
+                        { id: 'drop_outlier', label: 'Drop outlier', axis: FRAME_AXIS.COLUMN, selection: FRAME_SELECT_TYPE.SINGLE, menuType: FRAME_EDIT_TYPE.DROP_OUT },
+                        { id: 'drop_duplicates', label: 'Drop duplicates', axis: FRAME_AXIS.COLUMN, selection: FRAME_SELECT_TYPE.NONE, menuType: FRAME_EDIT_TYPE.DROP_DUP },
                     ]
                 },
             ];
@@ -238,46 +242,59 @@ define([
                 that.setPreview(that.getCurrentCode());
             });
 
-            // menu on column
-            $(document).on('contextmenu', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN), function(event) {
-                event.preventDefault();
-                var hasSelected = $(this).hasClass('selected');
+            // menu on column (Deprecated on v2.3.6)
+            // $(document).on('contextmenu', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN), function(event) {
+            //     event.preventDefault();
+            //     var hasSelected = $(this).hasClass('selected');
+            //     $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW)).removeClass('selected');
+            //     // select col/idx
+            //     if (!hasSelected) {
+            //         $(this).addClass('selected');
+            //         var newAxis = $(this).data('axis');
+            //         that.state.axis = newAxis;
+            //     }
+
+            //     that.loadInfo();
+
+            //     // show menu
+            //     var thisPos = $(this).position();
+            //     var thisRect = $(this)[0].getBoundingClientRect();
+            //     that.showMenu(thisPos.left, thisPos.top + thisRect.height);
+            // });
+
+            // menu on row (Deprecated on v2.3.6)
+            // $(document).on('contextmenu', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW), function(event) {
+            //     event.preventDefault();
+            //     var hasSelected = $(this).hasClass('selected');
+            //     $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN)).removeClass('selected');
+            //     // select col/idx
+            //     if (!hasSelected) {
+            //         $(this).addClass('selected');
+            //         var newAxis = $(this).data('axis');
+            //         that.state.axis = newAxis;
+            //     }
+
+            //     that.loadInfo();
+
+            //     // show menu
+            //     var thisPos = $(this).position();
+            //     var thisRect = $(this)[0].getBoundingClientRect();
+            //     var tblPos = $(that.wrapSelector('.' + VP_FE_TABLE)).position();
+            //     var scrollTop = $(that.wrapSelector('.' + VP_FE_TABLE)).scrollTop();
+            //     that.showMenu(tblPos.left + thisRect.width, tblPos.top + thisPos.top - scrollTop);
+            // });
+
+            // un-select every selection
+            $(document).on('click', this.wrapSelector('.vp-popup-body'), function() {
                 $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW)).removeClass('selected');
-                // select col/idx
-                if (!hasSelected) {
-                    $(this).addClass('selected');
-                    var newAxis = $(this).data('axis');
-                    that.state.axis = newAxis;
-                }
-
-                that.loadInfo();
-
-                // show menu
-                var thisPos = $(this).position();
-                var thisRect = $(this)[0].getBoundingClientRect();
-                that.showMenu(thisPos.left, thisPos.top + thisRect.height);
-            });
-
-            // menu on row
-            $(document).on('contextmenu', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW), function(event) {
-                event.preventDefault();
-                var hasSelected = $(this).hasClass('selected');
                 $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN)).removeClass('selected');
-                // select col/idx
-                if (!hasSelected) {
-                    $(this).addClass('selected');
-                    var newAxis = $(this).data('axis');
-                    that.state.axis = newAxis;
-                }
+                $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN_GROUP)).removeClass('selected');
 
-                that.loadInfo();
-
-                // show menu
-                var thisPos = $(this).position();
-                var thisRect = $(this)[0].getBoundingClientRect();
-                var tblPos = $(that.wrapSelector('.' + VP_FE_TABLE)).position();
-                var scrollTop = $(that.wrapSelector('.' + VP_FE_TABLE)).scrollTop();
-                that.showMenu(tblPos.left + thisRect.width, tblPos.top + thisPos.top - scrollTop);
+                // reset selected columns/indexes
+                that.state.axis = FRAME_AXIS.NONE;
+                that.state.selected = [];
+                // load toolbar
+                that.renderToolbar();
             });
 
             // select column group
@@ -319,7 +336,7 @@ define([
                         // add selection from idx to startIdx
                         var tags = $(that.wrapSelector('.' + VP_FE_TABLE_COLUMN));
                         let parentSet = new Set();
-                        for (var i = firstIdx; i <= startIdx; i++) {
+                        for (var i = firstIdx - 1; i <= startIdx; i++) {
                             $(tags[i]).addClass('selected');
                             parentSet.add($(tags[i]).data('parent'));
                         }
@@ -337,7 +354,7 @@ define([
                         // add selection from startIdx to idx
                         var tags = $(that.wrapSelector('.' + VP_FE_TABLE_COLUMN));
                         let parentSet = new Set();
-                        for (var i = startIdx; i <= lastIdx; i++) {
+                        for (var i = startIdx; i < lastIdx; i++) {
                             $(tags[i]).addClass('selected');
                             parentSet.add($(tags[i]).data('parent'));
                         }
@@ -355,19 +372,16 @@ define([
                 } else {
                     $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN)).removeClass('selected');
                     $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN_GROUP)).removeClass('selected');
-                    if (!hasSelected) {
-                        $(this).addClass('selected');
-                        $(that.wrapSelector(`.${VP_FE_TABLE} th[data-parent="${colLabel}"]`)).addClass('selected');
-                        that.state.selection = { start: firstIdx, end: lastIdx };
-                        var newAxis = $(this).data('axis');
-                        that.state.axis = newAxis;
-                    } else {
-                        $(this).removeClass('selected');
-                        $(that.wrapSelector(`.${VP_FE_TABLE} th[data-parent="${colLabel}"]`)).removeClass('selected');
-                    }
+
+                    $(this).addClass('selected');
+                    $(that.wrapSelector(`.${VP_FE_TABLE} th[data-parent="${colLabel}"]`)).addClass('selected');
+                    that.state.selection = { start: firstIdx, end: lastIdx };
+                    var newAxis = $(this).data('axis');
+                    that.state.axis = newAxis;
                 }
                 that.loadInfo();
-
+                // load toolbar
+                that.renderToolbar();
             });
 
             // select column
@@ -417,16 +431,18 @@ define([
                 } else {
                     $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN)).removeClass('selected');
                     $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN_GROUP)).removeClass('selected');
-                    if (!hasSelected) {
-                        $(this).addClass('selected');
-                        that.state.selection = { start: idx, end: -1 };
-                        var newAxis = $(this).data('axis');
-                        that.state.axis = newAxis;
-                    } else {
-                        $(this).removeClass('selected');
-                    }
+
+                    $(this).addClass('selected');
+                    that.state.selection = { start: idx, end: -1 };
+                    var newAxis = $(this).data('axis');
+                    that.state.axis = newAxis;
                 }
+                // select its group
+                $(that.wrapSelector(`.${VP_FE_TABLE} th[data-label="${$(this).data('parent')}"]`)).addClass('selected');
+
                 that.loadInfo();
+                // load toolbar
+                that.renderToolbar();
             });
 
             // select row
@@ -485,6 +501,8 @@ define([
                     }
                 }
                 that.loadInfo();
+                // load toolbar
+                that.renderToolbar();
             });
 
             // add column
@@ -506,18 +524,19 @@ define([
             });
 
             // click toolbar item
-            $(document).on('click', this.wrapSelector('.vp-fe-toolbar-item'), function() {
-                var itemType = $(this).data('type');
-                switch (parseInt(itemType)) {
-                    case FRAME_EDIT_TYPE.ADD_COL:
-                    case FRAME_EDIT_TYPE.ADD_ROW:
-                        that.openInputPopup(itemType);
-                        break;
-                }
-            });
+            // $(document).on('click', this.wrapSelector('.vp-fe-toolbar-item'), function(evt) {
+            //     evt.stopPropagation();
+            //     var itemType = $(this).data('type');
+            //     switch (parseInt(itemType)) {
+            //         case FRAME_EDIT_TYPE.ADD_COL:
+            //         case FRAME_EDIT_TYPE.ADD_ROW:
+            //             that.openInputPopup(itemType);
+            //             break;
+            //     }
+            // });
 
             // click menu item
-            $(document).on('click', this.wrapSelector('.' + VP_FE_MENU_ITEM), function(event) {
+            $(document).on('click', this.wrapSelector('.' + VP_FE_MENU_ITEM + ':not(.disabled)'), function(event) {
                 event.stopPropagation();
                 var editType = $(this).data('type');
                 switch (parseInt(editType)) {
@@ -532,6 +551,7 @@ define([
                     case FRAME_EDIT_TYPE.SORT_VALUES:
                     case FRAME_EDIT_TYPE.FILL_NA:
                     case FRAME_EDIT_TYPE.DROP_NA:
+                    case FRAME_EDIT_TYPE.DROP: // check one more time
                         that.openInputPopup(editType);
                         break;
                     case FRAME_EDIT_TYPE.DROP_OUT:
@@ -633,8 +653,9 @@ define([
             $(document).off('click', this.wrapSelector('.vp-fe-df-refresh'));
             $(document).off('click', this.wrapSelector('.' + VP_FE_INFO));
             $(document).off('change', this.wrapSelector('#vp_feReturn'));
-            $(document).off('contextmenu', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN));
-            $(document).off('contextmenu', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW));
+            $(document).off('click', this.wrapSelector('.vp-popup-body'));
+            // $(document).off('contextmenu', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN));
+            // $(document).off('contextmenu', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW));
             $(document).off('click', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN));
             $(document).off('click', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW));
             $(document).off('click', this.wrapSelector('.' + VP_FE_ADD_COLUMN));
@@ -688,18 +709,22 @@ define([
                 });
 
                 // change cut to qcut(quantile based discretization)
-                $(this.wrapSelector('.vp-inner-popup-qcut')).on('change', function() {
-                    let qcut = $(this).prop('checked');
+                $(this.wrapSelector('.vp-inner-popup-discretizetype')).on('change', function() {
+                    let binsCount = $(that.wrapSelector('.vp-inner-popup-bins')).val();
+                    let discretizeType = $(this).val();
                     // disable right and range table
-                    if (qcut === true) {
+                    if (discretizeType === 'qcut') {
                         $(that.wrapSelector('.vp-inner-popup-right')).prop('disabled', true);
-                        $(that.wrapSelector('.vp-inner-popup-range-table input:not(.vp-inner-popup-label):disabled')).addClass('already-disabled');
+                        $(that.wrapSelector('.vp-inner-popup-range-table input.vp-inner-popup-left-edge')).val('');
+                        $(that.wrapSelector('.vp-inner-popup-range-table input.vp-inner-popup-right-edge')).val('');
                         $(that.wrapSelector('.vp-inner-popup-range-table input:not(.vp-inner-popup-label)')).prop('disabled', true);
                     } else {
                         $(that.wrapSelector('.vp-inner-popup-right')).prop('disabled', false);
-                        $(that.wrapSelector('.vp-inner-popup-range-table input:not(.vp-inner-popup-label):not(.already-disabled)')).prop('disabled', false);
-                        $(that.wrapSelector('.vp-inner-popup-range-table input:not(.vp-inner-popup-label).already-disabled')).removeClass('already-disabled');
+                        $(that.wrapSelector('.vp-inner-popup-range-table input.vp-inner-popup-left-edge')).val('');
+                        $(that.wrapSelector('.vp-inner-popup-range-table input.vp-inner-popup-right-edge')).val('');
+                        $(that.wrapSelector('.vp-inner-popup-range-table input:not(.vp-inner-popup-label)')).prop('disabled', false);
                     }
+                    that.handleDiscretizeEdges(binsCount);
                 });
 
                 // change right option
@@ -707,6 +732,18 @@ define([
                     let binsCount = $(that.wrapSelector('.vp-inner-popup-bins')).val();
                     let right = $(this).prop('checked');
                     that.handleDiscretizeEdges(binsCount, right);
+                });
+            } else if (menuType === FRAME_EDIT_TYPE.SORT_INDEX 
+                    || menuType === FRAME_EDIT_TYPE.SORT_VALUES) {
+                $(this.wrapSelector('.vp-inner-popup-sortby-up')).on('click', function() {
+                    console.log('up', $(this));
+                    let tag = $(this).closest('.vp-inner-popup-sortby-item');
+                    tag.insertBefore(tag.prev());
+                });
+                $(this.wrapSelector('.vp-inner-popup-sortby-down')).on('click', function() {
+                    console.log('down', $(this));
+                    let tag = $(this).closest('.vp-inner-popup-sortby-item');
+                    tag.insertAfter(tag.next());
                 });
             }
             
@@ -719,9 +756,9 @@ define([
             $(that.wrapSelector('.vp-inner-popup-isedgechanged')).val("false");
 
             let code = new com_String();
-            code.appendFormatLine("_out, _bins = pd.cut({0}[{1}], bins={2}, right={3}, retbins=True)"
+            code.appendFormatLine("_out, _bins = pd.cut({0}[{1}], bins={2}, right={3}, labels=False, retbins=True)"
                 , this.state.tempObj, this.state.selected[0].code, binsCount, right?'True':'False');
-            code.append("_vp_print({'labels': [str(o) for o in _out.cat.categories], 'edges': list(_bins)})");
+            code.append("_vp_print({'labels': _out.unique(), 'edges': list(_bins)})");
             vpKernel.execute(code.toString()).then(function(resultObj) {
                 let { result } = resultObj;
                 let { labels, edges } = JSON.parse(result);
@@ -732,9 +769,6 @@ define([
                     let rightDisabled = '';
                     if (idx === (labels.length - 1)) {
                         rightDisabled = 'disabled';
-                    }
-                    if (right===false) {
-                        [leftDisabled, rightDisabled] = [rightDisabled, leftDisabled];
                     }
                     edgeTbody.append('<tr>');
                     edgeTbody.appendFormatLine('<td><input type="text" class="vp-input m vp-inner-popup-label" data-idx="{0}" value="{1}"/></td>', idx, label);
@@ -838,16 +872,38 @@ define([
             // add menu list
             this.menuList & this.menuList.forEach(menuObj => {
                 // show menu list dynamically
-                let { id, label, child, dtype } = menuObj;
-                let enabled = true; //dtype.includes(currentDtype); // FIXME: consider column/row or single/multi select
+                let { id, label, child, axis, selection } = menuObj;
+                let enabled = true;
+                if ((that.state.axis !== FRAME_AXIS.NONE) && (axis !== undefined) && (axis !== FRAME_AXIS.NONE) && (that.state.axis !== axis)) {
+                    enabled = false;
+                }
+                if (selection !== undefined && (selection !== FRAME_SELECT_TYPE.NONE)) {
+                    if ((selection === FRAME_SELECT_TYPE.SINGLE) && (that.state.selected.length !== 1)) {
+                        enabled = false;
+                    }
+                    if ((selection === FRAME_SELECT_TYPE.MULTI) && (that.state.selected.length === 0)) {
+                        enabled = false;
+                    }
+                }
                 let selected = id === that.state.menu;
                 let $menu = $(`<div class="vp-dropdown ${enabled?'':'disabled'}">
                     <div class="vp-drop-button ${enabled?'':'disabled'} ${selected?'selected':''}" data-menu="${id}">${label}</div>
                     <div class="vp-dropdown-content"></div>
                 </div>`);
                 child && child.forEach(itemObj => {
-                    let { id, label, dtype, menuType } = itemObj;
-                    let enabled = true; //dtype.includes(currentDtype); // FIXME: consider column/row or single/multi select
+                    let { id, label, menuType, axis, selection } = itemObj;
+                    let enabled = true;
+                    if ((that.state.axis !== FRAME_AXIS.NONE) && (axis !== undefined) && (axis !== FRAME_AXIS.NONE) && (that.state.axis !== axis)) {
+                        enabled = false;
+                    }
+                    if (selection !== undefined && (selection !== FRAME_SELECT_TYPE.NONE)) {
+                        if ((selection === FRAME_SELECT_TYPE.SINGLE) && (that.state.selected.length !== 1)) {
+                            enabled = false;
+                        }
+                        if ((selection === FRAME_SELECT_TYPE.MULTI) && (that.state.selected.length === 0)) {
+                            enabled = false;
+                        }
+                    }
                     let selected = that.state.menuItem === id;
                     $menu.find('.vp-dropdown-content')
                         .append($(`<div class="vp-dropdown-item ${VP_FE_MENU_ITEM} ${enabled?'':'disabled'} ${selected?'selected':''}" data-menu="${id}" data-type="${menuType}" data-parent="${menuObj.id}">${label}</div>`));
@@ -967,112 +1023,91 @@ define([
 
         /**
          * Render Inner popup page
-         * @param {*} type 
-         * @param {*} targetLabel 
+         * @param {*} type
          * @returns 
          */
-        renderAddPage = function(type, targetLabel = '') {
+        renderAddPage(type = '') {
             var content = new com_String();
             content.appendFormatLine('<div class="{0}">', 'vp-inner-popup-addpage');
             content.appendLine('<div>');
-            content.appendLine('<table class="vp-tbl-gap5"><colgroup><col width="80px"><col width="*"></colgroup>');
-            content.appendFormatLine('<tr><th class="{0}">{1}</th>', 'vp-orange-text', targetLabel);
-            var target = '';
-            if (type == 'replace') {
-                target = this.state.selected.map(col => col.label).join(',');
+            content.appendLine('<table class="vp-tbl-gap5 wp100"><colgroup><col width="110px"><col width="*"></colgroup>');
+            content.appendFormatLine('<tr><th class="{0}">New {1}</th>', 'vp-orange-text', type);
+            if (type === 'row') {
+                content.appendFormatLine('<td><input type="text" class="{0}" placeholder="{1}"/>', 'vp-inner-popup-input0', 'Type row name');
+            } else {
+                content.appendFormatLine('<td><input type="text" class="{0}" placeholder="{1}"/>', 'vp-inner-popup-input0', 'level 0');
             }
-            content.appendFormatLine('<td><input type="text" class="{0}" value="{1}" {2}/>', 'vp-inner-popup-input1', target, type=='replace'?'disabled':'');
-            content.appendFormatLine('<label><input type="checkbox" class="{0}" checked {1}/><span>{2}</span></label>'
-                                    , 'vp-inner-popup-istext1', type=='replace'?'disabled':'', 'Text');
-            content.appendLine('</td></tr><tr>');
-            content.appendLine('<th><label>Add Type</label></th>');
-            content.appendFormatLine('<td><select class="{0}">', 'vp-inner-popup-addtype');
-            content.appendFormatLine('<option value="{0}">{1}</option>', 'value', 'Value');
-            content.appendFormatLine('<option value="{0}">{1}</option>', 'calculation', 'Calculation');
-            if (type == 'replace') {
-                content.appendFormatLine('<option value="{0}">{1}</option>', 'replace', 'Replace');
+            content.appendFormatLine('<label><input type="checkbox" class="{0}" checked/><span>{1}</span></label>'
+                                    , 'vp-inner-popup-inputastext0', 'Text');
+            content.appendLine('</td></tr>');
+            if (type === 'column' && this.state.columnLevel > 1) {
+                for (let i = 1; i < this.state.columnLevel; i++ ) {
+                    content.appendLine('<tr><td></td>');
+                    content.appendFormatLine('<td><input type="text" class="{0}" placeholder="{1}"/>', 'vp-inner-popup-input' + i, 'level ' + i);
+                    content.appendFormatLine('<label><input type="checkbox" class="{0}" checked/><span>{1}</span></label>'
+                                            , 'vp-inner-popup-inputastext' + i, 'Text');
+                    content.appendLine('</td></tr>');
+                }
             }
-            if (type == 'column' || type == 'replace') {
-                content.appendFormatLine('<option value="{0}">{1}</option>', 'subset', 'Subset');
+            if (type === 'column') {
+                content.appendLine('<tr><th><label>Add Type</label></th>');
+                content.appendFormatLine('<td><select class="{0}">', 'vp-inner-popup-addtype');
+                content.appendFormatLine('<option value="{0}">{1}</option>', 'variable', 'Variable');
+                content.appendFormatLine('<option value="{0}">{1}</option>', 'apply', 'Apply');
+                content.appendLine('</select></td></tr>');
             }
-            content.appendFormatLine('<option value="{0}">{1}</option>', 'apply', 'Apply');
-            content.appendLine('</select></td></tr>');
             content.appendLine('</table>');
             content.appendLine('</div>'); // end of vp-inner-popup-header
     
             content.appendLine('<hr style="margin: 5px 0px;"/>');
             
-            // tab 1. value
-            content.appendFormatLine('<div class="{0} {1}">', 'vp-inner-popup-tab', 'value');
-            content.appendLine('<table class="vp-tbl-gap5"><colgroup><col width="80px"><col width="*"></colgroup><tr>');
-            content.appendLine('<th><label>Value</label></th>');
-            content.appendFormatLine('<td><input type="text" class="{0}"/>', 'vp-inner-popup-input2');
-            content.appendFormatLine('<label><input type="checkbox" class="{0}" checked/><span>{1}</span></label>', 'vp-inner-popup-istext2','Text');
-            content.appendLine('</td></tr></table>');
-            content.appendLine('</div>'); // end of vp-inner-popup-tab value
-    
-            // tab 2. calculation
-            content.appendFormatLine('<div class="{0} {1}" style="display: none;">', 'vp-inner-popup-tab', 'calculation');
-            content.appendLine('<table class="vp-tbl-gap5"><colgroup><col width="80px"><col width="*"></colgroup>');
-            // calc - variable 1
-            content.appendLine('<tr>');
-            content.appendLine('<th><label>Variable 1</label></th>');
-            content.appendFormatLine('<td><select class="{0}"></select></td>', 'vp-inner-popup-var1col');
-            content.appendLine('</tr>');
-            // calc -operator
-            content.appendLine('<tr>');
-            content.appendLine('<th><label>Operator</label></th>');
-            content.appendFormatLine('<td><select class="{0}">', 'vp-inner-popup-oper');
-            var operList = ['+', '-', '*', '/', '%', '//', '==', '!=', '>=', '>', '<=', '<', 'and', 'or'];
-            operList.forEach(oper => {
-                content.appendFormatLine('<option value="{0}">{1}</option>', oper, oper);
-            });
-            content.appendFormatLine('</select></td>');
-            content.appendLine('</tr>');
-            // calc - variable 2
-            content.appendLine('<tr>');
-            content.appendLine('<th><label>Variable 2</label></th>');
-            content.appendFormatLine('<td><select class="{0}"></select></td>', 'vp-inner-popup-var2col');
-            content.appendLine('</tr>');
+            // tab 1. variable
+            content.appendFormatLine('<div class="{0} {1}">', 'vp-inner-popup-tab', 'variable');
+            content.appendLine('<table class="vp-tbl-gap5"><colgroup><col width="110px"><col width="*"></colgroup>');
+            content.appendLine('<tr class="vp-inner-popup-value-row">');
+            content.appendLine('<th><label>Variable</label></th>');
+            content.appendFormatLine('<td><input type="text" class="{0}" data-idx="{1}" placeholder="Type value"/>', 'vp-inner-popup-value', 0);
+            content.appendFormatLine('<label><input type="checkbox" class="{0}"/><span>{1}</span></label>', 'vp-inner-popup-istext','Text');
+            // content.appendFormatLine('<span class="{0} vp-icon-close-small"></span>', 'vp-inner-popup-delete-value');
+            content.appendLine('</td></tr>');
+            content.appendFormatLine('<tr class="vp-inner-popup-addvalue-row"><td colspan="2"><button class="vp-button {0}">+ Variable</button></td></tr>', 'vp-inner-popup-addvalue');
             content.appendLine('</table>');
-            content.appendLine('</div>'); // end of vp-inner-popup-tab calculation
-    
-            // tab 3. replace
-            content.appendFormatLine('<div class="{0} {1} {2}" style="display: none;">', 'vp-inner-popup-tab', 'replace', 'vp-scrollbar');
-            content.appendLine(this.renderReplacePage());
-            content.appendLine('</div>'); // end of vp-inner-popup-tab replace
+            content.appendLine('</div>'); // end of vp-inner-popup-tab value
 
-            // tab 4. subset
-            if (type == 'column' || type == 'replace') {
-                content.appendFormatLine('<div class="{0} {1}" style="display: none;">', 'vp-inner-popup-tab', 'subset');
-                content.appendLine('<table class="vp-tbl-gap5"><colgroup><col width="80px"><col width="*"></colgroup>');
-
-                content.appendLine('<tr><td colspan="2">');
-                content.appendLine('<div class="vp-fr-subset-box">');
-                content.appendLine('<textarea class="vp-input vp-inner-popup-subset"></textarea>');
-                content.appendLine('</div>');
-                content.appendLine('</td></tr>');
-
-                content.appendLine('<tr><th><label>Value</label></th>');
-                content.appendFormatLine('<td><input type="text" class="{0}"/>', 'vp-inner-popup-input3');
-                content.appendFormatLine('<label><input type="checkbox" class="{0}" checked/><span>{1}</span></label>', 'vp-inner-popup-istext3','Text');
-                content.appendLine('</td></tr></table>');
-                content.appendLine('</div>'); // end of vp-inner-popup-tab subset
-            }
-            // tab 5. apply
+            // tab 2. apply
             content.appendFormatLine('<div class="{0} {1}" style="display: none;">', 'vp-inner-popup-tab', 'apply');
-            content.appendLine('<table class="vp-tbl-gap5"><colgroup><col width="80px"><col width="*"></colgroup>');
-            content.appendLine('<tr><th><label>Column</label></th>');
-            content.appendFormatLine('<td>{0}</td></tr>', this.renderColumnList(this.state.columnList));
-            content.appendLine('<tr><th><label>Function</label></th>');
-            content.appendFormatLine('<td><input type="text" id="{0}" class="{1}" placeholder="{2}"/></td>'
+            content.appendLine('<div class="vp-grid-box">');
+            content.appendLine('<div class="vp-grid-col-110">');
+            content.appendLine('<label>Column</label>');
+            content.appendLine(this.renderColumnList(this.state.columnList));
+            content.appendLine('</div>');
+            content.appendFormatLine('<textarea type="text" id="{0}" class="{1}" placeholder="{2}">lambda x: x</textarea>'
                                     , 'vp_popupAddApply', 'vp-input vp-inner-popup-apply-lambda', 'Type code manually');
-            content.appendLine('</tr></table>');
+            content.appendLine('</div>');
             content.appendLine('</div>'); // end of vp-inner-popup-tab apply
             content.appendLine('</div>'); // end of vp-inner-popup-addpage
             
             // set content
             $(this.wrapSelector('.vp-inner-popup-body')).html(content.toString());
+            return content.toString();
+        }
+
+        renderAddValueBox(idx) {
+            // add dataselector
+            let valueSelector = new DataSelector({
+                pageThis: this, id: 'vp_addValue' + idx, classes: 'vp-inner-popup-value', placeholder: 'Type value'
+            });
+            $(this.wrapSelector('.vp-inner-popup-body')).find('.vp-inner-popup-value:nth(' + idx + ')').replaceWith(valueSelector.toTagString());
+        }
+
+        renderCalculator(idx) {
+            let content = new com_String();
+            content.appendFormatLine('<select class="{0}" data-idx="{1}">', 'vp-input s vp-inner-popup-oper', idx);
+            let operList = ['+', '-', '*', '/', '%', '//', '==', '!=', '>=', '>', '<=', '<', 'and', 'or'];
+            operList.forEach(oper => {
+                content.appendFormatLine('<option value="{0}">{1}</option>', oper, oper);
+            });
+            content.appendFormatLine('</select>');
             return content.toString();
         }
 
@@ -1086,18 +1121,87 @@ define([
             return selectTag.toString();
         }
 
-        renderRenamePage = function() {
+        renderDropPage() {
+            var content = new com_String();
+            content.appendFormatLine('<div class="{0} vp-grid-box vp-center">', 'vp-inner-popup-drop-page');
+            content.appendFormatLine('Are you sure to delete {0} below?', (this.state.axis === FRAME_AXIS.COLUMN?'columns':'rows'));
+            content.appendFormatLine('<pre>{0}</pre>', this.state.selected.map(col=>col.code).join(', '))
+            content.appendLine('</div>');
+            // set content
+            $(this.wrapSelector('.vp-inner-popup-body')).html(content.toString());
+            return content.toString();
+        }
+
+        /**
+         * Render rename page
+         * @param {string} type FRAME_AXIS
+         * @returns 
+         */
+        renderRenamePage = function(type = FRAME_AXIS.COLUMN) {
             var content = new com_String();
             content.appendFormatLine('<div class="{0} {1}">', 'vp-inner-popup-rename-page', 'vp-scrollbar');
-            content.appendLine('<table>');
-            content.appendLine('<colgroup><col width="100px"><col width="*"></colgroup>');
-            this.state.selected.forEach((col, idx) => {
-                content.appendLine('<tr>');
-                content.appendFormatLine('<th><label>{0}</label></th>', col.label);
-                content.appendFormatLine('<td><input type="text" class="{0}"/>', 'vp-inner-popup-input' + idx);
-                content.appendFormatLine('<label><input type="checkbox" class="{0}" checked/><span>{1}</span></label></td>', 'vp-inner-popup-istext' + idx, 'Text');
-                content.appendLine('</tr>');
-            });
+            if (type === FRAME_AXIS.COLUMN && this.state.columnLevel > 1) {
+                content.appendFormatLine('<div class="{0}">', 'vp-grid-col-110');
+                content.appendLine('<label>Level</label>');
+                content.appendFormatLine('<select class="{0}">', 'vp-inner-popup-level');
+                for (let i = 0; i < this.state.columnLevel; i++) {
+                    content.appendFormatLine('<option value="{0}">{1}</option>', i, i);
+                }
+                content.appendLine('</select>');
+                content.appendLine('</div>');
+                content.appendLine('<hr style="margin: 5px 0;">');
+            }
+            content.appendLine('<table class="vp-tbl-gap5 wp100">');
+            content.appendLine('<colgroup><col width="110px"><col width="*"></colgroup>');
+            content.appendLine('<tbody>');
+            if (this.state.columnLevel > 1) {
+                let selectedList = this.state.selected;
+                let selectedStr = '';
+                if (selectedList.length === 0) {
+                    // select all
+                    selectedList = this.state.columnList;
+                    selectedStr = selectedList.map(col => "(" + col.code.join(',') + ")").join(',')
+                } else {
+                    selectedStr = selectedList.map(col => col.code).join(',');
+                }
+                let codeStr = com_util.formatString("_vp_print([ list(col) for col in {0}[[{1}]].columns.to_list()])"
+                    , this.state.tempObj, selectedStr);
+                let that = this;
+                vpKernel.execute(codeStr).then(function(resultObj) {
+                    let { result } = resultObj;
+                    let colList = JSON.parse(result);
+                    let colTags = new com_String();
+                    for (let i = 0; i < colList.length; i++) {
+                        let colLevels = colList[i];
+                        for (let j = 0; j < colLevels.length; j++) {
+                            let idx = (i + 1) * j
+                            colTags.appendFormatLine('<tr class="{0}">', 'vp-inner-popup-input-row');
+                            colTags.appendFormatLine('<th><label style="padding-left:{0}px;">{1}</label></th>', j * 10, colLevels[j]);
+                            colTags.appendFormatLine('<td><input type="text" class="{0}" data-code="{1}"/>'
+                                , 'vp-inner-popup-input' + idx, com_util.convertToStr(colLevels[j], true)); // FIXME: text or num ?
+                            colTags.appendFormatLine('<label><input type="checkbox" class="{0}" checked/><span>{1}</span></label></td>', 'vp-inner-popup-istext' + idx, 'Text');
+                            colTags.appendLine('</tr>');
+                        }
+                    }
+                    $(that.wrapSelector('.vp-inner-popup-rename-page tbody')).html(colTags.toString());
+                });
+            } else {
+                let selectedList = this.state.selected;
+                if (selectedList.length === 0) {
+                    // select all
+                    selectedList = this.state.columnList;
+                }
+                selectedList.forEach((col, idx) => {
+                    content.appendFormatLine('<tr class="{0}">', 'vp-inner-popup-input-row');
+                    content.appendFormatLine('<th><label>{0}</label></th>', col.label);
+                    content.appendFormatLine('<td><input type="text" class="{0}" data-code="{1}"/>'
+                        , 'vp-inner-popup-input' + idx, col.code);
+                    content.appendFormatLine('<label><input type="checkbox" class="{0}" checked/><span>{1}</span></label></td>'
+                        , 'vp-inner-popup-istext' + idx, 'Text');
+                    content.appendLine('</tr>');
+                });
+            }
+            content.appendLine('</tbody>');
             content.appendLine('</table>');
             content.appendLine('</div>');
 
@@ -1111,15 +1215,24 @@ define([
             content.appendLine(`
             <div class="vp-inner-popup-discretize-page vp-grid-box">
                 <div class="vp-grid-col-110">
-                    <label class="vp-orange-text">Column name</label>
-                    <input type="text" class="vp-input" value="${this.state.selected[0].label}" disabled />
+                    <label class="vp-orange-text">New column</label>
+                    <div>
+                        <input type="text" class="vp-input vp-inner-popup-input" value=""/>
+                        <label>
+                            <input type="checkbox" class="vp-inner-popup-inputastext" checked>
+                            <span>Text</span>
+                        </label>
+                    </div>
+                    <label>Target column</label>
+                    <input type="text" class="vp-input" value="${this.state.selected[0].label}" readonly />
                     <label>Bins count</label>
                     <input type="number" class="vp-input vp-inner-popup-bins" placeholder="Input count of bins"/>
+                    <label>Discretize type</label>
+                    <select class="vp-inner-popup-discretizetype">
+                        <option value="cut">Interval based</option>
+                        <option value="qcut">Quantile based</option>
+                    </select>
                 </div>
-                <label title="pd.qcut() option">
-                    <input type="checkbox" class="vp-inner-popup-qcut">
-                    <span>Quantile-based discretization</span>
-                </label>
                 <label title="right option">
                     <input type="checkbox" class="vp-inner-popup-right" checked>
                     <span>Include the rightmost edge</span>
@@ -1140,7 +1253,7 @@ define([
                     </tbody>
                 </table>
                 <label title="Set all labels as text">
-                    <input type="checkbox" class="vp-inner-popup-labelastext" checked>
+                    <input type="checkbox" class="vp-inner-popup-labelastext">
                     <span>Label as Text</span>
                 </label>
                 <input type="hidden" class="vp-inner-popup-islabelchanged" value=false />
@@ -1153,19 +1266,77 @@ define([
             return content.toString();
         }
 
-        renderSortPage() {
+        renderShiftPage() {
             var content = new com_String();
-            content.appendFormatLine('<div class="{0}">', 'vp-inner-popup-sort-page');
-            content.appendLine('<table>');
+            content.appendFormatLine('<div class="{0}">', 'vp-inner-popup-shift-page');
+            content.appendLine('<table class="vp-tbl-gap5">');
             content.appendLine('<colgroup><col width="100px"><col width="*"></colgroup>');
             content.appendLine('<tr>');
-            content.appendFormatLine('<th><label>{0}</label></th>', 'Ascending');
-            content.appendFormatLine('<td><select class="{0}">', 'vp-inner-popup-isascending');
-            content.appendFormatLine('<option value="{0}">{1}</option>', "True", "True (default)");
-            content.appendFormatLine('<option value="{0}">{1}</option>', "False", "False");
-            content.appendLine('</select></td>');
+            content.appendFormatLine('<th><label class="vp-orange-text">{0}</label></th>', 'Periods');
+            content.appendFormatLine('<td><input type="number" class="{0}" placeholder="{1}" value="1" required></td>'
+                , 'vp-inner-popup-periods', 'Type number');
+            content.appendLine('</tr>');
+            content.appendFormatLine('<td colspan="2"><label class="vp-orange-text vp-italic">{0}</label> <label class="vp-gray-text vp-italic">{1}</label></td>'
+                , 'NOTE:', 'Number of periods to shift. Can be positive or negative.');
+            content.appendLine('</tr>');
+            content.appendLine('<tr>');
+            content.appendFormatLine('<th><label>{0}</label></th>', 'Frequency');
+            content.appendFormatLine('<td><input type="text" class="{0}" placeholder="{1}"></td>'
+                , 'vp-inner-popup-freq', 'Offset for timeseries');
+            content.appendLine('</tr>');
+            content.appendLine('<tr>');
+            content.appendFormatLine('<th><label>{0}</label></th>', 'Fill value');
+            content.appendLine('<td>');
+            content.appendFormatLine('<input type="text" class="{0}" placeholder="{1}">'
+                , 'vp-inner-popup-fillvalue', 'Type value to fill');
+            content.appendFormatLine('<label><input type="checkbox" class="{0}"/><span>{1}</span></label>', 'vp-inner-popup-fillvalueastext', 'Text');
+            content.appendLine('</td>');
             content.appendLine('</tr>');
             content.appendLine('</table>');
+            content.appendLine('</div>');
+
+            // set content
+            $(this.wrapSelector('.vp-inner-popup-body')).html(content.toString());
+            return content.toString();
+        }
+
+        /**
+         * 
+         * @param {int} type FRAME_AXIS
+         * @returns 
+         */
+        renderSortPage(type=FRAME_AXIS.COLUMN) {
+            var content = new com_String();
+            content.appendFormatLine('<div class="{0}">', 'vp-inner-popup-sort-page');
+            content.appendLine('<div class="vp-grid-col-110">');
+            // sort by
+            let sortByStr = 'column';
+            let sortByList = [];
+            if (type === FRAME_AXIS.ROW) {
+                sortByStr = 'level';
+                sortByList = Array.from({ length:this.state.indexLevel },(v,k)=>{ return {label: k, code: k} });
+            } else {
+                sortByList = this.state.selected;
+            }
+            content.appendFormatLine('<label>{0} {1}</label>', 'Sort by', sortByStr);
+            // movable list
+            content.appendLine('<div class="vp-inner-popup-sortby">');
+            sortByList.forEach((obj, idx) => {
+                content.appendFormatLine('<div class="vp-inner-popup-sortby-item" data-code="{0}">', obj.code);
+                content.appendFormatLine('<label>{0}</label>', obj.label);
+                content.appendLine('<span class="vp-inner-popup-sortby-down vp-icon-chevron-down" title="Set lower priority on sorting"></span>');
+                content.appendLine('<span class="vp-inner-popup-sortby-up vp-icon-chevron-up" title="Set upper priority on sorting"></span>');
+                content.appendLine('</div>');
+            });
+            content.appendLine('</div>');
+
+            // ascending
+            content.appendFormatLine('<label>{0}</label>', 'Ascending');
+            content.appendFormatLine('<select class="{0}">', 'vp-inner-popup-isascending');
+            content.appendFormatLine('<option value="{0}">{1}</option>', "True", "True (default)");
+            content.appendFormatLine('<option value="{0}">{1}</option>', "False", "False");
+            content.appendLine('</select>');
+            content.appendLine('</div>');
             content.appendLine('</div>');
             // set content
             $(this.wrapSelector('.vp-inner-popup-body')).html(content.toString());
@@ -1174,32 +1345,41 @@ define([
 
         renderReplacePage() {
             var content = new com_String();
-            content.appendFormatLine('<label><input type="checkbox" class="{0}"/><span>{1}</span></label>', 'vp-inner-popup-use-regex', 'Use Regular Expression');
-            content.appendLine('<br/><br/>');
-            content.appendFormatLine('<div class="{0}">', 'vp-inner-popup-replace-table');
-            content.appendLine('<table>');
-            content.appendLine(this.renderReplaceInput(0));
-            content.appendFormatLine('<tr><td colspan="3"><button class="{0} {1}">{2}</button></td></tr>', 'vp-button', 'vp-inner-popup-replace-add', '+ Add Key');
+            content.appendFormatLine('<div class="{0}">', 'vp-inner-popup-replacepage');
+            content.appendLine('<div>');
+            content.appendLine('<table class="vp-tbl-gap5 wp100"><colgroup><col width="80px"><col width="*"></colgroup>');
+            content.appendFormatLine('<tr><th class="{0}">{1}</th>', '', 'Column');
+            var target = this.state.selected.map(col => col.label).join(',');
+            content.appendFormatLine('<td><input type="text" class="{0}" value="{1}" readonly/>', 'vp-inner-popup-input1', target);
+            content.appendLine('</td></tr>');
             content.appendLine('</table>');
-            content.appendLine('</div>');
-            return content.toString();
-        }
+            content.appendLine('</div>'); // end of vp-inner-popup-header
+    
+            content.appendLine('<hr style="margin: 5px 0px;"/>');
+            // replace page
+            content.appendFormatLine('<div class="{0}">', 'vp-inner-popup-replace-table');
+            // subset
+            content.appendLine('<table class="vp-tbl-gap5"><colgroup><col width="80px"><col width="*"></colgroup>');
 
-        renderReplaceInput(index) {
-            var content = new com_String();
-            content.appendLine('<tr>');
-            content.appendLine('<td>');
-            content.appendFormatLine('<input type="text" class="{0}" placeholder="{1}"/>', 'vp-inner-popup-origin' + index, 'Origin');
-            content.appendFormatLine('<label><input type="checkbox" class="{0}" checked/><span>{1}</span></label>', 'vp-inner-popup-origin-istext' + index, 'Text');
-            content.appendLine('</td>');
-            content.appendLine('<td>');
-            content.appendFormatLine('<input type="text" class="{0}" placeholder="{1}"/>', 'vp-inner-popup-replace' + index, 'Replace');
-            content.appendFormatLine('<label><input type="checkbox" class="{0}" checked/><span>{1}</span></label>', 'vp-inner-popup-replace-istext' + index, 'Text');
-            content.appendLine('</td>');
-            // LAB: img to url
-            // content.appendFormatLine('<td><div class="{0} {1}"><img src="{2}"/></div></td>', 'vp-inner-popup-delete', 'vp-cursor', com_Const.IMAGE_PATH + 'close_small.svg');
-            content.appendFormatLine('<td><div class="{0} {1} {2}"></div></td>', 'vp-inner-popup-delete', 'vp-cursor', 'vp-icon-close-small');
+            content.appendLine('<tr><td><label>Condition</label></td>');
+            content.appendLine('<td><div class="vp-fr-subset-box">');
+            content.appendLine('<textarea class="vp-input vp-inner-popup-subset"></textarea>');
+            content.appendLine('</div></td>');
             content.appendLine('</tr>');
+
+            content.appendLine('<tr><th><label>Variable</label></th>');
+            content.appendFormatLine('<td><input type="text" class="{0}"/>', 'vp-inner-popup-input3');
+            content.appendFormatLine('<label><input type="checkbox" class="{0}"/><span>{1}</span></label>', 'vp-inner-popup-istext3','Text');
+            content.appendLine('</td></tr>');
+            content.appendLine('<tr><td colspan="2">');
+            content.appendFormatLine('<label><input type="checkbox" class="{0}"/><span>{1}</span></label>', 'vp-inner-popup-use-regex', 'Use Regular Expression');
+            content.appendLine('</td></tr>');
+            content.appendLine('</table></div>');
+
+            content.appendLine('</div>'); // end of vp-inner-popup-addpage
+
+            // set content
+            $(this.wrapSelector('.vp-inner-popup-body')).html(content.toString());
             return content.toString();
         }
 
@@ -1232,6 +1412,43 @@ define([
             return content.toString();
         }
 
+        renderFillNAPage() {
+            var content = new com_String();
+            content.appendFormatLine('<div class="{0}">', 'vp-inner-popup-fillna-page');
+            content.appendLine('<table class="vp-tbl-gap5">');
+            content.appendLine('<colgroup><col width="100px"><col width="*"></colgroup>');
+            content.appendLine('<tr>');
+            content.appendFormatLine('<th><label class="vp-orange-text">{0}</label></th>', 'Fill value');
+            content.appendLine('<td>');
+            content.appendFormatLine('<input type="text" id="{0}" class="{1}" placeholder="{2}" required>'
+                , 'vp_fillValue', 'vp-inner-popup-value', 'Type or select value');
+            content.appendFormatLine('<label><input type="checkbox" class="{0}"/><span>{1}</span></label>'
+                , 'vp-inner-popup-valueastext', 'Text');
+            content.appendLine('</td>');
+            content.appendLine('</tr>');
+            content.appendLine('<tr>');
+            content.appendFormatLine('<th><label>{0}</label></th>', 'Method');
+            content.appendFormatLine('<td><select class="{0}">', 'vp-inner-popup-method');
+            content.appendFormatLine('<option value="{0}">{1}</option>', "", "Select option...");
+            content.appendFormatLine('<option value="{0}">{1}</option>', "ffill", "Forward fill");
+            content.appendFormatLine('<option value="{0}">{1}</option>', "bfill", "Back fill");
+            content.appendLine('</select></td>');
+            content.appendLine('</tr>');
+            content.appendLine('<tr>');
+            content.appendFormatLine('<th><label>{0}</label></th>', 'Limit');
+            content.appendLine('<td>');
+            content.appendFormatLine('<input type="number" class="{0}" placeholder="{1}">'
+                , 'vp-inner-popup-limit', 'Type limit to fill');
+            content.appendLine('</td>');
+            content.appendLine('</tr>');
+            content.appendLine('</table>');
+            content.appendLine('</div>');
+
+            // set content
+            $(this.wrapSelector('.vp-inner-popup-body')).html(content.toString());
+            return content.toString();
+        }
+
         openInputPopup(type, width=400, height=400) {
             var title = '';
             var content = '';
@@ -1240,8 +1457,142 @@ define([
     
             switch (parseInt(type)) {
                 case FRAME_EDIT_TYPE.ADD_COL:
-                    title = 'Add Column';
-                    content = this.renderAddPage('column', 'Column Name');
+                    title = 'Add column';
+                    size = { width: 450, height: 450 };
+                    content = this.renderAddPage('column');
+                    this.renderAddValueBox(0);
+
+                    // bind event for adding values to calculate
+                    $(this.wrapSelector('.vp-inner-popup-addvalue')).on('click', function() {
+                        let valueCount = $(that.wrapSelector('.vp-inner-popup-value')).length;
+                        $(`<tr class="vp-inner-popup-oper-row">
+                            <td></td>
+                            <td>${that.renderCalculator(valueCount)}</td>
+                        </tr>
+                        <tr class="vp-inner-popup-value-row">
+                            <th><label>Variable</label></th>
+                            <td>
+                                <input type="text" class="vp-inner-popup-value"/>
+                                <label><input type="checkbox" class="vp-inner-popup-istext"/><span>Text</span></label>
+                                <span class="vp-inner-popup-delete-value vp-icon-close-small"></span>
+                            </td>
+                        </tr>`).insertBefore($(that.wrapSelector('.vp-inner-popup-addvalue-row')));
+                        that.renderAddValueBox(valueCount);
+                        
+                        $(that.wrapSelector('.vp-inner-popup-delete-value')).off('click');
+                        $(that.wrapSelector('.vp-inner-popup-delete-value')).on('click', function() {
+                            // delete variable item
+                            let index = $(this).closest('tr.vp-inner-popup-value-row').index();
+                            $(that.wrapSelector('.vp-inner-popup-oper-row:nth(' + (index - 2) + ')')).remove();
+                            $(that.wrapSelector('.vp-inner-popup-value-row:nth(' + (index - 1) + ')')).remove();
+                        });
+                    });
+
+                    // bind codemirror for apply textarea
+                    this.applyCm = this.initCodemirror({ 
+                        key: 'vp-inner-popup-apply-lambda', 
+                        selector: this.wrapSelector('.vp-inner-popup-apply-lambda'),
+                    });
+                    break;
+                case FRAME_EDIT_TYPE.ADD_ROW:
+                    title = 'Add row';
+                    size = { width: 450, height: 450 };
+                    content = this.renderAddPage('row');
+                    this.renderAddValueBox(0);
+
+                    // bind event for adding values to calculate
+                    $(this.wrapSelector('.vp-inner-popup-addvalue')).on('click', function() {
+                        let valueCount = $(that.wrapSelector('.vp-inner-popup-value')).length;
+                        $(`<tr class="vp-inner-popup-oper-row">
+                            <td></td>
+                            <td>${that.renderCalculator(valueCount)}</td>
+                        </tr>
+                        <tr class="vp-inner-popup-value-row">
+                            <th><label>Variable</label></th>
+                            <td>
+                                <input type="text" class="vp-inner-popup-value"/>
+                                <label><input type="checkbox" class="vp-inner-popup-istext"/><span>Text</span></label>
+                                <span class="vp-inner-popup-delete-value vp-icon-close-small"></span>
+                            </td>
+                        </tr>`).insertBefore($(that.wrapSelector('.vp-inner-popup-addvalue-row')));
+                        that.renderAddValueBox(valueCount);
+                        
+                        $(that.wrapSelector('.vp-inner-popup-delete-value')).off('click');
+                        $(that.wrapSelector('.vp-inner-popup-delete-value')).on('click', function() {
+                            // delete variable item
+                            let index = $(this).closest('tr.vp-inner-popup-value-row').index();
+                            $(that.wrapSelector('.vp-inner-popup-oper-row:nth(' + (index - 2) + ')')).remove();
+                            $(that.wrapSelector('.vp-inner-popup-value-row:nth(' + (index - 1) + ')')).remove();
+                        });
+                    });
+                    break;
+                case FRAME_EDIT_TYPE.DROP:
+                    title = 'Drop ';
+                    if (this.state.axis === FRAME_AXIS.COLUMN) {
+                        title += 'columns';
+                    } else {
+                        title += 'rows';
+                    }
+                    size = { width: 400, height: 200 };
+                    content = this.renderDropPage();
+                    break;
+                case FRAME_EDIT_TYPE.RENAME:
+                    title = 'Rename ';
+                    if (this.state.axis === FRAME_AXIS.ROW) {
+                        title += 'rows';
+                        content = this.renderRenamePage(FRAME_AXIS.ROW);
+                    } else {
+                        title += 'columns';
+                        content = this.renderRenamePage(FRAME_AXIS.COLUMN);
+                    }
+                    break;
+                case FRAME_EDIT_TYPE.DISCRETIZE:
+                    title = 'Discretize';
+                    size = { width: 450, height: 450 };
+                    content = this.renderDiscretizePage();
+                    break;
+                case FRAME_EDIT_TYPE.DATA_SHIFT:
+                    title = 'Data shift';
+                    size = { width: 450, height: 300 };
+                    content = this.renderShiftPage();
+
+                    // set suggestinput
+                    let freqFormats = [
+                        {'label': 'infer', 'value': 'infer'},
+                        {'label': 'second', 'value': 's'},
+                        {'label': 'minute', 'value': 'T'},
+                        {'label': 'hour', 'value': 'H'},
+                        {'label': 'day', 'value': 'D'},
+                        {'label': 'weekdays', 'value': 'B'},
+                        {'label': 'week(Sunday)', 'value': 'W'},
+                        {'label': 'week(Monday)', 'value': 'W-MON'},
+                        {'label': 'first day of month', 'value': 'MS'},
+                        {'label': 'last day of month', 'value': 'M'},
+                        {'label': 'first weekday of month', 'value': 'BMS'},
+                        {'label': 'last weekday of month', 'value': 'BM'}
+                    ];
+                    var freqInput = new SuggestInput();
+                    freqInput.addClass('vp-inner-popup-freq');
+                    freqInput.setPlaceholder('Type frequency');
+                    freqInput.setSuggestList(freqFormats);
+                    freqInput.setNormalFilter(true);
+                    $(this.wrapSelector('.vp-inner-popup-freq')).replaceWith(function() {
+                        return freqInput.toTagString();
+                    });
+                    break;
+                case FRAME_EDIT_TYPE.SORT_INDEX:
+                    title = 'Sort by index';
+                    content = this.renderSortPage(FRAME_AXIS.ROW);
+                    break;
+                case FRAME_EDIT_TYPE.SORT_VALUES:
+                    title = 'Sort by values';
+                    content = this.renderSortPage(FRAME_AXIS.COLUMN);
+                    break;
+                case FRAME_EDIT_TYPE.REPLACE:
+                    title = 'Replace';
+                    // content = this.renderReplacePage();
+                    content = this.renderReplacePage();
+                    size = { width: 450, height: 300 };
 
                     // bind codemirror
                     this.subsetCm = this.initCodemirror({ 
@@ -1276,80 +1627,19 @@ define([
                     });
                     // initial code
                     var code = this.subsetEditor.generateCode();
-                    that.subsetCm.setValue(code);
-                    that.subsetCm.save();
-                    setTimeout(function () {
-                        that.subsetCm.refresh();
-                    }, 1);
-                    
-                    break;
-                case FRAME_EDIT_TYPE.ADD_ROW:
-                    title = 'Add Row';
-                    content = this.renderAddPage('row', 'Row Name');
-                    break;
-                case FRAME_EDIT_TYPE.RENAME:
-                    title = 'Rename';
-                    content = this.renderRenamePage();
-                    break;
-                case FRAME_EDIT_TYPE.DISCRETIZE:
-                    title = 'Discretize';
-                    size = { width: 450, height: 450 };
-                    content = this.renderDiscretizePage();
-                    break;
-                case FRAME_EDIT_TYPE.DATA_SHIFT:
-                    title = 'Data shift';
-                    // TODO:
-                    content = 'WIP';
-                    break;
-                case FRAME_EDIT_TYPE.SORT_INDEX:
-                    title = 'Sort by index';
-                    content = this.renderSortPage();
-                    break;
-                case FRAME_EDIT_TYPE.SORT_VALUES:
-                    title = 'Sort by values';
-                    content = this.renderSortPage();
-                    break;
-                case FRAME_EDIT_TYPE.REPLACE:
-                    title = 'Replace';
-                    // content = this.renderReplacePage();
-                    content = this.renderAddPage('replace', 'Column');
-
-                    // bind codemirror
-                    this.subsetCm = this.initCodemirror({ 
-                        key: 'vp-inner-popup-subset', 
-                        selector: this.wrapSelector('.vp-inner-popup-subset'), 
-                        type: 'readonly' 
-                    });
-                    // set subset
-                    this.subsetEditor = new Subset({ 
-                        pandasObject: this.state.tempObj,
-                        selectedColumns: that.state.selected.map(col=>col.code),
-                        config: { name: 'Subset' } }, 
-                    { 
-                        useInputVariable: true,
-                        useInputColumns: true,
-                        targetSelector: this.wrapSelector('.vp-inner-popup-subset'),
-                        pageThis: this,
-                        allowSubsetTypes: ['iloc', 'loc'],
-                        beforeOpen: function(subsetThis) {
-                            subsetThis.state.selectedColumns = that.state.selected.map(col=>col.code);
-                        },
-                        finish: function(code) {
-                            that.subsetCm.setValue(code);
-                            that.subsetCm.save();
-                            setTimeout(function () {
-                                that.subsetCm.refresh();
-                            }, 1);
-                        }
-                    });
-                    // initial code
-                    var code = this.subsetEditor.generateCode();
-                    that.subsetCm.setValue(code);
-                    that.subsetCm.save();
+                    this.subsetCm.setValue(code);
+                    this.subsetCm.save();
                     setTimeout(function () {
                         that.subsetCm.refresh();
                     }, 1);
 
+                    // data selector
+                    // vp-inner-popup-input3
+                    // set dataselector
+                    let replaceVarSelector = new DataSelector({
+                        pageThis: this, id: 'vp_replaceVariable', classes: 'vp-inner-popup-input3', placeholder: 'Type or select variable'
+                    });
+                    $(this.wrapSelector('.vp-inner-popup-body')).find('.vp-inner-popup-input3').replaceWith(replaceVarSelector.toTagString());
                     break;
                 case FRAME_EDIT_TYPE.AS_TYPE:
                     title = 'Convert type';
@@ -1357,8 +1647,25 @@ define([
                     break;
                 case FRAME_EDIT_TYPE.FILL_NA:
                     title = 'Fill NA';
-                    // TODO:
-                    content = 'WIP';
+                    content = this.renderFillNAPage();
+
+                    // set dataselector
+                    let valueSelector = new DataSelector({
+                        pageThis: this, id: 'vp_fillValue', classes: 'vp-inner-popup-value', placeholder: 'Type or select value'
+                    });
+                    $(this.wrapSelector('.vp-inner-popup-body')).find('.vp-inner-popup-value').replaceWith(valueSelector.toTagString());
+
+                    // bind event on method
+                    $(this.wrapSelector('.vp-inner-popup-method')).on('change', function() {
+                        let changedVal = $(this).val();
+                        if (changedVal === '') {
+                            // disable limit
+                            $(that.wrapSelector('.vp-inner-popup-limit')).prop('disabled', true);
+                        } else {
+                            // enable limit
+                            $(that.wrapSelector('.vp-inner-popup-limit')).prop('disabled', false);
+                        }
+                    });
                     break;
                 default:
                     type = FRAME_EDIT_TYPE.NONE;
@@ -1403,92 +1710,85 @@ define([
         }
 
         getPopupContent = function(type) {
+            let that = this;
             var content = {};
             switch (type) {
                 case FRAME_EDIT_TYPE.ADD_COL:
+                case FRAME_EDIT_TYPE.ADD_ROW:
+                    let variableTuple = [];
+                    let thisLevel = this.state.columnLevel;
+                    if (type === FRAME_EDIT_TYPE.ADD_ROW) {
+                        thisLevel = this.state.indexLevel;
+                    }
+                    for (let i = 0; i < thisLevel; i++) {
+                        let val = $(this.wrapSelector('.vp-inner-popup-input' + i)).val();
+                        let istext = $(this.wrapSelector('.vp-inner-popup-inputastext' + i)).prop('checked');
+                        variableTuple.push(com_util.convertToStr(val, istext));
+                    }
+                    if (variableTuple.length > 1) {
+                        content['name'] = '(' + variableTuple.join(',') + ')';
+                    } else {
+                        content['name'] = variableTuple.join(',');
+                    }
+                    var tab = $(this.wrapSelector('.vp-inner-popup-addtype')).val();
+                    if (type === FRAME_EDIT_TYPE.ADD_ROW) {
+                        tab = 'variable';
+                    }
+                    content['addtype'] = tab;
+                    if (tab == 'variable') {
+                        let values = [];
+                        let opers = [];
+                        $(this.wrapSelector('.vp-inner-popup-tab.variable tr.vp-inner-popup-value-row')).each((idx, tag) => {
+                            let valueastext = $(tag).find('.vp-inner-popup-istext').prop('checked');
+                            values.push(com_util.convertToStr($(tag).find('.vp-inner-popup-value').val(), valueastext));
+                            let oper = $(that.wrapSelector('.vp-inner-popup-oper:nth(' + idx + ')')).val();
+                            if (oper && oper !== '') {
+                                opers.push(oper);
+                            }
+                        });
+                        content['values'] = values;
+                        content['opers'] = opers;
+                    } else if (tab == 'apply') {
+                        content['column'] = $(this.wrapSelector('.vp-inner-popup-apply-column')).val();
+                        content['apply'] = $(this.wrapSelector('.vp-inner-popup-apply-lambda')).val();
+                    }
+                    break;
                 case FRAME_EDIT_TYPE.REPLACE:
                     content['name'] = $(this.wrapSelector('.vp-inner-popup-input1')).val();
                     if (content['name'] == '') {
                         $(this.wrapSelector('.vp-inner-popup-input1')).attr({'placeholder': 'Required input'});
                         $(this.wrapSelector('.vp-inner-popup-input1')).focus();
                     }
-                    var tab = $(this.wrapSelector('.vp-inner-popup-addtype')).val();
-                    content['nameastext'] = $(this.wrapSelector('.vp-inner-popup-istext1')).prop('checked');
-                    content['addtype'] = tab;
-                    if (tab == 'value') {
-                        content['value'] = $(this.wrapSelector('.vp-inner-popup-input2')).val();
-                        content['valueastext'] = $(this.wrapSelector('.vp-inner-popup-istext2')).prop('checked');
-                    } else if (tab == 'calculation') {
-                        content['var1col'] = $(this.wrapSelector('.vp-inner-popup-var1col')).val();
-                        content['oper'] = $(this.wrapSelector('.vp-inner-popup-oper')).val();
-                        content['var2col'] = $(this.wrapSelector('.vp-inner-popup-var2col')).val();
-                    } else if (tab == 'replace') {
-                        var useregex = $(this.wrapSelector('.vp-inner-popup-use-regex')).prop('checked');
-                        content['useregex'] = useregex;
-                        content['list'] = [];
-                        for (var i=0; i <= this.state.popup.replace.index; i++) {
-                            var origin = $(this.wrapSelector('.vp-inner-popup-origin' + i)).val();
-                            var origintext = $(this.wrapSelector('.vp-inner-popup-origin-istext'+i)).prop('checked');
-                            var replace = $(this.wrapSelector('.vp-inner-popup-replace' + i)).val();
-                            var replacetext = $(this.wrapSelector('.vp-inner-popup-replace-istext'+i)).prop('checked');
-                            if (origin && replace) {
-                                content['list'].push({
-                                    origin: origin,
-                                    origintext: origintext,
-                                    replace: replace,
-                                    replacetext: replacetext
-                                });
-                            }
-                        }
-                    } else if (tab == 'subset') {
-                        content['subset'] = this.subsetCm?this.subsetCm.getValue():'';
-                        content['value'] = $(this.wrapSelector('.vp-inner-popup-input3')).val();
-                        content['valueastext'] = $(this.wrapSelector('.vp-inner-popup-istext3')).prop('checked');
-                    } else if (tab == 'apply') {
-                        content['column'] = $(this.wrapSelector('.vp-inner-popup-apply-column')).val();
-                        content['apply'] = $(this.wrapSelector('.vp-inner-popup-apply-lambda')).val();
-                    }
-                    break;
-                case FRAME_EDIT_TYPE.ADD_ROW:
-                    content['name'] = $(this.wrapSelector('.vp-inner-popup-input1')).val();
-                    content['nameastext'] = $(this.wrapSelector('.vp-inner-popup-istext1')).prop('checked');
-                    content['value'] = $(this.wrapSelector('.vp-inner-popup-input2')).val();
-                    content['valueastext'] = $(this.wrapSelector('.vp-inner-popup-istext2')).prop('checked');
+                    content['subset'] = this.subsetCm?this.subsetCm.getValue():'';
+                    content['value'] = $(this.wrapSelector('.vp-inner-popup-input3')).val();
+                    content['valueastext'] = $(this.wrapSelector('.vp-inner-popup-istext3')).prop('checked');
                     break;
                 case FRAME_EDIT_TYPE.RENAME:
-                    this.state.selected.forEach((element, idx) => {
+                    content['list'] = {};
+                    let inputLength = $(this.wrapSelector('.vp-inner-popup-input-row')).length;
+                    for (let idx = 0; idx < inputLength; idx++) {
+                        var label = $(this.wrapSelector('.vp-inner-popup-input'+idx)).data('code');
                         var value = $(this.wrapSelector('.vp-inner-popup-input'+idx)).val();
                         var istext = $(this.wrapSelector('.vp-inner-popup-istext'+idx)).prop('checked');
-                        content[idx] = {
-                            label: element.code,
+                        content['list'][idx] = {
+                            label: label,
                             value: value,
                             istext: istext
                         };
-                    });
+                    }
+                    if (this.state.axis !== FRAME_AXIS.ROW && this.state.columnLevel > 1) {
+                        content['level'] = $(this.wrapSelector('.vp-inner-popup-level')).val();
+                    }
                     break;
                 case FRAME_EDIT_TYPE.SORT_INDEX:
                 case FRAME_EDIT_TYPE.SORT_VALUES:
+                    let values = [];
+                    $(this.wrapSelector('.vp-inner-popup-sortby-item')).each((idx, tag) => {
+                        values.push($(tag).data('code'));
+                    });
+                    content['values'] = values;
                     content['ascending'] = $(this.wrapSelector('.vp-inner-popup-isascending')).val();
                     break;
-                // case FRAME_EDIT_TYPE.REPLACE:
-                //     var useregex = $(this.wrapSelector('.vp-inner-popup-use-regex')).prop('checked');
-                //     content['useregex'] = useregex;
-                //     content['list'] = [];
-                //     for (var i=0; i <= this.state.popup.replace.index; i++) {
-                //         var origin = $(this.wrapSelector('.vp-inner-popup-origin' + i)).val();
-                //         var origintext = $(this.wrapSelector('.vp-inner-popup-origin-istext'+i)).prop('checked');
-                //         var replace = $(this.wrapSelector('.vp-inner-popup-replace' + i)).val();
-                //         var replacetext = $(this.wrapSelector('.vp-inner-popup-replace-istext'+i)).prop('checked');
-                //         if (origin && replace) {
-                //             content['list'].push({
-                //                 origin: origin,
-                //                 origintext: origintext,
-                //                 replace: replace,
-                //                 replacetext: replacetext
-                //             });
-                //         }
-                //     }
-                //     break;
                 case FRAME_EDIT_TYPE.AS_TYPE:
                     this.state.selected.forEach((col, idx) => {
                         var value = $(this.wrapSelector('.vp-inner-popup-astype'+idx)).val();
@@ -1499,8 +1799,10 @@ define([
                     });
                     break;
                 case FRAME_EDIT_TYPE.DISCRETIZE:
+                    content['input'] = $(this.wrapSelector('.vp-inner-popup-input')).val();
+                    content['inputastext'] = $(this.wrapSelector('.vp-inner-popup-inputastext')).prop('checked');
                     content['bins'] = $(this.wrapSelector('.vp-inner-popup-bins')).val();
-                    content['isqcut'] = $(this.wrapSelector('.vp-inner-popup-qcut')).prop('checked');
+                    content['type'] = $(this.wrapSelector('.vp-inner-popup-discretizetype')).val();
                     content['isright'] = $(this.wrapSelector('.vp-inner-popup-right')).prop('checked');
                     let labelastext = $(this.wrapSelector('.vp-inner-popup-labelastext')).prop('checked');
                     let islabelchanged = $(this.wrapSelector('.vp-inner-popup-islabelchanged')).val() === 'true';
@@ -1512,7 +1814,7 @@ define([
                         if (islabelchanged === true) {
                             labels.push(com_util.convertToStr($(tag).find('.vp-inner-popup-label').val(), labelastext));
                         }
-                        if (content['isqcut'] === false && isedgechanged === true) {
+                        if (content['type'] === 'cut' && isedgechanged === true) {
                             edges.push($(tag).find('.vp-inner-popup-left-edge').val());
                             if (idx === (rangeTableTags.length - 1)) {
                                 edges.push($(tag).find('.vp-inner-popup-right-edge').val());
@@ -1521,6 +1823,22 @@ define([
                     });
                     content['labels'] = labels;
                     content['edges'] = edges;
+                    break;
+                case FRAME_EDIT_TYPE.DATA_SHIFT:
+                    content['periods'] = $(this.wrapSelector('.vp-inner-popup-periods')).val();
+                    content['freq'] = $(this.wrapSelector('.vp-inner-popup-freq')).val();
+                    let fillValue = $(this.wrapSelector('.vp-inner-popup-fillvalue')).val();
+                    let fillValueAsText= $(this.wrapSelector('.vp-inner-popup-fillvalueastext')).prop('checked');
+                    content['fill_value'] = '';
+                    if (fillValue && fillValue !== '') {
+                        content['fill_value'] = com_util.convertToStr(fillValue, fillValueAsText);
+                    }
+                    break;
+                case FRAME_EDIT_TYPE.FILL_NA:
+                    content['value'] = $(this.wrapSelector('.vp-inner-popup-value')).val();
+                    content['valueastext'] = $(this.wrapSelector('.vp-inner-popup-valueastext')).prop('checked');
+                    content['method'] = $(this.wrapSelector('.vp-inner-popup-method')).val();
+                    content['limit'] = $(this.wrapSelector('.vp-inner-popup-limit')).val();
                     break;
                 default:
                     break;
@@ -1639,6 +1957,14 @@ define([
     
             var selectedName = this.state.selected.map(col=>col.code).join(',');
             var axis = this.state.axis;
+            var subsetObjStr = tempObj;
+            if (selectedName && selectedName !== '') {
+                if (this.state.selected.length > 1) {
+                    subsetObjStr += "[[" + selectedName + "]]";
+                } else {
+                    subsetObjStr += "[" + selectedName + "]";
+                }
+            }
     
             var code = new com_String();
             switch (type) {
@@ -1651,13 +1977,17 @@ define([
                     break;
                 case FRAME_EDIT_TYPE.RENAME:
                     var renameList = [];
-                    Object.keys(content).forEach((key, idx) => {
-                        if (content[key].value != '') {
-                            renameList.push(com_util.formatString("{0}: {1}", content[key].label, com_util.convertToStr(content[key].value, content[key].istext)));
+                    Object.keys(content['list']).forEach((key, idx) => {
+                        if (content['list'][key].value !== undefined && content['list'][key].value !== '') {
+                            renameList.push(com_util.formatString("{0}: {1}", content['list'][key].label, com_util.convertToStr(content['list'][key].value, content['list'][key].istext)));
                         }
                     });
                     if (renameList.length > 0) {
-                        code.appendFormat("{0}.rename({1}={{2}}, inplace=True)", tempObj, axis==FRAME_AXIS.ROW?'index':'columns', renameList.join(', '));
+                        code.appendFormat("{0}.rename({1}={{2}}", tempObj, axis==FRAME_AXIS.ROW?'index':'columns', renameList.join(', '));
+                        if (content['level'] !== undefined) {
+                            code.appendFormat(", level={0}", content['level']);
+                        }
+                        code.append(', inplace=True)')
                     }
                     break;
                 case FRAME_EDIT_TYPE.DROP_NA:
@@ -1701,72 +2031,73 @@ define([
                     }
                     break;
                 case FRAME_EDIT_TYPE.RESET_IDX:
-                    if (axis == FRAME_AXIS.ROW) {
-                        code.appendFormat("{0}.reset_index(inplace=True)", tempObj);
-                    }
+                    code.appendFormat("{0}.reset_index(inplace=True)", tempObj);
                     break;
                 case FRAME_EDIT_TYPE.SORT_INDEX:
-                    if (axis == FRAME_AXIS.COLUMN) {
-                        code.appendFormat("{0}.sort_index(ascending={1})", tempObj, content.ascending);
+                    let selectedStr = '';
+                    if (content.values.length > 1) {
+                        selectedStr = "[" + content.values.join(',') + "]";
                     }
+                    code.appendFormat("{0}.sort_index(ascending={1}", tempObj, content.ascending);
+                    if (selectedStr !== '') {
+                        code.appendFormat(', level=[{0}])', selectedStr);
+                    }
+                    code.append(', inplace=True)');
                     break;
                 case FRAME_EDIT_TYPE.SORT_VALUES:
                     if (axis == FRAME_AXIS.COLUMN) {
-                        code.appendFormat("{0}.sort_values(by={1}, ascending={2})", tempObj, selectedName, content.ascending);
+                        let selectedStr = '';
+                        if (content.values.length > 1) {
+                            selectedStr = "[" + content.values.join(',') + "]";
+                        } else {
+                            selectedStr = content.values[0];
+                        }
+                        code.appendFormat("{0}.sort_values(by={1}, ascending={2}, inplace=True)", tempObj, selectedStr, content.ascending);
                     }
                     break;
                 case FRAME_EDIT_TYPE.ADD_COL:
+                    // if no name entered
+                    if (content.name == '') {
+                        return '';
+                    }
+                    var tab = content.addtype;
+                    if (tab == 'variable') {
+                        let values = [];
+                        content['values'] && content['values'].forEach((val, idx) => {
+                            if (idx > 0) {
+                                values.push(content['opers'][idx - 1]);
+                            }
+                            values.push(val);
+                        });
+                        code.appendFormat("{0}[{1}] = {2}", tempObj, content.name, values.join(' '));
+                    } else if (tab == 'apply') {
+                        code.appendFormat("{0}[{1}] = {2}[{3}].apply({4})", tempObj, content.name, tempObj, content.column, content.apply);
+                    }
+                    break;
+                case FRAME_EDIT_TYPE.ADD_ROW: 
+                    // if no name entered
+                    if (content.name == '') {
+                        return '';
+                    }
+                    var tab = content.addtype;
+                    let values = [];
+                    content['values'] && content['values'].forEach((val, idx) => {
+                        if (idx > 0) {
+                            values.push(content['opers'][idx - 1]);
+                        }
+                        values.push(val);
+                    });
+                    code.appendFormat("{0}.loc[{1}] = {2}", tempObj, content.name, values.join(' '));
+                    break;
                 case FRAME_EDIT_TYPE.REPLACE:
                     // if no name entered
                     if (content.name == '') {
                         return '';
                     }
                     var name = com_util.convertToStr(content.name, content.nameastext);
-                    if (type == FRAME_EDIT_TYPE.REPLACE) {
-                        name = selectedName;
-                    }
-                    var tab = content.addtype;
-                    if (tab == 'value') {
-                        var value = com_util.convertToStr(content.value, content.valueastext);
-                        code.appendFormat("{0}[{1}] = {2}", tempObj, name, value);
-                    } else if (tab == 'calculation') {
-                        var { var1col, oper, var2col } = content;
-                        var var1code = tempObj + "['" + var1col + "']";
-                        var var2code = tempObj + "['" + var2col + "']";
-                        code.appendFormat('{0}[{1}] = {2} {3} {4}', tempObj, name, var1code, oper, var2code);
-                    } else if (tab == 'replace') {
-                        var replaceStr = new com_String();
-                        var useRegex = content['useregex'];
-                        content['list'].forEach((obj, idx) => {
-                            if (idx == 0) {
-                                replaceStr.appendFormat("{0}: {1}"
-                                                        , com_util.convertToStr(obj.origin, obj.origintext, useRegex)
-                                                        , com_util.convertToStr(obj.replace, obj.replacetext, useRegex));
-                            } else {
-                                replaceStr.appendFormat(", {0}: {1}"
-                                                        , com_util.convertToStr(obj.origin, obj.origintext, useRegex)
-                                                        , com_util.convertToStr(obj.replace, obj.replacetext, useRegex));
-                            }
-                        });
-                        if (selectedName && selectedName != '') {
-                            selectedName = '[[' + selectedName + ']]';
-                        }
-                        code.appendFormat("{0}[{1}] = {2}{3}.replace({{4}}", tempObj, name, tempObj, selectedName, replaceStr);
-                        if (useRegex) {
-                            code.append(', regex=True');
-                        }
-                        code.append(')');
-                    } else if (tab == 'subset') {
-                        var value = com_util.convertToStr(content.value, content.valueastext);
-                        code.appendFormat("{0} = {1}", content.subset, value);
-                    } else if (tab == 'apply') {
-                        code.appendFormat("{0}[{1}] = {2}[{3}].apply({4})", tempObj, name, tempObj, content.column, content.apply);
-                    }
-                    break;
-                case FRAME_EDIT_TYPE.ADD_ROW: 
-                    var name = com_util.convertToStr(content.name, content.nameastext);
+                    name = selectedName;
                     var value = com_util.convertToStr(content.value, content.valueastext);
-                    code.appendFormat("{0}.loc[{1}] = {2}", tempObj, name, value);
+                    code.appendFormat("{0} = {1}", content.subset, value);
                     break;
                 case FRAME_EDIT_TYPE.AS_TYPE:
                     var astypeStr = new com_String();
@@ -1780,24 +2111,45 @@ define([
                     code.appendFormat("{0} = {1}.astype({{2}})", tempObj, tempObj, astypeStr.toString());
                     break;
                 case FRAME_EDIT_TYPE.DISCRETIZE:
-                    let method = 'cut';
+                    let newColumn = com_util.convertToStr(content['input'], content['inputastext']);
+                    let method = content['type'];
                     let bins = content['bins'];
-                    if (content['isqcut'] === true) {
-                        method = 'qcut';
-                    } else {
-                        if (content['isedgechanged'] === true) {
+                    if (method === 'cut') {
+                        if (content['edges'] && content['edges'].length > 0) {
                             bins = "[" + content['edges'].join(',') + "]";
                         }
                     }
 
                     code.appendFormat("{0}[{1}] = pd.{2}({3}[{4}], {5}"
-                        , tempObj, selectedName, method, tempObj, selectedName, bins);
+                        , tempObj, newColumn, method, tempObj, selectedName, bins);
 
                     if (method === 'cut' && content['isright'] === false) {
                         code.append(", right=False");
                     }
                     if (content['labels'] && content['labels'].length > 0) {
                         code.appendFormat(", labels=[{0}]", content['labels'].join(', '));
+                    } else {
+                        code.append(", labels=False");
+                    }
+                    code.append(')');
+                    break;
+                case FRAME_EDIT_TYPE.DATA_SHIFT:
+                    code.appendFormat("{0} = {1}.shift({2}", subsetObjStr, subsetObjStr, content['periods']);
+                    if (content['freq'] && content['freq'] !== '') {
+                        code.appendFormat(", freq='{0}'", content['freq']);
+                    }
+                    if (content['fill_value'] && content['fill_value'] !== '') {
+                        code.appendFormat(", fill_value={0}", content['fill_value']);
+                    }
+                    code.append(')');
+                    break;
+                case FRAME_EDIT_TYPE.FILL_NA:
+                    code.appendFormat("{0} = {1}.fillna({2}", subsetObjStr, subsetObjStr, com_util.convertToStr(content['value'], content['valueastext']));
+                    if (content['method'] && content['method'] !== '') {
+                        code.appendFormat(", method='{0}'", content['method']);
+                        if (content['limit'] && content['limit'] !== '') {
+                            code.appendFormat(", limit={0}", content['limit']);
+                        }
                     }
                     code.append(')');
                     break;
@@ -1846,7 +2198,7 @@ define([
                             // var columnList = data.columns;
                             var indexList = data.index;
                             var dataList = data.data;
-        
+
                             columnList = columnList.map(col => { return { label: col.label, type: col.dtype, code: col.value } });
                             indexList = indexList.map(idx => { return { label: idx, code: idx } });
             
@@ -1975,6 +2327,7 @@ define([
                             }
         
                             // save columnList & indexList as state
+                            that.state.columnLevel = columnLevel;
                             that.state.columnList = columnList;
                             if (!more) {
                                 that.state.indexList = indexList;
@@ -1985,6 +2338,8 @@ define([
         
                             // load info
                             that.loadInfo();
+                            // load toolbar
+                            that.renderToolbar();
                             // add to stack
                             if (codeStr !== '') {
                                 let newSteps = codeStr.split('\n');
@@ -2130,6 +2485,12 @@ define([
         NONE: -1,
         ROW: 0,
         COLUMN: 1
+    }
+
+    const FRAME_SELECT_TYPE = {
+        NONE: -1,  // no problem with every selection type
+        SINGLE: 0, // only single select supported
+        MULTI: 1   // more than 1 selection needed
     }
 
     return Frame;
