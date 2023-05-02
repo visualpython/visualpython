@@ -2916,7 +2916,8 @@
                         "apps" : {
                             "color": 1,
                             "icon": "apps/apps_import.svg"
-                        }
+                        },
+                        "docs" : "https://visual-python.gitbook.io/docs/tutorials/data-preparation"
                     },
                     {
                         "id"   : "apps_file",
@@ -2930,17 +2931,18 @@
                         "apps" : {
                             "color": 1,
                             "icon": "apps/apps_file.svg"
-                        }
+                        },
+                        "docs" : "https://visual-python.gitbook.io/docs/tutorials/data-preparation"
                     },
                     {
-                        "id"   : "apps_variable",
+                        "id"   : "apps_information",
                         "type" : "function",
                         "level": 1,
-                        "name" : "Variable",
-                        "tag"  : "VARIABLE,APPS",
-                        "path" : "visualpython - apps - variable",
-                        "desc" : "Variable",
-                        "file" : "m_apps/Variable",
+                        "name" : "Data Info",
+                        "tag"  : "INFORMATION,APPS",
+                        "path" : "visualpython - apps - information",
+                        "desc" : "Data information",
+                        "file" : "m_apps/Information",
                         "apps" : {
                             "color": 1,
                             "icon": "apps/apps_variable.svg"
@@ -2972,7 +2974,8 @@
                         "apps" : {
                             "color": 2,
                             "icon": "apps/apps_frame.svg"
-                        }
+                        },
+                        "docs" : "https://visual-python.gitbook.io/docs/tutorials/data-transformation/modify-dataframes"
                     },
                     {
                         "id"   : "apps_subset",
@@ -2986,7 +2989,8 @@
                         "apps" : {
                             "color": 2,
                             "icon": "apps/apps_subset.svg"
-                        }
+                        },
+                        "docs" : "https://visual-python.gitbook.io/docs/tutorials/data-transformation/create-subsets" 
                     },
                     {
                         "id"   : "apps_instance",
@@ -3014,7 +3018,8 @@
                         "apps" : {
                             "color": 2,
                             "icon": "apps/apps_groupby.svg"
-                        }
+                        },
+                        "docs" : "https://visual-python.gitbook.io/docs/tutorials/data-transformation/group-and-aggregate-dataframes"
                     },
                     {
                         "id"   : "apps_bind",
@@ -3028,7 +3033,8 @@
                         "apps" : {
                             "color": 3,
                             "icon": "apps/apps_bind.svg"
-                        }
+                        },
+                        "docs" : "https://visual-python.gitbook.io/docs/tutorials/data-transformation/combine-dataframes"
                     },
                     {
                         "id"   : "apps_reshape",
@@ -3042,7 +3048,8 @@
                         "apps" : {
                             "color": 3,
                             "icon": "apps/apps_reshape.svg"
-                        }
+                        },
+                        "docs" : "https://visual-python.gitbook.io/docs/tutorials/data-transformation/reshape-dataframes"
                     },
                     {
                         "id"   : "apps_markdown",

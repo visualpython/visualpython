@@ -17,7 +17,7 @@
     min-height: 400px;
     width: 400px;
     height: 400px;
-    background: var(--vp-background-color);
+    background-color: var(--vp-background-color);
     border: 1px solid var(--vp-border-gray-color);
     border-top: 3px solid var(--vp-border-gray-color);
     box-shadow: 1px 1px 2px rgb(0 0 0 / 10%);
@@ -80,6 +80,24 @@
 .vp-popup-frame.vp-focused .vp-popup-title {
     font-family: 'AppleSDGothicNeo';
     color: var(--vp-font-highlight);
+}
+.vp-popup-docs {
+    position: absolute;
+    width: 15px;
+    height: 20px;
+    top: 4px;
+    right: 85px;
+    z-index: 3;
+    line-height: 20px;
+    text-align: center;
+    cursor: pointer;
+    color: var(--vp-gray-color);
+}
+.vp-popup-docs > div {
+    width: 20px;
+    height: 20px;
+    /* LAB: img to background-image */
+    background: center / contain no-repeat url(../../img/docs.svg);
 }
 .vp-popup-maximize {
     position: absolute;
@@ -341,6 +359,11 @@
 .vp-popup-frame input[type=text]::placeholder,
 .vp-popup-frame input[type=number]::placeholder {
 	color: var(--vp-gray-color);
+}
+.vp-popup-frame input[type=text]:disabled,
+.vp-popup-frame input[type=number]:disabled {
+	background-color: var(--vp-light-gray-color);
+    cursor: not-allowed;
 }
 
 .vp-popup-frame select {

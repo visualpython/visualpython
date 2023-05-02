@@ -92,8 +92,8 @@ define([
             this.chartTypeList = {
                 'Relational': [ 'scatterplot', 'lineplot' ],
                 'Distributions': [ 'histplot', 'kdeplot', 'rugplot' ], 
-                'Categorical': [ 'stripplot', 'swarmplot', 'boxplot', 'violinplot', 'pointplot', 'barplot' ],
-                'ETC': [ 'countplot' ]
+                'Categorical': [ 'stripplot', 'swarmplot', 'boxplot', 'violinplot', 'pointplot', 'barplot', 'countplot' ],
+                'Axes-level': [ 'heatmap' ],
             }
 
             this.legendPosList = [
@@ -217,6 +217,8 @@ define([
                             $(that.wrapSelector('#sortHue')).closest('.sb-option').show();
                         }
                     }
+                } else if (chartType == 'heatmap') {
+                    $(that.wrapSelector('#annot')).closest('.sb-option').show();
                 }
             });
             
@@ -545,6 +547,8 @@ define([
                         $(page).find('#sortHue').closest('.sb-option').show();
                     }
                 }
+            } else if (this.state.chartType == 'heatmap') {
+                $(page).find('#annot').closest('.sb-option').show();
             }
 
             //================================================================
@@ -926,7 +930,7 @@ define([
                 etcOptionCode.push(com_util.formatString("marker='{0}'", markerStyle));
             }
             if (showValues === true && chartType === 'barplot') {
-                // etcOptionCode.push('ci=None'); // changed to errorbar
+                // etcOptionCode.push('ci=None'); // changed to errorbar after 0.12 version
                 etcOptionCode.push('errorbar=None');
             }
             if (setXY === false && sortType !== '') {

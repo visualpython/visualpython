@@ -33,14 +33,14 @@ define([
             this.config.checkModules = ['pd'];
 
             this.state = {
+                filter_warning: '',
                 min_rows: '',
                 max_rows: '',
-                max_cols: '',
+                max_columns: '',
                 max_colwidth: '',
-                float_format: '',
+                expand_frame_repr: '',
                 precision: '',
                 chop_threshold: '',
-                expand_frame_repr: '',
                 ...this.state
             }
         }
@@ -51,15 +51,48 @@ define([
             var that = this;
             
             // setting popup - set default
-            $(this.wrapSelector('#setDefault')).on('change', function() {
+            $(this.wrapSelector('#resetDisplay')).on('change', function() {
                 let checked = $(this).prop('checked');
 
                 if (checked) {
                     // disable input
-                    $(that.wrapSelector('.vp-pandas-option-body input')).prop('disabled', true);
+                    $(that.wrapSelector('.vp-po-option-item')).prop('disabled', true);
                 } else {
                     // enable input
-                    $(that.wrapSelector('.vp-pandas-option-body input')).prop('disabled', false);
+                    $(that.wrapSelector('.vp-po-option-item')).prop('disabled', false);
+                }
+            });
+
+            // show all rows
+            $(this.wrapSelector('#showAllRows')).on('change', function() {
+                let checked = $(this).prop('checked');
+                if (checked) {
+                    $(that.wrapSelector('#max_rows')).prop('disabled', true);
+                } else {
+                    $(that.wrapSelector('#max_rows')).prop('disabled', false);
+                }
+            });
+
+            // show all columns
+            $(this.wrapSelector('#showAllColumns')).on('change', function() {
+                let checked = $(this).prop('checked');
+                if (checked) {
+                    $(that.wrapSelector('#max_columns')).prop('disabled', true);
+                } else {
+                    $(that.wrapSelector('#max_columns')).prop('disabled', false);
+                }
+            });
+
+            // setting popup - reset warning
+            $(this.wrapSelector('#resetWarning')).on('change', function() {
+                let checked = $(this).prop('checked');
+
+                if (checked) {
+                    // disable input
+                    $(that.wrapSelector('.vp-po-warning-item')).prop('disabled', true);
+                } else {
+                    // enable input
+                    $(that.wrapSelector('.vp-po-warning-item')).prop('disabled', false);
                 }
             });
         }
@@ -80,19 +113,34 @@ define([
             let that = this;
             let code = [];
 
-            let setDefault = $(this.wrapSelector('#setDefault')).prop('checked');
-            if (setDefault == true) {
-                // Object.keys(this.state).forEach((key) => {
-                //     code.push(com_util.formatString("pd.reset_option('display.{0}')", key));
-                // })
+            let resetDisplay = $(this.wrapSelector('#resetDisplay')).prop('checked');
+            let resetWarning = $(this.wrapSelector('#resetWarning')).prop('checked');
+
+            // warning options
+            if (resetWarning === true) {
+                code.push("import warnings\nwarnings.resetwarnings()");
+            } else{
+                if (that.state['filter_warning'] && that.state['filter_warning'] != '') {
+                    code.push(com_util.formatString("import warnings\nwarnings.simplefilter(action='{0}', category=Warning)", that.state['filter_warning']));
+                }
+            }
+
+            // display options
+            if (resetDisplay === true) {
                 code.push("pd.reset_option('^display')");
             } else {
+                let showAllRows = $(this.wrapSelector('#showAllRows')).prop('checked');
+                let showAllCols = $(this.wrapSelector('#showAllColumns')).prop('checked');
                 Object.keys(this.state).forEach((key) => {
-                    if (that.state[key] && that.state[key] != '') {
+                    if ((showAllRows === true && key === 'max_rows') 
+                        || (showAllCols === true && key === 'max_columns')) {
+                        code.push(com_util.formatString("pd.set_option('display.{0}', {1})", key, 'None'));
+                    } else if (key !== 'filter_warning' && that.state[key] && that.state[key] != '') {
                         code.push(com_util.formatString("pd.set_option('display.{0}', {1})", key, that.state[key]));
                     }
-                })
+                });
             }
+
             return code.join('\n');
         }
 

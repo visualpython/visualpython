@@ -80,13 +80,18 @@ input.vp-input {
     height: 30px;
     padding: 3px 7px;
     color: var(--vp-font-primary);
-    background: var(--vp-background-color);
+    background-color: var(--vp-background-color);
     outline-color: var(--vp-highlight-color);
     border: 0.25px solid var(--vp-border-gray-color);
     box-sizing: border-box;
 }
 input.vp-input::placeholder {
 	color: var(--vp-gray-color);
+}
+input.vp-input:disabled, 
+select.vp-select:disabled {
+    background-color: var(--vp-light-gray-color);
+    cursor: not-allowed;
 }
 
 /* image icons */
@@ -120,10 +125,23 @@ input.vp-input::placeholder {
     width: 15px;
     height: 15px;
 }
+.vp-icon-chevron-down {
+    background: center / contain no-repeat url(../img/chevron_big_down.svg);
+    width: 15px;
+    height: 15px;
+}
+.vp-icon-chevron-up {
+    background: center / contain no-repeat url(../img/chevron_big_up.svg);
+    width: 15px;
+    height: 15px;
+}
 .vp-icon-run {
     background: center / contain no-repeat url(../img/snippets/run.svg);
     width: 16px;
     height: 16px;
+}
+.vp-icon-run.white {
+    background: center / contain no-repeat url(../img/snippets/run_white.svg);
 }
 .vp-icon-save {
     background: center / contain no-repeat url(../img/snippets/save_orange.svg);
@@ -369,6 +387,80 @@ button.vp-button {
 .vp-accordian.vp-open + .vp-accordian-box {
     display: block !important;
 }
+/* 
+ * Dropdown menus
+ * - Usage: set these structure using tag's class
+ *    <vp-dropdown>
+ *        <vp-drop-button></vp-drop-button>
+ *        <vp-dropdown-content>
+ *            <vp-dropdown-item></vp-dropdown-item>
+ *            <vp-dropdown-item></vp-dropdown-item>
+ *        </vp-dropdown-content>
+ *    <vp-dropdown>
+ */
+.vp-dropdown {
+    position: relative;
+    display: inline-block;
+}
+.vp-dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: var(--vp-background-color);
+    min-width: 100px;
+    box-shadow: 1px 1px 2px rgb(0 0 0 / 10%);
+    z-index: 1;
+}
+.vp-dropdown-content .vp-dropdown-item {
+    height: 30px;
+    line-height: 30px;
+    background: var(--vp-background-color);
+    border: 0.25px solid var(--vp-border-gray-color);
+    box-sizing: border-box;
+    box-shadow: 1px 1px 2px rgb(0 0 0 / 10%);
+    border-radius: 2px;
+    font-size: 13px;
+    text-align: left;
+    color: var(--vp-font-primary);
+    cursor: pointer;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    text-overflow: ellipsis;
+    /* overflow: hidden; */
+    white-space: nowrap;
+    padding: 0px 5px;
+}
+.vp-dropdown-content .vp-dropdown-item:not(.disabled):not(.selected):hover {
+    background-color: var(--vp-border-gray-color);
+}
+.vp-dropdown:not(.disabled):hover .vp-dropdown-content {
+    display: block;
+}
+.vp-dropdown:not(.disabled):hover .vp-drop-button:not(.selected) {
+    background-color: var(--vp-border-gray-color);
+}
+.vp-drop-button.selected,
+.vp-dropdown-content .vp-dropdown-item.selected {
+    background-color: var(--vp-highlight-color);
+    color: var(--vp-background-color);
+}
+.vp-drop-button {
+    background-color: var(--vp-background-color);
+    color: var(--vp-font-primary);
+    padding: 5px 7px;
+    border: 0.25px solid var(--vp-border-gray-color);
+    cursor: pointer;
+    height: 30px;
+    font-size: 13px;
+}
+.vp-drop-button.disabled,
+.vp-dropdown-item.disabled {
+    color: var(--vp-gray-color);
+    cursor: not-allowed;
+}
 /* cursor */
 .vp-cursor {
     cursor: pointer;
@@ -497,6 +589,13 @@ hr.vp-extra-menu-line {
 .vp-grid-col-95 {
     display: grid;
     grid-template-columns: 95px auto;
+    grid-row-gap: 5px;
+    align-items: baseline;
+    align-content: space-evenly;
+}
+.vp-grid-col-100 {
+    display: grid;
+    grid-template-columns: 100px auto;
     grid-row-gap: 5px;
     align-items: baseline;
     align-content: space-evenly;

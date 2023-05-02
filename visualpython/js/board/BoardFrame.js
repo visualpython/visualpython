@@ -976,22 +976,31 @@ define([
                 let panelId = vpKernel.getLabPanelId();
                 if (panelId) {
                     sessionId = panelId;
+                    if (!(sessionId in this._blockList)) {
+                        this._blockList[sessionId] = {
+                            title: '',
+                            blockList: []
+                        }
+                    }
                 }
             }
-            var movingBlock = this._blockList[sessionId].blockList[startIdx];
-            if (movingBlock) {
-                let groupBlocks = this.getGroupedBlocks(movingBlock);
-                this._blockList[sessionId].blockList.splice(startIdx, groupBlocks.length);
-                this._blockList[sessionId].blockList.splice(endIdx, 0, ...groupBlocks);
-                // move tag
-                if (parentBlock != null) {
-                    // set this movingBlock as child of parentBlock
-                    movingBlock.setChildBlock(parentBlock.getChildDepth());
-                } else {
-                    // set group block
-                    movingBlock.setGroupBlock();
+            var blockList = this._blockList[sessionId].blockList;
+            if (blockList) {
+                var movingBlock = blockList[startIdx];
+                if (movingBlock) {
+                    let groupBlocks = this.getGroupedBlocks(movingBlock);
+                    this._blockList[sessionId].blockList.splice(startIdx, groupBlocks.length);
+                    this._blockList[sessionId].blockList.splice(endIdx, 0, ...groupBlocks);
+                    // move tag
+                    if (parentBlock != null) {
+                        // set this movingBlock as child of parentBlock
+                        movingBlock.setChildBlock(parentBlock.getChildDepth());
+                    } else {
+                        // set group block
+                        movingBlock.setGroupBlock();
+                    }
+                    this.reloadBlockList();
                 }
-                this.reloadBlockList();
             }
         }
 

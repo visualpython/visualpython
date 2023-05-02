@@ -11,6 +11,7 @@
 .vp-instance-left-box, 
 .vp-instance-right-box {
     height: 100%;
+    align-content: baseline;
 }
 .vp-instance-base {
     display: grid;
@@ -115,7 +116,11 @@
 .vp-instance-preview-box {
     min-height: 352px;
     width: 100%;
-    height: calc(100% - 30px);
+    height: 400px;
+    min-height: calc(100% - 50px);
+}
+.vp-instance-preview-content {
+    height: 100%;
 }
 .vp-instance-preview-content:empty::after {
     content: 'No preview data';

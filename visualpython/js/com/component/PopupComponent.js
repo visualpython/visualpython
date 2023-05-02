@@ -113,8 +113,9 @@ define([
                 position: { right: 10, top: 120 },
                 size: { width: 400, height: 550 },
                 saveOnly: false, // apply mode
-                checkModules: [] // module aliases or function names
-                , ...restConfig
+                checkModules: [], // module aliases or function names
+                docs: 'https://visual-python.gitbook.io/docs/getting-started/welcome-to-visual-python',
+                ...restConfig
             };
 
             // check BoardFrame width and set initial position of popup
@@ -562,9 +563,13 @@ define([
             let { 
                 installButton, importButton, packageButton, 
                 codeview, dataview, runButton, footer, 
-                sizeLevel, position
+                sizeLevel, position, docs
             } = this.config;
 
+            // apply link to docs
+            if (docs) {
+                $(this.wrapSelector('.vp-popup-docs')).prop('href', docs);
+            }
             // import & package manager button hide/show
             if (!installButton) { // FIXME: Deprecated after creating package manager
                 $(this.wrapSelector('#popupInstall')).hide();
@@ -618,6 +623,9 @@ define([
                     break;
                 case 3: 
                     this.config.size = { width: 760, height: 550 };
+                    break;
+                case 4:
+                    this.config.size = { width: 1064, height: 550 };
                     break;
             }
 

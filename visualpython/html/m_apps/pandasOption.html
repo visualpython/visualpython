@@ -1,34 +1,72 @@
 <body>
-    <div class="vp-grid-border-box vp-pandas-option-body">
+    <div class="vp-grid-border-box vp-pandas-option-body vp-po-option">
+        <div>
+            <label class="vp-bold">Display</label>
+            <label style="float: right;">
+                <input type="checkbox" id="resetDisplay">
+                <span title="Set pandas options to default.">Set default</span>
+            </label>
+        </div>
         <div class="vp-grid-col-110">
-            <label for="min_rows" class="">Min/Max Rows</label>
+            <label for="min_rows" class="">Min rows</label>
+            <input type="number" id="min_rows" class="vp-po-option-item vp-input vp-state" placeholder="10 (min)">
+        </div>
+        <div>
+            <label class="vp-orange-text vp-italic">NOTE:</label> <label class="vp-gray-text vp-italic">numbers of rows to show in a truncated view</label>
+        </div>
+        <div class="vp-grid-col-110">
+            <label for="min_rows" class="">Max rows</label>
             <div>
-                <input type="number" id="min_rows" class="vp-input m vp-state" placeholder="10 (min)">
-                <input type="number" id="max_rows" class="vp-input m vp-state" placeholder="60 (max)">
+                <input type="number" id="max_rows" class="vp-po-option-item vp-input vp-state" placeholder="60 (max)">
+                <label>
+                    <input type="checkbox" id="showAllRows" class="vp-po-option-item">
+                    <span title="Set option as None to show all rows">Show all rows</span>
+                </label>
             </div>
             <label for="min_columns" class="">Max columns</label>
-            <input type="number" id="max_columns" class="vp-input m vp-state" placeholder="0">
+            <div>
+                <input type="number" id="max_columns" class="vp-po-option-item vp-input vp-state" placeholder="0">
+                <label>
+                    <input type="checkbox" id="showAllColumns" class="vp-po-option-item">
+                    <span title="Set option as None to show all columns">Show all columns</span>
+                </label>
+            </div>
             <label for="max_colwidth" class="">Max colwidth</label>
-            <input type="number" id="max_colwidth" class="vp-input m vp-state" placeholder="50">
-        </div>
-        <hr style="margin: 5px 0;">
-        <div class="vp-grid-col-110">
-            <label for="float_format" class="">Float format</label>
-            <input type="number" class="vp-input vp-state" id="float_format" placeholder="None">
-            <label for="precision" class="">Precision</label>
-            <input type="number" class="vp-input vp-state" id="precision" placeholder="6">
-            <label for="chop_threshold" class="">Chop threshold</label>
-            <input type="number" class="vp-input vp-state" id="chop_threshold" placeholder="None">
+            <input type="number" id="max_colwidth" class="vp-po-option-item vp-input vp-state" placeholder="50">
             <label for="expand_frame_repr" class="">Expand frame</label>
-            <select id="expand_frame_repr" class="vp-select vp-state">
+            <select id="expand_frame_repr" class="vp-po-option-item vp-select vp-state">
                 <option value="">Select option...</option>
                 <option value="True">True (default)</option>
                 <option value="False">False</option>
             </select>
         </div>
+        <hr style="margin: 5px 0;">
+        <div class="vp-grid-col-110">
+            <label for="precision" class="">Precision</label>
+            <input type="number" class="vp-po-option-item vp-input vp-state" id="precision" placeholder="6">
+            <label for="chop_threshold" class="">Chop threshold</label>
+            <input type="number" class="vp-po-option-item vp-input vp-state" id="chop_threshold" placeholder="None">
+        </div>
     </div>
-    <label class="mt5">
-        <input type="checkbox" id="setDefault">
-        <span title="Set chart setting to default.">Set Default</span>
-    </label>
+    <div class="vp-grid-border-box vp-po-warning mt5">
+        <div>
+            <label class="vp-bold">Warnings</label>
+            <label style="float: right;">
+                <input type="checkbox" id="resetWarning">
+                <span title="Reset warning option.">Set default</span>
+            </label>
+        </div>
+        <div class="vp-grid-col-110">
+            <label for="filter_warning" class="">Filter warnings</label>
+            <select id="filter_warning" class="vp-po-warning-item vp-select vp-state">
+                <option value="">Select option...</option>
+                <option value="default">Default (default)</option>
+                <option value="error">Error</option>
+                <option value="ignore">Ignore</option>
+                <option value="always">Always</option>
+                <option value="module">Module</option>
+                <option value="once">Once</option>
+            </select>
+        </div>
+    </div>
 </body>

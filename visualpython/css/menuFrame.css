@@ -356,7 +356,7 @@ input.vp-menu-search-box {
 .vp-menuitem.apps .apps_file {
     background: top / contain no-repeat url(../img/apps/apps_file.svg);
 }
-.vp-menuitem.apps .apps_variable {
+.vp-menuitem.apps .apps_information {
     background: top / contain no-repeat url(../img/apps/apps_variable.svg);
 }
 .vp-menuitem.apps .apps_snippets {
