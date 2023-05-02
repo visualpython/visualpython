@@ -1,6 +1,12 @@
 <body>
     <div class="vp-grid-border-box vp-pandas-option-body vp-po-option">
-        <label class="vp-bold">Display</label>
+        <div>
+            <label class="vp-bold">Display</label>
+            <label style="float: right;">
+                <input type="checkbox" id="resetDisplay">
+                <span title="Set pandas options to default.">Set default</span>
+            </label>
+        </div>
         <div class="vp-grid-col-110">
             <label for="min_rows" class="">Min rows</label>
             <input type="number" id="min_rows" class="vp-po-option-item vp-input vp-state" placeholder="10 (min)">
@@ -41,15 +47,15 @@
             <label for="chop_threshold" class="">Chop threshold</label>
             <input type="number" class="vp-po-option-item vp-input vp-state" id="chop_threshold" placeholder="None">
         </div>
-        <hr style="margin: 5px 0;">
-        <label class="mt5">
-            <input type="checkbox" id="resetDisplay">
-            <span title="Set pandas options to default.">Set default</span>
-        </label>
     </div>
-    <hr style="margin: 5px 0;">
-    <div class="vp-grid-border-box vp-po-warning">
-        <label class="vp-bold">Warnings</label>
+    <div class="vp-grid-border-box vp-po-warning mt5">
+        <div>
+            <label class="vp-bold">Warnings</label>
+            <label style="float: right;">
+                <input type="checkbox" id="resetWarning">
+                <span title="Reset warning option.">Set default</span>
+            </label>
+        </div>
         <div class="vp-grid-col-110">
             <label for="filter_warning" class="">Filter warnings</label>
             <select id="filter_warning" class="vp-po-warning-item vp-select vp-state">
@@ -62,10 +68,5 @@
                 <option value="once">Once</option>
             </select>
         </div>
-        <hr style="margin: 5px 0;">
-        <label class="mt5">
-            <input type="checkbox" id="resetWarning">
-            <span title="Reset warning option.">Set default</span>
-        </label>
     </div>
 </body>

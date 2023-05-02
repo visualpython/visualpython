@@ -135,6 +135,10 @@ define([
                 } else if (sessionType === 'console') {
                     var labConsole = notebookPanel.content;
                     var widget = labConsole.widgets[0];
+                    if (type === 'markdown') {
+                        // add # before the lines
+                        command = '#' + command.split('\n').join('#');
+                    }
 
                     // execute or not
                     if (exec == true) {

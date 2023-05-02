@@ -80,7 +80,7 @@ input.vp-input {
     height: 30px;
     padding: 3px 7px;
     color: var(--vp-font-primary);
-    background: var(--vp-background-color);
+    background-color: var(--vp-background-color);
     outline-color: var(--vp-highlight-color);
     border: 0.25px solid var(--vp-border-gray-color);
     box-sizing: border-box;
@@ -90,6 +90,7 @@ input.vp-input::placeholder {
 }
 input.vp-input:disabled, 
 select.vp-select:disabled {
+    background-color: var(--vp-light-gray-color);
     cursor: not-allowed;
 }
 
@@ -121,6 +122,16 @@ select.vp-select:disabled {
 }
 .vp-icon-arrow-short-up {
     background: center / contain no-repeat url(../img/arrow_short_up.svg);
+    width: 15px;
+    height: 15px;
+}
+.vp-icon-chevron-down {
+    background: center / contain no-repeat url(../img/chevron_big_down.svg);
+    width: 15px;
+    height: 15px;
+}
+.vp-icon-chevron-up {
+    background: center / contain no-repeat url(../img/chevron_big_up.svg);
     width: 15px;
     height: 15px;
 }
@@ -445,6 +456,11 @@ button.vp-button {
     height: 30px;
     font-size: 13px;
 }
+.vp-drop-button.disabled,
+.vp-dropdown-item.disabled {
+    color: var(--vp-gray-color);
+    cursor: not-allowed;
+}
 /* cursor */
 .vp-cursor {
     cursor: pointer;
@@ -573,6 +589,13 @@ hr.vp-extra-menu-line {
 .vp-grid-col-95 {
     display: grid;
     grid-template-columns: 95px auto;
+    grid-row-gap: 5px;
+    align-items: baseline;
+    align-content: space-evenly;
+}
+.vp-grid-col-100 {
+    display: grid;
+    grid-template-columns: 100px auto;
     grid-row-gap: 5px;
     align-items: baseline;
     align-content: space-evenly;

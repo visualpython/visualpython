@@ -89,10 +89,6 @@
     height: 30px;
     font-size: 13px;
 }
-.vp-information-menu.disabled {
-    color: var(--vp-gray-color);
-    cursor: not-allowed;
-}
 .vp-variable-preview {
     margin-top: 5px;
     align-content: baseline;

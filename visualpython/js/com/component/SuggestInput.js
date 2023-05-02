@@ -56,7 +56,7 @@ define([
             this._normalFilter = normalFilter;
         }
         /**
-         * suggest list
+         * suggest list or object list [{ label, value } ...]
          * @param {Array or Function} suggestList
          */
         setSuggestList(suggestList = new Array()) {

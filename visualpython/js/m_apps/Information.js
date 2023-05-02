@@ -67,15 +67,14 @@ define([
                         { id: 'null_count', label: 'Null count', 
                             code: "pd.DataFrame({'Null Count': ${data}.isnull().sum(), 'Non-Null Count': ${data}.notnull().sum()})", dtype: ['DataFrame', 'Series'] },
                         // { id: 'duplicates', label: 'Duplicated', code: '${data}.duplicated()', dtype: ['DataFrame', 'Series'] },
-                        { id: 'duplicates', label: 'Duplicated', code: "with pd.option_context('display.max_colwidth', None):\
-                            \n    _duplicated = ([${data}.duplicated().sum()] + [${data}[col].duplicated().sum() for col in df.columns])\
-                            \n    _duplicated_df = pd.DataFrame({\
-                            \n        'Rows':[len(${data})]*len(_duplicated),\
-                            \n        'Unique':[len(${data}) - dups for dups in _duplicated],\
-                            \n        'Duplicated': _duplicated,\
-                            \n        'Duplicated values': [' + '.join(${data}.columns.to_list())] + ${data}.columns.to_list()\
-                            \n    }, index=['Combination']+${data}.columns.to_list())\
-                            \n    display(_duplicated_df)", dtype: ['DataFrame', 'Series'] },
+                        { id: 'duplicates', label: 'Duplicated', code: "_duplicated = ([${data}.duplicated().sum()] + [${data}[col].duplicated().sum() for col in ${data}.columns])\
+                            \n_duplicated_df = pd.DataFrame({\
+                            \n    'Rows':[len(${data})]*len(_duplicated),\
+                            \n    'Unique':[len(${data}) - dups for dups in _duplicated],\
+                            \n    'Duplicated': _duplicated,\
+                            \n    'Duplicated by': ['All columns'] + ${data}.columns.to_list()\
+                            \n}, index=['Combination']+${data}.columns.to_list())\
+                            \n_duplicated_df", dtype: ['DataFrame', 'Series'], toframe: true },
                         { id: 'unique', label: 'Unique', code: '${data}.unique()', dtype: ['Series'] },
                         { id: 'value_counts', label: 'Value counts', code: '${data}.value_counts()', dtype: ['DataFrame', 'Series'] },
                     ]
@@ -136,6 +135,7 @@ define([
         _unbindEvent() {
             super._unbindEvent();
 
+            $(document).off('click', this.wrapSelector('.vp-popup-body'));
             $(document).off('click', this.wrapSelector('.vp-information-menu'));
         }
 
@@ -152,6 +152,23 @@ define([
                 }
             });
 
+            // un-select every selection
+            $(document).on('click', this.wrapSelector('.vp-popup-body'), function(evt) {
+                evt.stopPropagation();
+                var target = evt.target;
+                // if(!$(target).is("input") && !$(target).is("label")) {
+                if ($('.vp-dropdown-content').find(target).length == 0 
+                    && !$(target).hasClass('vp-dropdown-content') ) {
+                    $(that.wrapSelector('.vp-variable-preview thead th')).removeClass('selected');
+
+                    // load menu
+                    that.renderMenu();
+                    // load info
+                    that.loadInfo();
+                }
+
+            });
+
             // click menu
             $(document).on('click', this.wrapSelector('.vp-information-menu:not(.disabled)'), function(event) {
                 event.stopPropagation();
@@ -163,10 +180,10 @@ define([
                         let menuType = $(this).attr('type'); // checkbox or radio
                         if (menuType === 'radio') {
                             // uncheck all checkbox
-                            $('.vp-information-menu[data-parent="statistics"][type="checkbox"]:checked').prop('checked', false);
+                            $(that.wrapSelector('.vp-information-menu[data-parent="statistics"][type="checkbox"]:checked')).prop('checked', false);
                         } else {
                             // uncheck all radio
-                            $('.vp-information-menu[data-parent="statistics"][type="radio"]:checked').prop('checked', false);
+                            $(that.wrapSelector('.vp-information-menu[data-parent="statistics"][type="radio"]:checked')).prop('checked', false);
                         }
                         // allow multi-select
                         that.state.menu = menuParent;
@@ -181,7 +198,7 @@ define([
                         that.state.menu = menuParent;
                         that.state.menuItem = [ menuId ];
                         // remove checkbox selection for statistics
-                        $(that.wrapSelector('.vp-information-menu[data-parent="statistics"] input')).prop('checked', false);
+                        $(that.wrapSelector('.vp-information-menu[data-parent="statistics"]:checked')).prop('checked', false);
                         // add selection
                         $(that.wrapSelector('.vp-information-menu')).removeClass('selected');
                         $(this).addClass('selected');
@@ -298,7 +315,15 @@ define([
         }
 
         generateCode() {
-            let { data, dtype, selected, menu, menuItem } = this.state;
+            let { data, dtype, menu, menuItem } = this.state;
+
+            var selected = [];
+            $(this.wrapSelector('.vp-variable-preview thead th.selected')).each((idx, tag) => {
+                var label = $(tag).text();
+                selected.push("'" + label + "'"); // FIXME: get data columns and use its code
+            });
+            this.state.selected = selected;
+            
             let currentDtype = dtype;
             let dataVar = new com_String();
             dataVar.append(data);
@@ -330,6 +355,12 @@ define([
                                 let childObj = infoObj.child.find(obj=>obj.id === itemId);
                                 statList.push(com_util.formatString("'{0}': {1}", itemId, childObj.code));
                             });
+                            if (currentDtype === 'Series') {
+                                // if multiple stats selected, set series data as dataframe
+                                dataVar = new com_String();
+                                dataVar.appendFormat("{0}[[{1}]]", data, selected.join(','));
+                                currentDtype = 'DataFrame';
+                            }
                             codePattern = com_util.formatString("pd.DataFrame({{0}})", statList.join(','));
                         } else {
                             let childObj = infoObj.child.find(obj=>obj.id === menuItem[0]);
@@ -342,6 +373,11 @@ define([
                     // only one method selected
                     if (menuItem.length > 0 && infoObj.child) {
                         let childObj = infoObj.child.find(obj=>obj.id === menuItem[0]);
+                        if (childObj.toframe === true && currentDtype === 'Series') {
+                            dataVar = new com_String();
+                            dataVar.appendFormat("{0}[[{1}]]", data, selected.join(','));
+                            currentDtype = 'DataFrame';
+                        }
                         codePattern = childObj.code;
                     } else {
                         codePattern = infoObj.code;
@@ -362,6 +398,11 @@ define([
                 let code = codePattern.replaceAll('${data}', dataVar.toString());
                 return code;
             }
+
+            // add ignore options TODO:
+            // let ignoreCode = `import warnings\
+            // \nwith warnings.catch_warnings():
+            // \n    warnings.simplefilter("ignore")\n`;
 
             return dataVar.toString();
         }
@@ -395,15 +436,9 @@ define([
                     }
                     
                     // add event listener for columns
-                    $(that.wrapSelector('.vp-variable-preview thead th')).click(function() {
+                    $(that.wrapSelector('.vp-variable-preview thead th')).click(function(evt) {
+                        evt.stopPropagation();
                         let col = $(this).text();
-                        // if ($(this).hasClass('selected')) {
-                        //     $(this).removeClass('selected');
-                        //     that.state.selection = that.state.selection.filter(x => x !== ("'" + col + "'"));
-                        // } else {
-                        //     $(this).addClass('selected');
-                        //     that.state.selection.push("'" + col + "'");
-                        // }
 
                         var idx = $(that.wrapSelector('.vp-variable-preview thead th')).index(this); // 1 ~ n
                         var hasSelected = $(this).hasClass('selected');
@@ -447,13 +482,6 @@ define([
                             }
                         }
 
-                        var selected = [];
-                        $(that.wrapSelector('.vp-variable-preview thead th.selected')).each((idx, tag) => {
-                            var label = $(tag).text();
-                            selected.push("'" + label + "'"); // FIXME: get data columns and use its code
-                        });
-                        that.state.selected = selected;
-
                         // load info
                         that.renderMenu();
                         that.loadInfo();
@@ -494,7 +522,7 @@ define([
             let $infoPreviewTag = $(this.wrapSelector('#informationPreview'));
             $infoPreviewTag.html('');
             let code = this.generateCode();
-            console.log('load info: ', code, this.state); // TEST:
+
             // show variable information on clicking variable
             vpKernel.execute(code).then(function(resultObj) {
                 let { result, type, msg } = resultObj;

@@ -246,6 +246,10 @@
 .vp-inner-popup-addtype {
     width: 153px;
 }
+.vp-inner-popup-delete-value {
+    display: inline-block;
+    cursor: pointer;
+}
 .vp-inner-popup-delete {
     padding-bottom: 20px;
 }
@@ -260,6 +264,27 @@
 }
 .vp-inner-popup-apply-column {
     width: 153px;
+}
+.vp-inner-popup-sortby {
+    border: 0.25px solid var(--vp-border-gray-color);
+    width: 160px;
+    padding: 5px;
+    min-height: 180px;
+}
+.vp-inner-popup-sortby-item {
+    border-bottom: 0.25px solid var(--vp-border-gray-color);
+    padding: 3px;
+    cursor: pointer;
+    height: 30px;
+}
+.vp-inner-popup-sortby-up {
+    float: right;
+    display: inline-block;
+}
+.vp-inner-popup-sortby-down {
+    float: right;
+    display: inline-block;
+
 }
 
 /* UDF Editor - CodeMirror */
@@ -293,5 +318,6 @@
 
 .vp-fr-subset-box .vp-ds-button {
     width: 50px;
+    min-width: 50px;
     vertical-align: top;
 }
