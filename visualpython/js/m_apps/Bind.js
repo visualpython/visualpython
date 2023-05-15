@@ -308,7 +308,9 @@ define([
             
             // reset index checkbox event
             $(document).on('change', this.wrapSelector('#vp_bdResetIndex'), function() {
-                that.state.resetIndex = $(this).prop('checked');
+                let isChecked = $(this).prop('checked');
+                $(that.wrapSelector('#vp_bdWithoutColumn')).prop('disabled', !isChecked);
+                that.state.resetIndex = isChecked;
             });
 
             // with/without column select event
@@ -334,7 +336,7 @@ define([
 
         renderDataPage(renderedText, isHtml = true) {
             var tag = new com_String();
-            tag.appendFormatLine('<div class="{0} vp-close-on-blur vp-scrollbar">', 'rendered_html'); // 'rendered_html' style from jupyter output area
+            tag.appendFormatLine('<div class="{0} vp-close-on-blur vp-scrollbar">', 'vp_rendered_html'); // 'rendered_html' style from jupyter output area
             if (isHtml) {
                 tag.appendLine(renderedText);
             } else {
