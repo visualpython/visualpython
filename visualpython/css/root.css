@@ -678,6 +678,58 @@ hr.vp-extra-menu-line {
 .vp-option-horizontal-table-layout .vp-center-align {
 	text-align: center;
 }
+/* rendered table style */
+.vp_rendered_html * + table {
+    margin-top: 1em;
+}
+.vp_rendered_html table {
+    margin-left: auto;
+    margin-right: auto;
+    border: none;
+    border-collapse: collapse;
+    border-spacing: 0;
+    color: black;
+    font-size: 12px;
+    table-layout: fixed;
+}
+.vp_rendered_html thead {
+    border-bottom: 1px solid black;
+    vertical-align: bottom;
+}
+.vp_rendered_html tr, .vp_rendered_html th, .vp_rendered_html td {
+    text-align: right;
+    vertical-align: middle;
+    padding: 0.5em 0.5em;
+    line-height: normal;
+    white-space: normal;
+    max-width: none;
+    border: none;
+}
+.vp_rendered_html th {
+    font-weight: bold;
+}
+.vp_rendered_html tbody tr:nth-child(odd) {
+    background: #f5f5f5;
+}
+.vp_rendered_html tbody tr:hover {
+    background: rgba(66, 165, 245, 0.2);
+}
+.vp_rendered_html * + p {
+    margin-top: 1em;
+}
+.vp_rendered_html p {
+    text-align: left;
+}
+.vp_rendered_html pre, .vp_rendered_html code {
+    border: 0;
+    color: #000;
+    font-size: 100%;
+}
+.vp_rendered_html pre {
+    margin: 1em 2em;
+    padding: 0px;
+    background-color: #fff;
+}
 /* jquery auto-complete */
 .ui-autocomplete {
     z-index: 1250;
