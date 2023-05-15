@@ -166,20 +166,20 @@ define([
             let { elseFlag, finallyFlag } = this.state; 
             if (taskId == 'lgCtrl_for' || taskId == 'lgCtrl_while') {
                 page.appendLine('<div class="vp-block-button-group">');
-                page.appendFormatLine('<div class="vp-block-button {0}" data-menu="{1}">{2}</div>', 'else', 'else', 'else ' + (elseFlag?'off':'on'));
+                page.appendFormatLine('<div class="vp-block-button {0}" data-menu="{1}">{2}</div>', 'else', 'else', 'else ' + (elseFlag === true?'off':'on'));
                 page.appendLine('</div>');
             }
             if (taskId == 'lgCtrl_if') {
                 page.appendLine('<div class="vp-block-button-group">');
                 page.appendFormatLine('<div class="vp-block-button {0}" data-menu="{1}">{2}</div>', 'elif', 'elif', '+ elif');
-                page.appendFormatLine('<div class="vp-block-button {0}" data-menu="{1}">{2}</div>', 'else', 'else', 'else ' + (elseFlag?'off':'on'));
+                page.appendFormatLine('<div class="vp-block-button {0}" data-menu="{1}">{2}</div>', 'else', 'else', 'else ' + (elseFlag === true?'off':'on'));
                 page.appendLine('</div>');
             }
             if (taskId == 'lgCtrl_try') {
                 page.appendLine('<div class="vp-block-button-group">');
                 page.appendFormatLine('<div class="vp-block-button {0}" data-menu="{1}">{2}</div>', 'except', 'except', '+ except');
-                page.appendFormatLine('<div class="vp-block-button {0}" data-menu="{1}">{2}</div>', 'else', 'else', 'else ' + (elseFlag?'off':'on'));
-                page.appendFormatLine('<div class="vp-block-button {0}" data-menu="{1}">{2}</div>', 'finally', 'finally', 'finally ' + (finallyFlag?'off':'on'));
+                page.appendFormatLine('<div class="vp-block-button {0}" data-menu="{1}">{2}</div>', 'else', 'else', 'else ' + (elseFlag === true?'off':'on'));
+                page.appendFormatLine('<div class="vp-block-button {0}" data-menu="{1}">{2}</div>', 'finally', 'finally', 'finally ' + (finallyFlag === true?'off':'on'));
                 page.appendLine('</div>');
             }
             page.appendLine('</div>');

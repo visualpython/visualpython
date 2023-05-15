@@ -1087,8 +1087,8 @@ define([
             let groupedBlocks = block.getGroupedBlocks();
             let elseBlock = groupedBlocks.filter(obj => (obj.id === 'lgCtrl_else' && obj.depth === block.depth));
             let finallyBlock = groupedBlocks.find(obj => (obj.id === 'lgCtrl_finally' && obj.depth === block.depth));
-            block.state.elseFlag = elseBlock!=undefined?true:false;
-            block.state.finallyFlag = finallyBlock!=undefined?true:false;
+            block.state.elseFlag = (elseBlock!==undefined?true:false);
+            block.state.finallyFlag = finallyBlock!==undefined?true:false;
         }
         toggleElseBlock(block) {
             const blockIdx = this.blockList.indexOf(block);
@@ -1096,7 +1096,7 @@ define([
             let position = blockIdx + groupedBlocks.length; // add position
             // check if it has else block
             let elseFlag = block.state.elseFlag;
-            if (!elseFlag) {
+            if (elseFlag === false) {
                 // if finally is available, change add position
                 if (block.state.finallyFlag) {
                     let finallyBlock = groupedBlocks.find(obj => (obj.id === 'lgCtrl_finally' && obj.depth === block.depth));
@@ -1108,13 +1108,13 @@ define([
                     isGroup: false,
                     depth: block.depth
                 }
+                block.state.elseFlag = true;
                 this.prop.parent.createPopup([{ 
                     blockType: 'block', 
                     menuId: 'lgCtrl_else', 
                     menuState: { blockState: blockState }, 
                     position: position
                 }]);
-                block.state.elseFlag = true;
                 setTimeout(function() {
                     block.focusItem();
                 }, 100);
@@ -1138,19 +1138,19 @@ define([
             
             // check if it has finally block
             let finallyFlag = block.state.finallyFlag;
-            if (!finallyFlag) {
+            if (finallyFlag === false) {
                 // add finally
                 let blockState = {
                     isGroup: false,
                     depth: block.depth
                 }
+                block.state.finallyFlag = true;
                 this.prop.parent.createPopup([{
                     blockType: 'block', 
                     menuId: 'lgCtrl_finally', 
                     menuState: { blockState: blockState }, 
                     position: position
                 }]);
-                block.state.finallyFlag = true;
                 setTimeout(function() {
                     block.focusItem();
                 }, 100);
@@ -1172,7 +1172,7 @@ define([
             let groupedBlocks = block.getGroupedBlocks();
             let position = blockIdx + groupedBlocks.length; // add position
             // if else is available, change add position
-            if (block.state.elseFlag) {
+            if (block.state.elseFlag === true) {
                 let elseBlock = groupedBlocks.find(obj => (obj.id === 'lgCtrl_else' && obj.depth === block.depth));
                 let elsePosition = this.blockList.indexOf(elseBlock);
                 position = elsePosition;
@@ -1198,13 +1198,13 @@ define([
             let groupedBlocks = block.getGroupedBlocks();
             let position = blockIdx + groupedBlocks.length; // add position
             // if finally is available, change add position
-            if (block.state.finallyFlag) {
+            if (block.state.finallyFlag === true) {
                 let finallyBlock = groupedBlocks.find(obj => (obj.id === 'lgCtrl_finally' && obj.depth === block.depth));
                 let finallyPosition = this.blockList.indexOf(finallyBlock);
                 position = finallyPosition;
             }
             // if else is available, change add position
-            if (block.state.elseFlag) {
+            if (block.state.elseFlag === true) {
                 let elseBlock = groupedBlocks.find(obj => (obj.id === 'lgCtrl_else' && obj.depth === block.depth));
                 let elsePosition = this.blockList.indexOf(elseBlock);
                 position = elsePosition;
