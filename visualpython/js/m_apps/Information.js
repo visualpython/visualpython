@@ -603,7 +603,7 @@ define([
         }
 
         loadCode(codeStr, more=false) {
-            if (this.loading) {
+            if (this.loading === true) {
                 return;
             }
     
@@ -839,13 +839,16 @@ define([
                     vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
                 }
             }).catch(function(resultObj) {
-                let { msg } = resultObj;
+                let { msg, ename, evalue } = resultObj;
                 var errorContent = '';
-                if (msg.content.ename) {
+                if (msg && msg?.content?.ename) {
                     errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue, msg.content.detail);
+                    vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
+                } else if (ename && evalue) {
+                    errorContent = com_util.templateForErrorBox(ename, evalue);
+                    vpLog.display(VP_LOG_TYPE.ERROR, ename, evalue, resultObj);
                 }
                 $infoPreviewTag.html(errorContent);
-                vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
             }).finally(function() {
                 loadingSpinner.remove();
             });
