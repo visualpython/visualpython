@@ -242,59 +242,80 @@ define([
                 that.setPreview(that.getCurrentCode());
             });
 
-            // menu on column (Deprecated on v2.3.6)
-            // $(document).on('contextmenu', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN), function(event) {
-            //     event.preventDefault();
-            //     var hasSelected = $(this).hasClass('selected');
-            //     $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW)).removeClass('selected');
-            //     // select col/idx
-            //     if (!hasSelected) {
-            //         $(this).addClass('selected');
-            //         var newAxis = $(this).data('axis');
-            //         that.state.axis = newAxis;
-            //     }
+            // menu on column (Deprecated on v2.3.6 - Temporarily Show on v.2.3.7)
+            $(document).on('contextmenu', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN), function(event) {
+                event.preventDefault();
 
-            //     that.loadInfo();
-
-            //     // show menu
-            //     var thisPos = $(this).position();
-            //     var thisRect = $(this)[0].getBoundingClientRect();
-            //     that.showMenu(thisPos.left, thisPos.top + thisRect.height);
-            // });
-
-            // menu on row (Deprecated on v2.3.6)
-            // $(document).on('contextmenu', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW), function(event) {
-            //     event.preventDefault();
-            //     var hasSelected = $(this).hasClass('selected');
-            //     $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN)).removeClass('selected');
-            //     // select col/idx
-            //     if (!hasSelected) {
-            //         $(this).addClass('selected');
-            //         var newAxis = $(this).data('axis');
-            //         that.state.axis = newAxis;
-            //     }
-
-            //     that.loadInfo();
-
-            //     // show menu
-            //     var thisPos = $(this).position();
-            //     var thisRect = $(this)[0].getBoundingClientRect();
-            //     var tblPos = $(that.wrapSelector('.' + VP_FE_TABLE)).position();
-            //     var scrollTop = $(that.wrapSelector('.' + VP_FE_TABLE)).scrollTop();
-            //     that.showMenu(tblPos.left + thisRect.width, tblPos.top + thisPos.top - scrollTop);
-            // });
-
-            // un-select every selection
-            $(document).on('click', this.wrapSelector('.vp-popup-body'), function() {
+                var idx = $(that.wrapSelector('.' + VP_FE_TABLE_COLUMN)).index(this); // 1 ~ n
+                var hasSelected = $(this).hasClass('selected');
                 $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW)).removeClass('selected');
-                $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN)).removeClass('selected');
-                $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN_GROUP)).removeClass('selected');
+                // select col/idx
+                if (!hasSelected) {
+                    $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN)).removeClass('selected');
+                    $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN_GROUP)).removeClass('selected');
 
-                // reset selected columns/indexes
-                that.state.axis = FRAME_AXIS.NONE;
-                that.state.selected = [];
+                    $(this).addClass('selected');
+                    that.state.selection = { start: idx, end: -1 };
+                    var newAxis = $(this).data('axis');
+                    that.state.axis = newAxis;
+                }
+                // select its group
+                $(that.wrapSelector(`.${VP_FE_TABLE} th[data-label="${$(this).data('parent')}"]`)).addClass('selected');
+
+                that.loadInfo();
                 // load toolbar
                 that.renderToolbar();
+
+                // show menu
+                var thisPos = $(this).position();
+                var thisRect = $(this)[0].getBoundingClientRect();
+                that.showMenu(thisPos.left, thisPos.top + thisRect.height);
+            });
+
+            // menu on row (Deprecated on v2.3.6 - Temporarily Show on v.2.3.7)
+            $(document).on('contextmenu', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW), function(event) {
+                event.preventDefault();
+                var idx = $(that.wrapSelector('.' + VP_FE_TABLE_ROW)).index(this); // 0 ~ n
+                var hasSelected = $(this).hasClass('selected');
+                $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN)).removeClass('selected');
+                // select col/idx
+                if (!hasSelected) {
+                    $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW)).removeClass('selected');
+                    $(this).addClass('selected');
+                    that.state.selection = { start: idx, end: -1 };
+                    var newAxis = $(this).data('axis');
+                    that.state.axis = newAxis;
+                }
+
+                that.loadInfo();
+                // load toolbar
+                that.renderToolbar();
+
+                // show menu
+                var thisPos = $(this).position();
+                var thisRect = $(this)[0].getBoundingClientRect();
+                var tblPos = $(that.wrapSelector('.' + VP_FE_TABLE)).position();
+                var scrollTop = $(that.wrapSelector('.' + VP_FE_TABLE)).scrollTop();
+                that.showMenu(tblPos.left + thisRect.width, tblPos.top + thisPos.top - scrollTop);
+            });
+
+            // un-select every selection and menu box
+            $(document).on('click', this.wrapSelector('.vp-fe-table'), function(evt) {
+                evt.stopPropagation();
+                var target = evt.target;
+                if ($('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN).find(target).length == 0 
+                    && !$(target).hasClass('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN) ) {
+                    $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW)).removeClass('selected');
+                    $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN)).removeClass('selected');
+                    $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN_GROUP)).removeClass('selected');
+                    $(that.wrapSelector('.vp-fe-menu-box')).hide();
+    
+                    // reset selected columns/indexes
+                    that.state.axis = FRAME_AXIS.NONE;
+                    that.state.selected = [];
+                    // load toolbar
+                    that.renderToolbar();
+                }
             });
 
             // select column group
@@ -384,6 +405,59 @@ define([
                 that.renderToolbar();
             });
 
+            /**
+             * Drag and drop selection TODO: release for later version v2.3.8
+             */
+            // drag start column
+            // $(document).on('mousedown', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN), function(evt) {
+            //     var idx = $(that.wrapSelector('.' + VP_FE_TABLE_COLUMN)).index(this); // 1 ~ n
+            //     that.state.axis = FRAME_AXIS.COLUMN;
+            //     that.state.selection = { start: idx, end: -1 };
+            //     that.isMouseDown = true;
+            //     console.log('down');
+
+            //     $(document).on('mouseover', that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN), function(evt) {
+            //         evt.stopPropagation();
+            //         var idx = $(that.wrapSelector('.' + VP_FE_TABLE_COLUMN)).index(this); // 1 ~ n
+            //         var axis = that.state.axis;
+            //         var startIdx = that.state.selection.start;
+            //         if (that.isMouseDown === true) {
+            //             if (axis === FRAME_AXIS.ROW) {
+            //                 startIdx = -1;
+            //             }
+                        
+            //             if (startIdx == -1) {
+            //                 // no selection
+            //                 that.state.selection = { start: idx, end: -1 };
+            //             } else if (startIdx > idx) {
+            //                 // add selection from idx to startIdx
+            //                 var tags = $(that.wrapSelector('.' + VP_FE_TABLE_COLUMN));
+            //                 for (var i = idx; i <= startIdx; i++) {
+            //                     $(tags[i]).addClass('selected');
+            //                 }
+            //                 that.state.selection = { start: startIdx, end: idx };
+            //             } else if (startIdx <= idx) {
+            //                 // add selection from startIdx to idx
+            //                 var tags = $(that.wrapSelector('.' + VP_FE_TABLE_COLUMN));
+            //                 for (var i = startIdx; i <= idx; i++) {
+            //                     $(tags[i]).addClass('selected');
+            //                 }
+            //                 that.state.selection = { start: startIdx, end: idx };
+            //             }
+
+            //             that.loadInfo();
+            //             // load toolbar
+            //             that.renderToolbar();
+            //         }
+            //     });
+            // });
+
+            // $(document).on('mouseup', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN), function(evt) {
+            //     that.isMouseDown = false;
+            //     console.log('up');
+            //     $(document).off('mouseover', that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN));
+            // });
+
             // select column
             $(document).on('click', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN), function(evt) {
                 evt.stopPropagation();
@@ -406,7 +480,7 @@ define([
                 } else if (vpEvent.keyManager.keyCheck.shiftKey) {
                     var axis = that.state.axis;
                     var startIdx = that.state.selection.start;
-                    if (axis != FRAME_AXIS.COLUMN) {
+                    if (axis === FRAME_AXIS.ROW) {
                         startIdx = -1;
                     }
                     
@@ -523,17 +597,17 @@ define([
                 that.loadCode(that.getTypeCode(FRAME_EDIT_TYPE.SHOW), true);
             });
 
-            // click toolbar item
-            // $(document).on('click', this.wrapSelector('.vp-fe-toolbar-item'), function(evt) {
-            //     evt.stopPropagation();
-            //     var itemType = $(this).data('type');
-            //     switch (parseInt(itemType)) {
-            //         case FRAME_EDIT_TYPE.ADD_COL:
-            //         case FRAME_EDIT_TYPE.ADD_ROW:
-            //             that.openInputPopup(itemType);
-            //             break;
-            //     }
-            // });
+            // click toolbar item (Deprecated on v2.3.6 - Temporarily Show on v.2.3.7)
+            $(document).on('click', this.wrapSelector('.vp-fe-toolbar-item'), function(evt) {
+                evt.stopPropagation();
+                var itemType = $(this).data('type');
+                switch (parseInt(itemType)) {
+                    case FRAME_EDIT_TYPE.ADD_COL:
+                    case FRAME_EDIT_TYPE.ADD_ROW:
+                        that.openInputPopup(itemType);
+                        break;
+                }
+            });
 
             // click menu item
             $(document).on('click', this.wrapSelector('.' + VP_FE_MENU_ITEM + ':not(.disabled)'), function(event) {
@@ -551,14 +625,10 @@ define([
                     case FRAME_EDIT_TYPE.SORT_VALUES:
                     case FRAME_EDIT_TYPE.FILL_NA:
                     case FRAME_EDIT_TYPE.DROP_NA:
+                    case FRAME_EDIT_TYPE.DROP_DUP:
+                    case FRAME_EDIT_TYPE.DROP_OUT:
                     case FRAME_EDIT_TYPE.DROP: // check one more time
                         that.openInputPopup(editType);
-                        break;
-                    case FRAME_EDIT_TYPE.DROP_OUT:
-                        that.config.checkModules = ['pd', 'np', 'vp_drop_outlier'];
-                        that.checkAndRunModules(true).then(function() {
-                            that.loadCode(that.getTypeCode(editType));
-                        });
                         break;
                     default:
                         that.loadCode(that.getTypeCode(editType));
@@ -633,14 +703,39 @@ define([
             var type = parseInt(this.state.popup.type);
             var content = this.getPopupContent(type);
             // required data check
-            if (type == FRAME_EDIT_TYPE.ADD_COL) {
-                if (content.name === '') {
+            if (type === FRAME_EDIT_TYPE.ADD_COL 
+                || type === FRAME_EDIT_TYPE.ADD_ROW) {
+                if (content.name === '' || content.name === "''") {
+                    $(this.wrapSelector('.vp-inner-popup-input0')).focus();
+                    return;
+                }
+            } else if (type === FRAME_EDIT_TYPE.REPLACE) {
+                if (content.replacetype === 'condition' && content.value === '') {
+                    $(this.wrapSelector('.vp-inner-popup-input3')).focus();
+                    return;
+                }
+            } else if (type === FRAME_EDIT_TYPE.REPLACE) {
+                if (content.input === '') {
+                    $(this.wrapSelector('.vp-inner-popup-input')).focus();
+                    return;
+                }
+            } else if (type === FRAME_EDIT_TYPE.FILL_NA) {
+                if (content.method === 'value' && content.value === '') {
+                    $(this.wrapSelector('.vp-inner-popup-value')).focus();
                     return;
                 }
             }
-            var code = this.loadCode(this.getTypeCode(this.state.popup.type, content));
-            if (code == '') {
-                return;
+            if (type == FRAME_EDIT_TYPE.DROP_OUT) {
+                this.config.checkModules = ['pd', 'np', 'vp_drop_outlier'];
+                let that = this;
+                this.checkAndRunModules(true).then(function() {
+                    that.loadCode(that.getTypeCode(that.state.popup.type, content));
+                });
+            } else {
+                var code = this.loadCode(this.getTypeCode(this.state.popup.type, content));
+                if (code == '') {
+                    return;
+                }
             }
             this.closeInnerPopup();
         }
@@ -654,8 +749,8 @@ define([
             $(document).off('click', this.wrapSelector('.' + VP_FE_INFO));
             $(document).off('change', this.wrapSelector('#vp_feReturn'));
             $(document).off('click', this.wrapSelector('.vp-popup-body'));
-            // $(document).off('contextmenu', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN));
-            // $(document).off('contextmenu', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW));
+            $(document).off('contextmenu', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN));
+            $(document).off('contextmenu', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW));
             $(document).off('click', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN));
             $(document).off('click', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW));
             $(document).off('click', this.wrapSelector('.' + VP_FE_ADD_COLUMN));
@@ -673,8 +768,7 @@ define([
             var that = this;
 
             if (menuType === FRAME_EDIT_TYPE.ADD_COL
-                || menuType === FRAME_EDIT_TYPE.ADD_ROW
-                || menuType === FRAME_EDIT_TYPE.REPLACE) {
+                || menuType === FRAME_EDIT_TYPE.ADD_ROW) {
                 ///// add page
                 // 1. add type
                 $(this.wrapSelector('.vp-inner-popup-addtype')).on('change', function() {
@@ -700,6 +794,12 @@ define([
                     } else {
                         $(that.wrapSelector('.vp-inner-popup-var2col')).hide();
                     }
+                });
+            } else if (menuType === FRAME_EDIT_TYPE.REPLACE) {
+                $(this.wrapSelector('.vp-inner-popup-replacetype')).on('change', function() {
+                    var tab = $(this).val();
+                    $(that.wrapSelector('.vp-inner-popup-tab')).hide();
+                    $(that.wrapSelector('.vp-inner-popup-tab.' + tab)).show();
                 });
             } else if (menuType === FRAME_EDIT_TYPE.DISCRETIZE) {
                 // change bins
@@ -735,13 +835,30 @@ define([
                 });
             } else if (menuType === FRAME_EDIT_TYPE.SORT_INDEX 
                     || menuType === FRAME_EDIT_TYPE.SORT_VALUES) {
+                $(this.wrapSelector('.vp-inner-popup-axis')).on('change', function() {
+                    let axis = $(this).val();
+                    if (axis === '0') {
+                        axis = FRAME_AXIS.ROW;
+                    } else {
+                        axis = FRAME_AXIS.COLUMN;
+                    }
+                    $(that.wrapSelector('.vp-inner-popup-sortby')).replaceWith(that.templateForSortByBox('index', axis));
+                    // re-bind events
+                    $(that.wrapSelector('.vp-inner-popup-sortby-up')).on('click', function() {
+                        let tag = $(this).closest('.vp-inner-popup-sortby-item');
+                        tag.insertBefore(tag.prev());
+                    });
+                    $(that.wrapSelector('.vp-inner-popup-sortby-down')).on('click', function() {
+                        let tag = $(this).closest('.vp-inner-popup-sortby-item');
+                        tag.insertAfter(tag.next());
+                    });
+                });
+
                 $(this.wrapSelector('.vp-inner-popup-sortby-up')).on('click', function() {
-                    console.log('up', $(this));
                     let tag = $(this).closest('.vp-inner-popup-sortby-item');
                     tag.insertBefore(tag.prev());
                 });
                 $(this.wrapSelector('.vp-inner-popup-sortby-down')).on('click', function() {
-                    console.log('down', $(this));
                     let tag = $(this).closest('.vp-inner-popup-sortby-item');
                     tag.insertAfter(tag.next());
                 });
@@ -866,11 +983,15 @@ define([
             });
         }
 
+        /**
+         * Render toolbar and contextmenu
+         */
         renderToolbar() {
             let that = this;
             $(this.wrapSelector('.vp-fe-toolbox')).html('');
+            $(this.wrapSelector('.vp-fe-menu-box')).html('');
             // add menu list
-            this.menuList & this.menuList.forEach(menuObj => {
+            this.menuList & this.menuList.forEach((menuObj, idx) => {
                 // show menu list dynamically
                 let { id, label, child, axis, selection } = menuObj;
                 let enabled = true;
@@ -886,10 +1007,19 @@ define([
                     }
                 }
                 let selected = id === that.state.menu;
-                let $menu = $(`<div class="vp-dropdown ${enabled?'':'disabled'}">
+                let $toolbar = $(`<div class="vp-dropdown ${enabled?'':'disabled'}">
                     <div class="vp-drop-button ${enabled?'':'disabled'} ${selected?'selected':''}" data-menu="${id}">${label}</div>
                     <div class="vp-dropdown-content"></div>
                 </div>`);
+                let $menubox = '';
+                if (child !== undefined) {
+                    $menubox = $(`<div class="vp-fe-menu-item vp-fe-menu-drop ${enabled?'':'disabled'}" data-menu="${id}">${label}
+                        <i class="fa fa-caret-right" style="float: right; margin-top: 7.5px; margin-right: 2px; margin-left: 5px;"></i>
+                        <div class="vp-fe-menu-sub-box" style="top: ${30 * idx}px;"></div>
+                    </div>`);
+                } else {
+                    $menubox = $(`<div class="vp-fe-menu-item vp-fe-menu-drop ${enabled?'':'disabled'}" data-menu="${id}">${label}</div>`);
+                }
                 child && child.forEach(itemObj => {
                     let { id, label, menuType, axis, selection } = itemObj;
                     let enabled = true;
@@ -905,21 +1035,24 @@ define([
                         }
                     }
                     let selected = that.state.menuItem === id;
-                    $menu.find('.vp-dropdown-content')
+                    $toolbar.find('.vp-dropdown-content')
                         .append($(`<div class="vp-dropdown-item ${VP_FE_MENU_ITEM} ${enabled?'':'disabled'} ${selected?'selected':''}" data-menu="${id}" data-type="${menuType}" data-parent="${menuObj.id}">${label}</div>`));
+                    $menubox.find('.vp-fe-menu-sub-box')
+                        .append($(`<div class="vp-fe-menu-item ${enabled?'':'disabled'} ${selected?'selected':''}" data-menu="${id}" data-type="${menuType}" data-parent="${menuObj.id}">${label}</div>`))
                 });
-                $(this.wrapSelector('.vp-fe-toolbox')).append($menu);
+                $(this.wrapSelector('.vp-fe-toolbox')).append($toolbar);
+                $(this.wrapSelector('.vp-fe-menu-box')).append($menubox);
             });
         }
 
         renderTable(renderedText, isHtml=true) {
             var tag = new com_String();
             // Table
-            tag.appendFormatLine('<div class="{0} {1} {2}">', VP_FE_TABLE, 'rendered_html', 'vp-scrollbar');
+            tag.appendFormatLine('<div class="{0} {1} {2}">', VP_FE_TABLE, 'vp_rendered_html', 'vp-scrollbar');
             if (isHtml) {
                 tag.appendFormatLine('<table class="dataframe">{0}</table>', renderedText);
                 // More button
-                tag.appendFormatLine('<div class="{0} {1}">More...</div>', VP_FE_TABLE_MORE, 'vp-button');
+                tag.appendFormatLine('<div class="{0} {1}">Show more</div>', VP_FE_TABLE_MORE, 'vp-button');
             } else {
                 tag.appendFormatLine('<pre>{0}</pre>', renderedText);
             }
@@ -1050,7 +1183,7 @@ define([
                 }
             }
             if (type === 'column') {
-                content.appendLine('<tr><th><label>Add Type</label></th>');
+                content.appendLine('<tr><th><label>Add type</label></th>');
                 content.appendFormatLine('<td><select class="{0}">', 'vp-inner-popup-addtype');
                 content.appendFormatLine('<option value="{0}">{1}</option>', 'variable', 'Variable');
                 content.appendFormatLine('<option value="{0}">{1}</option>', 'apply', 'Apply');
@@ -1233,10 +1366,12 @@ define([
                         <option value="qcut">Quantile based</option>
                     </select>
                 </div>
-                <label title="right option">
-                    <input type="checkbox" class="vp-inner-popup-right" checked>
-                    <span>Include the rightmost edge</span>
-                </label>
+                <div>
+                    <label title="right option">
+                        <input type="checkbox" class="vp-inner-popup-right" checked>
+                        <span>Include the rightmost edge</span>
+                    </label>
+                </div>
                 <hr style="margin: 5px 0;"/>
                 <table class="vp-tbl-gap5 vp-inner-popup-range-table">
                     <colgroup><col width="116px"><col width="5px"><col width="116px"><col width="5px"><col width="*"></colgroup>
@@ -1252,10 +1387,12 @@ define([
                     <tbody>
                     </tbody>
                 </table>
-                <label title="Set all labels as text">
-                    <input type="checkbox" class="vp-inner-popup-labelastext">
-                    <span>Label as Text</span>
-                </label>
+                <div>
+                    <label title="Set all labels as text">
+                        <input type="checkbox" class="vp-inner-popup-labelastext">
+                        <span>Label as Text</span>
+                    </label>
+                </div>
                 <input type="hidden" class="vp-inner-popup-islabelchanged" value=false />
                 <input type="hidden" class="vp-inner-popup-isedgechanged" value=false />
             </div>
@@ -1270,7 +1407,7 @@ define([
             var content = new com_String();
             content.appendFormatLine('<div class="{0}">', 'vp-inner-popup-shift-page');
             content.appendLine('<table class="vp-tbl-gap5">');
-            content.appendLine('<colgroup><col width="100px"><col width="*"></colgroup>');
+            content.appendLine('<colgroup><col width="110px"><col width="*"></colgroup>');
             content.appendLine('<tr>');
             content.appendFormatLine('<th><label class="vp-orange-text">{0}</label></th>', 'Periods');
             content.appendFormatLine('<td><input type="number" class="{0}" placeholder="{1}" value="1" required></td>'
@@ -1302,33 +1439,26 @@ define([
 
         /**
          * 
-         * @param {int} type FRAME_AXIS
+         * @param {int} method index / values
          * @returns 
          */
-        renderSortPage(type=FRAME_AXIS.COLUMN) {
+        renderSortPage(method='values') {
             var content = new com_String();
             content.appendFormatLine('<div class="{0}">', 'vp-inner-popup-sort-page');
             content.appendLine('<div class="vp-grid-col-110">');
-            // sort by
+            // axis
             let sortByStr = 'column';
-            let sortByList = [];
-            if (type === FRAME_AXIS.ROW) {
+            if (method === 'index') {
+                content.appendFormatLine('<label>{0}</label>', 'Axis');
+                content.appendFormatLine('<select class="{0}">', 'vp-inner-popup-axis');
+                content.appendFormatLine('<option value="{0}">{1}</option>', "0", "Index (default)");
+                content.appendFormatLine('<option value="{0}">{1}</option>', "1", "Column");
+                content.appendLine('</select>');
                 sortByStr = 'level';
-                sortByList = Array.from({ length:this.state.indexLevel },(v,k)=>{ return {label: k, code: k} });
-            } else {
-                sortByList = this.state.selected;
             }
+            // sort by
             content.appendFormatLine('<label>{0} {1}</label>', 'Sort by', sortByStr);
-            // movable list
-            content.appendLine('<div class="vp-inner-popup-sortby">');
-            sortByList.forEach((obj, idx) => {
-                content.appendFormatLine('<div class="vp-inner-popup-sortby-item" data-code="{0}">', obj.code);
-                content.appendFormatLine('<label>{0}</label>', obj.label);
-                content.appendLine('<span class="vp-inner-popup-sortby-down vp-icon-chevron-down" title="Set lower priority on sorting"></span>');
-                content.appendLine('<span class="vp-inner-popup-sortby-up vp-icon-chevron-up" title="Set upper priority on sorting"></span>');
-                content.appendLine('</div>');
-            });
-            content.appendLine('</div>');
+            content.appendLine(this.templateForSortByBox(method));
 
             // ascending
             content.appendFormatLine('<label>{0}</label>', 'Ascending');
@@ -1343,23 +1473,71 @@ define([
             return content.toString();
         }
 
+        templateForSortByBox(method='index', axis=FRAME_AXIS.ROW) {
+            var content = new com_String();
+            let sortByList = [];
+            if (method === 'values') {
+                // sort_values
+                sortByList = this.state.selected;
+            } else {
+                // sort_index
+                if (axis === FRAME_AXIS.ROW) {
+                    sortByList = Array.from({ length:this.state.indexLevel },(v,k)=>{ return {label: k, code: k} });
+                } else {
+                    sortByList = Array.from({ length:this.state.columnLevel },(v,k)=>{ return {label: k, code: k} });
+                }
+            }
+            
+            // movable list
+            content.appendLine('<div class="vp-inner-popup-sortby">');
+            sortByList.forEach((obj, idx) => {
+                content.appendFormatLine('<div class="vp-inner-popup-sortby-item" data-code="{0}">', obj.code);
+                content.appendFormatLine('<label>{0}</label>', obj.label);
+                content.appendLine('<span class="vp-inner-popup-sortby-down vp-icon-chevron-down" title="Set lower priority on sorting"></span>');
+                content.appendLine('<span class="vp-inner-popup-sortby-up vp-icon-chevron-up" title="Set upper priority on sorting"></span>');
+                content.appendLine('</div>');
+            });
+            content.appendLine('</div>');
+            return content.toString();
+        }
+
         renderReplacePage() {
             var content = new com_String();
             content.appendFormatLine('<div class="{0}">', 'vp-inner-popup-replacepage');
             content.appendLine('<div>');
-            content.appendLine('<table class="vp-tbl-gap5 wp100"><colgroup><col width="80px"><col width="*"></colgroup>');
+            content.appendLine('<table class="vp-tbl-gap5 wp100"><colgroup><col width="110px"><col width="*"></colgroup>');
             content.appendFormatLine('<tr><th class="{0}">{1}</th>', '', 'Column');
             var target = this.state.selected.map(col => col.label).join(',');
             content.appendFormatLine('<td><input type="text" class="{0}" value="{1}" readonly/>', 'vp-inner-popup-input1', target);
             content.appendLine('</td></tr>');
+            content.appendLine('<tr><th><label>Replace type</label></th>');
+            content.appendFormatLine('<td><select class="{0}">', 'vp-inner-popup-replacetype');
+            content.appendFormatLine('<option value="{0}">{1}</option>', 'value', 'Value');
+            content.appendFormatLine('<option value="{0}">{1}</option>', 'condition', 'Condition');
+            content.appendLine('</select></td></tr>');
             content.appendLine('</table>');
             content.appendLine('</div>'); // end of vp-inner-popup-header
     
             content.appendLine('<hr style="margin: 5px 0px;"/>');
-            // replace page
+            // replace page - 1. value
+            content.appendFormatLine('<div class="{0}">', 'vp-inner-popup-tab value');
+            content.appendFormatLine('<label><input type="checkbox" class="{0}"/><span>{1}</span></label>', 'vp-inner-popup-use-regex', 'Use Regular Expression');
+            content.appendLine('<br/><br/>');
             content.appendFormatLine('<div class="{0}">', 'vp-inner-popup-replace-table');
+            content.appendLine('<table class="vp-tbl-gap5">');
+            content.appendLine('<colgroup><col width="170px"><col width="170px"><col width="*"></colgroup>');
+            content.appendFormatLine('<thead><th>{0}</th><th>{1}</th><th></th></thead>', 'Value', 'New value');
+            content.appendLine('<tbody>');
+            content.appendLine(this.renderReplaceInput(0));
+            content.appendFormatLine('<tr><td colspan="3"><button class="{0} {1}">{2}</button></td></tr>', 'vp-button', 'vp-inner-popup-replace-add', '+ Add value');
+            content.appendLine('</tbody>');
+            content.appendLine('</table>');
+            content.appendLine('</div>');
+            content.appendLine('</div>');
+            // replace page - 2. condition
+            content.appendFormatLine('<div class="{0}" style="display:none;">', 'vp-inner-popup-tab condition');
             // subset
-            content.appendLine('<table class="vp-tbl-gap5"><colgroup><col width="80px"><col width="*"></colgroup>');
+            content.appendLine('<table class="vp-tbl-gap5"><colgroup><col width="110px"><col width="*"></colgroup>');
 
             content.appendLine('<tr><td><label>Condition</label></td>');
             content.appendLine('<td><div class="vp-fr-subset-box">');
@@ -1371,9 +1549,6 @@ define([
             content.appendFormatLine('<td><input type="text" class="{0}"/>', 'vp-inner-popup-input3');
             content.appendFormatLine('<label><input type="checkbox" class="{0}"/><span>{1}</span></label>', 'vp-inner-popup-istext3','Text');
             content.appendLine('</td></tr>');
-            content.appendLine('<tr><td colspan="2">');
-            content.appendFormatLine('<label><input type="checkbox" class="{0}"/><span>{1}</span></label>', 'vp-inner-popup-use-regex', 'Use Regular Expression');
-            content.appendLine('</td></tr>');
             content.appendLine('</table></div>');
 
             content.appendLine('</div>'); // end of vp-inner-popup-addpage
@@ -1383,12 +1558,30 @@ define([
             return content.toString();
         }
 
+        renderReplaceInput(index) {
+            var content = new com_String();
+            content.appendLine('<tr>');
+            content.appendLine('<td>');
+            content.appendFormatLine('<input type="text" class="{0}" placeholder="{1}"/>', 'vp-inner-popup-origin' + index, 'Origin');
+            content.appendFormatLine('<label><input type="checkbox" class="{0}" checked/><span>{1}</span></label>', 'vp-inner-popup-origin-istext' + index, 'Text');
+            content.appendLine('</td>');
+            content.appendLine('<td>');
+            content.appendFormatLine('<input type="text" class="{0}" placeholder="{1}"/>', 'vp-inner-popup-replace' + index, 'Replace');
+            content.appendFormatLine('<label><input type="checkbox" class="{0}" checked/><span>{1}</span></label>', 'vp-inner-popup-replace-istext' + index, 'Text');
+            content.appendLine('</td>');
+            // LAB: img to url
+            // content.appendFormatLine('<td><div class="{0} {1}"><img src="{2}"/></div></td>', 'vp-inner-popup-delete', 'vp-cursor', com_Const.IMAGE_PATH + 'close_small.svg');
+            content.appendFormatLine('<td><div class="{0} {1} {2}"></div></td>', 'vp-inner-popup-delete', 'vp-cursor', 'vp-icon-close-small');
+            content.appendLine('</tr>');
+            return content.toString();
+        }
+
         renderAsType() {
             var astypeList = this.astypeList;
             var content = new com_String();
             content.appendFormatLine('<div class="{0}">', 'vp-inner-popup-astype');
-            content.appendFormatLine('<table class="{0}">', 'vp-inner-popup-astype-table');
-            content.appendLine('<colgroup><col width="140px"><col width="80px"><col width="*"></colgroup>');
+            content.appendFormatLine('<table class="vp-tbl-gap5 {0}">', 'vp-inner-popup-astype-table');
+            content.appendLine('<colgroup><col width="140px"><col width="160px"><col width="*"></colgroup>');
             content.appendFormatLine('<thead style="height: 30px"><th>{0}</th><th>{1}</th><th class="{2}">{3}</th></thead>'
                                     , 'Column', 'Data type', 'vp-orange-text', 'New data type');
             content.appendLine('<tbody>');
@@ -1416,8 +1609,16 @@ define([
             var content = new com_String();
             content.appendFormatLine('<div class="{0}">', 'vp-inner-popup-fillna-page');
             content.appendLine('<table class="vp-tbl-gap5">');
-            content.appendLine('<colgroup><col width="100px"><col width="*"></colgroup>');
+            content.appendLine('<colgroup><col width="110px"><col width="*"></colgroup>');
             content.appendLine('<tr>');
+            content.appendFormatLine('<th><label class="vp-orange-text">{0}</label></th>', 'Method');
+            content.appendFormatLine('<td><select class="{0}">', 'vp-inner-popup-method');
+            content.appendFormatLine('<option value="{0}">{1}</option>', "value", "Value");
+            content.appendFormatLine('<option value="{0}">{1}</option>', "ffill", "Forward fill");
+            content.appendFormatLine('<option value="{0}">{1}</option>', "bfill", "Back fill");
+            content.appendLine('</select></td>');
+            content.appendLine('</tr>');
+            content.appendFormatLine('<tr class="{0}">', 'vp-inner-popup-value-row');
             content.appendFormatLine('<th><label class="vp-orange-text">{0}</label></th>', 'Fill value');
             content.appendLine('<td>');
             content.appendFormatLine('<input type="text" id="{0}" class="{1}" placeholder="{2}" required>'
@@ -1426,15 +1627,7 @@ define([
                 , 'vp-inner-popup-valueastext', 'Text');
             content.appendLine('</td>');
             content.appendLine('</tr>');
-            content.appendLine('<tr>');
-            content.appendFormatLine('<th><label>{0}</label></th>', 'Method');
-            content.appendFormatLine('<td><select class="{0}">', 'vp-inner-popup-method');
-            content.appendFormatLine('<option value="{0}">{1}</option>', "", "Select option...");
-            content.appendFormatLine('<option value="{0}">{1}</option>', "ffill", "Forward fill");
-            content.appendFormatLine('<option value="{0}">{1}</option>', "bfill", "Back fill");
-            content.appendLine('</select></td>');
-            content.appendLine('</tr>');
-            content.appendLine('<tr>');
+            content.appendFormatLine('<tr class="{0}" style="display:none;">', 'vp-inner-popup-fill-row');
             content.appendFormatLine('<th><label>{0}</label></th>', 'Limit');
             content.appendLine('<td>');
             content.appendFormatLine('<input type="number" class="{0}" placeholder="{1}">'
@@ -1449,11 +1642,72 @@ define([
             return content.toString();
         }
 
-        openInputPopup(type, width=400, height=400) {
+        renderDropNAPage() {
+            // how / thresh / ignore_index
+            let content = `<div class="vp-inner-popup-dropna-page vp-grid-col-110">
+                <label>How</label>
+                <select class="vp-inner-popup-how">
+                    <option value="">Select option...</option>
+                    <option value="any">Any</option>
+                    <option value="all">All</option>
+                </select>
+                <label>Threshold</label>
+                <input type="number" class="vp-input vp-inner-popup-thresh" value=""/>
+                <label>Ignore index</label>
+                <select class="vp-inner-popup-ignoreindex">
+                    <option value="">Select option...</option>
+                    <option value="True">True</option>
+                    <option value="False">False</option>
+                </select>
+            </div>`;
+
+            // set content
+            $(this.wrapSelector('.vp-inner-popup-body')).html(content);
+            return content.toString();
+        }
+
+        renderDropDupPage() {
+            // keep / ignore_index
+            let content = `<div class="vp-inner-popup-dropdup-page vp-grid-col-110">
+                <label>Keep</label>
+                <select class="vp-inner-popup-how">
+                    <option value="">Select option...</option>
+                    <option value="'first'">First</option>
+                    <option value="'last'">Last</option>
+                    <option value="False">False</option>
+                </select>
+                <label>Ignore index</label>
+                <select class="vp-inner-popup-ignoreindex">
+                    <option value="">Select option...</option>
+                    <option value="True">True</option>
+                    <option value="False">False</option>
+                </select>
+            </div>`;
+
+            // set content
+            $(this.wrapSelector('.vp-inner-popup-body')).html(content);
+            return content.toString();
+        }
+
+        renderDropOutPage() {
+            var content = new com_String();
+            content.appendFormatLine('<div class="{0} vp-grid-box vp-center">', 'vp-inner-popup-dropout-page');
+            content.appendLine('Are you sure to drop outliers from columns below?');
+            content.appendFormatLine('<pre>{0}</pre>', this.state.selected.map(col=>col.code).join(', '))
+            content.appendLine('</div>');
+
+            // set content
+            $(this.wrapSelector('.vp-inner-popup-body')).html(content.toString());
+            return content.toString();
+        }
+
+        openInputPopup(type, width=450, height=450) {
             var title = '';
             var content = '';
             let size = { width: width, height: height };
             let that = this;
+
+            $(this.wrapSelector('.vp-inner-popup-body')).html('');
     
             switch (parseInt(type)) {
                 case FRAME_EDIT_TYPE.ADD_COL:
@@ -1582,17 +1836,16 @@ define([
                     break;
                 case FRAME_EDIT_TYPE.SORT_INDEX:
                     title = 'Sort by index';
-                    content = this.renderSortPage(FRAME_AXIS.ROW);
+                    content = this.renderSortPage('index');
                     break;
                 case FRAME_EDIT_TYPE.SORT_VALUES:
                     title = 'Sort by values';
-                    content = this.renderSortPage(FRAME_AXIS.COLUMN);
+                    content = this.renderSortPage('values');
                     break;
                 case FRAME_EDIT_TYPE.REPLACE:
                     title = 'Replace';
                     // content = this.renderReplacePage();
                     content = this.renderReplacePage();
-                    size = { width: 450, height: 300 };
 
                     // bind codemirror
                     this.subsetCm = this.initCodemirror({ 
@@ -1658,14 +1911,29 @@ define([
                     // bind event on method
                     $(this.wrapSelector('.vp-inner-popup-method')).on('change', function() {
                         let changedVal = $(this).val();
-                        if (changedVal === '') {
-                            // disable limit
-                            $(that.wrapSelector('.vp-inner-popup-limit')).prop('disabled', true);
+                        if (changedVal === 'value') {
+                            // show value row
+                            $(that.wrapSelector('.vp-inner-popup-value-row')).show();
+                            $(that.wrapSelector('.vp-inner-popup-fill-row')).hide();
                         } else {
-                            // enable limit
-                            $(that.wrapSelector('.vp-inner-popup-limit')).prop('disabled', false);
+                            // show method fill row
+                            $(that.wrapSelector('.vp-inner-popup-value-row')).hide();
+                            $(that.wrapSelector('.vp-inner-popup-fill-row')).show();
                         }
                     });
+                    break;
+                case FRAME_EDIT_TYPE.DROP_NA:
+                    title = 'Drop NA';
+                    content = this.renderDropNAPage();
+                    break;
+                case FRAME_EDIT_TYPE.DROP_DUP:
+                    title = 'Drop duplicates';
+                    content = this.renderDropDupPage();
+                    break;
+                case FRAME_EDIT_TYPE.DROP_OUT:
+                    title = 'Drop outlier';
+                    size = { width: 400, height: 200 };
+                    content = this.renderDropOutPage();
                     break;
                 default:
                     type = FRAME_EDIT_TYPE.NONE;
@@ -1674,8 +1942,13 @@ define([
     
             this.state.popup.type = type;
 
-            // set size
-            $(this.wrapSelector('.vp-inner-popup-box')).css(size);
+            // set size and position
+            $(this.wrapSelector('.vp-inner-popup-box')).css({
+                width: size.width,
+                height: size.height,
+                left: 'calc(50% - ' + (size.width/2) + 'px)',
+                top: 'calc(50% - ' + (size.height/2) + 'px)',
+            });
             
             // bindEventForAddPage
             this.bindEventForPopupPage(type);
@@ -1759,9 +2032,31 @@ define([
                         $(this.wrapSelector('.vp-inner-popup-input1')).attr({'placeholder': 'Required input'});
                         $(this.wrapSelector('.vp-inner-popup-input1')).focus();
                     }
-                    content['subset'] = this.subsetCm?this.subsetCm.getValue():'';
-                    content['value'] = $(this.wrapSelector('.vp-inner-popup-input3')).val();
-                    content['valueastext'] = $(this.wrapSelector('.vp-inner-popup-istext3')).prop('checked');
+                    var tab = $(this.wrapSelector('.vp-inner-popup-replacetype')).val();
+                    content['replacetype'] = tab;
+                    if (tab == 'value') {
+                        var useregex = $(this.wrapSelector('.vp-inner-popup-use-regex')).prop('checked');
+                        content['useregex'] = useregex;
+                        content['list'] = [];
+                        for (var i=0; i <= this.state.popup.replace.index; i++) {
+                            var origin = $(this.wrapSelector('.vp-inner-popup-origin' + i)).val();
+                            var origintext = $(this.wrapSelector('.vp-inner-popup-origin-istext'+i)).prop('checked');
+                            var replace = $(this.wrapSelector('.vp-inner-popup-replace' + i)).val();
+                            var replacetext = $(this.wrapSelector('.vp-inner-popup-replace-istext'+i)).prop('checked');
+                            if (origin && replace) {
+                                content['list'].push({
+                                    origin: origin,
+                                    origintext: origintext,
+                                    replace: replace,
+                                    replacetext: replacetext
+                                });
+                            }
+                        }
+                    } else if (tab === 'condition') {
+                        content['subset'] = this.subsetCm?this.subsetCm.getValue():'';
+                        content['value'] = $(this.wrapSelector('.vp-inner-popup-input3')).val();
+                        content['valueastext'] = $(this.wrapSelector('.vp-inner-popup-istext3')).prop('checked');
+                    }
                     break;
                 case FRAME_EDIT_TYPE.RENAME:
                     content['list'] = {};
@@ -1781,6 +2076,7 @@ define([
                     }
                     break;
                 case FRAME_EDIT_TYPE.SORT_INDEX:
+                    content['axis'] = $(this.wrapSelector('.vp-inner-popup-axis')).val();
                 case FRAME_EDIT_TYPE.SORT_VALUES:
                     let values = [];
                     $(this.wrapSelector('.vp-inner-popup-sortby-item')).each((idx, tag) => {
@@ -1835,10 +2131,19 @@ define([
                     }
                     break;
                 case FRAME_EDIT_TYPE.FILL_NA:
+                    content['method'] = $(this.wrapSelector('.vp-inner-popup-method')).val();
                     content['value'] = $(this.wrapSelector('.vp-inner-popup-value')).val();
                     content['valueastext'] = $(this.wrapSelector('.vp-inner-popup-valueastext')).prop('checked');
-                    content['method'] = $(this.wrapSelector('.vp-inner-popup-method')).val();
                     content['limit'] = $(this.wrapSelector('.vp-inner-popup-limit')).val();
+                    break;
+                case FRAME_EDIT_TYPE.DROP_NA:
+                    content['how'] = $(this.wrapSelector('.vp-inner-popup-how')).val();
+                    content['thresh'] = $(this.wrapSelector('.vp-inner-popup-thresh')).val();
+                    content['ignore_index'] = $(this.wrapSelector('.vp-inner-popup-ignoreindex')).val();
+                    break;
+                case FRAME_EDIT_TYPE.DROP_DUP:
+                    content['keep'] = $(this.wrapSelector('.vp-inner-popup-how')).val();
+                    content['ignore_index'] = $(this.wrapSelector('.vp-inner-popup-ignoreindex')).val();
                     break;
                 default:
                     break;
@@ -1860,7 +2165,7 @@ define([
         renderInfoPage = function(renderedText, isHtml = true) {
             var tag = new com_String();
             tag.appendFormatLine('<div class="{0} {1} vp-close-on-blur vp-scrollbar">', VP_FE_INFO_CONTENT
-                                , 'rendered_html'); // 'rendered_html' style from jupyter output area
+                                , 'vp_rendered_html'); // 'rendered_html' style from jupyter output area
             if (isHtml) {
                 tag.appendLine(renderedText);
             } else {
@@ -1900,8 +2205,6 @@ define([
             // code.append(".value_counts()");
             code.appendFormat('_vp_display_dataframe_info({0})', locObj.toString());
     
-            // CHROME: TODO: 6: use com_Kernel.execute
-            // Jupyter.notebook.kernel.execute(
             vpKernel.execute(code.toString()).then(function(resultObj) {
                 let { msg } = resultObj;
                 if (msg.content.data) {
@@ -1993,16 +2296,34 @@ define([
                 case FRAME_EDIT_TYPE.DROP_NA:
                     var locObj = '';
                     if (axis == FRAME_AXIS.ROW) {
-                        locObj = com_util.formatString('.loc[[{0}],:]', selectedName);
+                        code.appendFormat("{0}.loc[[{1}],:].dropna(axis=0", tempObj, selectedName);
                     } else {
-                        locObj = com_util.formatString('.loc[:,[{0}]]', selectedName);
+                        code.appendFormat("{0}.loc[:,[{1}]].dropna(axis=1", tempObj, selectedName);
                     }
-                    code.appendFormat("{0}{1}.dropna(axis={2}, inplace=True)", tempObj, locObj, axis);
+                    if (content.how && content.how !== '') {
+                        code.appendFormat(", how='{0}'", content.how);
+                    }
+                    if (content.thresh && content.thresh !== '') {
+                        code.appendFormat(", thresh={0}", content.thresh);
+                    }
+                    if (content.ignore_index && content.ignore_index !== '') {
+                        code.appendFormat(", ignore_index={0}", content.ignore_index);
+                    }
+                    code.append(", inplace=True)");
                     break;
                 case FRAME_EDIT_TYPE.DROP_DUP:
-                    if (axis == FRAME_AXIS.COLUMN) {
-                        code.appendFormat("{0}.drop_duplicates(subset=[{1}], inplace=True)", tempObj, selectedName);
+                    let dropDupOptions = [];
+                    if (selectedName && selectedName !== '') {
+                        dropDupOptions.push(com_util.formatString("subset=[{0}]", selectedName));
                     }
+                    if (content.keep && content.keep !== '') {
+                        dropDupOptions.push(com_util.formatString("keep={0}", content.keep));
+                    }
+                    if (content.ignore_index && content.ignore_index !== '') {
+                        dropDupOptions.push(com_util.formatString("ignore_index={0}", content.ignore_index));
+                    }
+                    dropDupOptions.push(com_util.formatString("inplace=True"));
+                    code.appendFormat("{0}.drop_duplicates({1})", tempObj, dropDupOptions.join(', '));
                     break;
                 case FRAME_EDIT_TYPE.DROP_OUT:
                     if (axis == FRAME_AXIS.COLUMN) {
@@ -2036,11 +2357,11 @@ define([
                 case FRAME_EDIT_TYPE.SORT_INDEX:
                     let selectedStr = '';
                     if (content.values.length > 1) {
-                        selectedStr = "[" + content.values.join(',') + "]";
+                        selectedStr = content.values.join(',');
                     }
-                    code.appendFormat("{0}.sort_index(ascending={1}", tempObj, content.ascending);
+                    code.appendFormat("{0}.sort_index(axis={1}, ascending={2}", tempObj, content.axis, content.ascending);
                     if (selectedStr !== '') {
-                        code.appendFormat(', level=[{0}])', selectedStr);
+                        code.appendFormat(', level=[{0}]', selectedStr);
                     }
                     code.append(', inplace=True)');
                     break;
@@ -2096,8 +2417,33 @@ define([
                     }
                     var name = com_util.convertToStr(content.name, content.nameastext);
                     name = selectedName;
-                    var value = com_util.convertToStr(content.value, content.valueastext);
-                    code.appendFormat("{0} = {1}", content.subset, value);
+                    var tab = content.replacetype;
+                    if (tab === 'value') {
+                        var replaceStr = new com_String();
+                        var useRegex = content['useregex'];
+                        content['list'].forEach((obj, idx) => {
+                            if (idx == 0) {
+                                replaceStr.appendFormat("{0}: {1}"
+                                                        , com_util.convertToStr(obj.origin, obj.origintext, useRegex)
+                                                        , com_util.convertToStr(obj.replace, obj.replacetext, useRegex));
+                            } else {
+                                replaceStr.appendFormat(", {0}: {1}"
+                                                        , com_util.convertToStr(obj.origin, obj.origintext, useRegex)
+                                                        , com_util.convertToStr(obj.replace, obj.replacetext, useRegex));
+                            }
+                        });
+                        if (selectedName && selectedName != '') {
+                            selectedName = '[[' + selectedName + ']]';
+                        }
+                        code.appendFormat("{0}[{1}] = {2}{3}.replace({{4}}", tempObj, name, tempObj, selectedName, replaceStr);
+                        if (useRegex) {
+                            code.append(', regex=True');
+                        }
+                        code.append(')');
+                    } else if (tab === 'condition') {
+                        var value = com_util.convertToStr(content.value, content.valueastext);
+                        code.appendFormat("{0} = {1}", content.subset, value);
+                    }
                     break;
                 case FRAME_EDIT_TYPE.AS_TYPE:
                     var astypeStr = new com_String();
@@ -2144,9 +2490,11 @@ define([
                     code.append(')');
                     break;
                 case FRAME_EDIT_TYPE.FILL_NA:
-                    code.appendFormat("{0} = {1}.fillna({2}", subsetObjStr, subsetObjStr, com_util.convertToStr(content['value'], content['valueastext']));
-                    if (content['method'] && content['method'] !== '') {
-                        code.appendFormat(", method='{0}'", content['method']);
+                    code.appendFormat("{0} = {1}.fillna(", subsetObjStr, subsetObjStr);
+                    if (content['method'] == 'value') {
+                        code.append(com_util.convertToStr(content['value'], content['valueastext']));
+                    } else {
+                        code.appendFormat("method='{0}'", content['method']);
                         if (content['limit'] && content['limit'] !== '') {
                             code.appendFormat(", limit={0}", content['limit']);
                         }
@@ -2239,9 +2587,9 @@ define([
                                         // add column
                                         // LAB: img to url
                                         // table.appendFormatLine('<th class="{0}"><img src="{1}"/></th>', VP_FE_ADD_COLUMN, com_Const.IMAGE_PATH + 'plus.svg');
-                                        if (colLevIdx === 0) {
-                                            table.appendFormatLine('<th class="{0}"><div class="{1}"></div></th>', VP_FE_ADD_COLUMN, 'vp-icon-plus');
-                                        }
+                                        // if (colLevIdx === 0) {
+                                        //     table.appendFormatLine('<th class="{0}"><div class="{1}"></div></th>', VP_FE_ADD_COLUMN, 'vp-icon-plus');
+                                        // }
                         
                                         table.appendLine('</tr>');
                                     }
@@ -2256,8 +2604,8 @@ define([
                                         table.appendFormatLine('<th data-code="{0}" data-axis="{1}" data-type="{2}" data-label="{3}" class="{4} {5}">{6}</th>'
                                                                 , colCode, FRAME_AXIS.COLUMN, col.type, col.label, VP_FE_TABLE_COLUMN, colClass, col.label);
                                     });
-                                    // add column
-                                    table.appendFormatLine('<th class="{0}"><div class="{1}"></div></th>', VP_FE_ADD_COLUMN, 'vp-icon-plus');
+                                    // // add column
+                                    // table.appendFormatLine('<th class="{0}"><div class="{1}"></div></th>', VP_FE_ADD_COLUMN, 'vp-icon-plus');
                     
                                     table.appendLine('</tr>');
                                 }
@@ -2291,7 +2639,7 @@ define([
                                 table.appendLine('<tr>');
                                 // LAB: img to url
                                 // table.appendFormatLine('<th class="{0}"><img src="{1}"/></th>', VP_FE_ADD_ROW, com_Const.IMAGE_PATH + 'plus.svg');
-                                table.appendFormatLine('<th class="{0}"><div class="{1}"></div></th>', VP_FE_ADD_ROW, 'vp-icon-plus');
+                                // table.appendFormatLine('<th class="{0}"><div class="{1}"></div></th>', VP_FE_ADD_ROW, 'vp-icon-plus');
                                 table.appendLine('</tr>');
                                 table.appendLine('</tbody>');
                                 $(that.wrapSelector('.' + VP_FE_TABLE)).replaceWith(function() {
