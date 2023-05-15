@@ -915,7 +915,7 @@ define([
                             'class': 'vp-select vp-state'
                         });
                         // make tag
-                        varResult.forEach(listVar => {
+                        list.forEach(listVar => {
                             var option = document.createElement('option');
                             $(option).attr({
                                 'value':listVar.value,
