@@ -18,8 +18,9 @@ define([
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
     'vp_base/js/com/component/PopupComponent',
-    'vp_base/js/com/component/DataSelector'
-], function(varHtml, varCss, com_String, com_util, PopupComponent, DataSelector) {
+    'vp_base/js/com/component/DataSelector',
+    'vp_base/js/com/component/LoadingSpinner'
+], function(varHtml, varCss, com_String, com_util, PopupComponent, DataSelector, LoadingSpinner) {
 
     /**
      * Information
@@ -44,6 +45,11 @@ define([
                     start: -1,
                     end: -1
                 },
+                columnLevel: 1,
+                columnList: [],
+                indexLevel: 1,
+                indexList: [],
+                lines: TABLE_LINES,
                 ...this.state
             }
 
@@ -65,7 +71,7 @@ define([
                     dtype: ['DataFrame', 'Series'],
                     child: [
                         { id: 'null_count', label: 'Null count', 
-                            code: "pd.DataFrame({'Null Count': ${data}.isnull().sum(), 'Non-Null Count': ${data}.notnull().sum()})", dtype: ['DataFrame', 'Series'] },
+                            code: "pd.DataFrame({'Null Count': ${data}.isnull().sum(), 'Non-Null Count': ${data}.notnull().sum()})", dtype: ['DataFrame', 'Series'], toframe: true },
                         // { id: 'duplicates', label: 'Duplicated', code: '${data}.duplicated()', dtype: ['DataFrame', 'Series'] },
                         { id: 'duplicates', label: 'Duplicated', code: "_duplicated = ([${data}.duplicated().sum()] + [${data}[col].duplicated().sum() for col in ${data}.columns])\
                             \n_duplicated_df = pd.DataFrame({\
@@ -87,8 +93,6 @@ define([
                         { id: 'count', label: 'count', code: '${data}.count()' },
                         { id: 'min', label: 'min', code: '${data}.min()' },
                         { id: 'max', label: 'max', code: '${data}.max()' },
-                        { id: 'argmin', label: 'min', code: '${data}.argmin()' },
-                        { id: 'argmax', label: 'max', code: '${data}.argmax()' },
                         { id: 'quantile', label: 'quantile', code: '${data}.quantile(numeric_only=True)' },
                         { id: 'sum', label: 'sum', code: '${data}.sum()' },
                         { id: 'mean', label: 'mean', code: '${data}.mean(numeric_only=True)' },
@@ -129,7 +133,9 @@ define([
                     ]
                 }
                 
-            ]
+            ];
+
+            this.loading = false;
         }
 
         _unbindEvent() {
@@ -147,24 +153,24 @@ define([
             // change data
             $(this.wrapSelector('#data')).on('change', function() {
                 let val = $(this).val();
-                if (val === '') {
-                    that.handleChangeData('');
-                }
             });
 
             // un-select every selection
-            $(document).on('click', this.wrapSelector('.vp-popup-body'), function(evt) {
+            $(document).on('click', this.wrapSelector('.vp-variable-table'), function(evt) {
                 evt.stopPropagation();
                 var target = evt.target;
                 // if(!$(target).is("input") && !$(target).is("label")) {
-                if ($('.vp-dropdown-content').find(target).length == 0 
-                    && !$(target).hasClass('vp-dropdown-content') ) {
-                    $(that.wrapSelector('.vp-variable-preview thead th')).removeClass('selected');
-
-                    // load menu
-                    that.renderMenu();
-                    // load info
-                    that.loadInfo();
+                if (that.state.selected.length > 0) {
+                    if ($('.vp-dropdown-content').find(target).length == 0 
+                        && !$(target).hasClass('vp-dropdown-content') ) {
+                        $(that.wrapSelector('.vp-variable-table thead th')).removeClass('selected');
+                        that.state.selected = [];
+                        
+                        // load menu
+                        that.renderMenu();
+                        // load info
+                        that.loadInfo();
+                    }
                 }
 
             });
@@ -193,7 +199,12 @@ define([
                         });
                         // add selection
                         $(that.wrapSelector('.vp-information-menu')).removeClass('selected');
-                        $(that.wrapSelector('.vp-information-menu[data-menu="statistics"]')).addClass('selected');
+                        if (that.state.menuItem.length > 0) {
+                            $(that.wrapSelector('.vp-information-menu[data-menu="statistics"]')).addClass('selected');
+                        } else {
+                            // all selection removed from statistics
+                            that.state.menu = '';
+                        }
                     } else {
                         that.state.menu = menuParent;
                         that.state.menuItem = [ menuId ];
@@ -208,6 +219,165 @@ define([
                     that.loadInfo();
                 }
             });
+
+            // column group selection
+            // select column group
+            $(document).on('click', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN_GROUP), function(evt) {
+                evt.stopPropagation();
+
+                let hasSelected = $(this).hasClass('selected');
+                let colLabel = $(this).data('label');
+                let firstIdx = $(that.wrapSelector(`.${VP_FE_TABLE} th[data-parent="${colLabel}"]:first`)).index();
+                let lastIdx = $(that.wrapSelector(`.${VP_FE_TABLE} th[data-parent="${colLabel}"]:last`)).index();
+                if (firstIdx === lastIdx) {
+                    lastIdx = -1;
+                }
+
+                $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW)).removeClass('selected');
+
+                if (vpEvent.keyManager.keyCheck.ctrlKey) {
+                    if (!hasSelected) {
+                        that.state.selection = { start: firstIdx, end: -1 };
+                        $(this).addClass('selected');
+                        $(that.wrapSelector(`.${VP_FE_TABLE} th[data-parent="${colLabel}"]`)).addClass('selected');
+                    } else {
+                        $(this).removeClass('selected');
+                        $(that.wrapSelector(`.${VP_FE_TABLE} th[data-parent="${colLabel}"]`)).removeClass('selected');
+                    }
+                } else if (vpEvent.keyManager.keyCheck.shiftKey) {
+                    var startIdx = that.state.selection.start;
+                    
+                    if (startIdx == -1) {
+                        // no selection
+                        that.state.selection = { start: firstIdx, end: -1 };
+                    } else if (startIdx > firstIdx) {
+                        // add selection from idx to startIdx
+                        var tags = $(that.wrapSelector('.' + VP_FE_TABLE_COLUMN));
+                        let parentSet = new Set();
+                        for (var i = firstIdx - 1; i <= startIdx; i++) {
+                            $(tags[i]).addClass('selected');
+                            parentSet.add($(tags[i]).data('parent'));
+                        }
+                        parentSet.forEach(parentKey => {
+                            let length = $(that.wrapSelector(`.${VP_FE_TABLE} th[data-parent="${parentKey}"]`)).length;
+                            let selectedLength = $(that.wrapSelector(`.${VP_FE_TABLE} th.selected[data-parent="${parentKey}"]`)).length;
+                            if (length === selectedLength) {
+                                $(that.wrapSelector(`.${VP_FE_TABLE} th[data-label="${parentKey}"]`)).addClass('selected');
+                            } else {
+                                $(that.wrapSelector(`.${VP_FE_TABLE} th[data-label="${parentKey}"]`)).removeClass('selected');
+                            }
+                        });
+                        that.state.selection = { start: startIdx, end: firstIdx };
+                    } else if (startIdx <= firstIdx) {
+                        // add selection from startIdx to idx
+                        var tags = $(that.wrapSelector('.' + VP_FE_TABLE_COLUMN));
+                        let parentSet = new Set();
+                        for (var i = startIdx; i < lastIdx; i++) {
+                            $(tags[i]).addClass('selected');
+                            parentSet.add($(tags[i]).data('parent'));
+                        }
+                        parentSet.forEach(parentKey => {
+                            let length = $(that.wrapSelector(`.${VP_FE_TABLE} th[data-parent="${parentKey}"]`)).length;
+                            let selectedLength = $(that.wrapSelector(`.${VP_FE_TABLE} th.selected[data-parent="${parentKey}"]`)).length;
+                            if (length === selectedLength) {
+                                $(that.wrapSelector(`.${VP_FE_TABLE} th[data-label="${parentKey}"]`)).addClass('selected');
+                            } else {
+                                $(that.wrapSelector(`.${VP_FE_TABLE} th[data-label="${parentKey}"]`)).removeClass('selected');
+                            }
+                        });
+                        that.state.selection = { start: startIdx, end: lastIdx };
+                    }
+                } else {
+                    $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN)).removeClass('selected');
+                    $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN_GROUP)).removeClass('selected');
+
+                    $(this).addClass('selected');
+                    $(that.wrapSelector(`.${VP_FE_TABLE} th[data-parent="${colLabel}"]`)).addClass('selected');
+                    that.state.selection = { start: firstIdx, end: lastIdx };
+                }
+                var selected = [];
+                $(that.wrapSelector(`.${VP_FE_TABLE} th:not(.${VP_FE_TABLE_COLUMN_GROUP}).selected`)).each((idx, tag) => {
+                    var label = $(tag).text();
+                    var code = $(tag).data('code');
+                    var type = $(tag).data('type');
+                    selected.push({ label: label, code: code, type: type });
+                });
+                that.state.selected = selected;
+
+                // load info
+                that.renderMenu();
+                that.loadInfo();
+            });
+
+            // column selection
+            // select column
+            $(document).on('click', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN), function(evt) {
+                evt.stopPropagation();
+
+                var idx = $(that.wrapSelector('.' + VP_FE_TABLE_COLUMN)).index(this); // 1 ~ n
+                var hasSelected = $(this).hasClass('selected');
+
+                $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW)).removeClass('selected');
+
+                if (vpEvent.keyManager.keyCheck.ctrlKey) {
+                    if (!hasSelected) {
+                        that.state.selection = { start: idx, end: -1 };
+                        $(this).addClass('selected');
+                    } else {
+                        $(this).removeClass('selected');
+                    }
+                    
+                } else if (vpEvent.keyManager.keyCheck.shiftKey) {
+                    var startIdx = that.state.selection.start;
+                    
+                    if (startIdx == -1) {
+                        // no selection
+                        that.state.selection = { start: idx, end: -1 };
+                    } else if (startIdx > idx) {
+                        // add selection from idx to startIdx
+                        var tags = $(that.wrapSelector('.' + VP_FE_TABLE_COLUMN));
+                        for (var i = idx; i <= startIdx; i++) {
+                            $(tags[i]).addClass('selected');
+                        }
+                        that.state.selection = { start: startIdx, end: idx };
+                    } else if (startIdx <= idx) {
+                        // add selection from startIdx to idx
+                        var tags = $(that.wrapSelector('.' + VP_FE_TABLE_COLUMN));
+                        for (var i = startIdx; i <= idx; i++) {
+                            $(tags[i]).addClass('selected');
+                        }
+                        that.state.selection = { start: startIdx, end: idx };
+                    }
+                } else {
+                    $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN)).removeClass('selected');
+                    $(that.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN_GROUP)).removeClass('selected');
+
+                    $(this).addClass('selected');
+                    that.state.selection = { start: idx, end: -1 };
+                }
+                // select its group
+                $(that.wrapSelector(`.${VP_FE_TABLE} th[data-label="${$(this).data('parent')}"]`)).addClass('selected');
+
+                var selected = [];
+                $(that.wrapSelector(`.${VP_FE_TABLE} th:not(.${VP_FE_TABLE_COLUMN_GROUP}).selected`)).each((idx, tag) => {
+                    var label = $(tag).text();
+                    var code = $(tag).data('code');
+                    var type = $(tag).data('type');
+                    selected.push({ label: label, code: code, type: type });
+                });
+                that.state.selected = selected;
+
+                // load info
+                that.renderMenu();
+                that.loadInfo();
+            });
+
+            // click more button for more rows
+            $(document).on('click', this.wrapSelector('.' + VP_FE_TABLE_MORE), function() {
+                that.state.lines += TABLE_LINES;
+                that.loadCode(that.state.data, true);
+            });
+
 
             // click run button
             $(this.wrapSelector('.vp-information-run-button')).click(function(event) {
@@ -232,7 +402,7 @@ define([
             this.state.selected = [];
             this.state.selection = { start: -1, end: -1 };
             this.renderMenu();
-            this.loadPreview(data);
+            this.loadCode(data);
             this.loadInfo(data, this.state.menu);
         }
 
@@ -305,6 +475,13 @@ define([
                         let { id, label, dtype } = itemObj;
                         let enabled = dtype.includes(currentDtype);
                         let selected = that.state.menuItem.includes(id);
+                        if (enabled === false && selected === true) {
+                            // if disabled menu is selected, remove selection
+                            $menu.find('.vp-information-menu').removeClass('selected');
+                            selected = false;
+                            that.state.menu = '';
+                            that.state.menuItem = [];
+                        }
                         // disable item depends on dtype
                         $menu.find('.vp-dropdown-content')
                             .append($(`<div class="vp-dropdown-item vp-information-menu ${enabled?'':'disabled'} ${selected?'selected':''}" data-menu="${id}" data-parent="${menuObj.id}">${label}</div>`));
@@ -314,13 +491,30 @@ define([
             });
         }
 
+        renderTable(renderedText, isHtml=true) {
+            var tag = new com_String();
+            // Table
+            tag.appendFormatLine('<div class="{0} {1} {2}">', VP_FE_TABLE, 'vp_rendered_html', 'vp-scrollbar');
+            if (isHtml) {
+                tag.appendFormatLine('<table class="dataframe">{0}</table>', renderedText);
+                // More button
+                tag.appendFormatLine('<div class="{0} {1}">Show more</div>', VP_FE_TABLE_MORE, 'vp-button');
+            } else {
+                tag.appendFormatLine('<pre>{0}</pre>', renderedText);
+            }
+            tag.appendLine('</div>'); // End of Table
+            return tag.toString();
+        }
+
         generateCode() {
             let { data, dtype, menu, menuItem } = this.state;
 
             var selected = [];
-            $(this.wrapSelector('.vp-variable-preview thead th.selected')).each((idx, tag) => {
+            $(this.wrapSelector(`.${VP_FE_TABLE} th:not(.${VP_FE_TABLE_COLUMN_GROUP}).selected`)).each((idx, tag) => {
                 var label = $(tag).text();
-                selected.push("'" + label + "'"); // FIXME: get data columns and use its code
+                var code = $(tag).data('code');
+                var type = $(tag).data('type');
+                selected.push({ label: label, code: code, type: type });
             });
             this.state.selected = selected;
             
@@ -331,11 +525,11 @@ define([
                 if (selected.length > 0) {
                     if (selected.length == 1) {
                         // series
-                        dataVar.appendFormat("[{0}]", selected[0]);
+                        dataVar.appendFormat("[{0}]", selected[0].code);
                         currentDtype = 'Series';
                     } else {
                         // dataframe
-                        dataVar.appendFormat("[[{0}]]", selected.join(','));
+                        dataVar.appendFormat("[[{0}]]", selected.map(col=>col.code).join(','));
                     }
                 }
             }
@@ -358,7 +552,7 @@ define([
                             if (currentDtype === 'Series') {
                                 // if multiple stats selected, set series data as dataframe
                                 dataVar = new com_String();
-                                dataVar.appendFormat("{0}[[{1}]]", data, selected.join(','));
+                                dataVar.appendFormat("{0}[[{1}]]", data, selected.map(col=>col.code).join(','));
                                 currentDtype = 'DataFrame';
                             }
                             codePattern = com_util.formatString("pd.DataFrame({{0}})", statList.join(','));
@@ -375,7 +569,7 @@ define([
                         let childObj = infoObj.child.find(obj=>obj.id === menuItem[0]);
                         if (childObj.toframe === true && currentDtype === 'Series') {
                             dataVar = new com_String();
-                            dataVar.appendFormat("{0}[[{1}]]", data, selected.join(','));
+                            dataVar.appendFormat("{0}[[{1}]]", data, selected.map(col=>col.code).join(','));
                             currentDtype = 'DataFrame';
                         }
                         codePattern = childObj.code;
@@ -389,112 +583,193 @@ define([
                     let code = codePattern.replaceAll('${data}', dataVar.toString());
                     return code;
                 }
-            } else if (currentDtype == 'DataFrame') {
-                // if dtype is dataframe, show describe + info preview
-                let codePattern = "_desc = ${data}.describe().T\
-                \n_info = pd.DataFrame({'Non-Null Count': ${data}.notnull().sum(), 'Dtype': ${data}.dtypes})\
-                \ndisplay(pd.concat([_info, _desc], axis=1).fillna(''))";
+            } 
+            // else if (currentDtype == 'DataFrame') {
+            //     // if dtype is dataframe, show describe + info preview
+            //     let codePattern = "_desc = ${data}.describe().T\
+            //     \n_info = pd.DataFrame({'Non-Null Count': ${data}.notnull().sum(), 'Dtype': ${data}.dtypes})\
+            //     \ndisplay(pd.concat([_info, _desc], axis=1).fillna(''))";
 
-                let code = codePattern.replaceAll('${data}', dataVar.toString());
-                return code;
-            }
+            //     let code = codePattern.replaceAll('${data}', dataVar.toString());
+            //     return code;
+            // }
 
             // add ignore options TODO:
             // let ignoreCode = `import warnings\
             // \nwith warnings.catch_warnings():
             // \n    warnings.simplefilter("ignore")\n`;
 
-            return dataVar.toString();
+            return `display(${dataVar.toString()})`;
         }
 
-        loadPreview(data) {
-            let that = this;
-            let variablePreviewTag = $(this.wrapSelector('#variablePreview'));
-            $(variablePreviewTag).html('');
-            // show variable information on clicking variable
-            vpKernel.execute(data).then(function(resultObj) {
-                let { result, type, msg } = resultObj;
-                if (msg.content.data) {
-                    var textResult = msg.content.data["text/plain"];
-                    var htmlResult = msg.content.data["text/html"];
-                    var imgResult = msg.content.data["image/png"];
-                    
-                    if (htmlResult != undefined) {
-                        // 1. HTML tag
-                        $(variablePreviewTag).append(htmlResult);
-                    } else if (imgResult != undefined) {
-                        // 2. Image data (base64)
-                        var imgTag = '<img src="data:image/png;base64, ' + imgResult + '">';
-                        $(variablePreviewTag).append(imgTag);
-                    } else if (textResult != undefined) {
-                        // 3. Text data
-                        var preTag = document.createElement('pre');
-                        $(preTag).text(textResult);
-                        $(variablePreviewTag).html(preTag);
-                    } else {
-                        $(variablePreviewTag).append('(Select data to preview.)');
+        loadCode(codeStr, more=false) {
+            if (this.loading === true) {
+                return;
+            }
+    
+            var that = this;
+            let { data, lines, indexList } = this.state;
+            var prevLines = 0;
+            var scrollPos = -1;
+            if (more) {
+                prevLines = indexList.length;
+                scrollPos = $(this.wrapSelector('.vp-variable-table')).scrollTop();
+            }
+    
+            var code = new com_String();
+            code.appendLine(codeStr);
+            code.appendFormat("{0}.iloc[{1}:{2}].to_json(orient='{3}')", data, prevLines, lines, 'split');
+            
+            this.loading = true;
+            vpKernel.execute(code.toString()).then(function(resultObj) {
+                let { result } = resultObj;
+                try {
+                    if (!result || result.length <= 0) {
+                        return;
                     }
+                    result = result.substr(1,result.length - 2).replaceAll('\\\\', '\\');
+                    result = result.replaceAll('\'', "\\'");    // TEST: need test
+                    // result = result.replaceAll('\\"', "\"");
+                    var dataJson = JSON.parse(result);
                     
-                    // add event listener for columns
-                    $(that.wrapSelector('.vp-variable-preview thead th')).click(function(evt) {
-                        evt.stopPropagation();
-                        let col = $(this).text();
+                    vpKernel.getColumnList(data).then(function(colResObj) {
+                        try {
+                            let columnResult = colResObj.result;
+                            var columnInfo = JSON.parse(columnResult);
+                            let { name:columnName='', level:columnLevel, list:columnList } = columnInfo;
+                            // var columnList = data.columns;
+                            var indexList = dataJson.index;
+                            var dataList = dataJson.data;
 
-                        var idx = $(that.wrapSelector('.vp-variable-preview thead th')).index(this); // 1 ~ n
-                        var hasSelected = $(this).hasClass('selected');
-
-                        if (vpEvent.keyManager.keyCheck.ctrlKey) {
-                            if (!hasSelected) {
-                                that.state.selection = { start: idx, end: -1 };
-                                $(this).addClass('selected');
-                            } else {
-                                $(this).removeClass('selected');
-                            }
-                            
-                        } else if (vpEvent.keyManager.keyCheck.shiftKey) {
-                            var startIdx = that.state.selection.start;
-                            
-                            if (startIdx == -1) {
-                                // no selection
-                                that.state.selection = { start: idx, end: -1 };
-                            } else if (startIdx > idx) {
-                                // add selection from idx to startIdx
-                                var tags = $(that.wrapSelector('.vp-variable-preview thead th'));
-                                for (var i = idx; i <= startIdx; i++) {
-                                    $(tags[i]).addClass('selected');
+                            columnList = columnList.map(col => { return { label: col.label, type: col.dtype, code: col.value } });
+                            indexList = indexList.map(idx => { return { label: idx, code: idx } });
+            
+                            if (!more) {
+                                // table
+                                var table = new com_String();
+                                // table.appendFormatLine('<table border="{0}" class="{1}">', 1, 'dataframe');
+                                table.appendLine('<thead>');
+                                if (columnLevel > 1) {
+                                    for (let colLevIdx = 0; colLevIdx < columnLevel; colLevIdx++) {
+                                        table.appendLine('<tr><th></th>');
+                                        let colIdx = 0;
+                                        let colSpan = 1;
+                                        while (colIdx < columnList.length) {
+                                            let col = columnList[colIdx];
+                                            let colCode = col.code.slice(0, colLevIdx + 1).join(',');
+                                            let nextCol = columnList[colIdx + 1];
+                                            if (nextCol && nextCol.code.slice(0, colLevIdx + 1).join(',') === colCode) {
+                                                colSpan++;
+                                            } else {
+                                                let colClass = '';
+                                                let selected = ''; // set class if it's leaf node of columns on multi-level
+                                                if (that.state.selected.map(col=>col.code[colLevIdx]).includes(colCode)) {
+                                                    selected = 'selected';
+                                                }
+                                                if ((columnLevel - 1) === colLevIdx) {
+                                                    colClass = VP_FE_TABLE_COLUMN;
+                                                } else {
+                                                    colClass = VP_FE_TABLE_COLUMN_GROUP;
+                                                }
+                                                table.appendFormatLine('<th data-code="({0})" data-axis="{1}" data-type="{2}" data-parent="{3}" data-label="{4}" class="{5} {6}" colspan="{7}">{8}</th>'
+                                                                , colCode, FRAME_AXIS.COLUMN, col.type, col.label[colLevIdx-1], col.label[colLevIdx], colClass, selected, colSpan, col.label[colLevIdx]);
+                                                colSpan = 1;
+                                            }
+                                            colIdx++;
+                                        }
+                        
+                                        table.appendLine('</tr>');
+                                    }
+                                } else {
+                                    table.appendLine('<tr><th></th>');
+                                    columnList && columnList.forEach(col => {
+                                        var colCode = col.code;
+                                        var colClass = '';
+                                        if (that.state.selected.map(col=>col.code).includes(colCode)) {
+                                            colClass = 'selected';
+                                        }
+                                        table.appendFormatLine('<th data-code="{0}" data-axis="{1}" data-type="{2}" data-label="{3}" class="{4} {5}">{6}</th>'
+                                                                , colCode, FRAME_AXIS.COLUMN, col.type, col.label, VP_FE_TABLE_COLUMN, colClass, col.label);
+                                    });
+                                    table.appendLine('</tr>');
                                 }
-                                that.state.selection = { start: startIdx, end: idx };
-                            } else if (startIdx <= idx) {
-                                // add selection from startIdx to idx
-                                var tags = $(that.wrapSelector('.vp-variable-preview thead th'));
-                                for (var i = startIdx; i <= idx; i++) {
-                                    $(tags[i]).addClass('selected');
-                                }
-                                that.state.selection = { start: startIdx, end: idx };
-                            }
-                        } else {
-                            $(that.wrapSelector('.vp-variable-preview thead th')).removeClass('selected');
-                            if (!hasSelected) {
-                                $(this).addClass('selected');
-                                that.state.selection = { start: idx, end: -1 };
-                            } else {
-                                $(this).removeClass('selected');
-                            }
-                        }
-
-                        // load info
-                        that.renderMenu();
-                        that.loadInfo();
-                    });
-                } else {
-                    var errorContent = '';
-                    if (msg.content.ename) {
-                        errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue, msg.content.detail);
-                    }
-                    $(variablePreviewTag).html(errorContent);
-                    vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
-                }
+                                table.appendLine('</thead>');
+                                table.appendLine('<tbody>');
                 
+                                dataList && dataList.forEach((row, idx) => {
+                                    table.appendLine('<tr>');
+                                    var idxName = indexList[idx].label;
+                                    var idxLabel = com_util.convertToStr(idxName, typeof idxName == 'string');
+                                    var idxClass = '';
+                                    table.appendFormatLine('<th data-code="{0}" data-axis="{1}" class="{2} {3}">{4}</th>', idxLabel, FRAME_AXIS.ROW, VP_FE_TABLE_ROW, idxClass, idxName);
+                                    row.forEach((cell, colIdx) => {
+                                        if (cell == null) {
+                                            cell = 'NaN';
+                                        }
+                                        var cellType = columnList[colIdx].type;
+                                        if (cellType.includes('datetime')) {
+                                            cell = new Date(parseInt(cell)).toLocaleString();
+                                        }
+                                        table.appendFormatLine('<td>{0}</td>', cell);
+                                    });
+                                    table.appendLine('</tr>');
+                                });
+                                // add row
+                                table.appendLine('<tr>');
+                                table.appendLine('</tr>');
+                                table.appendLine('</tbody>');
+                                $(that.wrapSelector('.' + VP_FE_TABLE)).replaceWith(function() {
+                                    return that.renderTable(table.toString());
+                                });
+                            } else {
+                                var table = new com_String();
+                                dataList && dataList.forEach((row, idx) => {
+                                    table.appendLine('<tr>');
+                                    var idxName = indexList[idx].label;
+                                    var idxLabel = com_util.convertToStr(idxName, typeof idxName == 'string');
+                                    var idxClass = '';
+                                    table.appendFormatLine('<th data-code="{0}" data-axis="{1}" class="{2} {3}">{4}</th>', idxLabel, FRAME_AXIS.ROW, VP_FE_TABLE_ROW, idxClass, idxName);
+                                    row.forEach((cell, colIdx) => {
+                                        if (cell == null) {
+                                            cell = 'NaN';
+                                        }
+                                        var cellType = columnList[colIdx].type;
+                                        if (cellType.includes('datetime')) {
+                                            cell = new Date(parseInt(cell)).toLocaleString();
+                                        }
+                                        table.appendFormatLine('<td>{0}</td>', cell);
+                                    });
+                                    table.appendLine('</tr>');
+                                });
+                                // insert before last tr tag(add row button)
+                                $(table.toString()).insertBefore($(that.wrapSelector('.' + VP_FE_TABLE + ' tbody tr:last')));
+                            }
+        
+                            // save columnList & indexList as state
+                            that.state.columnLevel = columnLevel;
+                            that.state.columnList = columnList;
+                            if (!more) {
+                                that.state.indexList = indexList;
+                            } else {
+                                that.state.indexList = that.state.indexList.concat(indexList);
+                            }
+                            
+                            // if scrollPos is saved, go to the position
+                            if (scrollPos >= 0) {
+                                $(that.wrapSelector('.vp-variable-table')).scrollTop(scrollPos);
+                            }
+            
+                            that.loading = false;
+                        } catch (err1) {
+                            vpLog.display(VP_LOG_TYPE.ERROR, err1);
+                            that.loading = false;
+                            throw err1;
+                        }
+                    });
+                } catch (err) {
+                    vpLog.display(VP_LOG_TYPE.ERROR, err);
+                    that.loading = false;
+                }
             }).catch(function(resultObj) {
                 let { msg } = resultObj;
                 var errorContent = '';
@@ -503,9 +778,15 @@ define([
                 }
                 $(variablePreviewTag).html(errorContent);
                 vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
+                that.loading = false;
             });
+    
+            return code.toString();
         }
 
+        /**
+         * Load information preview
+         */
         loadInfo() {
             let that = this;
             let { menu, menuItem } = this.state;
@@ -523,6 +804,12 @@ define([
             $infoPreviewTag.html('');
             let code = this.generateCode();
 
+            // use default pandas option
+            // let defaultPOCode = new com_String();
+            // defaultPOCode.appendLine("with pd.option_context('display.min_rows', 10, 'display.max_rows', 60, 'display.max_columns', 0, 'display.max_colwidth', 50, 'display.expand_frame_repr', True, 'display.precision', 6, 'display.chop_threshold', None):");
+            // defaultPOCode.append('    ' + code.replaceAll('\n', '\n    '));
+
+            let loadingSpinner = new LoadingSpinner($(this.wrapSelector('#informationPreview')));
             // show variable information on clicking variable
             vpKernel.execute(code).then(function(resultObj) {
                 let { result, type, msg } = resultObj;
@@ -551,17 +838,36 @@ define([
                     $infoPreviewTag.html(errorContent);
                     vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
                 }
-                
             }).catch(function(resultObj) {
-                let { msg } = resultObj;
+                let { msg, ename, evalue } = resultObj;
                 var errorContent = '';
-                if (msg.content.ename) {
+                if (msg && msg?.content?.ename) {
                     errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue, msg.content.detail);
+                    vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
+                } else if (ename && evalue) {
+                    errorContent = com_util.templateForErrorBox(ename, evalue);
+                    vpLog.display(VP_LOG_TYPE.ERROR, ename, evalue, resultObj);
                 }
                 $infoPreviewTag.html(errorContent);
-                vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
+            }).finally(function() {
+                loadingSpinner.remove();
             });
         }
+    }
+
+    // search rows count at once
+    const TABLE_LINES = 10;
+
+    const VP_FE_TABLE = 'vp-variable-table';
+    const VP_FE_TABLE_COLUMN = 'vp-variable-table-column';
+    const VP_FE_TABLE_COLUMN_GROUP = 'vp-variable-table-column-group';
+    const VP_FE_TABLE_ROW = 'vp-variable-table-row';
+    const VP_FE_TABLE_MORE = 'vp-variable-table-more';
+
+    const FRAME_AXIS = {
+        NONE: -1,
+        ROW: 0,
+        COLUMN: 1
     }
 
     return Information;

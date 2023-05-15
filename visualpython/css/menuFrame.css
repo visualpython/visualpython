@@ -257,13 +257,25 @@ input.vp-menu-search-box {
     background: #97AA4E;
 }
 .vp-menuitem.apps.vp-color-apps6 {
+    background: #8D9D4D;
+}
+.vp-menuitem.apps.vp-color-apps11 {
     background: #88B4E9;
 }
-.vp-menuitem.apps.vp-color-apps7 {
+.vp-menuitem.apps.vp-color-apps12 {
     background: #6C9BD1;
 }
-.vp-menuitem.apps.vp-color-apps8 {
+.vp-menuitem.apps.vp-color-apps13 {
     background: #578BC7;
+}
+.vp-menuitem.apps.vp-color-apps15 {
+    background: #B66CC8;
+}
+.vp-menuitem.apps.vp-color-apps16 {
+    background: #A965BA;
+}
+.vp-menuitem.apps.vp-color-apps17 {
+    background: #9658A6;
 }
 .vp-menuitem.apps.vp-color-preparing {
     background: var(--vp-gray-color);
@@ -413,6 +425,19 @@ input.vp-menu-search-box {
 }
 .vp-menuitem.apps .visualize_wordcloud {
     background: top / contain no-repeat url(../img/apps/apps_wordcloud.svg);
+}
+/* statistics */
+.vp-menuitem.apps .stats_probDist {
+    background: top / contain no-repeat url(../img/apps/apps_white.svg);
+}
+.vp-menuitem.apps .stats_normTest {
+    background: top / contain no-repeat url(../img/apps/apps_white.svg);
+}
+.vp-menuitem.apps .stats_equalVarTest {
+    background: top / contain no-repeat url(../img/apps/apps_white.svg);
+}
+.vp-menuitem.apps .stats_studentstTest {
+    background: top / contain no-repeat url(../img/apps/apps_white.svg);
 }
 /* machine learning */
 .vp-menuitem.apps .ml_dataSet {

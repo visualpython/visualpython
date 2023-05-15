@@ -3186,7 +3186,7 @@
                         "desc" : "Plotly chart creation",
                         "file" : "m_visualize/Plotly",
                         "apps" : {
-                            "color": 5,
+                            "color": 6,
                             "icon": "apps/apps_visualize.svg"
                         }
                     },
@@ -3200,7 +3200,7 @@
                         "desc" : "Word Cloud",
                         "file" : "m_visualize/WordCloud",
                         "apps" : {
-                            "color": 5,
+                            "color": 6,
                             "icon": "apps/apps_wordcloud.svg"
                         }
                     }
@@ -3226,7 +3226,7 @@
                         "desc" : "Data sets for machine learning",
                         "file" : "m_ml/DataSets",
                         "apps" : {
-                            "color": 6,
+                            "color": 11,
                             "icon": "apps/apps_dataset.svg"
                         }
                     },
@@ -3240,7 +3240,7 @@
                         "desc" : "Data split for machine learning",
                         "file" : "m_ml/dataSplit",
                         "apps" : {
-                            "color": 6,
+                            "color": 11,
                             "icon": "apps/apps_datasplit.svg"
                         }
                     },
@@ -3254,7 +3254,7 @@
                         "desc" : "Data preparation for machine learning",
                         "file" : "m_ml/DataPrep",
                         "apps" : {
-                            "color": 6,
+                            "color": 11,
                             "icon": "apps/apps_dataprep.svg"
                         }
                     },
@@ -3268,7 +3268,7 @@
                         "desc" : "AutoML model for machine learning",
                         "file" : "m_ml/AutoML",
                         "apps" : {
-                            "color": 6,
+                            "color": 11,
                             "icon": "apps/apps_automl.svg"
                         }
                     },
@@ -3282,7 +3282,7 @@
                         "desc" : "Regression model for machine learning",
                         "file" : "m_ml/Regression",
                         "apps" : {
-                            "color": 7,
+                            "color": 12,
                             "icon": "apps/apps_regression.svg"
                         }
                     },
@@ -3296,7 +3296,7 @@
                         "desc" : "Classification model for machine learning",
                         "file" : "m_ml/Classification",
                         "apps" : {
-                            "color": 7,
+                            "color": 12,
                             "icon": "apps/apps_classification.svg"
                         }
                     },
@@ -3310,7 +3310,7 @@
                         "desc" : "Clustering model for machine learning",
                         "file" : "m_ml/Clustering",
                         "apps" : {
-                            "color": 7,
+                            "color": 12,
                             "icon": "apps/apps_clustering.svg"
                         }
                     },
@@ -3324,7 +3324,7 @@
                         "desc" : "Dimension reduction model for machine learning",
                         "file" : "m_ml/DimensionReduction",
                         "apps" : {
-                            "color": 7,
+                            "color": 12,
                             "icon": "apps/apps_dimension.svg"
                         }
                     },
@@ -3338,7 +3338,7 @@
                         "desc" : "Model save/load for machine learning",
                         "file" : "m_ml/SaveLoad",
                         "apps" : {
-                            "color": 8,
+                            "color": 13,
                             "icon": "apps/apps_file.svg"
                         }
                     },
@@ -3352,7 +3352,7 @@
                         "desc" : "Model fit/predict for machine learning",
                         "file" : "m_ml/FitPredict",
                         "apps" : {
-                            "color": 8,
+                            "color": 13,
                             "icon": "apps/apps_fit.svg"
                         }
                     },
@@ -3366,7 +3366,7 @@
                         "desc" : "Model information for machine learning",
                         "file" : "m_ml/ModelInfo",
                         "apps" : {
-                            "color": 8,
+                            "color": 13,
                             "icon": "apps/apps_predict.svg"
                         }
                     },
@@ -3380,7 +3380,7 @@
                         "desc" : "Performance evaluation for machine learning",
                         "file" : "m_ml/evaluation",
                         "apps" : {
-                            "color": 8,
+                            "color": 13,
                             "icon": "apps/apps_evaluate.svg"
                         }
                     }

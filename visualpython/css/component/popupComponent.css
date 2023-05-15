@@ -446,6 +446,10 @@
     height: calc(100% - 70px);
     padding: 10px;
 }
+.vp-inner-popup-body table th {
+    text-align: left;
+    font-weight: unset;
+}
 .vp-inner-popup-button-box {
     float: right;
     margin: 0 10px 10px 0;

@@ -162,7 +162,7 @@ define([
                 VP_DS_DATA_VIEW_ALL_DIV, VP_DS_DATA_VIEW_ALL, (this.state.viewAll?'checked':''), "view all");
             // data view
             tag.appendFormatLine('<div class="{0} {1} vp-scrollbar"></div>', VP_DS_DATA_VIEW_BOX,
-                'rendered_html'); // 'rendered_html' style from jupyter output area
+                'vp_rendered_html'); // 'rendered_html' style from jupyter output area
             return tag.toString();
         }
         getAllowSubsetTypes() {

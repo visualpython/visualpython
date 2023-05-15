@@ -31,7 +31,7 @@
     height: 30px;
 }
 /* dropdown menu */
-.vp-dropdown {
+/* .vp-dropdown {
     position: relative;
     display: inline-block;
 }
@@ -62,7 +62,6 @@
     -ms-user-select: none;
     user-select: none;
     text-overflow: ellipsis;
-    /* overflow: hidden; */
     white-space: nowrap;
     padding: 0px 5px;
 }
@@ -88,17 +87,76 @@
     cursor: pointer;
     height: 30px;
     font-size: 13px;
-}
-.vp-variable-preview {
+} */
+.vp-variable-table {
     margin-top: 5px;
-    align-content: baseline;
+    background: var(--vp-border-gray-color);
+    border: 1px solid var(--vp-border-gray-color);
+    overflow: auto;
 }
-.vp-variable-preview thead th {
+.vp-variable-table table {
+    border-collapse: separate;
+    margin-top: 0px;
+    margin-left: 0px;
+    color: var(--vp-font-primary);
+    font-size: 13px;
+}
+.vp-variable-table table th {
+    /* no-selection for th */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.vp-variable-table thead th {
+    position: sticky;
+    top: 0;
+    background-color: var(--vp-background-color);
+    border-bottom: 1px solid var(--vp-border-gray-color);
+
+    text-align: right;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    height: 30px !important;
+    min-width: 80px;
+    white-space: nowrap;
+}
+.vp-variable-table tbody tr:nth-child(odd) {
+    background: #F5F5F5;
+}
+.vp-variable-table tbody tr:nth-child(even) {
+    background: var(--vp-background-color);
+}
+.vp-variable-table th.selected {
+    /* color: var(--vp-highlight-color); */
+    background: #add3fd;
+}
+.vp-variable-table th:hover {
     cursor: pointer;
+    /* background: var(--vp-light-gray-color); */
+    /* background: rgba(66, 165, 245, 0.2); */
 }
-.vp-variable-preview thead th.selected {
-    background-color: var(--vp-highlight-color);
-    color: var(--vp-background-color);
+
+/* Row Hover */
+.vp-variable-table tbody tr:hover { 
+    background-color: rgba(66, 165, 245, 0.2);
+}
+
+/* Column Hover */
+.vp-variable-table tr th:nth-child(1) {
+    min-width: 30px !important;
+}
+
+.vp-variable-table-more {
+    margin: 10px;
+    cursor: pointer;
+    padding: 3px;
+    background-color: white;
+}
+.vp-variable-table-more:hover {
+    background-color: var(--vp-gray-color);
 }
 .vp-information-preview-header {
     height: 30px;
@@ -136,6 +194,8 @@
 }
 .vp-information-preview-content { 
     align-content: baseline;
+    position: relative;
+    height: 100%;
 }
 .vp-information-preview-box img {
     width: 100%;
