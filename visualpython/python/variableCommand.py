@@ -102,16 +102,16 @@ def _vp_sample(data, sample_cnt):
     """
     Sampling data
     """
-    dataType = type(data).__name__
+    data_type = type(data).__name__
     sample_cnt = len(data) if len(data) < sample_cnt else sample_cnt
 
-    if dataType == 'DataFrame':
+    if data_type == 'DataFrame':
         return data.sample(sample_cnt, random_state=0)
-    elif dataType == 'Series':
-        return data.sample(sample_cnt, random_state=0)
-    elif dataType == 'ndarray':
+    elif data_type == 'Series':
+        return data.sample(sample_cnt, random_state=0).reset_index(drop=True)
+    elif data_type == 'ndarray':
         return data[_vp_np.random.choice(data.shape[0], sample_cnt, replace=False)]
-    elif dataType == 'list':
+    elif data_type == 'list':
         return _vp_rd.choices(data, k=sample_cnt)
     return data
 

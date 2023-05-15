@@ -195,7 +195,7 @@ define([
                                         reject({result: output, type: 'error', msg: { content: { ename: output.ename, evalue: simpleEvalue, detail: convertedEvalue } }});
                                     } else {
                                         if (output.output_type === 'stream') {
-                                            result = String(output.text[0]);
+                                            result = String(output.text.join('\n'));
                                             type = 'text';
                                             msg = {
                                                 content: {
@@ -265,12 +265,12 @@ define([
                                             var message = content.text;    	    		    	    
                                             resolve({
                                                 result: message, 
-                                                type: type, 
+                                                type: 'text', 
                                                 msg: {
                                                     content: {
-                                                        name: type,
+                                                        name: 'text',
                                                         data: {
-                                                            [type]: message
+                                                            'text': message
                                                         }
                                                     }
                                                 }
@@ -315,13 +315,13 @@ define([
                                                 if (msg.content.data['image/png']) {
                                                     result = String(msg.content.data['image/png']);
                                                     type = 'image/png';
-                                                } else if (msg.content.data['text/plain']) {
-                                                    result = String(msg.content.data['text/plain']);
-                                                    type = 'text/plain';
                                                 } else if (msg.content.data['text/html']) {
                                                     result = String(msg.content.data['text/html']);
                                                     type = 'text/html';
-                                                }
+                                                } else if (msg.content.data['text/plain']) {
+                                                    result = String(msg.content.data['text/plain']);
+                                                    type = 'text/plain';
+                                                } 
                                             }
                                             resolve({result: result, type: type, msg: msg});
                                         } catch(ex) {
@@ -342,13 +342,13 @@ define([
                                                 if (msg.content.data['image/png']) {
                                                     result = String(msg.content.data['image/png']);
                                                     type = 'image/png';
-                                                } else if (msg.content.data['text/plain']) {
-                                                    result = String(msg.content.data['text/plain']);
-                                                    type = 'text/plain';
                                                 } else if (msg.content.data['text/html']) {
                                                     result = String(msg.content.data['text/html']);
                                                     type = 'text/html';
-                                                }
+                                                } else if (msg.content.data['text/plain']) {
+                                                    result = String(msg.content.data['text/plain']);
+                                                    type = 'text/plain';
+                                                } 
                                             }
                                             resolve({result: result, type: type, msg: msg});
                                         } catch(ex) {

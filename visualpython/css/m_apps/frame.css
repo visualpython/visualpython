@@ -111,8 +111,12 @@
     position: absolute;
     left: 100%;
 }
-.vp-fe-menu-item:hover .vp-fe-menu-sub-box {
+.vp-fe-menu-item:not(.disabled):hover .vp-fe-menu-sub-box {
     display: block;
+}
+.vp-fe-menu-item.disabled {
+    color: var(--vp-gray-color);
+    cursor: not-allowed;
 }
 .vp-fe-table {
     height: 97%;
@@ -188,6 +192,12 @@
 
 .vp-fe-table-more {
     margin: 10px;
+    cursor: pointer;
+    padding: 3px;
+    background-color: white;
+}
+.vp-fe-table-more:hover {
+    background-color: var(--vp-gray-color);
 }
 .vp-fe-info {
     display: none;
@@ -269,7 +279,7 @@
     border: 0.25px solid var(--vp-border-gray-color);
     width: 160px;
     padding: 5px;
-    min-height: 180px;
+    min-height: 130px;
 }
 .vp-inner-popup-sortby-item {
     border-bottom: 0.25px solid var(--vp-border-gray-color);
