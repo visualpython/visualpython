@@ -90,6 +90,7 @@ define([
                     label: 'Statistics',
                     dtype: ['DataFrame', 'Series'],
                     child: [
+                        /** checkbox */
                         { id: 'count', label: 'count', code: '${data}.count()' },
                         { id: 'min', label: 'min', code: '${data}.min()' },
                         { id: 'max', label: 'max', code: '${data}.max()' },
@@ -101,6 +102,8 @@ define([
                         { id: 'var', label: 'var', code: '${data}.var(numeric_only=True)' },
                         { id: 'std', label: 'std', code: '${data}.std(numeric_only=True)' },
                         { id: 'skew', label: 'skew', code: '${data}.skew(numeric_only=True)' },
+                        { id: 'kurtosis', label: 'kurtosis', code: '${data}.kurtosis(numeric_only=True)' },
+                        /** radio */
                         { id: 'cumsum', label: 'cumsum', code: '${data}.cumsum()', type: 'radio' },
                         { id: 'cummin', label: 'cummin', code: '${data}.cummin()', type: 'radio' },
                         { id: 'cummax', label: 'cummax', code: '${data}.cummax()', type: 'radio' },
