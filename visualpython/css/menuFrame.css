@@ -430,13 +430,34 @@ input.vp-menu-search-box {
 .vp-menuitem.apps .stats_probDist {
     background: top / contain no-repeat url(../img/apps/apps_white.svg);
 }
+.vp-menuitem.apps .stats_descStats {
+    background: top / contain no-repeat url(../img/apps/apps_white.svg);
+}
 .vp-menuitem.apps .stats_normTest {
     background: top / contain no-repeat url(../img/apps/apps_white.svg);
 }
 .vp-menuitem.apps .stats_equalVarTest {
     background: top / contain no-repeat url(../img/apps/apps_white.svg);
 }
+.vp-menuitem.apps .stats_corrAnalysis {
+    background: top / contain no-repeat url(../img/apps/apps_white.svg);
+}
+.vp-menuitem.apps .stats_reliabAnalysis {
+    background: top / contain no-repeat url(../img/apps/apps_white.svg);
+}
+.vp-menuitem.apps .stats_chi2test {
+    background: top / contain no-repeat url(../img/apps/apps_white.svg);
+}
 .vp-menuitem.apps .stats_studentstTest {
+    background: top / contain no-repeat url(../img/apps/apps_white.svg);
+}
+.vp-menuitem.apps .stats_anova {
+    background: top / contain no-repeat url(../img/apps/apps_white.svg);
+}
+.vp-menuitem.apps .stats_regression {
+    background: top / contain no-repeat url(../img/apps/apps_white.svg);
+}
+.vp-menuitem.apps .stats_factorAnalysis {
     background: top / contain no-repeat url(../img/apps/apps_white.svg);
 }
 /* machine learning */

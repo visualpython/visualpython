@@ -3207,6 +3207,172 @@
                 ]
             },
             {
+                "id"   : "pkg_statistics",
+                "type" : "package",
+                "level": 0,
+                "name" : "Statistics",
+                "path" : "visualpython - statistics",
+                "desc" : "Statistics modules",
+                "open" : true,
+                "grid" : true,
+                "item" : [
+                    {
+                        "id"   : "stats_probDist",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Prob. Distribution",
+                        "tag"  : "PROBABILITY DISTRIBUTION,STATS,STATISTICS",
+                        "path" : "visualpython - statistics - probabilitiy distribution",
+                        "desc" : "Probability distribution",
+                        "file" : "m_stats/ProbDist",
+                        "apps" : {
+                            "color": 15,
+                            "icon": "apps/apps.svg"
+                        }
+                    },
+                    {
+                        "id"   : "stats_descStats",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Descriptive Statistics",
+                        "tag"  : "DESCRIPTIVE STATISTICS,STATS,STATISTICS",
+                        "path" : "visualpython - statistics - descriptive statistics",
+                        "desc" : "Descriptive statistics",
+                        "file" : "m_stats/DescStats",
+                        "apps" : {
+                            "color": 15,
+                            "icon": "apps/apps.svg"
+                        }
+                    },
+                    {
+                        "id"   : "stats_normTest",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Normality test",
+                        "tag"  : "NORMALITY TEST,STATS,STATISTICS",
+                        "path" : "visualpython - statistics - normality test",
+                        "desc" : "Normality test",
+                        "file" : "m_stats/NormTest",
+                        "apps" : {
+                            "color": 15,
+                            "icon": "apps/apps.svg"
+                        }
+                    },
+                    {
+                        "id"   : "stats_equalVarTest",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Equal Var. test",
+                        "tag"  : "EQUAL VARIANCE TEST,STATS,STATISTICS",
+                        "path" : "visualpython - statistics - equal variance test",
+                        "desc" : "Equal Variance test",
+                        "file" : "m_stats/EqualVarTest",
+                        "apps" : {
+                            "color": 15,
+                            "icon": "apps/apps.svg"
+                        }
+                    },
+                    {
+                        "id"   : "stats_corrAnalysis",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Correlation Analysis",
+                        "tag"  : "CORRELATION ANALYSIS,STATS,STATISTICS",
+                        "path" : "visualpython - statistics - correlation analysis",
+                        "desc" : "Correlation analysis",
+                        "file" : "m_stats/CorrAnalysis",
+                        "apps" : {
+                            "color": 16,
+                            "icon": "apps/apps.svg"
+                        }
+                    },
+                    {
+                        "id"   : "stats_reliabAnalysis",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Reliability Analysis",
+                        "tag"  : "RELIABILITY ANALYSIS,STATS,STATISTICS",
+                        "path" : "visualpython - statistics - reliability analysis",
+                        "desc" : "Reliability analysis",
+                        "file" : "m_stats/ReliabAnalysis",
+                        "apps" : {
+                            "color": 16,
+                            "icon": "apps/apps.svg"
+                        }
+                    },
+                    {
+                        "id"   : "stats_chi2test",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Chi-square test",
+                        "tag"  : "CHI-SQUARE TEST,STATS,STATISTICS",
+                        "path" : "visualpython - statistics - chisquare test",
+                        "desc" : "Chi-square test of independence",
+                        "file" : "m_stats/Chi2test",
+                        "apps" : {
+                            "color": 16,
+                            "icon": "apps/apps.svg"
+                        }
+                    },
+                    {
+                        "id"   : "stats_studentstTest",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Student's t-test",
+                        "tag"  : "STUDENTS T-TEST,STATS,STATISTICS",
+                        "path" : "visualpython - statistics - students ttest",
+                        "desc" : "Student's t-test",
+                        "file" : "m_stats/StudentstTest",
+                        "apps" : {
+                            "color": 16,
+                            "icon": "apps/apps.svg"
+                        }
+                    },
+                    {
+                        "id"   : "stats_anova",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "ANOVA",
+                        "tag"  : "ANOVA,ONE-WAY ANOVA,TWO-WAY ANOVA,ANCOVA,STATS,STATISTICS",
+                        "path" : "visualpython - statistics - anova",
+                        "desc" : "ANOVA",
+                        "file" : "m_stats/Anova",
+                        "apps" : {
+                            "color": 17,
+                            "icon": "apps/apps.svg"
+                        }
+                    },
+                    {
+                        "id"   : "stats_regression",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Regression",
+                        "tag"  : "REGRESSION,HIERARCHICAL LINEAR REGRESSION,MODERATED LINEAR REGRESSION,MEDIATED LINEAR REGRESSION,DUMMY VARIABLE LINEAR REGRESSION,STATS,STATISTICS",
+                        "path" : "visualpython - statistics - regression",
+                        "desc" : "Regression",
+                        "file" : "m_stats/Regression",
+                        "apps" : {
+                            "color": 17,
+                            "icon": "apps/apps.svg"
+                        }
+                    },
+                    {
+                        "id"   : "stats_factorAnalysis",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Factor Analysis",
+                        "tag"  : "FACTOR ANALYSIS,STATS,STATISTICS",
+                        "path" : "visualpython - statistics - factor analysis",
+                        "desc" : "Factor analysis",
+                        "file" : "m_stats/FactorAnalysis",
+                        "apps" : {
+                            "color": 17,
+                            "icon": "apps/apps.svg"
+                        }
+                    }
+                ]
+            },
+            {
                 "id"   : "pkg_ml",
                 "type" : "package",
                 "level": 0,
