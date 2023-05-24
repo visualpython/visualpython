@@ -564,6 +564,14 @@ hr.vp-extra-menu-line {
 .vp-inline-block {
     display: inline-block !important;
 }
+/* Flex */
+.vp-flex-box {
+    display: flex;
+}
+.vp-flex-gap5 {
+    display: flex;
+    gap: 5px;
+}
 /* Grid style */
 .vp-grid-box {
     display: grid;
@@ -610,6 +618,13 @@ hr.vp-extra-menu-line {
 .vp-grid-col-130 {
     display: grid;
     grid-template-columns: 130px auto;
+    grid-row-gap: 5px;
+    align-items: baseline;
+    align-content: space-evenly;
+}
+.vp-grid-col-160 {
+    display: grid;
+    grid-template-columns: 160px auto;
     grid-row-gap: 5px;
     align-items: baseline;
     align-content: space-evenly;
