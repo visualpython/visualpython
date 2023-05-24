@@ -1,0 +1,36 @@
+<!--
+    Project Name    : Visual Python
+    Description     : GUI-based Python code generator
+    File Name       : propDist.html
+    Author          : Black Logic
+    Note            : probability distribution
+    License         : GNU GPLv3 with Visual Python special exception
+    Date            : 2023. 05. 16
+    Change Date     : 
+-->
+<body>
+    <div class="vp-grid-box">
+        <div class="vp-grid-border-box">
+            <div class="vp-grid-col-160">
+                <label for="distType" class="vp-orange-text">Probability distribution</label>
+                <select id="distType" class="vp-select vp-state">
+                </select>
+            </div>
+            <div class="vp-pd-dist-option-box vp-grid-col-160">
+
+            </div>
+            <div class="vp-grid-col-160">
+                <label for="allocateTo" class="vp-orange-text">Allocate to</label>
+                <input type="text" class="vp-input vp-state" id="allocateTo" placeholder="_res" />
+            </div>
+        </div>
+        <div class="vp-grid-border-box">
+            <label for="probMassFunc">Display</label>
+            <div class="vp-grid-box">
+                <label class="vp-pd-display-option dist cont"><input type="checkbox" id="probMassFunc" class="vp-state"><span>Probability mass function</span></label>
+                <label class="vp-pd-display-option cont"><input type="checkbox" id="cumDistFunc" class="vp-state"><span>Cumulative distribution function</span></label>
+                <label class="vp-pd-display-option dist cont"><input type="checkbox" id="sampledDist" class="vp-state" checked><span>Sampled distribution</span></label>
+            </div>
+        </div>
+    </div>
+</body>

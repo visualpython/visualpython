@@ -1,0 +1,43 @@
+<!--
+    Project Name    : Visual Python
+    Description     : GUI-based Python code generator
+    File Name       : equalVarTest.html
+    Author          : Black Logic
+    Note            : equal variance test
+    License         : GNU GPLv3 with Visual Python special exception
+    Date            : 2023. 05. 16
+    Change Date     : 
+-->
+<body>
+    <div class="vp-grid-box">
+        <select id="testType" class="vp-big-select vp-state">
+            <option value="bartlett">Bartlett test</option>
+            <option value="levene">Levene test</option>
+            <option value="fligner">Fligner test</option>
+        </select>
+        <div class="vp-grid-border-box">
+            <div class="vp-grid-box">
+                <div class="vp-st-variable-box vp-grid-box">
+                </div>
+                <div>
+                    <button id="addVariable" class="vp-button">+ Variable</button>
+                    <button id="removeVariable" class="vp-button">- Variable</button>
+                </div>
+                <div class="vp-st-option levene fligner vp-grid-col-160">
+                    <label for="center" class="vp-orange-text">Center</label>
+                    <select id="center" class="vp-select vp-state">
+                        <option value="mean">mean</option>
+                        <option value="median" selected>median</option>
+                        <option value="trimmed">trimmed</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="vp-grid-border-box">
+            <label for="histogram">Display</label>
+            <div class="vp-grid-box">
+                <label><input type="checkbox" id="histogram" class="vp-state"><span>Histogram</span></label>
+            </div>
+        </div>
+    </div>
+</body>
