@@ -209,6 +209,13 @@ define([
                 // reload
                 that.renderPage(pageType);
                 that._bindEventByType(pageType);
+
+                if (value === 'spss') {
+                    // show install button
+                    that.showInstallButton();
+                } else {
+                    that.hideInstallButton();
+                }
             });
     
             // open file navigation
@@ -422,6 +429,10 @@ define([
             this._bindEventByType('Read');
             this._bindEventByType('Write');
 
+        }
+
+        generateInstallCode() {
+            return [ '!pip install pyreadstat' ];
         }
 
         generateCode() {

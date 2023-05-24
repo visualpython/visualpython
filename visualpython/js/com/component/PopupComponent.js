@@ -950,9 +950,25 @@ define([
             $(this.wrapSelector()).show();
         }
 
+        showInstallButton() {
+            $(this.wrapSelector('#popupInstall')).show();
+        }
+
+        showImportButton() {
+            $(this.wrapSelector('#popupImport')).show();
+        }
+
         hide() {
             this.taskItem && this.taskItem.blurItem();
             $(this.wrapSelector()).hide();
+        }
+
+        hideInstallButton() {
+            $(this.wrapSelector('#popupInstall')).hide();
+        }
+
+        hideImportButton() {
+            $(this.wrapSelector('#popupImport')).hide();
         }
 
         isHidden() {
