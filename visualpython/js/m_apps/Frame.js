@@ -862,6 +862,15 @@ define([
                     let tag = $(this).closest('.vp-inner-popup-sortby-item');
                     tag.insertAfter(tag.next());
                 });
+            } else if (menuType === FRAME_EDIT_TYPE.DROP_NA) {
+                $(this.wrapSelector('.vp-inner-popup-how')).on('change', function() {
+                    let val = $(this).val();
+                    if (val === '') {
+                        $(that.wrapSelector('.vp-inner-popup-thresh')).prop('disabled', false);
+                    } else {
+                        $(that.wrapSelector('.vp-inner-popup-thresh')).prop('disabled', true);
+                    }
+                });
             }
             
         }
@@ -1585,7 +1594,12 @@ define([
             content.appendFormatLine('<thead style="height: 30px"><th>{0}</th><th>{1}</th><th class="{2}">{3}</th></thead>'
                                     , 'Column', 'Data type', 'vp-orange-text', 'New data type');
             content.appendLine('<tbody>');
-            this.state.selected.forEach((col, idx) => {
+            let selectedList = this.state.selected;
+            if (selectedList.length === 0) {
+                // select all
+                selectedList = this.state.columnList;
+            }
+            selectedList.forEach((col, idx) => {
                 content.appendLine('<tr>');
                 content.appendFormatLine('<td title="{0}">{1}</td>', col.label, col.label);
                 content.appendFormatLine('<td><input type="text" value="{0}" readonly/></td>', col.type);
@@ -1859,25 +1873,25 @@ define([
                         pandasObject: this.state.tempObj,
                         selectedColumns: [ com_util.convertToStr(contentState.name, contentState.nameastext) ],
                         config: { name: 'Subset' } }, 
-                    { 
-                        useInputVariable: true,
-                        useInputColumns: true,
-                        targetSelector: this.wrapSelector('.vp-inner-popup-subset'),
-                        pageThis: this,
-                        allowSubsetTypes: ['iloc', 'loc'],
-                        beforeOpen: function(subsetThis) {
-                            let contentState = that.getPopupContent(type);
-                            let name = com_util.convertToStr(contentState.name, contentState.nameastext);
-                            subsetThis.state.selectedColumns = [ name ];
-                        },
-                        finish: function(code) {
-                            that.subsetCm.setValue(code);
-                            that.subsetCm.save();
-                            setTimeout(function () {
-                                that.subsetCm.refresh();
-                            }, 1);
-                        }
-                    });
+                        { 
+                            useInputVariable: true,
+                            useInputColumns: true,
+                            targetSelector: this.wrapSelector('.vp-inner-popup-subset'),
+                            pageThis: this,
+                            allowSubsetTypes: ['iloc', 'loc'],
+                            beforeOpen: function(subsetThis) {
+                                let contentState = that.getPopupContent(type);
+                                let name = com_util.convertToStr(contentState.name, contentState.nameastext);
+                                subsetThis.state.selectedColumns = [ name ];
+                            },
+                            finish: function(code) {
+                                that.subsetCm.setValue(code);
+                                that.subsetCm.save();
+                                setTimeout(function () {
+                                    that.subsetCm.refresh();
+                                }, 1);
+                            }
+                        });
                     // initial code
                     var code = this.subsetEditor.generateCode();
                     this.subsetCm.setValue(code);
@@ -2086,12 +2100,19 @@ define([
                     content['ascending'] = $(this.wrapSelector('.vp-inner-popup-isascending')).val();
                     break;
                 case FRAME_EDIT_TYPE.AS_TYPE:
-                    this.state.selected.forEach((col, idx) => {
+                    let selectedList = this.state.selected;
+                    if (selectedList.length === 0) {
+                        // select all
+                        selectedList = this.state.columnList;
+                    }
+                    selectedList.forEach((col, idx) => {
                         var value = $(this.wrapSelector('.vp-inner-popup-astype'+idx)).val();
-                        content[idx] = {
-                            label: col.code,
-                            value: value
-                        };
+                        if (value !== undefined && value !== '') {
+                            content[idx] = {
+                                label: col.code,
+                                value: value
+                            };
+                        }
                     });
                     break;
                 case FRAME_EDIT_TYPE.DISCRETIZE:
@@ -2294,22 +2315,26 @@ define([
                     }
                     break;
                 case FRAME_EDIT_TYPE.DROP_NA:
-                    var locObj = '';
+                    var dropNAOptions = [];
                     if (axis == FRAME_AXIS.ROW) {
-                        code.appendFormat("{0}.loc[[{1}],:].dropna(axis=0", tempObj, selectedName);
+                        dropNAOptions.push("axis=1");
                     } else {
-                        code.appendFormat("{0}.loc[:,[{1}]].dropna(axis=1", tempObj, selectedName);
+                        dropNAOptions.push("axis=0");
+                    }
+                    if (selectedName && selectedName !== '') {
+                        dropNAOptions.push(com_util.formatString("subset=[{0}]", selectedName));
                     }
                     if (content.how && content.how !== '') {
-                        code.appendFormat(", how='{0}'", content.how);
+                        dropNAOptions.push(com_util.formatString("how='{0}'", content.how));
                     }
                     if (content.thresh && content.thresh !== '') {
-                        code.appendFormat(", thresh={0}", content.thresh);
+                        dropNAOptions.push(com_util.formatString("thresh={0}", content.thresh));
                     }
                     if (content.ignore_index && content.ignore_index !== '') {
-                        code.appendFormat(", ignore_index={0}", content.ignore_index);
+                        dropNAOptions.push(com_util.formatString("ignore_index={0}", content.ignore_index));
                     }
-                    code.append(", inplace=True)");
+                    dropNAOptions.push("inplace=True");
+                    code.appendFormat("{0}.dropna({1})", tempObj, dropNAOptions.join(', '));
                     break;
                 case FRAME_EDIT_TYPE.DROP_DUP:
                     let dropDupOptions = [];
@@ -2322,7 +2347,7 @@ define([
                     if (content.ignore_index && content.ignore_index !== '') {
                         dropDupOptions.push(com_util.formatString("ignore_index={0}", content.ignore_index));
                     }
-                    dropDupOptions.push(com_util.formatString("inplace=True"));
+                    dropDupOptions.push("inplace=True");
                     code.appendFormat("{0}.drop_duplicates({1})", tempObj, dropDupOptions.join(', '));
                     break;
                 case FRAME_EDIT_TYPE.DROP_OUT:
