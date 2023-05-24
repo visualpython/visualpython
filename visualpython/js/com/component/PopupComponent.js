@@ -288,6 +288,13 @@ define([
             }
         }
 
+        addCheckModules(module) {
+            if (this.config.checkModules.includes(module)) {
+                return ;
+            }
+            this.config.checkModules.push(module);
+        }
+
         _bindEvent() {
             var that = this;
             // Close popup event
