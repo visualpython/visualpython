@@ -42,7 +42,9 @@ define([
                 'csv': 'csv',
                 'excel': 'xlsx',
                 'json': 'json',
-                'pickle': ''
+                'pickle': '',
+                'sas': '', // xport or sas7bdat
+                'spss': ''
             }
             
             this.package = {
@@ -79,10 +81,12 @@ define([
             this.fileState = {
                 'Read': {
                     fileTypeId: {
-                        'csv': 'pd004',
-                        'excel': 'pd123',
-                        'json': 'pd076',
-                        'pickle': 'pd079'
+                        'csv': 'pd_readCsv',
+                        'excel': 'pd_readExcel',
+                        'json': 'pd_readJson',
+                        'pickle': 'pd_readPickle',
+                        'sas': 'pd_readSas',
+                        'spss': 'pd_readSpss'
                     },
                     selectedType: 'csv',
                     package: null,
@@ -93,10 +97,10 @@ define([
                 },
                 'Write': {
                     fileTypeId: {
-                        'csv': 'pd005',
-                        'excel': 'pd124',
-                        'json': 'pd077',
-                        'pickle': 'pd078'
+                        'csv': 'pd_toCsv',
+                        'excel': 'pd_toExcel',
+                        'json': 'pd_toJson',
+                        'pickle': 'pd_toPickle'
                     },
                     selectedType: 'csv',
                     package: null,

@@ -57,10 +57,10 @@ define([
             };
             this.fileState = {
                 fileTypeId: {
-                    'csv': 'pd004',
-                    'excel': 'pd123',
-                    'json': 'pd076',
-                    'pickle': 'pd079'
+                    'csv': 'pd_readCsv',
+                    'excel': 'pd_readExcel',
+                    'json': 'pd_readJson',
+                    'pickle': 'pd_readPickle'
                 },
                 selectedType: 'csv',
                 package: null
