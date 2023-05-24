@@ -26,6 +26,20 @@ define([
 
     /**
      * Subset
+     * ====================================
+     * Special mode
+     * 1. useAsModule : Use subset as module like DataSelector
+     *      - No allocation
+     *      - No run to cell (able to use apply button instead)
+     *      - renders button to target
+     * 2. useInputVariable : Use subset as module but use applied variable
+     *      - No allocation
+     *      - No data selection
+     *      - No run to cell
+     *      - renders button to target
+     * 3. useInputColumns : Use subset as module but use applied columns
+     *      - No allocation
+     *      - No column selection
      */
     class Subset extends PopupComponent {
         _init() {
@@ -39,8 +53,9 @@ define([
             this.targetSelector = this.prop.targetSelector;
             this.pageThis = this.prop.pageThis;
 
+            this.useAsModule = this.prop.useAsModule;
             this.useInputVariable = this.prop.useInputVariable;
-            if (this.useInputVariable) {
+            if (this.useInputVariable === true || this.useAsModule === true) {
                 this.eventTarget = this.targetSelector;
                 this.useCell = false; // show apply button only
             }
@@ -115,6 +130,13 @@ define([
             this.loadStateAfterRender();
             
             // render button
+            if (this.useAsModule) {
+                // render button
+                this.renderButton();
+
+                // hide allocate to
+                $(this.wrapSelector('.' + VP_DS_ALLOCATE_TO)).closest('tr').hide();
+            }
             if (this.useInputVariable) {
                 // set readonly
                 $(this.wrapSelector('.' + VP_DS_PANDAS_OBJECT)).attr('disabled', true);
@@ -1911,9 +1933,11 @@ define([
             if (this.useInputVariable) {
                 this.loadVariables();
                 this.reloadSubsetData();
+            }        
+            if (this.useCell === false) {
                 // show save button only
                 this.setSaveOnlyMode();
-            }        
+            }
             // generate code after displaying page
             // - codemirror can be set after display    
             this.generateCode();
@@ -1924,13 +1948,13 @@ define([
         //====================================================================
 
         hideButton() {
-            if (this.useInputVariable) {
+            if (this.useInputVariable === true || this.useAsModule === true) {
                 $(this.pageThis.wrapSelector('.' + VP_DS_BTN + '.' + this.uuid)).hide();
             }
         }
 
         disableButton() {
-            if (this.useInputVariable) {
+            if (this.useInputVariable === true || this.useAsModule === true) {
                 var buttonEle = $(this.pageThis.wrapSelector('.' + VP_DS_BTN + '.' + this.uuid));
                 if (!buttonEle.hasClass('disabled')) {
                     buttonEle.addClass('disabled');
@@ -1939,12 +1963,12 @@ define([
         }
 
         enableButton() {
-            if (this.useInputVariable) {
+            if (this.useInputVariable === true || this.useAsModule === true) {
                 $(this.pageThis.wrapSelector('.' + VP_DS_BTN + '.' + this.uuid)).removeClass('disabled');
             }
         }
         showButton() {
-            if (this.useInputVariable) {
+            if (this.useInputVariable === true || this.useAsModule === true) {
                 $(this.pageThis.wrapSelector('.' + VP_DS_BTN + '.' + this.uuid)).show();
             }
         }
