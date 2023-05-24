@@ -195,6 +195,10 @@ define([
                 'joblib': {
                     code: 'import joblib',
                     type: 'package'
+                },
+                'scipy': {
+                    code: 'import scipy',
+                    type: 'package'
                 }
             }
 
