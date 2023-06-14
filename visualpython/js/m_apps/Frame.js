@@ -129,7 +129,8 @@ define([
                     child: [
                         { id: 'fillna', label: 'Fill NA', axis: FRAME_AXIS.COLUMN, selection: FRAME_SELECT_TYPE.NONE, menuType: FRAME_EDIT_TYPE.FILL_NA },
                         { id: 'dropna', label: 'Drop NA', axis: FRAME_AXIS.COLUMN, selection: FRAME_SELECT_TYPE.NONE, menuType: FRAME_EDIT_TYPE.DROP_NA },
-                        { id: 'drop_outlier', label: 'Drop outlier', axis: FRAME_AXIS.COLUMN, selection: FRAME_SELECT_TYPE.SINGLE, menuType: FRAME_EDIT_TYPE.DROP_OUT },
+                        { id: 'fill_outlier', label: 'Fill outlier', axis: FRAME_AXIS.COLUMN, selection: FRAME_SELECT_TYPE.MULTI, menuType: FRAME_EDIT_TYPE.FILL_OUT },
+                        { id: 'drop_outlier', label: 'Drop outlier', axis: FRAME_AXIS.COLUMN, selection: FRAME_SELECT_TYPE.MULTI, menuType: FRAME_EDIT_TYPE.DROP_OUT },
                         { id: 'drop_duplicates', label: 'Drop duplicates', axis: FRAME_AXIS.COLUMN, selection: FRAME_SELECT_TYPE.NONE, menuType: FRAME_EDIT_TYPE.DROP_DUP },
                     ]
                 },
@@ -626,8 +627,10 @@ define([
                     case FRAME_EDIT_TYPE.FILL_NA:
                     case FRAME_EDIT_TYPE.DROP_NA:
                     case FRAME_EDIT_TYPE.DROP_DUP:
+                    case FRAME_EDIT_TYPE.FILL_OUT:
                     case FRAME_EDIT_TYPE.DROP_OUT:
-                    case FRAME_EDIT_TYPE.DROP: // check one more time
+                    case FRAME_EDIT_TYPE.DROP: 
+                        // open inner popup
                         that.openInputPopup(editType);
                         break;
                     default:
@@ -714,18 +717,25 @@ define([
                     $(this.wrapSelector('.vp-inner-popup-input3')).focus();
                     return;
                 }
-            } else if (type === FRAME_EDIT_TYPE.REPLACE) {
-                if (content.input === '') {
-                    $(this.wrapSelector('.vp-inner-popup-input')).focus();
-                    return;
-                }
             } else if (type === FRAME_EDIT_TYPE.FILL_NA) {
                 if (content.method === 'value' && content.value === '') {
                     $(this.wrapSelector('.vp-inner-popup-value')).focus();
                     return;
                 }
+            } else if (type === FRAME_EDIT_TYPE.FILL_OUT) {
+                if (content.filltype === 'value' && content.fillvalue === '') {
+                    $(this.wrapSelector('.vp-inner-popup-fillvalue')).focus();
+                    return;
+                }
             }
-            if (type == FRAME_EDIT_TYPE.DROP_OUT) {
+            // run check modules for outliers and load codes
+            if (type === FRAME_EDIT_TYPE.FILL_OUT) {
+                this.config.checkModules = ['pd', 'np', 'vp_fill_outlier'];
+                let that = this;
+                this.checkAndRunModules(true).then(function() {
+                    that.loadCode(that.getTypeCode(that.state.popup.type, content));
+                });
+            } else if (type === FRAME_EDIT_TYPE.DROP_OUT) {
                 this.config.checkModules = ['pd', 'np', 'vp_drop_outlier'];
                 let that = this;
                 this.checkAndRunModules(true).then(function() {
@@ -768,38 +778,140 @@ define([
             var that = this;
 
             if (menuType === FRAME_EDIT_TYPE.ADD_COL
-                || menuType === FRAME_EDIT_TYPE.ADD_ROW) {
-                ///// add page
-                // 1. add type
-                $(this.wrapSelector('.vp-inner-popup-addtype')).on('change', function() {
-                    var tab = $(this).val();
-                    $(that.wrapSelector('.vp-inner-popup-tab')).hide();
-                    $(that.wrapSelector('.vp-inner-popup-tab.' + tab)).show();
+                || menuType === FRAME_EDIT_TYPE.ADD_ROW
+                || menuType === FRAME_EDIT_TYPE.REPLACE) {
+                // Add page
+                if (menuType === FRAME_EDIT_TYPE.ADD_COL
+                    || menuType === FRAME_EDIT_TYPE.ADD_ROW) {
+                    ///// add page
+                    // 1. add type
+                    $(this.wrapSelector('.vp-inner-popup-addtype')).on('change', function() {
+                        var tab = $(this).val();
+                        $(that.wrapSelector('.vp-inner-popup-tab')).hide();
+                        $(that.wrapSelector('.vp-inner-popup-tab.' + tab)).show();
+                    });
+            
+                    // 2-1. hide column selection box
+                    $(this.wrapSelector('.vp-inner-popup-var1box .vp-vs-data-type')).on('change', function() {
+                        var type = $(this).val();
+                        if (type == 'DataFrame') {
+                            $(that.wrapSelector('.vp-inner-popup-var1col')).show();
+                        } else {
+                            $(that.wrapSelector('.vp-inner-popup-var1col')).hide();
+                        }
+                    });
+            
+                    $(this.wrapSelector('.vp-inner-popup-var2box .vp-vs-data-type')).on('change', function() {
+                        var type = $(this).val();
+                        if (type == 'DataFrame') {
+                            $(that.wrapSelector('.vp-inner-popup-var2col')).show();
+                        } else {
+                            $(that.wrapSelector('.vp-inner-popup-var2col')).hide();
+                        }
+                    });
+
+                    $(document).off('change', this.wrapSelector('.vp-inner-popup-vartype'));
+                    $(document).on('change', this.wrapSelector('.vp-inner-popup-vartype'), function() {
+                        var type = $(this).val();
+                        $(this).closest('tr').find('.vp-inner-popup-vartype-box').hide();
+                        $(this).closest('tr').find('.vp-inner-popup-vartype-box.' + type).show();
+                    });
+                }
+
+                // Replace page
+                if (menuType === FRAME_EDIT_TYPE.REPLACE) {
+                    $(this.wrapSelector('.vp-inner-popup-replacetype')).on('change', function() {
+                        var tab = $(this).val();
+                        $(that.wrapSelector('.vp-inner-popup-tab')).hide();
+                        $(that.wrapSelector('.vp-inner-popup-tab.' + tab)).show();
+                    });
+                }
+
+                // Add & Replace page
+                // condition add
+                $(document).off('click', this.wrapSelector('.vp-inner-popup-add-cond'));
+                $(document).on('click', this.wrapSelector('.vp-inner-popup-add-cond'), function (event) {
+                    that.handleConditionAdd();
                 });
-        
-                // 2-1. hide column selection box
-                $(this.wrapSelector('.vp-inner-popup-var1box .vp-vs-data-type')).on('change', function() {
-                    var type = $(this).val();
-                    if (type == 'DataFrame') {
-                        $(that.wrapSelector('.vp-inner-popup-var1col')).show();
+
+                // condition delete
+                $(document).off('click', this.wrapSelector('.vp-inner-popup-del-cond'));
+                $(document).on('click', this.wrapSelector('.vp-inner-popup-del-cond'), function (event) {
+                    event.stopPropagation();
+    
+                    // clear previous one
+                    $(this).closest('tr').remove();
+                    $(that.wrapSelector('.vp-inner-popup-oper-connect:last')).hide();
+                });
+
+                // change column selection for condition page
+                $(document).off('change', this.wrapSelector('.vp-inner-popup-col-list'));
+                $(document).on('change', this.wrapSelector('.vp-inner-popup-col-list'), function () {
+                    var thisTag = $(this);
+                    var varName = that.state.tempObj;
+                    var colName = $(this).find('option:selected').attr('data-code');
+                    var colDtype = $(this).find('option:selected').attr('data-dtype');
+
+                    var operTag = $(this).closest('td').find('.vp-inner-popup-oper-list');
+                    var condTag = $(this).closest('td').find('.vp-inner-popup-condition');
+
+                    if (colName == '.index') {
+                        // index
+                        $(thisTag).closest('td').find('.vp-inner-popup-cond-use-text').prop('checked', false);
+                        $(operTag).replaceWith(function () {
+                            return that.templateForConditionOperator('');
+                        });
+                        $(condTag).replaceWith(function () {
+                            return that.templateForConditionCondInput([], '');
+                        });
+                        that.generateCode();
                     } else {
-                        $(that.wrapSelector('.vp-inner-popup-var1col')).hide();
+                        // get result and load column list
+                        vpKernel.getColumnCategory(varName, colName).then(function (resultObj) {
+                            let { result } = resultObj;
+                            try {
+                                var category = JSON.parse(result);
+                                if (category && category.length > 0 && colDtype == 'object') {
+                                    // if it's categorical column and its dtype is object, check 'Text' as default
+                                    $(thisTag).closest('td').find('.vp-inner-popup-cond-use-text').prop('checked', true);
+                                } else {
+                                    $(thisTag).closest('td').find('.vp-inner-popup-cond-use-text').prop('checked', false);
+                                }
+                                $(operTag).replaceWith(function () {
+                                    return that.templateForConditionOperator(colDtype);
+                                });
+                                $(condTag).replaceWith(function () {
+                                    return that.templateForConditionCondInput(category, colDtype);
+                                });
+                            } catch {
+                                $(thisTag).closest('td').find('.vp-inner-popup-cond-use-text').prop('checked', false);
+                                $(operTag).replaceWith(function () {
+                                    return that.templateForConditionOperator(colDtype);
+                                });
+                                $(condTag).replaceWith(function () {
+                                    return that.templateForConditionCondInput([], colDtype);
+                                });
+                            }
+                        });
                     }
                 });
-        
-                $(this.wrapSelector('.vp-inner-popup-var2box .vp-vs-data-type')).on('change', function() {
-                    var type = $(this).val();
-                    if (type == 'DataFrame') {
-                        $(that.wrapSelector('.vp-inner-popup-var2col')).show();
+
+                // change operator selection
+                $(document).off('change', this.wrapSelector('.vp-inner-popup-oper-list'));
+                $(document).on('change', this.wrapSelector('.vp-inner-popup-oper-list'), function () {
+                    var oper = $(this).val();
+                    var condTag = $(this).closest('td').find('.vp-inner-popup-condition');
+                    var useTextTag = $(this).closest('td').find('.vp-inner-popup-cond-use-text');
+                    // var colDtype = $(this).closest('td').find('.vp-col-list option:selected').attr('data-dtype');
+
+                    // if operator is isnull(), notnull(), disable condition input
+                    if (oper == 'isnull()' || oper == 'notnull()') {
+                        $(condTag).prop('disabled', true);
+                        $(useTextTag).prop('disabled', true);
                     } else {
-                        $(that.wrapSelector('.vp-inner-popup-var2col')).hide();
+                        $(condTag).prop('disabled', false);
+                        $(useTextTag).prop('disabled', false);
                     }
-                });
-            } else if (menuType === FRAME_EDIT_TYPE.REPLACE) {
-                $(this.wrapSelector('.vp-inner-popup-replacetype')).on('change', function() {
-                    var tab = $(this).val();
-                    $(that.wrapSelector('.vp-inner-popup-tab')).hide();
-                    $(that.wrapSelector('.vp-inner-popup-tab.' + tab)).show();
                 });
             } else if (menuType === FRAME_EDIT_TYPE.DISCRETIZE) {
                 // change bins
@@ -862,6 +974,15 @@ define([
                     let tag = $(this).closest('.vp-inner-popup-sortby-item');
                     tag.insertAfter(tag.next());
                 });
+            } else if (menuType === FRAME_EDIT_TYPE.FILL_OUT) {
+                $(this.wrapSelector('.vp-inner-popup-filltype')).on('change', function() {
+                    let filltype = $(this).val();
+                    if (filltype === 'value') {
+                        $(that.wrapSelector('.vp-inner-popup-fillvalue')).prop('disabled', false);
+                    } else {
+                        $(that.wrapSelector('.vp-inner-popup-fillvalue')).prop('disabled', true);
+                    }
+                });
             } else if (menuType === FRAME_EDIT_TYPE.DROP_NA) {
                 $(this.wrapSelector('.vp-inner-popup-how')).on('change', function() {
                     let val = $(this).val();
@@ -869,6 +990,24 @@ define([
                         $(that.wrapSelector('.vp-inner-popup-thresh')).prop('disabled', false);
                     } else {
                         $(that.wrapSelector('.vp-inner-popup-thresh')).prop('disabled', true);
+                    }
+                });
+            } else if (menuType === FRAME_EDIT_TYPE.FILL_NA) {
+                // bind event on method
+                $(this.wrapSelector('.vp-inner-popup-method')).on('change', function() {
+                    let changedVal = $(this).val();
+                    if (changedVal === 'value') {
+                        // show value row
+                        $(that.wrapSelector('.vp-inner-popup-value-row')).show();
+                        $(that.wrapSelector('.vp-inner-popup-fill-row')).hide();
+                    } else if (changedVal === 'ffill' || changedVal === 'bfill') {
+                        // show method fill row
+                        $(that.wrapSelector('.vp-inner-popup-value-row')).hide();
+                        $(that.wrapSelector('.vp-inner-popup-fill-row')).show();
+                    } else {
+                        // hide all
+                        $(that.wrapSelector('.vp-inner-popup-value-row')).hide();
+                        $(that.wrapSelector('.vp-inner-popup-fill-row')).hide();
                     }
                 });
             }
@@ -1195,6 +1334,8 @@ define([
                 content.appendLine('<tr><th><label>Add type</label></th>');
                 content.appendFormatLine('<td><select class="{0}">', 'vp-inner-popup-addtype');
                 content.appendFormatLine('<option value="{0}">{1}</option>', 'variable', 'Variable');
+                content.appendFormatLine('<option value="{0}">{1}</option>', 'value', 'Value');
+                content.appendFormatLine('<option value="{0}">{1}</option>', 'condition', 'Condition');
                 content.appendFormatLine('<option value="{0}">{1}</option>', 'apply', 'Apply');
                 content.appendLine('</select></td></tr>');
             }
@@ -1205,18 +1346,73 @@ define([
             
             // tab 1. variable
             content.appendFormatLine('<div class="{0} {1}">', 'vp-inner-popup-tab', 'variable');
-            content.appendLine('<table class="vp-tbl-gap5"><colgroup><col width="110px"><col width="*"></colgroup>');
+            content.appendLine('<table class="vp-tbl-gap5"><colgroup><col width="110px"><col width="*"><col width="15px"></colgroup>');
             content.appendLine('<tr class="vp-inner-popup-value-row">');
-            content.appendLine('<th><label>Variable</label></th>');
-            content.appendFormatLine('<td><input type="text" class="{0}" data-idx="{1}" placeholder="Type value"/>', 'vp-inner-popup-value', 0);
+            content.appendFormatLine('<th><select class="{0}"><option value="variable">Variable</option><option value="column">Column</option></select></th>', 'vp-inner-popup-vartype');
+            content.appendLine('<td>');
+            content.appendFormatLine('<div class="{0}">', 'vp-inner-popup-vartype-box variable');
+            content.appendFormatLine('<input type="text" class="{0}" data-idx="{1}" placeholder="Type value"/>', 'vp-inner-popup-value', 0);
             content.appendFormatLine('<label><input type="checkbox" class="{0}"/><span>{1}</span></label>', 'vp-inner-popup-istext','Text');
+            content.appendLine('</div>');
+            content.appendFormatLine('<div class="{0}" style="display:none;">', 'vp-inner-popup-vartype-box column');
+            content.appendFormatLine('<select class="vp-select {0}">', 'vp-inner-popup-var-col-list');
+            this.state.columnList.forEach(col => {
+                content.appendFormatLine('<option data-code="{0}" data-dtype="{1}" value="{2}">{3}</option>',
+                    col.code, col.type, col.code, col.label);
+            });
+            content.appendLine('</select>');
+            content.appendLine('</div>');
             // content.appendFormatLine('<span class="{0} vp-icon-close-small"></span>', 'vp-inner-popup-delete-value');
-            content.appendLine('</td></tr>');
+            content.appendLine('</td><td></td></tr>');
             content.appendFormatLine('<tr class="vp-inner-popup-addvalue-row"><td colspan="2"><button class="vp-button {0}">+ Variable</button></td></tr>', 'vp-inner-popup-addvalue');
             content.appendLine('</table>');
             content.appendLine('</div>'); // end of vp-inner-popup-tab value
 
-            // tab 2. apply
+            // tab 2. value
+            content.appendFormatLine('<div class="{0} {1}" style="display:none;">', 'vp-inner-popup-tab', 'value');
+            content.appendFormatLine('<div class="{0}">', 'vp-grid-col-120');
+            content.appendLine('<label class="vp-orange-text">Target column</label>');
+            content.appendFormatLine('<select class="vp-select {0}">', 'vp-inner-popup-value-col-list');
+            this.state.columnList.forEach(col => {
+                content.appendFormatLine('<option data-code="{0}" data-dtype="{1}" value="{2}">{3}</option>',
+                    col.code, col.type, col.code, col.label);
+            });
+            content.appendLine('</select>');
+            content.appendLine('</div>');
+            content.appendFormatLine('<label><input type="checkbox" class="{0}"/><span>{1}</span></label>', 'vp-inner-popup-use-regex', 'Use Regular Expression');
+            content.appendLine('<br/><br/>');
+            content.appendFormatLine('<div class="{0}">', 'vp-inner-popup-replace-table');
+            content.appendLine('<table class="vp-tbl-gap5">');
+            content.appendLine('<colgroup><col width="170px"><col width="170px"><col width="*"></colgroup>');
+            content.appendFormatLine('<thead><th>{0}</th><th>{1}</th><th></th></thead>', 'Value', 'New value');
+            content.appendLine('<tbody>');
+            content.appendLine(this.renderReplaceInput(0));
+            content.appendFormatLine('<tr><td colspan="3"><button class="{0} {1}">{2}</button></td></tr>', 'vp-button', 'vp-inner-popup-replace-add', '+ Add value');
+            content.appendLine('</tbody>');
+            content.appendLine('</table>');
+            content.appendLine('</div>');
+            content.appendLine('</div>');
+
+            // tab 3. condition
+            // replace page - 2. condition
+            content.appendFormatLine('<div class="{0} {1}" style="display:none;">', 'vp-inner-popup-tab', 'condition');
+            // condition table
+            content.appendLine('<table class="vp-inner-popup-condition-tbl vp-tbl-gap5 wp100"><colgroup><col width="110px"><col width="*"></colgroup>');
+            content.appendLine(this.renderReplaceCondition());
+            content.appendFormatLine('<tr><td colspan="4"><button type="button" class="vp-button {0}">{1}</button></td></tr>',
+                'vp-inner-popup-add-cond', '+ Condition');
+            content.appendLine('</table>');
+            content.appendLine('<hr style="margin: 5px 0;"/>');
+            // value
+            content.appendLine('<div class="vp-grid-col-95">');
+            content.appendLine('<label>Value</label>');
+            content.appendLine('<div>')
+            content.appendFormatLine('<input type="text" class="{0}"/>', 'vp-inner-popup-condvalue');
+            content.appendFormatLine('<label><input type="checkbox" class="{0}"/><span>{1}</span></label>', 'vp-inner-popup-condvalueastext','Text');
+            content.appendLine('</div>');
+            content.appendLine('</div>');
+
+            // tab 4. apply
             content.appendFormatLine('<div class="{0} {1}" style="display: none;">', 'vp-inner-popup-tab', 'apply');
             content.appendLine('<div class="vp-grid-box">');
             content.appendLine('<div class="vp-grid-col-110">');
@@ -1237,7 +1433,7 @@ define([
         renderAddValueBox(idx) {
             // add dataselector
             let valueSelector = new DataSelector({
-                pageThis: this, id: 'vp_addValue' + idx, classes: 'vp-inner-popup-value', placeholder: 'Type value'
+                pageThis: this, classes: 'vp-inner-popup-value', placeholder: 'Type value', withPopup: false
             });
             $(this.wrapSelector('.vp-inner-popup-body')).find('.vp-inner-popup-value:nth(' + idx + ')').replaceWith(valueSelector.toTagString());
         }
@@ -1516,8 +1712,9 @@ define([
             content.appendLine('<div>');
             content.appendLine('<table class="vp-tbl-gap5 wp100"><colgroup><col width="110px"><col width="*"></colgroup>');
             content.appendFormatLine('<tr><th class="{0}">{1}</th>', '', 'Column');
-            var target = this.state.selected.map(col => col.label).join(',');
-            content.appendFormatLine('<td><input type="text" class="{0}" value="{1}" readonly/>', 'vp-inner-popup-input1', target);
+            var target = this.state.selected[0];
+            content.appendFormatLine('<td><input type="text" class="{0}" value="{1}" data-code="{2}" readonly/>'
+                , 'vp-inner-popup-input1', target.label, target.code);
             content.appendLine('</td></tr>');
             content.appendLine('<tr><th><label>Replace type</label></th>');
             content.appendFormatLine('<td><select class="{0}">', 'vp-inner-popup-replacetype');
@@ -1545,20 +1742,31 @@ define([
             content.appendLine('</div>');
             // replace page - 2. condition
             content.appendFormatLine('<div class="{0}" style="display:none;">', 'vp-inner-popup-tab condition');
-            // subset
-            content.appendLine('<table class="vp-tbl-gap5"><colgroup><col width="110px"><col width="*"></colgroup>');
+            // condition table
+            content.appendLine('<table class="vp-inner-popup-condition-tbl vp-tbl-gap5 wp100"><colgroup><col width="110px"><col width="*"></colgroup>');
+            // content.appendLine('<tr><td><label>Condition</label></td>');
+            // content.appendLine('<td><div class="vp-fr-subset-box">');
+            // content.appendLine('<textarea class="vp-input vp-inner-popup-subset"></textarea>');
+            // content.appendLine('</div></td>');
+            // content.appendLine('</tr>');
 
-            content.appendLine('<tr><td><label>Condition</label></td>');
-            content.appendLine('<td><div class="vp-fr-subset-box">');
-            content.appendLine('<textarea class="vp-input vp-inner-popup-subset"></textarea>');
-            content.appendLine('</div></td>');
-            content.appendLine('</tr>');
-
-            content.appendLine('<tr><th><label>Variable</label></th>');
-            content.appendFormatLine('<td><input type="text" class="{0}"/>', 'vp-inner-popup-input3');
-            content.appendFormatLine('<label><input type="checkbox" class="{0}"/><span>{1}</span></label>', 'vp-inner-popup-istext3','Text');
-            content.appendLine('</td></tr>');
-            content.appendLine('</table></div>');
+            // content.appendLine('<tr><th><label>Variable</label></th>');
+            // content.appendFormatLine('<td><input type="text" class="{0}"/>', 'vp-inner-popup-input3');
+            // content.appendFormatLine('<label><input type="checkbox" class="{0}"/><span>{1}</span></label>', 'vp-inner-popup-istext3','Text');
+            // content.appendLine('</td></tr>');
+            content.appendLine(this.renderReplaceCondition());
+            content.appendFormatLine('<tr><td colspan="4"><button type="button" class="vp-button {0}">{1}</button></td></tr>',
+                'vp-inner-popup-add-cond', '+ Condition');
+            content.appendLine('</table>');
+            content.appendLine('<hr style="margin: 5px 0;"/>');
+            // value
+            content.appendLine('<div class="vp-grid-col-95">');
+            content.appendLine('<label>Value</label>');
+            content.appendLine('<div>')
+            content.appendFormatLine('<input type="text" class="{0}"/>', 'vp-inner-popup-condvalue');
+            content.appendFormatLine('<label><input type="checkbox" class="{0}"/><span>{1}</span></label>', 'vp-inner-popup-condvalueastext','Text');
+            content.appendLine('</div>');
+            content.appendLine('</div>');
 
             content.appendLine('</div>'); // end of vp-inner-popup-addpage
 
@@ -1583,6 +1791,86 @@ define([
             content.appendFormatLine('<td><div class="{0} {1} {2}"></div></td>', 'vp-inner-popup-delete', 'vp-cursor', 'vp-icon-close-small');
             content.appendLine('</tr>');
             return content.toString();
+        }
+
+        handleConditionAdd() {
+            var conditonBox = $(this.renderReplaceCondition());
+
+            // hide last connect operator
+            conditonBox.find('.vp-inner-popup-oper-connect').hide();
+
+            // show connect operator right before last one
+            $(this.wrapSelector('.vp-inner-popup-oper-connect:last')).show();
+            conditonBox.insertBefore(this.wrapSelector('.vp-inner-popup-condition-tbl tr:last'));
+        }
+
+        renderReplaceCondition() {
+            var content = new com_String();
+            content.appendLine('<tr><td>');
+            // delete condition button
+            content.appendLine('<div class="vp-icon-btn vp-icon-close-small vp-inner-popup-del-cond" style="float:right;"></div>');
+            // condition line
+            content.appendLine('<div class="vp-td-line mb5">');
+            // - 1. column list
+            content.appendFormatLine('<select class="{0} {1}">', 'vp-select m', 'vp-inner-popup-col-list');
+            // add .index
+            content.appendFormatLine('<option data-code="{0}" value="{1}">{2}</option>', '.index', '.index', 'index');
+            this.state.columnList.forEach(col => {
+                content.appendFormatLine('<option data-code="{0}" data-dtype="{1}" value="{2}">{3}</option>',
+                    col.code, col.type, col.code, col.label);
+            });
+            content.appendLine('</select>');
+            // - 2. operator
+            content.appendLine(this.templateForConditionOperator(''));
+            // - 3. oper-value
+            content.appendLine('<input class="vp-input m vp-inner-popup-condition" type="text" placeholder="Value"/>');
+            content.appendLine('</div>');
+            content.appendLine('<div class="vp-td-line">');
+            content.appendLine('<select class="vp-select s vp-inner-popup-oper-connect" style="display:none;">');
+            content.appendLine('<option value="&">and</option>');
+            content.appendLine('<option value="|">or</option>');
+            content.appendLine('</select>');
+            // use text
+            content.appendFormatLine('<label class="{0}"><input type="checkbox" class="{1}" title="{2}"/><span>{3}</span></label>',
+                'vp-inner-popup-condition-use-text', 'vp-inner-popup-cond-use-text', 'Uncheck it if you want to use variable or numeric values.', 'Text');
+                content.appendLine('</div>');
+            content.appendLine('</td></tr>');
+            return content.toString();
+        }
+
+        templateForConditionOperator(dtype='object') {
+            var content = new com_String();
+            content.appendFormatLine('<select class="{0} {1}">', 'vp-select s', 'vp-inner-popup-oper-list');
+            var operList = ['', '==', '!=', '<', '<=', '>', '>=', 'contains', 'not contains', 'starts with', 'ends with', 'isnull()', 'notnull()'];
+            if (dtype == '') {
+                // .index
+                operList = ['', '==', '!=', '<', '<=', '>', '>='];
+            } else if (dtype != 'object') {
+                operList = ['', '==', '!=', '<', '<=', '>', '>=', 'isnull()', 'notnull()'];
+            }
+            operList.forEach(oper => {
+                content.appendFormatLine('<option value="{0}">{1}</option>', oper, oper);
+            });
+            content.appendLine('</select>');
+            return content.toString();
+        }
+
+        templateForConditionCondInput(category, dtype='object') {
+            var vpCondSuggest = new SuggestInput();
+            vpCondSuggest.addClass('vp-input m vp-inner-popup-condition');
+
+            if (category && category.length > 0) {
+                vpCondSuggest.setPlaceholder((dtype=='object'?'Categorical':dtype) + " dtype");
+                vpCondSuggest.setSuggestList(function () { return category; });
+                vpCondSuggest.setSelectEvent(function (value) {
+                    $(this.wrapSelector()).val(value);
+                    $(this.wrapSelector()).trigger('change');
+                });
+                vpCondSuggest.setNormalFilter(false);
+            } else {
+                vpCondSuggest.setPlaceholder(dtype==''?'Value':(dtype + " dtype"));
+            }
+            return vpCondSuggest.toTagString();
         }
 
         renderAsType() {
@@ -1630,6 +1918,12 @@ define([
             content.appendFormatLine('<option value="{0}">{1}</option>', "value", "Value");
             content.appendFormatLine('<option value="{0}">{1}</option>', "ffill", "Forward fill");
             content.appendFormatLine('<option value="{0}">{1}</option>', "bfill", "Back fill");
+            let statsMethodList = ['mean', 'median', 'mode', 'min', 'max'];
+            content.appendLine('<optgroup label="Statistics">');
+            statsMethodList.forEach(opt => {
+                content.appendFormatLine('<option value="{0}">{1}</option>', opt, opt);
+            })
+            content.appendLine('</optgroup>');
             content.appendLine('</select></td>');
             content.appendLine('</tr>');
             content.appendFormatLine('<tr class="{0}">', 'vp-inner-popup-value-row');
@@ -1663,10 +1957,10 @@ define([
                 <select class="vp-inner-popup-how">
                     <option value="">Select option...</option>
                     <option value="any">Any</option>
-                    <option value="all">All</option>
+                    <option value="all" selected>All</option>
                 </select>
                 <label>Threshold</label>
-                <input type="number" class="vp-input vp-inner-popup-thresh" value=""/>
+                <input type="number" class="vp-input vp-inner-popup-thresh" value="" disabled />
                 <label>Ignore index</label>
                 <select class="vp-inner-popup-ignoreindex">
                     <option value="">Select option...</option>
@@ -1703,6 +1997,26 @@ define([
             return content.toString();
         }
 
+        renderFillOutPage() {
+            let content = `<div class="vp-inner-popup-fillout-page vp-grid-col-110">
+                <label>Fill type</label>
+                <select class="vp-inner-popup-filltype">
+                    <option value="iqr">IQR</option>
+                    <option value="mean">Mean</option>
+                    <option value="median">Median</option>
+                    <option value="value">Value</option>
+                    <option value="NA">NA</option>
+                </select>
+                <label>Value</label>
+                <input type="text" class="vp-input vp-inner-popup-fillvalue" disabled>
+            </div>`;
+
+            // set content
+            $(this.wrapSelector('.vp-inner-popup-body')).html(content);
+            return content.toString();
+        }
+
+
         renderDropOutPage() {
             var content = new com_String();
             content.appendFormatLine('<div class="{0} vp-grid-box vp-center">', 'vp-inner-popup-dropout-page');
@@ -1721,7 +2035,7 @@ define([
             let size = { width: width, height: height };
             let that = this;
 
-            $(this.wrapSelector('.vp-inner-popup-body')).html('');
+            $(this.wrapSelector('.vp-inner-popup-body')).empty();
     
             switch (parseInt(type)) {
                 case FRAME_EDIT_TYPE.ADD_COL:
@@ -1733,15 +2047,33 @@ define([
                     // bind event for adding values to calculate
                     $(this.wrapSelector('.vp-inner-popup-addvalue')).on('click', function() {
                         let valueCount = $(that.wrapSelector('.vp-inner-popup-value')).length;
+                        let columnOptStr = '';
+                        that.state.columnList.forEach(col => {
+                            columnOptStr += `<option data-code="${col.code}" data-dtype="${col.type}" value="${col.code}">${col.label}</option>`;
+                        });
                         $(`<tr class="vp-inner-popup-oper-row">
                             <td></td>
                             <td>${that.renderCalculator(valueCount)}</td>
                         </tr>
                         <tr class="vp-inner-popup-value-row">
-                            <th><label>Variable</label></th>
+                            <th>
+                                <select class="vp-inner-popup-vartype">
+                                    <option value="variable">Variable</option>
+                                    <option value="column">Column</option>
+                                </select>
+                            </th>
                             <td>
-                                <input type="text" class="vp-inner-popup-value"/>
-                                <label><input type="checkbox" class="vp-inner-popup-istext"/><span>Text</span></label>
+                                <div class="vp-inner-popup-vartype-box variable">
+                                    <input type="text" class="vp-inner-popup-value"/>
+                                    <label><input type="checkbox" class="vp-inner-popup-istext"/><span>Text</span></label>
+                                </div>
+                                <div class="vp-inner-popup-vartype-box column" style="display:none;">
+                                    <select class="vp-select vp-inner-popup-var-col-list">
+                                        ${columnOptStr}
+                                    </select>
+                                </div>
+                            </td>
+                            <td>
                                 <span class="vp-inner-popup-delete-value vp-icon-close-small"></span>
                             </td>
                         </tr>`).insertBefore($(that.wrapSelector('.vp-inner-popup-addvalue-row')));
@@ -1858,55 +2190,53 @@ define([
                     break;
                 case FRAME_EDIT_TYPE.REPLACE:
                     title = 'Replace';
-                    // content = this.renderReplacePage();
                     content = this.renderReplacePage();
 
-                    // bind codemirror
-                    this.subsetCm = this.initCodemirror({ 
-                        key: 'vp-inner-popup-subset', 
-                        selector: this.wrapSelector('.vp-inner-popup-subset'), 
-                        type: 'readonly' 
-                    });
-                    // set subset
-                    let contentState = that.getPopupContent(type);
-                    this.subsetEditor = new Subset({ 
-                        pandasObject: this.state.tempObj,
-                        selectedColumns: [ com_util.convertToStr(contentState.name, contentState.nameastext) ],
-                        config: { name: 'Subset' } }, 
-                        { 
-                            useInputVariable: true,
-                            useInputColumns: true,
-                            targetSelector: this.wrapSelector('.vp-inner-popup-subset'),
-                            pageThis: this,
-                            allowSubsetTypes: ['iloc', 'loc'],
-                            beforeOpen: function(subsetThis) {
-                                let contentState = that.getPopupContent(type);
-                                let name = com_util.convertToStr(contentState.name, contentState.nameastext);
-                                subsetThis.state.selectedColumns = [ name ];
-                            },
-                            finish: function(code) {
-                                that.subsetCm.setValue(code);
-                                that.subsetCm.save();
-                                setTimeout(function () {
-                                    that.subsetCm.refresh();
-                                }, 1);
-                            }
-                        });
+                    // // bind codemirror
+                    // this.subsetCm = this.initCodemirror({ 
+                    //     key: 'vp-inner-popup-subset', 
+                    //     selector: this.wrapSelector('.vp-inner-popup-subset'), 
+                    //     type: 'readonly' 
+                    // });
+                    // // set subset
+                    // let contentState = that.getPopupContent(type);
+                    // this.subsetEditor = new Subset({ 
+                    //     pandasObject: this.state.tempObj,
+                    //     selectedColumns: [ com_util.convertToStr(contentState.name, contentState.nameastext) ],
+                    //     config: { name: 'Subset' } }, 
+                    //     { 
+                    //         useInputVariable: true,
+                    //         useInputColumns: true,
+                    //         targetSelector: this.wrapSelector('.vp-inner-popup-subset'),
+                    //         pageThis: this,
+                    //         allowSubsetTypes: ['iloc', 'loc'],
+                    //         beforeOpen: function(subsetThis) {
+                    //             let contentState = that.getPopupContent(type);
+                    //             let name = com_util.convertToStr(contentState.name, contentState.nameastext);
+                    //             subsetThis.state.selectedColumns = [ name ];
+                    //         },
+                    //         finish: function(code) {
+                    //             that.subsetCm.setValue(code);
+                    //             that.subsetCm.save();
+                    //             setTimeout(function () {
+                    //                 that.subsetCm.refresh();
+                    //             }, 1);
+                    //         }
+                    //     });
                     // initial code
-                    var code = this.subsetEditor.generateCode();
-                    this.subsetCm.setValue(code);
-                    this.subsetCm.save();
-                    setTimeout(function () {
-                        that.subsetCm.refresh();
-                    }, 1);
+                    // var code = this.subsetEditor.generateCode();
+                    // this.subsetCm.setValue(code);
+                    // this.subsetCm.save();
+                    // setTimeout(function () {
+                    //     that.subsetCm.refresh();
+                    // }, 1);
 
-                    // data selector
-                    // vp-inner-popup-input3
                     // set dataselector
                     let replaceVarSelector = new DataSelector({
-                        pageThis: this, id: 'vp_replaceVariable', classes: 'vp-inner-popup-input3', placeholder: 'Type or select variable'
+                        pageThis: this, id: 'vp_replaceVariable', classes: 'vp-inner-popup-value', placeholder: 'Type or select variable'
+                        , withPopup: false
                     });
-                    $(this.wrapSelector('.vp-inner-popup-body')).find('.vp-inner-popup-input3').replaceWith(replaceVarSelector.toTagString());
+                    $(this.wrapSelector('.vp-inner-popup-body')).find('.vp-inner-popup-value').replaceWith(replaceVarSelector.toTagString());
                     break;
                 case FRAME_EDIT_TYPE.AS_TYPE:
                     title = 'Convert type';
@@ -1918,23 +2248,10 @@ define([
 
                     // set dataselector
                     let valueSelector = new DataSelector({
-                        pageThis: this, id: 'vp_fillValue', classes: 'vp-inner-popup-value', placeholder: 'Type or select value'
+                        pageThis: this, classes: 'vp-inner-popup-value', placeholder: 'Type or select value',
+                        withPopup: false
                     });
                     $(this.wrapSelector('.vp-inner-popup-body')).find('.vp-inner-popup-value').replaceWith(valueSelector.toTagString());
-
-                    // bind event on method
-                    $(this.wrapSelector('.vp-inner-popup-method')).on('change', function() {
-                        let changedVal = $(this).val();
-                        if (changedVal === 'value') {
-                            // show value row
-                            $(that.wrapSelector('.vp-inner-popup-value-row')).show();
-                            $(that.wrapSelector('.vp-inner-popup-fill-row')).hide();
-                        } else {
-                            // show method fill row
-                            $(that.wrapSelector('.vp-inner-popup-value-row')).hide();
-                            $(that.wrapSelector('.vp-inner-popup-fill-row')).show();
-                        }
-                    });
                     break;
                 case FRAME_EDIT_TYPE.DROP_NA:
                     title = 'Drop NA';
@@ -1943,6 +2260,18 @@ define([
                 case FRAME_EDIT_TYPE.DROP_DUP:
                     title = 'Drop duplicates';
                     content = this.renderDropDupPage();
+                    break;
+                case FRAME_EDIT_TYPE.FILL_OUT:
+                    title = 'Fill outlier';
+                    content = this.renderFillOutPage();
+
+                    // set dataselector
+                    let fillvalueSelector = new DataSelector({
+                        pageThis: this, classes: 'vp-inner-popup-fillvalue', placeholder: 'Type or select value',
+                        withPopup: false
+                    });
+                    $(this.wrapSelector('.vp-inner-popup-body')).find('.vp-inner-popup-fillvalue').replaceWith(fillvalueSelector.toTagString());
+                    $(this.wrapSelector('.vp-inner-popup-body')).find('.vp-inner-popup-fillvalue').prop('disabled', true);
                     break;
                 case FRAME_EDIT_TYPE.DROP_OUT:
                     title = 'Drop outlier';
@@ -2026,8 +2355,15 @@ define([
                         let values = [];
                         let opers = [];
                         $(this.wrapSelector('.vp-inner-popup-tab.variable tr.vp-inner-popup-value-row')).each((idx, tag) => {
-                            let valueastext = $(tag).find('.vp-inner-popup-istext').prop('checked');
-                            values.push(com_util.convertToStr($(tag).find('.vp-inner-popup-value').val(), valueastext));
+                            let varType = $(tag).find('.vp-inner-popup-vartype').val();
+                            if (varType === 'variable') {
+                                let valueastext = $(tag).find('.vp-inner-popup-istext').prop('checked');
+                                values.push(com_util.convertToStr($(tag).find('.vp-inner-popup-value').val(), valueastext));
+                            } else {
+                                // columns
+                                let column = $(tag).find('.vp-inner-popup-var-col-list').val();
+                                values.push(com_util.formatString("{0}[{1}]", this.state.tempObj, column));
+                            }
                             let oper = $(that.wrapSelector('.vp-inner-popup-oper:nth(' + idx + ')')).val();
                             if (oper && oper !== '') {
                                 opers.push(oper);
@@ -2035,17 +2371,61 @@ define([
                         });
                         content['values'] = values;
                         content['opers'] = opers;
+                    } else if (tab == 'value') {
+                        content['target'] = $(this.wrapSelector('.vp-inner-popup-value-col-list option:selected')).data('code');
+                        var useregex = $(this.wrapSelector('.vp-inner-popup-use-regex')).prop('checked');
+                        content['useregex'] = useregex;
+                        content['list'] = [];
+                        for (var i=0; i <= this.state.popup.replace.index; i++) {
+                            var origin = $(this.wrapSelector('.vp-inner-popup-origin' + i)).val();
+                            var origintext = $(this.wrapSelector('.vp-inner-popup-origin-istext'+i)).prop('checked');
+                            var replace = $(this.wrapSelector('.vp-inner-popup-replace' + i)).val();
+                            var replacetext = $(this.wrapSelector('.vp-inner-popup-replace-istext'+i)).prop('checked');
+                            if (origin && replace) {
+                                content['list'].push({
+                                    origin: origin,
+                                    origintext: origintext,
+                                    replace: replace,
+                                    replacetext: replacetext
+                                });
+                            }
+                        }
                     } else if (tab == 'apply') {
                         content['column'] = $(this.wrapSelector('.vp-inner-popup-apply-column')).val();
                         content['apply'] = $(this.wrapSelector('.vp-inner-popup-apply-lambda')).val();
+                    } else if (tab === 'condition') {
+                        content['list'] = [];
+                        var colTag = $(this.wrapSelector('.vp-inner-popup-col-list'));
+                        var operTag = $(this.wrapSelector('.vp-inner-popup-oper-list'));
+                        var condTag = $(this.wrapSelector('.vp-inner-popup-condition'));
+                        var condTextTag = $(this.wrapSelector('.vp-inner-popup-cond-use-text'));
+                        var operConnTag = $(this.wrapSelector('.vp-inner-popup-oper-connect'));
+                        for (let i=0; i<colTag.length; i++) {
+                            var col = $(colTag[i]).val();
+                            var oper = $(operTag[i]).val();
+                            var cond = $(condTag[i]).val();
+                            var condText = $(condTextTag[i]).prop('checked');
+                            var operConn = $(operConnTag[i]).val();
+                            var condObj = {};
+                            if (col !== '' && oper !== '' && cond !== '') {
+                                condObj = {
+                                    colName: col,
+                                    oper: oper,
+                                    cond: cond,
+                                    condAsText: condText
+                                };
+                                if (i < (colTag.length - 1)) {
+                                    condObj['connector'] = operConn;
+                                }
+                                content['list'].push(condObj);
+                            }
+                        }
+                        content['value'] = $(this.wrapSelector('.vp-inner-popup-condvalue')).val();
+                        content['valueastext'] = $(this.wrapSelector('.vp-inner-popup-condvalueastext')).prop('checked');
                     }
                     break;
                 case FRAME_EDIT_TYPE.REPLACE:
-                    content['name'] = $(this.wrapSelector('.vp-inner-popup-input1')).val();
-                    if (content['name'] == '') {
-                        $(this.wrapSelector('.vp-inner-popup-input1')).attr({'placeholder': 'Required input'});
-                        $(this.wrapSelector('.vp-inner-popup-input1')).focus();
-                    }
+                    content['name'] = $(this.wrapSelector('.vp-inner-popup-input1')).data('code');
                     var tab = $(this.wrapSelector('.vp-inner-popup-replacetype')).val();
                     content['replacetype'] = tab;
                     if (tab == 'value') {
@@ -2067,9 +2447,34 @@ define([
                             }
                         }
                     } else if (tab === 'condition') {
-                        content['subset'] = this.subsetCm?this.subsetCm.getValue():'';
-                        content['value'] = $(this.wrapSelector('.vp-inner-popup-input3')).val();
-                        content['valueastext'] = $(this.wrapSelector('.vp-inner-popup-istext3')).prop('checked');
+                        content['list'] = [];
+                        var colTag = $(this.wrapSelector('.vp-inner-popup-col-list'));
+                        var operTag = $(this.wrapSelector('.vp-inner-popup-oper-list'));
+                        var condTag = $(this.wrapSelector('.vp-inner-popup-condition'));
+                        var condTextTag = $(this.wrapSelector('.vp-inner-popup-cond-use-text'));
+                        var operConnTag = $(this.wrapSelector('.vp-inner-popup-oper-connect'));
+                        for (let i=0; i<colTag.length; i++) {
+                            var col = $(colTag[i]).val();
+                            var oper = $(operTag[i]).val();
+                            var cond = $(condTag[i]).val();
+                            var condText = $(condTextTag[i]).prop('checked');
+                            var operConn = $(operConnTag[i]).val();
+                            var condObj = {};
+                            if (col !== '' && oper !== '' && cond !== '') {
+                                condObj = {
+                                    colName: col,
+                                    oper: oper,
+                                    cond: cond,
+                                    condAsText: condText
+                                };
+                                if (i < (colTag.length - 1)) {
+                                    condObj['connector'] = operConn;
+                                }
+                                content['list'].push(condObj);
+                            }
+                        }
+                        content['value'] = $(this.wrapSelector('.vp-inner-popup-condvalue')).val();
+                        content['valueastext'] = $(this.wrapSelector('.vp-inner-popup-condvalueastext')).prop('checked');
                     }
                     break;
                 case FRAME_EDIT_TYPE.RENAME:
@@ -2161,6 +2566,10 @@ define([
                     content['how'] = $(this.wrapSelector('.vp-inner-popup-how')).val();
                     content['thresh'] = $(this.wrapSelector('.vp-inner-popup-thresh')).val();
                     content['ignore_index'] = $(this.wrapSelector('.vp-inner-popup-ignoreindex')).val();
+                    break;
+                case FRAME_EDIT_TYPE.FILL_OUT:
+                    content['filltype'] = $(this.wrapSelector('.vp-inner-popup-filltype')).val();
+                    content['fillvalue'] = $(this.wrapSelector('.vp-inner-popup-fillvalue')).val();
                     break;
                 case FRAME_EDIT_TYPE.DROP_DUP:
                     content['keep'] = $(this.wrapSelector('.vp-inner-popup-how')).val();
@@ -2350,9 +2759,18 @@ define([
                     dropDupOptions.push("inplace=True");
                     code.appendFormat("{0}.drop_duplicates({1})", tempObj, dropDupOptions.join(', '));
                     break;
+                case FRAME_EDIT_TYPE.FILL_OUT:
+                    if (axis == FRAME_AXIS.COLUMN) {
+                        code.appendFormat("{0} = vp_fill_outlier({1}, [{2}], fill_type='{3}'", tempObj, tempObj, selectedName, content.filltype);
+                        if (content.filltype === 'value') {
+                            code.appendFormat(", fill_value_lst={0}", content.fillvalue);
+                        }
+                        code.append(")");
+                    }
+                    break;
                 case FRAME_EDIT_TYPE.DROP_OUT:
                     if (axis == FRAME_AXIS.COLUMN) {
-                        code.appendFormat("{0} = vp_drop_outlier({1}, {2})", tempObj, tempObj, selectedName);
+                        code.appendFormat("{0} = vp_drop_outlier({1}, [{2}])", tempObj, tempObj, selectedName);
                     }
                     break;
                 case FRAME_EDIT_TYPE.LABEL_ENCODING:
@@ -2415,9 +2833,69 @@ define([
                             }
                             values.push(val);
                         });
-                        code.appendFormat("{0}[{1}] = {2}", tempObj, content.name, values.join(' '));
+                        let valueStr = values.join(' ');
+                        if (valueStr === "" || valueStr === "''") {
+                            code.appendFormat("{0}[{1}] = np.NaN", tempObj, content.name);
+                        } else {
+                            code.appendFormat("{0}[{1}] = {2}", tempObj, content.name, valueStr);
+                        }
+                    } else if (tab == 'value') {
+                        var replaceStr = new com_String();
+                        var targetName = content['target'];
+                        var useRegex = content['useregex'];
+                        content['list'].forEach((obj, idx) => {
+                            if (idx == 0) {
+                                replaceStr.appendFormat("{0}: {1}"
+                                                        , com_util.convertToStr(obj.origin, obj.origintext, useRegex)
+                                                        , com_util.convertToStr(obj.replace, obj.replacetext, useRegex));
+                            } else {
+                                replaceStr.appendFormat(", {0}: {1}"
+                                                        , com_util.convertToStr(obj.origin, obj.origintext, useRegex)
+                                                        , com_util.convertToStr(obj.replace, obj.replacetext, useRegex));
+                            }
+                        });
+                        code.appendFormat("{0}[{1}] = {2}[[{3}]].replace({{4}}", tempObj, content.name, tempObj, targetName, replaceStr);
+                        if (useRegex) {
+                            code.append(', regex=True');
+                        }
+                        code.append(')');
                     } else if (tab == 'apply') {
                         code.appendFormat("{0}[{1}] = {2}[{3}].apply({4})", tempObj, content.name, tempObj, content.column, content.apply);
+                    } else if (tab === 'condition') {
+                        code.appendFormat("{0}.loc[", tempObj);
+                        content['list'].forEach((obj, idx) => {
+                            let { colName, oper, cond, condAsText, connector } = obj;
+                            code.append('(');
+
+                            let colValue = tempObj;
+                            if (colName && colName != '') {
+                                if (colName == '.index') {
+                                    colValue += colName;
+                                } else {
+                                    colValue += com_util.formatString('[{0}]', colName);
+                                }
+                            }
+                            let condValue = com_util.convertToStr(cond, condAsText);
+                            if (oper == 'contains') {
+                                code.appendFormat('{0}.str.contains({1})', colValue, condValue);
+                            } else if (oper == 'not contains') {
+                                code.appendFormat('~{0}.str.contains({1})', colValue, condValue);
+                            } else if (oper == 'starts with') {
+                                code.appendFormat('{0}.str.startswith({1})', colValue, condValue);
+                            } else if (oper == 'ends with') {
+                                code.appendFormat('{0}.str.endswith({1})', colValue, condValue);
+                            } else if (oper == 'isnull()' || oper == 'notnull()') {
+                                code.appendFormat('{0}.{1}', colValue, oper);
+                            } else {
+                                code.appendFormat('{0}{1}{2}', colValue, oper != ''?(' ' + oper):'', condValue != ''?(' ' + condValue):'');
+                            }
+                            code.append(')');
+                            if (idx < (content['list'].length - 1)) {
+                                code.append(connector);
+                            }
+                        });
+                        var value = com_util.convertToStr(content.value, content.valueastext);
+                        code.appendFormat(", {0}] = {1}", content.name, value);
                     }
                     break;
                 case FRAME_EDIT_TYPE.ADD_ROW: 
@@ -2436,12 +2914,7 @@ define([
                     code.appendFormat("{0}.loc[{1}] = {2}", tempObj, content.name, values.join(' '));
                     break;
                 case FRAME_EDIT_TYPE.REPLACE:
-                    // if no name entered
-                    if (content.name == '') {
-                        return '';
-                    }
-                    var name = com_util.convertToStr(content.name, content.nameastext);
-                    name = selectedName;
+                    var name = content.name;
                     var tab = content.replacetype;
                     if (tab === 'value') {
                         var replaceStr = new com_String();
@@ -2466,8 +2939,40 @@ define([
                         }
                         code.append(')');
                     } else if (tab === 'condition') {
+                        code.appendFormat("{0}.loc[", tempObj);
+                        content['list'].forEach((obj, idx) => {
+                            let { colName, oper, cond, condAsText, connector } = obj;
+                            code.append('(');
+
+                            let colValue = tempObj;
+                            if (colName && colName != '') {
+                                if (colName == '.index') {
+                                    colValue += colName;
+                                } else {
+                                    colValue += com_util.formatString('[{0}]', colName);
+                                }
+                            }
+                            let condValue = com_util.convertToStr(cond, condAsText);
+                            if (oper == 'contains') {
+                                code.appendFormat('{0}.str.contains({1})', colValue, condValue);
+                            } else if (oper == 'not contains') {
+                                code.appendFormat('~{0}.str.contains({1})', colValue, condValue);
+                            } else if (oper == 'starts with') {
+                                code.appendFormat('{0}.str.startswith({1})', colValue, condValue);
+                            } else if (oper == 'ends with') {
+                                code.appendFormat('{0}.str.endswith({1})', colValue, condValue);
+                            } else if (oper == 'isnull()' || oper == 'notnull()') {
+                                code.appendFormat('{0}.{1}', colValue, oper);
+                            } else {
+                                code.appendFormat('{0}{1}{2}', colValue, oper != ''?(' ' + oper):'', condValue != ''?(' ' + condValue):'');
+                            }
+                            code.append(')');
+                            if (idx < (content['list'].length - 1)) {
+                                code.append(connector);
+                            }
+                        });
                         var value = com_util.convertToStr(content.value, content.valueastext);
-                        code.appendFormat("{0} = {1}", content.subset, value);
+                        code.appendFormat(", {0}] = {1}", content.name, value);
                     }
                     break;
                 case FRAME_EDIT_TYPE.AS_TYPE:
@@ -2518,11 +3023,13 @@ define([
                     code.appendFormat("{0} = {1}.fillna(", subsetObjStr, subsetObjStr);
                     if (content['method'] == 'value') {
                         code.append(com_util.convertToStr(content['value'], content['valueastext']));
-                    } else {
+                    } else if (content['method'] === 'ffill' || content['method'] === 'bfill') {
                         code.appendFormat("method='{0}'", content['method']);
                         if (content['limit'] && content['limit'] !== '') {
                             code.appendFormat(", limit={0}", content['limit']);
                         }
+                    } else {
+                        code.appendFormat("{0}.{1}()", subsetObjStr, content['method']);
                     }
                     code.append(')');
                     break;
@@ -2612,9 +3119,9 @@ define([
                                         // add column
                                         // LAB: img to url
                                         // table.appendFormatLine('<th class="{0}"><img src="{1}"/></th>', VP_FE_ADD_COLUMN, com_Const.IMAGE_PATH + 'plus.svg');
-                                        // if (colLevIdx === 0) {
-                                        //     table.appendFormatLine('<th class="{0}"><div class="{1}"></div></th>', VP_FE_ADD_COLUMN, 'vp-icon-plus');
-                                        // }
+                                        if (colLevIdx === 0) {
+                                            table.appendFormatLine('<th class="{0}"><div class="{1}"></div></th>', VP_FE_ADD_COLUMN, 'vp-icon-plus');
+                                        }
                         
                                         table.appendLine('</tr>');
                                     }
@@ -2630,7 +3137,7 @@ define([
                                                                 , colCode, FRAME_AXIS.COLUMN, col.type, col.label, VP_FE_TABLE_COLUMN, colClass, col.label);
                                     });
                                     // // add column
-                                    // table.appendFormatLine('<th class="{0}"><div class="{1}"></div></th>', VP_FE_ADD_COLUMN, 'vp-icon-plus');
+                                    table.appendFormatLine('<th class="{0}"><div class="{1}"></div></th>', VP_FE_ADD_COLUMN, 'vp-icon-plus');
                     
                                     table.appendLine('</tr>');
                                 }
@@ -2722,6 +3229,11 @@ define([
                                 ]
                                 var replacedCode = codeStr.replaceAll(that.state.tempObj, that.state.returnObj);
                                 that.setPreview(replacedCode);
+                            }
+
+                            // if add column, go to the right position
+                            if (that.state.popup.type === FRAME_EDIT_TYPE.ADD_COL) {
+                                $(that.wrapSelector('.vp-fe-add-column'))[0].scrollIntoView();
                             }
                             
                             // if scrollPos is saved, go to the position
@@ -2848,7 +3360,8 @@ define([
 
         FILL_NA: 13,
         DROP_NA: 4,
-        DROP_OUT: 11, 
+        FILL_OUT: 18, 
+        DROP_OUT: 11,
         DROP_DUP: 5,
 
         SHOW: 99
