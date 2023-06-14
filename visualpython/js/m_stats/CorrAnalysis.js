@@ -147,10 +147,10 @@ define([
                 code.appendLine("    for j, col2 in enumerate(vp_df.columns):");
                 code.appendLine("        if i >= j: continue");
                 code.appendLine("        if pd.api.types.is_numeric_dtype(vp_df[col1]) and pd.api.types.is_numeric_dtype(vp_df[col2]):");
-                code.appendFormatLine("        _res = vp_confidence_interval_corr(vp_df[col1], vp_df[col2], method='{0}')", corrType);
-                code.appendLine("        _df_t = pd.DataFrame(data={'Variable1':col1,'Variable2':col2,'N':vp_df[col1].size,'Correlation coefficient':_res[0],");
+                code.appendFormatLine("            _res = vp_confidence_interval_corr(vp_df[col1], vp_df[col2], method='{0}')", corrType);
+                code.appendLine("            _df_t = pd.DataFrame(data={'Variable1':col1,'Variable2':col2,'N':vp_df[col1].size,'Correlation coefficient':_res[0],");
                 code.appendLine("                                   'p-value':_res[1],'Lower(95%)':_res[2],'Upper(95%)':_res[3]}, index=[0])");
-                code.appendLine("        _dfr = pd.concat([_dfr, _df_t]).reset_index(drop=True)");
+                code.appendLine("            _dfr = pd.concat([_dfr, _df_t]).reset_index(drop=True)");
                 code.appendFormatLine("display(Markdown('### Correlation Analysis: {0}'))", corrTypeLabel.replace("'", "\\'"));
                 code.append("display(_dfr)");
             }
