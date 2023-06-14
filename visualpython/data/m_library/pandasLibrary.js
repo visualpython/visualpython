@@ -3656,7 +3656,7 @@ define([
           },
           {
             "name": "path",
-            "label": "file path/variable",
+            "label": "File path/variable",
             "required": true,
             "type": "text"
           }
@@ -3670,7 +3670,7 @@ define([
         "options": [
           {
             "name": "i0",
-            "label": "file path/object",
+            "label": "File path/object",
             "required": true,
             "type": "text",
             "component": [
@@ -6547,6 +6547,7 @@ define([
           {
             "name": "index_col",
             "label": "Column To Use As Index",
+            "type": "text",
             "usePair": true
           },
         ]
