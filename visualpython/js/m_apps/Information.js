@@ -82,7 +82,16 @@ define([
                             \n}, index=['Combination']+${data}.columns.to_list())\
                             \n_duplicated_df", dtype: ['DataFrame', 'Series'], toframe: true },
                         { id: 'unique', label: 'Unique', code: '${data}.unique()', dtype: ['Series'] },
-                        { id: 'value_counts', label: 'Value counts', code: '${data}.value_counts()', dtype: ['DataFrame', 'Series'] },
+                        { id: 'value_counts', label: 'Value counts', code: "_value_counts_dict = {}\
+                        \nfor col in ${data}.columns:\
+                        \n    if pd.api.types.is_numeric_dtype(${data}[col]):\
+                        \n        _value_counts = ${data}[col].value_counts(bins=10, sort=False)\
+                        \n        _value_counts_dict[(col, 'bins')] = list(_value_counts.index) + ['']*(10 - len(_value_counts))\
+                        \n    else:\
+                        \n        _value_counts = ${data}[col].value_counts()\
+                        \n        _value_counts_dict[(col, 'category')] = list(_value_counts.index) + ['']*(10 - len(_value_counts))\
+                        \n    _value_counts_dict[(col, 'count')] = list(_value_counts.values) + ['']*(10 - len(_value_counts))\
+                        \npd.DataFrame(_value_counts_dict)", dtype: ['DataFrame', 'Series'], toframe: true },
                     ]
                 },
                 {
@@ -92,10 +101,10 @@ define([
                     child: [
                         /** checkbox */
                         { id: 'count', label: 'count', code: '${data}.count()' },
-                        { id: 'min', label: 'min', code: '${data}.min()' },
-                        { id: 'max', label: 'max', code: '${data}.max()' },
+                        { id: 'min', label: 'min', code: '${data}.min(numeric_only=True)' },
+                        { id: 'max', label: 'max', code: '${data}.max(numeric_only=True)' },
                         { id: 'quantile', label: 'quantile', code: '${data}.quantile(numeric_only=True)' },
-                        { id: 'sum', label: 'sum', code: '${data}.sum()' },
+                        { id: 'sum', label: 'sum', code: '${data}.sum(numeric_only=True)' },
                         { id: 'mean', label: 'mean', code: '${data}.mean(numeric_only=True)' },
                         { id: 'median', label: 'median', code: '${data}.median(numeric_only=True)' },
                         // { id: 'mad', label: 'mad', code: '${data}.mad(numeric_only=True)' }, // FutureWarning: Deprecated and will be removed
@@ -552,7 +561,7 @@ define([
                                 let childObj = infoObj.child.find(obj=>obj.id === itemId);
                                 statList.push(com_util.formatString("'{0}': {1}", itemId, childObj.code));
                             });
-                            if (currentDtype === 'Series') {
+                            if (currentDtype === 'Series' && selected.length > 0) {
                                 // if multiple stats selected, set series data as dataframe
                                 dataVar = new com_String();
                                 dataVar.appendFormat("{0}[[{1}]]", data, selected.map(col=>col.code).join(','));
@@ -560,6 +569,12 @@ define([
                             }
                             codePattern = com_util.formatString("pd.DataFrame({{0}})", statList.join(','));
                         } else {
+                            if (currentDtype === 'Series' && selected.length > 0) {
+                                // if multiple stats selected, set series data as dataframe
+                                dataVar = new com_String();
+                                dataVar.appendFormat("{0}[[{1}]]", data, selected.map(col=>col.code).join(','));
+                                currentDtype = 'DataFrame';
+                            }
                             let childObj = infoObj.child.find(obj=>obj.id === menuItem[0]);
                             codePattern = childObj.code;
                         }
@@ -570,10 +585,16 @@ define([
                     // only one method selected
                     if (menuItem.length > 0 && infoObj.child) {
                         let childObj = infoObj.child.find(obj=>obj.id === menuItem[0]);
-                        if (childObj.toframe === true && currentDtype === 'Series') {
-                            dataVar = new com_String();
-                            dataVar.appendFormat("{0}[[{1}]]", data, selected.map(col=>col.code).join(','));
-                            currentDtype = 'DataFrame';
+                        if (childObj.toframe === true) {
+                            if (dtype === 'Series') {
+                                dataVar = new com_String();
+                                dataVar.appendFormat("{0}.to_frame()", data);
+                                currentDtype = 'DataFrame';
+                            } else if (currentDtype === 'Series') {
+                                dataVar = new com_String();
+                                dataVar.appendFormat("{0}[[{1}]]", data, selected.map(col=>col.code).join(','));
+                                currentDtype = 'DataFrame';
+                            }
                         }
                         codePattern = childObj.code;
                     } else {
