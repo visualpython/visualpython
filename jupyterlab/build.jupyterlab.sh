@@ -11,14 +11,14 @@
 #=============================================================================
 # Replace Version and Basic Files
 #=============================================================================
-VP_ORG_VER=2.3.6
-VP_NEW_VER=2.3.7
+VP_ORG_VER=2.3.7
+VP_NEW_VER=2.4.0
 
 # update version info
 grep -REil "\"version\": \"${VP_ORG_VER}\"" package.json | xargs sed -i "s/\"version\": \"${VP_ORG_VER//\./\\.}\"/\"version\": \"${VP_NEW_VER}\"/g"
 grep -REil "version = \"${VP_ORG_VER}\"" pyproject.toml | xargs sed -i "s/version = \"${VP_ORG_VER//\./\\.}\"/version = \"${VP_NEW_VER}\"/g"
 grep -REil "current = \"${VP_ORG_VER}\"" pyproject.toml | xargs sed -i "s/current = \"${VP_ORG_VER//\./\\.}\"/current = \"${VP_NEW_VER}\"/g"
-grep -REil ${VP_ORG_VER//\./\\.} ../visualpython/* | xargs sed -i "s/${VP_ORG_VER//\./\\.}/${VP_NEW_VER}/g"
+# grep -REil ${VP_ORG_VER//\./\\.} ../visualpython/* | xargs sed -i "s/${VP_ORG_VER//\./\\.}/${VP_NEW_VER}/g"
 
 # update LICENSE, README.md files
 cp ../LICENSE LICENSE

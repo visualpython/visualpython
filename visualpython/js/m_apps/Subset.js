@@ -26,6 +26,20 @@ define([
 
     /**
      * Subset
+     * ====================================
+     * Special mode
+     * 1. useAsModule : Use subset as module like DataSelector
+     *      - No allocation
+     *      - No run to cell (able to use apply button instead)
+     *      - renders button to target
+     * 2. useInputVariable : Use subset as module but use applied variable
+     *      - No allocation
+     *      - No data selection
+     *      - No run to cell
+     *      - renders button to target
+     * 3. useInputColumns : Use subset as module but use applied columns
+     *      - No allocation
+     *      - No column selection
      */
     class Subset extends PopupComponent {
         _init() {
@@ -39,8 +53,9 @@ define([
             this.targetSelector = this.prop.targetSelector;
             this.pageThis = this.prop.pageThis;
 
+            this.useAsModule = this.prop.useAsModule;
             this.useInputVariable = this.prop.useInputVariable;
-            if (this.useInputVariable) {
+            if (this.useInputVariable === true || this.useAsModule === true) {
                 this.eventTarget = this.targetSelector;
                 this.useCell = false; // show apply button only
             }
@@ -77,6 +92,7 @@ define([
                 useCopy: false,
                 toFrame: false,
                 subsetType: 'loc', // subset / loc / iloc / query
+                returnType: '',
 
                 rowType: 'condition',
                 rowList: [],
@@ -115,6 +131,13 @@ define([
             this.loadStateAfterRender();
             
             // render button
+            if (this.useAsModule) {
+                // render button
+                this.renderButton();
+
+                // hide allocate to
+                $(this.wrapSelector('.' + VP_DS_ALLOCATE_TO)).closest('tr').hide();
+            }
             if (this.useInputVariable) {
                 // set readonly
                 $(this.wrapSelector('.' + VP_DS_PANDAS_OBJECT)).attr('disabled', true);
@@ -175,7 +198,7 @@ define([
             buttonTag.appendFormat('<button type="button" class="{0} {1} {2}">{3}</button>',
                 VP_DS_BTN, this.uuid, 'vp-button', 'Subset');
             if (this.pageThis) {
-                $(this.targetSelector).parent().append(buttonTag.toString());
+                $(buttonTag.toString()).insertAfter($(this.targetSelector));
             }
         }
         renderSubsetType(dataType) {
@@ -563,6 +586,7 @@ define([
         renderColumnConditionList(colList) {
             var tag = new com_String();
             tag.appendFormatLine('<table class="{0}">', VP_DS_CONDITION_TBL);
+            tag.appendLine(this.templateForConditionBox(colList));
             tag.appendLine('<tr>');
             tag.appendFormatLine('<td colspan="4"><button type="button" class="{0} {1}">{2}</button></td>',
                 VP_DS_BUTTON_ADD_CONDITION, 'vp-add-col', '+ Condition');
@@ -743,6 +767,7 @@ define([
                         var varType = JSON.parse(result);
                         that.state.pandasObject = prevValue;
                         that.state.dataType = varType;
+                        that.state.returnType = varType;
                         $(that.wrapSelector('.' + VP_DS_PANDAS_OBJECT_BOX)).replaceWith(function () {
                             return $(com_util.formatString('<div style="display:inline-block"><input class="{0} {1}" value="{2}" disabled /></div>',
                                 'vp-input', VP_DS_PANDAS_OBJECT, prevValue));
@@ -783,6 +808,7 @@ define([
                         $(this.wrapSelector()).data('dtype', item.dtype);
                         that.state.pandasObject = value;
                         that.state.dataType = item.dtype;
+                        that.state.returnType = item.dtype;
                         $(this.wrapSelector()).trigger('change');
                     });
                     variableInput.setNormalFilter(true);
@@ -1161,6 +1187,7 @@ define([
 
                 that.state.pandasObject = varName;
                 that.state.dataType = event.dataType ? event.dataType : that.state.dataType;
+                that.state.returnType = that.state.dataType;
                 that.state.rowList = [];
                 that.state.rowLimit = 10;
                 that.state.columnList = [];
@@ -1813,10 +1840,14 @@ define([
                 if (this.state.colType == 'indexing') {
                     if (this.useInputColumns == true) {
                         colList = this.state.selectedColumns;
-                        if (colList.length == 1) {
-                            colSelection.appendFormat('{0}', colList.toString());
-                        } else {
-                            colSelection.appendFormat('[{0}]', colList.toString());
+                        if (colList.length > 0) {
+                            if (colList.length == 1) {
+                                colSelection.appendFormat('{0}', colList.toString());
+                                this.state.returnType = 'Series';
+                            } else {
+                                colSelection.appendFormat('[{0}]', colList.toString());
+                                this.state.returnType = 'DataFrame';
+                            }
                         }
                     } else {
                         var colTags = $(this.wrapSelector('.' + VP_DS_SELECT_ITEM + '.select-col.added:not(.moving)'));
@@ -1836,11 +1867,14 @@ define([
                                 // to frame
                                 if (this.state.toFrame) {
                                     colSelection.appendFormat('[{0}]', colList.toString());
+                                    this.state.returnType = 'DataFrame';
                                 } else {
                                     colSelection.appendFormat('{0}', colList.toString());
+                                    this.state.returnType = 'Series';
                                 }
                             } else {
                                 colSelection.appendFormat('[{0}]', colList.toString());
+                                this.state.returnType = 'DataFrame';
                             }
     
                         } else {
@@ -1855,31 +1889,34 @@ define([
             }
 
             // use simple selection
-            if (this.state.subsetType == 'subset') {
-                if (rowSelection.toString() != ':' && rowSelection.toString() != '') {
-                    code.appendFormat('[{0}]', rowSelection.toString());
-                }
-                if (colSelection.toString() != ':' && colSelection.toString() != '') {
-                    code.appendFormat('[{0}]', colSelection.toString());
-                }
-            } else if (this.state.subsetType == 'loc') {
-                if (this.state.dataType == 'DataFrame') {
-                    code.appendFormat('.loc[{0}, {1}]', rowSelection.toString(), colSelection.toString());
-                } else {
-                    code.appendFormat('.loc[{0}]', rowSelection.toString());
-                }
-            } else if (this.state.subsetType == 'iloc') {
-                if (this.state.dataType == 'DataFrame') {
-                    code.appendFormat('.iloc[{0}, {1}]', rowSelection.toString(), colSelection.toString());
-                } else {
-                    code.appendFormat('.iloc[{0}]', rowSelection.toString());
-                }
-            } else if (this.state.subsetType == 'query') {
-                if (rowSelection.toString() != ':' && rowSelection.toString() != '') {
-                    code.appendFormat('.query("{0}")', rowSelection.toString());
-                }
-                if (colSelection.toString() != ':' && colSelection.toString() != '') {
-                    code.appendFormat('[{0}]', colSelection.toString());
+            if ((rowSelection.toString() !== ':' && rowSelection.toString() !== '')
+                || (colSelection.toString() !== ':' && colSelection.toString() !== '')) {
+                if (this.state.subsetType == 'subset') {
+                    if (rowSelection.toString() != ':' && rowSelection.toString() != '') {
+                        code.appendFormat('[{0}]', rowSelection.toString());
+                    }
+                    if (colSelection.toString() != ':' && colSelection.toString() != '') {
+                        code.appendFormat('[{0}]', colSelection.toString());
+                    }
+                } else if (this.state.subsetType == 'loc') {
+                    if (this.state.dataType == 'DataFrame') {
+                        code.appendFormat('.loc[{0}, {1}]', rowSelection.toString(), colSelection.toString());
+                    } else {
+                        code.appendFormat('.loc[{0}]', rowSelection.toString());
+                    }
+                } else if (this.state.subsetType == 'iloc') {
+                    if (this.state.dataType == 'DataFrame') {
+                        code.appendFormat('.iloc[{0}, {1}]', rowSelection.toString(), colSelection.toString());
+                    } else {
+                        code.appendFormat('.iloc[{0}]', rowSelection.toString());
+                    }
+                } else if (this.state.subsetType == 'query') {
+                    if (rowSelection.toString() != ':' && rowSelection.toString() != '') {
+                        code.appendFormat('.query("{0}")', rowSelection.toString());
+                    }
+                    if (colSelection.toString() != ':' && colSelection.toString() != '') {
+                        code.appendFormat('[{0}]', colSelection.toString());
+                    }
                 }
             }
 
@@ -1911,9 +1948,11 @@ define([
             if (this.useInputVariable) {
                 this.loadVariables();
                 this.reloadSubsetData();
+            }        
+            if (this.useCell === false) {
                 // show save button only
                 this.setSaveOnlyMode();
-            }        
+            }
             // generate code after displaying page
             // - codemirror can be set after display    
             this.generateCode();
@@ -1924,13 +1963,13 @@ define([
         //====================================================================
 
         hideButton() {
-            if (this.useInputVariable) {
+            if (this.useInputVariable === true || this.useAsModule === true) {
                 $(this.pageThis.wrapSelector('.' + VP_DS_BTN + '.' + this.uuid)).hide();
             }
         }
 
         disableButton() {
-            if (this.useInputVariable) {
+            if (this.useInputVariable === true || this.useAsModule === true) {
                 var buttonEle = $(this.pageThis.wrapSelector('.' + VP_DS_BTN + '.' + this.uuid));
                 if (!buttonEle.hasClass('disabled')) {
                     buttonEle.addClass('disabled');
@@ -1939,12 +1978,12 @@ define([
         }
 
         enableButton() {
-            if (this.useInputVariable) {
+            if (this.useInputVariable === true || this.useAsModule === true) {
                 $(this.pageThis.wrapSelector('.' + VP_DS_BTN + '.' + this.uuid)).removeClass('disabled');
             }
         }
         showButton() {
-            if (this.useInputVariable) {
+            if (this.useInputVariable === true || this.useAsModule === true) {
                 $(this.pageThis.wrapSelector('.' + VP_DS_BTN + '.' + this.uuid)).show();
             }
         }

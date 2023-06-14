@@ -1,0 +1,86 @@
+<!--
+    Project Name    : Visual Python
+    Description     : GUI-based Python code generator
+    File Name       : studentstTest.html
+    Author          : Black Logic
+    Note            : student's t-test
+    License         : GNU GPLv3 with Visual Python special exception
+    Date            : 2023. 05. 16
+    Change Date     : 
+-->
+<body>
+    <div class="vp-grid-box">
+        <select id="testType" class="vp-big-select vp-state">
+            <option value="one-sample">One-sample t-test</option>
+            <option value="two-sample">Independent two-sample t-test</option>
+            <option value="paired-sample">Paired samples t-test</option>
+        </select>
+        <div class="vp-grid-border-box">
+            <div class="vp-grid-box vp-st-option-box">
+                <div class="vp-st-option two-sample vp-grid-col-160">
+                    <label class="vp-orange-text">Input type</label>
+                    <div>
+                        <label><input type="radio" name="inputType" class="vp-state" value="long-data" checked><span>Long data</span></label>
+                        <label><input type="radio" name="inputType" class="vp-state" value="wide-data"><span>Wide data</span></label>
+                    </div>
+                </div>
+                <div class="vp-grid-col-160">
+                    <label for="data" class="vp-orange-text">Data</label>
+                    <div class="vp-flex-gap5">
+                        <input type="text" id="data" class="vp-state vp-input" required/>
+                    </div>
+                </div>
+                <div class="vp-st-option one-sample two-sample-long-data vp-grid-col-160">
+                    <label for="testVariable" class="vp-orange-text">Test variable</label>
+                    <select id="testVariable" class="vp-select vp-state" required></select>
+                </div>
+                <div class="vp-st-option two-sample-long-data vp-grid-col-160">
+                    <label for="groupingVariable" class="vp-orange-text">Grouping variable</label>
+                    <select id="groupingVariable" class="vp-select vp-state" required></select>
+                    <label></label>
+                    <div class="vp-grid-col-95">
+                        <label for="group1">Group 1</label>
+                        <select id="group1" class="vp-select vp-state"></select>
+                        <label for="group2">Group 2</label>
+                        <select id="group2" class="vp-select vp-state"></select>
+                    </div>
+                </div>
+                <div class="vp-st-option two-sample-wide-data vp-grid-col-160">
+                    <label for="testVariable1" class="vp-orange-text">Test variable 1</label>
+                    <select id="testVariable1" class="vp-select vp-state" required></select>
+                    <label for="testVariable2" class="vp-orange-text">Test variable 2</label>
+                    <select id="testVariable2" class="vp-select vp-state" required></select>
+                </div>
+                <div class="vp-st-option paired-sample vp-grid-col-160">
+                    <label for="pairedVariable1" class="vp-orange-text">Paired variable 1</label>
+                    <select id="pairedVariable1" class="vp-select vp-state" required></select>
+                    <label for="pairedVariable2" class="vp-orange-text">Paired variable 2</label>
+                    <select id="pairedVariable2" class="vp-select vp-state" required></select>
+                </div>
+                <div class="vp-st-option one-sample vp-grid-col-160">
+                        <label for="testValue" class="vp-orange-text">Test value</label>
+                        <input type="number" id="testValue" class="vp-state vp-input" required/>
+                        <label></label>
+                        <div>
+                            <label class="vp-orange-text vp-italic">NOTE:&nbsp;</label><label class="vp-gray-text vp-italic">Expected value in null hypothesis.</label>
+                        </div>
+                </div>
+                <hr style="margin: 5px 0;"/>
+                <div class="vp-st-option one-sample two-sample paired-sample vp-grid-col-160">
+                    <label for="alterHypo" class="vp-orange-text">Alternative hypothesis</label>
+                    <select id="alterHypo" class="vp-select vp-state" required>
+                        <option value="two-sided" selected>two-sided</option>
+                        <option value="less">less</option>
+                        <option value="greater">greater</option>
+                    </select>
+                </div>
+                <div class="vp-st-option one-sample paired-sample vp-grid-col-160">
+                    <label for="confInt" class="vp-orange-text">Confidence interval</label>
+                    <div>
+                        <input type="number" id="confInt" class="vp-state vp-input" value="95" required/> %
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

@@ -5,7 +5,7 @@
     grid-template-columns: calc(47% - 15px) 50px calc(47% - 15px);
     grid-auto-rows: 100%;
 }
-.vp-cs-select-search {
+.vp-cs-select-container input.vp-cs-select-search {
     width: 100%;
 }
 .vp-cs-select-search::after {

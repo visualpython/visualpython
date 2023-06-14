@@ -1,0 +1,82 @@
+<!--
+    Project Name    : Visual Python
+    Description     : GUI-based Python code generator
+    File Name       : regression.html
+    Author          : Black Logic
+    Note            : equal variance test
+    License         : GNU GPLv3 with Visual Python special exception
+    Date            : 2023. 05. 31
+    Change Date     : 
+-->
+<body>
+    <div class="vp-grid-box">
+        <select id="testType" class="vp-big-select vp-state">
+            <option value="simple">Simple linear regression</option>
+            <option value="multiple">Multiple linear regression</option>
+            <option value="hierarchical">Hierarchical linear regression</option>
+            <option value="moderated">Moderated linear regression</option>
+            <option value="mediated">Mediated linear regression</option>
+            <option value="dummy">Dummy variable linear regression</option>
+        </select>
+        <div class="vp-grid-border-box">
+            <div class="vp-grid-box">
+                <div class="vp-grid-col-160">
+                    <label for="data" class="vp-orange-text">Data</label>
+                    <div class="vp-flex-gap5">
+                        <input type="text" id="data" class="vp-state vp-input" required/>
+                    </div>
+                    <label for="dependent" class="vp-orange-text">Dependent variable</label>
+                    <select id="dependent" class="vp-select vp-state" required></select>
+                    <label for="independent" class="vp-orange-text">Independent variable</label>
+                    <div>
+                        <div class="vp-st-option simple moderated mediated">
+                            <select id="independent" class="vp-select vp-state" required></select>
+                        </div>
+                        <div id="independentBox" class="h150 vp-st-option multiple hierarchical dummy"></div>
+                    </div>
+                </div>
+                <div class="vp-st-option moderated vp-grid-col-160">
+                    <label for="moderated" class="vp-orange-text">Moderated variable</label>
+                    <select id="moderated" class="vp-select vp-state" required></select>
+                </div>
+                <div class="vp-st-option mediated vp-grid-col-160">
+                    <label for="mediated" class="vp-orange-text">Mediated variable</label>
+                    <select id="mediated" class="vp-select vp-state" required></select>
+                </div>
+                <div class="vp-st-option moderated">
+                    <label><input type="checkbox" id="meanCentering" class="vp-state" checked><span>Mean Centering</span></label>
+                </div>
+                <div class="vp-st-option mediated">
+                    <label><input type="checkbox" id="sobelTest" class="vp-state" checked><span>Sobel Test</span></label>
+                </div>
+                <div class="vp-st-option multiple vp-grid-col-160">
+                    <label for="method" class="vp-orange-text">Method</label>
+                    <select id="method" class="vp-select vp-state">
+                        <option value="enter" selected>Enter</option>
+                        <option value="stepwise">Stepwise</option>
+                        <option value="backward">Backward</option>
+                        <option value="forward">Forward</option>
+                    </select>
+                </div>
+                <div class="vp-st-option dummy vp-grid-col-160">
+                    <label for="method">Categorical variables</label>
+                    <div class="vp-categorical-box">
+                    </div>
+                </div>
+                <div class="vp-st-option multiple hierarchical moderated mediated dummy">
+                    <hr style="margin: 5px 0;"/>
+                    <label><input type="checkbox" id="multiCollinearity" class="vp-state" checked><span>Multi-collinearity statistics</span></label>
+                </div>
+            </div>
+        </div>
+        <div class="vp-grid-border-box">
+            <label>Residual</label>
+            <div class="vp-grid-box vp-grid-col-p50">
+                <label><input type="checkbox" id="statistics" class="vp-state"><span>Residual statistics</span></label>
+                <label><input type="checkbox" id="normTest" class="vp-state" checked><span>Residual Normality test</span></label>
+                <label><input type="checkbox" id="histogram" class="vp-state" checked><span>Residual histogram</span></label>
+                <label><input type="checkbox" id="scatterplot" class="vp-state" checked><span>Residual scatterplot</span></label>
+            </div>
+        </div>
+    </div>
+</body>

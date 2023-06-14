@@ -1,18 +1,15 @@
 /* DataSelector target*/
 .vp-ds-box {
-    display: inline-block;
+    display: inline-flex;
 }
 .vp-ds-filter {
     position: relative;
-    /* width: 20px;
-    height: 20px; */
-    right: 25px;
+    right: 20px;
     cursor: pointer;
-    /* LAB: img to background-image */
-    display: inline-block;
     background: center / contain no-repeat url(../../img/filter.svg);
     width: 12px;
     height: 12px;
+    top: 9px;
 }
 .vp-ds-box input.vp-ds-target {
     padding-right: 23px;

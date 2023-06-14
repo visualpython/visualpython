@@ -148,6 +148,10 @@ define([
                 // LAB: img to url
                 // page.appendFormatLine('<img src="{0}">', com_Const.IMAGE_PATH + apps.icon);
                 page.appendFormatLine('<div class="apps-icon {0}"></div>', id);
+                // Exception for title alignment
+                if (id === 'stats_studentstTest') {
+                    name = "Student's<br/>t-test";
+                }
                 page.appendFormatLine('<div class="vp-menuitem-apps-name">{0}</div>', name);
                 page.append('</div>');
             } else {

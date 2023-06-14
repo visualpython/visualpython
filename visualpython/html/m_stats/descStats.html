@@ -1,0 +1,99 @@
+<!--
+    Project Name    : Visual Python
+    Description     : GUI-based Python code generator
+    File Name       : descStats.html
+    Author          : Black Logic
+    Note            : Descriptive Statistics
+    License         : GNU GPLv3 with Visual Python special exception
+    Date            : 2023. 05. 31
+    Change Date     : 
+-->
+<body>
+    <div class="vp-grid-box">
+        <div class="vp-grid-border-box">
+            <div class="vp-grid-box vp-grid-col-130">
+                <label for="data" class="vp-orange-text">Data</label>
+                <div class="vp-flex-gap5">
+                    <input type="text" id="data" class="vp-state vp-input" required/>
+                </div>
+                <label>Variable</label>
+                <div id="variable" class="h150"></div>
+            </div>
+        </div>
+        <div class="vp-grid-border-box">
+            <div class="vp-grid-col-130">
+                <label>Central tendency</label>
+                <div class="vp-flex-gap10">
+                    <label><input type="checkbox" id="mean" class="vp-state" checked><span>Mean</span></label>
+                    <label><input type="checkbox" id="median" class="vp-state"><span>Median</span></label>
+                    <label><input type="checkbox" id="mode" class="vp-state"><span>Mode</span></label>
+                    <label><input type="checkbox" id="sum" class="vp-state" checked><span>Sum</span></label>
+                </div>
+            </div>
+            <hr style="margin: 5px 0;"/>
+            <div class="vp-grid-col-130">
+                <label>Dispersion</label>
+                <div class="vp-grid-box">
+                    <div class="vp-flex-gap10">
+                        <label><input type="checkbox" id="min" class="vp-state"><span>Minimum</span></label>
+                        <label><input type="checkbox" id="max" class="vp-state"><span>Maximum</span></label>
+                        <label><input type="checkbox" id="range" class="vp-state"><span>Range</span></label>
+                    </div>
+                    <div class="vp-flex-gap10">
+                        <label><input type="checkbox" id="std" class="vp-state" checked><span>Standard deviation(Std. deviation)</span></label>
+                        <label><input type="checkbox" id="variance" class="vp-state" checked><span>Variance</span></label>
+                    </div>
+                    <label><input type="checkbox" id="semean" class="vp-state"><span>Standard Error of the Mean (S.E. mean)</span></label>
+                </div>
+            </div>
+            <hr style="margin: 5px 0;"/>
+            <div class="vp-grid-col-130">
+                <label>Distribution</label>
+                <div class="vp-flex-gap10">
+                    <label><input type="checkbox" id="skew" class="vp-state"><span>Skewness</span></label>
+                    <label><input type="checkbox" id="kurtosis" class="vp-state"><span>Kurtosis</span></label>
+                </div>
+            </div>
+            <hr style="margin: 5px 0;"/>
+            <div class="vp-grid-col-130">
+                <label>Percentile values</label>
+                <div class="vp-grid-box">
+                    <label><input type="checkbox" id="quantile" class="vp-state" checked><span>Quantile</span></label>
+                    <div class="vp-grid-box">
+                        <div class="vp-flex-gap5">
+                            <label><input type="checkbox" id="usePercentile" class="vp-state"><span>Percentile</span></label>
+                            <input id="percentile" type="number" class="vp-input m vp-state" min="0" max="100" step="5" disabled/><button id="addPercentile" class="vp-button" disabled>Add</button>
+                        </div>
+                        <div class="vp-percentile-box vp-scrollbar disabled">
+                            
+                        </div>
+                    </div>
+                </div>    
+            </div>
+        </div>
+        <div class="vp-grid-border-box">
+            <label>Frequency table</label>
+            <div class="vp-grid-box">
+                <div class="vp-flex-gap10">
+                    <label><input type="checkbox" id="frequency" class="vp-state" checked><span>Frequency</span></label>
+                    <label><input type="checkbox" id="percent" class="vp-state" checked><span>Percent</span></label>
+                    <label><input type="checkbox" id="validPercent" class="vp-state" checked><span>Valid percent</span></label>
+                    <label><input type="checkbox" id="cumulativePercent" class="vp-state" checked><span>Cumulative percent</span></label>
+                </div>
+                <hr style="margin: 5px 0;"/>
+                <div class="vp-flex-gap10">
+                    <label>Number of unique values</label>
+                    <input id="noUniqVals" type="number" class="vp-input m vp-state" value="10"/>
+                </div>
+            </div>
+        </div>
+        <div class="vp-grid-border-box">
+            <label>Display</label>
+            <div class="vp-grid-box">
+                <div><label><input type="checkbox" id="histogram" class="vp-state" checked><span>Histogram</span></label></div>
+                <div><label><input type="checkbox" id="scatterMatrix" class="vp-state" checked><span>Scatter matrix</span></label></div>
+                <div><label><input type="checkbox" id="boxplot" class="vp-state" checked><span>Boxplot</span></label></div>
+            </div>
+        </div>
+    </div>
+</body>

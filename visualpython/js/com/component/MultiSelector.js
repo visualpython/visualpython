@@ -45,6 +45,13 @@ define([
     //========================================================================
     // [CLASS] MultiSelector
     //========================================================================
+    /**
+     * MultiSelector
+     * Usage
+     * this._columnSelector = new MultiSelector(this.wrapSelector('#multi-selector-id'),
+                        { mode: 'columns', parent: [data], selectedList: this.state.indexing, allowAdd: true }
+                    );
+     */
     class MultiSelector extends Component {
 
         /**
@@ -62,19 +69,31 @@ define([
             // configuration
             this.config = this.state;
 
-            var { mode, type, parent, dataList=[], selectedList=[], includeList=[], excludeList=[], allowAdd=false } = this.config;
+            var { 
+                mode, type, parent, 
+                dataList=[], selectedList=[], includeList=[], excludeList=[], 
+                allowAdd=false, showDescription=true,
+                change=null
+            } = this.config;
             this.mode = mode;   // variable / columns / index / ndarray0 / ndarray1 / methods / data(given data)
             this.parent = parent;
             this.selectedList = selectedList;
             this.includeList = includeList;
             this.excludeList = excludeList;
-            this.allowAdd = allowAdd;
+            this.allowAdd = allowAdd;                    // allow adding new item
+            this.showDescription = showDescription; // show description on the top of the box
+
+            this.change = change;  // function (type=('add'|'remove'), list=[])
 
             this.dataList = dataList;   // [ { value, code, type }, ... ]
             this.pointer = { start: -1, end: -1 };
 
             var that = this;
 
+            if (parent === '') {
+                this._executeCallback([]);
+                return;
+            }
             switch (mode) {
                 case 'columns':
                     this._getColumnList(parent, function(dataList) {
@@ -238,6 +257,7 @@ define([
             $(this.frameSelector).html(this.render());
             this.bindEvent();
             this.bindDraggable();
+            this._bindItemClickEvent();
         }
 
         getDataList() {
@@ -260,7 +280,9 @@ define([
             var that = this;
 
             var tag = new com_String();
-            tag.appendLine('<label>Drag-and-drop columns to right to select.</label>');
+            if (this.showDescription === true) {
+                tag.appendLine('<label>Drag-and-drop columns to right to select.</label>');
+            }
             tag.appendFormatLine('<div class="{0} {1}">', APP_SELECT_CONTAINER, this.uuid);
             // select - left
             tag.appendFormatLine('<div class="{0}">', APP_SELECT_LEFT);
@@ -275,6 +297,7 @@ define([
                 $(this.wrapSelector()).val(value);
                 $(this.wrapSelector()).trigger('change');
             });
+            vpSearchSuggest.setAutoFocus(false);
             vpSearchSuggest.setNormalFilter(true);
             tag.appendLine(vpSearchSuggest.toTagString());
             tag.appendFormatLine('<i class="fa fa-search search-icon"></i>')
@@ -378,6 +401,7 @@ define([
 
                 // draggable
                 that.bindDraggable();
+                that._bindItemClickEvent();
             });
 
             // item indexing
@@ -444,6 +468,8 @@ define([
                 $(that.wrapSelector('.' + APP_SELECT_ITEM)).addClass('added');
                 $(that.wrapSelector('.' + APP_SELECT_ITEM + '.selected')).removeClass('selected');
                 that.pointer = { start: -1, end: -1 };
+
+                that.change && that.change('add', that.getDataList());
             });
 
             // item indexing - add
@@ -456,6 +482,8 @@ define([
                 $(that.wrapSelector('.' + APP_SELECT_ITEM + selector)).addClass('added');
                 $(that.wrapSelector('.' + APP_SELECT_ITEM + selector)).removeClass('selected');
                 that.pointer = { start: -1, end: -1 };
+
+                that.change && that.change('add', that.getDataList());
             });
 
             // item indexing - del
@@ -476,6 +504,8 @@ define([
                 selectedTag.removeClass('added');
                 selectedTag.removeClass('selected');
                 that.pointer = { start: -1, end: -1 };
+
+                that.change && that.change('remove', that.getDataList());
             });
 
             // item indexing - delete all
@@ -493,12 +523,16 @@ define([
                 $(that.wrapSelector('.' + APP_SELECT_ITEM)).removeClass('added');
                 $(that.wrapSelector('.' + APP_SELECT_ITEM + '.selected')).removeClass('selected');
                 that.pointer = { start: -1, end: -1 };
+
+                that.change && that.change('remove', that.getDataList());
             });
 
             // add new item
             $(this.wrapSelector('.vp-cs-add-item-btn')).on('click', function(event) {
                 let newItemName = $(that.wrapSelector('.vp-cs-add-item-name')).val();
                 that._addNewItem(newItemName);
+
+                that.change && that.change('add', that.getDataList());
             });
             // add new item (by pushing enter key)
             $(this.wrapSelector('.vp-cs-add-item-name')).on('keyup', function(event) {
@@ -508,7 +542,80 @@ define([
                 if (keycode == 13) { // enter
                     let newItemName = $(this).val();
                     that._addNewItem(newItemName);
+
+                    that.change && that.change('add', that.getDataList());
                 }
+            });
+
+            this._bindItemClickEvent();
+        }
+
+        _bindItemClickEvent() {
+            let that = this;
+            // item indexing
+            $(this.wrapSelector('.' + APP_SELECT_ITEM)).off('click');
+            $(this.wrapSelector('.' + APP_SELECT_ITEM)).on('click', function(event) {
+                var dataIdx = $(this).attr('data-idx');
+                var idx = $(this).index();
+                var added = $(this).hasClass('added'); // right side added item?
+                var selector = '';
+
+                // remove selection for select box on the other side
+                if (added) {
+                    // remove selection for left side
+                    $(that.wrapSelector('.' + APP_SELECT_ITEM + ':not(.added)')).removeClass('selected');
+                    // set selector
+                    selector = '.added';
+                } else {
+                    // remove selection for right(added) side
+                    $(that.wrapSelector('.' + APP_SELECT_ITEM + '.added')).removeClass('selected');
+                    // set selector
+                    selector = ':not(.added)';
+                }
+
+                if (vpEvent.keyManager.keyCheck.ctrlKey) {
+                    // multi-select
+                    that.pointer = { start: idx, end: -1 };
+                    $(this).toggleClass('selected');
+                } else if (vpEvent.keyManager.keyCheck.shiftKey) {
+                    // slicing
+                    var startIdx = that.pointer.start;
+                    
+                    if (startIdx == -1) {
+                        // no selection
+                        that.pointer = { start: idx, end: -1 };
+                    } else if (startIdx > idx) {
+                        // add selection from idx to startIdx
+                        var tags = $(that.wrapSelector('.' + APP_SELECT_ITEM + selector));
+                        for (var i = idx; i <= startIdx; i++) {
+                            $(tags[i]).addClass('selected');
+                        }
+                        that.pointer = { start: startIdx, end: idx };
+                    } else if (startIdx <= idx) {
+                        // add selection from startIdx to idx
+                        var tags = $(that.wrapSelector('.' + APP_SELECT_ITEM + selector));
+                        for (var i = startIdx; i <= idx; i++) {
+                            $(tags[i]).addClass('selected');
+                        }
+                        that.pointer = { start: startIdx, end: idx };
+                    }
+                } else {
+                    // single-select
+                    that.pointer = { start: idx, end: -1 };
+                    // un-select others
+                    $(that.wrapSelector('.' + APP_SELECT_ITEM + selector)).removeClass('selected');
+                    // select this
+                    $(this).addClass('selected');
+                }
+            });
+
+            // item deleting (manually added item only)
+            $(this.wrapSelector('.vp-cs-del-item')).off('click');
+            $(this.wrapSelector('.vp-cs-del-item')).on('click', function(event) {
+                $(this).closest('.' + APP_SELECT_ITEM).remove();
+                that.pointer = { start: -1, end: -1 };
+
+                that.change && that.change('remove', that.getDataList());
             });
         }
 
@@ -613,6 +720,7 @@ define([
                     if ($(this).hasClass('right')) {
                         // add
                         $(dropGroup).addClass('added');
+                        that.change && that.change('add', that.getDataList());
                     } else {
                         // del
                         $(dropGroup).removeClass('added');
@@ -620,6 +728,7 @@ define([
                         $(droppedOn).find('.' + APP_SELECT_ITEM).sort(function(a, b) {
                             return ($(b).data('idx')) < ($(a).data('idx')) ? 1 : -1;
                         }).appendTo( $(droppedOn) );
+                        that.change && that.change('remove', that.getDataList());
                     }
                     // remove selection
                     $(droppableQuery).find('.selected').removeClass('selected');
