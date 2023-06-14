@@ -17,6 +17,7 @@ define([
             this._placeholder = "Select variable";
             this._compID = "";
             this._additionalClass = "";
+            this._autoFocus = true;
             this._normalFilter = true;
             this._suggestList = new Array();
             this._selectEvent = undefined;
@@ -47,6 +48,13 @@ define([
          */
         setComponentID(compID = "") {
             this._compID = compID;
+        }
+        /**
+         * set auto focus on enter
+         * @param {boolean} autoFocus 
+         */
+        setAutoFocus(autoFocus = true) {
+            this._autoFocus = autoFocus;
         }
         /**
          * normal filter usage
@@ -118,7 +126,7 @@ define([
                 $(com_util.formatString(".{0}", that.uuid)).removeClass('suggest-input-uninit').addClass('suggest-input');
 
                 $(com_util.formatString(".{0}", that.uuid)).autocomplete({
-                    autoFocus: true,
+                    autoFocus: that._autoFocus,
                     minLength: minLength,
                     source: function (req, res) {
                         var srcList = typeof that._suggestList == "function" ? that._suggestList() : that._suggestList;
