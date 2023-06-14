@@ -54,10 +54,12 @@ define([
                 pageThis: null, // target's page object
                 id: '',         // target id
                 value: null,    // pre-defined value
+                withPopup: true, // with filter button to show simple subset popup
                 finish: null,   // callback after selection (value, dtype)
                 select: null,   // callback after selection from suggestInput (value, dtype)
                 allowDataType: null, // list of allowed data types
                 // additional options
+                boxClasses: '',
                 classes: '',
                 attrs: '',
                 placeholder: 'Select variable',
@@ -95,7 +97,7 @@ define([
             }
 
             this._target = null;
-            if (this.prop.pageThis) {
+            if (this.prop.pageThis && this.prop.id !== '') {
                 this._target = this.prop.pageThis.wrapSelector('#' + this.prop.id);
             }
 
@@ -183,7 +185,7 @@ define([
                     autoFocus: true,
                     minLength: 0,
                     source: function (req, res) {
-                        var srcList = varList;
+                        var srcList = varList.filter(obj => that.prop.allowDataType.includes(obj.dtype));
                         var returlList = new Array();
                         for (var idx = 0; idx < srcList.length; idx++) {
                             // srcList as object array
@@ -358,20 +360,35 @@ define([
         templateForTarget() {
             let value = this.prop.value;
             if (value == undefined) {
-                value = this.prop.pageThis.state[this.prop.id] || '';
+                if (this.prop.id !== '') {
+                    value = this.prop.pageThis.state[this.prop.id] || '';
+                } else {
+                    value = '';
+                }
             }
-            return `
-                <div class="vp-ds-box vp-ds-box-${this.uuid} vp-ds-uninit">
-                    <input type="text" class="vp-ds-target vp-input vp-state ${this.prop.classes}" 
-                            ${this.prop.attrs} 
-                            id="${this.prop.id}" value="${value}" 
-                            placeholder="${this.prop.placeholder}" ${this.prop.required?'required="required"':''}/>
-                    <span class="vp-ds-filter">
-                    <!-- LAB: img to url -->
-                    <!-- <img src="${com_Const.IMAGE_PATH}filter.svg"/> -->
-                    </span>
-                </div>
-            `;
+            if (this.prop.withPopup === true) {
+                return `
+                    <div class="vp-ds-box vp-ds-box-${this.uuid} vp-ds-uninit ${this.prop.boxClasses}">
+                        <input type="text" class="vp-ds-target vp-input vp-state ${this.prop.classes}" 
+                                ${this.prop.attrs} 
+                                id="${this.prop.id}" value="${value}" 
+                                placeholder="${this.prop.placeholder}" ${this.prop.required?'required="required"':''}/>
+                        <span class="vp-ds-filter">
+                        <!-- LAB: img to url -->
+                        <!-- <img src="${com_Const.IMAGE_PATH}filter.svg"/> -->
+                        </span>
+                    </div>
+                `;
+            } else {
+                return `
+                    <div class="vp-ds-box vp-ds-box-${this.uuid} vp-ds-uninit ${this.prop.boxClasses}">
+                        <input type="text" class="vp-ds-target vp-input vp-state ${this.prop.classes}" 
+                                ${this.prop.attrs} 
+                                id="${this.prop.id}" value="${value}" 
+                                placeholder="${this.prop.placeholder}" ${this.prop.required?'required="required"':''}/>
+                    </div>
+                `;
+            }
         }
 
         templateForMultiSelector() {
