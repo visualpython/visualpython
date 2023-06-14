@@ -1,0 +1,50 @@
+<!--
+    Project Name    : Visual Python
+    Description     : GUI-based Python code generator
+    File Name       : normTest.html
+    Author          : Black Logic
+    Note            : normality test
+    License         : GNU GPLv3 with Visual Python special exception
+    Date            : 2023. 05. 16
+    Change Date     : 
+-->
+<body>
+    <div class="vp-grid-box">
+        <select id="testType" class="vp-big-select vp-state">
+            <option value="shapiro-wilk">Shapiro-Wilk test</option>
+            <option value="anderson-darling">Anderson-Darling test</option>
+            <option value="kolmogorov-smirnov">Kolmogorov-Smirnov test</option>
+            <option value="dagostino-pearson">D'Agostino and Pearson's test</option>
+            <option value="jarque-bera">Jarque-Bera test</option>
+        </select>
+        <div class="vp-grid-border-box">
+            <div class="vp-grid-box vp-st-option-box">
+                <div class="vp-grid-col-160">
+                    <label for="data0" class="vp-orange-text">Data</label>
+                    <div class="vp-flex-gap5">
+                        <input type="text" id="data0" class="vp-state vp-input" required/>
+                    </div>
+                    <label></label>
+                    <select id="var0" class="vp-state vp-select" required>
+                    </select>
+                </div>
+                <div class="vp-st-option kolmogorov-smirnov vp-grid-col-160">
+                    <label for="alterHypo" class="vp-orange-text">Alternative hypothesis</label>
+                    <select id="alterHypo" class="vp-select vp-state" required>
+                        <option value="two-sided" selected>two-sided</option>
+                        <option value="less">less</option>
+                        <option value="greater">greater</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="vp-grid-border-box">
+            <label for="histogram">Display</label>
+            <div class="vp-grid-box">
+                <label><input type="checkbox" id="histogram" class="vp-state"><span>Histogram</span></label>
+                <label><input type="checkbox" id="boxplot" class="vp-state"><span>Boxplot</span></label>
+                <label><input type="checkbox" id="qqplot" class="vp-state" checked><span>Q-Q Plot</span></label>
+            </div>
+        </div>
+    </div>
+</body>

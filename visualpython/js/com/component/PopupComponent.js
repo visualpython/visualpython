@@ -288,6 +288,13 @@ define([
             }
         }
 
+        addCheckModules(module) {
+            if (this.config.checkModules.includes(module)) {
+                return ;
+            }
+            this.config.checkModules.push(module);
+        }
+
         _bindEvent() {
             var that = this;
             // Close popup event
@@ -307,6 +314,7 @@ define([
             });
             // Toggle operation (minimize)
             $(this.wrapSelector('.vp-popup-toggle')).on('click', function(evt) {
+                evt.stopPropagation();
                 $(that.eventTarget).trigger({
                     type: 'close_option_page',
                     component: that
@@ -704,7 +712,37 @@ define([
         }
 
         loadState() {
-            /** Implementation needed */
+            vpLog.display(VP_LOG_TYPE.DEVELOP, this.state);   
+
+            let that = this;
+            Object.keys(this.state).forEach(key => {
+                if (key && key !== '' && key !== 'config') {
+                    let tag = $(that.wrapSelector('#' + key) + ', ' + that.wrapSelector('input[name="' + key + '"]'));
+                    let tagName = $(tag).prop('tagName');
+                    let savedValue = that.state[key];
+                    switch(tagName) {
+                        case 'INPUT':
+                            let inputType = $(tag).prop('type');
+                            if (inputType === 'text' || inputType === 'number' || inputType === 'hidden') {
+                                $(tag).val(savedValue);
+                                break;
+                            }
+                            if (inputType === 'checkbox') {
+                                $(tag).prop('checked', savedValue);
+                                break;
+                            }
+                            if (inputType === 'radio') {
+                                $(tag).filter(`[value="${savedValue}"]`).prop('checked', true);
+                            }
+                            break;
+                        case 'TEXTAREA':
+                        case 'SELECT':
+                        default:
+                            $(tag).val(savedValue);
+                            break;
+                    }
+                }
+            });
         }
 
         saveState() {
@@ -726,6 +764,15 @@ define([
                     let inputType = $(tag).prop('type');
                     if (inputType == 'checkbox') {
                         newValue = $(tag).prop('checked');
+                    } else if (inputType == 'radio') {
+                        let radioGroup = $(tag).prop('name');
+                        let checked = $(tag).prop('checked');
+                        if (checked === true) {
+                            id = radioGroup;
+                            newValue = $(tag).val();
+                        } else {
+                            return ;
+                        }
                     } else {
                         // inputType == 'text' || inputType == 'number' || inputType == 'hidden' || inputType == 'color' || inputType == 'range'
                         newValue = $(tag).val();
@@ -780,7 +827,7 @@ define([
          */
         checkRequiredOption() {
             let requiredFilled = true;
-            let requiredTags = $(this.wrapSelector('input[required=true]') + ',' + this.wrapSelector('input[required=required]'));
+            let requiredTags = $(this.wrapSelector('input[required=true]:visible') + ',' + this.wrapSelector('input[required=required]:visible'));
 
             vpLog.display(VP_LOG_TYPE.DEVELOP, 'checkRequiredOption', this, requiredTags);
 
@@ -812,9 +859,9 @@ define([
                         let checkedList = JSON.parse(result);
                         let executeList = [];
                         checkedList && checkedList.forEach((mod, idx) => {
-                            if (mod == false) {
+                            if (mod === false) {
                                 let modInfo = vpConfig.getModuleCode(checkModules[idx]);
-                                if (modInfo) {
+                                if (modInfo && modInfo?.code !== '') {
                                     executeList.push(modInfo.code);
                                 }
                             }
@@ -908,7 +955,7 @@ define([
         save() {
             if (this.prop.finish && typeof this.prop.finish == 'function') {
                 var code = this.generateCode();
-                this.prop.finish(code);
+                this.prop.finish(code, this.state);
             }
             $(this.eventTarget).trigger({
                 type: 'apply_option_page', 
@@ -943,9 +990,25 @@ define([
             $(this.wrapSelector()).show();
         }
 
+        showInstallButton() {
+            $(this.wrapSelector('#popupInstall')).show();
+        }
+
+        showImportButton() {
+            $(this.wrapSelector('#popupImport')).show();
+        }
+
         hide() {
             this.taskItem && this.taskItem.blurItem();
             $(this.wrapSelector()).hide();
+        }
+
+        hideInstallButton() {
+            $(this.wrapSelector('#popupInstall')).hide();
+        }
+
+        hideImportButton() {
+            $(this.wrapSelector('#popupImport')).hide();
         }
 
         isHidden() {

@@ -42,7 +42,9 @@ define([
                 'csv': 'csv',
                 'excel': 'xlsx',
                 'json': 'json',
-                'pickle': ''
+                'pickle': '',
+                'sas': '', // xport or sas7bdat
+                'spss': ''
             }
             
             this.package = {
@@ -79,10 +81,12 @@ define([
             this.fileState = {
                 'Read': {
                     fileTypeId: {
-                        'csv': 'pd004',
-                        'excel': 'pd123',
-                        'json': 'pd076',
-                        'pickle': 'pd079'
+                        'csv': 'pd_readCsv',
+                        'excel': 'pd_readExcel',
+                        'json': 'pd_readJson',
+                        'pickle': 'pd_readPickle',
+                        'sas': 'pd_readSas',
+                        'spss': 'pd_readSpss'
                     },
                     selectedType: 'csv',
                     package: null,
@@ -93,10 +97,10 @@ define([
                 },
                 'Write': {
                     fileTypeId: {
-                        'csv': 'pd005',
-                        'excel': 'pd124',
-                        'json': 'pd077',
-                        'pickle': 'pd078'
+                        'csv': 'pd_toCsv',
+                        'excel': 'pd_toExcel',
+                        'json': 'pd_toJson',
+                        'pickle': 'pd_toPickle'
                     },
                     selectedType: 'csv',
                     package: null,
@@ -205,6 +209,18 @@ define([
                 // reload
                 that.renderPage(pageType);
                 that._bindEventByType(pageType);
+
+                if (value === 'spss') {
+                    // show install button
+                    that.showInstallButton();
+                    // show install note below File type selection
+                    $(`<tr><td colspan="2">
+                        <label class="vp-orange-text vp-italic">NOTE: </label>
+                        <label class="vp-gray-text vp-italic">pyreadstat package is required to read spss file.</label>
+                    </td></tr>`).insertAfter($(that.wrapSelector('#fileType')).closest('tr'));
+                } else {
+                    that.hideInstallButton();
+                }
             });
     
             // open file navigation
@@ -316,6 +332,13 @@ define([
             this.fileResultState = {
                 ...this.fileState[pageType].fileResultState
             };
+
+            if (selectedType == 'pickle') {
+                // hide additional option box
+                $(this.wrapSelector(prefix + '#vp_optionBox')).closest('.vp-accordian-container').hide();
+            } else {
+                $(this.wrapSelector(prefix + '#vp_optionBox')).closest('.vp-accordian-container').show();
+            }
     
             if (pageType == 'Write') {
                 if (selectedType == 'json') {
@@ -333,7 +356,7 @@ define([
     
             // prepend file type selector
             $(this.wrapSelector(prefix + '#vp_inputOutputBox table tbody')).prepend(
-                $('<tr>').append($(`<td><label for="fileType" class="vp-orange-text">File Type</label></td>`))
+                $('<tr>').append($(`<td><label for="fileType" class="vp-bold vp-orange-text">File Type</label></td>`))
                     .append($('<td><select id="fileType" class="vp-select"></select></td>'))
             );
             var fileTypeList = Object.keys(fileTypeObj);
@@ -397,8 +420,6 @@ define([
                 suggestInput.setPlaceholder('encoding option');
                 return suggestInput.toTagString();
             });
-    
-            
         }
 
         render() {
@@ -418,6 +439,10 @@ define([
             this._bindEventByType('Read');
             this._bindEventByType('Write');
 
+        }
+
+        generateInstallCode() {
+            return [ '!pip install pyreadstat' ];
         }
 
         generateCode() {

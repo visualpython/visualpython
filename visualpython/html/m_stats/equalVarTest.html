@@ -1,0 +1,62 @@
+<!--
+    Project Name    : Visual Python
+    Description     : GUI-based Python code generator
+    File Name       : equalVarTest.html
+    Author          : Black Logic
+    Note            : equal variance test
+    License         : GNU GPLv3 with Visual Python special exception
+    Date            : 2023. 05. 16
+    Change Date     : 
+-->
+<body>
+    <div class="vp-grid-box">
+        <select id="testType" class="vp-big-select vp-state">
+            <option value="bartlett">Bartlett test</option>
+            <option value="levene">Levene test</option>
+            <option value="fligner">Fligner test</option>
+        </select>
+        <div class="vp-grid-border-box">
+            <div class="vp-grid-box">
+                <div class="vp-grid-col-160">
+                    <label class="vp-orange-text">Input type</label>
+                    <div>
+                        <label><input type="radio" name="inputType" class="vp-state" value="long-data" checked><span>Long data</span></label>
+                        <label><input type="radio" name="inputType" class="vp-state" value="wide-data"><span>Wide data</span></label>
+                    </div>
+                    <label for="data" class="vp-orange-text">Data</label>
+                    <div class="vp-flex-gap5">
+                        <input type="text" id="data" class="vp-state vp-input" required/>
+                    </div>
+                </div>
+                <div class="vp-variable-box long-data vp-grid-col-160">
+                    <label></label>
+                    <div class="vp-grid-col-95">
+                        <label for="variable" class="vp-orange-text">Variable</label>
+                        <select id="variable" class="vp-state vp-select" required></select>
+                        <label for="factor" class="vp-orange-text">Factor</label>
+                        <select id="factor" class="vp-state vp-select" required></select>
+                    </div>
+                </div>
+                <div class="vp-variable-box wide-data vp-grid-col-160">
+                    <label></label>
+                    <div id="variableMulti" class="h150"></div>
+                </div>
+                
+                <div class="vp-st-option levene fligner vp-grid-col-160">
+                    <label for="center" class="vp-orange-text">Center</label>
+                    <select id="center" class="vp-select vp-state">
+                        <option value="mean" selected>mean</option>
+                        <option value="median">median</option>
+                        <option value="trimmed">trimmed</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="vp-grid-border-box">
+            <label for="histogram">Display</label>
+            <div class="vp-grid-box">
+                <label><input type="checkbox" id="histogram" class="vp-state"><span>Histogram</span></label>
+            </div>
+        </div>
+    </div>
+</body>

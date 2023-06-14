@@ -256,6 +256,10 @@
 .vp-inner-popup-addtype {
     width: 153px;
 }
+.vp-inner-popup-condition-use-text {
+    position: sticky;
+    left: 190px;
+}
 .vp-inner-popup-delete-value {
     display: inline-block;
     cursor: pointer;
@@ -294,7 +298,6 @@
 .vp-inner-popup-sortby-down {
     float: right;
     display: inline-block;
-
 }
 
 /* UDF Editor - CodeMirror */

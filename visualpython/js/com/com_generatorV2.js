@@ -165,10 +165,15 @@ define([
         var tblContent = $('<td></td>');
 
         
-        let { name, label, component, required } = obj;
+        let { name, label, component, required, output } = obj;
         let value = state[name];
         
-        var requiredFontStyle = required == true? 'vp-orange-text' : '';
+        var requiredFontStyle = '';
+        if (required === true) {
+            requiredFontStyle = 'vp-bold vp-orange-text';
+        } else if (output === true) {
+            requiredFontStyle = 'vp-bold';
+        }
         var lblTag = $(`<label class="vp-bold">${label}</label>`).attr({
             'for': name,
             'class': requiredFontStyle,
@@ -823,7 +828,7 @@ define([
      * @param {array/boolean} columnWithIndex boolean array or value to decide whether select tag has index option
      * Usage : 
      *  $(document).on('change', this.wrapSelector('#dataframe_tag_id'), function() {
-     *      pdGen.vp_bindColumnSource(that, 'dataframe_tag_id', ['column_input_id'], 'select', [true, true, true]);
+     *      pdGen.vp_bindColumnSource(that, 'dataframe_tag_id', ['column_input_id'], 'select', false, false);
      *  });
      */
     var vp_bindColumnSource = function(pageThis, targetId, columnInputIdList, tagType="input", columnWithEmpty=false, columnWithIndex=false) {
@@ -915,7 +920,7 @@ define([
                             'class': 'vp-select vp-state'
                         });
                         // make tag
-                        list.forEach(listVar => {
+                        list.forEach((listVar, idx) => {
                             var option = document.createElement('option');
                             $(option).attr({
                                 'value':listVar.value,
@@ -932,6 +937,7 @@ define([
                         $(pageThis.wrapSelector('#' + columnInputId)).replaceWith(function() {
                             return $(tag);
                         });
+                        $(pageThis.wrapSelector('#' + columnInputId)).trigger('change');
                     }
                 }).catch(function(err) {
                     vpLog.display(VP_LOG_TYPE.ERROR, 'com_generator - bindColumnSource error ', err)

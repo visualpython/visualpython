@@ -1,0 +1,51 @@
+<!--
+    Project Name    : Visual Python
+    Description     : GUI-based Python code generator
+    File Name       : factorAnalysis.html
+    Author          : Black Logic
+    Note            : Factor Analylsis
+    License         : GNU GPLv3 with Visual Python special exception
+    Date            : 2023. 05. 24
+    Change Date     : 
+-->
+<body>
+    <div class="vp-grid-box">
+        <div class="vp-grid-border-box">
+            <div class="vp-grid-box vp-grid-col-160">
+                <label for="data" class="vp-orange-text">Data</label>
+                <div class="vp-flex-gap5">
+                    <input type="text" id="data" class="vp-state vp-input" required/>
+                </div>
+                <label>Variable</label>
+                <div id="variable" class="h150"></div>
+                <label for="rotation">Rotation</label>
+                <select id="rotation" class="vp-select vp-state">
+                </select>
+                <label for="method">Method</label>
+                <select id="method" class="vp-select vp-state">
+                </select>
+                <label for="impute">Impute</label>
+                <select id="impute" class="vp-select vp-state">
+                </select>
+                <label for="extract">Extract</label>
+                <div class="vp-grid-box">
+                    <div class="vp-grid-col-p50">
+                        <label><input type="radio" name="extract" value="eigenvalue" checked/><span>Based on eigenvalue</span></label>
+                        <input type="number" id="eigenvalue" class="vp-input vp-state" value="1">
+                    </div>
+                    <div class="vp-grid-col-p50">
+                        <label><input type="radio" name="extract" value="factor"/><span>Number of factor</span></label>
+                        <input type="number" id="factor" class="vp-input vp-state">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="vp-grid-border-box">
+            <label for="corrMatrix">Display</label>
+            <div class="vp-grid-box">
+                <div><label><input type="checkbox" id="corrMatrix" class="vp-state" checked><span>Correlation matrix</span></label></div>
+                <div><label><input type="checkbox" id="screePlot" class="vp-state" checked><span>Scree plot</span></label></div>
+            </div>
+        </div>
+    </div>
+</body>

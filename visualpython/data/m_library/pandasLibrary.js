@@ -158,7 +158,7 @@ define([
           }
         ]
       },
-      "pd004": {
+      "pd_readCsv": {
         "name": "Read CSV",
         "library": "pandas",
         "description": "",
@@ -245,7 +245,7 @@ define([
           }
         ]
       },
-      "pd005": {
+      "pd_toCsv": {
         "name": "To CSV",
         "library": "pandas",
         "description": "dataframe to csv",
@@ -3505,7 +3505,7 @@ define([
           }
         ]
       },
-      "pd076": {
+      "pd_readJson": {
         "name": "Read Json",
         "library": "pandas",
         "description": "json to pandas object",
@@ -3585,7 +3585,7 @@ define([
           }
         ]
       },
-      "pd077": {
+      "pd_toJson": {
         "name": "To Json",
         "library": "pandas",
         "description": "DataFrame/Series to Json file",
@@ -3636,7 +3636,7 @@ define([
           }
         ]
       },
-      "pd078": {
+      "pd_toPickle": {
         "name": "To Pickle",
         "library": "pandas",
         "description": "DataFrame/Series to Pickle file",
@@ -3656,13 +3656,13 @@ define([
           },
           {
             "name": "path",
-            "label": "file path/variable",
+            "label": "File path/variable",
             "required": true,
             "type": "text"
           }
         ]
       },
-      "pd079": {
+      "pd_readPickle": {
         "name": "Read Pickle",
         "library": "pandas",
         "description": "Pickle to pandas object",
@@ -3670,7 +3670,7 @@ define([
         "options": [
           {
             "name": "i0",
-            "label": "file path/object",
+            "label": "File path/object",
             "required": true,
             "type": "text",
             "component": [
@@ -6515,7 +6515,7 @@ define([
           }
         ]
       },
-      "pd123": {
+      "pd_readExcel": {
         "name": "Read Excel",
         "library": "pandas",
         "description": "excel to pandas object",
@@ -6547,11 +6547,12 @@ define([
           {
             "name": "index_col",
             "label": "Column To Use As Index",
+            "type": "text",
             "usePair": true
           },
         ]
       },
-      "pd124": {
+      "pd_toExcel": {
         "name": "To Excel",
         "library": [
           "pandas",
@@ -6699,7 +6700,91 @@ define([
             ]
           }
         ]
-      }
+      },
+      "pd_readSas": {
+        "name": "Read Sas",
+        "library": "pandas",
+        "description": "Read SAS files stored as either XPORT or SAS7BDAT format files.",
+        "code": "${o0} = pd.read_sas(${i0}${format}${encoding}${etc})",
+        "options": [
+          {
+            "name": "i0",
+            "label": "File Path",
+            "required": true,
+            "type": "text",
+            "component": [
+              "file"
+            ]
+          },
+          {
+            "name": "o0",
+            "label": "Allocate to",
+            "output": true,
+            "component": [
+              "data_select"
+            ]
+          },
+          {
+            "name": "format",
+            "label": "Format",
+            "type": "text",
+            "component": [
+              "option_select"
+            ],
+            "options": [
+              "",
+              "xport",
+              "sas7bdat"
+            ],
+            "usePair": true
+          },
+          {
+            "name": "encoding",
+            "label": "Encoding",
+            "type": "text",
+            "usePair": true
+          }
+        ]
+      },
+      "pd_readSpss": {
+        "name": "Read Spss",
+        "library": "pandas",
+        "description": "Load an SPSS file from the file path, returning a DataFrame.",
+        "code": "${o0} = pd.read_spss(${i0}${usecols}${convert_categoricals}${etc})",
+        "options": [
+          {
+            "name": "i0",
+            "label": "File Path",
+            "required": true,
+            "type": "text",
+            "component": [
+              "file"
+            ]
+          },
+          {
+            "name": "o0",
+            "label": "Allocate to",
+            "output": true,
+            "component": [
+              "data_select"
+            ]
+          },
+          {
+            "name": "usecols",
+            "label": "Use columns",
+            "usePair": true
+          },
+          {
+            "name": "convert_categoricals",
+            "label": "Convert categoricals",
+            "component": [
+              "bool_select"
+            ],
+            "default": true,
+            "usePair": true
+          },
+        ]
+      },
     }
 
     return {

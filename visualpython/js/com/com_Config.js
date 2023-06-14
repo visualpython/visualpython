@@ -195,6 +195,18 @@ define([
                 'joblib': {
                     code: 'import joblib',
                     type: 'package'
+                },
+                'scipy.stats': {
+                    code: 'from scipy import stats',
+                    type: 'package'
+                },
+                'scipy': {
+                    code: 'import scipy',
+                    type: 'package'
+                },
+                'statsmodels.api': {
+                    code: 'import statsmodels.api as sm',
+                    type: 'package'
                 }
             }
 
@@ -250,7 +262,9 @@ define([
             let packageAlias = {
                 '_vp_np': 'np',
                 '_vp_pd': 'pd',
-                '_vp_plt': 'plt'
+                '_vp_plt': 'plt',
+                '_vp_stats': 'stats',
+                '_vp_sm': 'sm'
             }
 
             for (let i = 0; i < tmpList.length; i += 2) {

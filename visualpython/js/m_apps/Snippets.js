@@ -412,7 +412,7 @@ define([
             // prevent occuring header click event by clicking input
             $(this.wrapSelector('.vp-sn-item-title')).off('click');
             $(this.wrapSelector('.vp-sn-item-title')).on('click', function(evt) {
-                evt.stopPropagation();
+                // evt.stopPropagation();
             });
 
             // item title save

@@ -1,0 +1,36 @@
+/*
+ *    Project Name    : Visual Python
+ *    Description     : GUI-based Python code generator
+ *    File Name       : descStats.css
+ *    Author          : Black Logic
+ *    Note            : stylesheet for descStats.html
+ *    License         : GNU GPLv3 with Visual Python special exception
+ *    Date            : 2023. 05. 31
+ *    Change Date     :
+ */
+.vp-percentile-box {
+    width: 300px;
+    height: 100px;
+    border: 0.25px solid var(--vp-border-gray-color);
+    padding: 0 5px;
+}
+.vp-percentile-item {
+    height: 30px;
+    width: 100%;
+    border-bottom: 0.25px solid var(--vp-border-gray-color);
+    padding: 0 10px;
+    line-height: 30px;
+    display: flex;
+    column-gap: 5px;
+    align-items: center;
+}
+.vp-percentile-value {
+    width: 95%;
+}
+.vp-percentile-box:not(.disabled) .vp-percentile-remove {
+    cursor: pointer;
+}
+.vp-percentile-box.disabled {
+    background-color: var(--vp-light-gray-color);
+    cursor: not-allowed;
+}

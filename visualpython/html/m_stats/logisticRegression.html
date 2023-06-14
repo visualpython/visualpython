@@ -1,0 +1,38 @@
+<!--
+    Project Name    : Visual Python
+    Description     : GUI-based Python code generator
+    File Name       : corrAnalysis.html
+    Author          : Black Logic
+    Note            : Correlation Analylsis
+    License         : GNU GPLv3 with Visual Python special exception
+    Date            : 2023. 05. 24
+    Change Date     : 
+-->
+<body>
+    <div class="vp-grid-box">
+        <div class="vp-grid-border-box">
+            <div class="vp-grid-col-160">
+                <label for="data" class="vp-orange-text">Data</label>
+                <div class="vp-flex-gap5">
+                    <input type="text" id="data" class="vp-state vp-input" required/>
+                </div>
+            </div>
+            <div class="vp-grid-col-160">
+                <label for="dependent" class="vp-orange-text">Dependent variable</label>
+                <div>
+                    <select id="dependent" class="vp-select vp-state" required></select>
+                    <label><input type="checkbox" id="encoding" class="vp-state" checked><span>Encoding labels</span></label>
+                </div>
+                <label></label>
+                <div>
+                    <label class="vp-italic vp-orange-text">NOTE: </label>
+                    <label class="vp-italic vp-gray-text">Dependent variables must have two categories.</label>
+                </div>
+                <label class="vp-orange-text">Independent variable</label>
+                <div id="independent" class="h150"></div>
+            </div>
+            <div><label><input type="checkbox" id="showOdds" class="vp-state" checked><span>Show Odds</span></label></div>
+            <div><label><input type="checkbox" id="multiCollinearity" class="vp-state" checked><span>Multi-collinearity statistics</span></label></div>
+        </div>
+    </div>
+</body>
