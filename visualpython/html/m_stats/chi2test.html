@@ -1,0 +1,36 @@
+<!--
+    Project Name    : Visual Python
+    Description     : GUI-based Python code generator
+    File Name       : chi2test.html
+    Author          : Black Logic
+    Note            : Chi-square test of independence
+    License         : GNU GPLv3 with Visual Python special exception
+    Date            : 2023. 05. 24
+    Change Date     : 
+-->
+<body>
+    <div class="vp-grid-box">
+        <div class="vp-grid-border-box">
+            <div class="vp-grid-box vp-st-option-box">
+                <div class="vp-grid-col-110">
+                    <label for="data" class="vp-orange-text">Data</label>
+                    <div class="vp-flex-gap5">
+                        <input type="text" id="data" class="vp-state vp-input" required/>
+                    </div>
+                    <label for="row" class="vp-orange-text">Row</label>
+                    <select id="row" class="vp-select vp-state" required></select>
+                    <label for="column" class="vp-orange-text">Column</label>
+                    <select id="column" class="vp-select vp-state" required></select>
+                </div>
+            </div>
+        </div>
+        <div class="vp-grid-border-box">
+            <label for="barplot">Display</label>
+            <div class="vp-grid-box">
+                <label><input type="checkbox" id="barplot" class="vp-state" checked><span>Barplot</span></label>
+                <label><input type="checkbox" id="crossTab" class="vp-state" checked><span>Cross tabulation</span></label>
+                <label><input type="checkbox" id="cramersCoef" class="vp-state" checked><span>Cramers V coefficient</span></label>
+            </div>
+        </div>
+    </div>
+</body>

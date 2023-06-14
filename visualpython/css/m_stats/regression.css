@@ -1,0 +1,17 @@
+/*
+ *    Project Name    : Visual Python
+ *    Description     : GUI-based Python code generator
+ *    File Name       : regression.css
+ *    Author          : Black Logic
+ *    Note            : stylesheet for regression.html
+ *    License         : GNU GPLv3 with Visual Python special exception
+ *    Date            : 2023. 05. 31
+ *    Change Date     :
+ */
+.vp-categorical-box {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    border: 0.25px solid var(--vp-border-gray-color);
+    padding: 5px;
+    min-height: 30px;
+}

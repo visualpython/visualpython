@@ -17,9 +17,12 @@ define([
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
+    'vp_base/js/com/com_generatorV2',
     'vp_base/js/com/component/PopupComponent',
+    'vp_base/js/com/component/DataSelector',
+    'vp_base/js/com/component/MultiSelector',
     'vp_base/js/m_apps/Subset'
-], function(eqHTML, com_util, com_Const, com_String, PopupComponent, Subset) {
+], function(eqHTML, com_util, com_Const, com_String, com_generator, PopupComponent, DataSelector, MultiSelector, Subset) {
 
     /**
      * EqualVarTest
@@ -33,14 +36,18 @@ define([
 
             this.state = {
                 testType: 'bartlett',
-                variables: {
-                },
-                center: 'median',
+                inputType: 'long-data',
+                data: '',
+                variableMulti: [],
+                variable: '',
+                factor: '',
+                center: 'mean',
                 histogram: true,
                 ...this.state
             };
 
             this.subsetEditor = {};
+            this.columnSelector = {};
         }
 
         _bindEvent() {
@@ -57,90 +64,49 @@ define([
                 $(that.wrapSelector('.vp-st-option.' + testType)).show();
             });
 
-            // add variable
-            $(this.wrapSelector('#addVariable')).on('click', function() {
-                that.addVariable();
+            // change input type
+            $(this.wrapSelector('input[name="inputType"]:radio')).on('change', function() {
+                let inputType = $(this).val();
+                that.state.inputType = inputType;
+                $(that.wrapSelector('.vp-variable-box')).hide();
+                $(that.wrapSelector('.vp-variable-box.' + inputType)).show();
             });
 
-            // remove variable
-            $(this.wrapSelector('#removeVariable')).on('click', function() {
-                // remove last variable
-                that.removeVariable('var' + Object.keys(that.state.variables).length);
-            });
-        }
-
-        addVariable() {
-            let varNameList = Object.keys(this.state.variables);
-            let newNumber = varNameList.length + 1;
-            let newVarId = 'var' + newNumber;
-            $(this.wrapSelector('.vp-st-variable-box')).append(
-                $(`<div class="vp-st-variable-item vp-grid-col-160" data-name="${newVarId}">
-                        <label for="${newVarId}" class="vp-orange-text">Variable ${newNumber}</label>
-                        <div class="vp-flex-gap5"><input type="text" id="${newVarId}" class="vp-input"/></div>
-                    </div>`));
-            this.state.variables[newVarId] = '';
-
-            let that = this;
-            // render Subset
-            this.subsetEditor[newVarId] = new Subset({ 
-                pandasObject: '',
-                config: { name: 'Subset', category: 'Equal Var. test' } }, 
-                {
-                    useAsModule: true,
-                    targetSelector: this.wrapSelector('#' + newVarId),
-                    pageThis: this,
-                    allowSubsetTypes: ['iloc', 'loc'],
-                    finish: function(code) {
-                        that.state.variables[newVarId] = code;
-                        $(that.wrapSelector('#' + newVarId)).val(code);
-                    }
-                });
-
-            $(this.wrapSelector('#' + newVarId)).on('change', function() {
-                that.state.variables[newVarId] = $(this).val();
+            // data change event
+            $(this.wrapSelector('#data')).on('change', function() {
+                let data = $(this).val();
+                that.handleVariableChange(data);
             });
         }
 
-        removeVariable(varName) {
-            delete this.state.variables[varName];
-            delete this.subsetEditor[varName];
-
-            $(this.wrapSelector(`.vp-st-variable-item[data-name="${varName}"]`)).remove();
+        handleVariableChange(data) {
+            this.state.data = data;
+            // render column selector
+            com_generator.vp_bindColumnSource(this, 'data', ['variable', 'factor'], 'select', false, false);
+            // render variable selector
+            this.columnSelector = new MultiSelector(this.wrapSelector('#variableMulti'),
+                { mode: 'columns', parent: data, showDescription: false }
+            );
         }
 
         templateForBody() {
             let page = $(eqHTML);
             let that = this;
 
-            //================================================================
-            // Load state
-            //================================================================
-            Object.keys(this.state).forEach(key => {
-                let tag = $(page).find('#' + key);
-                let tagName = $(tag).prop('tagName'); // returns with UpperCase
-                let value = that.state[key];
-                if (value == undefined) {
-                    return;
-                }
-                switch(tagName) {
-                    case 'INPUT':
-                        let inputType = $(tag).prop('type');
-                        if (inputType == 'text' || inputType == 'number' || inputType == 'hidden') {
-                            $(tag).val(value);
-                            break;
-                        }
-                        if (inputType == 'checkbox') {
-                            $(tag).prop('checked', value);
-                            break;
-                        }
-                        break;
-                    case 'TEXTAREA':
-                    case 'SELECT':
-                    default:
-                        $(tag).val(value);
-                        break;
+            // generate dataselector
+            let dataSelector = new DataSelector({
+                pageThis: this, id: 'data', placeholder: 'Select data', required: true, boxClasses: 'vp-flex-gap5',
+                allowDataType: ['DataFrame'], withPopup: false,
+                finish: function(data, type) {
+                    that.state.data = data;
+                    $(that.wrapSelector('#data')).trigger('change');
+                },
+                select: function(data, type) {
+                    that.state.data = data;
+                    $(that.wrapSelector('#data')).trigger('change');
                 }
             });
+            $(page).find('#data').replaceWith(dataSelector.toTagString());
 
             return page;
         }
@@ -149,11 +115,32 @@ define([
             super.render();
             let that = this;
 
-            // render variables input based on state
-            $(this.wrapSelector('.vp-st-variable-box')).html('');
-            // add 2 variable by default
-            this.addVariable();
-            this.addVariable();
+             // render Subset
+             this.subsetEditor = new Subset({ 
+                pandasObject: '',
+                config: { name: 'Subset', category: this.name } }, 
+                {
+                    useAsModule: true,
+                    useInputColumns: true,
+                    targetSelector: this.wrapSelector('#data'),
+                    pageThis: this,
+                    finish: function(code) {
+                        $(that.wrapSelector('#data')).val(code);
+                        that.handleVariableChange(code);
+                    }
+                });
+
+            if (this.state.data !== '') {
+                // render column selector
+                com_generator.vp_bindColumnSource(this, 'data', ['variable', 'factor'], 'select', false, false);
+            }
+            // render variable selector
+            this.columnSelector = new MultiSelector(this.wrapSelector('#variableMulti'),
+                        { mode: 'columns', parent: this.state.data, selectedList: this.state.variableMulti?.map(x => x.code), showDescription: false }
+                    );
+
+            $(this.wrapSelector('.vp-variable-box')).hide();
+            $(this.wrapSelector('.vp-variable-box.' + this.state.inputType)).show();
 
             // control display option
             $(this.wrapSelector('.vp-st-option')).hide();
@@ -161,80 +148,93 @@ define([
         }
 
         generateCode() {
-            let { testType, variables, center, histogram } = this.state;
+            let { testType, inputType, data, variable, factor, center, histogram } = this.state;
             let codeList = [];
             let code = new com_String();
+            let that = this;
 
-            // variable declaration
-            let varNameList = Object.keys(variables).filter(x => x !== '');
-            let varNameStr = varNameList.join(',');
-            varNameList.forEach((varName, idx) => {
-                if (varName !== variables[varName]) {
-                    if (idx > 0) {
-                        code.appendLine();
-                    }
-                    code.appendFormat("{0} = {1}", varName, variables[varName]);
-                }
-            });
-            codeList.push(code.toString());
+            // test type label
+            let testTypeLabel = $(this.wrapSelector('#testType option:selected')).text();
+            code.appendFormatLine("# {0}", testTypeLabel);
+
+            if (inputType === 'long-data') {
+                code.appendFormatLine("vp_df = {0}.dropna().copy()", data);
+                code.appendLine("_df = pd.DataFrame()");
+                code.appendFormatLine("for k, v in  dict(list(vp_df.groupby({0})[{1}])).items():", factor, variable);
+                code.appendLine("    _df_t = v.reset_index(drop=True)");
+                code.appendLine("    _df_t.name = k");
+                code.append("    _df = pd.concat([_df, _df_t], axis=1)");
+            } else if (inputType === 'wide-data') {
+                // get variable multi
+                let columns = this.columnSelector.getDataList();
+                this.state.variableMulti = columns;
+                code.appendFormatLine("vp_df = {0}[[{1}]].copy()", data, columns.map(x => x.code).join(', ')); // without dropna
+                code.append("_df = vp_df.copy()");
+            }
 
             // add variance code
-            code = new com_String();
-            code.appendLine("# Variance");
-            code.appendLine("from scipy import stats");
             code.appendLine();
-            code.appendFormat("pd.DataFrame(data={'Variance':[np.var(x, ddof=1) for x in [{0}]]})", varNameStr);
-            codeList.push(code.toString());
+            code.appendLine();
+            code.appendLine("# Variance");
+            code.appendLine("from IPython.display import display, Markdown");
+            code.appendLine("from scipy import stats");
+            code.appendLine("_dfr = _df.var().to_frame()");
+            code.appendLine("_dfr.columns = ['Variance']");
+            code.append("display(_dfr)");
 
             switch (testType) {
                 case 'bartlett':
                     // 1. Bartlett test
-                    code = new com_String();
-                    code.appendLine("# Equal Variance test (Bartlett)");
-                    code.appendLine("from scipy import stats");
                     code.appendLine();
-                    code.appendFormatLine("_res = stats.bartlett({0})", varNameStr);
                     code.appendLine();
-                    code.appendLine("pd.DataFrame(data={'Statistic':_res.statistic,'p-value':_res.pvalue},");
-                    code.append("             index=['Equal Variance test (Bartlett)'])");
-                    codeList.push(code.toString());
+                    code.appendLine("# Bartlett test");
+                    code.appendLine("_lst = []");
+                    code.appendLine("_df.apply(lambda x: _lst.append(x.dropna()))");
+                    code.appendLine("_res = stats.bartlett(*_lst)");
+                    code.appendLine("display(Markdown('### Bartlett test'))");
+                    code.appendLine("display(pd.DataFrame(data={'Statistic':_res.statistic,'p-value':_res.pvalue},");
+                    code.append("                     index=['Equal Variance test (Bartlett)']))");
                     break;
                 case 'levene':
                     // 1. Levene test
-                    code = new com_String();
-                    code.appendLine("# Equal Variance test (Levene)");
-                    code.appendLine("from scipy import stats");
                     code.appendLine();
-                    code.appendFormatLine("_res = stats.levene({0}, center='{1}')", varNameStr, center);
                     code.appendLine();
-                    code.appendLine("pd.DataFrame(data={'Statistic':_res.statistic,'p-value':_res.pvalue},");
-                    code.append("             index=['Equal Variance test (Levene)'])");
-                    codeList.push(code.toString());
+                    code.appendLine("# Levene test");
+                    code.appendLine("_lst = []");
+                    code.appendLine("_df.apply(lambda x: _lst.append(x.dropna()))");
+                    code.appendFormatLine("_res = stats.levene(*_lst, center='{0}')", center);
+                    code.appendLine("display(Markdown('### Levene test'))");
+                    code.appendLine("display(pd.DataFrame(data={'Statistic':_res.statistic,'p-value':_res.pvalue},");
+                    code.append("                     index=['Equal Variance test (Levene)']))");
                     break;
                 case 'fligner':
                     // 1. Fligner test
-                    code = new com_String();
-                    code.appendLine("# Equal Variance test (Fligner)");
-                    code.appendLine("from scipy import stats");
                     code.appendLine();
-                    code.appendFormatLine("_res = stats.fligner({0}, center='{1}')", varNameStr, center);
                     code.appendLine();
-                    code.appendLine("pd.DataFrame(data={'Statistic':_res.statistic,'p-value':_res.pvalue},");
-                    code.append("             index=['Equal Variance test (Fligner)'])");
-                    codeList.push(code.toString());
+                    code.appendLine("# Fligner test");
+                    code.appendLine("_lst = []");
+                    code.appendLine("_df.apply(lambda x: _lst.append(x.dropna()))");
+                    code.appendFormatLine("_res = stats.fligner(*_lst, center='{0}')", center);
+                    code.appendLine("display(Markdown('### Fligner test'))");
+                    code.appendLine("display(pd.DataFrame(data={'Statistic':_res.statistic,'p-value':_res.pvalue},");
+                    code.append("                     index=['Equal Variance test (Fligner)']))");
                     break;
             }
 
             // Display option
             if (histogram === true) {
-                code = new com_String();
+                code.appendLine();
+                code.appendLine();
                 code.appendLine("# Histogram");
                 code.appendLine("import seaborn as sns");
-                code.appendLine();
-                code.appendFormatLine("for x in [{0}]:", varNameStr);
-                code.append("    sns.histplot(x, stat='density', kde=True)");
-                codeList.push(code.toString());
+                code.appendLine("import warnings");
+                code.appendLine("with warnings.catch_warnings():");
+                code.appendLine("    warnings.simplefilter(action='ignore', category=Warning)");
+                code.appendLine("    sns.histplot(_df, stat='density', kde=True)");
+                code.appendLine("    plt.title('Histogram')");
+                code.append("    plt.show()");
             }
+            codeList.push(code.toString());
 
             return codeList;
         }

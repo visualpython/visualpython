@@ -3343,6 +3343,20 @@
                         }
                     },
                     {
+                        "id"   : "stats_factorAnalysis",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Factor Analysis",
+                        "tag"  : "FACTOR ANALYSIS,STATS,STATISTICS",
+                        "path" : "visualpython - statistics - factor analysis",
+                        "desc" : "Factor analysis",
+                        "file" : "m_stats/FactorAnalysis",
+                        "apps" : {
+                            "color": 17,
+                            "icon": "apps/apps.svg"
+                        }
+                    },
+                    {
                         "id"   : "stats_regression",
                         "type" : "function",
                         "level": 1,
@@ -3357,14 +3371,14 @@
                         }
                     },
                     {
-                        "id"   : "stats_factorAnalysis",
+                        "id"   : "stats_logisticRegression",
                         "type" : "function",
                         "level": 1,
-                        "name" : "Factor Analysis",
-                        "tag"  : "FACTOR ANALYSIS,STATS,STATISTICS",
-                        "path" : "visualpython - statistics - factor analysis",
-                        "desc" : "Factor analysis",
-                        "file" : "m_stats/FactorAnalysis",
+                        "name" : "Logistic Regression",
+                        "tag"  : "LOGISTIC REGRESSION,STATS,STATISTICS",
+                        "path" : "visualpython - statistics - logistic regression",
+                        "desc" : "Logistic regression",
+                        "file" : "m_stats/LogisticRegression",
                         "apps" : {
                             "color": 17,
                             "icon": "apps/apps.svg"

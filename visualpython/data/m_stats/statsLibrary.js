@@ -27,27 +27,27 @@ define([
             code: '_rv = stats.bernoulli(${p})',
             description: 'A Bernoulli discrete random variable.',
             options: [
-                { name: 'p', component: ['input_number'], default: 0.6, usePair: true },
+                { name: 'p', component: ['input_number'], value: 0.6, required: true, usePair: true },
             ]
         },
         'binomial': {
             name: 'Binomial',
             import: 'from scipy import stats',
-            code: '_rv = stats.binom(${N}${p})',
+            code: '_rv = stats.binom(${n}${p})',
             description: 'A binomial discrete random variable.',
             options: [
-                { name: 'N', component: ['input_number'], default: 10, usePair: true },
-                { name: 'p', component: ['input_number'], default: 0.6, usePair: true },
+                { name: 'n', component: ['input_number'], value: 10, required: true, usePair: true },
+                { name: 'p', component: ['input_number'], value: 0.6, required: true, usePair: true },
             ]
         },
         'multinomial': {
             name: 'Multinomial',
             import: 'from scipy import stats',
-            code: '_rv = stats.multinomial(${N}${mu})',
+            code: '_rv = stats.multinomial(${n}${p})',
             description: 'A multinomial random variable.',
             options: [
-                { name: 'N', component: ['input_number'], default: 10, usePair: true },
-                { name: 'p', component: ['data_select'], usePair: true },
+                { name: 'n', component: ['input_number'], value: 10, required: true, usePair: true },
+                { name: 'p', component: ['data_select'], value: '[0.4, 0.6]', required: true, usePair: true },
             ]
         },
         /** Continumous prob. dist. */
@@ -65,8 +65,8 @@ define([
             code: '_rv = stats.norm(${loc}${scale})',
             description: 'A normal continuous random variable.',
             options: [
-                { name: 'loc', component: ['input_number'], default: 0, usePair: true },
-                { name: 'scale', component: ['input_number'], default: 1, usePair: true },
+                { name: 'loc', component: ['input_number'], value: 0, usePair: true },
+                { name: 'scale', component: ['input_number'], value: 1, usePair: true },
             ]
         },
         'beta': {
@@ -75,8 +75,8 @@ define([
             code: '_rv = stats.beta(${a}${b})',
             description: 'A beta continuous random variable.',
             options: [
-                { name: 'a', component: ['input_number'], usePair: true },
-                { name: 'b', component: ['input_number'], usePair: true },
+                { name: 'a', component: ['input_number'], required: true, usePair: true },
+                { name: 'b', component: ['input_number'], required: true, usePair: true },
             ]
         },
         'gamma': {
@@ -85,7 +85,7 @@ define([
             code: '_rv = stats.gamma(${a})',
             description: 'A gamma continuous random variable.',
             options: [
-                { name: 'a', component: ['input_number'], usePair: true },
+                { name: 'a', component: ['input_number'], required: true, usePair: true },
             ]
         },
         'studentst': {
@@ -94,7 +94,7 @@ define([
             code: '_rv = stats.t(${df})',
             description: "A Student's t continuous random variable.",
             options: [
-                { name: 'df', component: ['input_number'], usePair: true },
+                { name: 'df', component: ['input_number'], required: true, usePair: true },
             ]
         },
         'chi2': {
@@ -103,7 +103,7 @@ define([
             code: '_rv = stats.chi2(${df})',
             description: 'A chi-squared continuous random variable.',
             options: [
-                { name: 'df', component: ['input_number'], usePair: true },
+                { name: 'df', component: ['input_number'], required: true, usePair: true },
             ]
         },
         'f': {
@@ -112,8 +112,8 @@ define([
             code: '_rv = stats.f(${dfn}${dfd})',
             description: 'An F continuous random variable.',
             options: [
-                { name: 'dfn', component: ['input_number'], usePair: true },
-                { name: 'dfd', component: ['input_number'], usePair: true },
+                { name: 'dfn', component: ['input_number'], required: true, usePair: true },
+                { name: 'dfd', component: ['input_number'], required: true, usePair: true },
             ]
         },
         'dirichlet': {
@@ -122,7 +122,7 @@ define([
             code: '_rv = stats.dirichlet(${alpha}${seed})',
             description: 'A Dirichlet random variable.',
             options: [
-                { name: 'alpha', component: ['input_number'], usePair: true },
+                { name: 'alpha', component: ['input_number'], required: true, usePair: true },
                 { name: 'seed', component: ['input_number'], usePair: true },
             ]
         },
@@ -132,8 +132,8 @@ define([
             code: '_rv = stats.multivariate_normal(${mean}${cov}${allow_singular})',
             description: 'A multivariate normal random variable.',
             options: [
-                { name: 'mean', component: ['data_select'], default: '[0]', usePair: true },
-                { name: 'cov', component: ['data_select'], default: '[1]', usePair: true },
+                { name: 'mean', component: ['data_select'], value: '[0]', usePair: true },
+                { name: 'cov', component: ['data_select'], value: '[1]', usePair: true },
                 { name: 'allow_singular', component: ['bool_select'], default: 'False', usePair: true },
             ]
         },

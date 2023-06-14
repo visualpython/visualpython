@@ -1,0 +1,74 @@
+<!--
+    Project Name    : Visual Python
+    Description     : GUI-based Python code generator
+    File Name       : anova.html
+    Author          : Black Logic
+    Note            : ANOVA
+    License         : GNU GPLv3 with Visual Python special exception
+    Date            : 2023. 05. 24
+    Change Date     : 
+-->
+<body>
+    <div class="vp-grid-box">
+        <select id="testType" class="vp-big-select vp-state">
+            <option value="one-way">One-way ANOVA</option>
+            <option value="two-way">Two-way ANOVA</option>
+            <option value="ancova">ANCOVA - Analysis of covariance</option>
+        </select>
+        <div class="vp-grid-border-box">
+            <div class="vp-grid-box vp-st-option-box">
+                <div class="vp-grid-col-130">
+                    <label for="data" class="vp-orange-text">Data</label>
+                    <div class="vp-flex-gap5">
+                        <input type="text" id="data" class="vp-state vp-input" required/>
+                    </div>
+                    <label for="depVar" class="vp-orange-text">Dependent variable</label>
+                    <select id="depVar" class="vp-state vp-select" required>
+                    </select>
+                </div>
+                <div class="vp-st-option one-way ancova vp-grid-col-130">
+                    <label for="factor" class="vp-orange-text">Factor</label>
+                    <select id="factor" class="vp-state vp-select" required>
+                    </select>
+                </div>
+                <div class="vp-st-option two-way vp-grid-col-130">
+                    <label for="factorA" class="vp-orange-text">Factor A</label>
+                    <select id="factorA" class="vp-state vp-select" required>
+                    </select>
+                    <label for="factorB" class="vp-orange-text">Factor B</label>
+                    <select id="factorB" class="vp-state vp-select" required>
+                    </select>
+                </div>
+                <div class="vp-st-option ancova vp-grid-col-130">
+                    <label for="covariate" class="vp-orange-text">Covariate</label>
+                    <select id="covariate" class="vp-state vp-select" required>
+                    </select>
+                </div>
+                <div class="vp-st-option one-way two-way">
+                    <hr style="margin: 5px 0;"/>
+                </div>
+                <div class="vp-st-option one-way two-way vp-grid-col-130">
+                    <label for="sigLevel" class="vp-orange-text">Significance level</label>
+                    <input type="number" id="sigLevel" class="vp-state vp-input" required/>
+                    <label for="covariate" class="vp-orange-text">Post hoc analysis</label>
+                    <div class="vp-grid-col-p50">
+                        <label><input type="checkbox" id="tukeyHSD" class="vp-state" checked><span>Tukey HSD</span></label>
+                        <label><input type="checkbox" id="tukey" class="vp-state"><span>Tukey</span></label>
+                        <label><input type="checkbox" id="scheffe" class="vp-state"><span>Scheffe</span></label>
+                        <label><input type="checkbox" id="duncan" class="vp-state"><span>Duncan</span></label>
+                        <label><input type="checkbox" id="bonferroni" class="vp-state"><span>Bonferroni</span></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="vp-grid-border-box">
+            <label for="statistics">Display</label>
+            <div class="vp-grid-box">
+                <label><input type="checkbox" id="statistics" class="vp-state" checked><span>Statistics</span></label>
+                <label><input type="checkbox" id="boxplot" class="vp-state" checked><span>Boxplot</span></label>
+                <label class="vp-st-option one-way two-way"><input type="checkbox" id="equalVariance" class="vp-state" checked><span>Equal Variance</span></label>
+                <label class="vp-st-option two-way"><input type="checkbox" id="interPlot" class="vp-state" checked><span>Interaction plot</span></label>
+            </div>
+        </div>
+    </div>
+</body>

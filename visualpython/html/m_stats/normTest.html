@@ -20,14 +20,17 @@
         <div class="vp-grid-border-box">
             <div class="vp-grid-box vp-st-option-box">
                 <div class="vp-grid-col-160">
-                    <label for="var0" class="vp-orange-text">Variable</label>
+                    <label for="data0" class="vp-orange-text">Data</label>
                     <div class="vp-flex-gap5">
-                        <input type="text" id="var0" class="vp-state vp-input"/>
+                        <input type="text" id="data0" class="vp-state vp-input" required/>
                     </div>
+                    <label></label>
+                    <select id="var0" class="vp-state vp-select" required>
+                    </select>
                 </div>
                 <div class="vp-st-option kolmogorov-smirnov vp-grid-col-160">
                     <label for="alterHypo" class="vp-orange-text">Alternative hypothesis</label>
-                    <select id="alterHypo" class="vp-select vp-state">
+                    <select id="alterHypo" class="vp-select vp-state" required>
                         <option value="two-sided" selected>two-sided</option>
                         <option value="less">less</option>
                         <option value="greater">greater</option>

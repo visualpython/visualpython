@@ -22,29 +22,29 @@
                 <select id="action" class="vp-select l">
                     <option value="random-number">Generate random numbers</option>
                     <option value="distribution-plot">Show distribution plot</option>
-                    <option value="stats-to-pvalue">Statistics to P-value</option>
-                    <option value="pvalue-to-stats">P-value to Statistics</option>
+                    <option class="vp-pd-display-option cont" value="stats-to-pvalue">Statistics to P-value</option>
+                    <option class="vp-pd-display-option cont" value="pvalue-to-stats">P-value to Statistics</option>
                 </select>
             </div>
             <div class="vp-grid-border-box vp-pd-action-box random-number">
                 <div class="vp-grid-col-160">
                     <label for="size" class="vp-orange-text">Size</label>
-                    <input type="number" class="vp-input vp-state" id="size" value="10000" />
+                    <input type="number" class="vp-input vp-state" id="size" value="10000" required/>
                     <label for="randomState">Random state</label>
                     <input type="number" class="vp-input vp-state" id="randomState"/>
                     <label for="allocateTo" class="vp-orange-text">Allocate to</label>
-                    <input type="text" class="vp-input vp-state" id="allocateTo" value="samples"/>
+                    <input type="text" class="vp-input vp-state" id="allocateTo" value="samples" required/>
                 </div>
                 <label><input type="checkbox" id="sampledDist" class="vp-state" checked><span>Show sampled distribution</span></label>
             </div>
             <div class="vp-grid-border-box vp-pd-action-box distribution-plot" style="display:none;">
-                <label class="vp-pd-display-option dist"><input type="checkbox" id="probDensityFunc" class="vp-state"><span>Probability density function</span></label>
-                <label class="vp-pd-display-option cont"><input type="checkbox" id="probMassFunc" class="vp-state"><span>Probability mass function</span></label>
+                <label class="vp-pd-display-option dist"><input type="checkbox" id="probMassFunc" class="vp-state"><span>Probability mass function</span></label>
+                <label class="vp-pd-display-option cont"><input type="checkbox" id="probDensityFunc" class="vp-state"><span>Probability density function</span></label>
                 <label class="vp-pd-display-option cont"><input type="checkbox" id="cumDistFunc" class="vp-state"><span>Cumulative distribution function</span></label>
             </div>
             <div class="vp-grid-border-box vp-grid-col-160 vp-pd-action-box stats-to-pvalue" style="display:none;">
                 <label for="stats" class="vp-orange-text">Statistic</label>
-                <input type="number" class="vp-input vp-state" id="stats" />
+                <input type="number" class="vp-input vp-state" id="stats" required/>
                 <label for="pAlter">Alternative</label>
                 <select id="pAlter" class="vp-select vp-state">
                     <option value="one-sided">One-sided</option>
@@ -53,7 +53,7 @@
             </div>
             <div class="vp-grid-border-box vp-grid-col-160 vp-pd-action-box pvalue-to-stats" style="display:none;">
                 <label for="pvalue" class="vp-orange-text">Proportional value</label>
-                <input type="number" class="vp-input vp-state" id="pvalue" />
+                <input type="number" class="vp-input vp-state" id="pvalue" required/>
                 <label for="statsAlter">Alternative</label>
                 <select id="statsAlter" class="vp-select vp-state">
                     <option value="one-sided">One-sided</option>

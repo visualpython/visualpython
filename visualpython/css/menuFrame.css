@@ -27,6 +27,19 @@
     background-color: var(--vp-background-color);
     border-bottom: 1px solid var(--vp-border-gray-color);
 }
+.vp-package-manager {
+    /* display: inline-flex; */
+    display: none;
+    float: right;
+    position: relative;
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--vp-highlight-color);
+    margin: 8px 6px 8px 3px;
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+}
 .vp-version-updater {
     display: none;
     float: right;
@@ -82,14 +95,12 @@ input.vp-menu-search-box {
 .vp-menu-search-icon {
     width: 20px;
     height: 20px;
-    position: relative;
-    right: 30px;
-    top: 6px;
-    /* LAB: img to background-image */
+    position: absolute;
+    right: 45px;
+    top: 15px;
     background-image: url(../img/search.svg);
     background-repeat: no-repeat;
     background-size: contain;
-    height: 100%;
 }
 /* LAB: img to background-image */
 #vp_wrapper.lab .vp-menu-search-icon {
@@ -428,37 +439,40 @@ input.vp-menu-search-box {
 }
 /* statistics */
 .vp-menuitem.apps .stats_probDist {
-    background: top / contain no-repeat url(../img/apps/apps_white.svg);
+    background: top / contain no-repeat url(../img/apps/apps_probDist.svg);
 }
 .vp-menuitem.apps .stats_descStats {
-    background: top / contain no-repeat url(../img/apps/apps_white.svg);
+    background: top / contain no-repeat url(../img/apps/apps_descStats.svg);
 }
 .vp-menuitem.apps .stats_normTest {
-    background: top / contain no-repeat url(../img/apps/apps_white.svg);
+    background: top / contain no-repeat url(../img/apps/apps_probDist.svg);
 }
 .vp-menuitem.apps .stats_equalVarTest {
-    background: top / contain no-repeat url(../img/apps/apps_white.svg);
+    background: top / contain no-repeat url(../img/apps/apps_equalVarTest.svg);
 }
 .vp-menuitem.apps .stats_corrAnalysis {
-    background: top / contain no-repeat url(../img/apps/apps_white.svg);
+    background: top / contain no-repeat url(../img/apps/apps_corrAnalysis.svg);
 }
 .vp-menuitem.apps .stats_reliabAnalysis {
-    background: top / contain no-repeat url(../img/apps/apps_white.svg);
+    background: top / contain no-repeat url(../img/apps/apps_corrAnalysis.svg);
 }
 .vp-menuitem.apps .stats_chi2test {
-    background: top / contain no-repeat url(../img/apps/apps_white.svg);
+    background: top / contain no-repeat url(../img/apps/apps_chi2test.svg);
 }
 .vp-menuitem.apps .stats_studentstTest {
-    background: top / contain no-repeat url(../img/apps/apps_white.svg);
+    background: top / contain no-repeat url(../img/apps/apps_studentstTest.svg);
 }
 .vp-menuitem.apps .stats_anova {
-    background: top / contain no-repeat url(../img/apps/apps_white.svg);
-}
-.vp-menuitem.apps .stats_regression {
-    background: top / contain no-repeat url(../img/apps/apps_white.svg);
+    background: top / contain no-repeat url(../img/apps/apps_anova.svg);
 }
 .vp-menuitem.apps .stats_factorAnalysis {
-    background: top / contain no-repeat url(../img/apps/apps_white.svg);
+    background: top / contain no-repeat url(../img/apps/apps_factorAnalysis.svg);
+}
+.vp-menuitem.apps .stats_regression {
+    background: top / contain no-repeat url(../img/apps/apps_regression.svg);
+}
+.vp-menuitem.apps .stats_logisticRegression {
+    background: top / contain no-repeat url(../img/apps/apps_logisticRegression.svg);
 }
 /* machine learning */
 .vp-menuitem.apps .ml_dataSet {

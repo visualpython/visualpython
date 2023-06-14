@@ -41,12 +41,12 @@ define([
                 // random-number
                 size: 10000,
                 randomState: '',
-                allocateTo: '',
+                allocateTo: 'samples',
                 sampledDist: true,
                 // distribution-plot
-                probDensityFunc: false,
-                probMassFunc: false,
-                cumDistFunc: false,
+                probDensityFunc: true,
+                probMassFunc: true,
+                cumDistFunc: true,
                 // stats-to-pvalue
                 stats: '',
                 pAlter: 'two-sided',
@@ -83,6 +83,12 @@ define([
                 if (that.distList[0].child.includes(distType)) {
                     // discrete option
                     $(that.wrapSelector('.vp-pd-display-option.dist')).show();
+
+                    // hide continuous action
+                    if (that.state.action === 'stats-to-pvalue' || that.state.action === 'pvalue-to-stats') {
+                        $(that.wrapSelector('#action')).val('random-number');
+                        $(that.wrapSelector('#action')).trigger('change');
+                    }
                 } else {
                     // continuous option
                     $(that.wrapSelector('.vp-pd-display-option.cont')).show();
@@ -155,36 +161,6 @@ define([
                 $(this.wrapSelector('.vp-pd-display-option.cont')).show();
             }
 
-            //================================================================
-            // Load state
-            //================================================================
-            Object.keys(this.state).forEach(key => {
-                let tag = $(page).find('#' + key);
-                let tagName = $(tag).prop('tagName'); // returns with UpperCase
-                let value = that.state[key];
-                if (value == undefined) {
-                    return;
-                }
-                switch(tagName) {
-                    case 'INPUT':
-                        let inputType = $(tag).prop('type');
-                        if (inputType == 'text' || inputType == 'number' || inputType == 'hidden') {
-                            $(tag).val(value);
-                            break;
-                        }
-                        if (inputType == 'checkbox') {
-                            $(tag).prop('checked', value);
-                            break;
-                        }
-                        break;
-                    case 'TEXTAREA':
-                    case 'SELECT':
-                    default:
-                        $(tag).val(value);
-                        break;
-                }
-            });
-
             return page;
         }
 
@@ -195,8 +171,8 @@ define([
             let optBox = new com_String();
             // render tag
             config.options.forEach(opt => {
-                optBox.appendFormatLine('<label for="{0}" title="{1}">{2}</label>'
-                    , opt.name, opt.name, com_util.optionToLabel(opt.name));
+                optBox.appendFormatLine('<label for="{0}" class="{1}" title="{2}">{3}</label>'
+                    , opt.name, (opt.required===true?'vp-orange-text':''), opt.name, com_util.optionToLabel(opt.name));
                 let content = com_generator.renderContent(this, opt.component[0], opt, state);
                 optBox.appendLine(content[0].outerHTML);
             });
@@ -246,128 +222,129 @@ define([
             // model code
             let modelCode = config.code;
             modelCode = com_generator.vp_codeGenerator(this, config, this.state, (userOption != ''? ', ' + userOption : ''));
-            code.append(modelCode); 
-            codeList.push(code.toString());
+            code.append(modelCode);
 
             switch (action) {
                 case 'random-number':
-                    code = new com_String();
+                    code.appendLine();
+                    code.appendLine();
                     code.appendFormatLine("# Generate random numbers ({0})", label);
-                    code.appendFormatLine('{0} = _rv.rvs(size={1}', allocateTo, size);
+                    code.appendLine("from IPython.display import display");
+                    code.appendFormat('{0} = _rv.rvs(size={1}', allocateTo, size);
                     if (randomState !== '') {
                         code.appendFormat(", random_state={0}", randomState);
                     }
                     code.appendLine(')');
-                    code.append(allocateTo);
-                    codeList.push(code.toString());
+                    code.appendFormat("display({0})", allocateTo);
 
                     if (sampledDist === true) {
                         this.addCheckModules('plt');
                         this.addCheckModules('sns');
-                        code = new com_String();
+
+                        code.appendLine();
+                        code.appendLine();
                         code.appendFormatLine("# Sample distribution ({0})", label);
                         code.appendLine("import warnings");
                         code.appendLine("with warnings.catch_warnings():");
                         code.appendLine("    warnings.simplefilter(action='ignore', category=Warning)");
                         code.appendFormatLine("    sns.histplot({0}, stat='density', kde=True)", allocateTo);
-                        code.appendLine("    plt.title('Generate random numbers: Normal distribution')");
+                        code.appendFormatLine("    plt.title('Generate random numbers: {0}')", label.replace("'", "\\'"));
                         code.appendLine("    plt.xlabel('$x$')");
                         code.append("    plt.show()");
-                        codeList.push(code.toString());
                     }
                     break;
                 case 'distribution-plot':
                     if (this.distList[0].child.includes(distType)) {
-                        if (probDensityFunc === true) {
-                            this.addCheckModules('np');
-                            this.addCheckModules('plt');
-                            code = new com_String();
-                            code.appendFormatLine("# Probability density function ({0})", label);
-                            code.appendLine("import warnings");
-                            code.appendLine("with warnings.catch_warnings():");
-                            code.appendLine("    _x = np.linspace(-5, 5, 100)");
-                            code.appendLine("    plt.plot(_x, _rv.pdf(_x))");
-                            code.appendLine();
-                            code.appendLine("    plt.title('Probability density function: Normal distribution')");
-                            code.appendLine("    plt.xlabel('$x$')");
-                            code.appendLine("    plt.ylabel('$p(x)$')");
-                            code.append("    plt.show()");
-                            codeList.push(code.toString());
-                        }
-                    } else {
                         if (probMassFunc === true) {
                             this.addCheckModules('np');
                             this.addCheckModules('plt');
-                            code = new com_String();
+
+                            code.appendLine();
+                            code.appendLine();
                             code.appendFormatLine("# Probability mass function ({0})", label);
-                            code.appendLine("import warnings");
-                            code.appendLine("with warnings.catch_warnings():");
-                            code.appendLine("    _x = [0, 1]");
-                            code.appendLine("    plt.bar(_x, _rv.pmf(_x))");
-                            code.appendLine();
-                            code.appendLine("    plt.title('Probability mass function: Bernoulli distribution')");
-                            code.appendLine("    plt.xlim(-1, 2)");
-                            code.appendLine("    plt.ylim(0, 1)");
-                            code.appendLine("    plt.xticks([0, 1])");
-                            code.appendLine("    plt.xlabel('$x$')");
-                            code.appendLine("    plt.ylabel('$p(x)$')");
-                            code.append("    plt.show()");
-                            codeList.push(code.toString());
+                            code.appendLine("plt.bar([0,1], _rv.pmf([0,1]))");
+                            code.appendFormatLine("plt.title('Probability mass function: {0}')", label.replace("'", "\\'"));
+                            code.appendLine("plt.xlim(-1, 2)");
+                            code.appendLine("plt.ylim(0, 1)");
+                            code.appendLine("plt.xticks([0, 1], ['x=0', 'x=1'])");
+                            code.appendLine("plt.xlabel('$x$')");
+                            code.appendLine("plt.ylabel('$p(x)$')");
+                            code.append("plt.show()");
                         }
-                        if (cumDistFunc === true) {
-                            this.addCheckModules('np');
-                            this.addCheckModules('plt');
-                            code = new com_String();
-                            code.appendFormatLine("# Cumulative distribution function ({0})", label);
-                            code.appendLine("import warnings");
-                            code.appendLine("with warnings.catch_warnings():");
-                            code.appendLine("    _x = np.linspace(-5, 5, 100)");
-                            code.appendLine("    plt.plot(_x, _rv.cdf(_x))");
+                    } else {
+                        if (probDensityFunc === true || cumDistFunc === true) {
                             code.appendLine();
-                            code.appendLine("    plt.title('Cumulative distribution function: Normal distribution')");
-                            code.appendLine("    plt.xlabel('$x$')");
-                            code.appendLine("    plt.ylabel('$F(x)$')");
-                            code.append("    plt.show()");
-                            codeList.push(code.toString());
+                            code.append("x = np.linspace(-5, 5, 100)");
+                            if (probDensityFunc === true) {
+                                this.addCheckModules('np');
+                                this.addCheckModules('plt');
+    
+                                code.appendLine();
+                                code.appendLine();
+                                code.appendFormatLine("# Probability density function ({0})", label);
+                                code.appendLine("plt.plot(x, _rv.pdf(x))");
+                                code.appendFormatLine("plt.title('Probability density function: {0}')", label.replace("'", "\\'"));
+                                code.appendLine("plt.xlabel('$x$')");
+                                code.appendLine("plt.ylabel('$p(x)$')");
+                                code.append("plt.show()");
+                            }
+                            if (cumDistFunc === true) {
+                                this.addCheckModules('np');
+                                this.addCheckModules('plt');
+                                
+                                code.appendLine();
+                                code.appendLine();
+                                code.appendFormatLine("# Cumulative distribution function ({0})", label);
+                                code.appendLine("import warnings");
+                                code.appendLine("with warnings.catch_warnings():");
+                                code.appendLine("    _x = np.linspace(-5, 5, 100)");
+                                code.appendLine("    plt.plot(_x, _rv.cdf(_x))");
+                                code.appendLine();
+                                code.appendFormatLine("    plt.title('Cumulative distribution function: {0}')", label.replace("'", "\\'"));
+                                code.appendLine("    plt.xlabel('$x$')");
+                                code.appendLine("    plt.ylabel('$F(x)$')");
+                                code.append("    plt.show()");
+                            }
                         }
                     }
                     break;
                 case 'stats-to-pvalue':
                     if (pAlter === 'one-sided') {
                         // one-sided
-                        code = new com_String();
+                        code.appendLine();
+                        code.appendLine();
                         code.appendLine("# Proportional values");
                         code.appendFormatLine("p_value = _rv.sf(abs({0}))", stats);
                         code.append("p_value");
-                        codeList.push(code.toString());
                     } else {
                         // two-sided
-                        code = new com_String();
+                        code.appendLine();
+                        code.appendLine();
                         code.appendLine("# Proportional values");
                         code.appendFormatLine("p_value = _rv.sf(abs({0}))*2", stats);
                         code.append("p_value");
-                        codeList.push(code.toString());
                     }
                     break;
                 case 'pvalue-to-stats': 
                     if (statsAlter === 'one-sided') {
                         // one-sided
-                        code = new com_String();
+                        code.appendLine();
+                        code.appendLine();
                         code.appendLine("# Statistic");
                         code.appendFormatLine("statistic = _rv.isf({0})", pvalue);
                         code.append("statistic");
-                        codeList.push(code.toString());
                     } else {
                         // two-sided
-                        code = new com_String();
+                        code.appendLine();
+                        code.appendLine();
                         code.appendLine("# Statistic");
                         code.appendFormatLine("statistic = _rv.isf({0}/2)", pvalue);
                         code.append("statistic");
-                        codeList.push(code.toString());
                     }
                     break;
             }
-
+            codeList.push(code.toString());
+                
             return codeList;
         }
 
