@@ -11,8 +11,8 @@
 #=============================================================================
 # Replace Version and Basic Files
 #=============================================================================
-VP_ORG_VER=2.3.6
-VP_NEW_VER=2.3.7
+VP_ORG_VER=2.3.7
+VP_NEW_VER=2.4.0
 
 # update version info
 grep -REil ${VP_ORG_VER//\./\\.} setup.py visualpython/js/com/com_Config.js visualpython/js/com/com_Const.js | xargs sed -i --follow-symlinks "s/${VP_ORG_VER//\./\\.}/${VP_NEW_VER}/g"
