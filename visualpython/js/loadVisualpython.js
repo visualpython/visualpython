@@ -206,6 +206,38 @@ define([
         }
     }
 
+    var _checkVersion = function() {
+        // check version timestamp
+        let nowDate = new Date();
+        vpConfig.getData('version_timestamp', 'vpcfg').then(function(data) {
+            let doCheckVersion = false;
+            if (data == undefined) {
+                // no timestamp, check version
+                doCheckVersion = true;
+            } else if (data != '') {
+                let lastCheck = new Date(parseInt(data));
+                let diffCheck_now = new Date(nowDate.getFullYear(), nowDate.getMonth() + 1, nowDate.getDate());
+                let diffCheck_last = new Date(lastCheck.getFullYear(), lastCheck.getMonth() + 1, lastCheck.getDate());
+
+                let diff = Math.abs(diffCheck_now.getTime() - diffCheck_last.getTime());
+                diff = Math.ceil(diff / (1000 * 3600 * 24));
+
+                if (diff >= 1) {
+                    // if More than 1 day passed, check version
+                    doCheckVersion = true;
+                }
+            }
+
+            // check version and update version_timestamp
+            if (doCheckVersion == true) {
+                vpConfig.checkVpVersion(true);
+            }
+
+        }).catch(function(err) {
+            vpLog.display(VP_LOG_TYPE.ERROR, err);
+        })
+    }
+
     //========================================================================
     // External call function
     //========================================================================
@@ -258,10 +290,9 @@ define([
             _addToolBarVpButton();
         }
         _loadVpResource(cfg);
-        vpConfig.checkVersionTimestamp();
+        _checkVersion();
 
-        if ((cfg.vp_section_display && vpFrame) 
-            || vpConfig.extensionType === 'colab') { // CHROME: default to display vp
+        if (cfg.vp_section_display && vpFrame) {
             vpFrame.openVp();
         }
 
@@ -288,13 +319,11 @@ define([
                     if (newValue.sessionContext.isReady) {
                         vpLog.display(VP_LOG_TYPE.LOG, 'vp operations for kernel ready...');
                         vpConfig.readKernelFunction();
-                        vpConfig.checkVersionTimestamp();
                     }
                     newValue.sessionContext._connectionStatusChanged.connect(function(s2, status) {
                         if (status === 'connected') {
                             vpLog.display(VP_LOG_TYPE.LOG, 'vp operations for kernel ready...');
                             vpConfig.readKernelFunction();
-                            vpConfig.checkVersionTimestamp();
                         }
                     });
                 } else {

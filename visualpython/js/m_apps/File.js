@@ -22,10 +22,9 @@ define([
     'vp_base/js/com/com_generatorV2',
     'vp_base/data/m_library/pandasLibrary',
     'vp_base/js/com/component/FileNavigation',
-    'vp_base/js/com/component/SuggestInput',
-    'vp_base/js/com/component/DataSelector'
+    'vp_base/js/com/component/SuggestInput'
 ], function(fileHtml, fileCss, com_String, com_util, com_Const, PopupComponent
-            , pdGen, pandasLibrary, FileNavigation, SuggestInput, DataSelector) {
+            , pdGen, pandasLibrary, FileNavigation, SuggestInput) {
 
     /**
      * File
@@ -303,14 +302,7 @@ define([
 
         templateForBody() {
             /** Implement generating template */
-            let page = $(fileHtml);
-
-            let allocateSelector = new DataSelector({
-                pageThis: this, id: 'vp_sampleReturn', placeholder: 'Variable name'
-            });
-            $(page).find('#vp_sampleReturn').replaceWith(allocateSelector.toTagString());
-
-            return page;
+            return fileHtml;
         }
 
         renderPage(pageType) {

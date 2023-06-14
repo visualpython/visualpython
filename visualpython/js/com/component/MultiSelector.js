@@ -404,6 +404,62 @@ define([
                 that._bindItemClickEvent();
             });
 
+            // item indexing
+            $(this.wrapSelector('.' + APP_SELECT_ITEM)).on('click', function(event) {
+                var dataIdx = $(this).attr('data-idx');
+                var idx = $(this).index();
+                var added = $(this).hasClass('added'); // right side added item?
+                var selector = '';
+
+                // remove selection for select box on the other side
+                if (added) {
+                    // remove selection for left side
+                    $(that.wrapSelector('.' + APP_SELECT_ITEM + ':not(.added)')).removeClass('selected');
+                    // set selector
+                    selector = '.added';
+                } else {
+                    // remove selection for right(added) side
+                    $(that.wrapSelector('.' + APP_SELECT_ITEM + '.added')).removeClass('selected');
+                    // set selector
+                    selector = ':not(.added)';
+                }
+
+                if (vpEvent.keyManager.keyCheck.ctrlKey) {
+                    // multi-select
+                    that.pointer = { start: idx, end: -1 };
+                    $(this).toggleClass('selected');
+                } else if (vpEvent.keyManager.keyCheck.shiftKey) {
+                    // slicing
+                    var startIdx = that.pointer.start;
+                    
+                    if (startIdx == -1) {
+                        // no selection
+                        that.pointer = { start: idx, end: -1 };
+                    } else if (startIdx > idx) {
+                        // add selection from idx to startIdx
+                        var tags = $(that.wrapSelector('.' + APP_SELECT_ITEM + selector));
+                        for (var i = idx; i <= startIdx; i++) {
+                            $(tags[i]).addClass('selected');
+                        }
+                        that.pointer = { start: startIdx, end: idx };
+                    } else if (startIdx <= idx) {
+                        // add selection from startIdx to idx
+                        var tags = $(that.wrapSelector('.' + APP_SELECT_ITEM + selector));
+                        for (var i = startIdx; i <= idx; i++) {
+                            $(tags[i]).addClass('selected');
+                        }
+                        that.pointer = { start: startIdx, end: idx };
+                    }
+                } else {
+                    // single-select
+                    that.pointer = { start: idx, end: -1 };
+                    // un-select others
+                    $(that.wrapSelector('.' + APP_SELECT_ITEM + selector)).removeClass('selected');
+                    // select this
+                    $(this).addClass('selected');
+                }
+            });
+
             // item indexing - add all
             $(this.wrapSelector('.' + APP_SELECT_ADD_ALL_BTN)).on('click', function(event) {
                 $(that.wrapSelector('.' + APP_SELECT_BOX + '.left .' + APP_SELECT_ITEM)).appendTo(
@@ -602,7 +658,6 @@ define([
                 let newItemIndex = this.dataList.length;
                 var targetTag = $(`<div class="${APP_SELECT_ITEM} ${APP_DRAGGABLE} added selected" data-idx="${newItemIndex}" data-name="${newItemName}" data-type="object" data-code="'${newItemName}'" title="${newItemName}: Added manually">
                     <span>${newItemName}</span>
-                    <div class="vp-cs-del-item vp-icon-close-small" title="Delete this manually added item"></div>
                 </div>`);
                 $(targetTag).appendTo(
                     $(this.wrapSelector('.' + APP_SELECT_BOX + '.right'))
@@ -612,8 +667,6 @@ define([
                 $(this.wrapSelector('.' + APP_SELECT_ITEM)).removeClass('selected');
                 // clear item input
                 $(this.wrapSelector('.vp-cs-add-item-name')).val('');
-                // bind click event
-                this._bindItemClickEvent();
                 // bind draggable
                 this.bindDraggable();
             }
