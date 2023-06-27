@@ -944,10 +944,10 @@ define([
                 }
                 if (chartType === 'barplot' && sortX !== '' && sortY !== '') {
                     if (hue !== '' && sortHue !== '') {
-                        sortCode = com_util.formatString("{0}[{1}[{2}]=={3}].groupby({4})[{5}].mean().sort_values({6}).index"
+                        sortCode = com_util.formatString("{0}[{1}[{2}]=={3}].groupby({4})[{5}].mean(numeric_only=True).sort_values({6}).index"
                                             , state.data, state.data, state.hue, com_util.convertToStr(sortHue, sortHueText), sortX, sortY, sortTypeStr);
                     } else {
-                        sortCode = com_util.formatString("{0}.groupby({1})[{2}].mean().sort_values({3}).index", state.data, sortX, sortY, sortTypeStr);
+                        sortCode = com_util.formatString("{0}.groupby({1})[{2}].mean(numeric_only=True).sort_values({3}).index", state.data, sortX, sortY, sortTypeStr);
                     }
                 } else if (chartType === 'countplot' && (sortX !== '' || sortY !== '')) {
                     let countVar = sortX === ''? sortY: sortX;

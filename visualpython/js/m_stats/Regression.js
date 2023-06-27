@@ -464,8 +464,8 @@ define([
                         code.appendLine("# Mean Centering ");
                         independentValue = com_util.formatString("{0}_MC", independentValue);
                         moderatedValue = com_util.formatString("{0}_MC", moderatedValue);
-                        code.appendFormatLine("vp_df['{0}']   = vp_df[{1}] - vp_df[{2}].mean()", independentValue, independent, independent);
-                        code.appendFormatLine("vp_df['{0}'] = vp_df[{1}] - vp_df[{2}].mean()", moderatedValue, moderated, moderated);
+                        code.appendFormatLine("vp_df['{0}']   = vp_df[{1}] - vp_df[{2}].mean(numeric_only=True)", independentValue, independent, independent);
+                        code.appendFormatLine("vp_df['{0}'] = vp_df[{1}] - vp_df[{2}].mean(numeric_only=True)", moderatedValue, moderated, moderated);
                     }
                     // Model 1 to 3
                     code.appendLine();
@@ -683,8 +683,8 @@ define([
                     code.appendLine();
                     code.appendLine("# Residual statistics");
                     code.appendLine("display(Markdown('### Residual statistics'))");
-                    code.appendLine("display(pd.DataFrame(data={'Min':vp_residual.min(),'Max':vp_residual.max(),'Mean':vp_residual.mean(),");
-                    code.append("                           'Std. Deviation':vp_residual.std(),'N':vp_residual.count()}))");
+                    code.appendLine("display(pd.DataFrame(data={'Min':vp_residual.min(),'Max':vp_residual.max(),'Mean':vp_residual.mean(numeric_only=True),");
+                    code.append("                           'Std. Deviation':vp_residual.std(numeric_only=True),'N':vp_residual.count()}))");
                 }
                 if (normTest === true) {
                     code.appendLine();
