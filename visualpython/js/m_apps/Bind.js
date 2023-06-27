@@ -566,6 +566,7 @@ define([
         }
 
         loadState() {
+            super.loadState();
             var {
                 type, concat, merge, userOption, allocateTo, resetIndex, withoutColumn
             } = this.state;
