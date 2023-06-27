@@ -523,8 +523,14 @@ define([
                 // col.array parsing
                 var colInfo = com_util.safeString(col.array);
                 // render column box
-                tag.appendFormatLine('<div class="{0} {1} {2}" data-idx="{3}" data-colname="{4}" data-dtype="{5}" data-code="{6}" title="{7}"><span>{8}</span></div>',
-                    VP_DS_SELECT_ITEM, 'select-col', VP_DS_DRAGGABLE, col.location, col.value, col.dtype, col.code, col.label + ': \n' + colInfo, col.label);
+                let numIconStr = '';
+                if (col.isNumeric === true) {
+                    numIconStr = '<span class="vp-icon-numeric mr5 vp-vertical-text"></span>';
+                } else {
+                    numIconStr = '<span class="vp-icon-non-numeric mr5 vp-vertical-text"></span>';
+                }
+                tag.appendFormatLine('<div class="{0} {1} {2}" data-idx="{3}" data-colname="{4}" data-dtype="{5}" data-code="{6}" title="{7}">{8}<span>{9}</span></div>',
+                    VP_DS_SELECT_ITEM, 'select-col', VP_DS_DRAGGABLE, col.location, col.value, col.dtype, col.code, col.label + ': \n' + colInfo, numIconStr, col.label);
             });
             tag.appendLine('</div>'); // VP_DS_SELECT_BOX
             $(this.wrapSelector('.select-col .' + VP_DS_SELECT_BOX + '.left')).replaceWith(function () {
@@ -1212,6 +1218,7 @@ define([
                                 ...x,
                                 value: x.label,
                                 code: x.value,
+                                isNumeric: x.is_numeric
                             };
                         });
                         that.loadColumnList(list);

@@ -37,7 +37,7 @@ def _vp_get_columns_list(df):
     """
     colInfo = { 'name': list(df.columns.names), 'level': df.columns.nlevels, 'list': [] }
     for i, c in enumerate(df.columns):
-        cInfo = { 'label': c, 'value': c, 'dtype': str(df[c].dtype), 'array': str(df[c].array), 'location': i }
+        cInfo = { 'label': c, 'value': c, 'dtype': str(df[c].dtype), 'is_numeric': _vp_pd.api.types.is_numeric_dtype(df[c]), 'array': str(df[c].array), 'location': i }
         # value
         if type(c).__name__ == 'list' or type(c).__name__ == 'tuple':
             cInfo['label'] = list(c)

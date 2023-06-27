@@ -191,6 +191,18 @@ select.vp-select:disabled {
     width: 15px;
     height: 15px;
 }
+.vp-icon-numeric {
+    background: center / contain no-repeat url(../img/numeric.svg);
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+}
+.vp-icon-non-numeric {
+    background: center / contain no-repeat url(../img/non_numeric.svg);
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+}
 
 .vp-file-browser-button {
 	width: 22px;
