@@ -61,12 +61,9 @@ define([
             }
 
             // numpy.dtype or python type
-            this.astypeList = [ 
-                'datetime64', 
-                'int', 'int32', 'int64', 
-                'float', 'float64', 
-                'object', 'category', 
-                'bool', 'str'
+            this.astypeList = [
+                'object', 'int64', 'float64', 'bool', 
+                'datetime64[ns]', 'timedelta[ns]', 'category'
             ];
 
             // {
@@ -1021,28 +1018,29 @@ define([
             $(that.wrapSelector('.vp-inner-popup-isedgechanged')).val("false");
 
             let code = new com_String();
-            code.appendFormatLine("_out, _bins = pd.cut({0}[{1}], bins={2}, right={3}, labels=False, retbins=True)"
+            code.appendFormatLine("_out, _bins = pd.cut({0}[{1}], bins={2}, right={3}, retbins=True)"
                 , this.state.tempObj, this.state.selected[0].code, binsCount, right?'True':'False');
-            code.append("_vp_print({'labels': _out.unique(), 'edges': list(_bins)})");
+            code.append("_vp_print({'edges': list(_bins)})");
             vpKernel.execute(code.toString()).then(function(resultObj) {
                 let { result } = resultObj;
-                let { labels, edges } = JSON.parse(result);
+                let { edges } = JSON.parse(result);
 
+                let labelLength = edges.length - 1;
                 let edgeTbody = new com_String();
-                labels && labels.forEach((label, idx) => {
+                for (let idx = 0; idx < labelLength; idx++ ) {
                     let leftDisabled = 'disabled';
                     let rightDisabled = '';
-                    if (idx === (labels.length - 1)) {
+                    if (idx === (labelLength - 1)) {
                         rightDisabled = 'disabled';
                     }
                     edgeTbody.append('<tr>');
-                    edgeTbody.appendFormatLine('<td><input type="text" class="vp-input m vp-inner-popup-label" data-idx="{0}" value="{1}"/></td>', idx, label);
+                    edgeTbody.appendFormatLine('<td><input type="text" class="vp-input m vp-inner-popup-label" data-idx="{0}" value="{1}"/></td>', idx, idx);
                     edgeTbody.appendLine('<td>:</td>');
                     edgeTbody.appendFormatLine('<td><input type="number" class="vp-input m vp-inner-popup-left-edge" data-idx="{0}" value="{1}" {2}/></td>', idx, edges[idx], leftDisabled);
                     edgeTbody.appendLine('<td>~</td>');
                     edgeTbody.appendFormatLine('<td><input type="number" class="vp-input m vp-inner-popup-right-edge" data-idx="{0}" value="{1}" {2}/></td>', idx + 1, edges[idx+1], rightDisabled);
                     edgeTbody.append('</tr>');
-                });
+                }
                 $(that.wrapSelector('.vp-inner-popup-range-table tbody')).html(edgeTbody.toString());
 
                 // label change event
@@ -1065,7 +1063,7 @@ define([
                 });
 
             }).catch(function(errObj) {
-                // TODO:
+                vpLog.display(VP_LOG_TYPE.ERROR, errObj);
             });
         }
 
@@ -1333,8 +1331,8 @@ define([
             if (type === 'column') {
                 content.appendLine('<tr><th><label>Add type</label></th>');
                 content.appendFormatLine('<td><select class="{0}">', 'vp-inner-popup-addtype');
-                content.appendFormatLine('<option value="{0}">{1}</option>', 'variable', 'Variable');
-                content.appendFormatLine('<option value="{0}">{1}</option>', 'value', 'Value');
+                content.appendFormatLine('<option value="{0}">{1}</option>', 'calculate', 'Calculate');
+                content.appendFormatLine('<option value="{0}">{1}</option>', 'replace', 'Replace');
                 content.appendFormatLine('<option value="{0}">{1}</option>', 'condition', 'Condition');
                 content.appendFormatLine('<option value="{0}">{1}</option>', 'apply', 'Apply');
                 content.appendLine('</select></td></tr>');
@@ -1344,8 +1342,8 @@ define([
     
             content.appendLine('<hr style="margin: 5px 0px;"/>');
             
-            // tab 1. variable
-            content.appendFormatLine('<div class="{0} {1}">', 'vp-inner-popup-tab', 'variable');
+            // tab 1. calculate
+            content.appendFormatLine('<div class="{0} {1}">', 'vp-inner-popup-tab', 'calculate');
             content.appendLine('<table class="vp-tbl-gap5"><colgroup><col width="110px"><col width="*"><col width="15px"></colgroup>');
             content.appendLine('<tr class="vp-inner-popup-value-row">');
             content.appendFormatLine('<th><select class="{0}"><option value="variable">Variable</option><option value="column">Column</option></select></th>', 'vp-inner-popup-vartype');
@@ -1368,8 +1366,8 @@ define([
             content.appendLine('</table>');
             content.appendLine('</div>'); // end of vp-inner-popup-tab value
 
-            // tab 2. value
-            content.appendFormatLine('<div class="{0} {1}" style="display:none;">', 'vp-inner-popup-tab', 'value');
+            // tab 2. replace
+            content.appendFormatLine('<div class="{0} {1}" style="display:none;">', 'vp-inner-popup-tab', 'replace');
             content.appendFormatLine('<div class="{0}">', 'vp-grid-col-120');
             content.appendLine('<label class="vp-orange-text">Target column</label>');
             content.appendFormatLine('<select class="vp-select {0}">', 'vp-inner-popup-value-col-list');
@@ -1718,15 +1716,15 @@ define([
             content.appendLine('</td></tr>');
             content.appendLine('<tr><th><label>Replace type</label></th>');
             content.appendFormatLine('<td><select class="{0}">', 'vp-inner-popup-replacetype');
-            content.appendFormatLine('<option value="{0}">{1}</option>', 'value', 'Value');
+            content.appendFormatLine('<option value="{0}">{1}</option>', 'replace', 'Replace');
             content.appendFormatLine('<option value="{0}">{1}</option>', 'condition', 'Condition');
             content.appendLine('</select></td></tr>');
             content.appendLine('</table>');
             content.appendLine('</div>'); // end of vp-inner-popup-header
     
             content.appendLine('<hr style="margin: 5px 0px;"/>');
-            // replace page - 1. value
-            content.appendFormatLine('<div class="{0}">', 'vp-inner-popup-tab value');
+            // replace page - 1. replace
+            content.appendFormatLine('<div class="{0}">', 'vp-inner-popup-tab replace');
             content.appendFormatLine('<label><input type="checkbox" class="{0}"/><span>{1}</span></label>', 'vp-inner-popup-use-regex', 'Use Regular Expression');
             content.appendLine('<br/><br/>');
             content.appendFormatLine('<div class="{0}">', 'vp-inner-popup-replace-table');
@@ -2348,13 +2346,13 @@ define([
                     }
                     var tab = $(this.wrapSelector('.vp-inner-popup-addtype')).val();
                     if (type === FRAME_EDIT_TYPE.ADD_ROW) {
-                        tab = 'variable';
+                        tab = 'calculate';
                     }
                     content['addtype'] = tab;
-                    if (tab == 'variable') {
+                    if (tab == 'calculate') {
                         let values = [];
                         let opers = [];
-                        $(this.wrapSelector('.vp-inner-popup-tab.variable tr.vp-inner-popup-value-row')).each((idx, tag) => {
+                        $(this.wrapSelector('.vp-inner-popup-tab.calculate tr.vp-inner-popup-value-row')).each((idx, tag) => {
                             let varType = $(tag).find('.vp-inner-popup-vartype').val();
                             if (varType === 'variable') {
                                 let valueastext = $(tag).find('.vp-inner-popup-istext').prop('checked');
@@ -2371,7 +2369,7 @@ define([
                         });
                         content['values'] = values;
                         content['opers'] = opers;
-                    } else if (tab == 'value') {
+                    } else if (tab == 'replace') {
                         content['target'] = $(this.wrapSelector('.vp-inner-popup-value-col-list option:selected')).data('code');
                         var useregex = $(this.wrapSelector('.vp-inner-popup-use-regex')).prop('checked');
                         content['useregex'] = useregex;
@@ -2428,7 +2426,7 @@ define([
                     content['name'] = $(this.wrapSelector('.vp-inner-popup-input1')).data('code');
                     var tab = $(this.wrapSelector('.vp-inner-popup-replacetype')).val();
                     content['replacetype'] = tab;
-                    if (tab == 'value') {
+                    if (tab == 'replace') {
                         var useregex = $(this.wrapSelector('.vp-inner-popup-use-regex')).prop('checked');
                         content['useregex'] = useregex;
                         content['list'] = [];
@@ -2825,7 +2823,7 @@ define([
                         return '';
                     }
                     var tab = content.addtype;
-                    if (tab == 'variable') {
+                    if (tab == 'calculate') {
                         let values = [];
                         content['values'] && content['values'].forEach((val, idx) => {
                             if (idx > 0) {
@@ -2839,7 +2837,7 @@ define([
                         } else {
                             code.appendFormat("{0}[{1}] = {2}", tempObj, content.name, valueStr);
                         }
-                    } else if (tab == 'value') {
+                    } else if (tab == 'replace') {
                         var replaceStr = new com_String();
                         var targetName = content['target'];
                         var useRegex = content['useregex'];
@@ -2916,7 +2914,7 @@ define([
                 case FRAME_EDIT_TYPE.REPLACE:
                     var name = content.name;
                     var tab = content.replacetype;
-                    if (tab === 'value') {
+                    if (tab === 'replace') {
                         var replaceStr = new com_String();
                         var useRegex = content['useregex'];
                         content['list'].forEach((obj, idx) => {
