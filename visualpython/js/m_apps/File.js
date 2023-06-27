@@ -369,7 +369,7 @@ define([
             // prepend user option
             let hasAllocateTo = $(this.wrapSelector(prefix + '#o0')).length > 0;
             if (hasAllocateTo) {
-                $(this.wrapSelector(prefix + '#o0')).closest('tr').before(
+                $(this.wrapSelector(prefix + '#o0')).closest('tr').after(
                     $('<tr>').append($(`<td><label for="userOption">User Option</label></td>`))
                         .append($('<td><input id="userOption" type="text" class="vp-input vp-state" placeholder="key=value, ..."/></td>'))
                 )
