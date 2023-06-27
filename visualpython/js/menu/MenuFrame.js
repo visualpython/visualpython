@@ -23,13 +23,14 @@ define([
     '../com/component/Component',
     '../com/component/SuggestInput',
     '../com/component/InnerFuncViewer',
+    '../com/component/PackageManager',
 
     __VP_RAW_LOADER__('../../data/libraries.json'), // INTEGRATION: text! to raw-loader
 
     './MenuGroup',
     './MenuItem',
     './TaskBar'
-], function(menuFrameHtml, menuFrameCss, com_Config, com_Const, com_util, com_interface, Component, SuggestInput, InnerFuncViewer,
+], function(menuFrameHtml, menuFrameCss, com_Config, com_Const, com_util, com_interface, Component, SuggestInput, InnerFuncViewer, PackageManager,
             librariesJson, 
             MenuGroup, MenuItem, TaskBar) {
 	'use strict';
@@ -113,6 +114,11 @@ define([
             // Click version updater
             $(this.wrapSelector('#vp_versionUpdater')).on('click', function() {
                 vpConfig.checkVpVersion();
+            });
+            // Click package manager
+            $(this.wrapSelector('#vp_packageManager')).on('click', function() {
+                let packageManager = new PackageManager();
+                packageManager.open();
             });
         }
 

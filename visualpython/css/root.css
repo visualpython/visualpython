@@ -60,6 +60,9 @@
 .vp-center {
     text-align: center;
 }
+.vp-vertical-text {
+    vertical-align: text-bottom;
+}
 /* Body */
 body {
     overflow: hidden;
@@ -96,6 +99,16 @@ select.vp-select:disabled {
 
 /* image icons */
 /* LAB: img to background-image */
+.vp-icon-package-manager {
+    background: center / contain no-repeat url(../img/package_manager.svg);
+    width: 20px;
+    height: 20px;
+}
+.vp-icon-install {
+    background: center / contain no-repeat url(../img/import.svg);
+    width: 16px;
+    height: 16px;
+}
 .vp-icon-setting {
     background: center / contain no-repeat url(../img/setting.svg);
     width: 100%;
@@ -190,6 +203,11 @@ select.vp-select:disabled {
     background: center / contain no-repeat url(../img/close_small.svg);
     width: 15px;
     height: 15px;
+}
+.vp-icon-upgrade {
+    background: center / contain no-repeat url(../img/upgrade.svg);
+    width: 16px;
+    height: 16px;
 }
 .vp-icon-numeric {
     background: center / contain no-repeat url(../img/numeric.svg);
@@ -613,6 +631,10 @@ hr.vp-extra-menu-line {
     box-sizing: border-box;
     padding: 15px;
     grid-row-gap: 5px;
+}
+.vp-grid-col-rp3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
 }
 .vp-grid-col-p50 {
     display: grid;

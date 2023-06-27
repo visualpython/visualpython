@@ -28,8 +28,8 @@
     border-bottom: 1px solid var(--vp-border-gray-color);
 }
 .vp-package-manager {
-    /* display: inline-flex; */
-    display: none;
+    display: inline-flex;
+    /* display: none; */
     float: right;
     position: relative;
     font-size: 18px;
@@ -39,6 +39,9 @@
     cursor: pointer;
     width: 18px;
     height: 18px;
+}
+.vp-package-manager span:hover {
+    background: center / contain no-repeat url(../img/package_manager_hover.svg);
 }
 .vp-version-updater {
     display: none;

@@ -1024,6 +1024,23 @@ define([
         }
 
         //====================================================================
+        // Package Manager
+        //====================================================================
+        getPackageList(packList=[]) {
+            var that = this;
+            let code = com_util.formatString("_vp_print(_vp_check_package_list({0}))", JSON.stringify(packList));
+            return new Promise(function(resolve, reject) {
+                that.execute(code).then(function(resultObj) {
+                    // resolve
+                    resolve(resultObj);
+                }).catch(function(err) {
+                    // reject
+                    reject(err);
+                })
+            });
+        }
+
+        //====================================================================
         // Configuration api
         //====================================================================
         loadConfig() {
