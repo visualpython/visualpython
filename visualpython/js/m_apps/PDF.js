@@ -21,9 +21,9 @@ define([
     'vp_base/js/com/component/FileNavigation'
 ], function(pdfHtml, pdfCss, com_String, com_interface, PopupComponent, FileNavigation) {
 
-    const PDF_SHOW     = '!pip show PyMuPDF nltk'
-    const PDF_INSTALL1 = '!pip install PyMuPDF'
-    const PDF_INSTALL2 = '!pip install nltk'
+    var PDF_SHOW     = '!pip show PyMuPDF nltk'
+    var PDF_INSTALL1 = '!pip install PyMuPDF'
+    var PDF_INSTALL2 = '!pip install nltk'
 
     const PDF_IMPORT   = `import pandas as pd
 import fitz
@@ -79,6 +79,12 @@ nltk.download('punkt')`;
                 vp_pdfFile: '',
                 vp_pdfReturn: '',
                 ...this.state
+            }
+
+            if (vpConfig.extensionType === 'lite') {
+                PDF_SHOW = PDF_SHOW.replace('!', '%');
+                PDF_INSTALL1 = PDF_INSTALL1.replace('!', '%');
+                PDF_INSTALL2 = PDF_INSTALL2.replace('!', '%');
             }
         }
 

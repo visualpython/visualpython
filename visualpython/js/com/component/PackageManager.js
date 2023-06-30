@@ -64,6 +64,28 @@ define([
                 'PyMuPDF': { pipName: 'PyMuPDF' },
                 'sweetviz': { pipName: 'sweetviz' },
             }
+            
+            if (vpConfig.extensionType === 'lite') {
+                this.packageLibTemplate = {
+                    'numpy': { pipName: 'numpy' },
+                    'pandas': { pipName: 'pandas' },
+                    'matplotlib': { pipName: 'matplotlib' },
+                    'seaborn': { pipName: 'seaborn' },
+                    'plotly': { pipName: 'plotly' },
+                    'sklearn': { pipName: 'scikit-learn' },
+                    'scikit-posthocs': { pipName: 'scikit-posthocs' },
+                    'scipy': { pipName: 'scipy' },
+                    'statsmodels': { pipName: 'statsmodels' },
+                    'factor-analyzer': { pipName: 'factor-analyzer' },
+                    'category_encoders': { pipName: 'category_encoders' },
+                    'imblearn': { pipName: 'imblearn' },
+                    'xgboost': { pipName: 'xgboost' },
+                    'lightgbm': { pipName: 'lightgbm' },
+                    'catboost': { pipName: 'catboost' },
+                    'auto-sklearn': { pipName: 'auto-sklearn' },
+                    'sweetviz': { pipName: 'sweetviz' },
+                }
+            }
         }
 
         _bindEvent() {
@@ -148,7 +170,7 @@ define([
                     var pipName = that.packageLib[key].pipName;
                     var code = com_util.formatString("!pip uninstall -y {0}", pipName);
                     if (vpConfig.extensionType === 'lite') {
-                        code = com_util.formatString("import piplite\npiplite.uninstall('{0}')", pipName);
+                        code = com_util.formatString("%pip uninstall {0}", pipName);
                     }
                     // create block and run it
                     $('#vp_wrapper').trigger({
@@ -162,7 +184,7 @@ define([
                     var pipName = that.packageLib[key].pipName;
                     var code = com_util.formatString("!pip install --upgrade {0}", pipName);
                     if (vpConfig.extensionType === 'lite') {
-                        code = com_util.formatString("%pip install --upgrade {0}", pipName);
+                        code = com_util.formatString("%pip install {0}", pipName);
                     }
                     // create block and run it
                     $('#vp_wrapper').trigger({
@@ -269,7 +291,7 @@ define([
                     var pipName = this.packageLib[this.state.selected].pipName;
                     var code = com_util.formatString("!pip install {0}", pipName);
                     if (vpConfig.extensionType === 'lite') {
-                        code = com_util.formatString("import piplite\npiplite.install('{0}')", pipName);
+                        code = com_util.formatString("%pip install {0}", pipName);
                     }
                     if (versionType === 'specified') {
                         // specified version
@@ -277,7 +299,7 @@ define([
                         if (version && version !== '') {
                             code = com_util.formatString("!pip install {0}=={1}", pipName, version);
                             if (vpConfig.extensionType === 'lite') {
-                                code = com_util.formatString("import piplite\npiplite.install('{0}=={1}')", pipName, version);
+                                code = com_util.formatString("%pip install {0}=={1}", pipName, version);
                             }
                         } else {
                             $(this.wrapSelector('.vp-inner-popup-version')).focus();
