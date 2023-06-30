@@ -167,6 +167,13 @@ define([
             let codeList = [];
             let code = new com_String();
 
+            // Add installation code FIXME:
+            if (vpConfig.extensionType === 'lite') {
+                codeList.push(that.generateInstallCode().replace('!', '%'));
+            } else {
+                codeList.push(that.generateInstallCode());
+            }
+
             // data declaration
             code.appendFormat("vp_df = {0}", data);
             if (this.columnSelector) {
