@@ -46,11 +46,23 @@ define([
                 'pandas': { pipName: 'pandas' },
                 'matplotlib': { pipName: 'matplotlib' },
                 'seaborn': { pipName: 'seaborn' },
-                'sklearn': { pipName: 'scikit-learn' },
-                'scipy': { pipName: 'scipy' },
-                'statsmodel': { pipName: 'statsmodel' },
-                'pinguin': { pipName: 'pinguin' },
+                'plotly': { pipName: 'plotly' },
                 'wordcloud': { pipName: 'wordcloud' },
+                'sklearn': { pipName: 'scikit-learn' },
+                'scikit-posthocs': { pipName: 'scikit-posthocs' },
+                'scipy': { pipName: 'scipy' },
+                'statsmodels': { pipName: 'statsmodels' },
+                'factor-analyzer': { pipName: 'factor-analyzer' },
+                'pingouin': { pipName: 'pingouin' },
+                'category_encoders': { pipName: 'category_encoders' },
+                'imblearn': { pipName: 'imblearn' },
+                'xgboost': { pipName: 'xgboost' },
+                'lightgbm': { pipName: 'lightgbm' },
+                'catboost': { pipName: 'catboost' },
+                'auto-sklearn': { pipName: 'auto-sklearn' },
+                'tpot': { pipName: 'tpot' },
+                'PyMuPDF': { pipName: 'PyMuPDF' },
+                'sweetviz': { pipName: 'sweetviz' },
             }
         }
 
@@ -135,6 +147,9 @@ define([
                 } else if (menu === 'uninstall') {
                     var pipName = that.packageLib[key].pipName;
                     var code = com_util.formatString("!pip uninstall -y {0}", pipName);
+                    if (vpConfig.extensionType === 'lite') {
+                        code = com_util.formatString("import piplite\npiplite.uninstall('{0}')", pipName);
+                    }
                     // create block and run it
                     $('#vp_wrapper').trigger({
                         type: 'create_option_page', 
@@ -146,6 +161,9 @@ define([
                 } else if (menu === 'upgrade') {
                     var pipName = that.packageLib[key].pipName;
                     var code = com_util.formatString("!pip install --upgrade {0}", pipName);
+                    if (vpConfig.extensionType === 'lite') {
+                        code = com_util.formatString("%pip install --upgrade {0}", pipName);
+                    }
                     // create block and run it
                     $('#vp_wrapper').trigger({
                         type: 'create_option_page', 
@@ -250,11 +268,17 @@ define([
                     let versionType = $(this.wrapSelector('.vp-inner-popup-body input[name="ver_select"]:checked')).val();
                     var pipName = this.packageLib[this.state.selected].pipName;
                     var code = com_util.formatString("!pip install {0}", pipName);
+                    if (vpConfig.extensionType === 'lite') {
+                        code = com_util.formatString("import piplite\npiplite.install('{0}')", pipName);
+                    }
                     if (versionType === 'specified') {
                         // specified version
                         let version = $(this.wrapSelector('.vp-inner-popup-version')).val();
                         if (version && version !== '') {
                             code = com_util.formatString("!pip install {0}=={1}", pipName, version);
+                            if (vpConfig.extensionType === 'lite') {
+                                code = com_util.formatString("import piplite\npiplite.install('{0}=={1}')", pipName, version);
+                            }
                         } else {
                             $(this.wrapSelector('.vp-inner-popup-version')).focus();
                             return false;
@@ -291,6 +315,15 @@ define([
 
                 // load package list
                 that.loadPackageList();
+            }).catch(function(err) {
+                vpLog.display(VP_LOG_TYPE.ERROR, err);
+
+                that.packageLib = {
+                    ...that.packageLibTemplate
+                };
+
+                // load package list
+                that.loadPackageList();
             });
         }
 
@@ -314,12 +347,14 @@ define([
             // install
             item.appendFormatLine('<div class="{0} vp-icon-install" data-menu="{1}" title="{2}"></div>'
                                 , 'vp-pm-item-menu-item', 'install', 'Install');
-            // upgrade
-            item.appendFormatLine('<div class="{0} vp-icon-upgrade {1}" data-menu="{2}" title="{3}"></div>'
-                                , 'vp-pm-item-menu-item', (info.installed===true?'':'disabled'), 'upgrade', 'Upgrade');
-            // uninstall
-            item.appendFormatLine('<div class="{0} vp-icon-delete {1}" data-menu="{2}" title="{3}"></div>'
-                                , 'vp-pm-item-menu-item', (info.installed===true?'':'disabled'), 'uninstall', 'Uninstall');
+            if (vpConfig.extensionType !== 'lite') {
+                // upgrade
+                item.appendFormatLine('<div class="{0} vp-icon-upgrade {1}" data-menu="{2}" title="{3}"></div>'
+                                    , 'vp-pm-item-menu-item', (info.installed===true?'':'disabled'), 'upgrade', 'Upgrade');
+                // uninstall
+                item.appendFormatLine('<div class="{0} vp-icon-delete {1}" data-menu="{2}" title="{3}"></div>'
+                                    , 'vp-pm-item-menu-item', (info.installed===true?'':'disabled'), 'uninstall', 'Uninstall');
+            }
             item.appendLine('</div>'); // end of vp-pm-item-menu
             item.appendLine('</div>'); // end of vp-pm-item-header
             // delete button
