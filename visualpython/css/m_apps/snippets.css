@@ -110,11 +110,12 @@
 .vp-sn-search-box .vp-sn-search-icon {
     position: absolute;
     color: #C4C4C4;
-    right: 10px;
-    padding-top: 4px;
+    right: 7px;
+    top: 4px;
     /* LAB: img to background-image */
     background: top / contain no-repeat url(../../img/search.svg);
     height: 100%;
+    width: 22px;
 }
 .vp-sn-func-box {
     height: 50px;

@@ -15,7 +15,7 @@
 // CHROME: notebook/js/codemirror-ipython
 (function(mod) {
     if (typeof exports == "object" && typeof module == "object"){ // CommonJS
-        if (vpExtType === 'lab') {
+        if (vpExtType === 'lab' || vpExtType === 'lite') {
             mod(require("codemirror/lib/codemirror"),
             require("codemirror/mode/python/python")
             );
@@ -81,7 +81,7 @@ define([
      * Component
      */
     class PopupComponent extends Component {
-        constructor(state={ config: { id: 'popup', name: 'Popup title', path: 'path/file' }}, prop={}) {
+        constructor(state={ config: { id: 'popup', name: 'Popup title', path: 'path/file', category: '' }}, prop={}) {
             // CHROME: FIXME: #site -> .notebook-vertical
             // super($('#site'), state, prop);
             super($(vpConfig.parentSelector), state, prop);
@@ -359,6 +359,9 @@ define([
                 // add install codes
                 var codes = that.generateInstallCode();
                 codes && codes.forEach(code => {
+                    if (vpConfig.extensionType === 'lite') {
+                        code = code.replace('!', '%');
+                    }
                     com_interface.insertCell('code', code, true, that.getSigText());
                 });
             });
@@ -396,6 +399,11 @@ define([
             // save state values
             $(document).on('change', this.wrapSelector('.vp-state'), function() {
                 that._saveSingleState($(this)[0]);
+            });
+
+            // click input box with selection
+            $(document).on('focus', this.wrapSelector('input'), function() {
+                $(this).select();
             });
 
             // Click buttons
@@ -492,12 +500,13 @@ define([
 
         _unbindEvent() {
             $(document).off('change', this.wrapSelector('.vp-state'));
+            $(document).off('focus', this.wrapSelector('input'));
         }
 
         _bindDraggable() {
             var that = this;
             let containment = 'body';
-            if (vpConfig.extensionType === 'lab') {
+            if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
                 containment = '#main';
             }
             $(this.wrapSelector()).draggable({
@@ -544,7 +553,11 @@ define([
             this.$pageDom = $(popupComponentHtml.replaceAll('${vp_base}', com_Const.BASE_PATH));
             // set title
             // this.$pageDom.find('.vp-popup-title').text(this.category + ' > ' + this.name);
-            this.$pageDom.find('.vp-popup-title').html(`<span class="vp-popup-category">${this.category} > </span><span>${this.name}</span>`);
+            if (this.category && this.category !== '') {
+                this.$pageDom.find('.vp-popup-title').html(`<span class="vp-popup-category">${this.category} > </span><span>${this.name}</span>`);
+            } else {
+                this.$pageDom.find('.vp-popup-title').html(`<span>${this.name}</span>`);
+            }
             // set body
             let bodyTemplate = this.templateForBody();
             // CHROME: check url keyword and replace it
@@ -792,7 +805,9 @@ define([
             if (customKey && customKey != '') {
                 // allow custom key until level 2
                 let customKeys = customKey.split('.');
-                if (customKeys.length == 2) {
+                if (customKeys.length === 3) {
+                    this.state[customKeys[0]][customKeys[1]][customKeys[2]] = newValue;
+                } else if (customKeys.length === 2) {
                     this.state[customKeys[0]][customKeys[1]] = newValue;
                 } else {
                     this.state[customKey] = newValue;

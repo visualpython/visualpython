@@ -74,24 +74,36 @@ define([
                             code: "pd.DataFrame({'Null Count': ${data}.isnull().sum(), 'Non-Null Count': ${data}.notnull().sum()})", dtype: ['DataFrame', 'Series'], toframe: true },
                         // { id: 'duplicates', label: 'Duplicated', code: '${data}.duplicated()', dtype: ['DataFrame', 'Series'] },
                         { id: 'duplicates', label: 'Duplicated', code: "_duplicated = ([${data}.duplicated().sum()] + [${data}[col].duplicated().sum() for col in ${data}.columns])\
-                            \n_duplicated_df = pd.DataFrame({\
-                            \n    'Rows':[len(${data})]*len(_duplicated),\
-                            \n    'Unique':[len(${data}) - dups for dups in _duplicated],\
-                            \n    'Duplicated': _duplicated,\
-                            \n    'Duplicated by': ['All columns'] + ${data}.columns.to_list()\
-                            \n}, index=['Combination']+${data}.columns.to_list())\
-                            \n_duplicated_df", dtype: ['DataFrame', 'Series'], toframe: true },
+\n_duplicated_df = pd.DataFrame({\
+\n    'Rows':[len(${data})]*len(_duplicated),\
+\n    'Unique':[len(${data}) - dups for dups in _duplicated],\
+\n    'Duplicated': _duplicated,\
+\n    'Duplicated by': ['All columns'] + ${data}.columns.to_list()\
+\n}, index=['Combination']+${data}.columns.to_list())\
+\n_duplicated_df", dtype: ['DataFrame', 'Series'], toframe: true },
                         { id: 'unique', label: 'Unique', code: '${data}.unique()', dtype: ['Series'] },
-                        { id: 'value_counts', label: 'Value counts', code: "_value_counts_dict = {}\
-                        \nfor col in ${data}.columns:\
-                        \n    if pd.api.types.is_numeric_dtype(${data}[col]):\
-                        \n        _value_counts = ${data}[col].value_counts(bins=10, sort=False)\
-                        \n        _value_counts_dict[(col, 'bins')] = list(_value_counts.index) + ['']*(10 - len(_value_counts))\
-                        \n    else:\
-                        \n        _value_counts = ${data}[col].value_counts()\
-                        \n        _value_counts_dict[(col, 'category')] = list(_value_counts.index) + ['']*(10 - len(_value_counts))\
-                        \n    _value_counts_dict[(col, 'count')] = list(_value_counts.values) + ['']*(10 - len(_value_counts))\
-                        \npd.DataFrame(_value_counts_dict)", dtype: ['DataFrame', 'Series'], toframe: true },
+                        { id: 'value_counts', label: 'Value counts', 
+                        // code: "_value_counts_dict = {}\
+                        // \nfor col in ${data}.columns:\
+                        // \n    if pd.api.types.is_numeric_dtype(${data}[col]):\
+                        // \n        _value_counts = ${data}[col].value_counts(bins=10, sort=False)\
+                        // \n        _value_counts_dict[(col, 'bins')] = list(_value_counts.index) + ['']*(10 - len(_value_counts))\
+                        // \n    else:\
+                        // \n        _value_counts = ${data}[col].value_counts()\
+                        // \n        _value_counts_dict[(col, 'category')] = list(_value_counts.index) + ['']*(10 - len(_value_counts))\
+                        // \n    _value_counts_dict[(col, 'count')] = list(_value_counts.values) + ['']*(10 - len(_value_counts))\
+                        // \npd.DataFrame(_value_counts_dict)", 
+                        code: "_dfr = pd.DataFrame()\
+\nfor col in ${data}.columns:\
+\n    if pd.api.types.is_numeric_dtype(${data}[col]) and  ${data}[col].value_counts().size > 10:\
+\n        _value_counts = ${data}[col].value_counts(bins=10, sort=False)\
+\n        _dfr = pd.concat([_dfr, pd.DataFrame({(col,'bins'): _value_counts.index})], axis=1)\
+\n    else:\
+\n        _value_counts = ${data}[col].value_counts()\
+\n        _dfr = pd.concat([_dfr, pd.DataFrame({(col,'category'): _value_counts.index})], axis=1)\
+\n    _dfr = pd.concat([_dfr, pd.DataFrame({(col,'count'): _value_counts.values})], axis=1)\
+\n_dfr.replace(np.nan,'')",
+                        dtype: ['DataFrame', 'Series'], toframe: true },
                     ]
                 },
                 {

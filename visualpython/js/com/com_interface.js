@@ -104,7 +104,7 @@ define([
             }
             // move to executed cell
             // CHROME: TODO:
-        } else if (vpConfig.extensionType === 'lab') {
+        } else if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
             var { NotebookActions } = require('@jupyterlab/notebook');
             var { signalToPromise } = require('@jupyterlab/coreutils');
             var notebookPanel = vpKernel.getLabNotebookPanel();
@@ -133,6 +133,7 @@ define([
                     // move to executed cell
                     $(vpKernel.getLabNotebookPanel().content.activeCell.node)[0].scrollIntoView(true);
                 } else if (sessionType === 'console') {
+                    //TODO:LITE: console check needed
                     var labConsole = notebookPanel.content;
                     var widget = labConsole.widgets[0];
                     if (type === 'markdown') {
@@ -169,7 +170,7 @@ define([
      */
     var insertCells = function(type, commands, exec=true, sigText='') {
 
-        if (vpConfig.extensionType === 'lab') {
+        if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
             var { NotebookActions } = require('@jupyterlab/notebook');
             var notebookPanel = vpKernel.getLabNotebookPanel();
         }
@@ -241,7 +242,7 @@ define([
                 }
             } else if (vpConfig.extensionType === 'lab') {
                 if (notebookPanel && notebookPanel.sessionContext){ 
-                    var sessionContext = notebookPanel.sessionContext;	
+                    var sessionContext = notebookPanel.sessionContext; 
                     let sessionType = sessionContext.type;
                     if (sessionType === 'notebook') {
                         var notebook = notebookPanel.content;
@@ -282,7 +283,7 @@ define([
         } else if (vpConfig.extensionType === 'colab') {
             // CHROME: TODO:
 
-        } else if (vpConfig.extensionType === 'lab') {
+        } else if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
             // LAB: TODO:
             let activeCell = notebookPanel.content.activeCell;
             let activeCellTop = $(activeCell.node).position().top;

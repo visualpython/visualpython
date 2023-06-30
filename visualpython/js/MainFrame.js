@@ -103,7 +103,7 @@ define([
             // get visualpython minimum width
             // resizable setting
             // $('#vp_wrapper').resizable('disable');
-            if (vpConfig.extensionType !== 'lab') {
+            if (vpConfig.extensionType !== 'lab' && vpConfig.extensionType !== 'lite') {
                 $('#vp_wrapper').resizable({
                     // alsoResize: '#vp_menuFrame',
                     helper: 'vp-wrapper-resizer',
@@ -151,7 +151,7 @@ define([
                     top: colabHeaderHeight + 'px'
                 });
                 this._resizeNotebook(vpWidth);
-            } else if (vpConfig.extensionType === 'lab') {
+            } else if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
                 // LAB: do nothing
             }
         }
@@ -334,7 +334,7 @@ define([
                 this.boardFrame.hide();
                 newVpWidth = menuWidth + MENU_BOARD_SPACING;
                 $('#vp_wrapper').width(newVpWidth);
-                if (vpConfig.extensionType === 'lab') {
+                if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
                     // LAB: set parent width and position, min-width
                     let target = $('#vp_wrapper').parent();
                     let prevWidth = target[0].getBoundingClientRect().width;
@@ -364,7 +364,7 @@ define([
                 this.boardFrame.show();
                 newVpWidth = vpWidth + BOARD_MIN_WIDTH + MENU_BOARD_SPACING;
                 $('#vp_wrapper').width(newVpWidth);
-                if (vpConfig.extensionType === 'lab') {
+                if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
                     // LAB: set parent width and position, min-width
                     let target = $('#vp_wrapper').parent();
                     let prevWidth = target[0].getBoundingClientRect().width;
@@ -474,7 +474,7 @@ define([
                 this.boardFrame.showLoadingBar();
                 // create components
                 // LAB: use require
-                if (vpConfig.extensionType === 'lab') {
+                if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
                     let parentBlock = null;
                     let prevBlock = null;
                     loadStateList.forEach(obj => {

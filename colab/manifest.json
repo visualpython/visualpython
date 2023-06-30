@@ -1,7 +1,7 @@
 {
     "name": "Visual Python for Colab",
     "description": "GUI-based Python code generator for Google Colab as an extension",
-    "version": "2.4.0",
+    "version": "2.4.1",
     "manifest_version": 3,
     "icons": {
         "48": "icon.png",

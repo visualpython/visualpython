@@ -30,7 +30,7 @@ define([
     class Frame extends PopupComponent {
         _init() {
             super._init();
-            this.config.sizeLevel = 3;
+            this.config.sizeLevel = 4;
             this.config.checkModules = ['pd'];
 
             // state
@@ -61,12 +61,9 @@ define([
             }
 
             // numpy.dtype or python type
-            this.astypeList = [ 
-                'datetime64', 
-                'int', 'int32', 'int64', 
-                'float', 'float64', 
-                'object', 'category', 
-                'bool', 'str'
+            this.astypeList = [
+                'object', 'int64', 'float64', 'bool', 
+                'datetime64[ns]', 'timedelta[ns]', 'category'
             ];
 
             // {
@@ -243,7 +240,7 @@ define([
                 that.setPreview(that.getCurrentCode());
             });
 
-            // menu on column (Deprecated on v2.3.6 - Temporarily Show on v.2.4.0)
+            // menu on column (Deprecated on v2.3.6 - Temporarily Show on v.2.4.1)
             $(document).on('contextmenu', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN), function(event) {
                 event.preventDefault();
 
@@ -273,7 +270,7 @@ define([
                 that.showMenu(thisPos.left, thisPos.top + thisRect.height);
             });
 
-            // menu on row (Deprecated on v2.3.6 - Temporarily Show on v.2.4.0)
+            // menu on row (Deprecated on v2.3.6 - Temporarily Show on v.2.4.1)
             $(document).on('contextmenu', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW), function(event) {
                 event.preventDefault();
                 var idx = $(that.wrapSelector('.' + VP_FE_TABLE_ROW)).index(this); // 0 ~ n
@@ -598,7 +595,7 @@ define([
                 that.loadCode(that.getTypeCode(FRAME_EDIT_TYPE.SHOW), true);
             });
 
-            // click toolbar item (Deprecated on v2.3.6 - Temporarily Show on v.2.4.0)
+            // click toolbar item (Deprecated on v2.3.6 - Temporarily Show on v.2.4.1)
             $(document).on('click', this.wrapSelector('.vp-fe-toolbar-item'), function(evt) {
                 evt.stopPropagation();
                 var itemType = $(this).data('type');
@@ -816,6 +813,57 @@ define([
                         $(this).closest('tr').find('.vp-inner-popup-vartype-box').hide();
                         $(this).closest('tr').find('.vp-inner-popup-vartype-box.' + type).show();
                     });
+
+                    // 4. apply
+                    $(this.wrapSelector('.vp-inner-popup-apply-column')).on('change', function() {
+                        // TODO: change apply-condition (save value)
+
+                    });
+
+                    $(this.wrapSelector('.vp-inner-popup-toggle-else')).on('click', function() {
+                        // toggle else on/off
+                        let elseOn = $(this).attr('data-else'); // on / off
+                        if (elseOn === 'off') {
+                            // off -> on
+                            $(this).attr('data-else', 'on');
+                            $(this).text('Else off');
+                            $(that.wrapSelector('.vp-inner-popup-apply-else-value')).prop('disabled', false);
+                            $(that.wrapSelector('.vp-inner-popup-apply-else-usetext')).prop('disabled', false);
+                        } else {
+                            // on -> off
+                            $(this).attr('data-else', 'off');
+                            $(this).text('Else on');
+                            $(that.wrapSelector('.vp-inner-popup-apply-else-value')).prop('disabled', true);
+                            $(that.wrapSelector('.vp-inner-popup-apply-else-usetext')).prop('disabled', true);
+                        }
+                    });
+
+                    $(this.wrapSelector('.vp-inner-popup-add-case')).on('click', function() {
+                        // add case
+                        $(this).parent().find('.vp-inner-popup-apply-case-box').append($(that.templateForApplyCase()));
+                    });
+
+                    $(document).off('click', this.wrapSelector('.vp-inner-popup-apply-add-cond'));
+                    $(document).on('click', this.wrapSelector('.vp-inner-popup-apply-add-cond'), function() {
+                        // add condition
+                        $(this).parent().find('.vp-inner-popup-apply-cond-box').append($(that.templateForApplyCondition()));
+                        // show operator except last operator
+                        $(this).parent().find('.vp-inner-popup-apply-oper-connect:not(:last)').show();
+                    });
+
+                    $(document).off('click', this.wrapSelector('.vp-inner-popup-apply-del-cond'));
+                    $(document).on('click', this.wrapSelector('.vp-inner-popup-apply-del-cond'), function() {
+                        // hide last operator
+                        $(this).closest('.vp-inner-popup-apply-cond-box').find('.vp-inner-popup-apply-oper-connect:last').hide();
+                        // delete apply cond
+                        $(this).parent().remove();
+                    });
+
+                    $(document).off('click', this.wrapSelector('.vp-inner-popup-apply-del-case'));
+                    $(document).on('click', this.wrapSelector('.vp-inner-popup-apply-del-case'), function() {
+                        // delete apply case
+                        $(this).parent().remove();
+                    });
                 }
 
                 // Replace page
@@ -1021,28 +1069,29 @@ define([
             $(that.wrapSelector('.vp-inner-popup-isedgechanged')).val("false");
 
             let code = new com_String();
-            code.appendFormatLine("_out, _bins = pd.cut({0}[{1}], bins={2}, right={3}, labels=False, retbins=True)"
+            code.appendFormatLine("_out, _bins = pd.cut({0}[{1}], bins={2}, right={3}, retbins=True)"
                 , this.state.tempObj, this.state.selected[0].code, binsCount, right?'True':'False');
-            code.append("_vp_print({'labels': _out.unique(), 'edges': list(_bins)})");
+            code.append("_vp_print({'edges': list(_bins)})");
             vpKernel.execute(code.toString()).then(function(resultObj) {
                 let { result } = resultObj;
-                let { labels, edges } = JSON.parse(result);
+                let { edges } = JSON.parse(result);
 
+                let labelLength = edges.length - 1;
                 let edgeTbody = new com_String();
-                labels && labels.forEach((label, idx) => {
+                for (let idx = 0; idx < labelLength; idx++ ) {
                     let leftDisabled = 'disabled';
                     let rightDisabled = '';
-                    if (idx === (labels.length - 1)) {
+                    if (idx === (labelLength - 1)) {
                         rightDisabled = 'disabled';
                     }
                     edgeTbody.append('<tr>');
-                    edgeTbody.appendFormatLine('<td><input type="text" class="vp-input m vp-inner-popup-label" data-idx="{0}" value="{1}"/></td>', idx, label);
+                    edgeTbody.appendFormatLine('<td><input type="text" class="vp-input m vp-inner-popup-label" data-idx="{0}" value="{1}"/></td>', idx, idx);
                     edgeTbody.appendLine('<td>:</td>');
                     edgeTbody.appendFormatLine('<td><input type="number" class="vp-input m vp-inner-popup-left-edge" data-idx="{0}" value="{1}" {2}/></td>', idx, edges[idx], leftDisabled);
                     edgeTbody.appendLine('<td>~</td>');
                     edgeTbody.appendFormatLine('<td><input type="number" class="vp-input m vp-inner-popup-right-edge" data-idx="{0}" value="{1}" {2}/></td>', idx + 1, edges[idx+1], rightDisabled);
                     edgeTbody.append('</tr>');
-                });
+                }
                 $(that.wrapSelector('.vp-inner-popup-range-table tbody')).html(edgeTbody.toString());
 
                 // label change event
@@ -1065,7 +1114,7 @@ define([
                 });
 
             }).catch(function(errObj) {
-                // TODO:
+                vpLog.display(VP_LOG_TYPE.ERROR, errObj);
             });
         }
 
@@ -1333,8 +1382,8 @@ define([
             if (type === 'column') {
                 content.appendLine('<tr><th><label>Add type</label></th>');
                 content.appendFormatLine('<td><select class="{0}">', 'vp-inner-popup-addtype');
-                content.appendFormatLine('<option value="{0}">{1}</option>', 'variable', 'Variable');
-                content.appendFormatLine('<option value="{0}">{1}</option>', 'value', 'Value');
+                content.appendFormatLine('<option value="{0}">{1}</option>', 'calculate', 'Calculate');
+                content.appendFormatLine('<option value="{0}">{1}</option>', 'replace', 'Replace');
                 content.appendFormatLine('<option value="{0}">{1}</option>', 'condition', 'Condition');
                 content.appendFormatLine('<option value="{0}">{1}</option>', 'apply', 'Apply');
                 content.appendLine('</select></td></tr>');
@@ -1344,8 +1393,8 @@ define([
     
             content.appendLine('<hr style="margin: 5px 0px;"/>');
             
-            // tab 1. variable
-            content.appendFormatLine('<div class="{0} {1}">', 'vp-inner-popup-tab', 'variable');
+            // tab 1. calculate
+            content.appendFormatLine('<div class="{0} {1}">', 'vp-inner-popup-tab', 'calculate');
             content.appendLine('<table class="vp-tbl-gap5"><colgroup><col width="110px"><col width="*"><col width="15px"></colgroup>');
             content.appendLine('<tr class="vp-inner-popup-value-row">');
             content.appendFormatLine('<th><select class="{0}"><option value="variable">Variable</option><option value="column">Column</option></select></th>', 'vp-inner-popup-vartype');
@@ -1368,8 +1417,8 @@ define([
             content.appendLine('</table>');
             content.appendLine('</div>'); // end of vp-inner-popup-tab value
 
-            // tab 2. value
-            content.appendFormatLine('<div class="{0} {1}" style="display:none;">', 'vp-inner-popup-tab', 'value');
+            // tab 2. replace
+            content.appendFormatLine('<div class="{0} {1}" style="display:none;">', 'vp-inner-popup-tab', 'replace');
             content.appendFormatLine('<div class="{0}">', 'vp-grid-col-120');
             content.appendLine('<label class="vp-orange-text">Target column</label>');
             content.appendFormatLine('<select class="vp-select {0}">', 'vp-inner-popup-value-col-list');
@@ -1396,31 +1445,49 @@ define([
             // tab 3. condition
             // replace page - 2. condition
             content.appendFormatLine('<div class="{0} {1}" style="display:none;">', 'vp-inner-popup-tab', 'condition');
-            // condition table
-            content.appendLine('<table class="vp-inner-popup-condition-tbl vp-tbl-gap5 wp100"><colgroup><col width="110px"><col width="*"></colgroup>');
-            content.appendLine(this.renderReplaceCondition());
-            content.appendFormatLine('<tr><td colspan="4"><button type="button" class="vp-button {0}">{1}</button></td></tr>',
-                'vp-inner-popup-add-cond', '+ Condition');
-            content.appendLine('</table>');
-            content.appendLine('<hr style="margin: 5px 0;"/>');
             // value
-            content.appendLine('<div class="vp-grid-col-95">');
-            content.appendLine('<label>Value</label>');
+            content.appendLine('<div class="vp-grid-col-120">');
+            content.appendLine('<label class="pl5">Add value</label>');
             content.appendLine('<div>')
             content.appendFormatLine('<input type="text" class="{0}"/>', 'vp-inner-popup-condvalue');
             content.appendFormatLine('<label><input type="checkbox" class="{0}"/><span>{1}</span></label>', 'vp-inner-popup-condvalueastext','Text');
             content.appendLine('</div>');
             content.appendLine('</div>');
+            // condition table
+            content.appendLine('<table class="vp-inner-popup-condition-tbl vp-tbl-gap5 wp100 mt5"><colgroup><col width="110px"><col width="*"></colgroup>');
+            content.appendLine(this.renderReplaceCondition());
+            content.appendFormatLine('<tr><td colspan="4"><button type="button" class="vp-button {0}">{1}</button></td></tr>',
+            'vp-inner-popup-add-cond', '+ Condition');
+            content.appendLine('</table>');
+            content.appendLine('</div>');
 
             // tab 4. apply
             content.appendFormatLine('<div class="{0} {1}" style="display: none;">', 'vp-inner-popup-tab', 'apply');
             content.appendLine('<div class="vp-grid-box">');
-            content.appendLine('<div class="vp-grid-col-110">');
-            content.appendLine('<label>Column</label>');
+            content.appendLine('<div class="vp-grid-col-120">');
+            content.appendLine('<label>Target column</label>');
+            content.appendLine('<div class="vp-flex-gap5">');
             content.appendLine(this.renderColumnList(this.state.columnList));
+            // else on/off
+            content.appendFormatLine('<button class="vp-button {0}" data-else="off">Else On</button>', 'vp-inner-popup-toggle-else');
             content.appendLine('</div>');
-            content.appendFormatLine('<textarea type="text" id="{0}" class="{1}" placeholder="{2}">lambda x: x</textarea>'
-                                    , 'vp_popupAddApply', 'vp-input vp-inner-popup-apply-lambda', 'Type code manually');
+            content.appendLine('</div>');
+            // content.appendFormatLine('<textarea type="text" id="{0}" class="{1}" placeholder="{2}">lambda x: x</textarea>'
+            //                         , 'vp_popupAddApply', 'vp-input vp-inner-popup-apply-lambda', 'Type code manually');
+            // render condition
+            content.appendLine('<div class="vp-grid-box vp-scrollbar" style="max-height: 220px;">');
+            content.appendFormatLine('<div class="{0}">', 'vp-inner-popup-apply-case-box');
+            content.appendLine(this.templateForApplyCase());
+            content.appendLine('</div>');
+            content.appendFormatLine('<button class="vp-button {0}">+ Case</button>', 'vp-inner-popup-add-case');
+            content.appendLine('</div>'); 
+            content.appendLine('<div class="vp-grid-col-120">');
+            content.appendLine('<label>Else value</label>');
+            content.appendLine('<div>');
+            content.appendFormatLine('<input type="text" class="{0}" disabled/>', 'vp-inner-popup-apply-else-value');
+            content.appendFormatLine('<label><input type="checkbox" class="{0}" checked disabled/><span>{1}</span></label>', 'vp-inner-popup-apply-else-usetext','Text');
+            content.appendLine('</div>');
+            content.appendLine('</div>'); // end of else value line
             content.appendLine('</div>');
             content.appendLine('</div>'); // end of vp-inner-popup-tab apply
             content.appendLine('</div>'); // end of vp-inner-popup-addpage
@@ -1436,6 +1503,44 @@ define([
                 pageThis: this, classes: 'vp-inner-popup-value', placeholder: 'Type value', withPopup: false
             });
             $(this.wrapSelector('.vp-inner-popup-body')).find('.vp-inner-popup-value:nth(' + idx + ')').replaceWith(valueSelector.toTagString());
+        }
+
+        templateForApplyCase() {
+            return `<div class="vp-inner-popup-apply-case-item">
+                <div class="vp-icon-btn vp-icon-close-small vp-inner-popup-apply-del-case" style="float:right;"></div>
+                <div class="vp-grid-border-box">
+                    <div class="vp-grid-col-120">
+                        <label>Replace value</label>
+                        <div>
+                            <input type="text" class="vp-input vp-inner-popup-apply-case-val" />
+                            <label>
+                                <input type="checkbox" class="vp-inner-popup-apply-case-usetext" checked>
+                                <span>Text</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="vp-inner-popup-apply-cond-box">
+                        ${this.templateForApplyCondition()}
+                    </div>
+                    <button class="vp-button vp-inner-popup-apply-add-cond">+ Condition</button>
+                </div>
+            </div>`;
+        }
+
+        templateForApplyCondition() {
+            return `<div class="vp-inner-popup-apply-cond-item wp100 mt5">
+                <div class="vp-icon-btn vp-icon-close-small vp-inner-popup-apply-del-cond" style="float:right;"></div>
+                ${this.templateForConditionOperator('', 'vp-inner-popup-apply-oper-list')}
+                <input class="vp-input m vp-inner-popup-apply-condition" type="text" placeholder="Value"/>
+                <label>
+                    <input type="checkbox" class="vp-inner-popup-apply-cond-usetext" title="Uncheck it if you want to use variable or numeric values.">
+                    <span>Text</span>
+                </label>
+                <select class="vp-select s vp-inner-popup-apply-oper-connect" style="display:none;">
+                    <option value="&">and</option>
+                    <option value="|">or</option>
+                </select>
+            </div>`;
         }
 
         renderCalculator(idx) {
@@ -1718,15 +1823,15 @@ define([
             content.appendLine('</td></tr>');
             content.appendLine('<tr><th><label>Replace type</label></th>');
             content.appendFormatLine('<td><select class="{0}">', 'vp-inner-popup-replacetype');
-            content.appendFormatLine('<option value="{0}">{1}</option>', 'value', 'Value');
+            content.appendFormatLine('<option value="{0}">{1}</option>', 'replace', 'Replace');
             content.appendFormatLine('<option value="{0}">{1}</option>', 'condition', 'Condition');
             content.appendLine('</select></td></tr>');
             content.appendLine('</table>');
             content.appendLine('</div>'); // end of vp-inner-popup-header
     
             content.appendLine('<hr style="margin: 5px 0px;"/>');
-            // replace page - 1. value
-            content.appendFormatLine('<div class="{0}">', 'vp-inner-popup-tab value');
+            // replace page - 1. replace
+            content.appendFormatLine('<div class="{0}">', 'vp-inner-popup-tab replace');
             content.appendFormatLine('<label><input type="checkbox" class="{0}"/><span>{1}</span></label>', 'vp-inner-popup-use-regex', 'Use Regular Expression');
             content.appendLine('<br/><br/>');
             content.appendFormatLine('<div class="{0}">', 'vp-inner-popup-replace-table');
@@ -1742,8 +1847,16 @@ define([
             content.appendLine('</div>');
             // replace page - 2. condition
             content.appendFormatLine('<div class="{0}" style="display:none;">', 'vp-inner-popup-tab condition');
+            // value
+            content.appendLine('<div class="vp-grid-col-120">');
+            content.appendLine('<label class="pl5">Replace value</label>');
+            content.appendLine('<div>')
+            content.appendFormatLine('<input type="text" class="{0}"/>', 'vp-inner-popup-condvalue');
+            content.appendFormatLine('<label><input type="checkbox" class="{0}"/><span>{1}</span></label>', 'vp-inner-popup-condvalueastext','Text');
+            content.appendLine('</div>');
+            content.appendLine('</div>');
             // condition table
-            content.appendLine('<table class="vp-inner-popup-condition-tbl vp-tbl-gap5 wp100"><colgroup><col width="110px"><col width="*"></colgroup>');
+            content.appendLine('<table class="vp-inner-popup-condition-tbl vp-tbl-gap5 wp100 mt5"><colgroup><col width="110px"><col width="*"></colgroup>');
             // content.appendLine('<tr><td><label>Condition</label></td>');
             // content.appendLine('<td><div class="vp-fr-subset-box">');
             // content.appendLine('<textarea class="vp-input vp-inner-popup-subset"></textarea>');
@@ -1758,15 +1871,6 @@ define([
             content.appendFormatLine('<tr><td colspan="4"><button type="button" class="vp-button {0}">{1}</button></td></tr>',
                 'vp-inner-popup-add-cond', '+ Condition');
             content.appendLine('</table>');
-            content.appendLine('<hr style="margin: 5px 0;"/>');
-            // value
-            content.appendLine('<div class="vp-grid-col-95">');
-            content.appendLine('<label>Value</label>');
-            content.appendLine('<div>')
-            content.appendFormatLine('<input type="text" class="{0}"/>', 'vp-inner-popup-condvalue');
-            content.appendFormatLine('<label><input type="checkbox" class="{0}"/><span>{1}</span></label>', 'vp-inner-popup-condvalueastext','Text');
-            content.appendLine('</div>');
-            content.appendLine('</div>');
 
             content.appendLine('</div>'); // end of vp-inner-popup-addpage
 
@@ -1824,23 +1928,23 @@ define([
             content.appendLine(this.templateForConditionOperator(''));
             // - 3. oper-value
             content.appendLine('<input class="vp-input m vp-inner-popup-condition" type="text" placeholder="Value"/>');
+            // use text
+            content.appendFormatLine('<label class="{0}"><input type="checkbox" class="{1}" title="{2}"/><span>{3}</span></label>',
+                'vp-inner-popup-condition-use-text', 'vp-inner-popup-cond-use-text', 'Uncheck it if you want to use variable or numeric values.', 'Text');
             content.appendLine('</div>');
             content.appendLine('<div class="vp-td-line">');
             content.appendLine('<select class="vp-select s vp-inner-popup-oper-connect" style="display:none;">');
             content.appendLine('<option value="&">and</option>');
             content.appendLine('<option value="|">or</option>');
             content.appendLine('</select>');
-            // use text
-            content.appendFormatLine('<label class="{0}"><input type="checkbox" class="{1}" title="{2}"/><span>{3}</span></label>',
-                'vp-inner-popup-condition-use-text', 'vp-inner-popup-cond-use-text', 'Uncheck it if you want to use variable or numeric values.', 'Text');
                 content.appendLine('</div>');
             content.appendLine('</td></tr>');
             return content.toString();
         }
 
-        templateForConditionOperator(dtype='object') {
+        templateForConditionOperator(dtype='object', className='vp-inner-popup-oper-list') {
             var content = new com_String();
-            content.appendFormatLine('<select class="{0} {1}">', 'vp-select s', 'vp-inner-popup-oper-list');
+            content.appendFormatLine('<select class="{0} {1}">', 'vp-select s', className);
             var operList = ['', '==', '!=', '<', '<=', '>', '>=', 'contains', 'not contains', 'starts with', 'ends with', 'isnull()', 'notnull()'];
             if (dtype == '') {
                 // .index
@@ -2040,7 +2144,7 @@ define([
             switch (parseInt(type)) {
                 case FRAME_EDIT_TYPE.ADD_COL:
                     title = 'Add column';
-                    size = { width: 450, height: 450 };
+                    size = { width: 450, height: 480 };
                     content = this.renderAddPage('column');
                     this.renderAddValueBox(0);
 
@@ -2348,13 +2452,13 @@ define([
                     }
                     var tab = $(this.wrapSelector('.vp-inner-popup-addtype')).val();
                     if (type === FRAME_EDIT_TYPE.ADD_ROW) {
-                        tab = 'variable';
+                        tab = 'calculate';
                     }
                     content['addtype'] = tab;
-                    if (tab == 'variable') {
+                    if (tab == 'calculate') {
                         let values = [];
                         let opers = [];
-                        $(this.wrapSelector('.vp-inner-popup-tab.variable tr.vp-inner-popup-value-row')).each((idx, tag) => {
+                        $(this.wrapSelector('.vp-inner-popup-tab.calculate tr.vp-inner-popup-value-row')).each((idx, tag) => {
                             let varType = $(tag).find('.vp-inner-popup-vartype').val();
                             if (varType === 'variable') {
                                 let valueastext = $(tag).find('.vp-inner-popup-istext').prop('checked');
@@ -2371,7 +2475,7 @@ define([
                         });
                         content['values'] = values;
                         content['opers'] = opers;
-                    } else if (tab == 'value') {
+                    } else if (tab == 'replace') {
                         content['target'] = $(this.wrapSelector('.vp-inner-popup-value-col-list option:selected')).data('code');
                         var useregex = $(this.wrapSelector('.vp-inner-popup-use-regex')).prop('checked');
                         content['useregex'] = useregex;
@@ -2391,8 +2495,50 @@ define([
                             }
                         }
                     } else if (tab == 'apply') {
-                        content['column'] = $(this.wrapSelector('.vp-inner-popup-apply-column')).val();
-                        content['apply'] = $(this.wrapSelector('.vp-inner-popup-apply-lambda')).val();
+                        content['target'] = $(this.wrapSelector('.vp-inner-popup-apply-column')).val();
+                        let caseList = [];
+                        $(this.wrapSelector('.vp-inner-popup-apply-case-item')).each((idx, caseTag) => {
+                            let condList = [];
+                            let replaceValue = $(caseTag).find('.vp-inner-popup-apply-case-val').val();
+                            let replaceValText = $(caseTag).find('.vp-inner-popup-apply-case-usetext').prop('checked');
+
+                            let operTag = $(caseTag).find('.vp-inner-popup-apply-oper-list');
+                            let condTag = $(caseTag).find('.vp-inner-popup-apply-condition');
+                            let condTextTag = $(caseTag).find('.vp-inner-popup-apply-cond-usetext');
+                            let operConnTag = $(caseTag).find('.vp-inner-popup-apply-oper-connect');
+                            for (let i=0; i<operTag.length; i++) {
+                                var oper = $(operTag[i]).val();
+                                var cond = $(condTag[i]).val();
+                                var condText = $(condTextTag[i]).prop('checked');
+                                var operConn = $(operConnTag[i]).val();
+                                var condObj = {};
+                                if (col !== '' && oper !== '' && cond !== '') {
+                                    condObj = {
+                                        oper: oper,
+                                        cond: com_util.convertToStr(cond, condText)
+                                    };
+                                    if (i < (operTag.length - 1)) {
+                                        condObj['connector'] = operConn;
+                                    }
+                                    condList.push(condObj);
+                                }
+                            };
+                            if (replaceValue !== '') {
+                                caseList.push({
+                                    value: com_util.convertToStr(replaceValue, replaceValText),
+                                    condList: condList
+                                });
+                            }
+                        });
+                        content['caseList'] = caseList;
+                        content['else'] = 'np.nan';
+                        if ($(this.wrapSelector('.vp-inner-popup-toggle-else')).attr('data-else') === 'on') {
+                            let elseValue = $(this.wrapSelector('.vp-inner-popup-apply-else-value')).val();
+                            let elseastext = $(this.wrapSelector('.vp-inner-popup-apply-else-usetext')).prop('checked');
+                            if (elseValue !== '') {
+                                content['else'] = com_util.convertToStr(elseValue, elseastext);
+                            }
+                        }
                     } else if (tab === 'condition') {
                         content['list'] = [];
                         var colTag = $(this.wrapSelector('.vp-inner-popup-col-list'));
@@ -2428,7 +2574,7 @@ define([
                     content['name'] = $(this.wrapSelector('.vp-inner-popup-input1')).data('code');
                     var tab = $(this.wrapSelector('.vp-inner-popup-replacetype')).val();
                     content['replacetype'] = tab;
-                    if (tab == 'value') {
+                    if (tab == 'replace') {
                         var useregex = $(this.wrapSelector('.vp-inner-popup-use-regex')).prop('checked');
                         content['useregex'] = useregex;
                         content['list'] = [];
@@ -2825,7 +2971,7 @@ define([
                         return '';
                     }
                     var tab = content.addtype;
-                    if (tab == 'variable') {
+                    if (tab == 'calculate') {
                         let values = [];
                         content['values'] && content['values'].forEach((val, idx) => {
                             if (idx > 0) {
@@ -2839,7 +2985,7 @@ define([
                         } else {
                             code.appendFormat("{0}[{1}] = {2}", tempObj, content.name, valueStr);
                         }
-                    } else if (tab == 'value') {
+                    } else if (tab == 'replace') {
                         var replaceStr = new com_String();
                         var targetName = content['target'];
                         var useRegex = content['useregex'];
@@ -2860,7 +3006,24 @@ define([
                         }
                         code.append(')');
                     } else if (tab == 'apply') {
-                        code.appendFormat("{0}[{1}] = {2}[{3}].apply({4})", tempObj, content.name, tempObj, content.column, content.apply);
+                        // code.appendFormat("{0}[{1}] = {2}[{3}].apply({4})", tempObj, content.name, tempObj, content.column, content.apply);
+                        let lambdaCode = 'lambda x: ';
+                        content['caseList'].forEach(obj => {
+                            // value if (cond list) else
+                            let caseCode = obj.value + ' ';
+                            let condCode = '';
+                            obj.condList.forEach((condObj, idx) => {
+                                let { oper, cond, connector } = condObj;
+                                condCode += `(x ${oper} ${cond})`;
+                                if (connector !== undefined) {
+                                    condCode += ` ${connector} `;
+                                }
+                            });
+                            caseCode += 'if ' + condCode + ' else ';
+                            lambdaCode += caseCode;
+                        });
+                        lambdaCode += content['else'];
+                        code.appendFormat("{0}[{1}] = {2}[{3}].apply({4})", tempObj, content.name, tempObj, content.target, lambdaCode);
                     } else if (tab === 'condition') {
                         code.appendFormat("{0}.loc[", tempObj);
                         content['list'].forEach((obj, idx) => {
@@ -2916,7 +3079,7 @@ define([
                 case FRAME_EDIT_TYPE.REPLACE:
                     var name = content.name;
                     var tab = content.replacetype;
-                    if (tab === 'value') {
+                    if (tab === 'replace') {
                         var replaceStr = new com_String();
                         var useRegex = content['useregex'];
                         content['list'].forEach((obj, idx) => {

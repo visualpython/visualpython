@@ -91,7 +91,11 @@ define([
                 let config = that.modelConfig[that.state.modelType];
                 if (config && config.install != undefined) {
                     // insert install code
-                    com_interface.insertCell('code', config.install, true, 'Machine Learning > Clustering');
+                    let installCode = config.install;
+                    if (vpConfig.extensionType === 'lite') {
+                        installCode = installCode.replace('!', '%');
+                    }
+                    com_interface.insertCell('code', installCode, true, 'Machine Learning > Clustering');
                 }
             });
             

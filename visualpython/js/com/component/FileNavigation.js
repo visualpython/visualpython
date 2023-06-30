@@ -120,7 +120,8 @@ define([
                 var pathType = $(this).attr('data-path');
                 var dirObj = {
                     direction: NAVIGATION_DIRECTION_TYPE.TO,
-                    destDir: '/'
+                    destDir: '/',
+                    useFunction: false
                 }
                 switch (pathType) {
                     case 'desktop':
@@ -141,6 +142,9 @@ define([
                         break;
                     case 'drive':
                         dirObj.destDir = "/content/drive/MyDrive";
+                        break;
+                    case 'lite-home':
+                        dirObj.destDir = "/drive";
                         break;
                     case '/':
                     default:
@@ -203,6 +207,8 @@ define([
                 $(fileNaviBody).find('.fnp-sidebar-menu.colab').show();
             } else if (vpConfig.extensionType === 'lab') {
                 $(fileNaviBody).find('.fnp-sidebar-menu.lab').show();
+            } else if (vpConfig.extensionType === 'lite') {
+                $(fileNaviBody).find('.fnp-sidebar-menu.lite').show();
             }
             return fileNaviBody;
         }

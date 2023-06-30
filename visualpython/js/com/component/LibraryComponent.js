@@ -46,6 +46,7 @@ define([
                 return;
             }
             this.config.checkModules = ['pd'];
+            this.config.docs = 'https://pandas.pydata.org/docs/reference/index.html';
 
             vpLog.display(VP_LOG_TYPE.DEVELOP, 'loading state', this.state);
         }

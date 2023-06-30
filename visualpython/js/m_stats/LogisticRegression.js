@@ -48,14 +48,31 @@ define([
             this.columnSelector = null;
         }
 
+        _unbindEvent() {
+            super._unbindEvent();
+            $(document).off('change', this.wrapSelector('#dependent'));
+        }
+
         _bindEvent() {
             super._bindEvent();
             /** Implement binding events */
             var that = this;
 
+            // data change
             $(this.wrapSelector('#data')).on('change', function() {
                 let data = $(this).val();
                 that.handleVariableChange(data);
+            });
+
+            // dependent change
+            $(document).on('change', this.wrapSelector('#dependent'), function() {
+                let depVal = $(this).val();
+                that.columnSelector = new MultiSelector(that.wrapSelector('#independent'),
+                    {   
+                        mode: 'columns', parent: that.state.data, showDescription: false, 
+                        excludeList: [ depVal ]
+                    }
+                );
             });
         }
 
@@ -117,9 +134,14 @@ define([
                 com_generator.vp_bindColumnSource(this, 'data', ['dependent'], 'select', false, false);
             }
 
+            let excludeList = [];
+            if (this.state.dependent !== '') {
+                excludeList = [ this.state.dependent ];
+            }
+
             // render variable selector
             this.columnSelector = new MultiSelector(this.wrapSelector('#independent'),
-                        { mode: 'columns', parent: this.state.data, selectedList: this.state.independent, showDescription: false });
+                        { mode: 'columns', parent: this.state.data, selectedList: this.state.independent, excludeList: excludeList, showDescription: false });
         }
 
         generateCode() {

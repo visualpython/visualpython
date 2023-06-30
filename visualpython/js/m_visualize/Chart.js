@@ -1308,8 +1308,8 @@ define([
                 'numerical': [
                     { label: 'count', method: 'count()' },
                     { label: 'unique count', method: 'unique()' },
-                    { label: 'sum', method: 'sum()' },
-                    { label: 'average', method: 'mean()' },
+                    { label: 'sum', method: 'sum(numeric_only=True)' },
+                    { label: 'average', method: 'mean(numeric_only=True)' },
                     { label: 'min', method: 'min()' },
                     { label: 'max', method: 'max()' }
                 ]
