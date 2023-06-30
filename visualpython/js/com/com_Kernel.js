@@ -239,7 +239,7 @@ define([
                     cell.runButton.click();
                     // set last focused cell
                     colab.global.notebook.focusCell(lastFocusedCellId);
-                } else if (vpConfig.extensionType === 'lab') {
+                } else if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
                     // LAB: 
                     // { code, stdin, stop_on_error, silent, ... } 
                     var codeObj = {
@@ -249,7 +249,6 @@ define([
                     } 
                     var kernelConnection = that.getLabKernel();
                     if (kernelConnection) {
-                        var future = kernelConnection.requestExecute(codeObj);
                         var onIOPub = function(msg) {
                             const msgType = msg.header.msg_type;
                             switch(msgType) {
@@ -380,149 +379,16 @@ define([
                             };
                             return;
                         }
-                        future.onIOPub = onIOPub;
-                        // future.onIOPub  = (msg) => {
-                        //     const msgType = msg.header.msg_type;
-                        //     switch(msgType) {
-                        //         case 'status':
-                        //             // if(!isExpectingOutput){
-                        //             //     if(msg.content.execution_state === 'idle'){
-                        //             //         resolve();
-                        //             //     }
-                        //             // }
-                        //             return;
-                        //         case 'execute_input':
-                        //             // var content = msg.content;
-                        //             // resolve({
-                        //             //     result: content, 
-                        //             //     type: type, 
-                        //             //     msg: {
-                        //             //         content: {
-                        //             //             name: type,
-                        //             //             data: {
-                        //             //                 [type]: content
-                        //             //             }
-                        //             //         }
-                        //             //     }
-                        //             // });	
-                        //             return;
-                        //         case 'stream':
-                        //             var content = msg.content;
-                        //             var type = content.name;
-                        //             switch(type){
-                        //                 case 'stdout':
-                        //                     var message = content.text;    	    		    	    
-                        //                     resolve({
-                        //                         result: message, 
-                        //                         type: type, 
-                        //                         msg: {
-                        //                             content: {
-                        //                                 name: type,
-                        //                                 data: {
-                        //                                     [type]: message
-                        //                                 }
-                        //                             }
-                        //                         }
-                        //                     });				
-                        //                     break;
-                        //                 case 'stderr':
-                        //                     var message = content.text;    	    		    	    				    
-                        //                     reject({status: 'stderr', ename: 'stderr', evalue: message});
-                        //                     break;
-                        //                 default:
-                        //                     var message = '[jupyterLabTerminal]: Unknown stream type ' + type;												    
-                        //                     reject({status: 'error', ename: 'Unknown stream type', evalue: message});
-                        //             } 
-                        //             break;   	    		    
-                        //         case 'error':    
-                        //             //stderr does not yield output for all errors	    
-                        //             // var message = msg.content.ename + '\n' + msg.content.evalue;
-                        //             // check if it has a problem on restarting vp inner function
-                        //             // ex) "name '_vp_print' is not defined"
-                        //             if (msg.content.ename === 'NameError' 
-                        //                 && msg.content.evalue.includes('_vp_') 
-                        //                 && msg.content.evalue.includes('is not defined')) {
-                        //                 // restart vp
-                        //                 vpConfig.readKernelFunction();
-                        //             }
-                        //             reject({status: 'error', ename: msg.content.ename, evalue: msg.content.evalue});
-                        //             break;						
-                        //         case 'execute_result':
-                        //             var type = 'text';
-                        //             if (msg.content) {
-                        //                 try {
-                        //                     if (msg.content['text']) {
-                        //                         result = String(msg.content['text']);
-                        //                         type = 'text';
-                        //                     } else if (msg.content.data) {
-                        //                         if (msg.content.data['image/png']) {
-                        //                             result = String(msg.content.data['image/png']);
-                        //                             type = 'image/png';
-                        //                         } else if (msg.content.data['text/plain']) {
-                        //                             result = String(msg.content.data['text/plain']);
-                        //                             type = 'text/plain';
-                        //                         } else if (msg.content.data['text/html']) {
-                        //                             result = String(msg.content.data['text/html']);
-                        //                             type = 'text/html';
-                        //                         }
-                        //                     }
-                        //                     resolve({result: result, type: type, msg: msg});
-                        //                 } catch(ex) {
-                        //                     reject(ex);
-                        //                 }
-                        //             } else {
-                        //                 resolve({result: result, type: type, msg: msg});
-                        //             }		
-                        //             break;
-                        //         case 'display_data':
-                        //             var type = 'text';
-                        //             if (msg.content) {
-                        //                 try {
-                        //                     if (msg.content['text']) {
-                        //                         result = String(msg.content['text']);
-                        //                         type = 'text';
-                        //                     } else if (msg.content.data) {
-                        //                         if (msg.content.data['image/png']) {
-                        //                             result = String(msg.content.data['image/png']);
-                        //                             type = 'image/png';
-                        //                         } else if (msg.content.data['text/plain']) {
-                        //                             result = String(msg.content.data['text/plain']);
-                        //                             type = 'text/plain';
-                        //                         } else if (msg.content.data['text/html']) {
-                        //                             result = String(msg.content.data['text/html']);
-                        //                             type = 'text/html';
-                        //                         }
-                        //                     }
-                        //                     resolve({result: result, type: type, msg: msg});
-                        //                 } catch(ex) {
-                        //                     reject(ex);
-                        //                 }
-                        //             } else {
-                        //                 resolve({result: result, type: type, msg: msg});
-                        //             }											
-                        //             break;
-                        //         case 'update_display_data':
-                        //             var result = msg.content;
-                        //             resolve({
-                        //                 result: result, 
-                        //                 type: msgType, 
-                        //                 msg: {
-                        //                     content: {
-                        //                         name: msgType,
-                        //                         data: {
-                        //                             [msgType]: result
-                        //                         }
-                        //                     }
-                        //                 }
-                        //             });										
-                        //             break;
-                        //         default:
-                        //             var message = '[jupyterLabTerminal]: Unknown message type ' + msgType;					  				    
-                        //             reject({status: 'error', ename: 'Unknown message type', evalue: message});
-
-                        //     };
-                        //     return;
-                        // };
+                        var future;
+                        if (vpConfig.isReady === false) {
+                            vpConfig.readKernelFunction().then(function() {
+                                future = kernelConnection.requestExecute(codeObj);
+                                future.onIOPub = onIOPub;
+                            });
+                        } else {
+                            future = kernelConnection.requestExecute(codeObj);
+                            future.onIOPub = onIOPub;
+                        }
                     }
                     
                 }

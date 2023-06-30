@@ -61,7 +61,11 @@ define([
             //     // this.dataPath = com_Const.DATA_PATH + "sample_csv/";
             //     this.dataPath = 'https://raw.githubusercontent.com/visualpython/visualpython/main/data/sample_csv/';
             // }
-            this.dataPath = 'https://raw.githubusercontent.com/visualpython/visualpython/main/visualpython/data/sample_csv/';
+            if (vpConfig.extensionType === 'lite') {
+                this.dataPath = '/drive/data/';
+            } else {
+                this.dataPath = 'https://raw.githubusercontent.com/visualpython/visualpython/main/visualpython/data/sample_csv/';
+            }
 
             this.state = {
                 fileExtension: 'csv',

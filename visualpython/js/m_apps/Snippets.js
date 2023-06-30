@@ -126,7 +126,7 @@ define([
                             filesPath.forEach(fileObj => {
                                 var fileName = fileObj.file;
                                 var selectedPath = fileObj.path;
-                                if (vpConfig.extensionType === 'lab') {
+                                if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
                                     vpKernel.readFile(selectedPath).then(function(resultObj) {
                                         try {
                                             var snippetData = JSON.parse(resultObj.result);
@@ -509,7 +509,7 @@ define([
                 } else if (menu == 'delete') {
                     let loadingSpinner = new LoadingSpinner($(that.wrapSelector('.vp-sn-table')));
                     // remove key
-                    if (vpConfig.extensionType === 'lab') {
+                    if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
                         vpConfig.getData('').then(function(data) {
                             let dataObj = data;
                             // remove data

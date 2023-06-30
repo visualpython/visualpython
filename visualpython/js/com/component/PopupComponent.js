@@ -15,7 +15,7 @@
 // CHROME: notebook/js/codemirror-ipython
 (function(mod) {
     if (typeof exports == "object" && typeof module == "object"){ // CommonJS
-        if (vpExtType === 'lab') {
+        if (vpExtType === 'lab' || vpExtType === 'lite') {
             mod(require("codemirror/lib/codemirror"),
             require("codemirror/mode/python/python")
             );
@@ -359,6 +359,9 @@ define([
                 // add install codes
                 var codes = that.generateInstallCode();
                 codes && codes.forEach(code => {
+                    if (vpConfig.extensionType === 'lite') {
+                        code = code.replace('!', '%');
+                    }
                     com_interface.insertCell('code', code, true, that.getSigText());
                 });
             });
@@ -503,7 +506,7 @@ define([
         _bindDraggable() {
             var that = this;
             let containment = 'body';
-            if (vpConfig.extensionType === 'lab') {
+            if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
                 containment = '#main';
             }
             $(this.wrapSelector()).draggable({

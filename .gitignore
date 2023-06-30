@@ -1,4 +1,5 @@
 dist/
+jupyterlab/_output
 jupyterlab/lib/visualpython
 jupyternotebook/visualpython
 colab/visualpython

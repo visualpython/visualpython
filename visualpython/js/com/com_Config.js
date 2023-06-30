@@ -48,15 +48,16 @@ define([
         /**
          * 
          * @param {*} initialData 
-         * @param {*} extensionType      extension type: notebook/colab/lab
+         * @param {*} extensionType      extension type: notebook/colab/lab/lite
          */
         constructor(extensionType='notebook', initialData={}) {
             // initial mode
+            this.isReady = false;
             this.extensionType = extensionType;
             this.parentSelector = 'body';
             if (extensionType === 'notebook') {
                 this.parentSelector = '#site';
-            } else if (extensionType === 'colab' || extensionType === 'lab') {
+            } else if (extensionType === 'colab' || extensionType === 'lab' || extensionType === 'lite') {
                 // this.parentSelector = '.notebook-horizontal';
                 this.parentSelector = 'body';
             }
@@ -463,8 +464,8 @@ define([
                         // not mounted
                         reject('Colab Drive is not mounted!');
                     })
-                } else if (that.extensionType === 'lab') {
-                    // CHROME: edited to use .visualpython files
+                } else if (that.extensionType === 'lab' || that.extensionType === 'lite') {
+                    // LAB: edited to use .visualpython files
                     that._readFromLab('', configKey).then(function(result) {
                         resolve(result);
                     }).catch(function(err) {
@@ -526,7 +527,7 @@ define([
                         // not mounted
                         reject('Colab Drive is not mounted!');
                     })
-                } else if (that.extensionType === 'lab') {
+                } else if (that.extensionType === 'lab' || that.extensionType === 'lite') {
                     // LAB: use local .visualpython files
                     that._readFromLab(configKey).then(function(result) {
                         let data = result;
@@ -604,7 +605,7 @@ define([
                             reject();
                         });
                     });
-                } else if (that.extensionType === 'lab') {
+                } else if (that.extensionType === 'lab' || that.extensionType === 'lite') {
                     // LAB: use .visualpython files
                     that.getData('', configKey).then(function(data) {
                         let newDataObj = {};
@@ -649,7 +650,7 @@ define([
                     }).catch(function(err) {
                         reject(false);
                     })
-                } else if (that.extensionType === 'lab') {
+                } else if (that.extensionType === 'lab' || that.extensionType === 'lite') {
                     // LAB: use .visualpython files
                     that.getData('', configKey).then(function(data) {
                         let dataObj = data;
@@ -838,7 +839,7 @@ define([
             let that = this;
             let nowVersion = this.getVpInstalledVersion();
             let packageName = 'visualpython';
-            if (this.extensionType === 'lab') {
+            if (this.extensionType === 'lab' || this.extensionType === 'lite') {
                 packageName = 'jupyterlab-visualpython';
             }
             this.getPackageVersion(packageName).then(function(latestVersion) {
@@ -908,6 +909,16 @@ define([
                                         ];
                                         com_interface.insertCell('markdown', info.join('\n'));
                                         com_interface.insertCell('code', '!pip install jupyterlab-visualpython --upgrade');
+                                    } else if (that.extensionType === 'lite') {
+                                        // LITE: update lab extension on lite
+                                        let info = [
+                                            '## Visual Python Upgrade',
+                                            'NOTE: ',
+                                            '- Refresh your web browser to start a new version.',
+                                            '- Save VP Note before refreshing the page.'
+                                        ];
+                                        com_interface.insertCell('markdown', info.join('\n'));
+                                        com_interface.insertCell('code', "import piplite\npiplite.install('jupyterlab-visualpython==" + latestVersion + "')");
                                     }
 
                                     // update version_timestamp

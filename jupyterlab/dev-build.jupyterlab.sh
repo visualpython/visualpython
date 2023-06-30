@@ -45,3 +45,9 @@ grep -rl "__VP_CSS_LOADER__" lib/visualpython/js/* | xargs sed -i "s/__VP_CSS_LO
 
 # Run Build for jupyterlab extension
 jlpm run build
+
+# Run Build for jupyterlite
+# jupyter lite build
+
+# Run jupyterlite server
+# jupyter lite serve

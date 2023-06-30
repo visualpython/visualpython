@@ -25,6 +25,9 @@ module.exports = [{
         );
         
         global.vpExtType = 'lab';
+        if (app.name === 'JupyterLite') {
+            global.vpExtType = 'lite';
+        }
         global.vpLab = app;
 
         const VpPanel = require('./VpPanel');

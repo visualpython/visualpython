@@ -50,13 +50,13 @@ div#vp_wrapper.colab * {
     box-sizing: border-box !important;
 }
 /* LAB: reset position and size */
-#vp_wrapper.lab {
+#vp_wrapper.lab, #vp_wrapper.lite {
     position: unset !important;
     width: 100% !important;
     height: 100% !important;
     min-width: 273px !important;
 }
-#vp_wrapper.lab * {
+#vp_wrapper.lab *, #vp_wrapper.lite * {
     box-sizing: border-box !important;
 }
 

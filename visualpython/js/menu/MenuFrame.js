@@ -188,7 +188,7 @@ define([
         getMenuLibraries() {
             var libraries = {};
             // LAB: webpack5 load json object by default
-            if (vpConfig.extensionType === 'lab') {
+            if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
                 libraries = librariesJson;
             } else {
                 libraries = JSON.parse(librariesJson);
