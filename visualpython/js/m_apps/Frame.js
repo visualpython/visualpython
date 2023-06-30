@@ -240,7 +240,7 @@ define([
                 that.setPreview(that.getCurrentCode());
             });
 
-            // menu on column (Deprecated on v2.3.6 - Temporarily Show on v.2.4.0)
+            // menu on column (Deprecated on v2.3.6 - Temporarily Show on v.2.4.1)
             $(document).on('contextmenu', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN), function(event) {
                 event.preventDefault();
 
@@ -270,7 +270,7 @@ define([
                 that.showMenu(thisPos.left, thisPos.top + thisRect.height);
             });
 
-            // menu on row (Deprecated on v2.3.6 - Temporarily Show on v.2.4.0)
+            // menu on row (Deprecated on v2.3.6 - Temporarily Show on v.2.4.1)
             $(document).on('contextmenu', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW), function(event) {
                 event.preventDefault();
                 var idx = $(that.wrapSelector('.' + VP_FE_TABLE_ROW)).index(this); // 0 ~ n
@@ -595,7 +595,7 @@ define([
                 that.loadCode(that.getTypeCode(FRAME_EDIT_TYPE.SHOW), true);
             });
 
-            // click toolbar item (Deprecated on v2.3.6 - Temporarily Show on v.2.4.0)
+            // click toolbar item (Deprecated on v2.3.6 - Temporarily Show on v.2.4.1)
             $(document).on('click', this.wrapSelector('.vp-fe-toolbar-item'), function(evt) {
                 evt.stopPropagation();
                 var itemType = $(this).data('type');

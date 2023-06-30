@@ -50,7 +50,7 @@
     font-size: 13px;
     font-weight: bold;
     color: var(--vp-highlight-color);
-    margin: 8px 6px 8px 3px;
+    margin: 4px 6px 8px 3px;
     cursor: pointer;
 }
 .vp-menu-header-button {
