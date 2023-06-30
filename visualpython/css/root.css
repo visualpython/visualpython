@@ -601,6 +601,11 @@ hr.vp-extra-menu-line {
 .vp-inner-popup-body .mr5 {
     margin-right: 5px;
 }
+#vp_wrapper .pl5,
+.vp-popup-frame .pl5,
+.vp-inner-popup-body .pl5 {
+    padding-left: 5px;
+}
 /* Layout */
 .vp-inline-block {
     display: inline-block !important;
