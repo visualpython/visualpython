@@ -169,9 +169,9 @@ define([
 
             // Add installation code FIXME:
             if (vpConfig.extensionType === 'lite') {
-                codeList.push(that.generateInstallCode().replace('!', '%'));
+                codeList.push('%pip install factor-analyzer');
             } else {
-                codeList.push(that.generateInstallCode());
+                codeList.push('!pip install factor-analyzer');
             }
 
             // data declaration

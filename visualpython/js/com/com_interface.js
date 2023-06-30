@@ -240,7 +240,7 @@ define([
                             }, 300);
                     }
                 }
-            } else if (vpConfig.extensionType === 'lab') {
+            } else if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
                 if (notebookPanel && notebookPanel.sessionContext){ 
                     var sessionContext = notebookPanel.sessionContext; 
                     let sessionType = sessionContext.type;
