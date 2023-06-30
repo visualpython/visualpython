@@ -99,7 +99,7 @@ define([
             cfg = $.extend(true, {}, vpConfig.defaultConfig, cfg);
 
         vpFrame = new MainFrame();
-        if (vpConfig.extensionType !== 'lab') {
+        if (vpConfig.extensionType !== 'lab' && vpConfig.extensionType !== 'lite') {
             vpFrame.loadMainFrame();
         }
 
@@ -192,6 +192,9 @@ define([
         } else if (window.vpExtType === 'lab') {
             // LAB: added extType as 'lab'
             window.vpConfig = new com_Config('lab');
+        } else if (window.vpExtType === 'lite') {
+            // LITE: added extType as 'lite'
+            window.vpConfig = new com_Config('lite');
         } else {
             window.vpConfig = new com_Config();
         }
@@ -199,7 +202,7 @@ define([
         /**
          * visualpython kernel
          */
-        if (vpConfig.extensionType === 'lab') {
+        if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
             window.vpKernel = new com_Kernel(vpLab);
         } else {
             window.vpKernel = new com_Kernel();
@@ -270,6 +273,7 @@ define([
             events.on('kernel_ready.Kernel', function (evt, info) {
                 vpLog.display(VP_LOG_TYPE.LOG, 'vp operations for kernel ready...');
                 // read vp functions
+                vpConfig.isReady = true;
                 vpConfig.readKernelFunction();
             });
         } else if (vpConfig.extensionType === 'colab') {
@@ -277,9 +281,10 @@ define([
             colab.global.notebook.kernel.listen('connected', function(x) { 
                 vpLog.display(VP_LOG_TYPE.LOG, 'vp operations for kernel ready...');
                 // read vp functions
+                vpConfig.isReady = true;
                 vpConfig.readKernelFunction();
             });
-        } else if (vpConfig.extensionType === 'lab') {
+        } else if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
             // LAB: if widget is ready or changed, ready for lab kernel connected, and restart vp
             vpLab.shell._currentChanged.connect(function(s1, value) {
                 var { newValue } = value;
@@ -287,12 +292,14 @@ define([
                 if (newValue && newValue.sessionContext) {
                     if (newValue.sessionContext.isReady) {
                         vpLog.display(VP_LOG_TYPE.LOG, 'vp operations for kernel ready...');
+                        vpConfig.isReady = true;
                         vpConfig.readKernelFunction();
                         vpConfig.checkVersionTimestamp();
                     }
                     newValue.sessionContext._connectionStatusChanged.connect(function(s2, status) {
                         if (status === 'connected') {
                             vpLog.display(VP_LOG_TYPE.LOG, 'vp operations for kernel ready...');
+                            vpConfig.isReady = true;
                             vpConfig.readKernelFunction();
                             vpConfig.checkVersionTimestamp();
                         }

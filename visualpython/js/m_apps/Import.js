@@ -69,8 +69,14 @@ define([
                 ...this.state
             }
 
+            this.importTemplatesCopy = JSON.parse(JSON.stringify(importTemplates));
+            if (vpConfig.extensionType === 'lite') {
+                // for LITE: set default checked state as false on seaborn package
+                this.importTemplatesCopy['data-analysis'][3].checked = false;
+            }
+
             if (!this.state.importMeta || this.state.importMeta.length <= 0) {
-                this.state.importMeta = JSON.parse(JSON.stringify(importTemplates[this.state.tabType]));
+                this.state.importMeta = JSON.parse(JSON.stringify(this.importTemplatesCopy[this.state.tabType]));
             }
         }
 
@@ -86,7 +92,7 @@ define([
                 $(that.wrapSelector('.vp-tab-button')).removeClass('vp-tab-selected');
                 $(this).addClass('vp-tab-selected');
                 // replace libraries
-                that.state.importMeta = importTemplates[tabType];
+                that.state.importMeta = that.importTemplatesCopy[tabType];
                 $(that.wrapSelector('#vp_tblImport')).replaceWith(function() {
                     return that.templateTable(that.state.importMeta);
                 });

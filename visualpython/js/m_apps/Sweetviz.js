@@ -285,12 +285,14 @@ define([
             this.checking = true;
     
             // check installed
-            vpKernel.execute('!pip show sweetviz').then(function(resultObj) {
+            let code = "_vp_print(_vp_check_package_list(['sweetviz']))";
+            vpKernel.execute(code).then(function(resultObj) {
                 let { result, msg } = resultObj;
                 if (!that.checking) {
                     return;
                 }
-                if (msg.content['text'].includes('not found')) {
+                let installed = result['sweetviz'].installed;
+                if (installed === false) {
                     that.toggleCheckState('install');
                 } else {
                     that.toggleCheckState('installed');

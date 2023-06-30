@@ -221,7 +221,7 @@ define([
 
                     MathJax.Hub.Queue(["Typeset", MathJax.Hub, "vp_markdownPreview"]);
                 });
-            } else if (vpConfig.extensionType === 'lab') {
+            } else if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
                 var marked = require('marked');
 
                 // get block

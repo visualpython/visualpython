@@ -77,6 +77,7 @@ define([
         }
 
         loadState() {
+            super.loadState();
             let { v1, v2 } = this.state;
         }
 

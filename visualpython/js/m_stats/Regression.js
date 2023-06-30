@@ -66,6 +66,11 @@ define([
             this.columnSelector = null;
         }
 
+        _unbindEvent() {
+            super._unbindEvent();
+            $(document).off('change', this.wrapSelector('#dependent'));
+        }
+
         _bindEvent() {
             super._bindEvent();
             /** Implement binding events */
@@ -79,10 +84,19 @@ define([
                 $(that.wrapSelector('.vp-st-option')).hide();
                 $(that.wrapSelector('.vp-st-option.' + testType)).show();
 
+                let excludeList = [];
+                if (that.state.testType === 'multiple' 
+                || that.state.testType === 'hierarchical' 
+                || that.state.testType === 'dummy') {
+                    let depVal = $(that.wrapSelector('#dependent')).val();
+                    excludeList = [ depVal ];
+                }
+
                 // render variable selector
                 that.columnSelector = new MultiSelector(that.wrapSelector('#independentBox'),
                     { 
                         mode: 'columns', parent: that.state.data, showDescription: false,
+                        excludeList: excludeList,
                         change: function(type, list) {
                             that._handleMultiColumnChange(type, list);
                         } 
@@ -93,6 +107,24 @@ define([
             $(this.wrapSelector('#data')).on('change', function() {
                 let data = $(this).val();
                 that.handleVariableChange(data);
+            });
+
+            // dependent change
+            $(document).on('change', this.wrapSelector('#dependent'), function() {
+                let depVal = $(this).val();
+                if (that.state.testType === 'multiple' 
+                || that.state.testType === 'hierarchical' 
+                || that.state.testType === 'dummy') {
+                    that.columnSelector = new MultiSelector(that.wrapSelector('#independentBox'),
+                        {   
+                            mode: 'columns', parent: that.state.data, showDescription: false, 
+                            excludeList: [ depVal ],
+                            change: function(type, list) {
+                                that._handleMultiColumnChange(type, list);
+                            }
+                        }
+                    );
+                }
             });
         }
 
@@ -116,7 +148,6 @@ define([
                     $(that.wrapSelector('#' + id)).prop('disabled', true);
                 });
             }
-
             // render variable selector
             this.columnSelector = new MultiSelector(this.wrapSelector('#independentBox'),
                 {   
@@ -191,10 +222,22 @@ define([
                     }
                 });
 
+            let excludeList = [];
+            if (this.state.testType === 'multiple' 
+                || this.state.testType === 'hierarchical' 
+                || this.state.testType === 'dummy') {
+                if (this.state.dependent !== '') {
+                    excludeList = [ this.state.dependent ];
+                }
+            }
+
             // render variable selector
             this.columnSelector = new MultiSelector(this.wrapSelector('#indenpendentBox'),
-                        { mode: 'columns', parent: this.state.data, selectedList: this.state.independentMulti.map(x=>x.code), showDescription: false }
-                    );
+                { 
+                    mode: 'columns', parent: this.state.data, 
+                    selectedList: this.state.independentMulti.map(x=>x.code), excludeList: excludeList, showDescription: false 
+                }
+            );
             
             // bind column if data exist
             if (this.state.data !== '') {
@@ -464,8 +507,8 @@ define([
                         code.appendLine("# Mean Centering ");
                         independentValue = com_util.formatString("{0}_MC", independentValue);
                         moderatedValue = com_util.formatString("{0}_MC", moderatedValue);
-                        code.appendFormatLine("vp_df['{0}']   = vp_df[{1}] - vp_df[{2}].mean()", independentValue, independent, independent);
-                        code.appendFormatLine("vp_df['{0}'] = vp_df[{1}] - vp_df[{2}].mean()", moderatedValue, moderated, moderated);
+                        code.appendFormatLine("vp_df['{0}']   = vp_df[{1}] - vp_df[{2}].mean(numeric_only=True)", independentValue, independent, independent);
+                        code.appendFormatLine("vp_df['{0}'] = vp_df[{1}] - vp_df[{2}].mean(numeric_only=True)", moderatedValue, moderated, moderated);
                     }
                     // Model 1 to 3
                     code.appendLine();
@@ -683,8 +726,8 @@ define([
                     code.appendLine();
                     code.appendLine("# Residual statistics");
                     code.appendLine("display(Markdown('### Residual statistics'))");
-                    code.appendLine("display(pd.DataFrame(data={'Min':vp_residual.min(),'Max':vp_residual.max(),'Mean':vp_residual.mean(),");
-                    code.append("                           'Std. Deviation':vp_residual.std(),'N':vp_residual.count()}))");
+                    code.appendLine("display(pd.DataFrame(data={'Min':vp_residual.min(),'Max':vp_residual.max(),'Mean':vp_residual.mean(numeric_only=True),");
+                    code.append("                           'Std. Deviation':vp_residual.std(numeric_only=True),'N':vp_residual.count()}))");
                 }
                 if (normTest === true) {
                     code.appendLine();

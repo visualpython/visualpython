@@ -175,7 +175,8 @@ define([
                                 ...x,
                                 value: x.label,
                                 code: x.value,
-                                type: x.dtype
+                                type: x.dtype,
+                                isNumeric: x.is_numeric
                             };
                         });
                         callback(colList);
@@ -193,7 +194,8 @@ define([
                                 ...x,
                                 value: x.label,
                                 code: x.value,
-                                type: x.dtype
+                                type: x.dtype,
+                                isNumeric: x.is_numeric
                             };
                         });
                         callback(list);
@@ -340,6 +342,7 @@ define([
         }
 
         renderSelectionBox(dataList) {
+            let mode = this.mode;
             var tag = new com_String();
             tag.appendFormatLine('<div class="{0} {1} {2} {3}">', APP_SELECT_BOX, 'left', APP_DROPPABLE, 'no-selection vp-scrollbar');
             // get data and make draggable items
@@ -351,9 +354,17 @@ define([
                 } else {
                     info = '';
                 }
+                let iconStr = '';
+                if (mode === 'columns') {
+                    if (data.isNumeric === true) {
+                        iconStr = '<span class="vp-icon-numeric mr5 vp-vertical-text"></span>';
+                    } else {
+                        iconStr = '<span class="vp-icon-non-numeric mr5 vp-vertical-text"></span>';
+                    }
+                }
                 // render item box
-                tag.appendFormatLine('<div class="{0} {1}" data-idx="{2}" data-name="{3}" data-type="{4}" data-code="{5}" title="{6}"><span>{7}</span></div>'
-                                    , APP_SELECT_ITEM, APP_DRAGGABLE, data.location, data.value, data.type, data.code, info, data.value);
+                tag.appendFormatLine('<div class="{0} {1}" data-idx="{2}" data-name="{3}" data-type="{4}" data-code="{5}" title="{6}">{7}<span>{8}</span></div>'
+                                    , APP_SELECT_ITEM, APP_DRAGGABLE, data.location, data.value, data.type, data.code, info, iconStr, data.value);
             });
             tag.appendLine('</div>');  // APP_SELECT_BOX
             return tag.toString();
@@ -371,9 +382,17 @@ define([
                 } else {
                     info = '';
                 }
+                let iconStr = '';
+                if (mode === 'columns') {
+                    if (data.isNumeric === true) {
+                        iconStr = '<span class="vp-icon-numeric mr5 vp-vertical-text"></span>';
+                    } else {
+                        iconStr = '<span class="vp-icon-non-numeric mr5 vp-vertical-text"></span>';
+                    }
+                }
                 // render item box
-                tag.appendFormatLine('<div class="{0} {1} {2}" data-idx="{3}" data-name="{4}" data-type="{5}" data-code="{6}" title="{7}"><span>{8}</span></div>'
-                                    , APP_SELECT_ITEM, APP_DRAGGABLE, 'added', data.location, data.value, data.type, data.code, info, data.value);
+                tag.appendFormatLine('<div class="{0} {1} {2}" data-idx="{3}" data-name="{4}" data-type="{5}" data-code="{6}" title="{7}">{8}<span>{9}</span></div>'
+                                    , APP_SELECT_ITEM, APP_DRAGGABLE, 'added', data.location, data.value, data.type, data.code, info, iconStr, data.value);
             });
             tag.appendLine('</div>');  // APP_SELECT_BOX
             return tag.toString();

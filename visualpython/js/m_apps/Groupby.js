@@ -886,7 +886,12 @@ define([
                 // Method code generation
                 //================================================================
                 if (method != '') {
-                    methodStr.appendFormat('{0}()', method);
+                    let numericOnlyList = ['std', 'sum', 'mean', 'median', 'quantile'];
+                    if (numericOnlyList.includes(method)) {
+                        methodStr.appendFormat('{0}(numeric_only=True)', method);
+                    } else {
+                        methodStr.appendFormat('{0}()', method);
+                    }
                 }
             }
 

@@ -31,7 +31,7 @@ define([
             super._init();
             /** Write codes executed before rendering */
             this.config.sizeLevel = 2;
-            this.config.checkModules = ['pd', 'np', 'vp_confidence_interval', 'vp_sem'];
+            this.config.checkModules = ['pd', 'np', 'scipy.stats', 'vp_confidence_interval', 'vp_sem'];
 
             this.state = {
                 testType: 'one-way',
@@ -188,7 +188,7 @@ define([
                         code.appendLine();
                         code.appendLine("# Statistics");
                         code.appendLine("display(Markdown('### Statistics'))");
-                        code.appendLine("display(pd.DataFrame(data={'Count':_df.count(),'Mean':_df.mean(),'Std. Deviation':_df.std(),'Min':_df.min(),'Max':_df.max(),");
+                        code.appendLine("display(pd.DataFrame(data={'Count':_df.count(),'Mean':_df.mean(numeric_only=True),'Std. Deviation':_df.std(numeric_only=True),'Min':_df.min(),'Max':_df.max(),");
                         code.appendLine("                           'Std. Error Mean':_df.apply(vp_sem),'Confidence interval':0.95,");
                         code.append("                           'Lower':_df.apply(vp_confidence_interval).T[0],'Upper':_df.apply(vp_confidence_interval).T[1] }))");
                     }
@@ -303,7 +303,7 @@ define([
                         code.appendLine();
                         code.appendLine("# Statistics");
                         code.appendLine("display(Markdown('### Statistics'))");
-                        code.appendLine("display(pd.DataFrame(data={'Count':_df.count(),'Mean':_df.mean(),'Std. Deviation':_df.std(),'Min':_df.min(),'Max':_df.max(),");
+                        code.appendLine("display(pd.DataFrame(data={'Count':_df.count(),'Mean':_df.mean(numeric_only=True),'Std. Deviation':_df.std(numeric_only=True),'Min':_df.min(),'Max':_df.max(),");
                         code.appendLine("                   'Std. Error Mean':_df.apply(vp_sem),'Confidence interval':0.95,");
                         code.append("                   'Lower':_df.apply(vp_confidence_interval).T[0],'Upper':_df.apply(vp_confidence_interval).T[1] }))");
                     }
@@ -427,7 +427,7 @@ define([
                         code.appendLine();
                         code.appendLine("# Statistics");
                         code.appendLine("display(Markdown('### Statistics'))");
-                        code.appendLine("display(pd.DataFrame(data={'Count':_df.count(),'Mean':_df.mean(),'Std. Deviation':_df.std(),'Min':_df.min(),'Max':_df.max(),");
+                        code.appendLine("display(pd.DataFrame(data={'Count':_df.count(),'Mean':_df.mean(numeric_only=True),'Std. Deviation':_df.std(numeric_only=True),'Min':_df.min(),'Max':_df.max(),");
                         code.appendLine("                   'Std. Error Mean':_df.apply(vp_sem),'Confidence interval':0.95,");
                         code.append("                   'Lower':_df.apply(vp_confidence_interval).T[0],'Upper':_df.apply(vp_confidence_interval).T[1] }))");
                     }

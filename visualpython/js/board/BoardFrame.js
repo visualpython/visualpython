@@ -87,7 +87,7 @@ define([
         get blockList() {
             let sessionId = 'default';
             // LAB: get session id
-            if (vpConfig.extensionType === 'lab') {
+            if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
                 let panelId = vpKernel.getLabPanelId();
                 if (panelId) {
                     sessionId = panelId;
@@ -102,7 +102,7 @@ define([
         set blockList(val) {
             let sessionId = 'default';
             // LAB: get session id
-            if (vpConfig.extensionType === 'lab') {
+            if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
                 let panelId = vpKernel.getLabPanelId();
                 if (panelId) {
                     sessionId = panelId;
@@ -122,7 +122,7 @@ define([
         addToBlockList(newVal, position=-1) {
             let sessionId = 'default';
             // LAB: get session id
-            if (vpConfig.extensionType === 'lab') {
+            if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
                 let panelId = vpKernel.getLabPanelId();
                 if (panelId) {
                     sessionId = panelId;
@@ -154,7 +154,7 @@ define([
         removeFromBlockList(removeVal) {
             let sessionId = 'default';
             // LAB: get session id
-            if (vpConfig.extensionType === 'lab') {
+            if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
                 let panelId = vpKernel.getLabPanelId();
                 if (panelId) {
                     sessionId = panelId;
@@ -173,7 +173,7 @@ define([
         getTitle() {
             let sessionId = 'default';
             // LAB: get session id
-            if (vpConfig.extensionType === 'lab') {
+            if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
                 let panelId = vpKernel.getLabPanelId();
                 if (panelId) {
                     sessionId = panelId;
@@ -189,7 +189,7 @@ define([
         setTitle(newTitle) {
             let sessionId = 'default';
             // LAB: get session id
-            if (vpConfig.extensionType === 'lab') {
+            if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
                 let panelId = vpKernel.getLabPanelId();
                 if (panelId) {
                     sessionId = panelId;
@@ -479,7 +479,7 @@ define([
 
             this.blockMenu = new BlockMenu(this);
 
-            if (vpConfig.extensionType === 'lab') {
+            if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
                 let that = this;
                 vpLab.shell._currentChanged.connect(function(sender, value) {
                     // if lab tab changed, reset title and reload board
@@ -643,7 +643,7 @@ define([
                     let vpFilePath = filesPath[0].path;
                     let vpFileName = filesPath[0].file;
                     // read file
-                    if (vpConfig.extensionType === 'lab') {
+                    if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
                         // LAB: read file using python open
                         vpKernel.readFile(vpFilePath).then(function(resultObj) {
                             try {
@@ -972,7 +972,7 @@ define([
         moveBlock(startIdx, endIdx, parentBlock=null) {
             let sessionId = 'default';
             // LAB: get session id
-            if (vpConfig.extensionType === 'lab') {
+            if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
                 let panelId = vpKernel.getLabPanelId();
                 if (panelId) {
                     sessionId = panelId;

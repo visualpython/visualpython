@@ -275,11 +275,11 @@ define([
                     code.appendLine("# Independent two-sample t-test");
                     // variable declaration
                     if (inputType === 'long-data') {
-                        code.appendFormatLine("vp_df1 = df[(df[{0}] == '{1}')][{2}].dropna().copy()", groupingVariable, group1, testVariable);
-                        code.appendFormatLine("vp_df2 = df[(df[{0}] == '{1}')][{2}].dropna().copy()", groupingVariable, group2, testVariable);
+                        code.appendFormatLine("vp_df1 = {0}[({1}[{2}] == '{3}')][{4}].dropna().copy()", data, data, groupingVariable, group1, testVariable);
+                        code.appendFormatLine("vp_df2 = {0}[({1}[{2}] == '{3}')][{4}].dropna().copy()", data, data, groupingVariable, group2, testVariable);
                     } else if (inputType === 'wide-data') {
-                        code.appendFormatLine("vp_df1 = df[{0}].dropna().copy()", testVariable1);
-                        code.appendFormatLine("vp_df2 = df[{0}].dropna().copy()", testVariable2);
+                        code.appendFormatLine("vp_df1 = {0}[{1}].dropna().copy()", data, testVariable1);
+                        code.appendFormatLine("vp_df2 = {0}[{1}].dropna().copy()", data, testVariable2);
                     }
                     code.appendLine("");
                     // 1. Normality test
