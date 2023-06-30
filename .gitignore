@@ -1,5 +1,6 @@
 dist/
 jupyterlab/_output
+jupyterlab/.jupyterlite.doit.db
 jupyterlab/lib/visualpython
 jupyternotebook/visualpython
 colab/visualpython
