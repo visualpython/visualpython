@@ -252,7 +252,11 @@ define([
                     }
 
                     if (tukey === true || scheffe === true || duncan === true) {
-                        codeList.push("!pip install scikit-posthocs");
+                        if (vpConfig.extensionType === 'lite') {
+                            codeList.push("%pip install scikit-posthocs");
+                        } else {
+                            codeList.push("!pip install scikit-posthocs");
+                        }
 
                         // Post hoc analysis - Tukey
                         if (tukey === true) {
@@ -379,7 +383,11 @@ define([
                     }
                     if (tukey === true || scheffe === true || duncan === true) {
                         // Add installation code
-                        codeList.push("!pip install scikit-posthocs");
+                        if (vpConfig.extensionType === 'lite') {
+                            codeList.push("%pip install scikit-posthocs");
+                        } else {
+                            codeList.push("!pip install scikit-posthocs");
+                        }
 
                         // Post hoc analysis - Tukey
                         if (tukey === true) {
@@ -445,7 +453,11 @@ define([
                     }
 
                     // Add installation code : # pip install pingouin
-                    codeList.push("!pip install pingouin");
+                    if (vpConfig.extensionType === 'lite') {
+                        codeList.push("%pip install pingouin");
+                    } else {
+                        codeList.push("!pip install pingouin");
+                    }
 
                     code.appendLine();
                     code.appendLine();
