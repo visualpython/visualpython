@@ -6,3 +6,4 @@ jupyternotebook/visualpython
 colab/visualpython
 test/
 .gitignore
+visualpython/js/com/com_Config.js

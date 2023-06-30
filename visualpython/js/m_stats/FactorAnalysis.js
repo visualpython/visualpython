@@ -167,6 +167,13 @@ define([
             let codeList = [];
             let code = new com_String();
 
+            // Add installation code FIXME:
+            if (vpConfig.extensionType === 'lite') {
+                codeList.push('%pip install factor-analyzer');
+            } else {
+                codeList.push('!pip install factor-analyzer');
+            }
+
             // data declaration
             code.appendFormat("vp_df = {0}", data);
             if (this.columnSelector) {

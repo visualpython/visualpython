@@ -297,6 +297,7 @@ define([
          * - automatically restart on jupyter kernel restart (loadVisualpython.js)
          */
         readKernelFunction() {
+            let that = this;
             // CHROME: change method to load py files ($.get -> require)
             return new Promise(function(resolve, reject) {
                 var libraryList = [ 
@@ -315,7 +316,26 @@ define([
                 libraryList.forEach(libCode => {
                     promiseList.push(vpKernel.execute(libCode, true));
                 });
-                
+
+                if (that.extensionType === 'lite') {
+                    let preInstallCode = '';
+                    let preInstallPackList = [
+                        'seaborn',
+                        'plotly',
+                        'scikit-learn',
+                        'scipy',
+                        'statsmodels'
+                    ];
+                    preInstallPackList.forEach((packName, idx) => {
+                        preInstallCode += '%pip install ' + packName
+                        if (idx < preInstallPackList.length - 1) {
+                            preInstallCode += '\n';
+                        }
+                    });
+                    // pre-install packages
+                    promiseList.push(vpKernel.execute(preInstallCode, true));
+                }
+
                 // run all promises
                 let failed = false;
                 Promise.all(promiseList).then(function(resultObj) {
@@ -883,7 +903,7 @@ define([
                                             '- Save VP Note before refreshing the page.'
                                         ];
                                         com_interface.insertCell('markdown', info.join('\n'));
-                                        com_interface.insertCell('code', "import piplite\npiplite.install('jupyterlab-visualpython==" + latestVersion + "')");
+                                        com_interface.insertCell('code', "%pip install jupyterlab-visualpython==" + latestVersion);
                                     }
 
                                     // update version_timestamp
@@ -956,7 +976,7 @@ define([
     /**
      * Version
      */
-    Config.version = "2.4.1";
+    Config.version = "2.4.3";
 
     /**
      * Type of mode
