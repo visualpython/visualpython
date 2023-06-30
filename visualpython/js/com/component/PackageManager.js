@@ -64,6 +64,28 @@ define([
                 'PyMuPDF': { pipName: 'PyMuPDF' },
                 'sweetviz': { pipName: 'sweetviz' },
             }
+            
+            if (vpConfig.extensionType === 'lite') {
+                this.packageLibTemplate = {
+                    'numpy': { pipName: 'numpy' },
+                    'pandas': { pipName: 'pandas' },
+                    'matplotlib': { pipName: 'matplotlib' },
+                    'seaborn': { pipName: 'seaborn' },
+                    'plotly': { pipName: 'plotly' },
+                    'sklearn': { pipName: 'scikit-learn' },
+                    'scikit-posthocs': { pipName: 'scikit-posthocs' },
+                    'scipy': { pipName: 'scipy' },
+                    'statsmodels': { pipName: 'statsmodels' },
+                    'factor-analyzer': { pipName: 'factor-analyzer' },
+                    'category_encoders': { pipName: 'category_encoders' },
+                    'imblearn': { pipName: 'imblearn' },
+                    'xgboost': { pipName: 'xgboost' },
+                    'lightgbm': { pipName: 'lightgbm' },
+                    'catboost': { pipName: 'catboost' },
+                    'auto-sklearn': { pipName: 'auto-sklearn' },
+                    'sweetviz': { pipName: 'sweetviz' },
+                }
+            }
         }
 
         _bindEvent() {
