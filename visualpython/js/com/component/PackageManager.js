@@ -148,7 +148,7 @@ define([
                     var pipName = that.packageLib[key].pipName;
                     var code = com_util.formatString("!pip uninstall -y {0}", pipName);
                     if (vpConfig.extensionType === 'lite') {
-                        code = com_util.formatString("import piplite\npiplite.uninstall('{0}')", pipName);
+                        code = com_util.formatString("%pip uninstall {0}", pipName);
                     }
                     // create block and run it
                     $('#vp_wrapper').trigger({
@@ -162,7 +162,7 @@ define([
                     var pipName = that.packageLib[key].pipName;
                     var code = com_util.formatString("!pip install --upgrade {0}", pipName);
                     if (vpConfig.extensionType === 'lite') {
-                        code = com_util.formatString("%pip install --upgrade {0}", pipName);
+                        code = com_util.formatString("%pip install {0}", pipName);
                     }
                     // create block and run it
                     $('#vp_wrapper').trigger({
@@ -269,7 +269,7 @@ define([
                     var pipName = this.packageLib[this.state.selected].pipName;
                     var code = com_util.formatString("!pip install {0}", pipName);
                     if (vpConfig.extensionType === 'lite') {
-                        code = com_util.formatString("import piplite\npiplite.install('{0}')", pipName);
+                        code = com_util.formatString("%pip install {0}", pipName);
                     }
                     if (versionType === 'specified') {
                         // specified version
@@ -277,7 +277,7 @@ define([
                         if (version && version !== '') {
                             code = com_util.formatString("!pip install {0}=={1}", pipName, version);
                             if (vpConfig.extensionType === 'lite') {
-                                code = com_util.formatString("import piplite\npiplite.install('{0}=={1}')", pipName, version);
+                                code = com_util.formatString("%pip install {0}=={1}", pipName, version);
                             }
                         } else {
                             $(this.wrapSelector('.vp-inner-popup-version')).focus();
