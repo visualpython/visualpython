@@ -18,8 +18,9 @@ define([
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/component/PopupComponent',
-    'vp_base/js/com/component/FileNavigation'
-], function(ifHtml, ifCss, com_util, com_Const, com_String, PopupComponent, FileNavigation) {
+    'vp_base/js/com/component/FileNavigation',
+    'vp_base/js/com/component/LoadingSpinner'
+], function(ifHtml, ifCss, com_util, com_Const, com_String, PopupComponent, FileNavigation, LoadingSpinner) {
 
     /**
      * PackageManager
@@ -399,6 +400,7 @@ define([
             $(this.wrapSelector('.vp-pm-table')).html('');
 
             let packageList = Object.keys(this.packageLib);
+            let loadingSpinner = new LoadingSpinner($(this.wrapSelector('.vp-popup-body')));
             vpKernel.getPackageList(packageList).then(function(resultObj) {
                 let { result } = resultObj;
                 let packageInfo = JSON.parse(result);
@@ -418,6 +420,8 @@ define([
                 that.bindItemEvent();
             }).catch(function() {
 
+            }).finally(function() {
+                loadingSpinner.remove();
             });
         }
 
