@@ -1121,10 +1121,11 @@ define([
         templateForBody() {
             let page = $(frameHtml);
 
-            let allocateSelector = new DataSelector({
-                pageThis: this, id: 'vp_feReturn', placeholder: 'Variable name', required: true, value: 'vp_df'
-            });
-            $(page).find('#vp_feReturn').replaceWith(allocateSelector.toTagString());
+            // Removed dataselector for Allocation input
+            // let allocateSelector = new DataSelector({
+            //     pageThis: this, id: 'vp_feReturn', placeholder: 'Variable name', required: true, value: 'vp_df'
+            // });
+            // $(page).find('#vp_feReturn').replaceWith(allocateSelector.toTagString());
 
             return page;
         }

@@ -315,10 +315,11 @@ define([
             /** Implement generating template */
             let page = $(fileHtml);
 
-            let allocateSelector = new DataSelector({
-                pageThis: this, id: 'vp_sampleReturn', placeholder: 'Variable name', value: 'vp_df'
-            });
-            $(page).find('#vp_sampleReturn').replaceWith(allocateSelector.toTagString());
+            // Removed dataselector for Allocation input
+            // let allocateSelector = new DataSelector({
+            //     pageThis: this, id: 'vp_sampleReturn', placeholder: 'Variable name', value: 'vp_df'
+            // });
+            // $(page).find('#vp_sampleReturn').replaceWith(allocateSelector.toTagString());
 
             return page;
         }

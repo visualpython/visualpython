@@ -44,7 +44,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -79,7 +79,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -110,7 +110,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -178,7 +178,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ],
             "value": "vp_df"
           },
@@ -349,7 +349,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -419,7 +419,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -488,7 +488,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -559,7 +559,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -648,7 +648,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -704,7 +704,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -778,7 +778,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -842,7 +842,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -921,7 +921,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -963,7 +963,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -1005,7 +1005,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -1057,7 +1057,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -1109,7 +1109,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -1161,7 +1161,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -1223,7 +1223,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -1282,7 +1282,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -1341,7 +1341,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -1400,7 +1400,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -1459,7 +1459,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -1518,7 +1518,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -1594,7 +1594,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -1670,7 +1670,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -1766,7 +1766,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -1798,7 +1798,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -1881,7 +1881,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -1965,7 +1965,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -1993,7 +1993,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -2022,7 +2022,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -2049,7 +2049,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -2077,7 +2077,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -2106,7 +2106,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -2133,7 +2133,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -2166,7 +2166,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -2199,7 +2199,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -2227,7 +2227,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -2254,7 +2254,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -2282,7 +2282,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -2310,7 +2310,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -2337,7 +2337,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -2366,7 +2366,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -2394,7 +2394,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -2418,7 +2418,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -2445,7 +2445,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -2481,7 +2481,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -2535,7 +2535,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -2601,7 +2601,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -2667,7 +2667,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -2733,7 +2733,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -2786,7 +2786,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -2902,7 +2902,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -2931,7 +2931,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -3004,7 +3004,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -3064,7 +3064,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -3146,7 +3146,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -3180,7 +3180,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -3220,7 +3220,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -3265,7 +3265,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -3291,7 +3291,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -3317,7 +3317,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -3343,7 +3343,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -3369,7 +3369,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -3395,7 +3395,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -3421,7 +3421,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -3463,7 +3463,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -3492,7 +3492,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -3526,7 +3526,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ],
             "value": "vp_df"
           },
@@ -3610,7 +3610,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -3684,7 +3684,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ],
             "value": "vp_df"
           }
@@ -3725,7 +3725,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -3752,7 +3752,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -3795,7 +3795,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -3834,7 +3834,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -3877,7 +3877,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -3930,7 +3930,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -3982,7 +3982,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -4062,7 +4062,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -4094,7 +4094,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -4147,7 +4147,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -4186,7 +4186,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -4263,7 +4263,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -4325,7 +4325,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -4356,7 +4356,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -4440,7 +4440,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -4529,7 +4529,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -4563,7 +4563,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -4606,7 +4606,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -4664,7 +4664,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -4708,7 +4708,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -4798,7 +4798,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -4892,7 +4892,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -4960,7 +4960,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -5015,7 +5015,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -5065,7 +5065,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ],
             "var_type": [
               "Series"
@@ -5139,7 +5139,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ],
             "var_type": [
               "Series",
@@ -5224,7 +5224,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -5262,7 +5262,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ],
             "var_type": [
               "Series",
@@ -5338,7 +5338,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ],
             "var_type": [
               "Series",
@@ -5389,7 +5389,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -5453,7 +5453,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -5523,7 +5523,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ],
             "var_type": [
               "Series",
@@ -5585,7 +5585,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -5673,7 +5673,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -5760,7 +5760,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -5886,7 +5886,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -5966,7 +5966,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -6061,7 +6061,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -6148,7 +6148,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -6207,7 +6207,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -6276,7 +6276,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           },
           {
@@ -6538,7 +6538,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ],
             "value": "vp_df"
           },
@@ -6617,7 +6617,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -6644,7 +6644,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -6673,7 +6673,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -6700,7 +6700,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ]
           }
         ]
@@ -6725,7 +6725,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ],
             "value": "vp_df"
           },
@@ -6771,7 +6771,7 @@ define([
             "label": "Allocate to",
             "output": true,
             "component": [
-              "data_select"
+              "input"
             ],
             "value": "vp_df"
           },
