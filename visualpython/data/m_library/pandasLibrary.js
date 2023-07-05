@@ -179,7 +179,8 @@ define([
             "output": true,
             "component": [
               "data_select"
-            ]
+            ],
+            "value": "vp_df"
           },
           {
             "name": "encoding",
@@ -3526,7 +3527,8 @@ define([
             "output": true,
             "component": [
               "data_select"
-            ]
+            ],
+            "value": "vp_df"
           },
           {
             "name": "typ",
@@ -3683,7 +3685,8 @@ define([
             "output": true,
             "component": [
               "data_select"
-            ]
+            ],
+            "value": "vp_df"
           }
         ]
       },
@@ -6536,7 +6539,8 @@ define([
             "output": true,
             "component": [
               "data_select"
-            ]
+            ],
+            "value": "vp_df"
           },
           {
             "name": "sheet_name",
@@ -6722,7 +6726,8 @@ define([
             "output": true,
             "component": [
               "data_select"
-            ]
+            ],
+            "value": "vp_df"
           },
           {
             "name": "format",
@@ -6767,7 +6772,8 @@ define([
             "output": true,
             "component": [
               "data_select"
-            ]
+            ],
+            "value": "vp_df"
           },
           {
             "name": "usecols",
