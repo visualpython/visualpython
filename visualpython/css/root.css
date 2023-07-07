@@ -378,6 +378,22 @@ button.vp-button {
     background: #C4C4C4;
 }
 
+/* Scrollbar vertical only */
+.vp-scrollbar-vertical {
+    overflow-x: hidden;
+    overflow-y: auto;
+    white-space: nowrap;
+    --webkit-mask-position: left top;
+}
+.vp-scrollbar-vertical::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+} 
+.vp-scrollbar-vertical::-webkit-scrollbar-thumb {
+    border: 0.3px solid #C4C4C4;
+    background: #C4C4C4;
+}
+
 /* Scrollbar horizontal */
 .vp-scrollbar-horizontal {
     overflow-x: auto;

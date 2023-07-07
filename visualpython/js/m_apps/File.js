@@ -176,7 +176,8 @@ define([
                           "data_select"
                         ],
                         "output": true,
-                        "required": true
+                        "required": true,
+                        "value": 'vp_df'
                       }
                     ]
                   }
@@ -234,9 +235,14 @@ define([
                     type = 'open';
                 }
 
+                let extensionList = [];
+                if (that.state.fileExtension !== '') {
+                    extensionList = [ that.state.fileExtension ];
+                }
+
                 let fileNavi = new FileNavigation({
                     type: type,
-                    extensions: [ that.state.fileExtension ],
+                    extensions: extensionList,
                     finish: function(filesPath, status, error) {
                         let {file, path} = filesPath[0];
                         that.state.selectedFile = file;
@@ -306,7 +312,15 @@ define([
 
         templateForBody() {
             /** Implement generating template */
-            return fileHtml;
+            let page = $(fileHtml);
+
+            // Removed dataselector for Allocation input
+            // let allocateSelector = new DataSelector({
+            //     pageThis: this, id: 'vp_sampleReturn', placeholder: 'Variable name', value: 'vp_df'
+            // });
+            // $(page).find('#vp_sampleReturn').replaceWith(allocateSelector.toTagString());
+
+            return page;
         }
 
         renderPage(pageType) {

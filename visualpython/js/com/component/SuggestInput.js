@@ -168,6 +168,8 @@ define([
                     $(this).select();
                     $(com_util.formatString(".{0}", that.uuid)).autocomplete('search', $(com_util.formatString(".{0}", that.uuid)).val());
                 }).autocomplete('instance')._renderItem = function(ul, item) {
+                    $(ul).addClass('vp-scrollbar-vertical');
+                    $(ul).css('max-height', '250px');
                     if (item.dtype != undefined) {
                         return $('<li>').attr('data-value', item.value)
                             .append(`<div class="vp-sg-item">${item.label}<label class="vp-gray-text vp-cursor">&nbsp;| ${item.dtype}</label></div>`)

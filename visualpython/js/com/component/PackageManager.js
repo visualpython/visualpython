@@ -18,8 +18,9 @@ define([
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
     'vp_base/js/com/component/PopupComponent',
-    'vp_base/js/com/component/FileNavigation'
-], function(ifHtml, ifCss, com_util, com_Const, com_String, PopupComponent, FileNavigation) {
+    'vp_base/js/com/component/FileNavigation',
+    'vp_base/js/com/component/LoadingSpinner'
+], function(ifHtml, ifCss, com_util, com_Const, com_String, PopupComponent, FileNavigation, LoadingSpinner) {
 
     /**
      * PackageManager
@@ -324,6 +325,7 @@ define([
             super.render();
 
             let that = this;
+            let loadingSpinner = new LoadingSpinner($(this.wrapSelector('.vp-popup-body')));
             vpConfig.getData('', 'vppackman').then(function(savedData) {
                 // Reset abnormal data
                 if (savedData == undefined || savedData.packageList === undefined) {
@@ -334,7 +336,7 @@ define([
                 that.packageLib = {
                     ...savedData.packageList
                 };
-
+                loadingSpinner.remove();
                 // load package list
                 that.loadPackageList();
             }).catch(function(err) {
@@ -343,7 +345,7 @@ define([
                 that.packageLib = {
                     ...that.packageLibTemplate
                 };
-
+                loadingSpinner.remove();
                 // load package list
                 that.loadPackageList();
             });
@@ -399,6 +401,7 @@ define([
             $(this.wrapSelector('.vp-pm-table')).html('');
 
             let packageList = Object.keys(this.packageLib);
+            let loadingSpinner = new LoadingSpinner($(this.wrapSelector('.vp-popup-body')));
             vpKernel.getPackageList(packageList).then(function(resultObj) {
                 let { result } = resultObj;
                 let packageInfo = JSON.parse(result);
@@ -418,6 +421,8 @@ define([
                 that.bindItemEvent();
             }).catch(function() {
 
+            }).finally(function() {
+                loadingSpinner.remove();
             });
         }
 

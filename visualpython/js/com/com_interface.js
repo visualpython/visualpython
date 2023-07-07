@@ -111,6 +111,13 @@ define([
             if (notebookPanel && notebookPanel.sessionContext){
                 var sessionContext = notebookPanel.sessionContext;	
                 let sessionType = sessionContext.type;
+                if (vpConfig.extensionType === 'lite') {
+                    // check one more time for jupyter lite
+                    // - it returns 'notebook' when it's console
+                    if (notebookPanel.console !== undefined) {
+                        sessionType = 'console';
+                    }
+                }
                 if (sessionType === 'notebook') {
                     var notebook = notebookPanel.content;
                     var notebookModel = notebook.model;
@@ -244,6 +251,13 @@ define([
                 if (notebookPanel && notebookPanel.sessionContext){ 
                     var sessionContext = notebookPanel.sessionContext; 
                     let sessionType = sessionContext.type;
+                    if (vpConfig.extensionType === 'lite') {
+                        // check one more time for jupyter lite
+                        // - it returns 'notebook' when it's console
+                        if (notebookPanel.console !== undefined) {
+                            sessionType = 'console';
+                        }
+                    }
                     if (sessionType === 'notebook') {
                         var notebook = notebookPanel.content;
                         var notebookModel = notebook.model;

@@ -37,7 +37,7 @@ define([
             this.state = {
                 originObj: '',
                 tempObj: '_vp',
-                returnObj: '_vp',
+                returnObj: 'vp_df',
                 inplace: false,
                 menu: '',
                 menuItem: '',
@@ -176,7 +176,7 @@ define([
                     // initialize state values
                     that.state.originObj = origin;
                     that.state.tempObj = '_vp';
-                    that.state.returnObj = that.state.tempObj;
+                    that.state.returnObj = 'vp_df';
                     if (that.state.inplace === true) {
                         that.state.returnObj = origin;
                     }
@@ -228,7 +228,7 @@ define([
             // check/uncheck inplace
             $(this.wrapSelector('#inplace')).on('change', function() {
                 let checked = $(this).prop('checked');
-                let returnVariable = '_vp';
+                let returnVariable = 'vp_df';
                 if (checked === true) {
                     returnVariable = that.state.originObj;
                 }
@@ -240,7 +240,7 @@ define([
                 that.setPreview(that.getCurrentCode());
             });
 
-            // menu on column (Deprecated on v2.3.6 - Temporarily Show on v.2.4.3)
+            // menu on column (Deprecated on v2.3.6 - Temporarily Show on v.2.4.4)
             $(document).on('contextmenu', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_COLUMN), function(event) {
                 event.preventDefault();
 
@@ -270,7 +270,7 @@ define([
                 that.showMenu(thisPos.left, thisPos.top + thisRect.height);
             });
 
-            // menu on row (Deprecated on v2.3.6 - Temporarily Show on v.2.4.3)
+            // menu on row (Deprecated on v2.3.6 - Temporarily Show on v.2.4.4)
             $(document).on('contextmenu', this.wrapSelector('.' + VP_FE_TABLE + ' .' + VP_FE_TABLE_ROW), function(event) {
                 event.preventDefault();
                 var idx = $(that.wrapSelector('.' + VP_FE_TABLE_ROW)).index(this); // 0 ~ n
@@ -595,7 +595,7 @@ define([
                 that.loadCode(that.getTypeCode(FRAME_EDIT_TYPE.SHOW), true);
             });
 
-            // click toolbar item (Deprecated on v2.3.6 - Temporarily Show on v.2.4.3)
+            // click toolbar item (Deprecated on v2.3.6 - Temporarily Show on v.2.4.4)
             $(document).on('click', this.wrapSelector('.vp-fe-toolbar-item'), function(evt) {
                 evt.stopPropagation();
                 var itemType = $(this).data('type');
@@ -1121,10 +1121,11 @@ define([
         templateForBody() {
             let page = $(frameHtml);
 
-            let allocateSelector = new DataSelector({
-                pageThis: this, id: 'vp_feReturn', placeholder: 'Variable name', required: true, value: '_vp'
-            });
-            $(page).find('#vp_feReturn').replaceWith(allocateSelector.toTagString());
+            // Removed dataselector for Allocation input
+            // let allocateSelector = new DataSelector({
+            //     pageThis: this, id: 'vp_feReturn', placeholder: 'Variable name', required: true, value: 'vp_df'
+            // });
+            // $(page).find('#vp_feReturn').replaceWith(allocateSelector.toTagString());
 
             return page;
         }

@@ -168,13 +168,14 @@ define([
             let page = $(subsetHtml);
 
             let that = this;
-            let allocateSelector = new DataSelector({
-                pageThis: this, id: 'allocateTo', classes: VP_DS_ALLOCATE_TO, placeholder: 'New variable name',
-                finish: function() {
-                    that.generateCode();
-                }
-            });
-            $(page).find('.' + VP_DS_ALLOCATE_TO).replaceWith(allocateSelector.toTagString());
+            // Removed dataselector for Allocation input
+            // let allocateSelector = new DataSelector({
+            //     pageThis: this, id: 'allocateTo', classes: VP_DS_ALLOCATE_TO, placeholder: 'New variable name',
+            //     finish: function() {
+            //         that.generateCode();
+            //     }
+            // });
+            // $(page).find('.' + VP_DS_ALLOCATE_TO).replaceWith(allocateSelector.toTagString());
 
             return page;
         }

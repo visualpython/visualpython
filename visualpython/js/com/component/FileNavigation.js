@@ -259,6 +259,7 @@ define([
                     if (allowExtensionList.length > 0 && !allowExtensionList.includes(extension)) {
                         // TODO: alert
                         //vpCommon.renderAlertModal('Not supported file type');
+                        vpLog.display(VP_LOG_TYPE.ERROR, 'Not supported file type: ' + extension);
                         return;
                     }
                     

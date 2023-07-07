@@ -1,9 +1,8 @@
 dist/
 jupyterlab/_output
-jupyterlab/.jupyterlite.doit.db
+jupyterlab/.jupyterlite.doit*
 jupyterlab/lib/visualpython
 jupyternotebook/visualpython
 colab/visualpython
 test/
 .gitignore
-visualpython/js/com/com_Config.js

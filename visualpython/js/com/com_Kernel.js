@@ -44,6 +44,9 @@ define([
                 },
                 'vpimport': {
 
+                },
+                'vppackman': {
+
                 }
             }
         }
@@ -381,6 +384,8 @@ define([
                         }
                         var future;
                         if (vpConfig.isReady === false) {
+                            vpConfig.isReady = true;
+                            vpConfig.hideProtector();
                             vpConfig.readKernelFunction().then(function() {
                                 future = kernelConnection.requestExecute(codeObj);
                                 future.onIOPub = onIOPub;
@@ -695,6 +700,9 @@ define([
                 case 'vpimport':
                     configFile = 'import';
                     break;
+                case 'vppackman':
+                    configFile = 'packman';
+                    break;
             }
             var cmd = com_util.formatString("print(_vp_get_colab_vpcfg('{0}'))", configFile);
             return new Promise(function(resolve, reject) {
@@ -726,6 +734,9 @@ define([
                     break;
                 case 'vpimport':
                     configFile = 'import';
+                    break;
+                case 'vppackman':
+                    configFile = 'packman';
                     break;
             }
             // write file
@@ -761,6 +772,9 @@ define([
                 case 'vpimport':
                     configFile = 'import';
                     break;
+                case 'vppackman':
+                    configFile = 'packman';
+                    break;
             }
             var cmd = com_util.formatString("print(_vp_get_lab_vpcfg('{0}'))", configFile);
             return new Promise(function(resolve, reject) {
@@ -792,6 +806,9 @@ define([
                     break;
                 case 'vpimport':
                     configFile = 'import';
+                    break;
+                case 'vppackman':
+                    configFile = 'packman';
                     break;
             }
             // write file
