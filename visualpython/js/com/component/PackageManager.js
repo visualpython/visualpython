@@ -325,6 +325,7 @@ define([
             super.render();
 
             let that = this;
+            let loadingSpinner = new LoadingSpinner($(this.wrapSelector('.vp-popup-body')));
             vpConfig.getData('', 'vppackman').then(function(savedData) {
                 // Reset abnormal data
                 if (savedData == undefined || savedData.packageList === undefined) {
@@ -335,7 +336,7 @@ define([
                 that.packageLib = {
                     ...savedData.packageList
                 };
-
+                loadingSpinner.remove();
                 // load package list
                 that.loadPackageList();
             }).catch(function(err) {
@@ -344,7 +345,7 @@ define([
                 that.packageLib = {
                     ...that.packageLibTemplate
                 };
-
+                loadingSpinner.remove();
                 // load package list
                 that.loadPackageList();
             });
