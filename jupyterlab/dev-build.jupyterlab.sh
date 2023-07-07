@@ -50,4 +50,7 @@ jlpm run build
 # jupyter lite build
 
 # Run jupyterlite server
-# jupyter lite serve
+# jupyter lite serve # init + build + serve
+
+# If something went wrong, remove _output/extensions folder and run command below
+# jupyter lite init

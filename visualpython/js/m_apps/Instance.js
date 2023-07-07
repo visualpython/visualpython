@@ -208,10 +208,11 @@ define([
             });
             $(page).find('#vp_instanceTarget').replaceWith(targetSelector.toTagString());
 
-            let allocateSelector = new DataSelector({
-                pageThis: this, id: 'vp_instanceAllocate', placeholder: 'Variable name'
-            });
-            $(page).find('#vp_instanceAllocate').replaceWith(allocateSelector.toTagString());
+            // Removed dataselector for Allocation input
+            // let allocateSelector = new DataSelector({
+            //     pageThis: this, id: 'vp_instanceAllocate', placeholder: 'Variable name'
+            // });
+            // $(page).find('#vp_instanceAllocate').replaceWith(allocateSelector.toTagString());
 
             return page;
         }

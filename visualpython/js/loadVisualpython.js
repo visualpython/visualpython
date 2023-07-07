@@ -288,29 +288,56 @@ define([
             // LAB: if widget is ready or changed, ready for lab kernel connected, and restart vp
             vpLab.shell._currentChanged.connect(function(s1, value) {
                 var { newValue } = value;
+                vpLog.display(VP_LOG_TYPE.DEVELOP, 'jupyterlab shell currently changed', s1, value);
                 // kernel restart for notebook and console
                 if (newValue && newValue.sessionContext) {
+                    vpConfig.hideProtector();
                     if (newValue.sessionContext.isReady) {
-                        vpLog.display(VP_LOG_TYPE.LOG, 'vp operations for kernel ready...');
-                        vpConfig.isReady = true;
-                        vpConfig.readKernelFunction();
-                        vpConfig.checkVersionTimestamp();
-                    }
-                    newValue.sessionContext._connectionStatusChanged.connect(function(s2, status) {
-                        if (status === 'connected') {
+                        if (vpConfig.isReady === false) {
                             vpLog.display(VP_LOG_TYPE.LOG, 'vp operations for kernel ready...');
                             vpConfig.isReady = true;
                             vpConfig.readKernelFunction();
                             vpConfig.checkVersionTimestamp();
                         }
+                    }
+                    newValue.sessionContext._connectionStatusChanged.connect(function(s2, status) {
+                        if (status === 'connected') {
+                            if (vpConfig.isReady === false) {
+                                vpLog.display(VP_LOG_TYPE.LOG, 'vp operations for kernel ready...');
+                                vpConfig.isReady = true;
+                                vpConfig.readKernelFunction();
+                                vpConfig.checkVersionTimestamp();
+                            }
+                        }
                     });
                 } else {
                     vpLog.display(VP_LOG_TYPE.LOG, 'No widget detected...');
+                    vpConfig.isReady = false;
+                    vpConfig.showProtector();
+                    if (vpConfig.extensionType === 'lite') {
+                        vpLab.serviceManager.sessions.runningChanged.connect(handleRunningChanged);
+                    }
                 }
             });
         }
 
         return vpFrame;
+    }
+
+    var handleRunningChanged = function(a, b) {
+        vpLog.display(VP_LOG_TYPE.DEVELOP, 'Current widget:', vpLab.shell.currentWidget);
+        if (vpLab.shell.currentWidget) {
+            vpLab.shell.currentWidget.sessionContext.statusChanged.connect(function(currentWidget, status) { 
+                if (status === 'idle' && vpConfig.isReady === false) {
+                    vpLog.display(VP_LOG_TYPE.LOG, 'vp operations for kernel ready...');
+                    vpConfig.isReady = true;
+                    vpConfig.hideProtector();
+                    vpConfig.readKernelFunction();
+                    vpConfig.checkVersionTimestamp();
+                }
+            });
+            vpLab.serviceManager.sessions.runningChanged.disconnect(handleRunningChanged);
+        }
     }
 
     return { initVisualpython: initVisualpython, readConfig: readConfig };

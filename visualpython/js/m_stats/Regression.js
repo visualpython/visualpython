@@ -707,10 +707,8 @@ define([
                 code.appendLine("from IPython.display import display, Markdown");
                 code.appendLine("from scipy import stats");
                 code.appendLine("import statsmodels.api as sm");
-                if (testType === 'multiple') {
-                    if (['stepwise', 'backward', 'forward'].includes(method)) {
-                        code.appendLine("_predict =  _result.predict(sm.add_constant(vp_df[_model.exog_names[1:]]))");
-                    }
+                if (testType === 'multiple' && ['stepwise', 'backward', 'forward'].includes(method)) {
+                    code.appendLine("_predict =  _result.predict(sm.add_constant(vp_df[_model.exog_names[1:]]))");
                 } else {
                     code.appendLine("_predict  = _result.predict(vp_df)");
                 }

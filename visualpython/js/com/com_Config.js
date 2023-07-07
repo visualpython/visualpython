@@ -52,7 +52,7 @@ define([
          */
         constructor(extensionType='notebook', initialData={}) {
             // initial mode
-            this.isReady = false;
+            this._isReady = { 'default': false };
             this.extensionType = extensionType;
             this.parentSelector = 'body';
             if (extensionType === 'notebook') {
@@ -216,6 +216,41 @@ define([
             
         }
 
+        get isReady() {
+            let sessionId = 'default';
+            if (this.extensionType === 'lab' || this.extensionType === 'lite') {
+                let panelId = vpKernel.getLabPanelId();
+                if (panelId) {
+                    sessionId = panelId;
+                }
+            }
+            if (sessionId in this._isReady) {
+                return this._isReady[sessionId];
+            }
+            return false;
+        }
+
+        set isReady(ready) {
+            let sessionId = 'default';
+            if (this.extensionType === 'lab' || this.extensionType === 'lite') {
+                let panelId = vpKernel.getLabPanelId();
+                if (panelId) {
+                    sessionId = panelId;
+                }
+            }
+            this._isReady[sessionId] = ready;
+        }
+
+        showProtector(title='No kernel', content='You have to open the notebook or console to use Visual Python.') {
+            $('#vp_protector .vp-protector-title').text(title);
+            $('#vp_protector .vp-protector-content').text(content);
+            $('#vp_protector').show();
+        }
+
+        hideProtector() {
+            $('#vp_protector').hide();
+        }
+
         /**
          * Read dejault config
          */
@@ -299,6 +334,9 @@ define([
             let that = this;
             // CHROME: change method to load py files ($.get -> require)
             return new Promise(function(resolve, reject) {
+                // if (that.extensionType === 'lite') {
+                //     that.showProtector('Kernel loading', 'Required inner function is loading now...');
+                // }
                 var libraryList = [ 
                     printCommand, fileNaviCommand, pandasCommand, variableCommand, visualizationCommand
                 ];
@@ -344,6 +382,9 @@ define([
                     console.log('visualpython - failed to load library', resultObj);
                     // TODO: show to restart kernel
                 }).finally(function() {
+                    // if (that.extensionType === 'lite') {
+                    //     that.hideProtector();
+                    // }
                     if (!failed) {
                         console.log('visualpython - loaded libraries', libraryList);
                         resolve(true);
@@ -1005,8 +1046,8 @@ define([
     /**
      * FIXME: before release, change it to _MODE_TYPE.RELEASE
      */
-    // Config.serverMode = _MODE_TYPE.DEVELOP;
-    Config.serverMode = _MODE_TYPE.RELEASE; 
+    Config.serverMode = _MODE_TYPE.DEVELOP;
+    // Config.serverMode = _MODE_TYPE.RELEASE; 
 
     /**
      * Version

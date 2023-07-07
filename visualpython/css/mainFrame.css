@@ -59,6 +59,43 @@ div#vp_wrapper.colab * {
 #vp_wrapper.lab *, #vp_wrapper.lite * {
     box-sizing: border-box !important;
 }
+/* LITE: show protector */
+#vp_wrapper.lab .vp-protector,
+#vp_wrapper.lite .vp-protector {
+    background-color: rgb(33 33 33 / 77%);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+}
+#vp_wrapper.lab .vp-protector-info,
+#vp_wrapper.lite .vp-protector-info {
+    background-color: var(--vp-background-color);
+    width: 250px;
+    height: 170px;
+    padding: 10px;
+    margin: auto;
+    top: calc(50% - 80px);
+    position: relative;
+    display: grid;
+    grid-template-rows: 20px 100px 30px;
+}
+#vp_wrapper.lab .vp-protector-title,
+#vp_wrapper.lite .vp-protector-title {
+    font-weight: bold;
+    color: var(--vp-font-highlight);
+}
+#vp_wrapper.lab .vp-protector-content,
+#vp_wrapper.lite .vp-protector-content {
+    border: 0.25px solid var(--vp-border-gray-color);
+    border-radius: 10px;
+    padding: 10px;
+    margin: 5px 0;
+}
+#vp_wrapper.lab .vp-protector-footer,
+#vp_wrapper.lite .vp-protector-footer {
+    text-align: right;
+}
 
 /* resizing handle */
 #vp_wrapper > .ui-resizable-handle {
