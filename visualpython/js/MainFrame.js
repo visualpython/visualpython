@@ -88,6 +88,11 @@ define([
                         top: colabHeaderHeight + 'px' 
                     });
                 });
+            } else if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
+                $('#vp_protectorShowWithoutKernel').click(function(evt) {
+                    // just hide protector
+                    vpConfig.hideProtector();
+                });
             }
 
             window.vpEvent = new com_Event(this);
@@ -250,6 +255,19 @@ define([
                 { vp_note_display: vp_note_display, vp_note_width: vp_note_width }, 
                 { parent: this }
             );
+
+            // load protector for jupyterlite
+            if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
+                $('#vp_wrapper').append(`<div id="vp_protector" class="vp-protector">
+                    <div class="vp-protector-info">
+                        <div class="vp-protector-title">No kernel</div>
+                        <div class="vp-protector-content">You have to open the notebook or console to use Visual Python.</div>
+                        <div class="vp-protector-footer">
+                            <button id="vp_protectorShowWithoutKernel" class="vp-button cancel">Show without Kernel</button>
+                        </div>
+                    </div>
+                </div>`)
+            }
             
             // consider height and width
             this._resizeWindow();
