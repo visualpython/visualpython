@@ -382,6 +382,7 @@ button.vp-button {
 .vp-scrollbar-vertical {
     overflow-x: hidden;
     overflow-y: auto;
+    white-space: nowrap;
     --webkit-mask-position: left top;
 }
 .vp-scrollbar-vertical::-webkit-scrollbar {
