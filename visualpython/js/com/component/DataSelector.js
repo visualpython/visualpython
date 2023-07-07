@@ -230,6 +230,8 @@ define([
                     $(this).select();
                     $(this).autocomplete('search', $(this).val());
                 }).autocomplete('instance')._renderItem = function(ul, item) {
+                    $(ul).addClass('vp-scrollbar-vertical');
+                    $(ul).css('max-height', '250px');
                     return $('<li>').attr('data-value', item.value)
                             .append(`<div class="vp-sg-item">${item.label}<label class="vp-gray-text vp-cursor">&nbsp;| ${item.dtype}</label></div>`)
                             .appendTo(ul);
