@@ -381,6 +381,8 @@ define([
                         }
                         var future;
                         if (vpConfig.isReady === false) {
+                            vpConfig.isReady = true;
+                            vpConfig.hideProtector();
                             vpConfig.readKernelFunction().then(function() {
                                 future = kernelConnection.requestExecute(codeObj);
                                 future.onIOPub = onIOPub;
