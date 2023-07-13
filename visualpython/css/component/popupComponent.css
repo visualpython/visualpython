@@ -197,6 +197,11 @@
     margin-top: 9px;
     margin-left: 10px;
 }
+.vp-popup-button[data-type="help"] {
+    float: left;
+    margin-top: 9px;
+    margin-left: 10px;
+}
 .vp-popup-button[data-type="cancel"] {
     float: right;
     background-color: #E4E4E4;
