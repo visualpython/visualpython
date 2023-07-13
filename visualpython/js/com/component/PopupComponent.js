@@ -108,7 +108,7 @@ define([
                 // show view box
                 codeview: true, 
                 dataview: true,
-                helpview: true,
+                helpview: false,
                 // show footer
                 runButton: true,
                 footer: true,
@@ -598,7 +598,7 @@ define([
 
             let { 
                 installButton, importButton, packageButton, 
-                codeview, dataview, runButton, footer, 
+                codeview, dataview, helpview, runButton, footer, 
                 sizeLevel, position, docs
             } = this.config;
 
@@ -633,6 +633,9 @@ define([
             } 
             if (!dataview) {
                 $(this.wrapSelector('.vp-popup-button[data-type="data"]')).hide();
+            }
+            if (!helpview) {
+                $(this.wrapSelector('.vp-popup-button[data-type="help"]')).hide();
             }
 
             // run button
