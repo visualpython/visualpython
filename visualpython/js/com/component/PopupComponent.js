@@ -1100,18 +1100,43 @@ define([
             } else if (viewType === 'help') {
                 $(this.wrapSelector('.vp-popup-codeview-box')).hide();
                 $(this.wrapSelector('.vp-popup-dataview-box')).hide();
-                if (this.config.helpview === true) {
-                    if (this.helpViewer !== undefined) {
-                        this.helpViewer.remove();
-                    }
-                    this.helpViewer = new HelpViewer();
-                    this.helpViewer.open(this.config.helpInfo.content, this.config.helpInfo.useHelp);
-                }
+                this.openHelpView();
             }
         }
 
         closeView(viewType) {
             $(this.wrapSelector('.vp-popup-'+viewType+'view-box')).hide();
+        }
+
+        /**
+         * Open HelpViewer
+         * - only one helpviewer at once
+         */
+        openHelpView() {
+            this.closeHelpView();
+            this.helpViewer = new HelpViewer();
+            this.helpViewer.open(this.config.helpInfo.content, this.config.helpInfo.useHelp);
+        }
+
+        /**
+         * Close helpViewer
+         */
+        closeHelpView() {
+            if (this.helpViewer !== undefined) {
+                this.helpViewer.remove();
+            }
+        }
+
+        /**
+         * Set HelpViewer content
+         * @param {string} content 
+         * @param {boolean} useHelp 
+         */
+        setHelpContent(content, useHelp=true) {
+            this.config.helpInfo = {
+                content: content,
+                useHelp: useHelp
+            };
         }
 
         /**

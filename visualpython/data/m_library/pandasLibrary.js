@@ -32,6 +32,7 @@ define([
         "name": "Series",
         "library": "pandas",
         "description": "1 dimension array with same data types",
+        "docs": "https://pandas.pydata.org/docs/reference/api/pandas.Series.html",
         "code": "${o0} = pd.Series(${i0}${index}${name})",
         "options": [
           {
@@ -64,6 +65,7 @@ define([
         "name": "DataFrame",
         "library": "pandas",
         "description": "2 dimension data table type pandas variable",
+        "docs": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html",
         "code": "${o0} = pd.DataFrame(${i0}${index}${columns})",
         "options": [
           {
@@ -98,6 +100,7 @@ define([
         "name": "Index",
         "library": "pandas",
         "description": "Create index object",
+        "docs": "https://pandas.pydata.org/docs/reference/api/pandas.Index.html",
         "code": "${o0} = pd.Index(${data}${dtype}${copy}${name}${tupleize_cols})",
         "options": [
           {
@@ -162,6 +165,7 @@ define([
         "name": "Read CSV",
         "library": "pandas",
         "description": "",
+        "docs": "https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html",
         "code": "${o0} = pd.read_csv(${i0}${encoding}${header}${sep}${names}${usecols}${index_col}${na_values}${skiprows}${nrows}${chunksize}${etc})",
         "options": [
           {
@@ -250,6 +254,7 @@ define([
         "name": "To CSV",
         "library": "pandas",
         "description": "dataframe to csv",
+        "docs": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_csv.html",
         "code": "${i0}.to_csv(${i1}${encoding}${header}${index}${sep}${na_rep}${columns}${etc})",
         "options": [
           {
@@ -320,6 +325,7 @@ define([
         "name": "Merge",
         "library": "pandas",
         "description": "Merge 2 objects",
+        "docs": "https://pandas.pydata.org/docs/reference/api/pandas.merge.html",
         "code": "${o0} = pd.merge(${i0}, ${i1}${left_on}${right_on}${how}${sort})",
         "options": [
           {
@@ -390,6 +396,7 @@ define([
         "name": "Join",
         "library": "pandas",
         "description": "Merge multiple objects",
+        "docs": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.join.html",
         "code": "${o0} = ${i0}.join(${i1}${on}${how}${sort}${lsuffix}${rsuffix})",
         "options": [
           {
@@ -469,6 +476,7 @@ define([
         "name": "Concat",
         "library": "pandas",
         "description": "Merge multiple objects",
+        "docs": "https://pandas.pydata.org/docs/reference/api/pandas.concat.html",
         "code": "${o0} = pd.concat([${i0}]${index}${axis}${sort}${join})",
         "options": [
           {
@@ -540,6 +548,7 @@ define([
         "name": "Sort By Index",
         "library": "pandas",
         "description": "Sort by index",
+        "docs": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.sort_index.html",
         "code": "${o0} = ${i0}.sort_index(${axis}${ascending}${inplace}${kind})",
         "options": [
           {
@@ -624,6 +633,7 @@ define([
         "name": "Group By",
         "library": "pandas",
         "description": "Group DataFrame/Series",
+        "docs": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.groupby.html",
         "code": "${o0} = ${i0}.groupby(${level}${axis}${sort}${as_index})",
         "options": [
           {
@@ -692,6 +702,7 @@ define([
         "name": "Period",
         "library": "pandas",
         "description": "Create Period object",
+        "docs": "https://pandas.pydata.org/docs/reference/api/pandas.Period.html",
         "code": "${o0} = pd.Period(${i0}${freq}${year}${month}${day})",
         "options": [
           {
@@ -759,6 +770,7 @@ define([
         "name": "Drop NA",
         "library": "pandas",
         "description": "",
+        "docs": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.dropna.html",
         "code": "${o0} = ${i0}.dropna(${axis}${how}${thresh})",
         "options": [
           {
@@ -823,6 +835,7 @@ define([
         "name": "Fill NA",
         "library": "pandas",
         "description": "replace null using value",
+        "docs": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.fillna.html",
         "code": "${o0} = ${i0}.fillna(${value}${axis}${method}${inplace}${limit})",
         "options": [
           {
@@ -902,6 +915,7 @@ define([
         "name": "Get Duplicates",
         "library": "pandas",
         "description": "Get duplicates",
+        "docs": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.duplicated.html",
         "code": "${o0} = ${i0}.duplicated(${keep})",
         "options": [
           {
@@ -986,6 +1000,7 @@ define([
         "name": "Scala Replace",
         "library": "pandas",
         "description": "Replace scala value",
+        "docs": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.replace.html",
         "code": "${o0} = ${i0}.replace(${to_replace}${value}${method})",
         "options": [
           {
@@ -1038,6 +1053,7 @@ define([
         "name": "List-like Replace",
         "library": "pandas",
         "description": "Replace values using list",
+        "docs": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.replace.html",
         "code": "${o0} = ${i0}.replace(${to_replace}${value}${method})",
         "options": [
           {
@@ -1090,6 +1106,7 @@ define([
         "name": "Dict-like Replace",
         "library": "pandas",
         "description": "Replace values using dictionary",
+        "docs": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.replace.html",
         "code": "${o0} = ${i0}.replace(${to_replace}${value}${method})",
         "options": [
           {
@@ -1142,6 +1159,7 @@ define([
         "name": "Regular Expression Replace",
         "library": "pandas",
         "description": "",
+        "docs": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.replace.html",
         "code": "${o0} = ${i0}.replace(${to_replace}${value}${method}${regex})",
         "options": [
           {
@@ -1203,6 +1221,7 @@ define([
         "name": "Sum",
         "library": "pandas",
         "description": "",
+        "docs": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.sum.html",
         "code": "${o0} = ${i0}.sum(${axis}${skipna}${level})",
         "options": [
           {
@@ -1262,6 +1281,7 @@ define([
         "name": "Mean",
         "library": "pandas",
         "description": "",
+        "docs": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.mean.html",
         "code": "${o0} = ${i0}.mean(${axis}${skipna}${level})",
         "options": [
           {
@@ -1321,6 +1341,7 @@ define([
         "name": "Count",
         "library": "pandas",
         "description": "Count except NA values",
+        "docs": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.count.html",
         "code": "${o0} = ${i0}.count(${axis}${skipna}${level})",
         "options": [
           {
@@ -1380,6 +1401,7 @@ define([
         "name": "Max",
         "library": "pandas",
         "description": "",
+        "docs": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.max.html",
         "code": "${o0} = ${i0}.max(${axis}${skipna}${level})",
         "options": [
           {
@@ -1439,6 +1461,7 @@ define([
         "name": "Min",
         "library": "pandas",
         "description": "",
+        "docs": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.min.html",
         "code": "${o0} = ${i0}.min(${axis}${skipna}${level})",
         "options": [
           {
@@ -1498,6 +1521,7 @@ define([
         "name": "Median",
         "library": "pandas",
         "description": "Median(50%)",
+        "docs": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.median.html",
         "code": "${o0} = ${i0}.median(${axis}${skipna}${level}${numeric_only})",
         "options": [
           {
@@ -1574,6 +1598,7 @@ define([
         "name": "Std",
         "library": "pandas",
         "description": "",
+        "docs": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.std.html",
         "code": "${o0} = ${i0}.std(${axis}${skipna}${level}${numeric_only})",
         "options": [
           {
@@ -1650,6 +1675,7 @@ define([
         "name": "Quantile",
         "library": "pandas",
         "description": "Calculate quantile between 0 and 1",
+        "docs": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.quantile.html",
         "code": "${o0} = ${i0}.quantile(${q}${axis}${numeric_only}${interpolation})",
         "options": [
           {
@@ -1735,6 +1761,7 @@ define([
         "name": "Drop Row/Column",
         "library": "pandas",
         "description": "Drop row and column",
+        "docs": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.drop.html",
         "code": "${o0} = ${i0}.drop(${i1}${axis})",
         "options": [
           {
@@ -1791,6 +1818,7 @@ define([
         "name": "date_range",
         "library": "pandas",
         "description": "Create DatetimeIndex type timestamp",
+        "docs": "https://pandas.pydata.org/docs/reference/api/pandas.date_range.html",
         "code": "${o0} = pd.date_range(${start}${end}${periods}${freq})",
         "options": [
           {
@@ -1862,6 +1890,7 @@ define([
         "name": "Sort By Values",
         "library": "pandas",
         "description": "",
+        "docs": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.sort_values.html",
         "code": "${o0} = ${i0}.sort_values(${by}${axis}${ascending}${inplace}${kind})",
         "options": [
           {
@@ -1946,6 +1975,7 @@ define([
         "name": "Is Null",
         "library": "pandas",
         "description": "Find null",
+        "docs": "https://pandas.pydata.org/docs/reference/api/pandas.isnull.html",
         "code": "${o0} = pd.isnull(${i0})",
         "options": [
           {
@@ -1974,6 +2004,7 @@ define([
         "name": "Not Null",
         "library": "pandas",
         "description": "Find not null",
+        "docs": "https://pandas.pydata.org/docs/reference/api/pandas.notnull.html",
         "code": "${o0} = pd.notnull(${i0})",
         "options": [
           {
@@ -2002,6 +2033,7 @@ define([
         "name": "Transpose",
         "library": "pandas",
         "description": "Transpose row and column",
+        "docs": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.T.html",
         "code": "${o0} = ${i0}.T",
         "options": [
           {
@@ -2031,6 +2063,7 @@ define([
         "name": "Get columns",
         "library": "pandas",
         "description": "",
+        "docs": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.columns.html",
         "code": "${o0} = ${i0}.columns",
         "options": [
           {
@@ -2375,6 +2408,7 @@ define([
         "name": "Unique",
         "library": "pandas",
         "description": "",
+        "docs": "https://pandas.pydata.org/docs/reference/api/pandas.Series.unique.html",
         "code": "${o0} = ${i0}.unique()",
         "options": [
           {

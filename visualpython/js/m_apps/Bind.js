@@ -31,6 +31,7 @@ define([
             /** Write codes executed before rendering */
             this.config.sizeLevel = 2;
             this.config.checkModules = ['pd'];
+            this.config.helpview = true;
 
             this.howList = [
                 { label: 'Inner', value: 'inner', desc: 'Inner join' },
@@ -127,6 +128,8 @@ define([
                 // clear user option
                 $(that.wrapSelector('#vp_bdUserOption')).val('');
                 that.state.userOption = '';
+
+                that.setHelpContent('_vp_pd.' + type);
             });
 
             //====================================================================
@@ -391,6 +394,8 @@ define([
             } else {
                 $(this.wrapSelector('#vp_bdWithoutColumn')).hide();
             }
+
+            this.setHelpContent('_vp_pd.' + this.state.type);
 
             this.loadVariableList();
         }
