@@ -32,6 +32,7 @@ define([
             this.config.dataview = false;
             this.config.size = { width: 1064, height: 550 };
             this.config.checkModules = ['plt', 'sns'];
+            this.config.docs = 'https://seaborn.pydata.org/index.html';
 
             this.state = {
                 chartType: 'scatterplot',

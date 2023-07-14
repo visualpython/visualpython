@@ -34,6 +34,7 @@ define([
             /** Write codes executed before rendering */
             this.config.sizeLevel = 2;
             this.config.checkModules = ['pd'];
+            this.config.docs = 'https://www.statsmodels.org/stable/api.html';
 
             this.state = {
                 testType: 'simple',

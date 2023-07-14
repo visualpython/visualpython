@@ -62,6 +62,7 @@ define([
     '../com_interface',
     './Component',
     './DataSelector',
+    './HelpViewer',
 
     /** codemirror */
     'codemirror/lib/codemirror',
@@ -70,7 +71,7 @@ define([
     'codemirror/addon/display/autorefresh',
     // 'notebook/js/codemirror-ipython' // LAB: disabled to avoid error FIXME:
 ], function(popupComponentHtml, popupComponentCss
-    , com_util, com_Const, com_String, com_interface, Component, DataSelector, codemirror
+    , com_util, com_Const, com_String, com_interface, Component, DataSelector, HelpViewer, codemirror
 ) {
     'use strict';
 
@@ -107,6 +108,7 @@ define([
                 // show view box
                 codeview: true, 
                 dataview: true,
+                helpview: false,
                 // show footer
                 runButton: true,
                 footer: true,
@@ -115,6 +117,10 @@ define([
                 saveOnly: false, // apply mode
                 checkModules: [], // module aliases or function names
                 docs: 'https://visual-python.gitbook.io/docs/getting-started/welcome-to-visual-python',
+                helpInfo: {
+                    content: '', // method to show using help() ex) pd.DataFrame
+                    useHelp: true // custom text to show on help viewer
+                },
                 ...restConfig
             };
 
@@ -145,8 +151,9 @@ define([
             }
 
             this.cmCodeview = null;
-
             this.cmCodeList = [];
+
+            this.helpViewer = undefined;
         }
 
         wrapSelector(selector='') {
@@ -426,6 +433,14 @@ define([
                         }
                         evt.stopPropagation();
                         break;
+                    case 'help':
+                        if ($(that.wrapSelector('.vp-popup-dataview-box')).is(':hidden')) {
+                            that.openView('help');
+                        } else {
+                            that.closeView('help');
+                        }
+                        evt.stopPropagation();
+                        break;
                     case 'cancel':
                         if (that.getTaskType() === 'task') {
                             $(that.eventTarget).trigger({
@@ -583,7 +598,7 @@ define([
 
             let { 
                 installButton, importButton, packageButton, 
-                codeview, dataview, runButton, footer, 
+                codeview, dataview, helpview, runButton, footer, 
                 sizeLevel, position, docs
             } = this.config;
 
@@ -618,6 +633,9 @@ define([
             } 
             if (!dataview) {
                 $(this.wrapSelector('.vp-popup-button[data-type="data"]')).hide();
+            }
+            if (!helpview) {
+                $(this.wrapSelector('.vp-popup-button[data-type="help"]')).hide();
             }
 
             // run button
@@ -919,6 +937,10 @@ define([
             return true;
         }
 
+        _beforeOpen() {
+            /** Implementation needed - Generated on clicking Install Package button */
+        }
+
         /**
          * Open popup
          * - show popup
@@ -929,6 +951,7 @@ define([
             vpLog.display(VP_LOG_TYPE.DEVELOP, 'open popup', this);
             this.loadState();
             
+            this._beforeOpen();
             this.show();
 
             // set popup position if its top-left side is outside of view
@@ -1052,7 +1075,7 @@ define([
          * @param {*} viewType code / data
          */
         openView(viewType) {
-            if (viewType == 'code') {
+            if (viewType === 'code') {
                 this.saveState();
                 var code = this.generateCode();
                 let codeText = '';
@@ -1069,16 +1092,51 @@ define([
                     that.cmCodeview.refresh();
                 }, 1);
                 $(this.wrapSelector('.vp-popup-dataview-box')).hide();
-            } else {
+                $(this.wrapSelector('.vp-popup-codeview-box')).show();
+            } else if (viewType === 'data') {
                 this.renderDataView();
                 $(this.wrapSelector('.vp-popup-codeview-box')).hide();
+                $(this.wrapSelector('.vp-popup-dataview-box')).show();
+            } else if (viewType === 'help') {
+                $(this.wrapSelector('.vp-popup-codeview-box')).hide();
+                $(this.wrapSelector('.vp-popup-dataview-box')).hide();
+                this.openHelpView();
             }
-
-            $(this.wrapSelector('.vp-popup-'+viewType+'view-box')).show();
         }
 
         closeView(viewType) {
             $(this.wrapSelector('.vp-popup-'+viewType+'view-box')).hide();
+        }
+
+        /**
+         * Open HelpViewer
+         * - only one helpviewer at once
+         */
+        openHelpView() {
+            this.closeHelpView();
+            this.helpViewer = new HelpViewer();
+            this.helpViewer.open(this.config.helpInfo.content, this.config.helpInfo.useHelp);
+        }
+
+        /**
+         * Close helpViewer
+         */
+        closeHelpView() {
+            if (this.helpViewer !== undefined) {
+                this.helpViewer.remove();
+            }
+        }
+
+        /**
+         * Set HelpViewer content
+         * @param {string} content 
+         * @param {boolean} useHelp 
+         */
+        setHelpContent(content, useHelp=true) {
+            this.config.helpInfo = {
+                content: content,
+                useHelp: useHelp
+            };
         }
 
         /**

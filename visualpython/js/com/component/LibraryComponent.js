@@ -30,6 +30,7 @@ define([
             /** Write codes executed before rendering */
             this.config.dataview = false;
             this.config.sizeLevel = 1;
+            this.config.helpview = true;
             
             this.packageId = this.id;
             // deep copy package info
@@ -46,7 +47,42 @@ define([
                 return;
             }
             this.config.checkModules = ['pd'];
-            this.config.docs = 'https://pandas.pydata.org/docs/reference/index.html';
+            
+            // set docs link
+            if (this.package.docs === undefined) {
+                let docsLink = 'https://pandas.pydata.org/docs/reference/api/pandas.';
+                let docsMatchObj = this.package.code.match(/\= (.+)\.(.+)\(/);
+                if (docsMatchObj) {
+                    let targetType = docsMatchObj[1]; // ${i0} or pd
+                    let method = docsMatchObj[2];
+                    if (targetType === 'pd') {
+                        docsLink += method + '.html';
+                    } else {
+                        docsLink += 'DataFrame.' + method + '.html';
+                    }
+                    this.config.docs = docsLink;
+                } else {
+                    this.config.docs = 'https://pandas.pydata.org/docs/reference/index.html';
+                }
+            } else {
+                this.config.docs = this.package.docs;
+            }
+
+            // set helpview content
+            let helpMatchObj = this.package.code.match(/\= (.+)\.(.+)\(/);
+            if (helpMatchObj) {
+                let helpContent = '';
+                let targetType = helpMatchObj[1]; // ${i0} or pd
+                let method = helpMatchObj[2];
+                if (targetType === 'pd') {
+                    helpContent += '_vp_pd.' + method;
+                } else {
+                    helpContent += '_vp_pd.' + 'DataFrame.' + method;
+                }
+                this.config.helpInfo.content = helpContent;
+            } else {
+                this.config.helpview = false;
+            }
 
             vpLog.display(VP_LOG_TYPE.DEVELOP, 'loading state', this.state);
         }

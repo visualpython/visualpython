@@ -33,6 +33,7 @@ define([
             this.config.sizeLevel = 2;
             this.config.checkModules = ['pd'];
             this.config.installButton = true;
+            this.config.docs = 'https://factor-analyzer.readthedocs.io/en/latest/factor_analyzer.html';
 
             this.state = {
                 data: '',

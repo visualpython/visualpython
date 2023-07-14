@@ -191,11 +191,21 @@
     float: left;
     margin-top: 9px;
     margin-left: 10px;
+    line-height: 20px;
 }
 .vp-popup-button[data-type="data"] {
     float: left;
     margin-top: 9px;
     margin-left: 10px;
+    line-height: 20px;
+}
+.vp-popup-button[data-type="help"] {
+    float: left;
+    margin-top: 9px;
+    margin-left: 10px;
+    background-color: #F9B52A;
+    color: var(--vp-background-color);
+    line-height: 20px;
 }
 .vp-popup-button[data-type="cancel"] {
     float: right;

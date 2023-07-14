@@ -586,6 +586,11 @@ hr.vp-extra-menu-line {
 .vp-inner-popup-body .w70 {
     width: 70px !important;
 }
+#vp_wrapper .w60,
+.vp-popup-frame .w60,
+.vp-inner-popup-body .w60 {
+    width: 60px !important;
+}
 #vp_wrapper .w50,
 .vp-popup-frame .w50,
 .vp-inner-popup-body .w50 {

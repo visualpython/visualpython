@@ -666,21 +666,23 @@ define([
             // load udf list to table 'vp_udfList'
             let loadingSpinner = new LoadingSpinner($(this.wrapSelector('.vp-sn-table')));
             vpConfig.getData().then(function(udfObj) {
-                vpLog.display(VP_LOG_TYPE.DEVELOP, udfObj);
+                vpLog.display(VP_LOG_TYPE.DEVELOP, 'Snippets get data', udfObj);
                 var snippets = new com_String();
-                Object.keys(udfObj).forEach(key => {
-                    let obj = udfObj[key];
-                    if (obj.code != null && obj.code != undefined) {
-    
-                        var hasImported = false;
-                        if (that.importedList.includes(key)) {
-                            // set new label
-                            hasImported = true;
+                if (udfObj !== undefined) {
+                    Object.keys(udfObj).forEach(key => {
+                        let obj = udfObj[key];
+                        if (obj.code != null && obj.code != undefined) {
+        
+                            var hasImported = false;
+                            if (that.importedList.includes(key)) {
+                                // set new label
+                                hasImported = true;
+                            }
+                            var item = that.renderSnippetItem(key, obj.code, obj.timestamp, hasImported);
+                            snippets.append(item);
                         }
-                        var item = that.renderSnippetItem(key, obj.code, obj.timestamp, hasImported);
-                        snippets.append(item);
-                    }
-                });
+                    });
+                }
                 $(that.wrapSelector('.vp-sn-table')).html(snippets.toString());
 
                 // bind snippet item
@@ -693,7 +695,8 @@ define([
                     that.bindCodeMirror(title, tag);
                 });
             }).catch(function(err) {
-                com_util.renderAlertModal(err);
+                // com_util.renderAlertModal(err);
+                vpLog.display(VP_LOG_TYPE.ERROR, err);
             }).finally(function() {
                 loadingSpinner.remove();
             });

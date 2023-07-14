@@ -786,6 +786,11 @@ define([
                         var tab = $(this).val();
                         $(that.wrapSelector('.vp-inner-popup-tab')).hide();
                         $(that.wrapSelector('.vp-inner-popup-tab.' + tab)).show();
+
+                        if (tab === 'apply') {
+                            let colName = $(that.wrapSelector('.vp-inner-popup-apply-column option:selected')).text();
+                            $(that.wrapSelector('.vp-inner-popup-apply-target-name')).text(colName);
+                        }
                     });
             
                     // 2-1. hide column selection box
@@ -813,57 +818,6 @@ define([
                         $(this).closest('tr').find('.vp-inner-popup-vartype-box').hide();
                         $(this).closest('tr').find('.vp-inner-popup-vartype-box.' + type).show();
                     });
-
-                    // 4. apply
-                    $(this.wrapSelector('.vp-inner-popup-apply-column')).on('change', function() {
-                        // TODO: change apply-condition (save value)
-
-                    });
-
-                    $(this.wrapSelector('.vp-inner-popup-toggle-else')).on('click', function() {
-                        // toggle else on/off
-                        let elseOn = $(this).attr('data-else'); // on / off
-                        if (elseOn === 'off') {
-                            // off -> on
-                            $(this).attr('data-else', 'on');
-                            $(this).text('Else off');
-                            $(that.wrapSelector('.vp-inner-popup-apply-else-value')).prop('disabled', false);
-                            $(that.wrapSelector('.vp-inner-popup-apply-else-usetext')).prop('disabled', false);
-                        } else {
-                            // on -> off
-                            $(this).attr('data-else', 'off');
-                            $(this).text('Else on');
-                            $(that.wrapSelector('.vp-inner-popup-apply-else-value')).prop('disabled', true);
-                            $(that.wrapSelector('.vp-inner-popup-apply-else-usetext')).prop('disabled', true);
-                        }
-                    });
-
-                    $(this.wrapSelector('.vp-inner-popup-add-case')).on('click', function() {
-                        // add case
-                        $(this).parent().find('.vp-inner-popup-apply-case-box').append($(that.templateForApplyCase()));
-                    });
-
-                    $(document).off('click', this.wrapSelector('.vp-inner-popup-apply-add-cond'));
-                    $(document).on('click', this.wrapSelector('.vp-inner-popup-apply-add-cond'), function() {
-                        // add condition
-                        $(this).parent().find('.vp-inner-popup-apply-cond-box').append($(that.templateForApplyCondition()));
-                        // show operator except last operator
-                        $(this).parent().find('.vp-inner-popup-apply-oper-connect:not(:last)').show();
-                    });
-
-                    $(document).off('click', this.wrapSelector('.vp-inner-popup-apply-del-cond'));
-                    $(document).on('click', this.wrapSelector('.vp-inner-popup-apply-del-cond'), function() {
-                        // hide last operator
-                        $(this).closest('.vp-inner-popup-apply-cond-box').find('.vp-inner-popup-apply-oper-connect:last').hide();
-                        // delete apply cond
-                        $(this).parent().remove();
-                    });
-
-                    $(document).off('click', this.wrapSelector('.vp-inner-popup-apply-del-case'));
-                    $(document).on('click', this.wrapSelector('.vp-inner-popup-apply-del-case'), function() {
-                        // delete apply case
-                        $(this).parent().remove();
-                    });
                 }
 
                 // Replace page
@@ -872,6 +826,11 @@ define([
                         var tab = $(this).val();
                         $(that.wrapSelector('.vp-inner-popup-tab')).hide();
                         $(that.wrapSelector('.vp-inner-popup-tab.' + tab)).show();
+
+                        if (tab === 'apply') {
+                            let colName = $(that.wrapSelector('.vp-inner-popup-apply-column option:selected')).text();
+                            $(that.wrapSelector('.vp-inner-popup-apply-target-name')).text(colName);
+                        }
                     });
                 }
 
@@ -960,6 +919,93 @@ define([
                         $(condTag).prop('disabled', false);
                         $(useTextTag).prop('disabled', false);
                     }
+                });
+
+                // apply page
+                // 4. apply
+                $(this.wrapSelector('.vp-inner-popup-apply-column')).on('change', function() {
+                    // TODO: change apply-condition (save value)
+                    let colLabel = $(that.wrapSelector('.vp-inner-popup-apply-column option:selected')).text();
+                    $(that.wrapSelector('.vp-inner-popup-apply-target-name')).text(colLabel);
+
+                    var varName = that.state.tempObj;
+                    let colName = $(this).val();
+                    var colDtype = $(this).find('option:selected').attr('data-dtype');
+                    var operTag = $(that.wrapSelector('.vp-inner-popup-apply-oper-list'));
+                    var condTag = $(that.wrapSelector('.vp-inner-popup-apply-condition'));
+                    // get result and load column list
+                    vpKernel.getColumnCategory(varName, colName).then(function (resultObj) {
+                        let { result } = resultObj;
+                        try {
+                            var category = JSON.parse(result);
+                            if (category && category.length > 0 && colDtype == 'object') {
+                                // if it's categorical column and its dtype is object, check 'Text' as default
+                                $(that.wrapSelector('.vp-inner-popup-apply-cond-usetext')).prop('checked', true);
+                            } else {
+                                $(that.wrapSelector('.vp-inner-popup-apply-cond-usetext')).prop('checked', false);
+                            }
+                            $(operTag).replaceWith(function () {
+                                return that.templateForConditionOperator(colDtype, 'vp-inner-popup-apply-oper-list');
+                            });
+                            $(condTag).replaceWith(function () {
+                                return that.templateForConditionCondInput(category, colDtype, 'vp-inner-popup-apply-condition');
+                            });
+                        } catch {
+                            $(that.wrapSelector('.vp-inner-popup-apply-cond-usetext')).prop('checked', false);
+                            $(operTag).replaceWith(function () {
+                                return that.templateForConditionOperator(colDtype, 'vp-inner-popup-apply-oper-list');
+                            });
+                            $(condTag).replaceWith(function () {
+                                return that.templateForConditionCondInput([], colDtype, 'vp-inner-popup-apply-condition');
+                            });
+                        }
+                    });
+                });
+
+                $(this.wrapSelector('.vp-inner-popup-toggle-else')).on('click', function() {
+                    // toggle else on/off
+                    let elseOn = $(this).attr('data-else'); // on / off
+                    if (elseOn === 'off') {
+                        // off -> on
+                        $(this).attr('data-else', 'on');
+                        $(this).text('Else off');
+                        $(that.wrapSelector('.vp-inner-popup-apply-else-value')).prop('disabled', false);
+                        $(that.wrapSelector('.vp-inner-popup-apply-else-usetext')).prop('disabled', false);
+                    } else {
+                        // on -> off
+                        $(this).attr('data-else', 'off');
+                        $(this).text('Else on');
+                        $(that.wrapSelector('.vp-inner-popup-apply-else-value')).prop('disabled', true);
+                        $(that.wrapSelector('.vp-inner-popup-apply-else-usetext')).prop('disabled', true);
+                    }
+                });
+
+                $(this.wrapSelector('.vp-inner-popup-add-case')).on('click', function() {
+                    // add case
+                    $(this).parent().find('.vp-inner-popup-apply-case-box').append($(that.templateForApplyCase()));
+                });
+
+                $(document).off('click', this.wrapSelector('.vp-inner-popup-apply-add-cond'));
+                $(document).on('click', this.wrapSelector('.vp-inner-popup-apply-add-cond'), function() {
+                    // add condition
+                    $(this).parent().find('.vp-inner-popup-apply-cond-box').append($(that.templateForApplyCondition()));
+                    // show operator except last operator
+                    $(this).parent().find('.vp-inner-popup-apply-oper-connect:not(:last)').show();
+                });
+
+                $(document).off('click', this.wrapSelector('.vp-inner-popup-apply-del-cond'));
+                $(document).on('click', this.wrapSelector('.vp-inner-popup-apply-del-cond'), function() {
+                    let condBox = $(this).closest('.vp-inner-popup-apply-cond-box');
+                    // delete apply cond
+                    $(this).parent().remove();
+                    // hide last operator
+                    $(condBox).find('.vp-inner-popup-apply-oper-connect:last').hide();
+                });
+
+                $(document).off('click', this.wrapSelector('.vp-inner-popup-apply-del-case'));
+                $(document).on('click', this.wrapSelector('.vp-inner-popup-apply-del-case'), function() {
+                    // delete apply case
+                    $(this).parent().remove();
                 });
             } else if (menuType === FRAME_EDIT_TYPE.DISCRETIZE) {
                 // change bins
@@ -1469,8 +1515,6 @@ define([
             content.appendLine('<label>Target column</label>');
             content.appendLine('<div class="vp-flex-gap5">');
             content.appendLine(this.renderColumnList(this.state.columnList));
-            // else on/off
-            content.appendFormatLine('<button class="vp-button {0}" data-else="off">Else On</button>', 'vp-inner-popup-toggle-else');
             content.appendLine('</div>');
             content.appendLine('</div>');
             // content.appendFormatLine('<textarea type="text" id="{0}" class="{1}" placeholder="{2}">lambda x: x</textarea>'
@@ -1483,7 +1527,8 @@ define([
             content.appendFormatLine('<button class="vp-button {0}">+ Case</button>', 'vp-inner-popup-add-case');
             content.appendLine('</div>'); 
             content.appendLine('<div class="vp-grid-col-120">');
-            content.appendLine('<label>Else value</label>');
+            // else on/off
+            content.appendFormatLine('<button class="vp-button {0}" data-else="off">Else On</button>', 'vp-inner-popup-toggle-else');
             content.appendLine('<div>');
             content.appendFormatLine('<input type="text" class="{0}" disabled/>', 'vp-inner-popup-apply-else-value');
             content.appendFormatLine('<label><input type="checkbox" class="{0}" checked disabled/><span>{1}</span></label>', 'vp-inner-popup-apply-else-usetext','Text');
@@ -1529,11 +1574,13 @@ define([
         }
 
         templateForApplyCondition() {
+            let colLabel = $(this.wrapSelector('.vp-inner-popup-apply-column option:selected'))?.text();
             return `<div class="vp-inner-popup-apply-cond-item wp100 mt5">
                 <div class="vp-icon-btn vp-icon-close-small vp-inner-popup-apply-del-cond" style="float:right;"></div>
+                <label class="vp-inner-popup-apply-target-name">${colLabel}</label>
                 ${this.templateForConditionOperator('', 'vp-inner-popup-apply-oper-list')}
                 <input class="vp-input m vp-inner-popup-apply-condition" type="text" placeholder="Value"/>
-                <label>
+                <label class="w60">
                     <input type="checkbox" class="vp-inner-popup-apply-cond-usetext" title="Uncheck it if you want to use variable or numeric values.">
                     <span>Text</span>
                 </label>
@@ -1558,9 +1605,13 @@ define([
         renderColumnList = function(columnList) {
             var selectTag = new com_String();
             selectTag.appendFormatLine('<select class="{0}">', 'vp-inner-popup-apply-column');
+            // columnList && columnList.forEach(col => {
+            //     selectTag.appendFormatLine('<option value="{0}">{1}</option>', col.code, col.label);
+            // }); 
             columnList && columnList.forEach(col => {
-                selectTag.appendFormatLine('<option value="{0}">{1}</option>', col.code, col.label);
-            }); 
+                selectTag.appendFormatLine('<option data-code="{0}" data-dtype="{1}" value="{2}">{3}</option>',
+                    col.code, col.type, col.code, col.label);
+            });
             selectTag.appendLine('</select>');
             return selectTag.toString();
         }
@@ -1826,6 +1877,7 @@ define([
             content.appendFormatLine('<td><select class="{0}">', 'vp-inner-popup-replacetype');
             content.appendFormatLine('<option value="{0}">{1}</option>', 'replace', 'Replace');
             content.appendFormatLine('<option value="{0}">{1}</option>', 'condition', 'Condition');
+            content.appendFormatLine('<option value="{0}">{1}</option>', 'apply', 'Apply');
             content.appendLine('</select></td></tr>');
             content.appendLine('</table>');
             content.appendLine('</div>'); // end of vp-inner-popup-header
@@ -1858,20 +1910,41 @@ define([
             content.appendLine('</div>');
             // condition table
             content.appendLine('<table class="vp-inner-popup-condition-tbl vp-tbl-gap5 wp100 mt5"><colgroup><col width="110px"><col width="*"></colgroup>');
-            // content.appendLine('<tr><td><label>Condition</label></td>');
-            // content.appendLine('<td><div class="vp-fr-subset-box">');
-            // content.appendLine('<textarea class="vp-input vp-inner-popup-subset"></textarea>');
-            // content.appendLine('</div></td>');
-            // content.appendLine('</tr>');
-
-            // content.appendLine('<tr><th><label>Variable</label></th>');
-            // content.appendFormatLine('<td><input type="text" class="{0}"/>', 'vp-inner-popup-input3');
-            // content.appendFormatLine('<label><input type="checkbox" class="{0}"/><span>{1}</span></label>', 'vp-inner-popup-istext3','Text');
             // content.appendLine('</td></tr>');
             content.appendLine(this.renderReplaceCondition());
             content.appendFormatLine('<tr><td colspan="4"><button type="button" class="vp-button {0}">{1}</button></td></tr>',
                 'vp-inner-popup-add-cond', '+ Condition');
             content.appendLine('</table>');
+            content.appendLine('</div>'); // end of vp-inner-popup-tab condition
+
+            // replace page - 3. apply
+            content.appendFormatLine('<div class="{0} {1}" style="display: none;">', 'vp-inner-popup-tab', 'apply');
+            content.appendLine('<div class="vp-grid-box">');
+            content.appendLine('<div class="vp-grid-col-120">');
+            content.appendLine('<label>Target column</label>');
+            content.appendLine('<div class="vp-flex-gap5">');
+            content.appendLine(this.renderColumnList(this.state.columnList));
+            content.appendLine('</div>');
+            content.appendLine('</div>');
+            // content.appendFormatLine('<textarea type="text" id="{0}" class="{1}" placeholder="{2}">lambda x: x</textarea>'
+            //                         , 'vp_popupAddApply', 'vp-input vp-inner-popup-apply-lambda', 'Type code manually');
+            // render condition
+            content.appendLine('<div class="vp-grid-box vp-scrollbar" style="max-height: 220px;">');
+            content.appendFormatLine('<div class="{0}">', 'vp-inner-popup-apply-case-box');
+            content.appendLine(this.templateForApplyCase());
+            content.appendLine('</div>');
+            content.appendFormatLine('<button class="vp-button {0}">+ Case</button>', 'vp-inner-popup-add-case');
+            content.appendLine('</div>'); 
+            content.appendLine('<div class="vp-grid-col-120">');
+            // else on/off
+            content.appendFormatLine('<button class="vp-button {0}" data-else="off">Else On</button>', 'vp-inner-popup-toggle-else');
+            content.appendLine('<div>');
+            content.appendFormatLine('<input type="text" class="{0}" disabled/>', 'vp-inner-popup-apply-else-value');
+            content.appendFormatLine('<label><input type="checkbox" class="{0}" checked disabled/><span>{1}</span></label>', 'vp-inner-popup-apply-else-usetext','Text');
+            content.appendLine('</div>');
+            content.appendLine('</div>'); // end of else value line
+            content.appendLine('</div>');
+            content.appendLine('</div>'); // end of vp-inner-popup-tab apply
 
             content.appendLine('</div>'); // end of vp-inner-popup-addpage
 
@@ -1960,9 +2033,9 @@ define([
             return content.toString();
         }
 
-        templateForConditionCondInput(category, dtype='object') {
+        templateForConditionCondInput(category, dtype='object', className='vp-inner-popup-condition') {
             var vpCondSuggest = new SuggestInput();
-            vpCondSuggest.addClass('vp-input m vp-inner-popup-condition');
+            vpCondSuggest.addClass('vp-input m ' + className);
 
             if (category && category.length > 0) {
                 vpCondSuggest.setPlaceholder((dtype=='object'?'Categorical':dtype) + " dtype");
@@ -2145,7 +2218,7 @@ define([
             switch (parseInt(type)) {
                 case FRAME_EDIT_TYPE.ADD_COL:
                     title = 'Add column';
-                    size = { width: 450, height: 480 };
+                    size = { width: 550, height: 480 };
                     content = this.renderAddPage('column');
                     this.renderAddValueBox(0);
 
@@ -2296,6 +2369,7 @@ define([
                 case FRAME_EDIT_TYPE.REPLACE:
                     title = 'Replace';
                     content = this.renderReplacePage();
+                    size = { width: 550, height: 480 };
 
                     // // bind codemirror
                     // this.subsetCm = this.initCodemirror({ 
@@ -2622,6 +2696,51 @@ define([
                         }
                         content['value'] = $(this.wrapSelector('.vp-inner-popup-condvalue')).val();
                         content['valueastext'] = $(this.wrapSelector('.vp-inner-popup-condvalueastext')).prop('checked');
+                    } else if (tab == 'apply') {
+                        content['target'] = $(this.wrapSelector('.vp-inner-popup-apply-column')).val();
+                        let caseList = [];
+                        $(this.wrapSelector('.vp-inner-popup-apply-case-item')).each((idx, caseTag) => {
+                            let condList = [];
+                            let replaceValue = $(caseTag).find('.vp-inner-popup-apply-case-val').val();
+                            let replaceValText = $(caseTag).find('.vp-inner-popup-apply-case-usetext').prop('checked');
+
+                            let operTag = $(caseTag).find('.vp-inner-popup-apply-oper-list');
+                            let condTag = $(caseTag).find('.vp-inner-popup-apply-condition');
+                            let condTextTag = $(caseTag).find('.vp-inner-popup-apply-cond-usetext');
+                            let operConnTag = $(caseTag).find('.vp-inner-popup-apply-oper-connect');
+                            for (let i=0; i<operTag.length; i++) {
+                                var oper = $(operTag[i]).val();
+                                var cond = $(condTag[i]).val();
+                                var condText = $(condTextTag[i]).prop('checked');
+                                var operConn = $(operConnTag[i]).val();
+                                var condObj = {};
+                                if (col !== '' && oper !== '' && cond !== '') {
+                                    condObj = {
+                                        oper: oper,
+                                        cond: com_util.convertToStr(cond, condText)
+                                    };
+                                    if (i < (operTag.length - 1)) {
+                                        condObj['connector'] = operConn;
+                                    }
+                                    condList.push(condObj);
+                                }
+                            };
+                            if (replaceValue !== '') {
+                                caseList.push({
+                                    value: com_util.convertToStr(replaceValue, replaceValText),
+                                    condList: condList
+                                });
+                            }
+                        });
+                        content['caseList'] = caseList;
+                        content['else'] = 'np.nan';
+                        if ($(this.wrapSelector('.vp-inner-popup-toggle-else')).attr('data-else') === 'on') {
+                            let elseValue = $(this.wrapSelector('.vp-inner-popup-apply-else-value')).val();
+                            let elseastext = $(this.wrapSelector('.vp-inner-popup-apply-else-usetext')).prop('checked');
+                            if (elseValue !== '') {
+                                content['else'] = com_util.convertToStr(elseValue, elseastext);
+                            }
+                        }
                     }
                     break;
                 case FRAME_EDIT_TYPE.RENAME:
@@ -3137,6 +3256,25 @@ define([
                         });
                         var value = com_util.convertToStr(content.value, content.valueastext);
                         code.appendFormat(", {0}] = {1}", content.name, value);
+                    } else if (tab == 'apply') {
+                        // code.appendFormat("{0}[{1}] = {2}[{3}].apply({4})", tempObj, content.name, tempObj, content.column, content.apply);
+                        let lambdaCode = 'lambda x: ';
+                        content['caseList'].forEach(obj => {
+                            // value if (cond list) else
+                            let caseCode = obj.value + ' ';
+                            let condCode = '';
+                            obj.condList.forEach((condObj, idx) => {
+                                let { oper, cond, connector } = condObj;
+                                condCode += `(x ${oper} ${cond})`;
+                                if (connector !== undefined) {
+                                    condCode += ` ${connector} `;
+                                }
+                            });
+                            caseCode += 'if ' + condCode + ' else ';
+                            lambdaCode += caseCode;
+                        });
+                        lambdaCode += content['else'];
+                        code.appendFormat("{0}[{1}] = {2}[{3}].apply({4})", tempObj, content.name, tempObj, content.target, lambdaCode);
                     }
                     break;
                 case FRAME_EDIT_TYPE.AS_TYPE:

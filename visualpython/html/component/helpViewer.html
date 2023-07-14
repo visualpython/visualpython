@@ -1,0 +1,41 @@
+<!--
+    Project Name    : Visual Python
+    Description     : GUI-based Python code generator
+    File Name       : helpViewer.html
+    Author          : Black Logic
+    Note            : Help viewer
+    License         : GNU GPLv3 with Visual Python special exception
+    Date            : 2023. 07. 13
+    Change Date     : 
+-->
+<!-- use body tag to strip comments out on requirejs/text plugin -->
+<body>
+    <div class="vp-popup-frame">
+        <div class="vp-popup-header">
+            <!-- CHROME: title is a handler for draggable, but for some reason label tag's width is not controllable. changed tag: label -> div -->
+            <div class="vp-popup-title">
+                <!-- Title -->
+                Help viewer
+            </div>
+            <div class="vp-popup-maximize" title="Maximize this popup"></div>
+            <div class="vp-popup-return" title="Return size of this popup"></div>
+            <div class="vp-popup-close" title="Close popup"></div>
+        </div>
+        <div class="vp-popup-body vp-scrollbar">
+            <!-- Body -->
+            <div class="vp-popup-content">
+                <!-- <textarea id="helpContent" class="wp100"></textarea> -->
+                <pre id="helpContent">
+
+                </pre>
+            </div>
+        </div>
+        <div class="vp-popup-footer">
+            <!-- Footer -->
+            <!-- Button box -->
+            <div class="vp-popup-button-box">
+                <button type="button" class="vp-button vp-popup-button" data-type="cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+</body>

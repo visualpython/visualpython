@@ -35,6 +35,7 @@ define([
             this.config.dataview = false;
             this.config.sizeLevel = 2;
             this.config.checkModules = ['plt'];
+            this.config.docs = 'https://matplotlib.org/stable/';
             
             this.setDefaultVariables();
             this.state = {
