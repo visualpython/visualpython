@@ -34,6 +34,7 @@ define([
             this.config.importButton = true;
             this.config.dataview = false;
             this.config.checkModules = ['px'];
+            this.config.docs = 'https://plotly.com/python-api-reference/index.html';
 
             this.state = {
                 chartType: 'scatter',
