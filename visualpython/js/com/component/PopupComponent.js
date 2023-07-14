@@ -1005,6 +1005,7 @@ define([
         remove() {
             vpLog.display(VP_LOG_TYPE.DEVELOP, 'remove popup', this);
             this._unbindEvent();
+            this.closeHelpView();
             $(this.wrapSelector()).remove();
         }
 
@@ -1037,6 +1038,7 @@ define([
         }
 
         hide() {
+            this.closeHelpView();
             this.taskItem && this.taskItem.blurItem();
             $(this.wrapSelector()).hide();
         }
