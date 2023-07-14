@@ -53,6 +53,16 @@ define([
             }
             this.config.checkModules = ['np'];
 
+            if (this.package.docs === undefined) {
+                if (packageName == 'numpy') {
+                    this.config.docs = 'https://numpy.org/doc/';
+                } else if (packageName == 'python') {
+                    this.config.docs = 'https://docs.python.org/3.11/library/index.html';
+                }
+            } else {
+                this.config.docs = this.package.docs;
+            }
+
             vpLog.display(VP_LOG_TYPE.DEVELOP, 'loading state', this.state);
         }
 

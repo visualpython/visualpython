@@ -32,6 +32,7 @@ define([
             this.config.importButton = true;
             this.config.dataview = false;
             this.config.checkModules = ['Counter', 'plt', 'WordCloud'];
+            this.config.docs = 'https://amueller.github.io/word_cloud/references.html';
 
             this.state = {
                 data: '',

@@ -32,6 +32,7 @@ define([
             /** Write codes executed before rendering */
             this.config.sizeLevel = 2;
             this.config.checkModules = ['pd'];
+            this.config.docs = 'https://docs.scipy.org/doc/scipy/reference/';
 
             this.state = {
                 testType: 'shapiro-wilk',

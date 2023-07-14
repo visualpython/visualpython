@@ -11,8 +11,8 @@
 #=============================================================================
 # Replace Version and Basic Files
 #=============================================================================
-VP_ORG_VER=2.4.3
-VP_NEW_VER=2.4.4
+VP_ORG_VER=2.4.4
+VP_NEW_VER=2.4.5
 
 # update version info
 grep -REil "\"version\": \"${VP_ORG_VER}\"" package.json | xargs sed -i "s/\"version\": \"${VP_ORG_VER//\./\\.}\"/\"version\": \"${VP_NEW_VER}\"/g"
