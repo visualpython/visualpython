@@ -5,7 +5,10 @@
 [![License: GPLv3](https://img.shields.io/badge/License-GPLv3-brightgreen)](https://github.com/visualpython/visualpython/blob/main/LICENSE)
 [![Downloads](https://static.pepy.tech/personalized-badge/visualpython?period=total&units=international_system&left_color=grey&right_color=orange&left_text=Downloads)](https://pepy.tech/project/visualpython)
 [![Issues: ](https://img.shields.io/github/issues/visualpython/visualpython?color=%23FF6347)](https://github.com/visualpython/visualpython/issues)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/visualpython/visualpython-binder/HEAD?labpath=index.ipynb)
+[![lite-badge]][lite]
+
+[lite-badge]: https://jupyterlite.rtfd.io/en/latest/_static/badge.svg
+[lite]: https://visualpython.github.io/visualpython-lite/lab/index.html
 
 ## Introduction
 Visual Python is a GUI-based Python code generator, developed on the **Jupyter Lab**, **Jupyter Notebook** and **Google Colab** as an extension. <br>
