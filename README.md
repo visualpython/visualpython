@@ -30,7 +30,7 @@ Try Visual Python if you would like to: <br>
 
 Visual Python is an extension to Jupyter Lab, so you must have Jupyter Lab installed already.<br>
 - Python version 3.x
-- Jupyter lab environment
+- Jupyter lab environment(<= 3.6.3)
 
 ### 2. How to Install
 
