@@ -8,6 +8,10 @@ description: This document will show how to install Visual Python.
 
 {% hint style="info" %}
 **Visual Python** is an extension to [Jupyter Lab](https://jupyter.org/), [Jupyter Notebook](https://jupyter.org/) and [Google Colab](https://colab.research.google.com/), so you must have one of these environments installed already.&#x20;
+
+***
+
+If you prefer a simpler solution, consider [**Visual Python Desktop**](https://visualpython.ai/visualpython-desktop). It will establish an isolated python environment quickly and help you start Visual Python easily.
 {% endhint %}
 
 {% embed url="https://www.youtube.com/watch?v=d-nR-ADpObU" %}
