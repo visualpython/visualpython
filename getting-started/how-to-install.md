@@ -86,7 +86,7 @@ Visual Python for Colab on chrome web store
 Google Colab Environment
 {% endembed %}
 
-**3. Activate Visual Python on Jupyter Lab**
+**3. Activate Visual Python on Google Colab**
 
 Click orange square button on the top-right side of the browser.
 
