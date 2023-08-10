@@ -95,6 +95,26 @@ Visual Python is an extension to Google Colab, so you must have Google Colab ope
 
 **3)  Activate Visual Python on Google Colab**
 
+
+## Getting Started with Visual Python Desktop
+### 1. Introduction
+Visual Python Desktop is an installer to create an isolated jupyter environment and enable to use Visual Python easily.
+
+It simplifies the process of configuring an independent Python environment, installing essential packages, and setting up a Jupyter environment, allowing users to focus on data analysis using python.
+
+### 2. Requirements
+- Operating System: Windows 10 or later (macOS and Linux support coming soon)
+- Minimum 4GB RAM, recommended 8GB RAM or higher
+- Minimum 10GB of disk space
+
+### 3. How to Install
+1) Download the Visual Python Desktop installer.
+- [Link to Visual Python Desktop installer page](https://visualpython.ai/visualpython-desktop)
+
+2) Run the installer and follow the provided instructions for the installation process.
+
+3) Use the shortcut created in Start menu or on Desktop to execute Jupyter Notebook (Visual Python), Jupyter Lab (Visual Python), and Visual Python Prompt according to your needs.
+
 ## Contributing
 If you are interested in contributing to the Visual Python, please see [`CONTRIBUTING.md`](CONTRIBUTING.md). <br>
 All skills from programmers, non-programmers, designers are welcomed.
