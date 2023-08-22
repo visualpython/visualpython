@@ -134,7 +134,22 @@ define([
             }
 
             // menu libraries for ml 
-            let libObj = JSON.parse(librariesJson);
+            let libObj = {};
+            if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
+                libObj = librariesJson;
+
+                this.MlAppComponent = {};
+                this.MlAppComponent['ml_dataSplit'] = require('./dataSplit');
+                this.MlAppComponent['ml_dataPrep'] = require('./DataPrep');
+                this.MlAppComponent['ml_regression'] = require('./Regression');
+                this.MlAppComponent['ml_classification'] = require('./Classification');
+                this.MlAppComponent['ml_clustering'] = require('./Clustering');
+                this.MlAppComponent['ml_dimensionReduction'] = require('./DimensionReduction');
+                this.MlAppComponent['ml_gridSearch'] = require('./GridSearch');
+                this.MlAppComponent['ml_evaluation'] = require('./evaluation');
+            } else {
+                libObj = JSON.parse(librariesJson);
+            }
             this.mlAppList = libObj.library.item.filter(x => x.id === 'pkg_ml')[0].item;
             
             this.modelConfig = ML_LIBRARIES;
@@ -280,7 +295,7 @@ define([
                     if (useApp === true) {
                         let mlObj = that.mlAppList.filter(x => x.id === name)[0];
                         if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
-                            appFileList.push({ index: idx, name: name, file: './' + mlObj.file});
+                            appFileList.push({ index: idx, name: name, file: 'vp_base/js/' + mlObj.file});
                         } else {
                             appFileList.push({ index: idx, name: name, file: 'vp_base/js/' + mlObj.file});
                         }
@@ -311,7 +326,7 @@ define([
                 // for lite and lab
                 if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
                     appFileList.forEach((obj, argIdx) => {
-                        let MlComponent = require(obj.file);
+                        let MlComponent = that.MlAppComponent[obj.name];
                         if (MlComponent) {
                             // DUP AREA: pp-1
                             let { name, label, index, file } = obj;
@@ -319,6 +334,7 @@ define([
                                 config: { id: name, name: label, path: file, category: 'Pipeline', resizable: false },
                                     ...that.state.pipeline[index].state
                             });
+                            mlComponent.loadState();
                             // mlComponent.open($(that.wrapSelector(`.vp-pp-step-page[data-name="${appId}"]`)));
                             that.state.pipeline[index].app = mlComponent;
 
@@ -350,6 +366,7 @@ define([
                                     config: { id: name, name: label, path: file, category: 'Pipeline', resizable: false },
                                         ...that.state.pipeline[index].state
                                 });
+                                mlComponent.loadState();
                                 // mlComponent.open($(that.wrapSelector(`.vp-pp-step-page[data-name="${appId}"]`)));
                                 that.state.pipeline[index].app = mlComponent;
 
@@ -466,6 +483,59 @@ define([
             return optBox.toString();
         }
 
+        checkBeforeRun() {
+            let that = this;
+            var result = true;
+            for (let idx = 0; idx < this.state.pipeline.length; idx++) {
+                let ppObj = this.state.pipeline[idx];
+                var { name, label, useApp, app } = ppObj;
+                let requiredList = [];
+                result = true;
+                let isVisible = $(that.wrapSelector(`.vp-pp-item[data-seq="${idx}"]`)).is(':visible') === true;
+                let isEnabled = $(that.wrapSelector(`.vp-pp-item[data-seq="${idx}"]`)).attr('data-flag') === 'enabled';
+                if (isVisible && isEnabled) {
+                    switch (name) {
+                        case 'ml_dataSplit':
+                            requiredList = ['featureData', 'targetData'];
+                            // check required data
+                            for (let i = 0; i < requiredList.length; i++) {
+                                let reqKey = requiredList[i];
+                                result = that._checkIsEmpty($(app.wrapSelector('#' + reqKey)));
+                                if (result === false) {
+                                    // show page and focus it
+                                    $(that.wrapSelector(`.vp-pp-item[data-name="${name}"]`)).click();
+                                    $(app.wrapSelector('#' + reqKey)).focus();
+                                    break;
+                                }
+                            }
+                            break;
+                        case 'ml_gridSearch':
+                            result = app.checkBeforeRun();
+                            if (result === false) {
+                                // show page
+                                $(that.wrapSelector(`.vp-pp-item[data-name="${name}"]`)).click();
+                                break;
+                            }
+                            break;
+                    }
+                }
+                if (result === false) {
+                    break;
+                }
+            }
+            return result;
+
+        }
+
+        _checkIsEmpty(tag) {
+            let requiredFilled = true;
+            // if it's empty, focus on it
+            if (tag && $(tag) && $(tag).val() == '') {
+                requiredFilled = false;
+            }
+            return requiredFilled;
+        }
+
         generateCodeForOptionPage(appId) {
             let actions = this.modelEditor.getAction(this.state.modelTypeName);
             let actObj = {};
@@ -514,7 +584,7 @@ define([
                 
                 // check disabled
                 let isVisible = $(that.wrapSelector(`.vp-pp-item[data-seq="${idx}"]`)).is(':visible') === true;
-                let isEnabled = $(that.wrapSelector(`.vp-pp-item[data-seq="${idx}"]`)).data('flag') === 'enabled';
+                let isEnabled = $(that.wrapSelector(`.vp-pp-item[data-seq="${idx}"]`)).attr('data-flag') === 'enabled';
                 if (isVisible && isEnabled) {
                     if (code.toString() !== '') {
                         code.appendLine();
