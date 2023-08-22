@@ -59,7 +59,7 @@ define([
             this.modelTypeList = {
                 'Encoding': ['prep-onehot', 'prep-label', 'prep-ordinal', 'prep-target', 'prep-smote'],
                 'Scaling': ['prep-standard', 'prep-robust', 'prep-minmax', 'prep-normalizer', 'prep-func-trsfrm-log', 'prep-func-trsfrm-exp', 'prep-poly-feat', 'prep-kbins-discretizer'],
-                'ETC': ['make-column-transformer']
+                'ETC': ['prep-simple-imputer', 'make-column-transformer']
             }
 
             this.mctEstimator = {
@@ -94,10 +94,19 @@ define([
                     $(that.wrapSelector('#vp_installLibrary')).hide();
                 }
 
-                if (modelType == 'make-column-transformer') {
+                if (modelType === 'make-column-transformer') {
                     // load mct-targetData
                     that.loadVariableList();
                     that.bindMCT();
+                } else if (modelType === 'prep-simple-imputer') {
+                    $(that.wrapSelector('#missing_values')).replaceWith(`<div>
+                        ${$(that.wrapSelector('#missing_values'))[0].outerHTML}
+                        <label><input type="checkbox" id="missing_values_istext" class="vp-state"/><span>Text</span></label>
+                    </div>`);
+                    $(that.wrapSelector('#fill_value')).replaceWith(`<div>
+                        ${$(that.wrapSelector('#fill_value'))[0].outerHTML}
+                        <label><input type="checkbox" id="fill_value_istext" class="vp-state"/><span>Text</span></label>
+                    </div>`);
                 }
             });
 
@@ -411,6 +420,7 @@ define([
 
         generateCode() {
             let { modelControlType, modelType, userOption, allocateToCreation, model } = this.state;
+            let state = JSON.parse(JSON.stringify(this.state));
             let code = new com_String();
             if (modelControlType == 'creation') {
                 /**
@@ -422,22 +432,33 @@ define([
                 let config = this.modelConfig[modelType];
                 code.appendLine(config.import);
 
+                if (modelType === 'prep-simple-imputer') {
+                    let checkList = ['missing_values', 'fill_value'];
+                    checkList.forEach(checkKey => {
+                        try {
+                            state[checkKey] = com_util.convertToStr(state[checkKey], state[checkKey + '_istext']);
+                        } catch(e) {
+                            ;
+                        }
+                    });
+                }
+
                 // model code
                 let modelCode = config.code;
-                modelCode = com_generator.vp_codeGenerator(this, config, this.state, (userOption != ''? ', ' + userOption : ''));
+                modelCode = com_generator.vp_codeGenerator(this, config, state, (userOption != ''? ', ' + userOption : ''));
 
                 // generate mct code
-                if (modelType == 'make-column-transformer') {
+                if (modelType === 'make-column-transformer') {
                     let mctCodes = [];
-                    let { mct_estimator1, mct_columns1, mct_estimator2, mct_columns2 } = this.state;
+                    let { mct_estimator1, mct_columns1, mct_estimator2, mct_columns2 } = state;
                     if (mct_estimator1 != undefined && mct_estimator1 != '') {
                         code.appendLine(this.modelConfig[mct_estimator1].import);
-                        let estimator1code = com_generator.vp_codeGenerator(this, this.modelConfig[mct_estimator1], this.state, (userOption != ''? ', ' + userOption : ''));
+                        let estimator1code = com_generator.vp_codeGenerator(this, this.modelConfig[mct_estimator1], state, (userOption != ''? ', ' + userOption : ''));
                         mctCodes.push(com_util.formatString('({0}, [{1}])', estimator1code, mct_columns1));
                     }
                     if (mct_estimator2 != undefined && mct_estimator2 != '') {
                         code.appendLine(this.modelConfig[mct_estimator2].import);
-                        let estimator2code = com_generator.vp_codeGenerator(this, this.modelConfig[mct_estimator2], this.state, (userOption != ''? ', ' + userOption : ''));
+                        let estimator2code = com_generator.vp_codeGenerator(this, this.modelConfig[mct_estimator2], state, (userOption != ''? ', ' + userOption : ''));
                         mctCodes.push(com_util.formatString('({0}, [{1}])', estimator2code, mct_columns2));
                     }
                     modelCode = modelCode.replace('${mct_code}', mctCodes.join(', '));

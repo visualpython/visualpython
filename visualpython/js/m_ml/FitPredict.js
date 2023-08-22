@@ -685,6 +685,52 @@ define([
                         }
                     }
                     break;
+                case 'ETC':
+                    if (modelType === 'GridSearchCV') {
+                        actions = {
+                            'fit': {
+                                name: 'fit',
+                                label: 'Fit',
+                                code: '${model}.fit(${fit_featureData}${fit_targetData})',
+                                description: 'Run fit with all sets of parameters.',
+                                options: [
+                                    { name: 'fit_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_train' },
+                                    { name: 'fit_targetData', label: 'Target Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y_train', usePair: true, pairKey: 'y' }
+                                ]
+                            },
+                            'predict': {
+                                name: 'predict',
+                                label: 'Predict',
+                                code: '${pred_allocate} = ${model}.predict(${pred_featureData})',
+                                description: 'Call predict on the estimator with the best found parameters.',
+                                options: [
+                                    { name: 'pred_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_test' },
+                                    { name: 'pred_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'pred' }
+                                ]
+                            },
+                            'inverse_transform': {
+                                name: 'inverse_transform',
+                                label: 'Inverse transform',
+                                code: '${inverse_allocate} = ${model}.inverse_transform(${inverse_featureData})',
+                                description: 'Call inverse_transform on the estimator with the best found params.',
+                                options: [
+                                    { name: 'inverse_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
+                                    { name: 'inverse_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'inv_trans' }
+                                ]
+                            },
+                            'transform': {
+                                name: 'transform',
+                                label: 'Transform',
+                                code: '${trans_allocate} = ${model}.transform(${trans_featureData})',
+                                description: 'Call transform on the estimator with the best found parameters.',
+                                options: [
+                                    { name: 'trans_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
+                                    { name: 'trans_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'trans' }
+                                ]
+                            }
+                        }
+                    }
+                    break;
             }
             return actions;
         }

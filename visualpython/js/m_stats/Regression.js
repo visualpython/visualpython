@@ -508,7 +508,7 @@ define([
                         code.appendLine("# Mean Centering ");
                         independentValue = com_util.formatString("{0}_MC", independentValue);
                         moderatedValue = com_util.formatString("{0}_MC", moderatedValue);
-                        code.appendFormatLine("vp_df['{0}']   = vp_df[{1}] - vp_df[{2}].mean(numeric_only=True)", independentValue, independent, independent);
+                        code.appendFormatLine("vp_df['{0}'] = vp_df[{1}] - vp_df[{2}].mean(numeric_only=True)", independentValue, independent, independent);
                         code.appendFormatLine("vp_df['{0}'] = vp_df[{1}] - vp_df[{2}].mean(numeric_only=True)", moderatedValue, moderated, moderated);
                     }
                     // Model 1 to 3

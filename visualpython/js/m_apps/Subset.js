@@ -1742,7 +1742,7 @@ define([
                     var connector = i > 0 ? $(condList[i - 1]).find('.vp-oper-connect').val() : undefined;
 
                     // if no variable selected, pass
-                    if (varName == "")
+                    if (varName === "" || oper === "")
                         continue;
                     if (useCondition) {
                         rowSelection.append(connector);

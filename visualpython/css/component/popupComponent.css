@@ -160,7 +160,7 @@
     width: 100%;
     height: calc(100% - 80px);
     padding: 15px;
-    overflow: auto;
+    /* overflow: auto; */
 }
 .vp-popup-content {
     min-height: calc(100% - 30px);
@@ -284,7 +284,7 @@
     padding: 1px 8px 0 5px;
 }
 /* checkbox */
-.vp-popup-frame input[type=checkbox]:not(.vp-checkbox),
+.vp-popup-frame input[type=checkbox]:not(.vp-checkbox):not(.vp-toggle),
 .vp-popup-frame input[type=radio]:not(.vp-radio) {
 	position: absolute;
 	width: 1px;
@@ -295,9 +295,9 @@
 	clip: rect(0, 0, 0, 0);
 	border: 0;
 }
-.vp-popup-frame input[type=checkbox]:not(.vp-checkbox) + label,
+.vp-popup-frame input[type=checkbox]:not(.vp-checkbox):not(.vp-toggle) + label,
 .vp-popup-frame input[type=radio]:not(.vp-radio) + label,
-.vp-popup-frame label input[type=checkbox]:not(.vp-checkbox) + span,
+.vp-popup-frame label input[type=checkbox]:not(.vp-checkbox):not(.vp-toggle) + span,
 .vp-popup-frame label input[type=radio]:not(.vp-radio) + span {
 	display: inline-block;
 	position: relative;
@@ -307,14 +307,14 @@
     line-height: 15px;
     vertical-align: middle;
 }
-.vp-popup-frame input[type=checkbox]:not(.vp-checkbox):disabled + label,
+.vp-popup-frame input[type=checkbox]:not(.vp-checkbox):not(.vp-toggle):disabled + label,
 .vp-popup-frame input[type=radio]:not(.vp-radio):disabled + label,
-.vp-popup-frame label input[type=checkbox]:not(.vp-checkbox):disabled + span,
+.vp-popup-frame label input[type=checkbox]:not(.vp-checkbox):not(.vp-toggle):disabled + span,
 .vp-popup-frame label input[type=radio]:not(.vp-radio):disabled + span {
 	color: var(--vp-gray-color);
 }
-.vp-popup-frame input[type=checkbox]:not(.vp-checkbox) + label::before,
-.vp-popup-frame label input[type=checkbox]:not(.vp-checkbox) + span::before {
+.vp-popup-frame input[type=checkbox]:not(.vp-checkbox):not(.vp-toggle) + label::before,
+.vp-popup-frame label input[type=checkbox]:not(.vp-checkbox):not(.vp-toggle) + span::before {
 	content: '';
 	position: absolute;
 	left: 0;
@@ -328,8 +328,8 @@
 	border: none;
 	box-sizing: border-box;
 }
-.vp-popup-frame input[type=checkbox]:not(.vp-checkbox):checked + label::before,
-.vp-popup-frame label input[type=checkbox]:not(.vp-checkbox):checked + span::before {
+.vp-popup-frame input[type=checkbox]:not(.vp-checkbox):not(.vp-toggle):checked + label::before,
+.vp-popup-frame label input[type=checkbox]:not(.vp-checkbox):not(.vp-toggle):checked + span::before {
 	content: '';
 	position: absolute;
 	left: 0;
@@ -342,8 +342,8 @@
 	border: none;
 	box-sizing: border-box;
 }
-.vp-popup-frame input[type=checkbox]:not(.vp-checkbox):disabled + label::before,
-.vp-popup-frame label input[type=checkbox]:not(.vp-checkbox):disabled + span::before {
+.vp-popup-frame input[type=checkbox]:not(.vp-checkbox):not(.vp-toggle):disabled + label::before,
+.vp-popup-frame label input[type=checkbox]:not(.vp-checkbox):not(.vp-toggle):disabled + span::before {
 	content: '';
 	position: absolute;
 	left: 0;
@@ -448,6 +448,56 @@
 }
 .vp-popup-frame select::-ms-expand {
     display: none;
+}
+/* toggle slider: <label><input class="vp-toggle" type="checkbox"/><span></span></label> */
+.vp-popup-frame input.vp-toggle { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.vp-popup-frame input.vp-toggle + span {
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
+    width: 27px;
+    height: 15px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 34px;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.vp-popup-frame input[type=checkbox].vp-toggle + span:before {
+    position: absolute;
+    content: "";
+    height: 12px;
+    width: 12px;
+    left: 2px;
+    bottom: 1.1px;
+    border-radius: 50%;
+    background: none;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.vp-popup-frame input.vp-toggle:checked + span {
+    background-color: #2196F3;
+}
+
+.vp-popup-frame input.vp-toggle:focus + span {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+.vp-popup-frame input.vp-toggle:checked + span:before {
+    -webkit-transform: translateX(12px);
+    -ms-transform: translateX(12px);
+    transform: translateX(12px);
 }
 /* Big Selector */
 .vp-popup-frame .vp-big-select {

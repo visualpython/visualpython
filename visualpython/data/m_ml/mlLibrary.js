@@ -249,6 +249,19 @@ define([
                     options: ['onehot', 'onehot-dense', 'ordinal'] }
             ]
         },
+        'prep-simple-imputer': {
+            name: 'SimpleImputer',
+            import: 'from sklearn.impute import SimpleImputer',
+            code: 'SimpleImputer(${missing_values}${strategy}${fill_value}${copy}${add_indicator}${etc})',
+            options: [
+                { name: 'missing_values', component: ['input'], placeholder: 'np.nan', usePair: true },
+                { name: 'strategy', component: ['option_select'], type: 'text', default: 'quantile', usePair: true,
+                    options: ['mean', 'median', 'most_frequent', 'constant'] },
+                { name: 'fill_value', component: ['input'], usePair: true },
+                { name: 'copy', component: ['bool_select'], default: 'True', usePair: true },
+                { name: 'add_indicator', component: ['bool_select'], default: 'False', usePair: true }
+            ]
+        },
         'make-column-transformer': {
             name: 'MakeColumnTransformer',
             import: 'from sklearn.compose import make_column_transformer',
@@ -648,6 +661,19 @@ define([
                 { name: 'n_components', component: ['input_number'], placeholder: 'None', usePair: true },
                 { name: 'learning_rate', component: ['input_number'], default: 200.0, usePair: true },
                 { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true }
+            ]
+        },
+        /** GridSearch */
+        'grid-search': {
+            name: 'GridSearch',
+            import: 'from sklearn.model_selection import GridSearchCV',
+            code: 'GridSearchCV(${estimator}, ${param_grid}${n_jobs}${cv}${verbose}${etc})',
+            options: [
+                { name: 'estimator', component: ['data_select'], placeholder: 'Select model'},
+                { name: 'param_grid', component: ['input'], placeholder: 'Enter parameters'},
+                { name: 'n_jobs', component: ['input'], placeholder: 'None', usePair: true },
+                { name: 'cv', component: ['input'], placeholder: 'None', usePair: true },
+                { name: 'verbose', component: ['input_number'], placeholder: 'Input number', usePair: true }
             ]
         },
         /** Save/Load */

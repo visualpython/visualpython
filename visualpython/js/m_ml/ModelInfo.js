@@ -779,6 +779,39 @@ define([
                         }
                     }
                     break;
+                case 'ETC':
+                    if (modelType === 'GridSearchCV') {
+                        infos = {
+                            'best_estimator_': {
+                                name: 'best_estimator_',
+                                label: 'Best estimator',
+                                code: '${best_estimator_allocate} = ${model}.best_estimator_',
+                                description: 'Estimator that was chosen by the search.',
+                                options: [
+                                    { name: 'best_estimator_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'best_estimator' }
+                                ]
+                            },
+                            'best_score_': {
+                                name: 'best_score_',
+                                label: 'Best score',
+                                code: '${best_score_allocate} = ${model}.best_score_',
+                                description: 'Mean cross-validated score of the best_estimator.',
+                                options: [
+                                    { name: 'best_score_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'best_score' }
+                                ]
+                            },
+                            'best_params_': {
+                                name: 'best_params_',
+                                label: 'Best params',
+                                code: '${best_params_allocate} = ${model}.best_params_',
+                                description: 'Parameter setting that gave the best results on the hold out data.',
+                                options: [
+                                    { name: 'best_params_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'best_params' }
+                                ]
+                            }
+                        }
+                    }
+                    break;
             }
             return infos;
         }

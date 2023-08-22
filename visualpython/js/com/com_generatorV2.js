@@ -738,7 +738,9 @@ define([
             package.options && package.options.forEach(function(v, i) {
                 var val = state[v.name];
                 if (val == undefined || val == '' || val == v.default) {
-                    val = vp_getTagValue(pageThis, v, parent=parent);
+                    if (pageThis) {
+                        val = vp_getTagValue(pageThis, v, parent=parent);
+                    }
                 }
                 var id = '${' + v.name + '}';
                 if (val == undefined || val.trim() == '') {
@@ -759,7 +761,11 @@ define([
                     }
                     // code completion 2
                     if (v.usePair == true) {
-                        val = ', ' + v.name + '=' + val;
+                        if (v.pairKey) {
+                            val = ', ' + v.pairKey + '=' + val;
+                        } else {
+                            val = ', ' + v.name + '=' + val;
+                        }
                     }
                     // code completion 3
                     if (v.component != undefined && v.componentCode != undefined) {
@@ -799,9 +805,11 @@ define([
             if (_VP_SHOW_RESULT && package.options) {
                 var outputOptList = package.options.filter(x => x.output === true);
                 var outputStr = '';
-                outputOptList.forEach(opt => {
-                    outputStr += (outputStr !== ''?', ':'') + vp_getTagValue(pageThis, opt);
-                })
+                if (pageThis) {
+                    outputOptList.forEach(opt => {
+                        outputStr += (outputStr !== ''?', ':'') + vp_getTagValue(pageThis, opt);
+                    })
+                }
                 if (outputStr != '') {
                     code += '\n'+ outputStr;
                 }

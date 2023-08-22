@@ -710,10 +710,7 @@ define([
                     return;
                 }
             } else if (type === FRAME_EDIT_TYPE.REPLACE) {
-                if (content.replacetype === 'condition' && content.value === '') {
-                    $(this.wrapSelector('.vp-inner-popup-input3')).focus();
-                    return;
-                }
+                ;
             } else if (type === FRAME_EDIT_TYPE.FILL_NA) {
                 if (content.method === 'value' && content.value === '') {
                     $(this.wrapSelector('.vp-inner-popup-value')).focus();
@@ -3101,7 +3098,7 @@ define([
                         });
                         let valueStr = values.join(' ');
                         if (valueStr === "" || valueStr === "''") {
-                            code.appendFormat("{0}[{1}] = np.NaN", tempObj, content.name);
+                            code.appendFormat("{0}[{1}] = np.nan", tempObj, content.name);
                         } else {
                             code.appendFormat("{0}[{1}] = {2}", tempObj, content.name, valueStr);
                         }
@@ -3178,6 +3175,9 @@ define([
                             }
                         });
                         var value = com_util.convertToStr(content.value, content.valueastext);
+                        if (value === '') {
+                            value = 'np.nan';
+                        }
                         code.appendFormat(", {0}] = {1}", content.name, value);
                     }
                     break;
@@ -3223,9 +3223,10 @@ define([
                         code.append(')');
                     } else if (tab === 'condition') {
                         code.appendFormat("{0}.loc[", tempObj);
+                        var condCode = new com_String();
                         content['list'].forEach((obj, idx) => {
                             let { colName, oper, cond, condAsText, connector } = obj;
-                            code.append('(');
+                            condCode.append('(');
 
                             let colValue = tempObj;
                             if (colName && colName != '') {
@@ -3237,25 +3238,31 @@ define([
                             }
                             let condValue = com_util.convertToStr(cond, condAsText);
                             if (oper == 'contains') {
-                                code.appendFormat('{0}.str.contains({1})', colValue, condValue);
+                                condCode.appendFormat('{0}.str.contains({1})', colValue, condValue);
                             } else if (oper == 'not contains') {
-                                code.appendFormat('~{0}.str.contains({1})', colValue, condValue);
+                                condCode.appendFormat('~{0}.str.contains({1})', colValue, condValue);
                             } else if (oper == 'starts with') {
-                                code.appendFormat('{0}.str.startswith({1})', colValue, condValue);
+                                condCode.appendFormat('{0}.str.startswith({1})', colValue, condValue);
                             } else if (oper == 'ends with') {
-                                code.appendFormat('{0}.str.endswith({1})', colValue, condValue);
+                                condCode.appendFormat('{0}.str.endswith({1})', colValue, condValue);
                             } else if (oper == 'isnull()' || oper == 'notnull()') {
-                                code.appendFormat('{0}.{1}', colValue, oper);
+                                condCode.appendFormat('{0}.{1}', colValue, oper);
                             } else {
-                                code.appendFormat('{0}{1}{2}', colValue, oper != ''?(' ' + oper):'', condValue != ''?(' ' + condValue):'');
+                                condCode.appendFormat('{0}{1}{2}', colValue, oper != ''?(' ' + oper):'', condValue != ''?(' ' + condValue):'');
                             }
-                            code.append(')');
+                            condCode.append(')');
                             if (idx < (content['list'].length - 1)) {
-                                code.append(connector);
+                                condCode.append(connector);
                             }
                         });
+                        if (condCode.toString() === '') {
+                            condCode.append(':');
+                        }
                         var value = com_util.convertToStr(content.value, content.valueastext);
-                        code.appendFormat(", {0}] = {1}", content.name, value);
+                        if (value === '') {
+                            value = 'np.nan';
+                        }
+                        code.appendFormat("{0}, {1}] = {2}", condCode.toString(), content.name, value);
                     } else if (tab == 'apply') {
                         // code.appendFormat("{0}[{1}] = {2}[{3}].apply({4})", tempObj, content.name, tempObj, content.column, content.apply);
                         let lambdaCode = 'lambda x: ';

@@ -33,7 +33,7 @@ define([
             this.config.checkModules = ['metrics'];
 
             this.state = {
-                modelType: 'rgs',
+                modelType: 'rgs', // rgs / clf / cls
                 predictData: 'pred',
                 targetData: 'y_test',
                 // regression
@@ -155,35 +155,6 @@ define([
                 pageThis: this, id: 'targetData2', value: this.state.targetData2, classes: 'vp-ev-model ari-nmi', required: true
             });
             $(page).find('#targetData2').replaceWith(targetData2Selector.toTagString());
-
-            // load state
-            let that = this;
-            Object.keys(this.state).forEach(key => {
-                let tag = $(page).find('#' + key);
-                let tagName = $(tag).prop('tagName'); // returns with UpperCase
-                let value = that.state[key];
-                if (value == undefined) {
-                    return;
-                }
-                switch(tagName) {
-                    case 'INPUT':
-                        let inputType = $(tag).prop('type');
-                        if (inputType == 'text' || inputType == 'number' || inputType == 'hidden') {
-                            $(tag).val(value);
-                            break;
-                        }
-                        if (inputType == 'checkbox') {
-                            $(tag).prop('checked', value);
-                            break;
-                        }
-                        break;
-                    case 'TEXTAREA':
-                    case 'SELECT':
-                    default:
-                        $(tag).val(value);
-                        break;
-                }
-            });
 
             $(page).find('.vp-upper-box').hide();
             $(page).find('.vp-upper-box.' + this.state.modelType).show();

@@ -160,20 +160,18 @@ define([
         }
 
         generateInstallCode() {
-            return [ '!pip install factor-analyzer'];
+            let installCode = '!pip install factor-analyzer';
+            // Add installation code
+            if (vpConfig.extensionType === 'lite') {
+                installCode = '%pip install factor-analyzer';
+            }
+            return [ installCode ];
         }
 
         generateCode() {
             let { data, variable, rotation, method, impute, extract, eigenvalue, factor, corrMatrix, screePlot } = this.state;
             let codeList = [];
             let code = new com_String();
-
-            // Add installation code FIXME:
-            if (vpConfig.extensionType === 'lite') {
-                codeList.push('%pip install factor-analyzer');
-            } else {
-                codeList.push('!pip install factor-analyzer');
-            }
 
             // data declaration
             code.appendFormat("vp_df = {0}", data);

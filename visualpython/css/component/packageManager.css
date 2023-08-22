@@ -74,6 +74,7 @@
 }
 .vp-pm-func-right {
     float: right;
+    display: flex;
 }
 .vp-pm-sort {
     cursor: pointer;
@@ -99,6 +100,14 @@
 }
 .vp-pm-sort-menu-item:hover {
     color: var(--vp-font-highlight);
+}
+.vp-pm-func-reload {
+    width: 22px;
+    height: 22px;
+    display: inline-block;
+    margin-top: 4px;
+    margin-right: 10px;
+    cursor: pointer;
 }
 /* Empty List */
 .vp-pm-table {

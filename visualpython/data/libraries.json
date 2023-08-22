@@ -3509,14 +3509,14 @@
                         }
                     },
                     {
-                        "id"   : "ml_saveLoad",
+                        "id"   : "ml_gridSearch",
                         "type" : "function",
                         "level": 1,
-                        "name" : "Save/Load",
-                        "tag"  : "SAVE,LOAD,MACHINE LEARNING,ML",
-                        "path" : "visualpython - machine_learning - save_load",
-                        "desc" : "Model save/load for machine learning",
-                        "file" : "m_ml/SaveLoad",
+                        "name" : "GridSearch",
+                        "tag"  : "GRIDSEARCH,MACHINE LEARNING,ML",
+                        "path" : "visualpython - machine_learning - gridsearch",
+                        "desc" : "Grid Search",
+                        "file" : "m_ml/GridSearch",
                         "apps" : {
                             "color": 13,
                             "icon": "apps/apps_file.svg"
@@ -3562,6 +3562,34 @@
                         "apps" : {
                             "color": 13,
                             "icon": "apps/apps_evaluate.svg"
+                        }
+                    },
+                    {
+                        "id"   : "ml_pipeline",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Pipeline",
+                        "tag"  : "PIPELINE,MACHINE LEARNING,ML",
+                        "path" : "visualpython - machine_learning - pipeline",
+                        "desc" : "Pipeline for machine learning",
+                        "file" : "m_ml/Pipeline",
+                        "apps" : {
+                            "color": 14,
+                            "icon": "apps/apps_file.svg"
+                        }
+                    },
+                    {
+                        "id"   : "ml_saveLoad",
+                        "type" : "function",
+                        "level": 1,
+                        "name" : "Save/Load",
+                        "tag"  : "SAVE,LOAD,MACHINE LEARNING,ML",
+                        "path" : "visualpython - machine_learning - save_load",
+                        "desc" : "Model save/load for machine learning",
+                        "file" : "m_ml/SaveLoad",
+                        "apps" : {
+                            "color": 14,
+                            "icon": "apps/apps_file.svg"
                         }
                     }
                 ]

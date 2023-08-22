@@ -1017,7 +1017,7 @@ define([
     /**
      * Version
      */
-    Config.version = "2.4.5";
+    Config.version = "2.4.6";
 
     /**
      * Type of mode
@@ -1072,7 +1072,7 @@ define([
             /** Scaling */
             'StandardScaler', 'RobustScaler', 'MinMaxScaler', 'Normalizer', 'FunctionTransformer', 'PolynomialFeatures', 'KBinsDiscretizer',
             /** ETC */
-            'ColumnTransformer'
+            'SimpleImputer', 'ColumnTransformer'
         ],
         'Regression': [
             'LinearRegression', 'Ridge', 'Lasso', 'ElasticNet', 'SVR', 'DecisionTreeRegressor', 'RandomForestRegressor', 'GradientBoostingRegressor', 'XGBRegressor', 'LGBMRegressor', 'CatBoostRegressor',
@@ -1088,6 +1088,9 @@ define([
         ],
         'Auto ML': [
             'AutoSklearnRegressor', 'AutoSklearnClassifier', 'TPOTRegressor', 'TPOTClassifier'
+        ],
+        'ETC': [
+            'GridSearchCV'
         ]
     };
 
@@ -1097,7 +1100,8 @@ define([
         ...Config.ML_DATA_DICT['Classification'],
         ...Config.ML_DATA_DICT['Clustering'],
         ...Config.ML_DATA_DICT['Dimension Reduction'],
-        ...Config.ML_DATA_DICT['Auto ML']
+        ...Config.ML_DATA_DICT['Auto ML'],
+        ...Config.ML_DATA_DICT['ETC']
     ];
 
     return Config;
