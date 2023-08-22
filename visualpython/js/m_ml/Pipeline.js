@@ -345,6 +345,10 @@ define([
                                 that.state.modelType = mlComponent.state.modelType;
                                 let modelObj = that.modelConfig[that.state.modelType];
                                 that.state.modelTypeName = modelObj.code.split('(')[0];
+
+                                that.state.pipeline[index].child.forEach(childId => {
+                                    that.renderApp(childId);
+                                });
                             }
                             // handle app view
                             that.handleAppView(name, mlComponent);
@@ -362,7 +366,7 @@ define([
                             let MlComponent = arguments[argIdx];
                             if (MlComponent) {
                                 // DUP AREA: pp-1
-                                let { name, label, index, file } = obj;
+                                let { name, index, file } = obj;
                                 let mlComponent = new MlComponent({ 
                                     config: { id: name, name: that.state.pipeline[index].label, path: file, category: 'Pipeline', resizable: false },
                                         ...that.state.pipeline[index].state
@@ -373,6 +377,7 @@ define([
 
                                 if (that.state.pipeline[index].modelStep === true) {
                                     // set default model type
+                                    that.state.model = mlComponent.state.allocateToCreation;
                                     that.state.modelType = mlComponent.state.modelType;
                                     let modelObj = that.modelConfig[that.state.modelType];
                                     that.state.modelTypeName = modelObj.code.split('(')[0];
