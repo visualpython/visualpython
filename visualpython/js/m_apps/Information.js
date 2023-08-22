@@ -153,7 +153,7 @@ define([
                             , code: "pd.plotting.scatter_matrix(${data}, marker='o', hist_kwds={'bins': 30}, s=30, alpha=.8)\nplt.show()"
                             , dtype: ['DataFrame'] },
                         { id: 'boxplot', label: 'Box plot', code: "${data}.plot(kind='box')\nplt.show()", dtype: ['DataFrame', 'Series'] },
-                        { id: 'count_plot', label: 'Count plot', code: "${data}.value_counts().plot(kind='bar')\nplt.show()", dtype: ['DataFrame', 'Series'] }
+                        { id: 'count_plot', label: 'Count plot', code: "${data}.value_counts().plot(kind='bar', rot=30)\nplt.show()", dtype: ['DataFrame', 'Series'] }
                     ]
                 }
                 

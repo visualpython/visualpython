@@ -6556,7 +6556,7 @@ define([
         "name": "Read Excel",
         "library": "pandas",
         "description": "excel to pandas object",
-        "code": "${o0} = pd.read_excel(${i0}${sheet_name}${index_col}${etc})",
+        "code": "${o0} = pd.read_excel(${i0}${sheet_name}${header}${index_col}${etc})",
         "options": [
           {
             "name": "i0",
@@ -6583,6 +6583,11 @@ define([
             "usePair": true
           },
           {
+            "name": "header",
+            "label": "Header",
+            "usePair": true
+          },
+          {
             "name": "index_col",
             "label": "Column To Use As Index",
             "type": "text",
@@ -6598,7 +6603,7 @@ define([
           "openpyxl"
         ],
         "description": "DataFrame to excel file",
-        "code": "${i0}.to_excel(${i1}${sheet_name}${etc})",
+        "code": "${i0}.to_excel(${i1}${sheet_name}${header}${index}${etc})",
         "options": [
           {
             "name": "i0",
@@ -6625,6 +6630,21 @@ define([
             "name": "sheet_name",
             "label": "Sheet Name",
             "type": "text",
+            "usePair": true
+          },
+          {
+            "name": "header",
+            "label": "Header",
+            "usePair": true
+          },
+          {
+            "name": "index",
+            "label": "Index",
+            "type": "text",
+            "component": [
+              "bool_select"
+            ],
+            "default": "True",
             "usePair": true
           }
         ]

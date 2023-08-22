@@ -361,29 +361,33 @@ define([
                 let val = $(this).val();
                 if (val !== '') {
                     // enable xticks_label
-                    $(that.wrapSelector('#xticks_label')).prop('readonly', false);
+                    $(that.wrapSelector('#xticks_label')).attr('readonly', false);
                 } else {
                     // disable xticks_label
-                    $(that.wrapSelector('#xticks_label')).prop('readonly', true);
+                    $(that.wrapSelector('#xticks_label')).attr('readonly', true);
                 }
             });
             $(this.wrapSelector('#yticks')).on('change', function() {
                 let val = $(this).val();
                 if (val !== '') {
                     // enable yticks_label
-                    $(that.wrapSelector('#yticks_label')).prop('readonly', false);
+                    $(that.wrapSelector('#yticks_label')).attr('readonly', false);
                 } else {
                     // disable yticks_label
-                    $(that.wrapSelector('#yticks_label')).prop('readonly', true);
+                    $(that.wrapSelector('#yticks_label')).attr('readonly', true);
                 }
             });
 
             // axes - ticks label: inform user to type location option to use label
-            $(this.wrapSelector('#xticks_label[readonly]')).on('click', function() {
-                $(that.wrapSelector('#xticks')).focus();
+            $(this.wrapSelector('#xticks_label')).on('click', function() {
+                if ($(that.wrapSelector('#xticks')).val() === '') {
+                    $(that.wrapSelector('#xticks')).focus();
+                }
             });
-            $(this.wrapSelector('#yticks_label[readonly]')).on('click', function() {
-                $(that.wrapSelector('#yticks')).focus();
+            $(this.wrapSelector('#yticks_label')).on('click', function() {
+                if ($(that.wrapSelector('#yticks')).val() === '') {
+                    $(that.wrapSelector('#yticks')).focus();
+                }
             });
 
             // preview refresh

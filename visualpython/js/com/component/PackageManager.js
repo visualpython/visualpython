@@ -17,10 +17,11 @@ define([
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
+    'vp_base/js/com/component/SuggestInput',
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/FileNavigation',
     'vp_base/js/com/component/LoadingSpinner'
-], function(ifHtml, ifCss, com_util, com_Const, com_String, PopupComponent, FileNavigation, LoadingSpinner) {
+], function(ifHtml, ifCss, com_util, com_Const, com_String, SuggestInput, PopupComponent, FileNavigation, LoadingSpinner) {
 
     /**
      * PackageManager
@@ -89,18 +90,24 @@ define([
             }
         }
 
+        _unbindEvent() {
+            super._unbindEvent();
+            $(document).off('change', this.wrapSelector('.vp-pm-search'));
+        }
+
         _bindEvent() {
             super._bindEvent();
             /** Implement binding events */
             let that = this;
 
             // search item 
-            $(this.wrapSelector('.vp-pm-search')).on('change', function(evt) {
+            $(document).on('change', this.wrapSelector('.vp-pm-search'), function(evt) {
                 var value = $(this).val();
                 if (value != '') {
                     $(that.wrapSelector('.vp-pm-item')).hide();
                     $(that.wrapSelector('.vp-pm-item')).filter(function() {
-                        return $(this).data('key').search(value) >= 0;
+                        let key = $(this).data('key');
+                        return key.search(value.toLowerCase()) >= 0;
                     }).show();
                 } else {
                     $(that.wrapSelector('.vp-pm-item')).show();
@@ -116,7 +123,14 @@ define([
             // sort item
             $(this.wrapSelector('.vp-pm-sort-menu-item')).on('click', function() {
                 var menu = $(this).data('menu');
-                if (menu === 'name') {
+                if (menu === 'registered') {
+                    // sort by name
+                    $(that.wrapSelector('.vp-pm-item')).sort(function(a, b) {
+                        var keyA = parseInt($(a).data('seq'));
+                        var keyB = parseInt($(b).data('seq'));
+                        return keyA > keyB ? 1 : -1
+                    }).appendTo($(that.wrapSelector('.vp-pm-table')))
+                } else if (menu === 'name') {
                     // sort by name
                     $(that.wrapSelector('.vp-pm-item')).sort(function(a, b) {
                         var keyA = $(a).data('key');
@@ -147,6 +161,16 @@ define([
                         return insA > insB ? 1 : -1
                     }).appendTo($(that.wrapSelector('.vp-pm-table')))
                 }
+                $(that.wrapSelector('.vp-pm-sort-menu-box')).hide();
+            });
+
+            // reload package list
+            $(this.wrapSelector('.vp-pm-func-reload')).on('click', function() {
+                // reset search keyword
+                $(that.wrapSelector('.vp-pm-search')).val('');
+                
+                // load package list
+                that.loadPackageList();
             });
 
             // add package
@@ -355,11 +379,12 @@ define([
          * 
          * @param {String} key 
          * @param {Object} info installed, version, path
+         * @param {number} index sequence of initial package list
          * @returns 
          */
-        renderPackageItem(key, info) {
+        renderPackageItem(key, info, index) {
             var item = new com_String();
-            item.appendFormatLine('<div class="{0}" data-key="{1}" data-installed="{2}">', 'vp-pm-item', key, info.installed===true?'1':'0');
+            item.appendFormatLine('<div class="{0}" data-key="{1}" data-installed="{2}" data-seq="{3}">', 'vp-pm-item', key, info.installed===true?'1':'0', index);
             item.appendFormatLine('<div class="{0}" title="{1}">', 'vp-pm-item-header', (info.path?info.path:''));
             item.appendFormatLine('<label>{0}</label>', key);
             if (info.installed === true) {
@@ -401,6 +426,14 @@ define([
             $(this.wrapSelector('.vp-pm-table')).html('');
 
             let packageList = Object.keys(this.packageLib);
+
+            // set auto search
+            let searchInput = new SuggestInput();
+            searchInput.addClass('vp-pm-search vp-input');
+            searchInput.setPlaceholder("Search");
+            searchInput.setSuggestList(function () { return packageList; });
+            $(this.wrapSelector('.vp-pm-search')).replaceWith(searchInput.toTagString());
+
             let loadingSpinner = new LoadingSpinner($(this.wrapSelector('.vp-popup-body')));
             vpKernel.getPackageList(packageList).then(function(resultObj) {
                 let { result } = resultObj;
@@ -408,10 +441,10 @@ define([
 
                 // load code list
                 var innerFuncCode = new com_String();
-                Object.keys(packageInfo).forEach(key => {
+                Object.keys(packageInfo).forEach((key, idx) => {
                     let info = packageInfo[key]; // installed, version, path
                     if (info) {
-                        var item = that.renderPackageItem(key, info);
+                        var item = that.renderPackageItem(key, info, idx);
                         innerFuncCode.append(item);
                     }
                 });
