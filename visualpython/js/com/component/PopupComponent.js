@@ -900,7 +900,21 @@ define([
                 }
             }
 
+            if (requiredFilled) {
+                requiredFilled = this.checkBeforeRun();
+            }
+
             return requiredFilled;
+        }
+
+        /**
+         * Check options and do some operation before run
+         * @returns {boolean} check options and returns true or false (false will stop code running)
+         */
+        checkBeforeRun() {
+            /** Implementation needed */
+
+            return true;
         }
 
         checkAndRunModules(execute=true, background=false) {

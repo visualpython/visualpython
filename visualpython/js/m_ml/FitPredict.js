@@ -691,10 +691,11 @@ define([
                             'fit': {
                                 name: 'fit',
                                 label: 'Fit',
-                                code: '${model}.fit(${fit_featureData})',
+                                code: '${model}.fit(${fit_featureData}${fit_targetData})',
                                 description: 'Run fit with all sets of parameters.',
                                 options: [
-                                    { name: 'fit_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' }
+                                    { name: 'fit_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_train' },
+                                    { name: 'fit_targetData', label: 'Target Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y_train', usePair: true, pairKey: 'y' }
                                 ]
                             },
                             'predict': {
@@ -703,7 +704,7 @@ define([
                                 code: '${pred_allocate} = ${model}.predict(${pred_featureData})',
                                 description: 'Call predict on the estimator with the best found parameters.',
                                 options: [
-                                    { name: 'pred_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
+                                    { name: 'pred_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_test' },
                                     { name: 'pred_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'pred' }
                                 ]
                             },

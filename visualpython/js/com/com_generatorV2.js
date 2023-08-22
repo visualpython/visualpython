@@ -764,7 +764,11 @@ define([
                     }
                     // code completion 2
                     if (v.usePair == true) {
-                        val = ', ' + v.name + '=' + val;
+                        if (v.pairKey) {
+                            val = ', ' + v.pairKey + '=' + val;
+                        } else {
+                            val = ', ' + v.name + '=' + val;
+                        }
                     }
                     // code completion 3
                     if (v.component != undefined && v.componentCode != undefined) {

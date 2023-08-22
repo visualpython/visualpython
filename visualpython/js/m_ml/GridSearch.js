@@ -404,6 +404,16 @@ define([
             return [ installCode ];
         }
 
+        checkBeforeRun() {
+            // if no param is registered, stop and show alert
+            if ($(this.wrapSelector('.vp-param-result-item')).length <= 0) {
+                com_util.renderAlertModal('No params added. Please add params.');
+                return false;
+            }
+
+            return true;
+        }
+
         generateCode() {
             let { modelType, userOption, allocateToCreation, model } = this.state;
             let code = new com_String();
