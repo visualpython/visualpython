@@ -30,6 +30,7 @@ define([
             this.config.sizeLevel = 2;
             this.config.dataview = false;
             this.config.checkModules = ['pd'];
+            this.config.docs = 'https://pandas.pydata.org/docs/user_guide/options.html';
 
             this.state = {
                 filter_warning: '',
