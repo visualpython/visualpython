@@ -83,7 +83,7 @@ define([
                     modelStep: 1,
                     step: [
                         { name: 'ml_dataSplit', label: 'Data Split', useApp: true },
-                        { name: 'ml_regression', label: 'Regressor', useApp: true },
+                        { name: 'ml_regression', label: 'Regressor', useApp: true, child: ['pp_fit', 'pp_predict'] },
                         { name: 'pp_fit', label: 'Fit' },
                         { name: 'pp_predict', label: 'Predict' },
                         { name: 'ml_evaluation', label: 'Evaluation', useApp: true, state: { modelType: 'rgs' } },
@@ -94,7 +94,7 @@ define([
                     modelStep: 1,
                     step: [
                         { name: 'ml_dataSplit', label: 'Data Split', useApp: true },
-                        { name: 'ml_classification', label: 'Classifier', useApp: true },
+                        { name: 'ml_classification', label: 'Classifier', useApp: true, child: ['pp_fit', 'pp_predict'] },
                         { name: 'pp_fit', label: 'Fit' },
                         { name: 'pp_predict', label: 'Predict' },
                         { name: 'ml_evaluation', label: 'Evaluation', useApp: true, state: { modelType: 'clf' } },
@@ -104,7 +104,7 @@ define([
                     label: 'Clustering',
                     modelStep: 0,
                     step: [
-                        { name: 'ml_clustering', label: 'Clustering', useApp: true },
+                        { name: 'ml_clustering', label: 'Clustering', useApp: true, child: ['pp_fit', 'pp_predict', 'pp_transform'] },
                         { name: 'pp_fit', label: 'Fit' },
                         { name: 'pp_predict', label: 'Predict' },
                         { name: 'pp_transform', label: 'Transform' },
@@ -115,7 +115,7 @@ define([
                     label: 'Dimension Reduction',
                     modelStep: 0,
                     step: [
-                        { name: 'ml_dimensionReduction', label: 'Dimension Reduction', useApp: true },
+                        { name: 'ml_dimensionReduction', label: 'Dimension Reduction', useApp: true, child: ['pp_fit', 'pp_transform'] },
                         { name: 'pp_fit', label: 'Fit' },
                         { name: 'pp_transform', label: 'Transform' }
                     ]
@@ -125,7 +125,7 @@ define([
                     modelStep: 1,
                     step: [
                         { name: 'ml_dataSplit', label: 'Data Split', useApp: true },
-                        { name: 'ml_gridSearch', label: 'GridSearch', useApp: true },
+                        { name: 'ml_gridSearch', label: 'GridSearch', useApp: true, child: ['pp_fit', 'pp_predict'] },
                         { name: 'pp_fit', label: 'Fit' },
                         { name: 'pp_predict', label: 'Predict' },
                         { name: 'ml_evaluation', label: 'Evaluation', useApp: true },
@@ -134,7 +134,22 @@ define([
             }
 
             // menu libraries for ml 
-            let libObj = JSON.parse(librariesJson);
+            let libObj = {};
+            if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
+                libObj = librariesJson;
+
+                this.MlAppComponent = {};
+                this.MlAppComponent['ml_dataSplit'] = require('./dataSplit');
+                this.MlAppComponent['ml_dataPrep'] = require('./DataPrep');
+                this.MlAppComponent['ml_regression'] = require('./Regression');
+                this.MlAppComponent['ml_classification'] = require('./Classification');
+                this.MlAppComponent['ml_clustering'] = require('./Clustering');
+                this.MlAppComponent['ml_dimensionReduction'] = require('./DimensionReduction');
+                this.MlAppComponent['ml_gridSearch'] = require('./GridSearch');
+                this.MlAppComponent['ml_evaluation'] = require('./evaluation');
+            } else {
+                libObj = JSON.parse(librariesJson);
+            }
             this.mlAppList = libObj.library.item.filter(x => x.id === 'pkg_ml')[0].item;
             
             this.modelConfig = ML_LIBRARIES;
@@ -268,7 +283,7 @@ define([
                 let appFileList = [];
                 // load pipeline items
                 tplObj.step.forEach((stepObj, idx) => {
-                    let { name, label, useApp=false, state={} } = stepObj;
+                    let { name, label, useApp=false, child=[], state={} } = stepObj;
                     ppTag.appendFormatLine(`<div class="vp-pp-item" data-flag="enabled" data-name="{0}" data-seq="{1}" data-label="{2}">
                         <span>{3}</span>
                         <div class="vp-pp-item-menu">
@@ -280,7 +295,7 @@ define([
                     if (useApp === true) {
                         let mlObj = that.mlAppList.filter(x => x.id === name)[0];
                         if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
-                            appFileList.push({ index: idx, name: name, file: './' + mlObj.file});
+                            appFileList.push({ index: idx, name: name, file: 'vp_base/js/' + mlObj.file});
                         } else {
                             appFileList.push({ index: idx, name: name, file: 'vp_base/js/' + mlObj.file});
                         }
@@ -293,6 +308,7 @@ define([
                     };
                     if (tplObj.modelStep === idx) {
                         pipeObj.modelStep = true;
+                        pipeObj.child = child;
                     }
                     that.state.pipeline.push(pipeObj);
                     // append pages
@@ -311,14 +327,15 @@ define([
                 // for lite and lab
                 if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
                     appFileList.forEach((obj, argIdx) => {
-                        let MlComponent = require(obj.file);
+                        let MlComponent = that.MlAppComponent[obj.name];
                         if (MlComponent) {
                             // DUP AREA: pp-1
-                            let { name, label, index, file } = obj;
+                            let { name, index, file } = obj;
                             let mlComponent = new MlComponent({ 
-                                config: { id: name, name: label, path: file, category: 'Pipeline', resizable: false },
+                                config: { id: name, name: that.state.pipeline[index].label, path: file, category: 'Pipeline', resizable: false },
                                     ...that.state.pipeline[index].state
                             });
+                            mlComponent.loadState();
                             // mlComponent.open($(that.wrapSelector(`.vp-pp-step-page[data-name="${appId}"]`)));
                             that.state.pipeline[index].app = mlComponent;
 
@@ -347,9 +364,10 @@ define([
                                 // DUP AREA: pp-1
                                 let { name, label, index, file } = obj;
                                 let mlComponent = new MlComponent({ 
-                                    config: { id: name, name: label, path: file, category: 'Pipeline', resizable: false },
+                                    config: { id: name, name: that.state.pipeline[index].label, path: file, category: 'Pipeline', resizable: false },
                                         ...that.state.pipeline[index].state
                                 });
+                                mlComponent.loadState();
                                 // mlComponent.open($(that.wrapSelector(`.vp-pp-step-page[data-name="${appId}"]`)));
                                 that.state.pipeline[index].app = mlComponent;
 
@@ -358,6 +376,10 @@ define([
                                     that.state.modelType = mlComponent.state.modelType;
                                     let modelObj = that.modelConfig[that.state.modelType];
                                     that.state.modelTypeName = modelObj.code.split('(')[0];
+
+                                    that.state.pipeline[index].child.forEach(childId => {
+                                        that.renderApp(childId);
+                                    });
                                 }
                                 // handle app view
                                 that.handleAppView(name, mlComponent);
@@ -460,10 +482,67 @@ define([
                 label = com_util.optionToLabel(label);
                 optBox.appendFormatLine('<label for="{0}" title="{1}">{2}</label>'
                     , opt.name, opt.name, label);
-                let content = com_generator.renderContent(this, opt.component[0], opt, this.state);
+                let tmpState = {};
+                if (opt.value && opt.value !== '') {
+                    tmpState[opt.name] = opt.value;
+                }
+                let content = com_generator.renderContent(this, opt.component[0], opt, tmpState);
                 optBox.appendLine(content[0].outerHTML);
             });
             return optBox.toString();
+        }
+
+        checkBeforeRun() {
+            let that = this;
+            var result = true;
+            for (let idx = 0; idx < this.state.pipeline.length; idx++) {
+                let ppObj = this.state.pipeline[idx];
+                var { name, label, useApp, app } = ppObj;
+                let requiredList = [];
+                result = true;
+                let isVisible = $(that.wrapSelector(`.vp-pp-item[data-seq="${idx}"]`)).is(':visible') === true;
+                let isEnabled = $(that.wrapSelector(`.vp-pp-item[data-seq="${idx}"]`)).attr('data-flag') === 'enabled';
+                if (isVisible && isEnabled) {
+                    switch (name) {
+                        case 'ml_dataSplit':
+                            requiredList = ['featureData', 'targetData'];
+                            // check required data
+                            for (let i = 0; i < requiredList.length; i++) {
+                                let reqKey = requiredList[i];
+                                result = that._checkIsEmpty($(app.wrapSelector('#' + reqKey)));
+                                if (result === false) {
+                                    // show page and focus it
+                                    $(that.wrapSelector(`.vp-pp-item[data-name="${name}"]`)).click();
+                                    $(app.wrapSelector('#' + reqKey)).focus();
+                                    break;
+                                }
+                            }
+                            break;
+                        case 'ml_gridSearch':
+                            result = app.checkBeforeRun();
+                            if (result === false) {
+                                // show page
+                                $(that.wrapSelector(`.vp-pp-item[data-name="${name}"]`)).click();
+                                break;
+                            }
+                            break;
+                    }
+                }
+                if (result === false) {
+                    break;
+                }
+            }
+            return result;
+
+        }
+
+        _checkIsEmpty(tag) {
+            let requiredFilled = true;
+            // if it's empty, focus on it
+            if (tag && $(tag) && $(tag).val() == '') {
+                requiredFilled = false;
+            }
+            return requiredFilled;
         }
 
         generateCodeForOptionPage(appId) {
@@ -514,24 +593,36 @@ define([
                 
                 // check disabled
                 let isVisible = $(that.wrapSelector(`.vp-pp-item[data-seq="${idx}"]`)).is(':visible') === true;
-                let isEnabled = $(that.wrapSelector(`.vp-pp-item[data-seq="${idx}"]`)).data('flag') === 'enabled';
+                let isEnabled = $(that.wrapSelector(`.vp-pp-item[data-seq="${idx}"]`)).attr('data-flag') === 'enabled';
                 if (isVisible && isEnabled) {
                     if (code.toString() !== '') {
                         code.appendLine();
                         code.appendLine();
                     }
-                    code.appendFormatLine("# [{0}] {1}", stepNo, label);
                     if (useApp) {
-                        code.append(app.generateCode());
+                        let appCode = app.generateCode();
+                        if (appCode instanceof Array) {
+                            appCode = appCode.join('\n');
+                        }
+                        if (appCode && appCode.trim() !== '') {
+                            code.appendFormatLine("# [{0}] {1}", stepNo++, label);
+                            if (name === 'ml_evaluation') {
+                                // import auto generate
+                                code.appendLine(app.generateImportCode().join('\n'));
+                            }
+                            code.append(appCode);
+                        }
                         // save state
                         that.state.pipeline[idx].state = app.state;
                     } else {
                         let ppResult = that.generateCodeForOptionPage(name);
-                        code.append(ppResult.code);
+                        if (ppResult && ppResult?.code?.trim() !== '') {
+                            code.appendFormatLine("# [{0}] {1}", stepNo++, label);
+                            code.append(ppResult.code);
+                        }
                         // save state
                         that.state.pipeline[idx].state = ppResult.state;
                     }
-                    stepNo++;
                 }
             });
 
