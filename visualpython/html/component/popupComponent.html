@@ -62,7 +62,7 @@
             <div class="vp-popup-return" title="Return size of this popup"></div>
             <div class="vp-popup-close" title="Close popup"></div>
         </div>
-        <div class="vp-popup-body vp-scrollbar">
+        <div class="vp-popup-body">
             <div class="vp-popup-body-top-bar vp-italic vp-gray-text vp-no-selection vp-cursor">
                 <span id="popupInstall" class="vp-popup-body-top-bar-item" data-type="install">
                     Install Package
@@ -112,8 +112,9 @@
                         <div class="vp-icon-arrow-short-up"></div>
                     </button>
                     <div class="vp-popup-run-detailbox vp-cursor vp-close-on-blur">
-                        <div class="vp-popup-detail-button" data-type="apply" title="Save to block">Save to block</div>
-                        <div class="vp-popup-detail-button" data-type="add" title="Save to block & Add cell">Code to cell</div>
+                        <!-- <div class="vp-popup-detail-button" data-type="apply" title="Save to block">Save to block</div> -->
+                        <div class="vp-popup-detail-button" data-type="run-save" title="Save to block & Run code">Run & Save</div>
+                        <div class="vp-popup-detail-button" data-type="add" title="Add code to cell">Code to cell</div>
                     </div>
                 </div>
                 <button type="button" class="vp-button activated vp-popup-button vp-popup-save-button" data-type="save" title="Save to target" style="display:none;">OK</button>

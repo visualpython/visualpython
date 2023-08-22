@@ -112,9 +112,13 @@ define([
                 // show footer
                 runButton: true,
                 footer: true,
+                // position and size
                 position: { right: 10, top: 120 },
                 size: { width: 400, height: 550 },
+                // additional modes and infos
                 saveOnly: false, // apply mode
+                resizable: true,
+                autoScroll: true,
                 checkModules: [], // module aliases or function names
                 docs: 'https://visual-python.gitbook.io/docs/getting-started/welcome-to-visual-python',
                 helpInfo: {
@@ -456,9 +460,10 @@ define([
                         }
                         break;
                     case 'run':
-                        let result = that.run();
+                        var result = that.run();
                         if (result) {
-                            that.save();
+                            // that.save();
+                            that.close();
                         }
                         break;
                     case 'show-detail':
@@ -474,13 +479,20 @@ define([
             $(this.wrapSelector('.vp-popup-detail-button')).on('click', function(evt) {
                 var btnType = $(this).data('type');
                 switch(btnType) {
-                    case 'apply':
-                        that.save();
-                        break;
-                    case 'add':
-                        let result = that.run(false);
+                    // case 'apply':
+                    //     that.save();
+                    //     break;
+                    case 'run-save':
+                        var result = that.run();
                         if (result) {
                             that.save();
+                        }
+                        break;
+                    case 'add':
+                        var result = that.run(false);
+                        if (result) {
+                            // that.save();
+                            that.close();
                         }
                         break;
                 }
@@ -599,7 +611,7 @@ define([
             let { 
                 installButton, importButton, packageButton, 
                 codeview, dataview, helpview, runButton, footer, 
-                sizeLevel, position, docs
+                sizeLevel, position, autoScroll, docs
             } = this.config;
 
             // apply link to docs
@@ -668,6 +680,10 @@ define([
                     break;
             }
 
+            if (autoScroll) {
+                $(this.wrapSelector('.vp-popup-body')).addClass('vp-scrollbar');
+            }
+
             // set detailed size
             $(this.wrapSelector()).css({
                 width: this.config.size.width + 'px',
@@ -683,7 +699,9 @@ define([
             }
 
             this._bindDraggable();
-            this._bindResizable();
+            if (this.config.resizable) {
+                this._bindResizable();
+            }
         }
         
         templateForInnerPopup() {
@@ -785,9 +803,8 @@ define([
             vpLog.display(VP_LOG_TYPE.DEVELOP, 'savedState', that.state);   
         }
 
-        _saveSingleState(tag) {
+        _getTagValue(tag) {
             let id = tag.id;
-            let customKey = $(tag).data('key');
             let tagName = $(tag).prop('tagName'); // returns with UpperCase
             let newValue = '';
             switch(tagName) {
@@ -818,7 +835,14 @@ define([
                     }
                     break;
             }
+            return newValue;
+        }
+
+        _saveSingleState(tag) {
+            let id = tag.id;
+            let customKey = $(tag).data('key');
             
+            let newValue = this._getTagValue(tag);
             // if custom key is available, use it
             if (customKey && customKey != '') {
                 // allow custom key until level 2
@@ -947,30 +971,52 @@ define([
          * - focus popup
          * - bind codemirror
          */
-        open() {
+        open(targetFrame=undefined) {
             vpLog.display(VP_LOG_TYPE.DEVELOP, 'open popup', this);
             this.loadState();
             
             this._beforeOpen();
-            this.show();
-
-            // set popup position if its top-left side is outside of view
-            let pos = $(this.wrapSelector()).position();
-            if (pos) {
-                if (pos.top < 0) {
-                    $(this.wrapSelector()).css({ top: 0 });
-                }
-                if (pos.left < 0) {
-                    $(this.wrapSelector()).css({ left: 0 });
+            if (targetFrame !== undefined) {
+                // hide popup frame
+                $(this.wrapSelector('.vp-popup-header')).hide();
+                $(this.wrapSelector('.vp-popup-footer')).hide();
+                // set width and height to 100%
+                $(this.wrapSelector()).css({
+                    width: '100%',
+                    height: '100%',
+                    'min-height': 'unset',
+                    display: 'block',
+                    position: 'initial',
+                    border: '0px'
+                });
+                $(this.wrapSelector('.vp-popup-body')).css({
+                    padding: '0px'
+                });
+                // show on targetFrame
+                $(this.wrapSelector()).appendTo($(targetFrame));
+            } else {
+                this.show();
+    
+                // set popup position if its top-left side is outside of view
+                let pos = $(this.wrapSelector()).position();
+                if (pos) {
+                    if (pos.top < 0) {
+                        $(this.wrapSelector()).css({ top: 0 });
+                    }
+                    if (pos.left < 0) {
+                        $(this.wrapSelector()).css({ left: 0 });
+                    }
                 }
             }
 
             this._bindCodemirror();
 
-            $(this.eventTarget).trigger({
-                type: 'focus_option_page',
-                component: this
-            });
+            if (targetFrame !== undefined) {
+                $(this.eventTarget).trigger({
+                    type: 'focus_option_page',
+                    component: this
+                });
+            }
         }
 
         setSaveOnlyMode() {
@@ -1004,6 +1050,7 @@ define([
 
         remove() {
             vpLog.display(VP_LOG_TYPE.DEVELOP, 'remove popup', this);
+            this._unbindResizable();
             this._unbindEvent();
             this.closeHelpView();
             $(this.wrapSelector()).remove();
