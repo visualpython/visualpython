@@ -503,8 +503,11 @@ input.vp-menu-search-box {
 .vp-menuitem.apps .ml_dimensionReduction {
     background: top / contain no-repeat url(../img/apps/apps_dimension.svg);
 }
-.vp-menuitem.apps .ml_saveLoad {
-    background: top / contain no-repeat url(../img/apps/apps_file.svg);
+.vp-menuitem.apps .ml_pipeline {
+    background: top / contain no-repeat url(../img/apps/apps_pipeline.svg);
+}
+.vp-menuitem.apps .ml_gridSearch {
+    background: top / contain no-repeat url(../img/apps/apps_gridSearch.svg);
 }
 .vp-menuitem.apps .ml_fitPredict {
     background: top / contain no-repeat url(../img/apps/apps_fit.svg);
@@ -514,4 +517,7 @@ input.vp-menu-search-box {
 }
 .vp-menuitem.apps .ml_evaluation {
     background: top / contain no-repeat url(../img/apps/apps_evaluate.svg);
+}
+.vp-menuitem.apps .ml_saveLoad {
+    background: top / contain no-repeat url(../img/apps/apps_file.svg);
 }
