@@ -83,7 +83,7 @@ define([
                     modelStep: 1,
                     step: [
                         { name: 'ml_dataSplit', label: 'Data Split', useApp: true },
-                        { name: 'ml_regression', label: 'Regressor', useApp: true },
+                        { name: 'ml_regression', label: 'Regressor', useApp: true, child: ['pp_fit', 'pp_predict'] },
                         { name: 'pp_fit', label: 'Fit' },
                         { name: 'pp_predict', label: 'Predict' },
                         { name: 'ml_evaluation', label: 'Evaluation', useApp: true, state: { modelType: 'rgs' } },
@@ -94,7 +94,7 @@ define([
                     modelStep: 1,
                     step: [
                         { name: 'ml_dataSplit', label: 'Data Split', useApp: true },
-                        { name: 'ml_classification', label: 'Classifier', useApp: true },
+                        { name: 'ml_classification', label: 'Classifier', useApp: true, child: ['pp_fit', 'pp_predict'] },
                         { name: 'pp_fit', label: 'Fit' },
                         { name: 'pp_predict', label: 'Predict' },
                         { name: 'ml_evaluation', label: 'Evaluation', useApp: true, state: { modelType: 'clf' } },
@@ -104,7 +104,7 @@ define([
                     label: 'Clustering',
                     modelStep: 0,
                     step: [
-                        { name: 'ml_clustering', label: 'Clustering', useApp: true },
+                        { name: 'ml_clustering', label: 'Clustering', useApp: true, child: ['pp_fit', 'pp_predict', 'pp_transform'] },
                         { name: 'pp_fit', label: 'Fit' },
                         { name: 'pp_predict', label: 'Predict' },
                         { name: 'pp_transform', label: 'Transform' },
@@ -115,7 +115,7 @@ define([
                     label: 'Dimension Reduction',
                     modelStep: 0,
                     step: [
-                        { name: 'ml_dimensionReduction', label: 'Dimension Reduction', useApp: true },
+                        { name: 'ml_dimensionReduction', label: 'Dimension Reduction', useApp: true, child: ['pp_fit', 'pp_transform'] },
                         { name: 'pp_fit', label: 'Fit' },
                         { name: 'pp_transform', label: 'Transform' }
                     ]
@@ -125,7 +125,7 @@ define([
                     modelStep: 1,
                     step: [
                         { name: 'ml_dataSplit', label: 'Data Split', useApp: true },
-                        { name: 'ml_gridSearch', label: 'GridSearch', useApp: true },
+                        { name: 'ml_gridSearch', label: 'GridSearch', useApp: true, child: ['pp_fit', 'pp_predict'] },
                         { name: 'pp_fit', label: 'Fit' },
                         { name: 'pp_predict', label: 'Predict' },
                         { name: 'ml_evaluation', label: 'Evaluation', useApp: true },
@@ -283,7 +283,7 @@ define([
                 let appFileList = [];
                 // load pipeline items
                 tplObj.step.forEach((stepObj, idx) => {
-                    let { name, label, useApp=false, state={} } = stepObj;
+                    let { name, label, useApp=false, child=[], state={} } = stepObj;
                     ppTag.appendFormatLine(`<div class="vp-pp-item" data-flag="enabled" data-name="{0}" data-seq="{1}" data-label="{2}">
                         <span>{3}</span>
                         <div class="vp-pp-item-menu">
@@ -308,6 +308,7 @@ define([
                     };
                     if (tplObj.modelStep === idx) {
                         pipeObj.modelStep = true;
+                        pipeObj.child = child;
                     }
                     that.state.pipeline.push(pipeObj);
                     // append pages
@@ -329,9 +330,9 @@ define([
                         let MlComponent = that.MlAppComponent[obj.name];
                         if (MlComponent) {
                             // DUP AREA: pp-1
-                            let { name, label, index, file } = obj;
+                            let { name, index, file } = obj;
                             let mlComponent = new MlComponent({ 
-                                config: { id: name, name: label, path: file, category: 'Pipeline', resizable: false },
+                                config: { id: name, name: that.state.pipeline[index].label, path: file, category: 'Pipeline', resizable: false },
                                     ...that.state.pipeline[index].state
                             });
                             mlComponent.loadState();
@@ -363,7 +364,7 @@ define([
                                 // DUP AREA: pp-1
                                 let { name, label, index, file } = obj;
                                 let mlComponent = new MlComponent({ 
-                                    config: { id: name, name: label, path: file, category: 'Pipeline', resizable: false },
+                                    config: { id: name, name: that.state.pipeline[index].label, path: file, category: 'Pipeline', resizable: false },
                                         ...that.state.pipeline[index].state
                                 });
                                 mlComponent.loadState();
@@ -375,6 +376,10 @@ define([
                                     that.state.modelType = mlComponent.state.modelType;
                                     let modelObj = that.modelConfig[that.state.modelType];
                                     that.state.modelTypeName = modelObj.code.split('(')[0];
+
+                                    that.state.pipeline[index].child.forEach(childId => {
+                                        that.renderApp(childId);
+                                    });
                                 }
                                 // handle app view
                                 that.handleAppView(name, mlComponent);
@@ -477,7 +482,11 @@ define([
                 label = com_util.optionToLabel(label);
                 optBox.appendFormatLine('<label for="{0}" title="{1}">{2}</label>'
                     , opt.name, opt.name, label);
-                let content = com_generator.renderContent(this, opt.component[0], opt, this.state);
+                let tmpState = {};
+                if (opt.value && opt.value !== '') {
+                    tmpState[opt.name] = opt.value;
+                }
+                let content = com_generator.renderContent(this, opt.component[0], opt, tmpState);
                 optBox.appendLine(content[0].outerHTML);
             });
             return optBox.toString();
@@ -590,18 +599,30 @@ define([
                         code.appendLine();
                         code.appendLine();
                     }
-                    code.appendFormatLine("# [{0}] {1}", stepNo, label);
                     if (useApp) {
-                        code.append(app.generateCode());
+                        let appCode = app.generateCode();
+                        if (appCode instanceof Array) {
+                            appCode = appCode.join('\n');
+                        }
+                        if (appCode && appCode.trim() !== '') {
+                            code.appendFormatLine("# [{0}] {1}", stepNo++, label);
+                            if (name === 'ml_evaluation') {
+                                // import auto generate
+                                code.appendLine(app.generateImportCode().join('\n'));
+                            }
+                            code.append(appCode);
+                        }
                         // save state
                         that.state.pipeline[idx].state = app.state;
                     } else {
                         let ppResult = that.generateCodeForOptionPage(name);
-                        code.append(ppResult.code);
+                        if (ppResult && ppResult?.code?.trim() !== '') {
+                            code.appendFormatLine("# [{0}] {1}", stepNo++, label);
+                            code.append(ppResult.code);
+                        }
                         // save state
                         that.state.pipeline[idx].state = ppResult.state;
                     }
-                    stepNo++;
                 }
             });
 
