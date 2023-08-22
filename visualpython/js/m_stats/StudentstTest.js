@@ -123,18 +123,18 @@ define([
                 var colName = $(this).find('option:selected').text();
                 var colDtype = $(this).find('option:selected').attr('data-type');
                 that.state.groupingVariable = colCode;
-                $(that.wrapSelector('#group1')).html('');
-                $(that.wrapSelector('#group2')).html('');
                 // get result and load column list
                 vpKernel.getColumnCategory(that.state.data, colCode).then(function(resultObj) {
                     let { result } = resultObj;
+                    $(that.wrapSelector('#group1')).html('');
+                    $(that.wrapSelector('#group2')).html('');
                     try {
                         var category = JSON.parse(result);
                         if (category && category.length > 0 && colDtype == 'object') {
                             // if it's categorical column and its dtype is object, check 'Text' as default
                             category.forEach(obj => {
                                 let selected1 = obj.value === that.state.group1;
-                                let selected2 = obj.value === that.state.group1;
+                                let selected2 = obj.value === that.state.group2;
                                 $(that.wrapSelector('#group1')).append(`<option value="${obj.value}" ${selected1?'selected':''}>${obj.label}</option>`);
                                 $(that.wrapSelector('#group2')).append(`<option value="${obj.value}" ${selected2?'selected':''}>${obj.label}</option>`);
                             });
