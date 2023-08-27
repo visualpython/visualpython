@@ -44,7 +44,8 @@ define([
                 'json': 'json',
                 'pickle': '',
                 'sas': '', // xport or sas7bdat
-                'spss': ''
+                'spss': '',
+                'parquet':'parquet'
             }
             
             this.package = {
@@ -90,7 +91,8 @@ define([
                         'json': 'pd_readJson',
                         'pickle': 'pd_readPickle',
                         'sas': 'pd_readSas',
-                        'spss': 'pd_readSpss'
+                        'spss': 'pd_readSpss',
+                        'parquet':'pd_readParquet'
                     },
                     selectedType: 'csv',
                     package: null,
@@ -104,7 +106,8 @@ define([
                         'csv': 'pd_toCsv',
                         'excel': 'pd_toExcel',
                         'json': 'pd_toJson',
-                        'pickle': 'pd_toPickle'
+                        'pickle': 'pd_toPickle',
+                        'parquet':'pd_toParquet'
                     },
                     selectedType: 'csv',
                     package: null,
@@ -194,22 +197,64 @@ define([
                 that.state['vp_fileioType'] = pageType;
                 $(that.wrapSelector('.vp-fileio-box')).hide();
                 $(that.wrapSelector('#vp_file' + pageType)).show();
-    
+
+
                 //set fileExtensions
                 that.fileResultState = {
                     ...that.fileState[pageType].fileResultState
                 };
             });
+
+            // fileReadAs change Event, Use PyArrow
+            $(document).on('change', this.wrapSelector('#fileReadAs'), function() {
+                let isChecked = $(this).prop('checked');
+                var fileioType = that.state.vp_fileioType;
+                var prefix = '#vp_file' + fileioType + ' ';
+                var selectedFileFormat = that.fileState[fileioType].selectedType;
+                var fileioTypePrefix = fileioType.toLowerCase();
+                if(fileioTypePrefix == 'write'){
+                    fileioTypePrefix = "to";
+                }
+
+                if(isChecked){  // pyArrow
+                    that.fileState[fileioType].fileTypeId[that.state.fileExtension] = "pa_" + fileioTypePrefix + selectedFileFormat[0].toUpperCase() + selectedFileFormat.slice(1);
+                    $(that.wrapSelector(prefix + '#vp_optionBox')).closest('.vp-accordian-container').hide();
+                }
+                else{  // pandas
+                    that.fileState[fileioType].fileTypeId[that.state.fileExtension] = "pd_" + fileioTypePrefix + selectedFileFormat[0].toUpperCase() + selectedFileFormat.slice(1);
+                    if (that.state.fileExtension != 'parquet'){  // parquet has no options area
+                        $(that.wrapSelector(prefix + '#vp_optionBox')).closest('.vp-accordian-container').show();
+                    }
+                }
+
+                var fileTypeObj = that.fileState[fileioType]['fileTypeId'];
+                var selectedType = that.fileState[fileioType]['selectedType'];
+                let fileId = fileTypeObj[selectedType];
+                let pdLib = pandasLibrary.PANDAS_FUNCTION;
+                let thisPkg = JSON.parse(JSON.stringify(pdLib[fileId]));
+                
+                that.fileState[fileioType].package = thisPkg;
+            });
+
         }
 
         _bindEventByType(pageType) {
             var that = this;
             var prefix = '#vp_file' + pageType + ' ';
-    
+
+            var fileioTypePrefix = pageType.toLowerCase();
+            if(fileioTypePrefix == 'write'){
+                fileioTypePrefix = "to";
+            }
+            var selectedFileFormat = that.fileState[pageType].selectedType;
             // select file type 
             $(this.wrapSelector(prefix + '#fileType')).change(function() {
                 var value = $(this).val();
                 that.fileState[pageType].selectedType = value;
+
+                // Whenever change the file type, change to default pandas
+                that.fileState[pageType].fileTypeId[that.state.fileExtension] = "pd_" + fileioTypePrefix + selectedFileFormat[0].toUpperCase() + selectedFileFormat.slice(1);
+
     
                 // reload
                 that.renderPage(pageType);
@@ -327,7 +372,7 @@ define([
         renderPage(pageType) {
             var that = this;
             var prefix = '#vp_file' + pageType + ' ';
-    
+            
             // clear
             $(this.wrapSelector(prefix + '#vp_inputOutputBox table tbody')).html('');
             $(this.wrapSelector(prefix + '#vp_optionBox table tbody')).html('');
@@ -344,7 +389,7 @@ define([
                 ...this.fileState[pageType].fileResultState
             };
 
-            if (selectedType == 'pickle') {
+            if (selectedType == 'pickle' || selectedType == 'parquet') {
                 // hide additional option box
                 $(this.wrapSelector(prefix + '#vp_optionBox')).closest('.vp-accordian-container').hide();
             } else {
@@ -355,7 +400,7 @@ define([
                 if (selectedType == 'json') {
                     this.fileResultState.pathInputId = this.wrapSelector(prefix + '#path_or_buf');
                 }
-                if (selectedType == 'pickle') {
+                if (selectedType == 'pickle' || selectedType == 'parquet') {
                     this.fileResultState.pathInputId = this.wrapSelector(prefix + '#path');
                 }
             }
@@ -365,17 +410,29 @@ define([
             // pdGen.vp_showInterfaceOnPage(this.wrapSelector('#vp_file' + pageType), thisPkg);
             pdGen.vp_showInterfaceOnPage(this, thisPkg, this.state, parent=('#vp_file' + pageType));
     
+            // pyarrow can r/w parquet, csv and only read json.
+            if ((pageType == 'Read' && selectedType == 'json') || selectedType == 'parquet'|| selectedType == 'csv') {
+                // add checkbox 'Use PyArrow', next to File Type
+                $(this.wrapSelector(prefix + '#vp_inputOutputBox table tbody')).prepend(
+                    $('<tr>').append($(`<td><label for="fileType" class="vp-bold vp-orange-text">File Type</label></td>`))
+                            .append($('<td><select id="fileType" class="vp-select"></select>  <label><input id="fileReadAs" type="checkbox"/><span>Use PyArrow</span></label></td>'))
+                );
+            }
+            else{
+                $(this.wrapSelector(prefix + '#vp_inputOutputBox table tbody')).prepend(
+                    $('<tr>').append($(`<td><label for="fileType" class="vp-bold vp-orange-text">File Type</label></td>`))
+                            .append($('<td><select id="fileType" class="vp-select"></select> </td>'))
+                );
+            }
+
             // prepend file type selector
-            $(this.wrapSelector(prefix + '#vp_inputOutputBox table tbody')).prepend(
-                $('<tr>').append($(`<td><label for="fileType" class="vp-bold vp-orange-text">File Type</label></td>`))
-                    .append($('<td><select id="fileType" class="vp-select"></select></td>'))
-            );
             var fileTypeList = Object.keys(fileTypeObj);
             fileTypeList.forEach(type => {
                 $(this.wrapSelector(prefix + '#fileType')).append(
                     $(`<option value="${type}">${type}</option>`)
                 );
             });
+
 
             // prepend user option
             let hasAllocateTo = $(this.wrapSelector(prefix + '#o0')).length > 0;
@@ -390,9 +447,9 @@ define([
                         .append($('<td><input id="userOption" type="text" class="vp-input vp-state" placeholder="key=value, ..."/></td>'))
                 )
             }
-    
+
             $(this.wrapSelector(prefix + '#fileType')).val(selectedType);
-    
+
             // add file navigation button
             if (pageType == 'Write') {
                 if (selectedType == 'json') {
@@ -400,7 +457,7 @@ define([
                         com_util.formatString('<input type="text" class="vp-input vp-state" id="path_or_buf" index="0" placeholder="" value="" title=""><div id="vp_openFileNavigationBtn" class="{0}"></div>'
                         , 'vp-file-browser-button')
                     );
-                } else if (selectedType == 'pickle') {
+                } else if (selectedType == 'pickle'  || selectedType == 'parquet') {
                     $(prefix + '#path').parent().html(
                         com_util.formatString('<input type="text" class="vp-input vp-state" id="path" index="0" placeholder="" value="" title="" required="true"><div id="vp_openFileNavigationBtn" class="{0}"></div>'
                         , 'vp-file-browser-button')
@@ -493,7 +550,6 @@ define([
                 var result = pdGen.vp_codeGenerator(this, thisPkg, this.state, userOption.toString(), parent='#vp_fileWrite');
                 sbCode.append(result);
             }
-
             return sbCode.toString();
         }
 

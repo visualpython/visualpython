@@ -6825,6 +6825,189 @@ define([
           },
         ]
       },
+      // ***
+      "pd_toParquet": {
+        "name": "To Parquet",
+        "library": "pandas",
+        "description": "DataFrame/Series to Parquet file",
+        "code": "${i0}.to_parquet(${path}${etc})",
+        "options": [
+          {
+            "name": "i0",
+            "label": "DataFrame",
+            "required": true,
+            "component": [
+              "data_select"
+            ],
+            "var_type": [
+              "DataFrame",
+              "Series"
+            ]
+          },
+          {
+            "name": "path",
+            "label": "File path/variable",
+            "required": true,
+            "type": "text"
+          }
+        ]
+      },
+      "pd_readParquet": {
+        "name": "Read Parquet",
+        "library": "pandas",
+        "description": "Parquet to pandas object",
+        "code": "${o0} = pd.read_parquet(${i0}${etc})",
+        "options": [
+          {
+            "name": "i0",
+            "label": "File path/object",
+            "required": true,
+            "type": "text",
+            "component": [
+              "file"
+            ]
+          },
+          {
+            "name": "o0",
+            "label": "Allocate to",
+            "output": true,
+            "component": [
+              "input"
+            ],
+            "value": "vp_df"
+          },
+        ]
+      },
+      "pa_readCsv": {
+        "name": "Read Csv as pyarrow",
+        "library": "pyarrow",
+        "description": "Csv to pandas object",
+        "code": "${o0} = pa.csv.read_csv(${i0}${etc}).to_pandas()",
+        "options": [
+          {
+            "name": "i0",
+            "label": "File path/object",
+            "required": true,
+            "type": "text",
+            "component": [
+              "file"
+            ]
+          },
+          {
+            "name": "o0",
+            "label": "Allocate to",
+            "output": true,
+            "component": [
+              "input"
+            ],
+            "value": "vp_df"
+          }
+        ]
+      },
+      "pa_toCsv": {
+        "name": "To Csv as pyarrow",
+        "library": "pyarrow",
+        "description": "DataFrame/Series to csv file",
+        "code": "pa.csv.write_csv(${i0}, ${path})",
+        "options": [
+          {
+            "name": "i0",
+            "label": "DataFrame",
+            "required": true,
+            "component": [
+              "data_select"
+            ],
+            "var_type": [
+              "DataFrame",
+              "Series"
+            ]
+          },
+          {
+            "name": "path",
+            "label": "File path/variable",
+            "required": true,
+            "type": "text"
+          }
+        ]
+      },
+      "pa_readJson": {
+        "name": "Read Json as pyarrow",
+        "library": "pyarrow",
+        "description": "Json to pyarrow object",
+        "code": "${o0} = pa.json.read_json(${i0}${etc}).to_pandas()",
+        "options": [
+          {
+            "name": "i0",
+            "label": "File path/object",
+            "required": true,
+            "type": "text",
+            "component": [
+              "file"
+            ]
+          },
+          {
+            "name": "o0",
+            "label": "Allocate to",
+            "output": true,
+            "component": [
+              "input"
+            ],
+            "value": "vp_df"
+          }
+        ]
+      },
+      "pa_readParquet": {
+        "name": "Read Parquet as pyarrow",
+        "library": "pyarrow",
+        "description": "Parquet to pandas object",
+        "code": "${o0} = pa.parquet.read_table(${i0}${etc}).to_pandas()",
+        "options": [
+          {
+            "name": "i0",
+            "label": "File path/object",
+            "required": true,
+            "type": "text",
+            "component": [
+              "file"
+            ]
+          },
+          {
+            "name": "o0",
+            "label": "Allocate to",
+            "output": true,
+            "component": [
+              "input"
+            ],
+            "value": "vp_df"
+          }
+        ]
+      },
+      "pa_toParquet": {
+        "name": "To Parquet as pyarrow",
+        "library": "pyarrow",
+        "description": "DataFrame/Series to Parquet file",
+        "code": "pa.parquet.write_table(${i0}, ${path})",
+        "options": [
+          {
+            "name": "i0",
+            "label": "DataFrame",
+            "required": true,
+            "component": [
+              "data_select"
+            ],
+            "var_type": [
+              "DataFrame",
+              "Series"
+            ]
+          },
+          {
+            "name": "path",
+            "label": "File path/variable",
+            "required": true,
+            "type": "text"
+          }
+        ]
+      },
     }
 
     return {
