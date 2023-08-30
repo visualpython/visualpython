@@ -2440,7 +2440,7 @@ define([
         "name": "get data counts",
         "library": "pandas",
         "description": "get data value counts",
-        "code": "${o0} = ${i0}.value_counts()",
+        "code": "${o0} = ${i0}.value_counts(${bins}${sort}${ascending}${dropna}${etc})",
         "options": [
           {
             "name": "i0",
@@ -2457,7 +2457,39 @@ define([
             "component": [
               "input"
             ]
-          }
+          },
+          {
+            "name": "bins",
+            "component": [
+              "input_number"
+            ],
+            "help": "Only for Series object",
+            "usePair": true,
+          },
+          {
+            "name": "sort",
+            "component": [
+              "bool_select"
+            ],
+            "default": "True",
+            "usePair": true,
+          },
+          {
+            "name": "ascending",
+            "component": [
+              "bool_select"
+            ],
+            "default": "False",
+            "usePair": true,
+          },
+          {
+            "name": "dropna",
+            "component": [
+              "bool_select"
+            ],
+            "default": "True",
+            "usePair": true,
+          },
         ]
       },
       "pdIdt_info": {
