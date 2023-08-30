@@ -264,7 +264,11 @@ define([
                         code.appendLine("with warnings.catch_warnings():");
                         code.appendLine("    warnings.simplefilter(action='ignore', category=Warning)");
                         if (this.distList[0].child.includes(distType)) {
-                            code.appendFormatLine("    sns.countplot(x={0})", allocateTo);
+                            if (distType === 'multinomial') {
+                                code.appendFormatLine("    plt.boxplot(x={0})", allocateTo);
+                            } else {
+                                code.appendFormatLine("    sns.countplot(x={0})", allocateTo);
+                            }
                         } else {
                             code.appendFormatLine("    sns.histplot({0}, stat='density', kde=True)", allocateTo);
                         }
@@ -291,8 +295,8 @@ define([
                                 code.appendLine("plt.xlabel('$x$')");
                                 code.appendLine("plt.ylabel('$p(x)$')");
                                 code.append("plt.show()");
-                            } else if (distType === 'binomial' || distType === 'multinomial') {
-                                let { n=10 } = this.state;
+                            } else if (distType === 'binomial') {
+                                var { n=10 } = this.state;
                                 code.appendFormatLine("plt.bar(range(0,{0}), _rv.pmf(range(0,{1})))", n, n);
                                 code.appendFormatLine("plt.title('Probability mass function: {0}')", label.replace("'", "\\'"));
                                 code.appendFormatLine("plt.xlim(-1, {0})", n);
@@ -300,6 +304,14 @@ define([
                                 code.appendLine("plt.xlabel('$x$')");
                                 code.appendLine("plt.ylabel('$p(x)$')");
                                 code.append("plt.show()");
+                            } else if (distType === 'multinomial') {
+                                code.appendFormatLine("for i in range(0, {0}.shape[1]):", allocateTo);
+                                code.appendLine("    plt.subplot(2, 2, i+1)");
+                                code.appendLine("    plt.title('$x$=' + str(i))");
+                                code.appendFormatLine("    sns.countplot(x=[ x[i] for x in {0} ])", allocateTo);
+                                code.appendLine("plt.suptitle('Probability mass function: Multinomial')");
+                                code.appendLine("plt.tight_layout()");
+                                code.appendLine("plt.show()");
                             }
                         }
                     } else {
