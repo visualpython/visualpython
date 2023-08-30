@@ -1916,7 +1916,10 @@ define([
           {
             "name": "by",
             "label": "Sort By",
-            "usePair": true
+            "usePair": true,
+            "component": [
+              "col_multi"
+            ]
           },
           {
             "name": "axis",

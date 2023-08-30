@@ -90,7 +90,7 @@ define([
 
             var that = this;
 
-            if (parent === '') {
+            if (parent == null || parent === '' || (Array.isArray(parent) && parent.length == 0)) {
                 this._executeCallback([]);
                 return;
             }
