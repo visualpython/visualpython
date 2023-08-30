@@ -122,8 +122,9 @@ define([
                 checkModules: [], // module aliases or function names
                 docs: 'https://visual-python.gitbook.io/docs/getting-started/welcome-to-visual-python',
                 helpInfo: {
-                    content: '', // method to show using help() ex) pd.DataFrame
-                    useHelp: true // custom text to show on help viewer
+                    content: '',   // method to show using help() ex) pd.DataFrame
+                    useHelp: true, // custom text to show on help viewer
+                    importCode: '' // import code for help
                 },
                 ...restConfig
             };
@@ -1227,7 +1228,7 @@ define([
         openHelpView() {
             this.closeHelpView();
             this.helpViewer = new HelpViewer();
-            this.helpViewer.open(this.config.helpInfo.content, this.config.helpInfo.useHelp);
+            this.helpViewer.open(this.config.helpInfo.content, this.config.helpInfo.useHelp, this.config.helpInfo.importCode);
         }
 
         /**
@@ -1243,11 +1244,13 @@ define([
          * Set HelpViewer content
          * @param {string} content 
          * @param {boolean} useHelp 
+         * @param {string} importCode
          */
-        setHelpContent(content, useHelp=true) {
+        setHelpContent(content, useHelp=true, importCode='') {
             this.config.helpInfo = {
                 content: content,
-                useHelp: useHelp
+                useHelp: useHelp,
+                importCode: importCode
             };
         }
 
