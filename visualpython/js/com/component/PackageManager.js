@@ -52,19 +52,19 @@ define([
                 'plotly': { pipName: 'plotly' },
                 'wordcloud': { pipName: 'wordcloud' },
                 'sklearn': { pipName: 'scikit-learn' },
-                'scikit-posthocs': { pipName: 'scikit-posthocs' },
+                'scikit_posthocs': { pipName: 'scikit-posthocs' },
                 'scipy': { pipName: 'scipy' },
                 'statsmodels': { pipName: 'statsmodels' },
-                'factor-analyzer': { pipName: 'factor-analyzer' },
+                'factor_analyzer': { pipName: 'factor-analyzer' },
                 'pingouin': { pipName: 'pingouin' },
                 'category_encoders': { pipName: 'category_encoders' },
                 'imblearn': { pipName: 'imblearn' },
                 'xgboost': { pipName: 'xgboost' },
                 'lightgbm': { pipName: 'lightgbm' },
                 'catboost': { pipName: 'catboost' },
-                'auto-sklearn': { pipName: 'auto-sklearn' },
+                'autosklearn': { pipName: 'auto-sklearn' },
                 'tpot': { pipName: 'tpot' },
-                'PyMuPDF': { pipName: 'PyMuPDF' },
+                'pymupdf': { pipName: 'pymupdf' },
                 'sweetviz': { pipName: 'sweetviz' },
             }
             
@@ -76,16 +76,16 @@ define([
                     'seaborn': { pipName: 'seaborn' },
                     'plotly': { pipName: 'plotly' },
                     'sklearn': { pipName: 'scikit-learn' },
-                    'scikit-posthocs': { pipName: 'scikit-posthocs' },
+                    'scikit_posthocs': { pipName: 'scikit-posthocs' },
                     'scipy': { pipName: 'scipy' },
                     'statsmodels': { pipName: 'statsmodels' },
-                    'factor-analyzer': { pipName: 'factor-analyzer' },
+                    'factor_analyzer': { pipName: 'factor-analyzer' },
                     'category_encoders': { pipName: 'category_encoders' },
                     'imblearn': { pipName: 'imblearn' },
                     'xgboost': { pipName: 'xgboost' },
                     'lightgbm': { pipName: 'lightgbm' },
                     'catboost': { pipName: 'catboost' },
-                    'auto-sklearn': { pipName: 'auto-sklearn' },
+                    'autosklearn': { pipName: 'auto-sklearn' },
                     'sweetviz': { pipName: 'sweetviz' },
                 }
             }
@@ -208,6 +208,7 @@ define([
                     //     afterAction: 'run'
                     // });
                     com_interface.insertCell('code', code, true, 'Package Manager');
+                    that.loadPackageList();
                 } else if (menu === 'upgrade') {
                     var pipName = that.packageLib[key].pipName;
                     var code = com_util.formatString("!pip install --upgrade {0}", pipName);
@@ -224,11 +225,13 @@ define([
                     //     afterAction: 'run'
                     // });
                     com_interface.insertCell('code', code, true, 'Package Manager');
+                    that.loadPackageList();
                 } else if (menu === 'delete') {
                     $(item).remove();
                     delete that.packageLib[key];
                     vpConfig.removeData('packageList', 'vppackman').then(function() {
                         vpConfig.setData({ 'packageList': that.packageLib }, 'vppackman');
+                        that.loadPackageList();
                     });
                 }
                 evt.stopPropagation();
@@ -347,6 +350,8 @@ define([
                     // });
                     com_interface.insertCell('code', code, true, 'Package Manager');
                     
+                    // load package list
+                    this.loadPackageList();
                     break;
             }
 

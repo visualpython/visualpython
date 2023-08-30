@@ -136,6 +136,7 @@ def _vp_check_package_list(pack_list):
     for pack in pack_list:
         try:
             _vp_pack = _vp_ilib.import_module(pack)
+            _vp_ilib.reload(_vp_pack)
             _pack_info[pack] = { 'name': _vp_pack.__name__, 'installed': True, 'version': _vp_pack.__version__, 'path': _vp_pack.__path__ }
         except:
             _pack_info[pack] = { 'name': pack, 'installed': False }
