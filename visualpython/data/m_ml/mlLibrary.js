@@ -717,10 +717,12 @@ define([
         'grid-search': {
             name: 'GridSearch',
             import: 'from sklearn.model_selection import GridSearchCV',
+            code: 'GridSearchCV(${estimator}, ${param_grid}${scoring}${n_jobs}${cv}${verbose}${etc})',
             returnType: 'GridSearchCV',
             options: [
                 { name: 'estimator', component: ['data_select'], placeholder: 'Select model'},
                 { name: 'param_grid', component: ['input'], placeholder: 'Enter parameters'},
+                { name: 'scoring', component: ['input'], placeholder: 'None', usePair: true }, // https://scikit-learn.org/stable/modules/model_evaluation.html#scoring-parameter
                 { name: 'n_jobs', component: ['input'], placeholder: 'None', usePair: true },
                 { name: 'cv', component: ['input'], placeholder: 'None', usePair: true },
                 { name: 'verbose', component: ['input_number'], placeholder: 'Input number', usePair: true }

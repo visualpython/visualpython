@@ -81,6 +81,8 @@ define([
                     that.hideInstallButton();
                 }
 
+                that.handleScoringOptions(modelType);
+
                 // reset model param set
                 $(that.wrapSelector('.vp-param-grid-box')).html('');
                 $(that.wrapSelector('.vp-param-grid-box')).html(that.templateForParamSet());
@@ -140,6 +142,10 @@ define([
             let parentTag = $(thisTag).parent();
             let paramIsText = $(parentTag).find('.vp-param-val').data('type') === 'text'; // text / var
             let paramVal = $(parentTag).find('.vp-param-val').val();
+            let reservedKeywordList = ['None', 'True', 'False', 'np.nan', 'np.NaN'];
+            if (reservedKeywordList.includes(paramVal)) {
+                paramIsText = false;
+            }
             // check , and split it
             let paramSplit = paramVal.split(',');
             paramSplit && paramSplit.forEach(val => {
@@ -193,6 +199,58 @@ define([
                     $(that.wrapSelector('.vp-add-param-name')).val('');
                 }
             });
+        }
+
+        handleScoringOptions(modelType) {
+            let options = {
+                'Classification': [
+                    "'accuracy'",
+                    "'balanced_accuracy'",
+                    "'top_k_accuracy'",
+                    "'average_precision'",
+                    "'neg_brier_score'",
+                    "'f1'",
+                    "'f1_micro'",
+                    "'f1_macro'",
+                    "'f1_weighted'",
+                    "'f1_samples'",
+                    "'neg_log_loss'",
+                    "'precision' etc.",
+                    "'recall' etc.",
+                    "'jaccard' etc.",
+                    "'roc_auc'",
+                    "'roc_auc_ovr'",
+                    "'roc_auc_ovo'",
+                    "'roc_auc_ovr_weighted'",
+                    "'roc_auc_ovo_weighted'",
+                ],
+                'Regression': [
+                    "'explained_variance'",
+                    "'max_error'",
+                    "'neg_mean_absolute_error'",
+                    "'neg_mean_squared_error'",
+                    "'neg_root_mean_squared_error'",
+                    "'neg_mean_squared_log_error'",
+                    "'neg_median_absolute_error'",
+                    "'r2'",
+                    "'neg_mean_poisson_deviance'",
+                    "'neg_mean_gamma_deviance'",
+                    "'neg_mean_absolute_percentage_error'",
+                    "'d2_absolute_error_score'",
+                    "'d2_pinball_score'",
+                    "'d2_tweedie_score'"
+                ]
+            }
+            let modelCategory = this.modelTypeList['Regression'].includes(modelType)?'Regression':'Classification';
+
+            // Set suggestInput on scoring option
+            var suggestInput = new SuggestInput();
+            suggestInput.setComponentID('scoring');
+            suggestInput.setPlaceholder('Select option');
+            suggestInput.addClass('vp-input vp-state');
+            suggestInput.setSuggestList(function() { return options[modelCategory]; });
+            suggestInput.setNormalFilter(true);
+            $(this.wrapSelector('#scoring')).replaceWith(suggestInput.toTagString());
         }
 
         templateForParamSet() {
@@ -378,6 +436,7 @@ define([
                         let thisTag = $(that.wrapSelector('.' + suggestInput.uuid));
                         that.handleAddParamValue($(thisTag));
                         $(thisTag).val('');
+                        return false;
                     });
                     paramSet.appendLine(suggestInput.toTagString());
                 }
@@ -394,6 +453,8 @@ define([
 
             // Model Editor
             this.modelEditor = new ModelEditor(this, "model", "instanceEditor");
+
+            this.handleScoringOptions(this.state.modelType);
         }
 
         generateInstallCode() {
@@ -432,7 +493,6 @@ define([
             state['estimator'] = estimator;
             state['param_grid'] = '{}';
 
-            let reservedKeywordList = ['None', 'True', 'False', 'np.nan', 'np.NaN'];
             let paramGrid = [];
             // generate param_grid
             $(this.wrapSelector('.vp-param-set-box')).each((i, tag) => {
