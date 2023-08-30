@@ -104,7 +104,7 @@ define([
                     label: 'Clustering',
                     modelStep: 0,
                     step: [
-                        { name: 'ml_clustering', label: 'Clustering', useApp: true, child: ['pp_fit', 'pp_predict', 'pp_transform'] },
+                        { name: 'ml_clustering', label: 'Clustering', useApp: true, child: ['pp_fit', 'pp_predict', 'pp_fit_predict', 'pp_transform'] },
                         { name: 'pp_fit', label: 'Fit' },
                         { name: 'pp_predict', label: 'Predict' },
                         { name: 'pp_fit_predict', label: 'Fit and Predict' },
@@ -116,7 +116,7 @@ define([
                     label: 'Dimension Reduction',
                     modelStep: 0,
                     step: [
-                        { name: 'ml_dimensionReduction', label: 'Dimension Reduction', useApp: true, child: ['pp_fit', 'pp_transform'] },
+                        { name: 'ml_dimensionReduction', label: 'Dimension Reduction', useApp: true, child: ['pp_fit', 'pp_transform', 'pp_fit_transform'] },
                         { name: 'pp_fit', label: 'Fit' },
                         { name: 'pp_transform', label: 'Transform' },
                         { name: 'pp_fit_transform', label: 'Fit and Transform' },
