@@ -197,7 +197,7 @@ define([
                     code: 'import joblib',
                     type: 'package'
                 },
-                'scipy.stats': {
+                'stats': {
                     code: 'from scipy import stats',
                     type: 'package'
                 },
@@ -205,7 +205,7 @@ define([
                     code: 'import scipy',
                     type: 'package'
                 },
-                'statsmodels.api': {
+                'sm': {
                     code: 'import statsmodels.api as sm',
                     type: 'package'
                 }

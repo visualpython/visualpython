@@ -31,7 +31,7 @@ define([
             super._init();
             /** Write codes executed before rendering */
             this.config.sizeLevel = 2;
-            this.config.checkModules = ['pd', 'np', 'scipy.stats', 'vp_confidence_interval', 'vp_sem'];
+            this.config.checkModules = ['pd', 'np', 'stats', 'vp_confidence_interval', 'vp_sem'];
             this.config.docs = 'https://docs.scipy.org/doc/scipy/reference/';
 
             this.state = {
