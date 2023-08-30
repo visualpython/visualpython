@@ -342,10 +342,7 @@ define([
             // Toggle operation (minimize)
             $(this.wrapSelector('.vp-popup-toggle')).on('click', function(evt) {
                 evt.stopPropagation();
-                $(that.eventTarget).trigger({
-                    type: 'close_option_page',
-                    component: that
-                });
+                that.hide();
             });
             // Maximize operation
             $(this.wrapSelector('.vp-popup-maximize')).on('click', function(evt) {
@@ -1071,7 +1068,15 @@ define([
         close() {
             vpLog.display(VP_LOG_TYPE.DEVELOP, 'close popup', this);
             this.saveState();
-            this.hide();
+            if (this.getTaskType() === 'task') {
+                $(this.eventTarget).trigger({
+                    type: 'remove_option_page',
+                    component: this
+                });
+            } else {
+                // if it's block, just hide it
+                this.hide();
+            }
         }
 
         save() {
