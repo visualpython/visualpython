@@ -34,6 +34,7 @@ define([
             this.config.sizeLevel = 2;
             this.config.checkModules = ['pd', 'plt'];
             this.config.docs = 'https://docs.scipy.org/doc/scipy/reference/';
+            this.config.helpview = true;
 
             this.state = {
                 distType: 'normal',
@@ -85,6 +86,10 @@ define([
                     // discrete option
                     $(that.wrapSelector('.vp-pd-display-option.dist')).show();
 
+                    // set size to 100
+                    $(that.wrapSelector('#size')).val(100);
+                    that.state.size = 100;
+
                     // hide continuous action
                     if (that.state.action === 'stats-to-pvalue' || that.state.action === 'pvalue-to-stats') {
                         $(that.wrapSelector('#action')).val('random-number');
@@ -93,14 +98,22 @@ define([
                 } else {
                     // continuous option
                     $(that.wrapSelector('.vp-pd-display-option.cont')).show();
+
+                    // set size to 10000
+                    $(that.wrapSelector('#size')).val(10000);
+                    that.state.size = 10000;
                 }
 
                 // show install button
-                if (STATS_LIBRARIES[distType].install != undefined) {
+                let thisDistObj = STATS_LIBRARIES[distType];
+                if (thisDistObj.install != undefined) {
                     $(that.wrapSelector('#vp_installLibrary')).show();
                 } else {
                     $(that.wrapSelector('#vp_installLibrary')).hide();
                 }
+
+                // set help content
+                that.setHelpContent(thisDistObj.help);
             });
 
             $(this.wrapSelector('#action')).on('change', function() {
@@ -198,6 +211,8 @@ define([
                 }
             });
             $(this.wrapSelector('#allocatedTo')).replaceWith(allocateSelector.toTagString());
+
+            this.setHelpContent(STATS_LIBRARIES[this.state.distType].help, true, 'import scipy.stats as _vp_stats');
         }
 
         generateCode() {
@@ -248,7 +263,11 @@ define([
                         code.appendLine("import warnings");
                         code.appendLine("with warnings.catch_warnings():");
                         code.appendLine("    warnings.simplefilter(action='ignore', category=Warning)");
-                        code.appendFormatLine("    sns.histplot({0}, stat='density', kde=True)", allocateTo);
+                        if (this.distList[0].child.includes(distType)) {
+                            code.appendFormatLine("    sns.countplot(x={0})", allocateTo);
+                        } else {
+                            code.appendFormatLine("    sns.histplot({0}, stat='density', kde=True)", allocateTo);
+                        }
                         code.appendFormatLine("    plt.title('Generate random numbers: {0}')", label.replace("'", "\\'"));
                         code.appendLine("    plt.xlabel('$x$')");
                         code.append("    plt.show()");
@@ -263,14 +282,25 @@ define([
                             code.appendLine();
                             code.appendLine();
                             code.appendFormatLine("# Probability mass function ({0})", label);
-                            code.appendLine("plt.bar([0,1], _rv.pmf([0,1]))");
-                            code.appendFormatLine("plt.title('Probability mass function: {0}')", label.replace("'", "\\'"));
-                            code.appendLine("plt.xlim(-1, 2)");
-                            code.appendLine("plt.ylim(0, 1)");
-                            code.appendLine("plt.xticks([0, 1], ['x=0', 'x=1'])");
-                            code.appendLine("plt.xlabel('$x$')");
-                            code.appendLine("plt.ylabel('$p(x)$')");
-                            code.append("plt.show()");
+                            if (distType === 'bernoulli') {
+                                code.appendLine("plt.bar([0,1], _rv.pmf([0,1]))");
+                                code.appendFormatLine("plt.title('Probability mass function: {0}')", label.replace("'", "\\'"));
+                                code.appendLine("plt.xlim(-1, 2)");
+                                code.appendLine("plt.ylim(0, 1)");
+                                code.appendLine("plt.xticks([0, 1], ['x=0', 'x=1'])");
+                                code.appendLine("plt.xlabel('$x$')");
+                                code.appendLine("plt.ylabel('$p(x)$')");
+                                code.append("plt.show()");
+                            } else if (distType === 'binomial' || distType === 'multinomial') {
+                                let { n=10 } = this.state;
+                                code.appendFormatLine("plt.bar(range(0,{0}), _rv.pmf(range(0,{1})))", n, n);
+                                code.appendFormatLine("plt.title('Probability mass function: {0}')", label.replace("'", "\\'"));
+                                code.appendFormatLine("plt.xlim(-1, {0})", n);
+                                code.appendFormatLine("plt.xticks(range(0, {0}), ['x='+str(i) for i in range(0, {1})])", n, n);
+                                code.appendLine("plt.xlabel('$x$')");
+                                code.appendLine("plt.ylabel('$p(x)$')");
+                                code.append("plt.show()");
+                            }
                         }
                     } else {
                         if (probDensityFunc === true || cumDistFunc === true) {
