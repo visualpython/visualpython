@@ -732,19 +732,19 @@ define([
         'model_save': {
             name: 'Save model',
             import: 'import joblib',
-            code: "joblib.dump(${target}, ${savePath}${etc})",
+            code: "joblib.dump(${target}, ${save_path}${etc})",
             options: [
-                { name: 'target', component: ['data_select'], placeholder: 'Select model'},
-                { name: 'savePath', component: ['file-save'], placeholder: 'Select path'}
+                { name: 'target', component: ['data_select'], comp_type: 'ml', placeholder: 'Select model'},
+                { name: 'save_path', component: ['file-save'], placeholder: 'Select path'}
             ]
         },
         'model_load': {
             name: 'Load model',
             import: 'import joblib',
-            code: "${allocateTo} = joblib.load(${loadPath}${etc})",
+            code: "${allocate_to} = joblib.load(${load_path}${etc})",
             options: [
-                { name: 'loadPath', component: ['file-open'], placeholder: 'Select path'},
-                { name: 'allocateTo', component: ['data_select'], placeholder: 'New variable to load'}
+                { name: 'load_path', component: ['file-open'], placeholder: 'Select path'},
+                { name: 'allocate_to', component: ['input'], placeholder: 'New variable to load'}
             ]
         }
     }
