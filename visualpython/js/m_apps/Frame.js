@@ -3138,7 +3138,7 @@ define([
                         if (content['columns'].length > 0) {
                             code.appendFormat("[[{0}]]", content['columns'].join(','));
                         }
-                        code.appendFormat(".apply(lambda x: x.{0}(), axis=1)", content.method);
+                        code.appendFormat(".apply(lambda x: x.{0}(numeric_only=True), axis=1)", content.method);
                         // code.appendFormat(".{0}(axis=1)", content.method); // FIXME: for pandas version upper 2.0.0 
                     } else if (tab == 'replace') {
                         var replaceStr = new com_String();
