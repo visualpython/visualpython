@@ -122,8 +122,9 @@ define([
                 checkModules: [], // module aliases or function names
                 docs: 'https://visual-python.gitbook.io/docs/getting-started/welcome-to-visual-python',
                 helpInfo: {
-                    content: '', // method to show using help() ex) pd.DataFrame
-                    useHelp: true // custom text to show on help viewer
+                    content: '',   // method to show using help() ex) pd.DataFrame
+                    useHelp: true, // custom text to show on help viewer
+                    importCode: '' // import code for help
                 },
                 ...restConfig
             };
@@ -308,6 +309,22 @@ define([
 
         _bindEvent() {
             var that = this;
+            // Popup click / focus event
+            $(this.wrapSelector()).on('click focus', function(evt) {
+                // Close on blur
+                if ($(that.wrapSelector('.vp-popup-button')).find(evt.target).length == 0) {
+                    if (!$(evt.target).hasClass('vp-popup-codeview-box') 
+                    && $(that.wrapSelector('.vp-popup-codeview-box')).find(evt.target).length == 0) {
+                        that.closeView('code');
+                    }
+                }
+                if ($(that.wrapSelector('.vp-popup-button')).find(evt.target).length == 0) {
+                    if (!$(evt.target).hasClass('vp-popup-dataview-box') 
+                    && $(that.wrapSelector('.vp-popup-dataview-box')).find(evt.target).length == 0) {
+                        that.closeView('data');
+                    }
+                }
+            });
             // Close popup event
             $(this.wrapSelector('.vp-popup-close')).on('click', function(evt) {
                 if (that.getTaskType() === 'task') {
@@ -326,10 +343,7 @@ define([
             // Toggle operation (minimize)
             $(this.wrapSelector('.vp-popup-toggle')).on('click', function(evt) {
                 evt.stopPropagation();
-                $(that.eventTarget).trigger({
-                    type: 'close_option_page',
-                    component: that
-                });
+                that.hide();
             });
             // Maximize operation
             $(this.wrapSelector('.vp-popup-maximize')).on('click', function(evt) {
@@ -513,6 +527,14 @@ define([
                         break;
                 }
             });
+
+            // blur on code, dataview
+            $(this.wrapSelector('.vp-popup-codeview-box')).on('hide', function() {
+                that.closeView('code');
+            }); 
+            $(this.wrapSelector('.vp-popup-dataview-box')).on('hide', function() {
+                that.closeView('data');
+            }); 
 
             // focus on data selector input
             $(this.wrapSelector('.vp-data-selector')).on('focus', function(evt) {
@@ -1025,7 +1047,7 @@ define([
 
             this._bindCodemirror();
 
-            if (targetFrame !== undefined) {
+            if (targetFrame == undefined) {
                 $(this.eventTarget).trigger({
                     type: 'focus_option_page',
                     component: this
@@ -1047,7 +1069,15 @@ define([
         close() {
             vpLog.display(VP_LOG_TYPE.DEVELOP, 'close popup', this);
             this.saveState();
-            this.hide();
+            if (this.getTaskType() === 'task') {
+                $(this.eventTarget).trigger({
+                    type: 'remove_option_page',
+                    component: this
+                });
+            } else {
+                // if it's block, just hide it
+                this.hide();
+            }
         }
 
         save() {
@@ -1083,6 +1113,10 @@ define([
 
         blur() {
             $(this.wrapSelector()).removeClass('vp-focused');
+            // blur on its block
+            if (this.taskItem) {
+                this.taskItem.blurItem();
+            }
         }
 
         show() {
@@ -1154,20 +1188,36 @@ define([
                 setTimeout(function() {
                     that.cmCodeview.refresh();
                 }, 1);
-                $(this.wrapSelector('.vp-popup-dataview-box')).hide();
+                this.closeView('data');
                 $(this.wrapSelector('.vp-popup-codeview-box')).show();
             } else if (viewType === 'data') {
                 this.renderDataView();
-                $(this.wrapSelector('.vp-popup-codeview-box')).hide();
+                this.closeView('code');
                 $(this.wrapSelector('.vp-popup-dataview-box')).show();
             } else if (viewType === 'help') {
-                $(this.wrapSelector('.vp-popup-codeview-box')).hide();
-                $(this.wrapSelector('.vp-popup-dataview-box')).hide();
+                this.closeView('code');
+                this.closeView('data');
                 this.openHelpView();
             }
         }
 
         closeView(viewType) {
+            if (viewType === 'code') {
+                // reset codeview
+                if (this.cmCodeview) {
+                    this.cmCodeview.setValue('');
+                    this.cmCodeview.save();
+        
+                    var that = this;
+                    setTimeout(function() {
+                        that.cmCodeview.refresh();
+                    }, 1);
+                }
+            } else if (viewType === 'data') {
+                // reset dataview
+                $(this.wrapSelector('.vp-popup-dataview-box')).html('');
+            }
+            // hide view
             $(this.wrapSelector('.vp-popup-'+viewType+'view-box')).hide();
         }
 
@@ -1178,7 +1228,7 @@ define([
         openHelpView() {
             this.closeHelpView();
             this.helpViewer = new HelpViewer();
-            this.helpViewer.open(this.config.helpInfo.content, this.config.helpInfo.useHelp);
+            this.helpViewer.open(this.config.helpInfo.content, this.config.helpInfo.useHelp, this.config.helpInfo.importCode);
         }
 
         /**
@@ -1194,11 +1244,13 @@ define([
          * Set HelpViewer content
          * @param {string} content 
          * @param {boolean} useHelp 
+         * @param {string} importCode
          */
-        setHelpContent(content, useHelp=true) {
+        setHelpContent(content, useHelp=true, importCode='') {
             this.config.helpInfo = {
                 content: content,
-                useHelp: useHelp
+                useHelp: useHelp,
+                importCode: importCode
             };
         }
 

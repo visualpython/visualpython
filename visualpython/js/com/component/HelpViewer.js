@@ -167,14 +167,18 @@ define([
             return sbSelector.toString();
         }
 
-        open(content, useHelp=true) {
+        open(content, useHelp=true, importCode='') {
             this.show();
 
             let that = this;
 
             let code = content;
             if (useHelp === true) {
-                code = `print(help(${content}))`;
+                if (importCode !== '') {
+                    code = importCode + '\n' + `print(help(${content}))`;
+                } else {
+                    code = `print(help(${content}))`;
+                }
             }
 
             let loadingSpinner = new LoadingSpinner($(this.wrapSelector('.vp-popup-body')));

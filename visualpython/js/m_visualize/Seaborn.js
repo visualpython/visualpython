@@ -18,12 +18,13 @@ define([
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_generatorV2',
     'vp_base/js/com/com_util',
+    'vp_base/js/com/com_interface',
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/SuggestInput',
     'vp_base/js/com/component/VarSelector2',
     'vp_base/data/m_visualize/seabornLibrary',
     'vp_base/js/com/component/DataSelector'
-], function(chartHTml, chartCss, com_String, com_generator, com_util, PopupComponent, SuggestInput, VarSelector2, SEABORN_LIBRARIES, DataSelector) {
+], function(chartHTml, chartCss, com_String, com_generator, com_util, com_interface, PopupComponent, SuggestInput, VarSelector2, SEABORN_LIBRARIES, DataSelector) {
 
     class Seaborn extends PopupComponent {
         _init() {
@@ -770,14 +771,16 @@ define([
         handleInnerOk() {
             // generateImportCode
             var code = this.generateImportCode();
+            // DEPRECATED: no longer save to block as default
             // create block and run it
-            $('#vp_wrapper').trigger({
-                type: 'create_option_page', 
-                blockType: 'block',
-                menuId: 'lgExe_code',
-                menuState: { taskState: { code: code } },
-                afterAction: 'run'
-            });
+            // $('#vp_wrapper').trigger({
+            //     type: 'create_option_page', 
+            //     blockType: 'block',
+            //     menuId: 'lgExe_code',
+            //     menuState: { taskState: { code: code } },
+            //     afterAction: 'run'
+            // });
+            com_interface.insertCell('code', code, true, 'Visualization > Seaborn');
 
             this.closeInnerPopup();
 

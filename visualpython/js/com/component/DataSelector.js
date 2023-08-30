@@ -50,7 +50,7 @@ define([
             super._init();
 
             this.prop = {
-                type: 'data',   // selector type : data / column
+                type: 'data',   // selector type : data / column / ml
                 pageThis: null, // target's page object
                 id: '',         // target id
                 value: null,    // pre-defined value
@@ -58,6 +58,7 @@ define([
                 finish: null,   // callback after selection (value, dtype)
                 select: null,   // callback after selection from suggestInput (value, dtype)
                 allowDataType: null, // list of allowed data types
+                dataCategory: null,  // list of data category (use it for ml categories)
                 // additional options
                 boxClasses: '',
                 classes: '',
@@ -71,9 +72,20 @@ define([
             // If null, define default allow data type
             if (!this.prop.allowDataType) {
                 // default allow data types
-                this.prop.allowDataType = [
-                    'DataFrame', 'Series', 'ndarray', 'list', 'dict'
-                ]
+                if (this.prop.type === 'ml') {
+                    this.prop.allowDataType = vpConfig.getMLDataTypes();
+                } else {
+                    this.prop.allowDataType = [
+                        'DataFrame', 'Series', 'ndarray', 'list', 'dict'
+                    ]
+                }
+            }
+            if (!this.prop.dataCategory) {
+                if (this.prop.type === 'ml') {
+                    this.prop.dataCategory = vpConfig.getMLCategories();
+                } else {
+                    this.prop.dataCategory = this.prop.allowDataType;
+                }
             }
 
             this.state = {
@@ -282,7 +294,11 @@ define([
                     that.renderVariableBox(that._varList.filter(obj => !that.prop.allowDataType.includes(obj.dtype)));
                 } else {
                     // filter variable list
-                    that.renderVariableBox(that._varList.filter(obj => obj.dtype == type));
+                    if (that.prop.type === 'ml') {
+                        that.renderVariableBox(that._varList.filter(obj => vpConfig.getMLDataDict(type).includes(obj.dtype)));
+                    } else {
+                        that.renderVariableBox(that._varList.filter(obj => obj.dtype == type));
+                    }
                 }
 
             });
@@ -530,7 +546,7 @@ define([
             let varTags = new com_String();
             let types = [
                 'All',
-                ...this.prop.allowDataType,
+                ...this.prop.dataCategory,
                 'Others'
             ];
             // Add Data Types to filter
@@ -551,10 +567,17 @@ define([
             let that = this;
             let varTags = new com_String();
             varTags = new com_String();
-            varList && varList.forEach((obj, idx) => {
-                varTags.appendFormatLine('<div class="{0} {1}" title="{2}" data-type="{3}">{4}</div>'
-                    , 'vp-ds-var-item', (that.state.data == obj.value?'selected':''), obj.dtype, obj.dtype, obj.label);
-            });
+            if (this.prop.type === 'ml') {
+                varList && varList.forEach((obj, idx) => {
+                    varTags.appendFormatLine('<div class="{0} {1}" title="{2}" data-type="{3}">{4}<span class="vp-gray-text"> | {5}</span></div>'
+                        , 'vp-ds-var-item', (that.state.data == obj.value?'selected':''), obj.dtype, obj.dtype, obj.label, obj.dtype);
+                });
+            } else {
+                varList && varList.forEach((obj, idx) => {
+                    varTags.appendFormatLine('<div class="{0} {1}" title="{2}" data-type="{3}">{4}</div>'
+                        , 'vp-ds-var-item', (that.state.data == obj.value?'selected':''), obj.dtype, obj.dtype, obj.label);
+                });
+            }
             $(this.wrapSelector('.vp-ds-variable-box')).html(varTags.toString());
 
             // focus on selected item

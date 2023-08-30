@@ -450,7 +450,7 @@ define([
                 // generate mct code
                 if (modelType === 'make-column-transformer') {
                     let mctCodes = [];
-                    let { mct_estimator1, mct_columns1, mct_estimator2, mct_columns2 } = state;
+                    let { mct_estimator1, mct_columns1='', mct_estimator2, mct_columns2='' } = state;
                     if (mct_estimator1 != undefined && mct_estimator1 != '') {
                         code.appendLine(this.modelConfig[mct_estimator1].import);
                         let estimator1code = com_generator.vp_codeGenerator(this, this.modelConfig[mct_estimator1], state, (userOption != ''? ', ' + userOption : ''));

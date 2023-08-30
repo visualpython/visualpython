@@ -20,8 +20,9 @@ define([
     'vp_base/js/com/com_generatorV2',
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/DataSelector',
+    'vp_base/js/com/component/SuggestInput',
     'vp_base/js/m_apps/Subset'
-], function(stHTML, com_util, com_Const, com_String, com_generator, PopupComponent, DataSelector, Subset) {
+], function(stHTML, com_util, com_Const, com_String, com_generator, PopupComponent, DataSelector, SuggestInput, Subset) {
 
     /**
      * StudentstTest
@@ -46,6 +47,8 @@ define([
                 groupingVariable: '',
                 group1: '',
                 group2: '',
+                group1_istext: true,
+                group2_istext: true,
                 pairedVariable1: '',
                 pairedVariable2: '',
                 testValue: '',
@@ -126,24 +129,58 @@ define([
                 // get result and load column list
                 vpKernel.getColumnCategory(that.state.data, colCode).then(function(resultObj) {
                     let { result } = resultObj;
-                    $(that.wrapSelector('#group1')).html('');
-                    $(that.wrapSelector('#group2')).html('');
+                    $(that.wrapSelector('#group1')).val('');
+                    $(that.wrapSelector('#group2')).val('');
+                    that.state.group1 = '';
+                    that.state.group2 = '';
+                    that.state.group1_istext = true;
+                    that.state.group2_istext = true;
                     try {
                         var category = JSON.parse(result);
-                        if (category && category.length > 0 && colDtype == 'object') {
-                            // if it's categorical column and its dtype is object, check 'Text' as default
-                            category.forEach(obj => {
-                                let selected1 = obj.value === that.state.group1;
-                                let selected2 = obj.value === that.state.group2;
-                                $(that.wrapSelector('#group1')).append(`<option value="${obj.value}" ${selected1?'selected':''}>${obj.label}</option>`);
-                                $(that.wrapSelector('#group2')).append(`<option value="${obj.value}" ${selected2?'selected':''}>${obj.label}</option>`);
-                            });
+                        // if (category && category.length > 0 && colDtype == 'object') {
+                        //     // if it's categorical column and its dtype is object, check 'Text' as default
+                        //     category.forEach(obj => {
+                        //         let selected1 = obj.value === that.state.group1;
+                        //         let selected2 = obj.value === that.state.group2;
+                        //         $(that.wrapSelector('#group1')).append(`<option value="${obj.value}" ${selected1?'selected':''}>${obj.label}</option>`);
+                        //         $(that.wrapSelector('#group2')).append(`<option value="${obj.value}" ${selected2?'selected':''}>${obj.label}</option>`);
+                        //     });
+                        // }
+                        var groupSuggest1 = new SuggestInput();
+                        groupSuggest1.setComponentID('group1');
+                        groupSuggest1.addClass('vp-input vp-state');
+                        groupSuggest1.setSuggestList(function() { return category; });
+                        groupSuggest1.setNormalFilter(true);
+                        groupSuggest1.setPlaceholder('Select value');
+                        $(that.wrapSelector('#group1')).replaceWith(groupSuggest1.toTagString());
+                        var groupSuggest2 = new SuggestInput();
+                        groupSuggest2.setComponentID('group2');
+                        groupSuggest2.addClass('vp-input vp-state');
+                        groupSuggest2.setSuggestList(function() { return category; });
+                        groupSuggest2.setNormalFilter(true);
+                        groupSuggest2.setPlaceholder('Select value');
+                        $(that.wrapSelector('#group2')).replaceWith(groupSuggest2.toTagString());
+
+                        if (category && category.length > 0) {
                             that.state.group1 = category[0].value;
                             that.state.group2 = category[0].value;
                         }
+
+                        if (colDtype == 'object') {
+                            // check as default
+                            $(that.wrapSelector('#group1_istext')).prop('checked',  true);
+                            $(that.wrapSelector('#group2_istext')).prop('checked',  true);
+                            that.state.group1_istext = true;
+                            that.state.group2_istext = true;
+                        } else {
+                            $(that.wrapSelector('#group1_istext')).prop('checked',  false);
+                            $(that.wrapSelector('#group2_istext')).prop('checked',  false);
+                            that.state.group1_istext = false;
+                            that.state.group2_istext = false;
+                        }
                     } catch {
-                        $(that.wrapSelector('#group1')).html('');
-                        $(that.wrapSelector('#group2')).html('');
+                        $(that.wrapSelector('#group1')).val('');
+                        $(that.wrapSelector('#group2')).val('');
                     }
                 });
             });
@@ -231,7 +268,7 @@ define([
                 testType, inputType, data, 
                 testVariable, testVariable1, testVariable2, groupingVariable,
                 pairedVariable1, pairedVariable2,
-                group1, group2,
+                group1, group2, group1_istext, group2_istext,
                 testValue, alterHypo, confInt 
             } = this.state;
             let codeList = [];
@@ -276,8 +313,8 @@ define([
                     code.appendLine("# Independent two-sample t-test");
                     // variable declaration
                     if (inputType === 'long-data') {
-                        code.appendFormatLine("vp_df1 = {0}[({1}[{2}] == '{3}')][{4}].dropna().copy()", data, data, groupingVariable, group1, testVariable);
-                        code.appendFormatLine("vp_df2 = {0}[({1}[{2}] == '{3}')][{4}].dropna().copy()", data, data, groupingVariable, group2, testVariable);
+                        code.appendFormatLine("vp_df1 = {0}[({1}[{2}] == {3})][{4}].dropna().copy()", data, data, groupingVariable, com_util.convertToStr(group1, group1_istext), testVariable);
+                        code.appendFormatLine("vp_df2 = {0}[({1}[{2}] == {3})][{4}].dropna().copy()", data, data, groupingVariable, com_util.convertToStr(group2, group2_istext), testVariable);
                     } else if (inputType === 'wide-data') {
                         code.appendFormatLine("vp_df1 = {0}[{1}].dropna().copy()", data, testVariable1);
                         code.appendFormatLine("vp_df2 = {0}[{1}].dropna().copy()", data, testVariable2);

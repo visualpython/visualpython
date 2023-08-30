@@ -39,10 +39,7 @@ define([
                 if (isOpen) {
                     // hide task if it's already opened
                     // open task
-                    $('#vp_wrapper').trigger({
-                        type: 'close_option_page',
-                        component: that.state.task
-                    });
+                    that.state.task.hide();
                 } else {
                     // open task
                     $('#vp_wrapper').trigger({

@@ -17,11 +17,12 @@ define([
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
+    'vp_base/js/com/com_interface',
     'vp_base/js/com/component/SuggestInput',
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/FileNavigation',
     'vp_base/js/com/component/LoadingSpinner'
-], function(ifHtml, ifCss, com_util, com_Const, com_String, SuggestInput, PopupComponent, FileNavigation, LoadingSpinner) {
+], function(ifHtml, ifCss, com_util, com_Const, com_String, com_interface, SuggestInput, PopupComponent, FileNavigation, LoadingSpinner) {
 
     /**
      * PackageManager
@@ -51,19 +52,19 @@ define([
                 'plotly': { pipName: 'plotly' },
                 'wordcloud': { pipName: 'wordcloud' },
                 'sklearn': { pipName: 'scikit-learn' },
-                'scikit-posthocs': { pipName: 'scikit-posthocs' },
+                'scikit_posthocs': { pipName: 'scikit-posthocs' },
                 'scipy': { pipName: 'scipy' },
                 'statsmodels': { pipName: 'statsmodels' },
-                'factor-analyzer': { pipName: 'factor-analyzer' },
+                'factor_analyzer': { pipName: 'factor-analyzer' },
                 'pingouin': { pipName: 'pingouin' },
                 'category_encoders': { pipName: 'category_encoders' },
                 'imblearn': { pipName: 'imblearn' },
                 'xgboost': { pipName: 'xgboost' },
                 'lightgbm': { pipName: 'lightgbm' },
                 'catboost': { pipName: 'catboost' },
-                'auto-sklearn': { pipName: 'auto-sklearn' },
+                'autosklearn': { pipName: 'auto-sklearn' },
                 'tpot': { pipName: 'tpot' },
-                'PyMuPDF': { pipName: 'PyMuPDF' },
+                'pymupdf': { pipName: 'pymupdf' },
                 'sweetviz': { pipName: 'sweetviz' },
             }
             
@@ -75,16 +76,16 @@ define([
                     'seaborn': { pipName: 'seaborn' },
                     'plotly': { pipName: 'plotly' },
                     'sklearn': { pipName: 'scikit-learn' },
-                    'scikit-posthocs': { pipName: 'scikit-posthocs' },
+                    'scikit_posthocs': { pipName: 'scikit-posthocs' },
                     'scipy': { pipName: 'scipy' },
                     'statsmodels': { pipName: 'statsmodels' },
-                    'factor-analyzer': { pipName: 'factor-analyzer' },
+                    'factor_analyzer': { pipName: 'factor-analyzer' },
                     'category_encoders': { pipName: 'category_encoders' },
                     'imblearn': { pipName: 'imblearn' },
                     'xgboost': { pipName: 'xgboost' },
                     'lightgbm': { pipName: 'lightgbm' },
                     'catboost': { pipName: 'catboost' },
-                    'auto-sklearn': { pipName: 'auto-sklearn' },
+                    'autosklearn': { pipName: 'auto-sklearn' },
                     'sweetviz': { pipName: 'sweetviz' },
                 }
             }
@@ -197,33 +198,40 @@ define([
                     if (vpConfig.extensionType === 'lite') {
                         code = com_util.formatString("%pip uninstall {0}", pipName);
                     }
+                    // DEPRECATED: no longer save to block as default
                     // create block and run it
-                    $('#vp_wrapper').trigger({
-                        type: 'create_option_page', 
-                        blockType: 'block',
-                        menuId: 'lgExe_code',
-                        menuState: { taskState: { code: code } },
-                        afterAction: 'run'
-                    });
+                    // $('#vp_wrapper').trigger({
+                    //     type: 'create_option_page', 
+                    //     blockType: 'block',
+                    //     menuId: 'lgExe_code',
+                    //     menuState: { taskState: { code: code } },
+                    //     afterAction: 'run'
+                    // });
+                    com_interface.insertCell('code', code, true, 'Package Manager');
+                    that.loadPackageList();
                 } else if (menu === 'upgrade') {
                     var pipName = that.packageLib[key].pipName;
                     var code = com_util.formatString("!pip install --upgrade {0}", pipName);
                     if (vpConfig.extensionType === 'lite') {
                         code = com_util.formatString("%pip install {0}", pipName);
                     }
+                    // DEPRECATED: no longer save to block as default
                     // create block and run it
-                    $('#vp_wrapper').trigger({
-                        type: 'create_option_page', 
-                        blockType: 'block',
-                        menuId: 'lgExe_code',
-                        menuState: { taskState: { code: code } },
-                        afterAction: 'run'
-                    });
+                    // $('#vp_wrapper').trigger({
+                    //     type: 'create_option_page', 
+                    //     blockType: 'block',
+                    //     menuId: 'lgExe_code',
+                    //     menuState: { taskState: { code: code } },
+                    //     afterAction: 'run'
+                    // });
+                    com_interface.insertCell('code', code, true, 'Package Manager');
+                    that.loadPackageList();
                 } else if (menu === 'delete') {
                     $(item).remove();
                     delete that.packageLib[key];
                     vpConfig.removeData('packageList', 'vppackman').then(function() {
                         vpConfig.setData({ 'packageList': that.packageLib }, 'vppackman');
+                        that.loadPackageList();
                     });
                 }
                 evt.stopPropagation();
@@ -331,14 +339,19 @@ define([
                             return false;
                         }
                     }
+                    // DEPRECATED: no longer save to block as default
                     // create block and run it
-                    $('#vp_wrapper').trigger({
-                        type: 'create_option_page', 
-                        blockType: 'block',
-                        menuId: 'lgExe_code',
-                        menuState: { taskState: { code: code } },
-                        afterAction: 'run'
-                    });
+                    // $('#vp_wrapper').trigger({
+                    //     type: 'create_option_page', 
+                    //     blockType: 'block',
+                    //     menuId: 'lgExe_code',
+                    //     menuState: { taskState: { code: code } },
+                    //     afterAction: 'run'
+                    // });
+                    com_interface.insertCell('code', code, true, 'Package Manager');
+                    
+                    // load package list
+                    this.loadPackageList();
                     break;
             }
 

@@ -14,8 +14,9 @@ define([
     'vp_base/js/com/component/SuggestInput',
     'vp_base/js/com/component/VarSelector2',
     'vp_base/js/com/component/DataSelector',
+    'vp_base/js/com/component/MultiSelector',
     'vp_base/js/com/component/FileNavigation'
-], function (com_util, com_makeDom, SuggestInput, VarSelector2, DataSelector, FileNavigation) {
+], function (com_util, com_makeDom, SuggestInput, VarSelector2, DataSelector, MultiSelector, FileNavigation) {
     /**
      * show result after code executed
      */
@@ -39,6 +40,7 @@ define([
         'var_select': 'Select Variable',
         'var_multi': 'Select N-Variables',
         'col_select': 'Select Column',
+        'col_multi': 'Select Columns',
         'textarea': 'Input textarea',
         'input_number': 'Input number',
         'input_text': 'Input text', 
@@ -149,6 +151,7 @@ define([
             
         }
 
+        bindMultiSelector(pageThis);
         bindAutoComponentEvent(pageThis);
     }
 
@@ -174,7 +177,7 @@ define([
         } else if (output === true) {
             requiredFontStyle = 'vp-bold';
         }
-        var lblTag = $(`<label class="vp-bold">${label}</label>`).attr({
+        var lblTag = $(`<label class="vp-bold">${label || com_util.optionToLabel(name)}</label>`).attr({
             'for': name,
             'class': requiredFontStyle,
             'title': '(' + name + ')'
@@ -315,7 +318,8 @@ define([
             case 'option_select':
                 var optSlct = $('<select></select>').attr({
                     'class':'vp-select option-select vp-state',
-                    'id':obj.name
+                    'id':obj.name,
+                    'title': (obj.help==undefined?'':obj.help),
                 });
                 obj.options.forEach((opt, idx, arr) => {
                     var label = (obj.options_label != undefined? obj.options_label[idx]:opt);
@@ -368,6 +372,7 @@ define([
                 let dataSelector = new DataSelector({
                     pageThis: pageThis, 
                     id: obj.name,
+                    type: obj.comp_type || 'data',
                     allowDataType: obj.var_type, 
                     placeholder: obj.placeholder || 'Select data',
                     value: value,
@@ -382,7 +387,8 @@ define([
                     id: obj.name,
                     class: 'vp-input vp-state',
                     placeholder: obj.placeholder || 'Select data',
-                    required: obj.required === true
+                    required: obj.required === true,
+                    title: (obj.help==undefined?'':obj.help),
                 });
                 vp_generateVarSuggestInput(pageThis.wrapSelector(), obj);
                 content = tag;
@@ -393,7 +399,8 @@ define([
                     'id': obj.name,
                     'class': 'vp-select var-multi vp-state',
                     // multiple selection true
-                    'multiple': true
+                    'multiple': true,
+                    'title': (obj.help==undefined?'':obj.help),
                 });
                 vp_generateVarSelect(tag, obj.var_type, obj.value);
                 content = tag;
@@ -402,8 +409,26 @@ define([
                 var tag = $('<input/>').attr({
                     'type': 'text',
                     'id': obj.name,
-                    'class': 'vp-input vp-state'
+                    'class': 'vp-input vp-state',
+                    'title': (obj.help==undefined?'':obj.help),
                 });
+                content = tag;
+                break;
+            case 'col_multi':
+                var tag1 = $('<div></div>').attr({
+                    'id': obj.name + '_auto_comp',
+                    'class': 'vp-auto-multi-column',
+                    'data-id': obj.name,
+                    'data-target': obj.comp_target || 'i0',
+                    'style': 'height: 150px;',
+                    'title': (obj.help==undefined?'':obj.help),
+                });
+                var tag2 = $('<input/>').attr({
+                    type: 'hidden',
+                    id: obj.name,
+                    class: 'vp-input vp-state',
+                })
+                var tag = $('<div></div>').append(tag1).append(tag2);
                 content = tag;
                 break;
             case 'textarea':
@@ -709,6 +734,12 @@ define([
             case 'col_select':
             case 'dtype':
                 value = $(pageThis.wrapSelector(parent + ' #'+obj.name)).val();
+                break;
+            case 'col_multi':
+                let colList = pageThis.autoGen[obj.name].getDataList();
+                pageThis.state[obj.name] = colList.map(data => { return data.code });
+                value = colList.map(data => { return data.code }).join(',');
+                $(pageThis.wrapSelector('#'+obj.name)).val(value);
                 break;
             case 'file-open':
             case 'file-save':
@@ -1236,6 +1267,50 @@ define([
         return $('<input value="tabblock"/>');
     }
 
+    var bindMultiSelector = function(pageThis) {
+        //====================================================================
+        // for column multi selector
+        //====================================================================
+        $(pageThis.wrapSelector('.vp-auto-multi-column')).each((idx, tag) => {
+            let compId = tag.id;
+            let id = $(tag).data('id');
+            let targetId = $(tag).data('target');
+            let colSelector = new MultiSelector(
+                pageThis.wrapSelector('#' + compId), 
+                { mode: 'columns', parent: (pageThis.state[targetId] || ''), selectedList: pageThis.state[compId] }
+            );
+            pageThis.autoGen = {
+                [id]: colSelector,
+                ...pageThis.autoGen
+            };
+            $(pageThis.wrapSelector('#' + targetId)).on('change', function() {
+                let targetVariable = $(this).val();
+                let colSelector = new MultiSelector(
+                    pageThis.wrapSelector('#' + compId), 
+                    { 
+                        mode: 'columns', parent: targetVariable, selectedList: pageThis.state[compId],
+                        change: function(type, list) {
+                            let value = list.map(data => { return data.code }).join(',');
+                            if (list.length == 0) {
+                                value = '';
+                            } else if (list.length > 1) {
+                                value = '[' + value + ']';
+                            }
+                            pageThis.state[compId] = list.map(data => { return data.code });
+                            pageThis.state[id] = value;
+                            $(pageThis.wrapSelector('#'+id)).val(value);
+                        }
+                    },
+                );
+                pageThis.autoGen = {
+                    [id]: colSelector,
+                    ...pageThis.autoGen
+                };
+            });
+            
+        });
+    }
+
     var bindAutoComponentEvent = function(pageThis) {
         let selector = pageThis.wrapSelector();
         // Auto-component selector
@@ -1498,7 +1573,6 @@ define([
             pageThis.setState({ [id]: code });
             $(pageThis.wrapSelector('#'+id)).val(code);
         });
-
 
         //====================================================================
         // Event for tabBlock

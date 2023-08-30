@@ -325,7 +325,7 @@ define([
                         code.append("print(_result.summary())");
                     } else if (method === 'stepwise') {
                         // Inner function : vp_stepwise_select
-                        this.addCheckModules('statsmodels.api');
+                        this.addCheckModules('sm');
                         this.addCheckModules('vp_stepwise_select');
 
                         code.appendFormatLine("_selected_stepwise = vp_stepwise_select(vp_df[[{0}]], vp_df[{1}])", independentMulti.map(x => x.code).join(','), dependent);
@@ -373,7 +373,7 @@ define([
                         lastModelNum = 2;
                     } else if (method === 'backward') {
                         // Inner function : vp_backward_select
-                        this.addCheckModules('statsmodels.api');
+                        this.addCheckModules('sm');
                         this.addCheckModules('vp_backward_select');
 
                         code.appendFormatLine("_selected_backward = vp_backward_select(vp_df[[{0}]], vp_df[{1}])", independentMulti.map(x => x.code).join(','), dependent);
@@ -421,7 +421,7 @@ define([
                         lastModelNum = 2;
                     } else if (method === 'forward') {
                         // Inner function : vp_forward_select
-                        this.addCheckModules('statsmodels.api');
+                        this.addCheckModules('sm');
                         this.addCheckModules('vp_forward_select');
 
                         code.appendFormatLine("_selected_forward = vp_forward_select(vp_df[[{0}]], vp_df[{1}])", independentMulti.map(x => x.code).join(','), dependent);
@@ -578,7 +578,7 @@ define([
                 case 'mediated':
                     // 5. Mediated
                     if (sobelTest === true) {
-                        this.addCheckModules('scipy.stats');
+                        this.addCheckModules('stats');
                         this.addCheckModules('vp_sobel');
                     }
                     code.appendLine();

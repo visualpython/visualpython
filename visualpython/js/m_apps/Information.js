@@ -17,10 +17,11 @@ define([
     __VP_CSS_LOADER__('vp_base/css/m_apps/information'), // INTEGRATION: unified version of css loader
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
+    'vp_base/js/com/com_interface',
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/DataSelector',
     'vp_base/js/com/component/LoadingSpinner'
-], function(varHtml, varCss, com_String, com_util, PopupComponent, DataSelector, LoadingSpinner) {
+], function(varHtml, varCss, com_String, com_util, com_interface, PopupComponent, DataSelector, LoadingSpinner) {
 
     /**
      * Information
@@ -103,6 +104,7 @@ define([
 \n        _dfr = pd.concat([_dfr, pd.DataFrame({(col,'category'): _value_counts.index})], axis=1)\
 \n    _dfr = pd.concat([_dfr, pd.DataFrame({(col,'count'): _value_counts.values})], axis=1)\
 \n_dfr.replace(np.nan,'')",
+                        code2: "${data}.value_counts()",
                         dtype: ['DataFrame', 'Series'], toframe: true },
                     ]
                 },
@@ -406,15 +408,17 @@ define([
             // click run button
             $(this.wrapSelector('.vp-information-run-button')).click(function(event) {
                 // get code
-                var code = that.generateCode();
+                var code = that.generateCodeForInfo();
+                // DEPRECATED: no longer save to block as default
                 // create block and run it
-                $('#vp_wrapper').trigger({
-                    type: 'create_option_page', 
-                    blockType: 'block',
-                    menuId: 'lgExe_code',
-                    menuState: { taskState: { code: code } },
-                    afterAction: 'run'
-                });
+                // $('#vp_wrapper').trigger({
+                //     type: 'create_option_page', 
+                //     blockType: 'block',
+                //     menuId: 'lgExe_code',
+                //     menuState: { taskState: { code: code } },
+                //     afterAction: 'run'
+                // });
+                com_interface.insertCell('code', code, true, 'Data Analysis > Data Info');
             });
         }
 
@@ -426,6 +430,7 @@ define([
             this.state.selected = [];
             this.state.selection = { start: -1, end: -1 };
             this.renderMenu();
+            $(this.wrapSelector('.' + VP_FE_TABLE)).html('');
             this.loadCode(data);
             this.loadInfo(data, this.state.menu);
         }
@@ -531,6 +536,10 @@ define([
         }
 
         generateCode() {
+            return this.tempCode;
+        }
+
+        generateCodeForInfo() {
             let { data, dtype, menu, menuItem } = this.state;
 
             var selected = [];
@@ -597,18 +606,26 @@ define([
                     // only one method selected
                     if (menuItem.length > 0 && infoObj.child) {
                         let childObj = infoObj.child.find(obj=>obj.id === menuItem[0]);
-                        if (childObj.toframe === true) {
-                            if (dtype === 'Series') {
-                                dataVar = new com_String();
-                                dataVar.appendFormat("{0}.to_frame()", data);
-                                currentDtype = 'DataFrame';
-                            } else if (currentDtype === 'Series') {
-                                dataVar = new com_String();
-                                dataVar.appendFormat("{0}[[{1}]]", data, selected.map(col=>col.code).join(','));
-                                currentDtype = 'DataFrame';
+                        if (menuItem[0] === 'value_counts') {
+                            if (currentDtype === 'Series') {
+                                codePattern = childObj.code2;
+                            } else {
+                                codePattern = childObj.code;
                             }
+                        } else {
+                            if (childObj.toframe === true) {
+                                if (dtype === 'Series') {
+                                    dataVar = new com_String();
+                                    dataVar.appendFormat("{0}.to_frame()", data);
+                                    currentDtype = 'DataFrame';
+                                } else if (currentDtype === 'Series') { // DataFrame with single column selected
+                                    dataVar = new com_String();
+                                    dataVar.appendFormat("{0}[[{1}]]", data, selected.map(col=>col.code).join(','));
+                                    currentDtype = 'DataFrame';
+                                }
+                            }
+                            codePattern = childObj.code;
                         }
-                        codePattern = childObj.code;
                     } else {
                         codePattern = infoObj.code;
                     }
@@ -838,7 +855,8 @@ define([
             // load preview content
             let $infoPreviewTag = $(this.wrapSelector('#informationPreview'));
             $infoPreviewTag.html('');
-            let code = this.generateCode();
+            let code = this.generateCodeForInfo();
+            this.tempCode = code;
 
             // use default pandas option
             // let defaultPOCode = new com_String();
