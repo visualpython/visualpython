@@ -40,6 +40,7 @@
 }
 .vp-param-set-add {
     cursor: pointer;
+    margin-bottom: 5px;
 }
 .vp-param-item > label {
     align-self: center;
