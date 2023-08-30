@@ -17,11 +17,12 @@ define([
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
+    'vp_base/js/com/com_interface',
     'vp_base/js/com/component/SuggestInput',
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/FileNavigation',
     'vp_base/js/com/component/LoadingSpinner'
-], function(ifHtml, ifCss, com_util, com_Const, com_String, SuggestInput, PopupComponent, FileNavigation, LoadingSpinner) {
+], function(ifHtml, ifCss, com_util, com_Const, com_String, com_interface, SuggestInput, PopupComponent, FileNavigation, LoadingSpinner) {
 
     /**
      * PackageManager
@@ -197,28 +198,32 @@ define([
                     if (vpConfig.extensionType === 'lite') {
                         code = com_util.formatString("%pip uninstall {0}", pipName);
                     }
+                    // DEPRECATED: no longer save to block as default
                     // create block and run it
-                    $('#vp_wrapper').trigger({
-                        type: 'create_option_page', 
-                        blockType: 'block',
-                        menuId: 'lgExe_code',
-                        menuState: { taskState: { code: code } },
-                        afterAction: 'run'
-                    });
+                    // $('#vp_wrapper').trigger({
+                    //     type: 'create_option_page', 
+                    //     blockType: 'block',
+                    //     menuId: 'lgExe_code',
+                    //     menuState: { taskState: { code: code } },
+                    //     afterAction: 'run'
+                    // });
+                    com_interface.insertCell('code', code, true, 'Package Manager');
                 } else if (menu === 'upgrade') {
                     var pipName = that.packageLib[key].pipName;
                     var code = com_util.formatString("!pip install --upgrade {0}", pipName);
                     if (vpConfig.extensionType === 'lite') {
                         code = com_util.formatString("%pip install {0}", pipName);
                     }
+                    // DEPRECATED: no longer save to block as default
                     // create block and run it
-                    $('#vp_wrapper').trigger({
-                        type: 'create_option_page', 
-                        blockType: 'block',
-                        menuId: 'lgExe_code',
-                        menuState: { taskState: { code: code } },
-                        afterAction: 'run'
-                    });
+                    // $('#vp_wrapper').trigger({
+                    //     type: 'create_option_page', 
+                    //     blockType: 'block',
+                    //     menuId: 'lgExe_code',
+                    //     menuState: { taskState: { code: code } },
+                    //     afterAction: 'run'
+                    // });
+                    com_interface.insertCell('code', code, true, 'Package Manager');
                 } else if (menu === 'delete') {
                     $(item).remove();
                     delete that.packageLib[key];
@@ -331,14 +336,17 @@ define([
                             return false;
                         }
                     }
+                    // DEPRECATED: no longer save to block as default
                     // create block and run it
-                    $('#vp_wrapper').trigger({
-                        type: 'create_option_page', 
-                        blockType: 'block',
-                        menuId: 'lgExe_code',
-                        menuState: { taskState: { code: code } },
-                        afterAction: 'run'
-                    });
+                    // $('#vp_wrapper').trigger({
+                    //     type: 'create_option_page', 
+                    //     blockType: 'block',
+                    //     menuId: 'lgExe_code',
+                    //     menuState: { taskState: { code: code } },
+                    //     afterAction: 'run'
+                    // });
+                    com_interface.insertCell('code', code, true, 'Package Manager');
+                    
                     break;
             }
 

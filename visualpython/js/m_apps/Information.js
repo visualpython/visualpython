@@ -17,10 +17,11 @@ define([
     __VP_CSS_LOADER__('vp_base/css/m_apps/information'), // INTEGRATION: unified version of css loader
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_util',
+    'vp_base/js/com/com_interface',
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/DataSelector',
     'vp_base/js/com/component/LoadingSpinner'
-], function(varHtml, varCss, com_String, com_util, PopupComponent, DataSelector, LoadingSpinner) {
+], function(varHtml, varCss, com_String, com_util, com_interface, PopupComponent, DataSelector, LoadingSpinner) {
 
     /**
      * Information
@@ -406,15 +407,17 @@ define([
             // click run button
             $(this.wrapSelector('.vp-information-run-button')).click(function(event) {
                 // get code
-                var code = that.generateCode();
+                var code = that.generateCodeForInfo();
+                // DEPRECATED: no longer save to block as default
                 // create block and run it
-                $('#vp_wrapper').trigger({
-                    type: 'create_option_page', 
-                    blockType: 'block',
-                    menuId: 'lgExe_code',
-                    menuState: { taskState: { code: code } },
-                    afterAction: 'run'
-                });
+                // $('#vp_wrapper').trigger({
+                //     type: 'create_option_page', 
+                //     blockType: 'block',
+                //     menuId: 'lgExe_code',
+                //     menuState: { taskState: { code: code } },
+                //     afterAction: 'run'
+                // });
+                com_interface.insertCell('code', code, true, 'Data Analysis > Data Info');
             });
         }
 

@@ -18,10 +18,11 @@ define([
     'vp_base/js/com/com_util',
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_String',
+    'vp_base/js/com/com_interface',
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/FileNavigation',
     'vp_base/js/com/component/LoadingSpinner'
-], function(snHtml, snCss, com_util, com_Const, com_String, PopupComponent, FileNavigation, LoadingSpinner) {
+], function(snHtml, snCss, com_util, com_Const, com_String, com_interface, PopupComponent, FileNavigation, LoadingSpinner) {
 
     /**
      * Snippets
@@ -471,14 +472,16 @@ define([
                     let cmCode = that.codemirrorList[title];
                     cmCode.save();
                     var code = cmCode.getValue();
+                    // DEPRECATED: no longer save to block as default
                     // create block and run it
-                    $('#vp_wrapper').trigger({
-                        type: 'create_option_page', 
-                        blockType: 'block',
-                        menuId: 'lgExe_code',
-                        menuState: { taskState: { code: code } },
-                        afterAction: 'run'
-                    });
+                    // $('#vp_wrapper').trigger({
+                    //     type: 'create_option_page', 
+                    //     blockType: 'block',
+                    //     menuId: 'lgExe_code',
+                    //     menuState: { taskState: { code: code } },
+                    //     afterAction: 'run'
+                    // });
+                    com_interface.insertCell('code', code, true, 'Data Analysis > Snippets');
                 } else if (menu == 'duplicate') {
                     var dupNo = 1;
                     var timestamp = new Date().getTime();
