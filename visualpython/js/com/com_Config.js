@@ -197,7 +197,7 @@ define([
                     code: 'import joblib',
                     type: 'package'
                 },
-                'scipy.stats': {
+                'stats': {
                     code: 'from scipy import stats',
                     type: 'package'
                 },
@@ -205,7 +205,7 @@ define([
                     code: 'import scipy',
                     type: 'package'
                 },
-                'statsmodels.api': {
+                'sm': {
                     code: 'import statsmodels.api as sm',
                     type: 'package'
                 }
@@ -1017,7 +1017,7 @@ define([
     /**
      * Version
      */
-    Config.version = "2.4.7";
+    Config.version = "2.4.8";
 
     /**
      * Type of mode

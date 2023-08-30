@@ -21,8 +21,9 @@ define([
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/SuggestInput',
     'vp_base/js/com/component/DataSelector',
+    'vp_base/js/com/component/MultiSelector',
     'vp_base/js/m_apps/Subset'
-], function(frameHtml, frameCss, com_Const, com_String, com_util, PopupComponent, SuggestInput, DataSelector, Subset) {
+], function(frameHtml, frameCss, com_Const, com_String, com_util, PopupComponent, SuggestInput, DataSelector, MultiSelector, Subset) {
 
     /**
      * Frame
@@ -1427,6 +1428,7 @@ define([
                 content.appendLine('<tr><th><label>Add type</label></th>');
                 content.appendFormatLine('<td><select class="{0}">', 'vp-inner-popup-addtype');
                 content.appendFormatLine('<option value="{0}">{1}</option>', 'calculate', 'Calculate');
+                content.appendFormatLine('<option value="{0}">{1}</option>', 'statistics', 'Statistics');
                 content.appendFormatLine('<option value="{0}">{1}</option>', 'replace', 'Replace');
                 content.appendFormatLine('<option value="{0}">{1}</option>', 'condition', 'Condition');
                 content.appendFormatLine('<option value="{0}">{1}</option>', 'apply', 'Apply');
@@ -1461,7 +1463,26 @@ define([
             content.appendLine('</table>');
             content.appendLine('</div>'); // end of vp-inner-popup-tab value
 
-            // tab 2. replace
+            // tab 2. statistics
+            content.appendFormatLine('<div class="{0} {1}" style="display:none;">', 'vp-inner-popup-tab', 'statistics');
+            content.appendFormatLine('<div class="{0}">', 'vp-grid-col-120');
+            content.appendLine('<label class="vp-orange-text">Columns</label>');
+            content.appendFormatLine('<div class="{0}" style="height: 150px;"></div>', 'vp-inner-popup-stats-col-list');
+            content.appendLine('<label>Method</label>');
+            content.appendFormatLine('<select class="vp-select {0}">', 'vp-inner-popup-stats-method');
+            let methodList = [
+                'sum', 'mean', 'median', 'max', 'min', 'std', 'var'
+            ];
+            methodList.forEach(method => {
+                content.appendFormatLine('<option data-code="{0}" value="{1}">{2}</option>',
+                    method, method, method);
+            });
+            content.appendLine('</select>');
+
+            content.appendLine('</div>');
+            content.appendLine('</div>');
+
+            // tab 3. replace
             content.appendFormatLine('<div class="{0} {1}" style="display:none;">', 'vp-inner-popup-tab', 'replace');
             content.appendFormatLine('<div class="{0}">', 'vp-grid-col-120');
             content.appendLine('<label class="vp-orange-text">Target column</label>');
@@ -1486,7 +1507,7 @@ define([
             content.appendLine('</div>');
             content.appendLine('</div>');
 
-            // tab 3. condition
+            // tab 4. condition
             // replace page - 2. condition
             content.appendFormatLine('<div class="{0} {1}" style="display:none;">', 'vp-inner-popup-tab', 'condition');
             // value
@@ -1505,7 +1526,7 @@ define([
             content.appendLine('</table>');
             content.appendLine('</div>');
 
-            // tab 4. apply
+            // tab 5. apply
             content.appendFormatLine('<div class="{0} {1}" style="display: none;">', 'vp-inner-popup-tab', 'apply');
             content.appendLine('<div class="vp-grid-box">');
             content.appendLine('<div class="vp-grid-col-120">');
@@ -2263,6 +2284,11 @@ define([
                         });
                     });
 
+                    // bind multiselector
+                    this.statsSelector = new MultiSelector(this.wrapSelector('.vp-inner-popup-stats-col-list'),
+                        { mode: 'columns', parent: this.state.tempObj, showDescription: false }
+                    );
+
                     // bind codemirror for apply textarea
                     this.applyCm = this.initCodemirror({ 
                         key: 'vp-inner-popup-apply-lambda', 
@@ -2547,6 +2573,10 @@ define([
                         });
                         content['values'] = values;
                         content['opers'] = opers;
+                    } else if (tab == 'statistics') {
+                        var colList = this.statsSelector.getDataList();
+                        content['columns'] = colList.map(x => x.code);
+                        content['method'] = $(this.wrapSelector('.vp-inner-popup-stats-method')).val();
                     } else if (tab == 'replace') {
                         content['target'] = $(this.wrapSelector('.vp-inner-popup-value-col-list option:selected')).data('code');
                         var useregex = $(this.wrapSelector('.vp-inner-popup-use-regex')).prop('checked');
@@ -3102,6 +3132,14 @@ define([
                         } else {
                             code.appendFormat("{0}[{1}] = {2}", tempObj, content.name, valueStr);
                         }
+                    } else if (tab == 'statistics') {
+                        code.appendFormat("{0}[{1}] = ", tempObj, content.name);
+                        code.append(tempObj);
+                        if (content['columns'].length > 0) {
+                            code.appendFormat("[[{0}]]", content['columns'].join(','));
+                        }
+                        code.appendFormat(".apply(lambda x: x.{0}(numeric_only=True), axis=1)", content.method);
+                        // code.appendFormat(".{0}(axis=1)", content.method); // FIXME: for pandas version upper 2.0.0 
                     } else if (tab == 'replace') {
                         var replaceStr = new com_String();
                         var targetName = content['target'];

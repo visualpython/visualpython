@@ -104,9 +104,10 @@ define([
                     label: 'Clustering',
                     modelStep: 0,
                     step: [
-                        { name: 'ml_clustering', label: 'Clustering', useApp: true, child: ['pp_fit', 'pp_predict', 'pp_transform'] },
+                        { name: 'ml_clustering', label: 'Clustering', useApp: true, child: ['pp_fit', 'pp_predict', 'pp_fit_predict', 'pp_transform'] },
                         { name: 'pp_fit', label: 'Fit' },
                         { name: 'pp_predict', label: 'Predict' },
+                        { name: 'pp_fit_predict', label: 'Fit and Predict' },
                         { name: 'pp_transform', label: 'Transform' },
                         { name: 'ml_evaluation', label: 'Evaluation', useApp: true, state: { modelType: 'cls' } },
                     ]
@@ -115,9 +116,10 @@ define([
                     label: 'Dimension Reduction',
                     modelStep: 0,
                     step: [
-                        { name: 'ml_dimensionReduction', label: 'Dimension Reduction', useApp: true, child: ['pp_fit', 'pp_transform'] },
+                        { name: 'ml_dimensionReduction', label: 'Dimension Reduction', useApp: true, child: ['pp_fit', 'pp_transform', 'pp_fit_transform'] },
                         { name: 'pp_fit', label: 'Fit' },
-                        { name: 'pp_transform', label: 'Transform' }
+                        { name: 'pp_transform', label: 'Transform' },
+                        { name: 'pp_fit_transform', label: 'Fit and Transform' },
                     ]
                 },
                 'gridSearch': {
@@ -184,6 +186,8 @@ define([
                 $(that.wrapSelector('.vp-pp-step-content')).html('');
                 $(that.wrapSelector('.vp-pp-step-title')).text('');
                 that.state.pipeline = [];
+                $(that.wrapSelector('.vp-pp-step-prev')).addClass('disabled');
+                $(that.wrapSelector('.vp-pp-step-next')).addClass('disabled');
                 
                 that.handleChangeTemplate(type);
             }); 
@@ -192,7 +196,7 @@ define([
             $(document).on('click', this.wrapSelector('.vp-pp-item[data-flag="enabled"]'), function() {
                 if (!$(this).hasClass('selected')) {
                     let title = $(this).data('label');
-                    let stepSeq = parseInt($(this).data('seq')); // 0 ~ n
+                    let stepSeq = parseInt($(this).data('step')); // 0 ~ n
                     let name = $(this).data('name');
                     let ppObj = that.state.pipeline[stepSeq];
                     // set title
@@ -210,6 +214,20 @@ define([
                     // check selected
                     $(that.wrapSelector('.vp-pp-item')).removeClass('selected');
                     $(this).addClass('selected');
+
+                    // check prev/next
+                    let prevTagList = $(this).prevAll('.vp-pp-item[data-flag="enabled"]:visible');
+                    let nextTagList = $(this).nextAll('.vp-pp-item[data-flag="enabled"]:visible');
+                    if (prevTagList.length == 0) {
+                        $(that.wrapSelector('.vp-pp-step-prev')).addClass('disabled');
+                    } else {
+                        $(that.wrapSelector('.vp-pp-step-prev')).removeClass('disabled');
+                    }
+                    if (nextTagList.length == 0) {
+                        $(that.wrapSelector('.vp-pp-step-next')).addClass('disabled');
+                    } else {
+                        $(that.wrapSelector('.vp-pp-step-next')).removeClass('disabled');
+                    }
                 }
             });
 
@@ -232,6 +250,25 @@ define([
                     $(that.wrapSelector('.vp-pp-step-title')).text('');
                     $(that.wrapSelector(`.vp-pp-step-page[data-name="${name}"]`)).hide();
                     $(itemTag).removeClass('selected');
+
+                    // disable prev/next
+                    $(that.wrapSelector('.vp-pp-step-prev')).addClass('disabled');
+                    $(that.wrapSelector('.vp-pp-step-next')).addClass('disabled');
+                } else {
+                    // check prev/next
+                    let selectedTag = $(that.wrapSelector('.vp-pp-item.selected'));
+                    let prevTagList = $(selectedTag).prevAll('.vp-pp-item[data-flag="enabled"]:visible');
+                    let nextTagList = $(selectedTag).nextAll('.vp-pp-item[data-flag="enabled"]:visible');
+                    if (prevTagList.length == 0) {
+                        $(that.wrapSelector('.vp-pp-step-prev')).addClass('disabled');
+                    } else {
+                        $(that.wrapSelector('.vp-pp-step-prev')).removeClass('disabled');
+                    }
+                    if (nextTagList.length == 0) {
+                        $(that.wrapSelector('.vp-pp-step-next')).addClass('disabled');
+                    } else {
+                        $(that.wrapSelector('.vp-pp-step-next')).removeClass('disabled');
+                    }
                 }
 
             });
@@ -239,26 +276,75 @@ define([
             // model type change event
             $(document).on('change', this.wrapSelector(`#modelType`), function() {
                 let name = $(this).closest('.vp-pp-step-page').data('name');
-                
-                let modelType = $(this).val();
-                let modelObj = that.modelConfig[modelType];
-                let modelTypeName = modelObj.code.split('(')[0];
-                
-                that.state.modelType = modelType;
-                that.state.modelTypeName = modelTypeName;
+                let modelCreatorList = ['ml_dataPrep', 'ml_regression', 'ml_classification', 'ml_clustering', 'ml_dimensionReduction', 'ml_gridSearch'];
+                if (modelCreatorList.includes(name)) {
+                    let modelType = $(this).val();
+                    let modelObj = that.modelConfig[modelType];
+                    let modelTypeName = modelObj.returnType;
+                    
+                    that.state.modelType = modelType;
+                    that.state.modelTypeName = modelTypeName;
+                    
+                    // show fit / predict / transform depends on model selection
+                    let defaultActions = ['fit', 'predict', 'transform', 'fit_predict', 'fit_transform'];
+                    let actions = that.modelEditor.getAction(modelTypeName);
+                    defaultActions.forEach(actKey => {
+                        if (actions[actKey] === undefined) {
+                            // if undefined, hide step
+                            $(that.wrapSelector(`.vp-pp-item[data-name="pp_${actKey}"]`)).hide();
+                        } else {
+                            $(that.wrapSelector(`.vp-pp-item[data-name="pp_${actKey}"]`)).show();
+                            if (actKey === 'fit_predict') {
+                                if (actions['fit'] === undefined || actions['predict'] === undefined) {
+                                    $(that.wrapSelector(`.vp-pp-item[data-name="pp_fit"]`)).hide();
+                                    $(that.wrapSelector(`.vp-pp-item[data-name="pp_predict"]`)).hide();
+                                } else {
+                                    $(that.wrapSelector(`.vp-pp-item[data-name="pp_${actKey}"]`)).hide();
+                                }
+                            } else if (actKey === 'fit_transform') {
+                                if (actions['fit'] === undefined || actions['transform'] === undefined) {
+                                    $(that.wrapSelector(`.vp-pp-item[data-name="pp_fit"]`)).hide();
+                                    $(that.wrapSelector(`.vp-pp-item[data-name="pp_transform"]`)).hide();
+                                } else {
+                                    $(that.wrapSelector(`.vp-pp-item[data-name="pp_${actKey}"]`)).hide();
+                                }
+                            }
+                        }
+                        $(that.wrapSelector('.vp-pp-item')).removeClass('vp-last-visible');
+                        $(that.wrapSelector('.vp-pp-item:visible:last')).addClass('vp-last-visible');
+                    });
 
-                // show fit / predict / transform depends on model selection
-                let defaultActions = ['fit', 'predict', 'transform'];
-                let actions = that.modelEditor.getAction(modelTypeName);
-                defaultActions.forEach(actKey => {
-                    if (actions[actKey] === undefined) {
-                        // if undefined, hide step
-                        $(that.wrapSelector(`.vp-pp-item[data-name="pp_${actKey}"]`)).hide();
-                    } else {
-                        $(that.wrapSelector(`.vp-pp-item[data-name="pp_${actKey}"]`)).show();
+                    // change evaluation page's default selection
+                    if (name === 'ml_gridSearch') {
+                        let modelCategory = that.modelEditor.getModelCategory(modelTypeName); // Regression / Classification / Clustering
+                        let evalModelTypeValue = 'rgs';
+                        switch (modelCategory) {
+                            case 'Regression':
+                                evalModelTypeValue = 'rgs';
+                                break;
+                            case 'Classification':
+                                evalModelTypeValue = 'clf';
+                                break;
+                            case 'Clustering':
+                                evalModelTypeValue = 'cls';
+                                break;
+                        }
+                        let evalPageTag = $(that.wrapSelector('.vp-pp-step-page[data-name="ml_evaluation"]'));
+                        if (evalPageTag.is(':empty') === true) {
+                            // evaluation page is not opened yet
+                            // set state for evaluation page
+                            let stepSeq = $(evalPageTag).data('step');
+                            let ppObj = that.state.pipeline[stepSeq];
+                            if (ppObj.app) {
+                                ppObj.app.state.modelType = evalModelTypeValue;
+                            }
+                        } else {
+                            let evalModelTypeTag = $(evalPageTag).find('#modelType');
+                            $(evalModelTypeTag).val(evalModelTypeValue);
+                            $(evalModelTypeTag).trigger('change');
+                        }
                     }
-                });
-                
+                }
             });
 
             // model allocation variable change
@@ -266,6 +352,20 @@ define([
                 let name = $(this).closest('.vp-pp-step-page').data('name');
                 let modelAllocation = $(this).val();
                 that.state.model = modelAllocation;
+            });
+
+            // click prev button
+            $(this.wrapSelector('.vp-pp-step-prev:not(.disabled)')).on('click', function() {
+                let selectedTag = $(that.wrapSelector('.vp-pp-item.selected'));
+                let prevTagList = $(selectedTag).prevAll('.vp-pp-item[data-flag="enabled"]:visible');
+                $(prevTagList[0]).trigger('click');
+            });
+
+            // click next button
+            $(this.wrapSelector('.vp-pp-step-next:not(.disabled)')).on('click', function() {
+                let selectedTag = $(that.wrapSelector('.vp-pp-item.selected'));
+                let nextTagList = $(selectedTag).nextAll('.vp-pp-item[data-flag="enabled"]:visible')
+                $(nextTagList[0]).trigger('click');
             });
         }
 
@@ -284,7 +384,7 @@ define([
                 // load pipeline items
                 tplObj.step.forEach((stepObj, idx) => {
                     let { name, label, useApp=false, child=[], state={} } = stepObj;
-                    ppTag.appendFormatLine(`<div class="vp-pp-item" data-flag="enabled" data-name="{0}" data-seq="{1}" data-label="{2}">
+                    ppTag.appendFormatLine(`<div class="vp-pp-item" data-flag="enabled" data-name="{0}" data-step="{1}" data-label="{2}">
                         <span>{3}</span>
                         <div class="vp-pp-item-menu">
                             <label><input type="checkbox" class="vp-toggle vp-pp-item-toggle" checked/><span></span></label>
@@ -354,7 +454,8 @@ define([
                             that.handleAppView(name, mlComponent);
 
                             // select first step
-                            $(that.wrapSelector('.vp-pp-item[data-seq="0"]')).click();
+                            $(that.wrapSelector('.vp-pp-item[data-step="0"]')).click();
+                            $(that.wrapSelector('#modelType')).trigger('change');
                             // end of DUP AREA: pp-1
                         }
                     });
@@ -390,7 +491,8 @@ define([
                                 that.handleAppView(name, mlComponent);
 
                                 // select first step
-                                $(that.wrapSelector('.vp-pp-item[data-seq="0"]')).click();
+                                $(that.wrapSelector('.vp-pp-item[data-step="0"]')).click();
+                                $(that.wrapSelector('#modelType')).trigger('change');
                                 // end of DUP AREA: pp-1
                             }
                         })
@@ -436,6 +538,9 @@ define([
             // load state
             if (this.state.templateType !== '') {
                 $(this.wrapSelector('#templateType')).trigger('change');
+            } else {
+                $(this.wrapSelector('.vp-pp-step-prev')).addClass('disabled');
+                $(this.wrapSelector('.vp-pp-step-next')).addClass('disabled');
             }
         }
 
@@ -468,6 +573,12 @@ define([
                     break;
                 case 'pp_transform':
                     tag = this.templateForOptionPage(actions['transform']);
+                    break;
+                case 'pp_fit_predict':
+                    tag = this.templateForOptionPage(actions['fit_predict']);
+                    break;
+                case 'pp_fit_transform':
+                    tag = this.templateForOptionPage(actions['fit_transform']);
                     break;
             }
             $(this.wrapSelector(`.vp-pp-step-page[data-name="${appId}"]`)).html(`
@@ -505,8 +616,8 @@ define([
                 var { name, label, useApp, app } = ppObj;
                 let requiredList = [];
                 result = true;
-                let isVisible = $(that.wrapSelector(`.vp-pp-item[data-seq="${idx}"]`)).is(':visible') === true;
-                let isEnabled = $(that.wrapSelector(`.vp-pp-item[data-seq="${idx}"]`)).attr('data-flag') === 'enabled';
+                let isVisible = $(that.wrapSelector(`.vp-pp-item[data-step="${idx}"]`)).is(':visible') === true;
+                let isEnabled = $(that.wrapSelector(`.vp-pp-item[data-step="${idx}"]`)).attr('data-flag') === 'enabled';
                 if (isVisible && isEnabled) {
                     switch (name) {
                         case 'ml_dataSplit':
@@ -563,6 +674,12 @@ define([
                 case 'pp_transform':
                     actObj = actions['transform'];
                     break;
+                case 'pp_fit_predict':
+                    actObj = actions['fit_predict'];
+                    break;
+                case 'pp_fit_transform':
+                    actObj = actions['fit_transform'];
+                    break;
             }
 
             let code = new com_String();
@@ -597,8 +714,8 @@ define([
                 let { name, label, useApp, app } = ppObj;
                 
                 // check disabled
-                let isVisible = $(that.wrapSelector(`.vp-pp-item[data-seq="${idx}"]`)).is(':visible') === true;
-                let isEnabled = $(that.wrapSelector(`.vp-pp-item[data-seq="${idx}"]`)).attr('data-flag') === 'enabled';
+                let isVisible = $(that.wrapSelector(`.vp-pp-item[data-step="${idx}"]`)).is(':visible') === true;
+                let isEnabled = $(that.wrapSelector(`.vp-pp-item[data-step="${idx}"]`)).attr('data-flag') === 'enabled';
                 if (isVisible && isEnabled) {
                     if (code.toString() !== '') {
                         code.appendLine();

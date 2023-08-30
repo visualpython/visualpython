@@ -199,6 +199,7 @@ define([
                 sizeOfClusters, silhouetteScore, ari, nmi,
                 clusteredIndex, featureData2, targetData2
             } = this.state;
+            let needDisplay = false;
 
             //====================================================================
             // Classfication
@@ -207,7 +208,8 @@ define([
                 if (confusion_matrix) {
                     code = new com_String();
                     code.appendLine("# Confusion Matrix");
-                    code.appendFormat('pd.crosstab({0}, {1}, margins=True)', targetData, predictData);
+                    code.appendFormat('display(pd.crosstab({0}, {1}, margins=True))', targetData, predictData);
+                    needDisplay = true;
                     codeCells.push(code.toString());
                 }
                 if (report) {
@@ -219,25 +221,29 @@ define([
                 if (accuracy) {
                     code = new com_String();
                     code.appendLine("# Accuracy");
-                    code.appendFormat('metrics.accuracy_score({0}, {1})', targetData, predictData);
+                    code.appendFormat('display(metrics.accuracy_score({0}, {1}))', targetData, predictData);
+                    needDisplay = true;
                     codeCells.push(code.toString());
                 }
                 if (precision) {
                     code = new com_String();
                     code.appendLine("# Precision");
-                    code.appendFormat("metrics.precision_score({0}, {1}, average='weighted')", targetData, predictData);
+                    code.appendFormat("display(metrics.precision_score({0}, {1}, average='weighted'))", targetData, predictData);
+                    needDisplay = true;
                     codeCells.push(code.toString());
                 }
                 if (recall) {
                     code = new com_String();
                     code.appendLine("# Recall");
-                    code.appendFormat("metrics.recall_score({0}, {1}, average='weighted')", targetData, predictData);
+                    code.appendFormat("display(metrics.recall_score({0}, {1}, average='weighted'))", targetData, predictData);
+                    needDisplay = true;
                     codeCells.push(code.toString());
                 }
                 if (f1_score) {
                     code = new com_String();
                     code.appendLine("# F1-score");
-                    code.appendFormat("metrics.f1_score({0}, {1}, average='weighted')", targetData, predictData);
+                    code.appendFormat("display(metrics.f1_score({0}, {1}, average='weighted'))", targetData, predictData);
+                    needDisplay = true;
                     codeCells.push(code.toString());
                 }
                 // if (roc_curve) {
@@ -272,13 +278,15 @@ define([
                 if (r_squared) {
                     code = new com_String();
                     code.appendLine("# R square");
-                    code.appendFormat('metrics.r2_score({0}, {1})', targetData, predictData);
+                    code.appendFormat('display(metrics.r2_score({0}, {1}))', targetData, predictData);
+                    needDisplay = true;
                     codeCells.push(code.toString());
                 }
                 if (mae) {
                     code = new com_String();
                     code.appendLine("# MAE(Mean Absolute Error)");
-                    code.appendFormat('metrics.mean_absolute_error({0}, {1})', targetData, predictData);
+                    code.appendFormat('display(metrics.mean_absolute_error({0}, {1}))', targetData, predictData);
+                    needDisplay = true;
                     codeCells.push(code.toString());
                 }
                 if (mape) {
@@ -287,13 +295,15 @@ define([
                     code.appendLine('def MAPE(y_test, y_pred):');
                     code.appendLine('    return np.mean(np.abs((y_test - pred) / y_test)) * 100');
                     code.appendLine();
-                    code.appendFormat('MAPE({0}, {1})', targetData, predictData);
+                    code.appendFormat('display(MAPE({0}, {1}))', targetData, predictData);
+                    needDisplay = true;
                     codeCells.push(code.toString());
                 }
                 if (rmse) {
                     code = new com_String();
                     code.appendLine("# RMSE(Root Mean Squared Error)");
-                    code.appendFormat('metrics.mean_squared_error({0}, {1})**0.5', targetData, predictData);
+                    code.appendFormat('display(metrics.mean_squared_error({0}, {1})**0.5)', targetData, predictData);
+                    needDisplay = true;
                     codeCells.push(code.toString());
                 }
                 if (scatter_plot) {
@@ -332,6 +342,12 @@ define([
                     code.appendFormat("print(f'NM: {metrics.cluster.normalized_mutual_info_score({0}, {1})}')", targetData2, clusteredIndex);
                     codeCells.push(code.toString());
                 }
+            }
+            if (needDisplay === true) {
+                codeCells = [
+                    "from IPython.display import display",
+                    ...codeCells
+                ];
             }
             // return as seperated cells
             return codeCells;

@@ -18,12 +18,13 @@ define([
     'vp_base/js/com/com_String',
     'vp_base/js/com/com_Const',
     'vp_base/js/com/com_util',
+    'vp_base/js/com/com_interface',
     'vp_base/js/com/com_generator',
     'vp_base/js/com/component/PopupComponent',
     'vp_base/js/com/component/FileNavigation',
     'vp_base/js/com/component/SuggestInput',
     'vp_base/js/com/component/DataSelector'
-], function(chartHTml, chartCss, com_String, com_Const, com_util, com_generator, PopupComponent, FileNavigation, SuggestInput, DataSelector) {
+], function(chartHTml, chartCss, com_String, com_Const, com_util, com_interface, com_generator, PopupComponent, FileNavigation, SuggestInput, DataSelector) {
 
     /**
      * Chart
@@ -268,14 +269,16 @@ define([
             $(this.wrapSelector('#vp_plImportRun')).click(function() {
                 // generateImportCode
                 var code = that.generateImportCode();
+                // DEPRECATED: no longer save to block as default
                 // create block and run it
-                $('#vp_wrapper').trigger({
-                    type: 'create_option_page', 
-                    blockType: 'block',
-                    menuId: 'lgExe_code',
-                    menuState: { taskState: { code: code } },
-                    afterAction: 'run'
-                });
+                // $('#vp_wrapper').trigger({
+                //     type: 'create_option_page', 
+                //     blockType: 'block',
+                //     menuId: 'lgExe_code',
+                //     menuState: { taskState: { code: code } },
+                //     afterAction: 'run'
+                // });
+                com_interface.insertCell('code', code, true, 'Visualization > Chart');
             });
         }
 
