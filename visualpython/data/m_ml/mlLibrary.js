@@ -129,6 +129,7 @@ define([
             name: 'OneHotEncoder',
             import: 'from sklearn.preprocessing import OneHotEncoder',
             code: 'OneHotEncoder(${sparse}${handle_unknown}${etc})',
+            returnType: 'OneHotEncoder',
             options: [
                 { name: 'sparse', component: ['bool_select'], default: 'False', usePair: true },
                 { name: 'handle_unknown', component: ['option_suggest'], usePair: true, 
@@ -139,6 +140,7 @@ define([
             name: 'LabelEncoder',
             import: 'from sklearn.preprocessing import LabelEncoder',
             code: 'LabelEncoder()',
+            returnType: 'LabelEncoder',
             options: [
                 
             ]
@@ -147,6 +149,7 @@ define([
             name: 'OrdinalEncoder',
             import: 'from sklearn.preprocessing import OrdinalEncoder',
             code: 'OrdinalEncoder(${handle_unknown}${unknown_values}${etc})',
+            returnType: 'OrdinalEncoder',
             options: [
                 { name: 'handle_unknown', component: ['option_suggest'], usePair: true, 
                     options: ['error', 'use_encoded_value'], default: 'error' },
@@ -158,6 +161,7 @@ define([
             install: '!pip install category_encoders',
             import: 'from category_encoders.target_encoder import TargetEncoder',
             code: 'TargetEncoder(${cols}${handle_missing}${handle_unknown}${smoothing}${etc})',
+            returnType: 'TargetEncoder',
             options: [
                 { name: 'cols', component: ['var_suggest', '1darr'], usePair: true },
                 { name: 'handle_missing', component: ['option_suggest'], usePair: true,
@@ -172,6 +176,7 @@ define([
             install: '!pip install imblearn',
             import: 'from imblearn.over_sampling import SMOTE',
             code: 'SMOTE(${random_state}${k_neighbors}${etc})',
+            returnType: 'SMOTE',
             options: [
                 { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true },
                 { name: 'k_neighbors', component: ['input_number'], default: 5, usePair: true }
@@ -182,6 +187,7 @@ define([
             name: 'StandardScaler',
             import: 'from sklearn.preprocessing import StandardScaler',
             code: 'StandardScaler(${with_mean}${with_std}${etc})',
+            returnType: 'StandardScaler',
             options: [
                 { name: 'with_mean', component: ['bool_select'], default: 'True', usePair: true },
                 { name: 'with_std', component: ['bool_select'], default: 'True', usePair: true }
@@ -191,6 +197,7 @@ define([
             name: 'RobustScaler',
             import: 'from sklearn.preprocessing import RobustScaler',
             code: 'RobustScaler(${with_centering}${with_scaling}${etc})',
+            returnType: 'RobustScaler',
             options: [
                 { name: 'with_centering', component: ['bool_select'], default: 'True', usePair: true },
                 { name: 'with_scaling', component: ['bool_select'], default: 'True', usePair: true }
@@ -200,6 +207,7 @@ define([
             name: 'MinMaxScaler',
             import: 'from sklearn.preprocessing import MinMaxScaler',
             code: 'MinMaxScaler(${feature_range}${etc})',
+            returnType: 'MinMaxScaler',
             options: [
                 { name: 'feature_range', component: ['input'], placeholder: '(min, max)', default: '(0, 1)', usePair: true }
             ]
@@ -208,6 +216,7 @@ define([
             name: 'Normalizer',
             import: 'from sklearn.preprocessing import Normalizer',
             code: 'Normalizer(${norm}${etc})',
+            returnType: 'Normalizer',
             options: [
                 { name: 'norm', component: ['option_suggest'], usePair: true,
                     options: ['l1', 'l2', 'max'], default: 'l2' },
@@ -217,6 +226,7 @@ define([
             name: 'Log Scaling',
             import: 'from sklearn.preprocessing import FunctionTransformer',
             code: 'FunctionTransformer(np.log1p${etc})',
+            returnType: 'FunctionTransformer',
             options: [
 
             ]
@@ -225,6 +235,7 @@ define([
             name: 'Exponential Scaling',
             import: 'from sklearn.preprocessing import FunctionTransformer',
             code: 'FunctionTransformer(np.expm1${etc})',
+            returnType: 'FunctionTransformer',
             options: [
 
             ]
@@ -233,6 +244,7 @@ define([
             name: 'Polynomial Features',
             import: 'from sklearn.preprocessing import PolynomialFeatures',
             code: 'PolynomialFeatures(${etc})',
+            returnType: 'PolynomialFeatures',
             options: [
 
             ]
@@ -241,6 +253,7 @@ define([
             name: 'KBins Discretizer',
             import: 'from sklearn.preprocessing import KBinsDiscretizer',
             code: 'KBinsDiscretizer(${n_bins}${strategy}${encode}${etc})',
+            returnType: 'KBinsDiscretizer',
             options: [
                 { name: 'n_bins', component: ['input_number'], default: 5, usePair: true },
                 { name: 'strategy', component: ['option_select'], type: 'text', default: 'quantile', usePair: true,
@@ -253,6 +266,7 @@ define([
             name: 'SimpleImputer',
             import: 'from sklearn.impute import SimpleImputer',
             code: 'SimpleImputer(${missing_values}${strategy}${fill_value}${copy}${add_indicator}${etc})',
+            returnType: 'SimpleImputer',
             options: [
                 { name: 'missing_values', component: ['input'], placeholder: 'np.nan', usePair: true },
                 { name: 'strategy', component: ['option_select'], type: 'text', default: 'quantile', usePair: true,
@@ -266,6 +280,7 @@ define([
             name: 'MakeColumnTransformer',
             import: 'from sklearn.compose import make_column_transformer',
             code: 'make_column_transformer(${mct_code})',
+            returnType: 'ColumnTransformer',
             options: [
 
             ]
@@ -275,6 +290,7 @@ define([
             name: 'LinearRegression',
             import: 'from sklearn.linear_model import LinearRegression',
             code: 'LinearRegression(${fit_intercept}${etc})',
+            returnType: 'LinearRegression',
             options: [
                 { name: 'fit_intercept', component: ['bool_select'], default: 'True', usePair: true }
             ]
@@ -283,6 +299,7 @@ define([
             name: 'Ridge',
             import: 'from sklearn.linear_model import Ridge',
             code: 'Ridge(${alpha}${etc})',
+            returnType: 'Ridge',
             options: [
                 { name: 'alpha', component: ['input_number'], default: 1.0, usePair: true }
             ]
@@ -291,6 +308,7 @@ define([
             name: 'Lasso',
             import: 'from sklearn.linear_model import Lasso',
             code: 'Lasso(${alpha}${etc})',
+            returnType: 'Lasso',
             options: [
                 { name: 'alpha', component: ['input_number'], default: 1.0, usePair: true }
             ]
@@ -299,6 +317,7 @@ define([
             name: 'ElasticNet',
             import: 'from sklearn.linear_model import ElasticNet',
             code: 'ElasticNet(${alpha}${l1_ratio}${etc})',
+            returnType: 'ElasticNet',
             options: [
                 { name: 'alpha', component: ['input_number'], default: 1.0, usePair: true },
                 { name: 'l1_ratio', component: ['input_number'], default: 0.5, usePair: true }
@@ -308,6 +327,7 @@ define([
             name: 'SVR',
             import: 'from sklearn.svm import SVR',
             code: 'SVR(${C}${kernel}${degree}${gamma}${coef0}${random_state}${etc})',
+            returnType: 'SVR',
             options: [
                 { name: 'C', component: ['input_number'], placeholder: '1.0', usePair: true, step: 0.1, min: 0 },
                 { name: 'kernel', component: ['option_select'], type: 'text', usePair: true, 
@@ -323,6 +343,7 @@ define([
             name: 'DecisionTreeRegressor',
             import: 'from sklearn.tree import DecisionTreeRegressor',
             code: 'DecisionTreeRegressor(${criterion}${max_depth}${min_samples_split}${random_state}${etc})',
+            returnType: 'DecisionTreeRegressor',
             options: [
                 { name: 'criterion', component: ['option_select'], type: 'text', default: 'squared_error', type:'text',
                     options: ['squared_error', 'friedman_mse', 'absolute_error', 'poisson'] },
@@ -335,6 +356,7 @@ define([
             name: 'RandomForestRegressor',
             import: 'from sklearn.ensemble import RandomForestRegressor',
             code: 'RandomForestRegressor(${n_estimators}${criterion}${max_depth}${min_samples_split}${n_jobs}${random_state}${etc})',
+            returnType: 'RandomForestRegressor',
             options: [
                 { name: 'n_estimators', component: ['input_number'], default: 100, usePair: true },
                 { name: 'criterion', component: ['option_select'], type: 'text', default: 'squared_error', type:'text', usePair: true,
@@ -349,6 +371,7 @@ define([
             name: 'GradientBoostingRegressor',
             import: 'from sklearn.ensemble import GradientBoostingRegressor',
             code: 'GradientBoostingRegressor(${loss}${learning_rate}${n_estimators}${criterion}${random_state}${etc})',
+            returnType: 'GradientBoostingRegressor',
             options: [
                 { name: 'loss', component: ['option_select'], type: 'text', default: 'squared_error', type:'text', usePair: true,
                     options: ['squared_error', 'absolute_error', 'huber', 'quantile'] },
@@ -364,6 +387,7 @@ define([
             install: '!pip install xgboost',
             import: 'from xgboost import XGBRegressor',
             code: 'XGBRegressor(${n_estimators}${max_depth}${learning_rate}${gamma}${random_state}${etc})',
+            returnType: 'XGBRegressor',
             options: [
                 { name: 'n_estimators', component: ['input_number'], default: 100, usePair: true },
                 { name: 'max_depth', component: ['input_number'], placeholder: 'None', usePair: true },
@@ -377,6 +401,7 @@ define([
             install: '!pip install lightgbm',
             import: 'from lightgbm import LGBMRegressor',
             code: 'LGBMRegressor(${boosting_type}${max_depth}${learning_rate}${n_estimators}${random_state}${etc})',
+            returnType: 'LGBMRegressor',
             options: [
                 { name: 'boosting_type', component: ['option_select'], type: 'text', default: 'gbdt', type: 'text', usePair: true,
                     options: ['gbdt', 'dart', 'goss', 'rf']},
@@ -391,6 +416,7 @@ define([
             install: '!pip install catboost',
             import: 'from catboost import CatBoostRegressor',
             code: 'CatBoostRegressor(${learning_rate}${loss_function}${task_type}${max_depth}${n_estimators}${random_state}${etc})',
+            returnType: 'CatBoostRegressor',
             options: [
                 { name: 'learning_rate', component: ['input_number'], placeholder: 'None', usePair: true },
                 { name: 'loss_function', component: ['option_select'], type: 'text', default: 'RMSE', type:'text', usePair: true,
@@ -407,6 +433,7 @@ define([
             name: 'LogisticRegression',
             import: 'from sklearn.linear_model import LogisticRegression',
             code: 'LogisticRegression(${penalty}${C}${random_state}${etc})',
+            returnType: 'LogisticRegression',
             options: [
                 { name: 'penalty', component: ['option_select'], type: 'text', default: 'l2', usePair: true, options: ['l1', 'l2', 'elasticnet', 'none']},
                 { name: 'C', component: ['input_number'], placeholder: '1.0', usePair: true, step: 0.1, min: 0 },
@@ -417,6 +444,7 @@ define([
             name: 'BernoulliNB',
             import: 'from sklearn.naive_bayes import BernoulliNB',
             code: 'BernoulliNB(${etc})',
+            returnType: 'BernoulliNB',
             options: [
                 //TODO:
             ]
@@ -425,6 +453,7 @@ define([
             name: 'MultinomialNB',
             import: 'from sklearn.naive_bayes import MultinomialNB',
             code: 'MultinomialNB(${etc})',
+            returnType: 'MultinomialNB',
             options: [
                 //TODO:
             ]
@@ -433,6 +462,7 @@ define([
             name: 'GaussianNB',
             import: 'from sklearn.naive_bayes import GaussianNB',
             code: 'GaussianNB(${etc})',
+            returnType: 'GaussianNB',
             options: [
                 //TODO:
             ]
@@ -441,6 +471,7 @@ define([
             name: 'SVC',
             import: 'from sklearn.svm import SVC',
             code: 'SVC(${C}${kernel}${degree}${gamma}${coef0}${random_state}${etc})',
+            returnType: 'SVC',
             options: [
                 { name: 'C', component: ['input_number'], placeholder: '1.0', usePair: true, step: 0.1, min: 0 },
                 { name: 'kernel', component: ['option_select'], type: 'text', usePair: true, 
@@ -456,6 +487,7 @@ define([
             name: 'DecisionTreeClassifier',
             import: 'from sklearn.tree import DecisionTreeClassifier',
             code: 'DecisionTreeClassifier(${criterion}${max_depth}${min_samples_split}${random_state}${etc})',
+            returnType: 'DecisionTreeClassifier',
             options: [
                 { name: 'criterion', component: ['option_select'], type: 'text', default: 'squared_error', type:'text',
                     options: ['squared_error', 'friedman_mse', 'absolute_error', 'poisson'], usePair: true },
@@ -468,6 +500,7 @@ define([
             name: 'RandomForestClassifier',
             import: 'from sklearn.ensemble import RandomForestClassifier',
             code: 'RandomForestClassifier(${n_estimators}${criterion}${max_depth}${min_samples_split}${n_jobs}${random_state}${etc})',
+            returnType: 'RandomForestClassifier',
             options: [
                 { name: 'n_estimators', component: ['input_number'], default: 100, usePair: true },
                 { name: 'criterion', component: ['option_select'], type: 'text', default: 'gini', type:'text', usePair: true,
@@ -482,6 +515,7 @@ define([
             name: 'GradientBoostingClassifier',
             import: 'from sklearn.ensemble import GradientBoostingClassifier',
             code: 'GradientBoostingClassifier(${loss}${learning_rate}${n_estimators}${criterion}${random_state}${etc})',
+            returnType: 'GradientBoostingClassifier',
             options: [
                 { name: 'loss', component: ['option_select'], type: 'text', default: 'deviance', type: 'text', usePair: true,
                     options: ['deviance', 'exponential'] },
@@ -497,6 +531,7 @@ define([
             install: '!pip install xgboost',
             import: 'from xgboost import XGBClassifier',
             code: 'XGBClassifier(${n_estimators}${max_depth}${learning_rate}${gamma}${random_state}${etc})',
+            returnType: 'XGBClassifier',
             options: [
                 { name: 'n_estimators', component: ['input_number'], default: 100, usePair: true },
                 { name: 'max_depth', component: ['input_number'], placeholder: 'None', usePair: true },
@@ -510,6 +545,7 @@ define([
             install: '!pip install lightgbm',
             import: 'from lightgbm import LGBMClassifier',
             code: 'LGBMClassifier(${boosting_type}${max_depth}${learning_rate}${n_estimators}${random_state}${etc})',
+            returnType: 'LGBMClassifier',
             options: [
                 { name: 'boosting_type', component: ['option_select'], type: 'text', default: 'gbdt', type: 'text', usePair: true,
                     options: ['gbdt', 'dart', 'goss', 'rf']},
@@ -524,6 +560,7 @@ define([
             install: '!pip install catboost',
             import: 'from catboost import CatBoostClassifier',
             code: 'CatBoostClassifier(${learning_rate}${loss_function}${task_type}${max_depth}${n_estimators}${random_state}${etc})',
+            returnType: 'CatBoostClassifier',
             options: [
                 { name: 'learning_rate', component: ['input_number'], placeholder: 'None', usePair: true },
                 { name: 'loss_function', component: ['option_select'], type: 'text', default: 'RMSE', type:'text', usePair: true,
@@ -542,6 +579,7 @@ define([
             import: 'from autosklearn.regression import AutoSklearnRegressor',
             link: 'https://automl.github.io/auto-sklearn/master/api.html#regression',
             code: 'AutoSklearnRegressor(${etc})',
+            returnType: 'AutoSklearnRegressor',
             options: [
                 
             ]
@@ -551,6 +589,7 @@ define([
             install: '!pip install tpot',
             import: 'from tpot import TPOTRegressor',
             code: 'TPOTRegressor(${generation}${population_size}${cv}${random_state}${etc})',
+            returnType: 'TPOTRegressor',
             options: [
                 { name: 'generation', component: ['input_number'], default: 100, usePair: true },
                 { name: 'population_size', component: ['input_number'], default: 100, usePair: true },
@@ -564,6 +603,7 @@ define([
             import: 'from autosklearn.classification import AutoSklearnClassifier',
             link: 'https://automl.github.io/auto-sklearn/master/api.html#classification',
             code: 'AutoSklearnClassifier(${etc})',
+            returnType: 'AutoSklearnClassifier',
             options: [
                 
             ]
@@ -573,6 +613,7 @@ define([
             install: '!pip install tpot',
             import: 'from tpot import TPOTClassifier',
             code: 'TPOTClassifier(${generation}${population_size}${cv}${random_state}${etc})',
+            returnType: 'TPOTClassifier',
             options: [
                 { name: 'generation', component: ['input_number'], default: 100, usePair: true },
                 { name: 'population_size', component: ['input_number'], default: 100, usePair: true },
@@ -585,6 +626,7 @@ define([
             name: 'KMeans',
             import: 'from sklearn.cluster import KMeans',
             code: 'KMeans(${n_clusters}${random_state}${etc})',
+            returnType: 'KMeans',
             options: [
                 { name: 'n_clusters', component: ['input_number'], default: 8, usePair: true },
                 { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true }
@@ -594,6 +636,7 @@ define([
             name: 'AgglomerativeClustering',
             import: 'from sklearn.cluster import AgglomerativeClustering',
             code: 'AgglomerativeClustering(${n_clusters}${random_state}${etc})',
+            returnType: 'AgglomerativeClustering',
             options: [
                 { name: 'n_clusters', component: ['input_number'], default: 2, usePair: true },
                 { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true }
@@ -603,6 +646,7 @@ define([
             name: 'GaussianMixture',
             import: 'from sklearn.mixture import GaussianMixture',
             code: 'GaussianMixture(${n_components}${random_state}${etc})',
+            returnType: 'GaussianMixture',
             options: [
                 { name: 'n_components', component: ['input_number'], default: 1, usePair: true },
                 { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true }
@@ -612,6 +656,7 @@ define([
             name: 'DBSCAN',
             import: 'from sklearn.cluster import DBSCAN',
             code: 'DBSCAN(${eps}${min_samples}${etc})',
+            returnType: 'DBSCAN',
             options: [
                 { name: 'eps', component: ['input_number'], default: 0.5, usePair: true },
                 { name: 'min_samples', component: ['input_number'], default: 5, usePair: true }
@@ -622,6 +667,7 @@ define([
             name: 'PCA(Principal Component Analysis)',
             import: 'from sklearn.decomposition import PCA',
             code: 'PCA(${n_components}${random_state}${etc})',
+            returnType: 'PCA',
             options: [
                 { name: 'n_components', component: ['input_number'], placeholder: 'None', usePair: true },
                 { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true }
@@ -631,6 +677,7 @@ define([
             name: 'LDA(Linear Discriminant Analysis)',
             import: 'from sklearn.discriminant_analysis import LinearDiscriminantAnalysis',
             code: 'LinearDiscriminantAnalysis(${n_components}${etc})',
+            returnType: 'LinearDiscriminantAnalysis',
             options: [
                 { name: 'n_components', component: ['input_number'], placeholder: 'None', usePair: true }
             ]
@@ -639,6 +686,7 @@ define([
             name: 'Truncated SVD',
             import: 'from sklearn.decomposition import TruncatedSVD',
             code: 'TruncatedSVD(${n_components}${random_state}${etc})',
+            returnType: 'TruncatedSVD',
             options: [
                 { name: 'n_components', component: ['input_number'], default: 2, usePair: true },
                 { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true }
@@ -648,6 +696,7 @@ define([
             name: 'NMF(Non-Negative Matrix Factorization)',
             import: 'from sklearn.decomposition import NMF',
             code: 'NMF(${n_components}${random_state}${etc})',
+            returnType: 'NMF',
             options: [
                 { name: 'n_components', component: ['input_number'], placeholder: 'None', usePair: true },
                 { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true }
@@ -657,6 +706,7 @@ define([
             name: 'TSNE(T-distributed Stochastic Neighbor Embedding)',
             import: 'from sklearn.manifold import TSNE',
             code: 'TSNE(${n_components}${learning_rate}${random_state}${etc})',
+            returnType: 'TSNE',
             options: [
                 { name: 'n_components', component: ['input_number'], placeholder: 'None', usePair: true },
                 { name: 'learning_rate', component: ['input_number'], default: 200.0, usePair: true },
@@ -667,7 +717,7 @@ define([
         'grid-search': {
             name: 'GridSearch',
             import: 'from sklearn.model_selection import GridSearchCV',
-            code: 'GridSearchCV(${estimator}, ${param_grid}${n_jobs}${cv}${verbose}${etc})',
+            returnType: 'GridSearchCV',
             options: [
                 { name: 'estimator', component: ['data_select'], placeholder: 'Select model'},
                 { name: 'param_grid', component: ['input'], placeholder: 'Enter parameters'},
