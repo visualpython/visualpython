@@ -1046,7 +1046,7 @@ define([
 
             this._bindCodemirror();
 
-            if (targetFrame !== undefined) {
+            if (targetFrame == undefined) {
                 $(this.eventTarget).trigger({
                     type: 'focus_option_page',
                     component: this
@@ -1112,6 +1112,10 @@ define([
 
         blur() {
             $(this.wrapSelector()).removeClass('vp-focused');
+            // blur on its block
+            if (this.taskItem) {
+                this.taskItem.blurItem();
+            }
         }
 
         show() {
