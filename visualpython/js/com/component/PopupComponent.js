@@ -308,6 +308,22 @@ define([
 
         _bindEvent() {
             var that = this;
+            // Popup click / focus event
+            $(this.wrapSelector()).on('click focus', function(evt) {
+                // Close on blur
+                if ($(that.wrapSelector('.vp-popup-button')).find(evt.target).length == 0) {
+                    if (!$(evt.target).hasClass('vp-popup-codeview-box') 
+                    && $(that.wrapSelector('.vp-popup-codeview-box')).find(evt.target).length == 0) {
+                        that.closeView('code');
+                    }
+                }
+                if ($(that.wrapSelector('.vp-popup-button')).find(evt.target).length == 0) {
+                    if (!$(evt.target).hasClass('vp-popup-dataview-box') 
+                    && $(that.wrapSelector('.vp-popup-dataview-box')).find(evt.target).length == 0) {
+                        that.closeView('data');
+                    }
+                }
+            });
             // Close popup event
             $(this.wrapSelector('.vp-popup-close')).on('click', function(evt) {
                 if (that.getTaskType() === 'task') {
@@ -513,6 +529,14 @@ define([
                         break;
                 }
             });
+
+            // blur on code, dataview
+            $(this.wrapSelector('.vp-popup-codeview-box')).on('hide', function() {
+                that.closeView('code');
+            }); 
+            $(this.wrapSelector('.vp-popup-dataview-box')).on('hide', function() {
+                that.closeView('data');
+            }); 
 
             // focus on data selector input
             $(this.wrapSelector('.vp-data-selector')).on('focus', function(evt) {
@@ -1154,20 +1178,36 @@ define([
                 setTimeout(function() {
                     that.cmCodeview.refresh();
                 }, 1);
-                $(this.wrapSelector('.vp-popup-dataview-box')).hide();
+                this.closeView('data');
                 $(this.wrapSelector('.vp-popup-codeview-box')).show();
             } else if (viewType === 'data') {
                 this.renderDataView();
-                $(this.wrapSelector('.vp-popup-codeview-box')).hide();
+                this.closeView('code');
                 $(this.wrapSelector('.vp-popup-dataview-box')).show();
             } else if (viewType === 'help') {
-                $(this.wrapSelector('.vp-popup-codeview-box')).hide();
-                $(this.wrapSelector('.vp-popup-dataview-box')).hide();
+                this.closeView('code');
+                this.closeView('data');
                 this.openHelpView();
             }
         }
 
         closeView(viewType) {
+            if (viewType === 'code') {
+                // reset codeview
+                if (this.cmCodeview) {
+                    this.cmCodeview.setValue('');
+                    this.cmCodeview.save();
+        
+                    var that = this;
+                    setTimeout(function() {
+                        that.cmCodeview.refresh();
+                    }, 1);
+                }
+            } else if (viewType === 'data') {
+                // reset dataview
+                $(this.wrapSelector('.vp-popup-dataview-box')).html('');
+            }
+            // hide view
             $(this.wrapSelector('.vp-popup-'+viewType+'view-box')).hide();
         }
 
