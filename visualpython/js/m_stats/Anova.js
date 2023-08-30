@@ -60,6 +60,8 @@ define([
 
             this.columnBindList = ['depVar', 'factor', 'factorA', 'factorB', 'covariate'];
 
+            this.tmpInstallCode = []; // install codes
+
             this.subsetEditor = {};
         }
 
@@ -74,6 +76,29 @@ define([
 
                 $(that.wrapSelector('.vp-st-option')).hide();
                 $(that.wrapSelector('.vp-st-option.' + testType)).show();
+
+                that.tmpInstallCode = [];
+                that.hideInstallButton();
+
+                if (testType === 'one-way' || testType === 'two-way') {
+                    if (that.state.tukey || that.state.scheffe || that.state.duncan) {
+                        // Add installation code
+                        if (vpConfig.extensionType === 'lite') {
+                            that.tmpInstallCode = ["%pip install scikit-posthocs"];
+                        } else {
+                            that.tmpInstallCode = ["!pip install scikit-posthocs"];
+                        }
+                        that.showInstallButton();
+                    }
+                } else if (testType === 'ancova') {
+                    // Add installation code : # pip install pingouin
+                    if (vpConfig.extensionType === 'lite') {
+                        that.tmpInstallCode = ["%pip install pingouin"];
+                    } else {
+                        that.tmpInstallCode = ["!pip install pingouin"];
+                    }
+                    that.showInstallButton();
+                }
             });
 
             $(this.wrapSelector('#data')).on('change', function() {
@@ -91,6 +116,28 @@ define([
                     com_generator.vp_bindColumnSource(that, 'data', that.columnBindList, 'select', false, false);
                 }
             });
+
+            $(this.wrapSelector('.vp-st-posthoc-box .vp-state')).on('change', function() {
+                let id = $(this)[0].id;
+                let checked = $(this).prop('checked') === true;
+                that.state[id] = checked;
+                let { testType, tukey, scheffe, duncan } = that.state;
+                if (testType === 'one-way' || testType === 'two-way') {
+                    if (tukey || scheffe || duncan) {
+                        // Add installation code
+                        if (vpConfig.extensionType === 'lite') {
+                            that.tmpInstallCode = ["%pip install scikit-posthocs"];
+                        } else {
+                            that.tmpInstallCode = ["!pip install scikit-posthocs"];
+                        }
+                        that.showInstallButton();
+                    } else {
+                        that.hideInstallButton();
+                    }
+                }
+            });
+
+            $(this.wrapSelector(''))
         }
 
         templateForBody() {
@@ -145,6 +192,10 @@ define([
             // control display option
             $(this.wrapSelector('.vp-st-option')).hide();
             $(this.wrapSelector('.vp-st-option.' + this.state.testType)).show();
+        }
+
+        generateInstallCode() {
+            return this.tmpInstallCode;
         }
 
         generateCode() {
@@ -253,12 +304,6 @@ define([
                     }
 
                     if (tukey === true || scheffe === true || duncan === true) {
-                        if (vpConfig.extensionType === 'lite') {
-                            codeList.push("%pip install scikit-posthocs");
-                        } else {
-                            codeList.push("!pip install scikit-posthocs");
-                        }
-
                         // Post hoc analysis - Tukey
                         if (tukey === true) {
                             code.appendLine();
@@ -383,13 +428,6 @@ define([
                         code.append("display(_res[0])");
                     }
                     if (tukey === true || scheffe === true || duncan === true) {
-                        // Add installation code
-                        if (vpConfig.extensionType === 'lite') {
-                            codeList.push("%pip install scikit-posthocs");
-                        } else {
-                            codeList.push("!pip install scikit-posthocs");
-                        }
-
                         // Post hoc analysis - Tukey
                         if (tukey === true) {
                             code.appendLine();
@@ -451,13 +489,6 @@ define([
                         code.appendLine("    warnings.simplefilter(action='ignore', category=Warning)");
                         code.appendLine("    sns.boxplot(data=_df)");
                         code.append("    plt.show()");
-                    }
-
-                    // Add installation code : # pip install pingouin
-                    if (vpConfig.extensionType === 'lite') {
-                        codeList.push("%pip install pingouin");
-                    } else {
-                        codeList.push("!pip install pingouin");
                     }
 
                     code.appendLine();
