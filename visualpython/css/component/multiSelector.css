@@ -44,9 +44,9 @@
     background-color: #F5F5F5;
 }
 /* Item Sorting FIXME: change span to class */
-.right .vp-cs-select-item span {
+/* .right .vp-cs-select-item span {
     padding: 0px 10px 0px 0px;
-}
+} */
 /* TODO: If sortable, apply this style */
 /* .right .vp-cs-select-item span:hover {
     cursor: n-resize;
