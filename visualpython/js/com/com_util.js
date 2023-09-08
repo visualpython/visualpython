@@ -245,6 +245,31 @@ define([
         return label;
     }
 
+    /**
+     * Pack the code with ignoring the warnings
+     * @param {*} code 
+     */
+    var ignoreWarning = function(code) {
+        var convertedCode = new com_String();
+        convertedCode.appendLine('import warnings');
+        convertedCode.appendLine('from IPython.display import display');
+        convertedCode.appendLine('with warnings.catch_warnings():');
+        convertedCode.appendLine("    warnings.simplefilter('ignore')");
+        let codeLines = code.split('\n');
+        codeLines.forEach((line, idx) => {
+            if (idx > 0) {
+                convertedCode.appendLine();
+            }
+            if (codeLines.length == idx + 1) {
+                // last line
+                convertedCode.appendFormat("    display({0})", line);
+            } else {
+                convertedCode.appendFormat("    {0}", line);
+            }
+        });
+        return convertedCode.toString();
+    }
+
     //============================================================================
     // Cross-browser RegEx Split
     //============================================================================
@@ -377,6 +402,7 @@ define([
         setIsAPIListRunCode: setIsAPIListRunCode,
         getIsAPIListRunCode: getIsAPIListRunCode,
         safeString: safeString,
+        ignoreWarning: ignoreWarning,
 
         regex_split: regex_split
     }
