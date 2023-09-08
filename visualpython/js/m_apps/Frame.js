@@ -31,7 +31,7 @@ define([
     class Frame extends PopupComponent {
         _init() {
             super._init();
-            this.config.sizeLevel = 4;
+            this.config.sizeLevel = 5;
             this.config.checkModules = ['pd'];
 
             // state
@@ -788,6 +788,7 @@ define([
                         if (tab === 'apply') {
                             let colName = $(that.wrapSelector('.vp-inner-popup-apply-column option:selected')).text();
                             $(that.wrapSelector('.vp-inner-popup-apply-target-name')).text(colName);
+                            $(that.wrapSelector('.vp-inner-popup-apply-column')).trigger('change');
                         }
                     });
             
@@ -828,6 +829,7 @@ define([
                         if (tab === 'apply') {
                             let colName = $(that.wrapSelector('.vp-inner-popup-apply-column option:selected')).text();
                             $(that.wrapSelector('.vp-inner-popup-apply-target-name')).text(colName);
+                            $(that.wrapSelector('.vp-inner-popup-apply-column')).trigger('change');
                         }
                     });
                 }
@@ -943,10 +945,10 @@ define([
                                 $(that.wrapSelector('.vp-inner-popup-apply-cond-usetext')).prop('checked', false);
                             }
                             $(operTag).replaceWith(function () {
-                                return that.templateForConditionOperator(colDtype, 'vp-inner-popup-apply-oper-list');
+                                return that.templateForConditionOperator(colDtype, 'vp-inner-popup-apply-oper-list', $(this).val());
                             });
                             $(condTag).replaceWith(function () {
-                                return that.templateForConditionCondInput(category, colDtype, 'vp-inner-popup-apply-condition');
+                                return that.templateForConditionCondInput(category, colDtype, 'vp-inner-popup-apply-condition', $(this).val());
                             });
                         } catch {
                             $(that.wrapSelector('.vp-inner-popup-apply-cond-usetext')).prop('checked', false);
@@ -981,6 +983,7 @@ define([
                 $(this.wrapSelector('.vp-inner-popup-add-case')).on('click', function() {
                     // add case
                     $(this).parent().find('.vp-inner-popup-apply-case-box').append($(that.templateForApplyCase()));
+                    $(that.wrapSelector('.vp-inner-popup-apply-column')).trigger('change');
                 });
 
                 $(document).off('click', this.wrapSelector('.vp-inner-popup-apply-add-cond'));
@@ -989,6 +992,7 @@ define([
                     $(this).parent().find('.vp-inner-popup-apply-cond-box').append($(that.templateForApplyCondition()));
                     // show operator except last operator
                     $(this).parent().find('.vp-inner-popup-apply-oper-connect:not(:last)').show();
+                    $(that.wrapSelector('.vp-inner-popup-apply-column')).trigger('change');
                 });
 
                 $(document).off('click', this.wrapSelector('.vp-inner-popup-apply-del-cond'));
@@ -1538,12 +1542,12 @@ define([
             // content.appendFormatLine('<textarea type="text" id="{0}" class="{1}" placeholder="{2}">lambda x: x</textarea>'
             //                         , 'vp_popupAddApply', 'vp-input vp-inner-popup-apply-lambda', 'Type code manually');
             // render condition
-            content.appendLine('<div class="vp-grid-box vp-scrollbar" style="max-height: 220px;">');
+            content.appendLine('<div class="vp-grid-box vp-scrollbar" style="max-height: 180px;">');
             content.appendFormatLine('<div class="{0}">', 'vp-inner-popup-apply-case-box');
             content.appendLine(this.templateForApplyCase());
             content.appendLine('</div>');
-            content.appendFormatLine('<button class="vp-button {0}">+ Case</button>', 'vp-inner-popup-add-case');
             content.appendLine('</div>'); 
+            content.appendFormatLine('<button class="vp-button {0}">+ Case</button>', 'vp-inner-popup-add-case');
             content.appendLine('<div class="vp-grid-col-120">');
             // else on/off
             content.appendFormatLine('<button class="vp-button {0}" data-else="off">Else On</button>', 'vp-inner-popup-toggle-else');
@@ -2034,7 +2038,7 @@ define([
             return content.toString();
         }
 
-        templateForConditionOperator(dtype='object', className='vp-inner-popup-oper-list') {
+        templateForConditionOperator(dtype='object', className='vp-inner-popup-oper-list', prevValue='') {
             var content = new com_String();
             content.appendFormatLine('<select class="{0} {1}">', 'vp-select s', className);
             var operList = ['', '==', '!=', '<', '<=', '>', '>=', 'contains', 'not contains', 'starts with', 'ends with', 'isnull()', 'notnull()'];
@@ -2045,16 +2049,22 @@ define([
                 operList = ['', '==', '!=', '<', '<=', '>', '>=', 'isnull()', 'notnull()'];
             }
             operList.forEach(oper => {
-                content.appendFormatLine('<option value="{0}">{1}</option>', oper, oper);
+                if (oper === prevValue) {
+                    content.appendFormatLine('<option value="{0}" selected>{1}</option>', oper, oper);
+                } else {
+                    content.appendFormatLine('<option value="{0}">{1}</option>', oper, oper);
+                }
             });
             content.appendLine('</select>');
             return content.toString();
         }
 
-        templateForConditionCondInput(category, dtype='object', className='vp-inner-popup-condition') {
+        templateForConditionCondInput(category, dtype='object', className='vp-inner-popup-condition', prevValue='') {
             var vpCondSuggest = new SuggestInput();
             vpCondSuggest.addClass('vp-input m ' + className);
-
+            if (prevValue !== '') {
+                vpCondSuggest.setValue(prevValue);
+            }
             if (category && category.length > 0) {
                 vpCondSuggest.setPlaceholder((dtype=='object'?'Categorical':dtype) + " dtype");
                 vpCondSuggest.setSuggestList(function () { return category; });
@@ -2949,10 +2959,10 @@ define([
                     }
                 } else {
                     var errorContent = '';
-                    if (msg.content.ename) {
+                    if (msg.content && msg.content.ename) {
                         errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
                     }
-                    vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
+                    vpLog.display(VP_LOG_TYPE.ERROR, msg.content?.ename, msg.content?.evalue, msg.content);
                     $(that.wrapSelector('.' + VP_FE_INFO_CONTENT)).replaceWith(function() {
                         return that.renderInfoPage(errorContent);
                     });
@@ -2960,10 +2970,10 @@ define([
             }).catch(function(resultObj) {
                 let { msg } = resultObj;
                 var errorContent = '';
-                if (msg.content.ename) {
-                    errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
+                if (msg.content && msg.content.ename) {
+                    errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content?.evalue);
                 }
-                vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
+                vpLog.display(VP_LOG_TYPE.ERROR, msg.content?.ename, msg.content?.evalue, msg.content);
                 $(that.wrapSelector('.' + VP_FE_INFO_CONTENT)).replaceWith(function() {
                     return that.renderInfoPage(errorContent);
                 });
@@ -3405,8 +3415,9 @@ define([
             code.appendLine(codeStr);
             code.appendFormat("{0}.iloc[{1}:{2}].to_json(orient='{3}')", tempObj, prevLines, lines, 'split');
             
+            
             this.loading = true;
-            vpKernel.execute(code.toString()).then(function(resultObj) {
+            vpKernel.execute(com_util.ignoreWarning(code.toString())).then(function(resultObj) {
                 let { result } = resultObj;
                 try {
                     if (!result || result.length <= 0) {
@@ -3600,11 +3611,21 @@ define([
                     that.loading = false;
                 }
             }).catch(function(resultObj) {
-                let { result, type, msg } = resultObj;
-                vpLog.display(VP_LOG_TYPE.ERROR, result.ename + ': ' + result.evalue, msg, code.toString());
-                if (that.isHidden() == false) {
-                    // show alert modal only if this popup is visible
-                    com_util.renderAlertModal(result.ename + ': ' + result.evalue);
+                let { result, msg, ename, evalue, status } = resultObj;
+                if (result) {
+                    // NOTEBOOK: notebook error FIXME: migrate it on com_Kernel.execute
+                    vpLog.display(VP_LOG_TYPE.ERROR, result?.ename + ': ' + result?.evalue, msg, code.toString());
+                    if (that.isHidden() == false) {
+                        // show alert modal only if this popup is visible
+                        com_util.renderAlertModal(result?.ename + ': ' + result?.evalue, { content: code.toString(), type: 'code' });
+                    }
+                } else {
+                    // LAB: lab error FIXME: migrate it on com_Kernel.execute
+                    vpLog.display(VP_LOG_TYPE.ERROR, ename + ': ' + evalue, status, code.toString());
+                    if (that.isHidden() == false) {
+                        // show alert modal only if this popup is visible
+                        com_util.renderAlertModal(ename + ': ' + evalue, { content: code.toString(), type: 'code' });
+                    }
                 }
                 that.loading = false;
             });

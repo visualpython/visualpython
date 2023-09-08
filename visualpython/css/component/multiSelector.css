@@ -4,6 +4,7 @@
     display: grid;
     grid-template-columns: calc(47% - 15px) 50px calc(47% - 15px);
     grid-auto-rows: 100%;
+    position: relative;
 }
 .vp-cs-select-container input.vp-cs-select-search {
     width: 100%;
@@ -44,9 +45,9 @@
     background-color: #F5F5F5;
 }
 /* Item Sorting FIXME: change span to class */
-.right .vp-cs-select-item span {
+/* .right .vp-cs-select-item span {
     padding: 0px 10px 0px 0px;
-}
+} */
 /* TODO: If sortable, apply this style */
 /* .right .vp-cs-select-item span:hover {
     cursor: n-resize;
@@ -80,4 +81,21 @@
     left: calc(100% - 25px);
     bottom: 23px;
     cursor: pointer;
+}
+.vp-cs-del-item {
+    position: relative;
+    float: right;
+    top: 4px;
+    cursor: pointer;
+}
+.vp-cs-refresh {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    vertical-align: middle;
+    cursor: pointer;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
 }

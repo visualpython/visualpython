@@ -263,18 +263,25 @@ define([
                         code.appendLine("import warnings");
                         code.appendLine("with warnings.catch_warnings():");
                         code.appendLine("    warnings.simplefilter(action='ignore', category=Warning)");
-                        if (this.distList[0].child.includes(distType)) {
-                            if (distType === 'multinomial') {
-                                code.appendFormatLine("    plt.boxplot(x={0})", allocateTo);
-                            } else {
-                                code.appendFormatLine("    sns.countplot(x={0})", allocateTo);
-                            }
+                        if (distType === 'multinomial') {
+                            // code.appendFormatLine("    plt.boxplot(x={0})", allocateTo);
+                            code.appendFormatLine("    for i in range(0, {0}.shape[1]):", allocateTo);
+                            code.appendLine("        plt.subplot(2, 2, i+1)");
+                            code.appendLine("        plt.title('$x$=' + str(i))");
+                            code.appendFormatLine("        sns.countplot(x=[ x[i] for x in {0} ])", allocateTo);
+                            code.appendLine("    plt.suptitle('Generate random numbers: Multinomial')");
+                            code.appendLine("    plt.tight_layout()");
+                            code.appendLine("    plt.show()");
                         } else {
-                            code.appendFormatLine("    sns.histplot({0}, stat='density', kde=True)", allocateTo);
+                            if (this.distList[0].child.includes(distType)) {
+                                code.appendFormatLine("    sns.countplot(x={0})", allocateTo);
+                            } else {
+                                code.appendFormatLine("    sns.histplot({0}, stat='density', kde=True)", allocateTo);
+                            }
+                            code.appendFormatLine("    plt.title('Generate random numbers: {0}')", label.replace("'", "\\'"));
+                            code.appendLine("    plt.xlabel('$x$')");
+                            code.append("    plt.show()");
                         }
-                        code.appendFormatLine("    plt.title('Generate random numbers: {0}')", label.replace("'", "\\'"));
-                        code.appendLine("    plt.xlabel('$x$')");
-                        code.append("    plt.show()");
                     }
                     break;
                 case 'distribution-plot':
@@ -311,13 +318,39 @@ define([
                                 code.appendFormatLine("    sns.countplot(x=[ x[i] for x in {0} ])", allocateTo);
                                 code.appendLine("plt.suptitle('Probability mass function: Multinomial')");
                                 code.appendLine("plt.tight_layout()");
-                                code.appendLine("plt.show()");
+                                code.append("plt.show()");
                             }
                         }
                     } else {
+                        let start = -5;
+                        let end = 5;
+                        switch (distType) {
+                            case 'normal':
+                            case 'studentst':
+                            case 'multivariate_normal':
+                                start = -5;
+                                end = 5;
+                                break;
+                            case 'uniform':
+                            case 'beta':
+                            case 'dirichlet':
+                                start = 0;
+                                end = 1;
+                                break;
+                            case 'gamma':
+                            case 'chi2':
+                                start = 0;
+                                end = 30;
+                                break;
+                            case 'f':
+                                start = 0;
+                                end = 10;
+                                break;
+                        }
+
                         if (probDensityFunc === true || cumDistFunc === true) {
                             code.appendLine();
-                            code.append("x = np.linspace(-5, 5, 100)");
+                            code.appendFormat("x = np.linspace({0}, {1}, 100)", start, end);
                             if (probDensityFunc === true) {
                                 this.addCheckModules('np');
                                 this.addCheckModules('plt');
@@ -340,7 +373,7 @@ define([
                                 code.appendFormatLine("# Cumulative distribution function ({0})", label);
                                 code.appendLine("import warnings");
                                 code.appendLine("with warnings.catch_warnings():");
-                                code.appendLine("    _x = np.linspace(-5, 5, 100)");
+                                code.appendFormatLine("    _x = np.linspace({0}, {1}, 100)", start, end);
                                 code.appendLine("    plt.plot(_x, _rv.cdf(_x))");
                                 code.appendLine();
                                 code.appendFormatLine("    plt.title('Cumulative distribution function: {0}')", label.replace("'", "\\'"));

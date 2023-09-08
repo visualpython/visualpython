@@ -105,16 +105,26 @@
                 <button type="button" class="vp-button vp-popup-button" data-type="help">Help</button>
 
                 <div class="vp-popup-runadd-box">
-                    <button type="button" class="vp-button activated vp-popup-button" data-type="run" title="Save to block & Run cell">Run</button>
-                    <button type="button" class="vp-button activated vp-popup-button" data-type="show-detail">
+                    <button type="button" class="vp-button activated vp-popup-button vp-popup-run-button" data-type="run" title="Run code">Run</button>
+                    <button type="button" class="vp-button activated vp-popup-button vp-popup-show-detail-button" data-type="show-detail">
                         <!-- LAB: img to url -->
                         <!-- <img src="${vp_base}/img/arrow_short_up.svg"/> -->
                         <div class="vp-icon-arrow-short-up"></div>
                     </button>
                     <div class="vp-popup-run-detailbox vp-cursor vp-close-on-blur">
                         <!-- <div class="vp-popup-detail-button" data-type="apply" title="Save to block">Save to block</div> -->
-                        <div class="vp-popup-detail-button" data-type="run-save" title="Save to block & Run code">Run & Save</div>
-                        <div class="vp-popup-detail-button" data-type="add" title="Add code to cell">Code to cell</div>
+                        <div class="vp-popup-detail-button" title="Run code">
+                            <label><input type="radio" class="vp-popup-run-type" name="runType" value="run" checked/><span></span></label>
+                            <span class="vp-popup-detail-action-button" data-type="run">Run</span>
+                        </div>
+                        <div class="vp-popup-detail-button" title="Save to block & Run code">
+                            <label><input type="radio" class="vp-popup-run-type" name="runType" value="run-save" /><span></span></label>
+                            <span class="vp-popup-detail-action-button" data-type="run-save">Run & Save</span>
+                        </div>
+                        <div class="vp-popup-detail-button" title="Add code to cell">
+                            <label><input type="radio" class="vp-popup-run-type" name="runType" value="add" /><span></span></label>
+                            <span class="vp-popup-detail-action-button" data-type="add">Code to cell</span>
+                        </div>
                     </div>
                 </div>
                 <button type="button" class="vp-button activated vp-popup-button vp-popup-save-button" data-type="save" title="Save to target" style="display:none;">OK</button>

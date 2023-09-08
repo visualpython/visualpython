@@ -33,7 +33,7 @@ define([
             super._init();
             /** Write codes executed before rendering */
             this.config.dataview = false;
-            this.config.sizeLevel = 4;
+            this.config.sizeLevel = 5;
             this.config.checkModules = ['pd'];
 
             this.state = {
@@ -331,20 +331,25 @@ define([
                     }
                 } else {
                     var errorContent = '';
-                    if (msg.content.ename) {
+                    if (msg.content && msg.content.ename) {
                         errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue, msg.content.detail);
                     }
                     $(that.wrapSelector('#instancePreview')).html(errorContent);
-                    vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
+                    vpLog.display(VP_LOG_TYPE.ERROR, msg.content?.ename, msg.content?.evalue, msg.content);
                 }
             }).catch(function(resultObj) {
-                let { msg } = resultObj;
+                let { msg, ename, evalue, status } = resultObj;
                 var errorContent = '';
-                if (msg.content.ename) {
+                if (msg && msg.content && msg.content.ename) {
+                    // NOTEBOOK: notebook error FIXME: migrate it on com_Kernel.execute
                     errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue, msg.content.detail);
+                    vpLog.display(VP_LOG_TYPE.ERROR, msg.content?.ename, msg.content?.evalue, msg.content);
+                } else {
+                    // LAB: lab error FIXME: migrate it on com_Kernel.execute
+                    errorContent = com_util.templateForErrorBox(ename, evalue, '');
+                    vpLog.display(VP_LOG_TYPE.ERROR, ename, evalue);
                 }
                 $(that.wrapSelector('#instancePreview')).html(errorContent);
-                vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
             });
         }
 

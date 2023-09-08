@@ -77,6 +77,7 @@ define([
             } = this.config;
             this.mode = mode;   // variable / columns / index / ndarray0 / ndarray1 / methods / data(given data)
             this.parent = parent;
+            this.varType = type; // for mode:variable, variable type list to search
             this.selectedList = selectedList;
             this.includeList = includeList;
             this.excludeList = excludeList;
@@ -88,35 +89,45 @@ define([
             this.dataList = dataList;   // [ { value, code, type }, ... ]
             this.pointer = { start: -1, end: -1 };
 
+            this.loadDataList();
+        }
+
+        render() {
+            ;
+        }
+
+        loadDataList() {
             var that = this;
 
-            if (parent == null || parent === '' || (Array.isArray(parent) && parent.length == 0)) {
-                this._executeCallback([]);
-                return;
+            if (this.mode !== 'variable' && this.mode !== 'data') {
+                if (this.parent == null || this.parent === '' || (Array.isArray(this.parent) && this.parent.length == 0)) {
+                    this._executeCallback([]);
+                    return;
+                }
             }
-            switch (mode) {
+            switch (this.mode) {
                 case 'columns':
-                    this._getColumnList(parent, function(dataList) {
+                    this._getColumnList(this.parent, function(dataList) {
                         that._executeCallback(dataList);
                     });
                     break;
                 case 'variable':
-                    this._getVariableList(type, function(dataList) {
+                    this._getVariableList(this.type, function(dataList) {
                         that._executeCallback(dataList);
                     });
                     break;
                 case 'index':
-                    this._getRowList(parent, function(dataList) {
+                    this._getRowList(this.parent, function(dataList) {
                         that._executeCallback(dataList);
                     });
                     break;
                 case 'ndarray0':
-                    this._getNdarray(parent, 0, function(dataList) {
+                    this._getNdarray(this.parent, 0, function(dataList) {
                         that._executeCallback(dataList);
                     });
                     break;
                 case 'ndarray1':
-                    this._getNdarray(parent, 1, function(dataList) {
+                    this._getNdarray(this.parent, 1, function(dataList) {
                         that._executeCallback(dataList);
                     });
                     break;
@@ -125,10 +136,6 @@ define([
                     break;
             }
         }
-
-        // render() {
-        //     ;
-        // }
 
         _executeCallback(dataList) {
             if (this.includeList && this.includeList.length > 0) {
@@ -241,7 +248,8 @@ define([
                             ndList.push({
                                 value: i,
                                 code: i,
-                                type: 'int'
+                                type: 'int',
+                                location: i
                             });
                         }
                         callback(ndList);
@@ -256,7 +264,7 @@ define([
         }
 
         load() {
-            $(this.frameSelector).html(this.render());
+            $(this.frameSelector).html(this.templateForMultiSelector());
             this.bindEvent();
             this.bindDraggable();
             this._bindItemClickEvent();
@@ -270,7 +278,7 @@ define([
                     var name = $(colTags[i]).data('name');
                     var type = $(colTags[i]).data('type');
                     var code = $(colTags[i]).data('code');
-                    if (code) {
+                    if (code != null) {
                         dataList.push({ name: name, type: type, code: code});                   
                     }
                 }
@@ -278,7 +286,7 @@ define([
             return dataList;
         }
 
-        render() {
+        templateForMultiSelector() {
             var that = this;
 
             var tag = new com_String();
@@ -337,6 +345,7 @@ define([
                 tag.appendLine('<div class="vp-cs-add-item-btn vp-icon-plus"></div>');
             }
             tag.appendLine('</div>');  // APP_SELECT_RIGHT
+            tag.appendLine('<span class="vp-cs-refresh vp-icon-refresh" title="Clear and Re-load this list"></span>');
             tag.appendLine('</div>');  // APP_SELECT_CONTAINER
             return tag.toString();
         }
@@ -355,22 +364,28 @@ define([
                     info = '';
                 }
                 let iconStr = '';
+                let infoStr = '';
                 if (mode === 'columns') {
                     if (data.isNumeric === true) {
                         iconStr = '<span class="vp-icon-numeric mr5 vp-vertical-text"></span>';
                     } else {
                         iconStr = '<span class="vp-icon-non-numeric mr5 vp-vertical-text"></span>';
                     }
+                } else if (mode === 'variable') {
+                    infoStr = `<span class="vp-gray-text"> | ${data.type}</span>`;
                 }
                 // render item box
-                tag.appendFormatLine('<div class="{0} {1}" data-idx="{2}" data-name="{3}" data-type="{4}" data-code="{5}" title="{6}">{7}<span>{8}</span></div>'
-                                    , APP_SELECT_ITEM, APP_DRAGGABLE, data.location, data.value, data.type, data.code, info, iconStr, data.value);
+                tag.appendFormat('<div class="{0} {1}" data-idx="{2}" data-name="{3}" data-type="{4}" data-code="{5}" title="{6}">'
+                                    , APP_SELECT_ITEM, APP_DRAGGABLE, data.location, data.value, data.type, data.code, info);
+                tag.appendFormat('{0}<span>{1}</span>{2}', iconStr, data.value, infoStr);
+                tag.appendLine('</div>');
             });
             tag.appendLine('</div>');  // APP_SELECT_BOX
             return tag.toString();
         }
 
         renderSelectedBox(dataList) {
+            let mode = this.mode;
             var tag = new com_String();
             tag.appendFormatLine('<div class="{0} {1} {2} {3}">', APP_SELECT_BOX, 'right', APP_DROPPABLE, 'no-selection vp-scrollbar');
             // get data and make draggable items
@@ -383,16 +398,21 @@ define([
                     info = '';
                 }
                 let iconStr = '';
+                let infoStr = '';
                 if (mode === 'columns') {
                     if (data.isNumeric === true) {
                         iconStr = '<span class="vp-icon-numeric mr5 vp-vertical-text"></span>';
                     } else {
                         iconStr = '<span class="vp-icon-non-numeric mr5 vp-vertical-text"></span>';
                     }
+                } else if (mode === 'variable') {
+                    infoStr = `<span class="vp-gray-text"> | ${data.type}</span>`;
                 }
                 // render item box
-                tag.appendFormatLine('<div class="{0} {1} {2}" data-idx="{3}" data-name="{4}" data-type="{5}" data-code="{6}" title="{7}">{8}<span>{9}</span></div>'
-                                    , APP_SELECT_ITEM, APP_DRAGGABLE, 'added', data.location, data.value, data.type, data.code, info, iconStr, data.value);
+                tag.appendFormat('<div class="{0} {1} {2}" data-idx="{3}" data-name="{4}" data-type="{5}" data-code="{6}" title="{7}">'
+                                    , APP_SELECT_ITEM, APP_DRAGGABLE, 'added', data.location, data.value, data.type, data.code, info);
+                tag.appendFormat('{0}<span>{1}</span>{2}', iconStr, data.value, infoStr);
+                tag.appendLine('</div>');
             });
             tag.appendLine('</div>');  // APP_SELECT_BOX
             return tag.toString();
@@ -564,6 +584,11 @@ define([
 
                     that.change && that.change('add', that.getDataList());
                 }
+            });
+
+            // refresh
+            $(this.wrapSelector('.vp-cs-refresh')).on('click', function(event) {
+                that.loadDataList();
             });
 
             this._bindItemClickEvent();

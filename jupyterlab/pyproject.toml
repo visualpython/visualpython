@@ -32,7 +32,7 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
 ]
-version = "2.4.8"
+version = "2.4.9"
 
 [project.license]
 file = "LICENSE"
@@ -92,7 +92,7 @@ file = [
 ]
 
 [tool.tbump.version]
-current = "2.4.8"
+current = "2.4.9"
 regex = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)((?P<channel>a|b|rc|.dev)(?P<release>\\d+))?"
 
 [tool.tbump.git]

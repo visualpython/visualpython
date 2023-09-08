@@ -766,7 +766,7 @@ define([
                 case 'list':
                     code.append(data);
                     // start / end value
-                    if ((slicingStart1 && slicingStart1 != '') || (slicingEnd1 && slicingEnd1 != '')) {
+                    if ((slicingStart1 != null && slicingStart1 != '') || (slicingEnd1 != null && slicingEnd1 != '')) {
                         code.appendFormat('[{0}:{1}]', slicingStart1, slicingEnd1);
                     }
                     break;
@@ -781,7 +781,7 @@ define([
                         let colCode = '';
                         if (ndRowType == 'slicing') {
                             // slicing start / end value
-                            if ((slicingStart1 && slicingStart1 != '') || (slicingEnd1 && slicingEnd1 != '')) {
+                            if ((slicingStart1 != null && slicingStart1 != '') || (slicingEnd1 != null && slicingEnd1 != '')) {
                                 rowCode = com_util.formatString('{0}:{1}', slicingStart1, slicingEnd1);
                             }
                         } else {
@@ -802,7 +802,7 @@ define([
                         }
                         if (ndColType == 'slicing') {
                             // slicing start / end value
-                            if ((slicingStart2 && slicingStart2 != '') || (slicingEnd2 && slicingEnd2 != '')) {
+                            if ((slicingStart2 != null && slicingStart2 != '') || (slicingEnd2 != null && slicingEnd2 != '')) {
                                 colCode = com_util.formatString('{0}:{1}', slicingStart2, slicingEnd2);
                             }
                         } else {
@@ -830,7 +830,7 @@ define([
                         }
                     } else {
                         // start / end value
-                        if ((slicingStart1 && slicingStart1 != '') || (slicingEnd1 && slicingEnd1 != '')) {
+                        if ((slicingStart1 != null && slicingStart1 != '') || (slicingEnd1 != null && slicingEnd1 != '')) {
                             code.appendFormat('[{0}:{1}]', slicingStart1, slicingEnd1);
                         }
                     }

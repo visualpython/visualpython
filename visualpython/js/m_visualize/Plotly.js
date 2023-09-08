@@ -451,20 +451,20 @@ define([
                         }
                     } else {
                         var errorContent = '';
-                        if (msg.content.ename) {
+                        if (msg.content && msg.content.ename) {
                             errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
                         }
                         $(that.wrapSelector('#vp_ptPreview')).html(errorContent);
-                        vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
+                        vpLog.display(VP_LOG_TYPE.ERROR, msg.content?.ename, msg.content?.evalue, msg.content);
                     }
                 }).catch(function(resultObj) {
                     let { msg } = resultObj;
                     var errorContent = '';
-                    if (msg.content.ename) {
+                    if (msg.content && msg.content.ename) {
                         errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
                     }
                     $(that.wrapSelector('#vp_ptPreview')).html(errorContent);
-                    vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
+                    vpLog.display(VP_LOG_TYPE.ERROR, msg.content?.ename, msg.content?.evalue, msg.content);
                 });
             });
         }
