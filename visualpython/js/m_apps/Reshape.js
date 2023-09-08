@@ -277,7 +277,7 @@ define([
                     }
                 } else {
                     var errorContent = '';
-                    if (msg.content.ename) {
+                    if (msg.content && msg.content.ename) {
                         errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
                     }
                     that.renderDataPage(errorContent);
@@ -285,7 +285,7 @@ define([
             }).catch(function(resultObj) {
                 let { msg } = resultObj;
                 var errorContent = '';
-                if (msg.content.ename) {
+                if (msg.content && msg.content.ename) {
                     errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
                 }
                 that.renderDataPage(errorContent);

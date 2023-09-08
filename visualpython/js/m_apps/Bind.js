@@ -355,7 +355,7 @@ define([
             // if not, get output of all data in selected pandasObject
             vpKernel.execute(code).then(function(resultObj) {
                 let { msg } = resultObj;
-                if (msg.content.data) {
+                if (msg.content && msg.content.data) {
                     var htmlText = String(msg.content.data["text/html"]);
                     var codeText = String(msg.content.data["text/plain"]);
                     if (htmlText != 'undefined') {
@@ -368,20 +368,20 @@ define([
                     }
                 } else {
                     var errorContent = '';
-                    if (msg.content.ename) {
-                        errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
+                    if (msg.content && msg.content.ename) {
+                        errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content?.evalue);
                     }
+                    vpLog.display(VP_LOG_TYPE.ERROR, msg.content?.ename, msg.content?.evalue, msg.content);
                     that.renderDataPage(errorContent);
-                    vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
                 }
             }).catch(function(resultObj) {
                 let { msg } = resultObj;
                 var errorContent = '';
-                if (msg.content.ename) {
-                    errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
+                if (msg.content && msg.content.ename) {
+                    errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content?.evalue);
                 }
+                vpLog.display(VP_LOG_TYPE.ERROR, msg.content?.ename, msg.content?.evalue, msg.content);
                 that.renderDataPage(errorContent);
-                vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
             });
         }
 

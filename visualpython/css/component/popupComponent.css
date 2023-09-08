@@ -222,14 +222,14 @@
     margin-top: 9px;
     margin-right: 10px;
 }
-.vp-popup-run-button {
+.vp-popup-runadd-box > .vp-popup-button.vp-popup-run-button {
     display: inline-block;
     width: 60px;
     min-width: 60px;
     border-radius: 3px 0px 0px 3px;
     border-right: 0.25px solid white !important;
 }
-.vp-popup-button.vp-popup-show-detail-button {
+.vp-popup-runadd-box > .vp-popup-button.vp-popup-show-detail-button {
     display: inline-block;
     width: 20px;
     min-width: 20px;

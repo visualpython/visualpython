@@ -2959,10 +2959,10 @@ define([
                     }
                 } else {
                     var errorContent = '';
-                    if (msg.content.ename) {
+                    if (msg.content && msg.content.ename) {
                         errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
                     }
-                    vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
+                    vpLog.display(VP_LOG_TYPE.ERROR, msg.content?.ename, msg.content?.evalue, msg.content);
                     $(that.wrapSelector('.' + VP_FE_INFO_CONTENT)).replaceWith(function() {
                         return that.renderInfoPage(errorContent);
                     });
@@ -2970,10 +2970,10 @@ define([
             }).catch(function(resultObj) {
                 let { msg } = resultObj;
                 var errorContent = '';
-                if (msg.content.ename) {
-                    errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
+                if (msg.content && msg.content.ename) {
+                    errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content?.evalue);
                 }
-                vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
+                vpLog.display(VP_LOG_TYPE.ERROR, msg.content?.ename, msg.content?.evalue, msg.content);
                 $(that.wrapSelector('.' + VP_FE_INFO_CONTENT)).replaceWith(function() {
                     return that.renderInfoPage(errorContent);
                 });
@@ -3611,11 +3611,21 @@ define([
                     that.loading = false;
                 }
             }).catch(function(resultObj) {
-                let { result, type, msg } = resultObj;
-                vpLog.display(VP_LOG_TYPE.ERROR, result.ename + ': ' + result.evalue, msg, code.toString());
-                if (that.isHidden() == false) {
-                    // show alert modal only if this popup is visible
-                    com_util.renderAlertModal(result.ename + ': ' + result.evalue, { content: code.toString(), type: 'code' });
+                let { result, msg, ename, evalue, status } = resultObj;
+                if (result) {
+                    // NOTEBOOK: notebook error FIXME: migrate it on com_Kernel.execute
+                    vpLog.display(VP_LOG_TYPE.ERROR, result?.ename + ': ' + result?.evalue, msg, code.toString());
+                    if (that.isHidden() == false) {
+                        // show alert modal only if this popup is visible
+                        com_util.renderAlertModal(result?.ename + ': ' + result?.evalue, { content: code.toString(), type: 'code' });
+                    }
+                } else {
+                    // LAB: lab error FIXME: migrate it on com_Kernel.execute
+                    vpLog.display(VP_LOG_TYPE.ERROR, ename + ': ' + evalue, status, code.toString());
+                    if (that.isHidden() == false) {
+                        // show alert modal only if this popup is visible
+                        com_util.renderAlertModal(ename + ': ' + evalue, { content: code.toString(), type: 'code' });
+                    }
                 }
                 that.loading = false;
             });

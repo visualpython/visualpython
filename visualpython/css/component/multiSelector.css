@@ -4,6 +4,7 @@
     display: grid;
     grid-template-columns: calc(47% - 15px) 50px calc(47% - 15px);
     grid-auto-rows: 100%;
+    position: relative;
 }
 .vp-cs-select-container input.vp-cs-select-search {
     width: 100%;
@@ -86,4 +87,15 @@
     float: right;
     top: 4px;
     cursor: pointer;
+}
+.vp-cs-refresh {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    vertical-align: middle;
+    cursor: pointer;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
 }

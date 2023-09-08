@@ -484,6 +484,26 @@ define([
                         break;
                     case 'show-detail':
                         $(that.wrapSelector('.vp-popup-run-detailbox')).show();
+                         // set run button
+                        vpConfig.getData('runType', 'vpcfg').then(function(data) {
+                            vpLog.display(VP_LOG_TYPE.DEVELOP, 'Runtype get data', data);
+                            if (data == undefined || data == null || data === '') {
+                                data = 'run'; // default = run
+                            }
+                            that.config.runType = data;
+                            $(that.wrapSelector(`.vp-popup-run-type[value="${data}"]`)).prop('checked', true);
+                            $(that.wrapSelector('.vp-popup-run-button')).attr('data-type', data);
+                            let runTitle = 'Run code';
+                            switch (data) {
+                                case 'run-save':
+                                    runTitle = 'Save to block & Run code';
+                                    break;
+                                case 'add':
+                                    runTitle = 'Add code to cell';
+                                    break;
+                            }
+                            $(that.wrapSelector('.vp-popup-run-button')).prop('title', runTitle);
+                        });
                         evt.stopPropagation();
                         break;
                     case 'save':
@@ -729,7 +749,7 @@ define([
                 let that = this;
                 vpConfig.getData('runType', 'vpcfg').then(function(data) {
                     vpLog.display(VP_LOG_TYPE.DEVELOP, 'Runtype get data', data);
-                    if (data == null || data === '') {
+                    if (data == undefined || data == null || data === '') {
                         data = 'run'; // default = run
                     }
                     that.config.runType = data;

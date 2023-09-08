@@ -543,20 +543,20 @@ define([
                     }
                 } else {
                     var errorContent = '';
-                    if (msg.content.ename) {
-                        errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
+                    if (msg.content && msg.content.ename) {
+                        errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content?.evalue);
                     }
+                    vpLog.display(VP_LOG_TYPE.ERROR, msg.content?.ename, msg.content?.evalue, msg.content);
                     that.renderDataPage(errorContent);
-                    vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
                 }
             }).catch(function(resultObj) {
                 let { msg } = resultObj;
                 var errorContent = '';
-                if (msg.content.ename) {
-                    errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content.evalue);
+                if (msg.content && msg.content.ename) {
+                    errorContent = com_util.templateForErrorBox(msg.content.ename, msg.content?.evalue);
                 }
+                vpLog.display(VP_LOG_TYPE.ERROR, msg.content?.ename, msg.content?.evalue, msg.content);
                 that.renderDataPage(errorContent);
-                vpLog.display(VP_LOG_TYPE.ERROR, msg.content.ename, msg.content.evalue, msg.content);
             });
         }
 

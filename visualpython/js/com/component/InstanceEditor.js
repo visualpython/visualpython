@@ -349,11 +349,15 @@ define([
                         // add targetid as state if exists
                         if (targetId) {
                             popupState[targetId] = targetCode;
+                            that.state[targetId] = targetCode;
+                        }
+                        if (that.optionPopup) {
+                            that.optionPopup.remove();
+                            that.optionPopup = null;
                         }
                         that.optionPopup = new LibraryComponent(popupState,
                             { 
                                 pageThis: that,
-                                useInputVariable: true,
                                 targetSelector: that.pageThis.wrapSelector('#' + that.targetId),
 
                                 finish: function(code) {
@@ -553,17 +557,6 @@ define([
             $(this.wrapSelector()).hide();
         }
     }
-
-
-
-    
-
-
-
-
-
-
-
 
     return InstanceEditor;
 })

@@ -89,37 +89,45 @@ define([
             this.dataList = dataList;   // [ { value, code, type }, ... ]
             this.pointer = { start: -1, end: -1 };
 
+            this.loadDataList();
+        }
+
+        render() {
+            ;
+        }
+
+        loadDataList() {
             var that = this;
 
-            if (mode !== 'variable' && mode !== 'data') {
-                if (parent == null || parent === '' || (Array.isArray(parent) && parent.length == 0)) {
+            if (this.mode !== 'variable' && this.mode !== 'data') {
+                if (this.parent == null || this.parent === '' || (Array.isArray(this.parent) && this.parent.length == 0)) {
                     this._executeCallback([]);
                     return;
                 }
             }
-            switch (mode) {
+            switch (this.mode) {
                 case 'columns':
-                    this._getColumnList(parent, function(dataList) {
+                    this._getColumnList(this.parent, function(dataList) {
                         that._executeCallback(dataList);
                     });
                     break;
                 case 'variable':
-                    this._getVariableList(type, function(dataList) {
+                    this._getVariableList(this.type, function(dataList) {
                         that._executeCallback(dataList);
                     });
                     break;
                 case 'index':
-                    this._getRowList(parent, function(dataList) {
+                    this._getRowList(this.parent, function(dataList) {
                         that._executeCallback(dataList);
                     });
                     break;
                 case 'ndarray0':
-                    this._getNdarray(parent, 0, function(dataList) {
+                    this._getNdarray(this.parent, 0, function(dataList) {
                         that._executeCallback(dataList);
                     });
                     break;
                 case 'ndarray1':
-                    this._getNdarray(parent, 1, function(dataList) {
+                    this._getNdarray(this.parent, 1, function(dataList) {
                         that._executeCallback(dataList);
                     });
                     break;
@@ -128,10 +136,6 @@ define([
                     break;
             }
         }
-
-        // render() {
-        //     ;
-        // }
 
         _executeCallback(dataList) {
             if (this.includeList && this.includeList.length > 0) {
@@ -260,7 +264,7 @@ define([
         }
 
         load() {
-            $(this.frameSelector).html(this.render());
+            $(this.frameSelector).html(this.templateForMultiSelector());
             this.bindEvent();
             this.bindDraggable();
             this._bindItemClickEvent();
@@ -282,7 +286,7 @@ define([
             return dataList;
         }
 
-        render() {
+        templateForMultiSelector() {
             var that = this;
 
             var tag = new com_String();
@@ -341,6 +345,7 @@ define([
                 tag.appendLine('<div class="vp-cs-add-item-btn vp-icon-plus"></div>');
             }
             tag.appendLine('</div>');  // APP_SELECT_RIGHT
+            tag.appendLine('<span class="vp-cs-refresh vp-icon-refresh" title="Clear and Re-load this list"></span>');
             tag.appendLine('</div>');  // APP_SELECT_CONTAINER
             return tag.toString();
         }
@@ -523,6 +528,11 @@ define([
 
                     that.change && that.change('add', that.getDataList());
                 }
+            });
+
+            // refresh
+            $(this.wrapSelector('.vp-cs-refresh')).on('click', function(event) {
+                that.loadDataList();
             });
 
             this._bindItemClickEvent();

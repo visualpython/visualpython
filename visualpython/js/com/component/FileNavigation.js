@@ -633,7 +633,7 @@ define([
                 let { msg, result } = resultObj;
                 // show error using alert
                 
-                if (msg.content.evalue) {
+                if (msg.content && msg.content.evalue) {
                     let resultStr = msg.content.evalue;
                     //t.match(/\[Errno [0-9]+?\] (.*)/)[1]
                     // get error message from traceback
