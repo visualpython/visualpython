@@ -31,7 +31,7 @@ define([
             super._init();
             /** Write codes executed before rendering */
             this.config.dataview = false;
-            this.config.sizeLevel = 4;
+            this.config.sizeLevel = 5;
             this.config.dataview = false;
             this.config.runButton = false;
             this.config.checkModules = ['pd', 'plt'];
