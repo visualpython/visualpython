@@ -739,6 +739,11 @@ define([
                 let colList = pageThis.autoGen[obj.name].getDataList();
                 pageThis.state[obj.name] = colList.map(data => { return data.code });
                 value = colList.map(data => { return data.code }).join(',');
+                if (colList.length == 0) {
+                    value = '';
+                } else if (colList.length > 0) {
+                    value = '[' + value + ']';
+                }
                 $(pageThis.wrapSelector('#'+obj.name)).val(value);
                 break;
             case 'file-open':
@@ -1293,7 +1298,7 @@ define([
                             let value = list.map(data => { return data.code }).join(',');
                             if (list.length == 0) {
                                 value = '';
-                            } else if (list.length > 1) {
+                            } else if (list.length > 0) {
                                 value = '[' + value + ']';
                             }
                             pageThis.state[compId] = list.map(data => { return data.code });
