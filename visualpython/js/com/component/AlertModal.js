@@ -21,9 +21,14 @@ define([
 
     /**
      * AlertModal
+     * com_util.renderAlertModal(title, detail);
+     * - title: string
+     * - detail: object
+     *      - content: string
+     *      - type: text / code
      */
     class AlertModal extends Component {
-        constructor(title, detail='') {
+        constructor(title, detail={ content:'', type:'text' }) {
             super($('body'), { title: title, detail: detail });
         }
 
@@ -44,9 +49,16 @@ define([
 
             // set title
             $(this.wrapSelector('.vp-alertModal-titleStr')).text(this.state.title);
-            // set detail as tooltip
-            if (this.state.detail) {
-                $(this.wrapSelector('.vp-alertModal-titleStr')).attr({ title: this.state.detail });
+            // set detail
+            let { content='', type='text' } = this.state.detail;
+            if (content !== '') {
+                if (type === 'code') {
+                    $(this.wrapSelector('.vp-alertModal-detailStr')).html('<pre>' + content + '</pre>')
+                } else {
+                    $(this.wrapSelector('.vp-alertModal-detailStr')).text(content);
+                }
+            } else {
+                $(this.wrapSelector('.vp-alertModal-detailStr')).hide();
             }
         }
 
