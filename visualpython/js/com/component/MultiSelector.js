@@ -77,6 +77,7 @@ define([
             } = this.config;
             this.mode = mode;   // variable / columns / index / ndarray0 / ndarray1 / methods / data(given data)
             this.parent = parent;
+            this.varType = type; // for mode:variable, variable type list to search
             this.selectedList = selectedList;
             this.includeList = includeList;
             this.excludeList = excludeList;
@@ -90,9 +91,11 @@ define([
 
             var that = this;
 
-            if (parent == null || parent === '' || (Array.isArray(parent) && parent.length == 0)) {
-                this._executeCallback([]);
-                return;
+            if (mode !== 'variable' && mode !== 'data') {
+                if (parent == null || parent === '' || (Array.isArray(parent) && parent.length == 0)) {
+                    this._executeCallback([]);
+                    return;
+                }
             }
             switch (mode) {
                 case 'columns':
@@ -241,7 +244,8 @@ define([
                             ndList.push({
                                 value: i,
                                 code: i,
-                                type: 'int'
+                                type: 'int',
+                                location: i
                             });
                         }
                         callback(ndList);
@@ -270,7 +274,7 @@ define([
                     var name = $(colTags[i]).data('name');
                     var type = $(colTags[i]).data('type');
                     var code = $(colTags[i]).data('code');
-                    if (code) {
+                    if (code != null) {
                         dataList.push({ name: name, type: type, code: code});                   
                     }
                 }
@@ -355,22 +359,28 @@ define([
                     info = '';
                 }
                 let iconStr = '';
+                let infoStr = '';
                 if (mode === 'columns') {
                     if (data.isNumeric === true) {
                         iconStr = '<span class="vp-icon-numeric mr5 vp-vertical-text"></span>';
                     } else {
                         iconStr = '<span class="vp-icon-non-numeric mr5 vp-vertical-text"></span>';
                     }
+                } else if (mode === 'variable') {
+                    infoStr = `<span class="vp-gray-text"> | ${data.type}</span>`;
                 }
                 // render item box
-                tag.appendFormatLine('<div class="{0} {1}" data-idx="{2}" data-name="{3}" data-type="{4}" data-code="{5}" title="{6}">{7}<span>{8}</span></div>'
-                                    , APP_SELECT_ITEM, APP_DRAGGABLE, data.location, data.value, data.type, data.code, info, iconStr, data.value);
+                tag.appendFormat('<div class="{0} {1}" data-idx="{2}" data-name="{3}" data-type="{4}" data-code="{5}" title="{6}">'
+                                    , APP_SELECT_ITEM, APP_DRAGGABLE, data.location, data.value, data.type, data.code, info);
+                tag.appendFormat('{0}<span>{1}</span>{2}', iconStr, data.value, infoStr);
+                tag.appendLine('</div>');
             });
             tag.appendLine('</div>');  // APP_SELECT_BOX
             return tag.toString();
         }
 
         renderSelectedBox(dataList) {
+            let mode = this.mode;
             var tag = new com_String();
             tag.appendFormatLine('<div class="{0} {1} {2} {3}">', APP_SELECT_BOX, 'right', APP_DROPPABLE, 'no-selection vp-scrollbar');
             // get data and make draggable items
@@ -383,16 +393,21 @@ define([
                     info = '';
                 }
                 let iconStr = '';
+                let infoStr = '';
                 if (mode === 'columns') {
                     if (data.isNumeric === true) {
                         iconStr = '<span class="vp-icon-numeric mr5 vp-vertical-text"></span>';
                     } else {
                         iconStr = '<span class="vp-icon-non-numeric mr5 vp-vertical-text"></span>';
                     }
+                } else if (mode === 'variable') {
+                    infoStr = `<span class="vp-gray-text"> | ${data.type}</span>`;
                 }
                 // render item box
-                tag.appendFormatLine('<div class="{0} {1} {2}" data-idx="{3}" data-name="{4}" data-type="{5}" data-code="{6}" title="{7}">{8}<span>{9}</span></div>'
-                                    , APP_SELECT_ITEM, APP_DRAGGABLE, 'added', data.location, data.value, data.type, data.code, info, iconStr, data.value);
+                tag.appendFormat('<div class="{0} {1} {2}" data-idx="{3}" data-name="{4}" data-type="{5}" data-code="{6}" title="{7}">'
+                                    , APP_SELECT_ITEM, APP_DRAGGABLE, 'added', data.location, data.value, data.type, data.code, info);
+                tag.appendFormat('{0}<span>{1}</span>{2}', iconStr, data.value, infoStr);
+                tag.appendLine('</div>');
             });
             tag.appendLine('</div>');  // APP_SELECT_BOX
             return tag.toString();

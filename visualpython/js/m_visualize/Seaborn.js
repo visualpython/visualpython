@@ -53,6 +53,7 @@ define([
                 stat: '',
                 showValues: false,
                 showValuesPrecision: '',
+                errorbar: '',
                 sortBy: 'y',
                 sortType: '',
                 sortHue: '',
@@ -201,6 +202,7 @@ define([
                     $(that.wrapSelector('#stat')).closest('.sb-option').show();
                 } else if (chartType == 'barplot') {
                     $(that.wrapSelector('#showValues')).closest('.sb-option').show();
+                    $(that.wrapSelector('#errorbar')).closest('.sb-option').show();
                     if (that.state.setXY === false) {
                         if (that.state.x !== '' && that.state.y !== '') {
                             $(that.wrapSelector('#sortBy')).closest('.sb-option').show();
@@ -221,6 +223,8 @@ define([
                     }
                 } else if (chartType == 'heatmap') {
                     $(that.wrapSelector('#annot')).closest('.sb-option').show();
+                } else if (chartType === 'lineplot') {
+                    $(that.wrapSelector('#errorbar')).closest('.sb-option').show();
                 }
             });
             
@@ -527,6 +531,15 @@ define([
             });
             $(page).find('#sampleCount').html(sampleCountTag.toString());
 
+            // set errorbar list
+            var vpErrorbarSuggest = new SuggestInput();
+            vpErrorbarSuggest.setComponentID('errorbar');
+            vpErrorbarSuggest.addClass('vp-input vp-state');
+            vpErrorbarSuggest.setPlaceholder("('ci', 95)");
+            vpErrorbarSuggest.setValue(this.state.errorbar);
+            vpErrorbarSuggest.setSuggestList(["None", "'ci'", "'pi'", "'sd'", "'se'"]);
+            $(page).find('#errorbar').replaceWith(vpErrorbarSuggest.toTagString());
+
             // data options depend on chart type
             $(page).find('.sb-option').hide();
             if (this.state.chartType == 'histplot') {
@@ -535,6 +548,7 @@ define([
                 $(page).find('#stat').closest('.sb-option').show();
             } else if (this.state.chartType == 'barplot') {
                 $(page).find('#showValues').closest('.sb-option').show();
+                $(page).find('#errorbar').closest('.sb-option').show();
                 if (this.state.setXY === false) {
                     if (this.state.x !== '' && this.state.y !== '') {
                         $(page).find('#sortBy').closest('.sb-option').show();
@@ -555,6 +569,8 @@ define([
                 }
             } else if (this.state.chartType == 'heatmap') {
                 $(page).find('#annot').closest('.sb-option').show();
+            } else if (this.state.chartType === 'lineplot') {
+                $(page).find('#errorbar').closest('.sb-option').show();
             }
 
             //================================================================
@@ -875,7 +891,7 @@ define([
         generateCode(preview=false) {
             let { 
                 chartType, data, x, y, setXY, hue, kde, stat, 
-                showValues, showValuesPrecision, 
+                showValues, showValuesPrecision, errorbar,
                 sortType, sortBy, sortHue, sortHueText,
                 userOption='', 
                 x_limit_from, x_limit_to, y_limit_from, y_limit_to,
@@ -940,6 +956,12 @@ define([
             if (showValues === true && chartType === 'barplot') {
                 // etcOptionCode.push('ci=None'); // changed to errorbar after 0.12 version
                 etcOptionCode.push('errorbar=None');
+            } else {
+                if (chartType === 'barplot' || chartType === 'lineplot') {
+                    if (errorbar !== '') {
+                        etcOptionCode.push(com_util.formatString("errorbar={0}", errorbar));
+                    }
+                }
             }
             if (setXY === false && sortType !== '') {
                 let sortCode = '';

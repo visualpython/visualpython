@@ -525,7 +525,7 @@ define([
                                 // vp-multilang for success message
                                 com_util.renderSuccessMessage('Successfully removed!');
                             }).catch(function(err) {
-                                com_util.renderAlertModal('Failed to remove data...', err);
+                                com_util.renderAlertModal('Failed to remove data...', { content: err });
                                 // load again
                                 that.loadUdfList();
                             }).finally(function() {
@@ -543,7 +543,7 @@ define([
                             // vp-multilang for success message
                             com_util.renderSuccessMessage('Successfully removed!');
                         }).catch(function(err) {
-                            com_util.renderAlertModal('Failed to remove data...', err);
+                            com_util.renderAlertModal('Failed to remove data...', { content: err });
                             // load again
                             that.loadUdfList();
                         }).finally(function() {

@@ -65,7 +65,7 @@ define([
             this.data = {
                 // Configuration
                 'vpcfg': {
-                    
+                    'runType': 'run'
                 },
                 // User defined code for Snippets
                 'vpudf': {
@@ -636,7 +636,7 @@ define([
         /**
          * Set configuration data (on server)
          * @param {Object} dataObj 
-         * @param {String} configKey 
+         * @param {String} configKey vpcfg / vpudf / vpimport / vppackman
          */
         setData(dataObj, configKey='vpudf') {
             let that = this;

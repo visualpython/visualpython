@@ -99,7 +99,7 @@ define([
             this.category = category;
 
             this.config = {
-                sizeLevel: 0,          // 0: 400x400 / 1: 500x500 / 2: 600x500 / 3: 750x500
+                sizeLevel: 0,          // 0: 400x400 / 1: 500x500 / 2: 600x500 / 3: 750x500 / 4: 
                 executeMode: 'code',   // cell execute mode
                 // show header bar buttons
                 installButton: false, // install button (#popupInstall) // FIXME: after creating packagemanager, deprecate it
@@ -112,6 +112,8 @@ define([
                 // show footer
                 runButton: true,
                 footer: true,
+                // run type : run / run-save / add
+                runType: 'run',
                 // position and size
                 position: { right: 10, top: 120 },
                 size: { width: 400, height: 550 },
@@ -487,15 +489,53 @@ define([
                     case 'save':
                         that.save();
                         break;
+                    case 'run-save':
+                        var result = that.run();
+                        if (result) {
+                            that.save();
+                        }
+                        break;
+                    case 'add':
+                        var result = that.run(false);
+                        if (result) {
+                            // that.save();
+                            that.close();
+                        }
+                        break;
                 }
             });
+            // Click detail radio
+            $(this.wrapSelector('.vp-popup-run-type')).on('click', function(evt) {
+                let runType = $(that.wrapSelector('.vp-popup-run-type[name=runType]:checked')).val();
+                that.config.runType = runType;
+                // save as vpConfig
+                vpConfig.setData({runType: runType}, 'vpcfg');
+                $(that.wrapSelector('.vp-popup-run-button')).attr('data-type', runType);
+                let runTitle = 'Run code';
+                switch (runType) {
+                    case 'run-save':
+                        runTitle = 'Save to block & Run code';
+                        break;
+                    case 'add':
+                        runTitle = 'Add code to cell';
+                        break;
+                }
+                $(that.wrapSelector('.vp-popup-run-button')).prop('title', runTitle);
+            });
             // Click detail buttons
-            $(this.wrapSelector('.vp-popup-detail-button')).on('click', function(evt) {
+            $(this.wrapSelector('.vp-popup-detail-action-button')).on('click', function(evt) {
                 var btnType = $(this).data('type');
                 switch(btnType) {
                     // case 'apply':
                     //     that.save();
                     //     break;
+                    case 'run':
+                        var result = that.run();
+                        if (result) {
+                            // that.save();
+                            that.close();
+                        }
+                        break;
                     case 'run-save':
                         var result = that.run();
                         if (result) {
@@ -684,7 +724,30 @@ define([
                 $(this.wrapSelector('.vp-popup-body')).css({
                     'height': 'calc(100% - 30px)'
                 })
+            } else {
+                // set run button
+                let that = this;
+                vpConfig.getData('runType', 'vpcfg').then(function(data) {
+                    vpLog.display(VP_LOG_TYPE.DEVELOP, 'Runtype get data', data);
+                    if (data == null || data === '') {
+                        data = 'run'; // default = run
+                    }
+                    that.config.runType = data;
+                    $(that.wrapSelector(`.vp-popup-run-type[value="${data}"]`)).prop('checked', true);
+                    $(that.wrapSelector('.vp-popup-run-button')).attr('data-type', data);
+                    let runTitle = 'Run code';
+                    switch (data) {
+                        case 'run-save':
+                            runTitle = 'Save to block & Run code';
+                            break;
+                        case 'add':
+                            runTitle = 'Add code to cell';
+                            break;
+                    }
+                    $(that.wrapSelector('.vp-popup-run-button')).prop('title', runTitle);
+                });
             }
+            
 
             // popup-frame size
             switch (sizeLevel) {
@@ -698,6 +761,9 @@ define([
                     this.config.size = { width: 760, height: 550 };
                     break;
                 case 4:
+                    this.config.size = { width: 840, height: 550 };
+                    break;
+                case 5:
                     this.config.size = { width: 1064, height: 550 };
                     break;
             }

@@ -43,8 +43,8 @@
 	src: url(../fonts/consola.ttf) format("font-truetype");
 }
 /* font style */
-.vp-primary {
-    color: var(--vp-font-highlight);
+.vp-primary-text {
+    color: var(--vp-font-primary);
 }
 .vp-orange-text {
     color: var(--vp-font-highlight);
