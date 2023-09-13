@@ -514,6 +514,19 @@ define([
                             }
                         }
                     }
+                    if (modelType === 'SMOTE') {
+                        infos = {
+                            'get_feature_names_out': {
+                                name: 'get_feature_names_out',
+                                label: 'Get feature names',
+                                code: '${feature_names_allocate} = ${model}.get_feature_names_out()',
+                                description: 'Get output feature names for transformation.',
+                                options: [
+                                    { name: 'feature_names_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'features' }
+                                ]
+                            }
+                        }
+                    }
                     infos = {
                         ...infos,
                         'get_params': defaultInfos['get_params']
