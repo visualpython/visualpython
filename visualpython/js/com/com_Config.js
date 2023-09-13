@@ -1109,11 +1109,11 @@ define([
     Config.ML_DATA_DICT = {
         'Data Preparation': [
             /** Encoding */
-            'OneHotEncoder', 'LabelEncoder', 'OrdinalEncoder', 'TargetEncoder', 'SMOTE',
+            'OneHotEncoder', 'LabelEncoder', 'OrdinalEncoder', 'TargetEncoder',
             /** Scaling */
             'StandardScaler', 'RobustScaler', 'MinMaxScaler', 'Normalizer', 'FunctionTransformer', 'PolynomialFeatures', 'KBinsDiscretizer',
             /** ETC */
-            'SimpleImputer', 'ColumnTransformer'
+            'SimpleImputer', 'SMOTE', 'ColumnTransformer'
         ],
         'Regression': [
             'LinearRegression', 'Ridge', 'Lasso', 'ElasticNet', 'SVR', 'DecisionTreeRegressor', 'RandomForestRegressor', 'GradientBoostingRegressor', 'XGBRegressor', 'LGBMRegressor', 'CatBoostRegressor',
