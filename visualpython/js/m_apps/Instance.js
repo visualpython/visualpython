@@ -263,7 +263,8 @@ define([
             let cmObj = this.getCodemirror('vp_instanceVariable');
             let rightCode = (cmObj && cmObj.cm)?cmObj.cm.getValue():'';
             if (leftCode && leftCode != '') {
-                sbCode.appendFormat('{0} = {1}', leftCode, rightCode);
+                sbCode.appendFormatLine('{0} = {1}', leftCode, rightCode);
+                sbCode.append(leftCode); // show allocation (from version 2.4.10)
             } else {
                 sbCode.appendFormat('{0}', rightCode);
             }
