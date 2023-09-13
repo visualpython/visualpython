@@ -112,7 +112,7 @@ define([
                     });
                     break;
                 case 'variable':
-                    this._getVariableList(this.type, function(dataList) {
+                    this._getVariableList(this.varType, function(dataList) {
                         that._executeCallback(dataList);
                     });
                     break;
