@@ -75,7 +75,8 @@ define([
                         'import matplotlib.pyplot as plt',
                         '%matplotlib inline',
                         'import seaborn as sns',
-                        'import plotly.express as px'
+                        'import plotly.express as px',
+                        'import pyarrow as pa'
                     ],
                     'matplotlib customizing': [
                         'import matplotlib.pyplot as plt',
@@ -132,7 +133,8 @@ define([
                             'from plotly.offline import init_notebook_mode',
                             'init_notebook_mode(connected=True)'
                         ]
-                    }
+                    },
+                    { library: 'pyarrow', alias:'pa' },
                 ]
             }
 
@@ -207,6 +209,10 @@ define([
                 },
                 'sm': {
                     code: 'import statsmodels.api as sm',
+                    type: 'package'
+                },
+                'pyarrow': {
+                    code: 'import pyarrow as pa',
                     type: 'package'
                 }
             }

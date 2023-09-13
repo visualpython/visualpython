@@ -37,7 +37,8 @@ define([
                     'from plotly.offline import init_notebook_mode',
                     'init_notebook_mode(connected=True)'
                 ], checked: false
-            }
+            },
+            { i0: 'pyarrow', i1: 'pa', type: 'module', checked: false},
         ],
         'machine-learning': [
             { i0: 'sklearn.model_selection',  i1: 'train_test_split', type: 'function' },
