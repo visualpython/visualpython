@@ -525,7 +525,7 @@
     height: 25px;
 }
 .vp-popup-frame .vp-accordian-box {
-    padding: 0px 15px 15px 0px;
+    padding: 0px 15px 0px 0px;
 }
 
 /* resizable handler */
