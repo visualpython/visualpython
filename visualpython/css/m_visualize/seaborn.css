@@ -47,17 +47,28 @@
     height: 100%;
 }
 .vp-tab-page-box.figure {
-    height: calc(100% - 30px);
+    height: 100%;
     align-content: baseline;
     grid-template-rows: 1fr;
+    overflow: hidden;
+}
+.vp-tab-page-box.figure > .vp-tab-page {
+    overflow: auto;
 }
 .vp-tab-page-box.plot {
-    height: calc(100% - 30px);
-    min-height: 352px;
+    /* height: calc(100% - 30px);
+    min-height: 352px; */
     align-content: baseline;
+    height: 100%;
+    max-height: 100%;
+    overflow: scroll;
+    padding: 15px 15px 0px 15px;
 }
 .vp-chart-plot-box {
     height: 100%;
+    display: grid;
+    grid-template-rows: 30px calc(100% - 30px);
+    overflow: auto;
 }
 .vp-chart-body {
     display: grid;
@@ -75,6 +86,14 @@
 .vp-chart-left-box, 
 .vp-chart-right-box {
     height: 100%;
+    display: grid;
+    grid-template-rows: 30px calc(100% - 30px);
+}
+.vp-chart-left-box {
+    overflow: auto;
+}
+.vp-chart-right-box {
+    overflow: hidden;
 }
 .vp-chart-preview-title {
     line-height: 30px;
@@ -86,7 +105,8 @@
 .vp-chart-preview-box {
     min-height: 352px;
     width: 100%;
-    height: calc(100% - 30px);
+    /* height: calc(100% - 30px); */
+    height: 100%;
 }
 .vp-chart-preview-content:empty::after {
     content: 'No preview image';
