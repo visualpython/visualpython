@@ -47,6 +47,7 @@ define([
             this.packageLibTemplate = {
                 'numpy': { pipName: 'numpy' },
                 'pandas': { pipName: 'pandas' },
+                'pyarrow': { pipName: 'pyarrow' },
                 'matplotlib': { pipName: 'matplotlib' },
                 'seaborn': { pipName: 'seaborn' },
                 'plotly': { pipName: 'plotly' },
