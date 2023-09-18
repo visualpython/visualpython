@@ -100,7 +100,7 @@ def vp_create_feature_importances(model, X_train=None, sort=False):
         feature_names = [ 'X{}'.format(i) for i in range(len(model.feature_importances_)) ]
                         
     df_i = _vp_pd.DataFrame(model.feature_importances_, index=feature_names, columns=['Feature_importance'])
-    df_i['Percentage'] = 100 * (df_i['Feature_importance'] / df_i['Feature_importance'].max())
+    df_i['Percentage'] = 100 * df_i['Feature_importance']
     if sort: df_i.sort_values(by='Feature_importance', ascending=False, inplace=True)
     df_i = df_i.round(2)
                         
