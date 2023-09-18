@@ -519,7 +519,7 @@ define([
             // Click detail buttons
             $(this.wrapSelector('.vp-popup-detail-action-button')).on('click', function(evt) {
                 var btnType = $(this).data('type');
-                vpConfig.setData({runType: runType}, 'vpcfg');
+                vpConfig.setData({runType: btnType}, 'vpcfg');
                 that._setDefaultRunType(btnType); // run, run-save, add
                 switch(btnType) {
                     // case 'apply':
