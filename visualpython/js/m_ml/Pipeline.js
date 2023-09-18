@@ -63,6 +63,9 @@ define([
                 - Fit
                 - Transform
                 - Predict
+                - Fit and Predict
+                - Fit and Transform
+                - Fit and Resample
              */
             this.templateList = {
                 'data-prep': {
@@ -73,9 +76,10 @@ define([
                          * ml_* is pre-defined app
                          * pp_* is defined only for Pipeline
                          */
-                        { name: 'ml_dataPrep', label: 'Data Prep', useApp: true },
+                        { name: 'ml_dataPrep', label: 'Data Prep', useApp: true, child: ['pp_fit', 'pp_transform', 'pp_fit_resample'] },
                         { name: 'pp_fit', label: 'Fit' },
-                        { name: 'pp_transform', label: 'Transform' }
+                        { name: 'pp_transform', label: 'Transform' },
+                        { name: 'pp_fit_resample', label: 'Fit and Resample' }
                     ]
                 },
                 'regression': {
@@ -286,7 +290,7 @@ define([
                     that.state.modelTypeName = modelTypeName;
                     
                     // show fit / predict / transform depends on model selection
-                    let defaultActions = ['fit', 'predict', 'transform', 'fit_predict', 'fit_transform'];
+                    let defaultActions = ['fit', 'predict', 'transform', 'fit_predict', 'fit_transform', 'fit_resample'];
                     let actions = that.modelEditor.getAction(modelTypeName);
                     defaultActions.forEach(actKey => {
                         if (actions[actKey] === undefined) {
@@ -308,6 +312,10 @@ define([
                                 } else {
                                     $(that.wrapSelector(`.vp-pp-item[data-name="pp_${actKey}"]`)).hide();
                                 }
+                            } else if (actKey === 'fit_resample') {
+                                // for SMOTE: show fit_resample only
+                                $(that.wrapSelector(`.vp-pp-item[data-name="pp_fit"]`)).hide();
+                                $(that.wrapSelector(`.vp-pp-item[data-name="pp_transform"]`)).hide();
                             }
                         }
                         $(that.wrapSelector('.vp-pp-item')).removeClass('vp-last-visible');
@@ -580,6 +588,9 @@ define([
                 case 'pp_fit_transform':
                     tag = this.templateForOptionPage(actions['fit_transform']);
                     break;
+                case 'pp_fit_resample':
+                    tag = this.templateForOptionPage(actions['fit_resample']);
+                    break;
             }
             $(this.wrapSelector(`.vp-pp-step-page[data-name="${appId}"]`)).html(`
                 <div class="vp-grid-border-box vp-grid-col-110">${tag}</div>
@@ -679,6 +690,9 @@ define([
                     break;
                 case 'pp_fit_transform':
                     actObj = actions['fit_transform'];
+                    break;
+                case 'pp_fit_resample':
+                    actObj = actions['fit_resample'];
                     break;
             }
 

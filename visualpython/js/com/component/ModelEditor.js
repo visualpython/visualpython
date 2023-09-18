@@ -143,7 +143,6 @@ define([
                             description: 'Transform labels to normalized encoding.'
                         }
                     }
-
                     if (modelType != 'ColumnTransformer') {
                         actions = {
                             ...actions,
@@ -155,6 +154,32 @@ define([
                                 options: [
                                     { name: 'inverse_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
                                     { name: 'inverse_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'inv_trans' }
+                                ]
+                            }
+                        }
+                    }
+                    if (modelType === 'SMOTE') {
+                        actions = {
+                            'fit': {
+                                name: 'fit',
+                                label: 'Fit',
+                                code: '${model}.fit(${fit_featureData}, ${fit_targetData})',
+                                description: 'Check inputs and statistics of the sampler.',
+                                options: [
+                                    { name: 'fit_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_train' }, 
+                                    { name: 'fit_targetData', label: 'Target Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y_train' }
+                                ]
+                            },
+                            'fit_resample': {
+                                name: 'fit_resample',
+                                label: 'Fit and resample',
+                                code: '${fit_res_allocateX}, ${fit_res_allocatey} = ${model}.fit_resample(${fit_res_featureData}, ${fit_res_targetData})',
+                                description: 'Resample the dataset.',
+                                options: [
+                                    { name: 'fit_res_allocateX', label: 'Allocate feature', component: ['input'], placeholder: 'New variable', value: 'X_res' },
+                                    { name: 'fit_res_allocatey', label: 'Allocate target', component: ['input'], placeholder: 'New variable', value: 'y_res' },
+                                    { name: 'fit_res_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_train' },
+                                    { name: 'fit_res_targetData', label: 'Target Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y_train' }
                                 ]
                             }
                         }
@@ -407,10 +432,11 @@ define([
                             'fit': {
                                 name: 'fit',
                                 label: 'Fit',
-                                code: '${model}.fit(${fit_featureData})',
+                                code: '${model}.fit(${fit_featureData}${fit_targetData})',
                                 description: 'Run fit with all sets of parameters.',
                                 options: [
-                                    { name: 'fit_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' }
+                                    { name: 'fit_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_train' },
+                                    { name: 'fit_targetData', label: 'Target Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y_train', usePair: true, pairKey: 'y' }
                                 ]
                             },
                             'predict': {
@@ -419,7 +445,7 @@ define([
                                 code: '${pred_allocate} = ${model}.predict(${pred_featureData})',
                                 description: 'Call predict on the estimator with the best found parameters.',
                                 options: [
-                                    { name: 'pred_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
+                                    { name: 'pred_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_test' },
                                     { name: 'pred_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'pred' }
                                 ]
                             },
@@ -592,6 +618,19 @@ define([
                                 label: 'Get feature names',
                                 code: '${feature_names_allocate} = ${model}.get_feature_names_out()',
                                 description: 'Get output feature names.',
+                                options: [
+                                    { name: 'feature_names_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'features' }
+                                ]
+                            }
+                        }
+                    }
+                    if (modelType === 'SMOTE') {
+                        infos = {
+                            'get_feature_names_out': {
+                                name: 'get_feature_names_out',
+                                label: 'Get feature names',
+                                code: '${feature_names_allocate} = ${model}.get_feature_names_out()',
+                                description: 'Get output feature names for transformation.',
                                 options: [
                                     { name: 'feature_names_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'features' }
                                 ]
