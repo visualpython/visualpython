@@ -39,7 +39,7 @@ define([
             this.config.checkModules = ['pd'];
 
             this.fileExtensions = {
-                'csv': ['csv', 'tsv'],
+                'csv': ['csv', 'tsv', 'txt'],
                 'excel': ['xlsx', 'xls'],
                 'json': ['json'],
                 'pickle': [],
