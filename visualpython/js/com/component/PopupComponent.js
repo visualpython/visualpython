@@ -1328,7 +1328,7 @@ define([
             $(this.wrapSelector('.vp-inner-popup-box')).show();
 
             // focus on first input
-            $(this.wrapSelector('.vp-inner-popup-box input:not(:disabled):visible:first')).focus();
+            $(this.wrapSelector('.vp-inner-popup-box input:not(:readonly):not(:disabled):visible:first')).focus();
             // disable Jupyter key
             com_interface.disableOtherShortcut();
         }
