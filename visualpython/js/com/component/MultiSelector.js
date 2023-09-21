@@ -367,9 +367,9 @@ define([
                 let infoStr = '';
                 if (mode === 'columns') {
                     if (data.isNumeric === true) {
-                        iconStr = '<span class="vp-icon-numeric mr5 vp-vertical-text"></span>';
+                        iconStr = '<span class="vp-icon-numeric mr5 vp-vertical-text" title="Numeric column"></span>';
                     } else {
-                        iconStr = '<span class="vp-icon-non-numeric mr5 vp-vertical-text"></span>';
+                        iconStr = '<span class="vp-icon-non-numeric mr5 vp-vertical-text" title="Non-numeric column"></span>';
                     }
                 } else if (mode === 'variable') {
                     infoStr = `<span class="vp-gray-text"> | ${data.type}</span>`;
@@ -401,9 +401,9 @@ define([
                 let infoStr = '';
                 if (mode === 'columns') {
                     if (data.isNumeric === true) {
-                        iconStr = '<span class="vp-icon-numeric mr5 vp-vertical-text"></span>';
+                        iconStr = '<span class="vp-icon-numeric mr5 vp-vertical-text" title="Numeric column"></span>';
                     } else {
-                        iconStr = '<span class="vp-icon-non-numeric mr5 vp-vertical-text"></span>';
+                        iconStr = '<span class="vp-icon-non-numeric mr5 vp-vertical-text" title="Non-numeric column"></span>';
                     }
                 } else if (mode === 'variable') {
                     infoStr = `<span class="vp-gray-text"> | ${data.type}</span>`;
