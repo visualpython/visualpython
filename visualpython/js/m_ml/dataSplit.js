@@ -175,7 +175,7 @@ define([
                 options.appendFormat(', shuffle={0}', shuffle);
             }
             if (shuffle != 'False' && stratify && stratify != '') {
-                options.appendFormat(', startify={0}', stratify);
+                options.appendFormat(', stratify={0}', stratify);
             }
 
             let code = new com_String();
