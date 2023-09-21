@@ -35,17 +35,17 @@ define([
             super._init();
             /** Write codes executed before rendering */
             this.config.dataview = false;
-            this.config.sizeLevel = 1;
+            this.config.sizeLevel = 2;
             this.config.checkModules = ['pd'];
 
             this.fileExtensions = {
-                'csv': 'csv',
-                'excel': 'xlsx',
-                'json': 'json',
-                'pickle': '',
-                'sas': '', // xport or sas7bdat
-                'spss': '',
-                'parquet':'parquet'
+                'csv': ['csv', 'tsv', 'txt'],
+                'excel': ['xlsx', 'xls'],
+                'json': ['json'],
+                'pickle': [],
+                'sas': [], // xport or sas7bdat
+                'spss': [],
+                'parquet': ['parquet']
             }
             
             this.package = {
@@ -69,7 +69,8 @@ define([
             }
 
             this.state = {
-                fileExtension: 'csv',
+                fileType: 'csv',
+                fileExtension: ['csv'],
                 selectedFile: '',
                 selectedPath: '',
                 vp_fileioType: 'Read',
@@ -188,6 +189,11 @@ define([
             }
         }
 
+        _unbindEvent() {
+            super._unbindEvent();
+            $(document).off('change', this.wrapSelector('#fileReadAs'));
+        }
+
         _bindEvent() {
             super._bindEvent();
             /** Implement binding events */
@@ -197,6 +203,19 @@ define([
                 that.state['vp_fileioType'] = pageType;
                 $(that.wrapSelector('.vp-fileio-box')).hide();
                 $(that.wrapSelector('#vp_file' + pageType)).show();
+
+                if (pageType === 'Read' && that.fileState[pageType].selectedType === 'spss') {
+                    // show install button
+                    that.showInstallButton();
+                    // show install note below File type selection
+                    $(`<tr class="vp-spss-note"><td colspan="2">
+                        <label class="vp-orange-text vp-italic">NOTE: </label>
+                        <label class="vp-gray-text vp-italic">pyreadstat package is required to read spss file.</label>
+                    </td></tr>`).insertAfter($(that.wrapSelector('#fileType')).closest('tr'));
+                } else {
+                    that.hideInstallButton();
+                    $(that.wrapSelector('.vp-spss-note')).remove();
+                }
 
 
                 //set fileExtensions
@@ -210,26 +229,24 @@ define([
                 let isChecked = $(this).prop('checked');
                 var fileioType = that.state.vp_fileioType;
                 var prefix = '#vp_file' + fileioType + ' ';
-                var selectedFileFormat = that.fileState[fileioType].selectedType;
+                var selectedType = that.fileState[fileioType]['selectedType'];
                 var fileioTypePrefix = fileioType.toLowerCase();
                 if(fileioTypePrefix == 'write'){
                     fileioTypePrefix = "to";
                 }
+                let fileId = that.fileState[fileioType].fileTypeId[selectedType];
 
-                if(isChecked){  // pyArrow
-                    that.fileState[fileioType].fileTypeId[that.state.fileExtension] = "pa_" + fileioTypePrefix + selectedFileFormat[0].toUpperCase() + selectedFileFormat.slice(1);
+                if (isChecked) {  // pyArrow
+                    fileId = "pa_" + fileioTypePrefix + selectedType[0].toUpperCase() + selectedType.slice(1);
+                    // that.fileState[fileioType].fileTypeId[that.state.fileExtension] = "pa_" + fileioTypePrefix + selectedFileFormat[0].toUpperCase() + selectedFileFormat.slice(1);
                     $(that.wrapSelector(prefix + '#vp_optionBox')).closest('.vp-accordian-container').hide();
-                }
-                else{  // pandas
-                    that.fileState[fileioType].fileTypeId[that.state.fileExtension] = "pd_" + fileioTypePrefix + selectedFileFormat[0].toUpperCase() + selectedFileFormat.slice(1);
-                    if (that.state.fileExtension != 'parquet'){  // parquet has no options area
+                } else {  // pandas
+                    // that.fileState[fileioType].fileTypeId[that.state.fileExtension] = "pd_" + fileioTypePrefix + selectedFileFormat[0].toUpperCase() + selectedFileFormat.slice(1);
+                    if (that.state.fileType != 'parquet'){  // parquet has no options area
                         $(that.wrapSelector(prefix + '#vp_optionBox')).closest('.vp-accordian-container').show();
                     }
                 }
 
-                var fileTypeObj = that.fileState[fileioType]['fileTypeId'];
-                var selectedType = that.fileState[fileioType]['selectedType'];
-                let fileId = fileTypeObj[selectedType];
                 let pdLib = pandasLibrary.PANDAS_FUNCTION;
                 let thisPkg = JSON.parse(JSON.stringify(pdLib[fileId]));
                 
@@ -246,31 +263,14 @@ define([
             if(fileioTypePrefix == 'write'){
                 fileioTypePrefix = "to";
             }
-            var selectedFileFormat = that.fileState[pageType].selectedType;
             // select file type 
             $(this.wrapSelector(prefix + '#fileType')).change(function() {
-                var value = $(this).val();
-                that.fileState[pageType].selectedType = value;
-
-                // Whenever change the file type, change to default pandas
-                that.fileState[pageType].fileTypeId[that.state.fileExtension] = "pd_" + fileioTypePrefix + selectedFileFormat[0].toUpperCase() + selectedFileFormat.slice(1);
-
+                var fileType = $(this).val();
+                that.fileState[pageType].selectedType = fileType;
     
                 // reload
                 that.renderPage(pageType);
                 that._bindEventByType(pageType);
-
-                if (value === 'spss') {
-                    // show install button
-                    that.showInstallButton();
-                    // show install note below File type selection
-                    $(`<tr><td colspan="2">
-                        <label class="vp-orange-text vp-italic">NOTE: </label>
-                        <label class="vp-gray-text vp-italic">pyreadstat package is required to read spss file.</label>
-                    </td></tr>`).insertAfter($(that.wrapSelector('#fileType')).closest('tr'));
-                } else {
-                    that.hideInstallButton();
-                }
             });
     
             // open file navigation
@@ -282,8 +282,8 @@ define([
                 }
 
                 let extensionList = [];
-                if (that.state.fileExtension !== '') {
-                    extensionList = [ that.state.fileExtension ];
+                if (that.state.fileExtension && that.state.fileExtension.length > 0) {
+                    extensionList = that.state.fileExtension;
                 }
 
                 let fileNavi = new FileNavigation({
@@ -417,8 +417,7 @@ define([
                     $('<tr>').append($(`<td><label for="fileType" class="vp-bold vp-orange-text">File Type</label></td>`))
                             .append($('<td><select id="fileType" class="vp-select"></select>  <label><input id="fileReadAs" type="checkbox"/><span>Use PyArrow</span></label></td>'))
                 );
-            }
-            else{
+            } else {
                 $(this.wrapSelector(prefix + '#vp_inputOutputBox table tbody')).prepend(
                     $('<tr>').append($(`<td><label for="fileType" class="vp-bold vp-orange-text">File Type</label></td>`))
                             .append($('<td><select id="fileType" class="vp-select"></select> </td>'))
@@ -432,7 +431,6 @@ define([
                     $(`<option value="${type}">${type}</option>`)
                 );
             });
-
 
             // prepend user option
             let hasAllocateTo = $(this.wrapSelector(prefix + '#o0')).length > 0;
@@ -476,6 +474,18 @@ define([
                         , 'vp-file-browser-button')
                 );
             }
+
+            if (pageType === 'Read' && selectedType === 'spss') {
+                // show install button
+                this.showInstallButton();
+                // show install note below File type selection
+                $(`<tr class="vp-spss-note"><td colspan="2">
+                    <label class="vp-orange-text vp-italic">NOTE: </label>
+                    <label class="vp-gray-text vp-italic">pyreadstat package is required to read spss file.</label>
+                </td></tr>`).insertAfter($(this.wrapSelector('#fileType')).closest('tr'));
+            } else {
+                this.hideInstallButton();
+            }
     
             // encoding suggest input
             $(this.wrapSelector('#encoding')).replaceWith(function() {
@@ -486,6 +496,18 @@ define([
                 suggestInput.addClass('vp-input vp-state');
                 suggestInput.setSuggestList(function() { return encodingList; });
                 suggestInput.setPlaceholder('encoding option');
+                return suggestInput.toTagString();
+            });
+
+            // seperator suggest input
+            $(this.wrapSelector('#sep')).replaceWith(function() {
+                // seperator list : 
+                var sepList = [',', '|', '\\t', '\\n', ':', ';', '-', '_', '&', '/', '\\'];
+                var suggestInput = new SuggestInput();
+                suggestInput.setComponentID('sep');
+                suggestInput.addClass('vp-input vp-state');
+                suggestInput.setSuggestList(function() { return sepList; });
+                suggestInput.setPlaceholder('Input seperator');
                 return suggestInput.toTagString();
             });
         }

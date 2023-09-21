@@ -175,11 +175,12 @@ define([
             name: 'SMOTE',
             install: '!pip install imblearn',
             import: 'from imblearn.over_sampling import SMOTE',
-            code: 'SMOTE(${random_state}${k_neighbors}${etc})',
+            code: 'SMOTE(${random_state}${k_neighbors}${sampling_strategy}${etc})',
             returnType: 'SMOTE',
             options: [
                 { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true },
-                { name: 'k_neighbors', component: ['input_number'], default: 5, usePair: true }
+                { name: 'k_neighbors', component: ['input_number'], default: 5, usePair: true },
+                { name: 'sampling_strategy', component: ['input'], placeholder: "'auto'", usePair: true }
             ]
         },
         /** Data Preparation - Scaling */

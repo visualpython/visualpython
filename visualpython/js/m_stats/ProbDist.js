@@ -86,14 +86,24 @@ define([
                     // discrete option
                     $(that.wrapSelector('.vp-pd-display-option.dist')).show();
 
-                    // set size to 100
-                    $(that.wrapSelector('#size')).val(100);
-                    that.state.size = 100;
+                    // set size to 1000
+                    $(that.wrapSelector('#size')).val(1000);
+                    that.state.size = 1000;
 
-                    // hide continuous action
-                    if (that.state.action === 'stats-to-pvalue' || that.state.action === 'pvalue-to-stats') {
-                        $(that.wrapSelector('#action')).val('random-number');
-                        $(that.wrapSelector('#action')).trigger('change');
+                    // hide distribution plot for multinomial
+                    if (distType === 'multinomial') {
+                        $(that.wrapSelector('.vp-pd-display-option.dist-plot')).hide();
+                        // hide other actions
+                        if (that.state.action !== 'random-number') {
+                            $(that.wrapSelector('#action')).val('random-number');
+                            $(that.wrapSelector('#action')).trigger('change');
+                        }
+                    } else {
+                        // hide continuous action
+                        if (that.state.action === 'stats-to-pvalue' || that.state.action === 'pvalue-to-stats') {
+                            $(that.wrapSelector('#action')).val('random-number');
+                            $(that.wrapSelector('#action')).trigger('change');
+                        }
                     }
                 } else {
                     // continuous option

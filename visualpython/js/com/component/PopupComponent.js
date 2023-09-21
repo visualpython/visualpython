@@ -487,22 +487,7 @@ define([
                          // set run button
                         vpConfig.getData('runType', 'vpcfg').then(function(data) {
                             vpLog.display(VP_LOG_TYPE.DEVELOP, 'Runtype get data', data);
-                            if (data == undefined || data == null || data === '') {
-                                data = 'run'; // default = run
-                            }
-                            that.config.runType = data;
-                            $(that.wrapSelector(`.vp-popup-run-type[value="${data}"]`)).prop('checked', true);
-                            $(that.wrapSelector('.vp-popup-run-button')).attr('data-type', data);
-                            let runTitle = 'Run code';
-                            switch (data) {
-                                case 'run-save':
-                                    runTitle = 'Save to block & Run code';
-                                    break;
-                                case 'add':
-                                    runTitle = 'Add code to cell';
-                                    break;
-                            }
-                            $(that.wrapSelector('.vp-popup-run-button')).prop('title', runTitle);
+                            that._setDefaultRunType(data);
                         });
                         evt.stopPropagation();
                         break;
@@ -527,24 +512,15 @@ define([
             // Click detail radio
             $(this.wrapSelector('.vp-popup-run-type')).on('click', function(evt) {
                 let runType = $(that.wrapSelector('.vp-popup-run-type[name=runType]:checked')).val();
-                that.config.runType = runType;
                 // save as vpConfig
                 vpConfig.setData({runType: runType}, 'vpcfg');
-                $(that.wrapSelector('.vp-popup-run-button')).attr('data-type', runType);
-                let runTitle = 'Run code';
-                switch (runType) {
-                    case 'run-save':
-                        runTitle = 'Save to block & Run code';
-                        break;
-                    case 'add':
-                        runTitle = 'Add code to cell';
-                        break;
-                }
-                $(that.wrapSelector('.vp-popup-run-button')).prop('title', runTitle);
+                that._setDefaultRunType(runType);
             });
             // Click detail buttons
             $(this.wrapSelector('.vp-popup-detail-action-button')).on('click', function(evt) {
                 var btnType = $(this).data('type');
+                vpConfig.setData({runType: btnType}, 'vpcfg');
+                that._setDefaultRunType(btnType); // run, run-save, add
                 switch(btnType) {
                     // case 'apply':
                     //     that.save();
@@ -749,22 +725,7 @@ define([
                 let that = this;
                 vpConfig.getData('runType', 'vpcfg').then(function(data) {
                     vpLog.display(VP_LOG_TYPE.DEVELOP, 'Runtype get data', data);
-                    if (data == undefined || data == null || data === '') {
-                        data = 'run'; // default = run
-                    }
-                    that.config.runType = data;
-                    $(that.wrapSelector(`.vp-popup-run-type[value="${data}"]`)).prop('checked', true);
-                    $(that.wrapSelector('.vp-popup-run-button')).attr('data-type', data);
-                    let runTitle = 'Run code';
-                    switch (data) {
-                        case 'run-save':
-                            runTitle = 'Save to block & Run code';
-                            break;
-                        case 'add':
-                            runTitle = 'Add code to cell';
-                            break;
-                    }
-                    $(that.wrapSelector('.vp-popup-run-button')).prop('title', runTitle);
+                    that._setDefaultRunType(data);
                 });
             }
             
@@ -909,6 +870,25 @@ define([
                 that._saveSingleState(tag);
             }); 
             vpLog.display(VP_LOG_TYPE.DEVELOP, 'savedState', that.state);   
+        }
+
+        _setDefaultRunType(runType) {
+            if (runType == undefined || runType == null || runType === '') {
+                runType = 'run'; // default = run
+            }
+            this.config.runType = runType;
+            $(this.wrapSelector(`.vp-popup-run-type[value="${runType}"]`)).prop('checked', true);
+            $(this.wrapSelector('.vp-popup-run-button')).attr('data-type', runType);
+            let runTitle = 'Run code'; // when runType is 'run'
+            switch (runType) {
+                case 'run-save':
+                    runTitle = 'Save to block & Run code';
+                    break;
+                case 'add':
+                    runTitle = 'Add code to cell';
+                    break;
+            }
+            $(this.wrapSelector('.vp-popup-run-button')).prop('title', runTitle);
         }
 
         _getTagValue(tag) {
@@ -1348,7 +1328,7 @@ define([
             $(this.wrapSelector('.vp-inner-popup-box')).show();
 
             // focus on first input
-            $(this.wrapSelector('.vp-inner-popup-box input:not(:disabled):visible:first')).focus();
+            $(this.wrapSelector('.vp-inner-popup-box input:not(:readonly):not(:disabled):visible:first')).focus();
             // disable Jupyter key
             com_interface.disableOtherShortcut();
         }

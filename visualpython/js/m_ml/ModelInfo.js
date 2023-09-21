@@ -409,14 +409,28 @@ define([
                     name: 'permutation_importance',
                     label: 'Permutation importance',
                     import: 'from sklearn.inspection import permutation_importance',
-                    code: '${importance_allocate} = permutation_importance(${model}, ${importance_featureData}, ${importance_targetData}${scoring}${random_state}${etc})',
+                    code: '${importance_allocate} = vp_create_permutation_importances(${model}, ${importance_featureData}, ${importance_targetData}${scoring}${sort})',
                     description: 'Permutation importance for feature evaluation.',
                     options: [
                         { name: 'importance_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_train' },
                         { name: 'importance_targetData', label: 'Target Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y_train' },
                         { name: 'scoring', component: ['input'], usePair: true },
-                        { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true },
+                        { name: 'sort', label: 'Sort data', component: ['bool_checkbox'], value: true, usePair: true },
                         { name: 'importance_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'importances' }
+                    ]
+                },
+                'plot_permutation_importance': {
+                    name: 'plot_permutation_importance',
+                    label: 'Plot permutation importance',
+                    import: 'from sklearn.inspection import permutation_importance',
+                    code: 'vp_plot_permutation_importances(${model}, ${importance_featureData}, ${importance_targetData}${scoring}${sort}${top_count})',
+                    description: 'Permutation importance for feature evaluation.',
+                    options: [
+                        { name: 'importance_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_train' },
+                        { name: 'importance_targetData', label: 'Target Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y_train' },
+                        { name: 'scoring', component: ['input'], usePair: true },
+                        { name: 'sort', label: 'Sort data', component: ['bool_checkbox'], value: true, usePair: true },
+                        { name: 'top_count', label: 'Top count', component: ['input_number'], min: 0, usePair: true }
                     ]
                 },
                 'feature_importances': {
@@ -508,6 +522,19 @@ define([
                                 label: 'Get feature names',
                                 code: '${feature_names_allocate} = ${model}.get_feature_names_out()',
                                 description: 'Get output feature names.',
+                                options: [
+                                    { name: 'feature_names_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'features' }
+                                ]
+                            }
+                        }
+                    }
+                    if (modelType === 'SMOTE') {
+                        infos = {
+                            'get_feature_names_out': {
+                                name: 'get_feature_names_out',
+                                label: 'Get feature names',
+                                code: '${feature_names_allocate} = ${model}.get_feature_names_out()',
+                                description: 'Get output feature names for transformation.',
                                 options: [
                                     { name: 'feature_names_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'features' }
                                 ]

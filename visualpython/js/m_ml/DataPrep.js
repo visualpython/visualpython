@@ -57,13 +57,13 @@ define([
             this.modelConfig = ML_LIBRARIES;
 
             this.modelTypeList = {
-                'Encoding': ['prep-onehot', 'prep-label', 'prep-ordinal', 'prep-target', 'prep-smote'],
+                'Encoding': ['prep-onehot', 'prep-label', 'prep-ordinal', 'prep-target'],
                 'Scaling': ['prep-standard', 'prep-robust', 'prep-minmax', 'prep-normalizer', 'prep-func-trsfrm-log', 'prep-func-trsfrm-exp', 'prep-poly-feat', 'prep-kbins-discretizer'],
-                'ETC': ['prep-simple-imputer', 'make-column-transformer']
+                'ETC': ['prep-simple-imputer', 'prep-smote', 'make-column-transformer']
             }
 
             this.mctEstimator = {
-                'Encoding': ['prep-onehot', 'prep-label', 'prep-ordinal', 'prep-target', 'prep-smote'],
+                'Encoding': ['prep-onehot', 'prep-label', 'prep-ordinal', 'prep-target'],
                 'Scaling': ['prep-standard', 'prep-robust', 'prep-minmax', 'prep-normalizer', 'prep-func-trsfrm-log', 'prep-func-trsfrm-exp', 'prep-poly-feat', 'prep-kbins-discretizer'],
             }
 
