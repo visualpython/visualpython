@@ -735,7 +735,7 @@ define([
                         code.appendLine();
                         code.appendLine();
                     }
-                    if (useApp) {
+                    if (useApp === true) {
                         let appCode = app.generateCode();
                         if (appCode instanceof Array) {
                             appCode = appCode.join('\n');
