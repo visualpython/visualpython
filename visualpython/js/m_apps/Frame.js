@@ -88,7 +88,7 @@ define([
                         { id: 'delete', label: 'Delete', selection: FRAME_SELECT_TYPE.MULTI, menuType: FRAME_EDIT_TYPE.DROP },
                         { id: 'rename', label: 'Rename', selection: FRAME_SELECT_TYPE.NONE, menuType: FRAME_EDIT_TYPE.RENAME },
                         { id: 'as_type', label: 'As type', selection: FRAME_SELECT_TYPE.NONE, axis: FRAME_AXIS.COLUMN, menuType: FRAME_EDIT_TYPE.AS_TYPE },
-                        { id: 'to_datetime', label: 'To datetime', selection: FRAME_SELECT_TYPE.SINGLE, axis: FRAME_AXIS.COLUMN, menuType: FRAME_EDIT_TYPE.TO_DATETIME },
+                        { id: 'to_datetime', label: 'To Datetime', selection: FRAME_SELECT_TYPE.SINGLE, axis: FRAME_AXIS.COLUMN, menuType: FRAME_EDIT_TYPE.TO_DATETIME },
                         { id: 'replace', label: 'Replace', selection: FRAME_SELECT_TYPE.SINGLE, axis: FRAME_AXIS.COLUMN, menuType: FRAME_EDIT_TYPE.REPLACE },
                         { id: 'discretize', label: 'Discretize', selection: FRAME_SELECT_TYPE.SINGLE, axis: FRAME_AXIS.COLUMN, numeric_only: true, menuType: FRAME_EDIT_TYPE.DISCRETIZE }
                     ]
@@ -724,6 +724,10 @@ define([
                     $(this.wrapSelector('.vp-inner-popup-fillvalue')).focus();
                     return;
                 }
+            } else if (type === FRAME_EDIT_TYPE.TO_DATETIME) {
+                if (content.newcol === '') {
+                    $(this.wrapSelector('.vp-inner-popup-todt-new-col')).focus();
+                }
             }
             // run check modules for outliers and load codes
             if (type === FRAME_EDIT_TYPE.FILL_OUT) {
@@ -1126,16 +1130,6 @@ define([
                     }
                 });
 
-                // bind event for checking add column
-                $(this.wrapSelector('.vp-inner-popup-todt-use-addcol')).on('change', function() {
-                    let checked = $(this).prop('checked');
-                    if (checked === true) {
-                        $(that.wrapSelector('.vp-inner-popup-todt-addcol-box')).show();
-                    } else {
-                        $(that.wrapSelector('.vp-inner-popup-todt-addcol-box')).hide();
-                    }
-                });
-
                 // Add column set event
                 $(this.wrapSelector('.vp-inner-popup-todt-addcol')).on('click', function() {
                     let dateTypeList = [ // df[col].dt[{dateType}]
@@ -1159,7 +1153,7 @@ define([
                     });
 
                     let addColItemTag = $(`<div class="vp-inner-popup-todt-addcol-item">
-                        <input type="text" class="vp-input vp-inner-popup-todt-addcol-colname" placeholder="Type column name" />
+                        <input type="text" class="vp-input vp-inner-popup-todt-addcol-colname" placeholder="Type column name" value="year" />
                         <select class="vp-select vp-inner-popup-todt-addcol-type">
                             ${dateTypeOptionTag.toString()}
                         </select>
@@ -1167,6 +1161,13 @@ define([
                     </div>`);
                     $(that.wrapSelector('.vp-inner-popup-todt-addcol-content')).append(addColItemTag);
                     $(addColItemTag)[0].scrollIntoView();
+
+                    // bind event for selecting date type option
+                    $(that.wrapSelector('.vp-inner-popup-todt-addcol-type')).off('change');
+                    $(that.wrapSelector('.vp-inner-popup-todt-addcol-type')).on('change', function() {
+                        let dateTypeVal = $(this).val();
+                        $(this).parent().find('.vp-inner-popup-todt-addcol-colname').val(dateTypeVal);
+                    });
                     
                     // bind event for deleting
                     $(that.wrapSelector('.vp-inner-popup-todt-addcol-del')).off('click');
@@ -2186,15 +2187,15 @@ define([
             var content = new com_String();
             let formatList = [
                 { label: 'Auto', value: 'auto' },
-                { label: 'Year', value: '%Y' },
-                { label: 'Month', value: '%m' },
-                { label: 'Day', value: '%d' },
-                { label: 'Day Of Week', value: '%w' },
                 { label: '%Y/%m/%d', value: '%Y/%m/%d' },
                 { label: '%Y-%m-%d', value: '%Y-%m-%d' },
+                { label: '%y/%m/%d', value: '%y/%m/%d' },
+                { label: '%y-%m-%d', value: '%y-%m-%d' },
                 { label: '%d/%m/%Y', value: '%d/%m/%Y' },
                 { label: '%d-%m-%Y', value: '%d-%m-%Y' },
-                { label: 'Typing', value: 'typing' },
+                { label: '%d/%m/%y', value: '%d/%m/%y' },
+                { label: '%d-%m-%y', value: '%d-%m-%y' },
+                { label: 'Typing', value: 'typing' }
             ];
             let formatOptionTag = new com_String();
             formatList.forEach(opt => {
@@ -2224,15 +2225,14 @@ define([
                     </select>
                 </div>
                 <hr style="margin: 5px 0;"/>
-                <div>
-                    <label>
-                        <input type="checkbox" class="vp-inner-popup-todt-use-addcol" />
-                        <span>
-                            Add column with date type
-                        </span>
-                    </label>
+                <div class="vp-grid-col-110">
+                    <label class="vp-orange-text">New column</label>
+                    <input type="text" class="vp-input vp-inner-popup-todt-new-col" value="{2}" placeholder="Type new column" />
                 </div>
-                <div class="vp-inner-popup-todt-addcol-box vp-grid-border-box" style="display: none;">
+                <label class="vp-bold">
+                    Add sub-columns using date type
+                </label>
+                <div class="vp-inner-popup-todt-addcol-box vp-grid-border-box">
                     <div class="vp-inner-popup-todt-addcol-head">
                         <label>New column name</label>
                         <label>Date type</label>
@@ -2244,7 +2244,7 @@ define([
                     <button class="vp-button vp-inner-popup-todt-addcol">+ Add column</button>
                 </div>
             </div>
-            `, this.state.selected[0].label, formatOptionTag.toString(), );
+            `, this.state.selected[0].label, formatOptionTag.toString(), this.state.selected[0].label);
             
             // set content
             $(this.wrapSelector('.vp-inner-popup-body')).html(content.toString());
@@ -2593,7 +2593,7 @@ define([
                     content = this.renderAsType();
                     break;
                 case FRAME_EDIT_TYPE.TO_DATETIME:
-                    title = 'Convert to datetime';
+                    title = 'Convert to Datetime';
                     size = { width: 500, height: 450 };
                     content = this.renderToDatetime();
                     break;
@@ -2970,7 +2970,7 @@ define([
                     content['format'] = $(this.wrapSelector('.vp-inner-popup-todt-format')).val();
                     content['format_typing'] = $(this.wrapSelector('.vp-inner-popup-todt-format-typing')).val();
                     content['dayfirst'] = $(this.wrapSelector('.vp-inner-popup-todt-dayfirst')).val();
-                    content['use_addcol'] = $(this.wrapSelector('.vp-inner-popup-todt-use-addcol')).prop('checked');
+                    content['newcol'] = $(this.wrapSelector('.vp-inner-popup-todt-new-col')).val();
                     var colList = [];
                     var addcolItemTags = $(this.wrapSelector('.vp-inner-popup-todt-addcol-item'));
                     addcolItemTags && addcolItemTags.each((idx, tag) => {
@@ -3503,7 +3503,7 @@ define([
                     code.appendFormat("{0} = {1}.astype({{2}})", tempObj, tempObj, astypeStr.toString());
                     break;
                 case FRAME_EDIT_TYPE.TO_DATETIME:
-                    code.appendFormat("{0}[{1}] = pd.to_datetime({2}[{3}]", tempObj, selectedName, tempObj, selectedName);
+                    code.appendFormat("{0}['{1}'] = pd.to_datetime({2}[{3}]", tempObj, content['newcol'], tempObj, selectedName);
                     let optionList = [];
                     if (content['format'] === 'auto') {
                         if (content['dayfirst'] !== '') {
@@ -3520,10 +3520,10 @@ define([
                         code.appendFormat(', {0}', optionList.join(', '));
                     }
                     code.append(')');
-                    if (content['use_addcol'] === true && content['collist'].length > 0) {
+                    if (content['collist'].length > 0) {
                         content['collist'].forEach(obj => {
                             code.appendLine();
-                            code.appendFormat("{0}['{1}'] = {2}[{3}].dt.{4}", tempObj, obj.colName, tempObj, selectedName, obj.dateType);
+                            code.appendFormat("{0}['{1}'] = {2}['{3}'].dt.{4}", tempObj, obj.colName, tempObj, content['newcol'], obj.dateType);
                         });
                     }
                     break;
@@ -3657,7 +3657,7 @@ define([
                                                 } else {
                                                     colClass = VP_FE_TABLE_COLUMN_GROUP;
                                                 }
-                                                table.appendFormatLine('<th data-code="({0})" data-axis="{1}" data-type="{2}" data-parent="{3}" data-label="{4}" class="{5} {6}" colspan="{7}">{8}{9}</th>'
+                                                table.appendFormatLine('<th data-code="({0})" data-axis="{1}" data-type="{2}" data-parent="{3}" data-label="{4}" class="{5} {6}" colspan="{7}">{8}<span>{9}</span></th>'
                                                                 , colCode, FRAME_AXIS.COLUMN, col.type, col.label[colLevIdx-1], col.label[colLevIdx], colClass, selected, colSpan, colIcon, col.label[colLevIdx]);
                                                 colSpan = 1;
                                             }
@@ -3687,7 +3687,7 @@ define([
                                         if (that.state.axis == FRAME_AXIS.COLUMN && that.state.selected.map(col=>col.code).includes(colCode)) {
                                             colClass = 'selected';
                                         }
-                                        table.appendFormatLine('<th data-code="{0}" data-axis="{1}" data-type="{2}" data-label="{3}" class="{4} {5}">{6}{7}</th>'
+                                        table.appendFormatLine('<th data-code="{0}" data-axis="{1}" data-type="{2}" data-label="{3}" class="{4} {5}">{6}<span>{7}</span></th>'
                                                                 , colCode, FRAME_AXIS.COLUMN, col.type, col.label, VP_FE_TABLE_COLUMN, colClass, colIcon, col.label);
                                     });
                                     // // add column
