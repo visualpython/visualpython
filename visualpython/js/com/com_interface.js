@@ -145,7 +145,7 @@ define([
                     var widget = labConsole.widgets[0];
                     if (type === 'markdown') {
                         // add # before the lines
-                        command = '#' + command.split('\n').join('#');
+                        command = '#' + command.split('\n').join('\n#');
                     }
 
                     // execute or not

@@ -287,8 +287,10 @@ define([
         } else if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
             // LAB: if widget is ready or changed, ready for lab kernel connected, and restart vp
             vpLab.shell._currentChanged.connect(function(s1, value) {
-                var { newValue } = value;
-                vpLog.display(VP_LOG_TYPE.DEVELOP, 'jupyterlab shell currently changed', s1, value);
+                // var { newValue } = value;
+                // LAB 4.x: get currentWidget
+                var newValue = s1.currentWidget;
+                vpLog.display(VP_LOG_TYPE.DEVELOP, 'jupyterlab shell currently changed', s1, newValue);
                 // kernel restart for notebook and console
                 if (newValue && newValue.sessionContext) {
                     vpConfig.hideProtector();
