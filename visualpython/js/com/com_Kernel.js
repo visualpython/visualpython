@@ -473,14 +473,27 @@ define([
         getLabNotebookPanel(){
             var mainWidgets = this.app.shell.widgets('main');
             var widget = mainWidgets.next();
-            while(widget){
-                if(widget.sessionContext){
+            while (widget) {
+                if (widget.sessionContext) {
                     var type = widget.sessionContext.type;
                     if(type == 'notebook' || type == 'console'){  //other wigets might be of type DocumentWidget
                         if (widget.isVisible){
                             return widget;
                         }
                     }
+                } else if (widget.value !== undefined && widget.done === false) {
+                    // for upper lab 4
+                    let widgetObj = widget.value;
+                    if (widgetObj.sessionContext) {
+                        var type = widgetObj.sessionContext.type;
+                        if(type == 'notebook' || type == 'console'){  //other wigets might be of type DocumentWidget
+                            if (widgetObj.isVisible){
+                                return widgetObj;
+                            }
+                        }
+                    }
+                } else if (widget.done === true) {
+                    break;
                 }
                 widget = mainWidgets.next();
             }
@@ -494,6 +507,14 @@ define([
             while (widget) {
                 if (widget.sessionContext) {
                     widgetList.push(widget);
+                } else if (widget.value !== undefined && widget.done === false) {
+                    // for upper lab 4
+                    let widgetObj = widget.value;
+                    if (widgetObj.sessionContext) {
+                        widgetList.push(widgetObj);
+                    }
+                } else if (widget.done === true) {
+                    break;
                 }
                 widget = mainWidgets.next();
             }
