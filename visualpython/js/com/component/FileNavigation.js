@@ -84,6 +84,10 @@ define([
             this.pathStackPointer = -1;
             this.pathStack = [];
             this.currentFileList = [];
+            this.selectedExt = '';
+            if (this.state.extensions.length > 0) {
+                this.selectedExt = this.state.extensions[0];
+            }
 
             this.pathState = {
                 parentPath: '',
@@ -280,6 +284,32 @@ define([
             // clear body
             $(this.wrapSelector('.fileNavigationPage-body')).html('');
 
+            /**
+             * Filter file/dir which included in this.state.extensions
+             */
+            if (Array.isArray(this.state.extensions) && this.state.extensions.length > 0 && this.state.extensions.toString() !== '') {
+                fileList = fileList.filter((data, index) => {
+                    if (index == 0) {
+                        return true;
+                    }
+
+                    if (data.type && data.type == 'dir') {
+                        // if directory, just show
+                        return true;
+                    } else if (data.name) {
+                        var extension = data.name.substring(data.name.lastIndexOf('.') + 1);
+                        // if (that.state.extensions.includes(extension)) {
+                        if (that.selectedExt === '' || extension === that.selectedExt) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    } else {
+                        return false;
+                    }
+                });
+            }
+
             // render file items
             let dirArr = [];
             let fileArr = [];
@@ -411,12 +441,12 @@ define([
             page.appendFormatLine('<input id="{0}" type="text" class="vp-input" placeholder="{1}" value="{2}"/>'
                                 , 'vp_fileNavigationInput', 'New File Name', this.state.fileName);
             page.appendFormatLine('<select id="{0}" class="vp-select">', 'vp_fileNavigationExt');
+            page.appendLine('<option value="">All files(*.*)</option>');
             if (this.state.extensions && this.state.extensions.length > 0) {
+                let selectedExt = this.selectedExt;
                 this.state.extensions.forEach(ext => {
-                    page.appendFormatLine('<option value="{0}">*.{1}</option>', ext, ext);
+                    page.appendFormatLine('<option value="{0}" {1}>*.{2}</option>', ext, (selectedExt === ext?'selected':''), ext);
                 });
-            } else {
-                page.appendLine('<option value="">All files(*.*)</option>');
             }
             page.appendLine('</select>');
             page.appendFormatLine('<button class="{0} vp-button" data-menu="{1}">{2}</button>', 'vp-filenavi-btn', 'select', 'Select');
@@ -429,6 +459,13 @@ define([
                 let filePath = that.getRelativePath(that.pathState.baseDir, that.pathState.currentPath);
                 
                 that.handleSelectFile(filePath, fileName);
+            });
+            // bind file extension change event
+            $(this.wrapSelector('#vp_fileNavigationExt')).on('change', function() {
+                let ext = $(this).val();
+                that.selectedExt = ext;
+
+                that.renderFileList();
             });
             // bind save cancel event
             $(this.wrapSelector('.vp-filenavi-btn')).on('click', function() {
@@ -477,10 +514,10 @@ define([
             let that = this;
             /** Implement after rendering */
             // if save mode
-            if (this.state.type == 'save') {
-                // render saving box
-                this.renderSaveBox();
-            }
+            // if (this.state.type == 'save') {
+            // render saving box
+            this.renderSaveBox();
+            // }
 
             // get current path
             this.getCurrentDirectory().then(function(currentPath) {
@@ -527,20 +564,21 @@ define([
             //============================================================================
             // Set selection result
             //============================================================================
-            if (this.state.type == 'save') {
-                // add as saving file
-                this.setSelectedFile(fileInput, pathInput);
-            } else {
-                // Manage result using finish function
-                let filesPath = [{ file: fileInput, path: pathInput }]; //FIXME: fix it if multiple selection implemented
-                let status = true;
-                let error = null;
-                vpLog.display(VP_LOG_TYPE.DEVELOP, 'fileNavigation finished', filesPath, status, error);
-                this.state.finish(filesPath, status, error);
+            this.setSelectedFile(fileInput, pathInput);
+            // if (this.state.type == 'save') {
+            //     // add as saving file
+            //     this.setSelectedFile(fileInput, pathInput);
+            // } else {
+            //     // Manage result using finish function
+            //     let filesPath = [{ file: fileInput, path: pathInput }]; //FIXME: fix it if multiple selection implemented
+            //     let status = true;
+            //     let error = null;
+            //     vpLog.display(VP_LOG_TYPE.DEVELOP, 'fileNavigation finished', filesPath, status, error);
+            //     this.state.finish(filesPath, status, error);
         
-                // remove and close file navigation
-                this.close();
-            }
+            //     // remove and close file navigation
+            //     this.close();
+            // }
         }
         getCurrentDirectory() {
             return vpKernel.getCurrentDirectory();
@@ -587,31 +625,6 @@ define([
                     /** sort ascending */
                     return a - b;
                 });
-
-                /**
-                 * Filter file/dir which included in this.state.extensions
-                 */
-                if (Array.isArray(that.state.extensions) && that.state.extensions.length > 0 && that.state.extensions.toString() !== '') {
-                    filtered_varList = filtered_varList.filter((data, index) => {
-                        if (index == 0) {
-                            return true;
-                        }
-
-                        if (data.type && data.type == 'dir') {
-                            // if file, just show
-                            return true;
-                        } else if (data.name) {
-                            var extension = data.name.substring(data.name.lastIndexOf('.') + 1);
-                            if (that.state.extensions.includes(extension)) {
-                                return true;
-                            } else {
-                                return false;
-                            }
-                        } else {
-                            return false;
-                        }
-                    });
-                }
 
                 vpLog.display(VP_LOG_TYPE.DEVELOP, 'FileNavigation - getFileList: ', filtered_varList);
 

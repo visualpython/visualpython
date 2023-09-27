@@ -427,7 +427,6 @@ define([
                             description: 'Transform labels to normalized encoding.'
                         }
                     }
-
                     if (modelType != 'ColumnTransformer') {
                         actions = {
                             ...actions,
@@ -439,6 +438,32 @@ define([
                                 options: [
                                     { name: 'inverse_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X' },
                                     { name: 'inverse_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'inv_trans' }
+                                ]
+                            }
+                        }
+                    }
+                    if (modelType === 'SMOTE') {
+                        actions = {
+                            'fit': {
+                                name: 'fit',
+                                label: 'Fit',
+                                code: '${model}.fit(${fit_featureData}, ${fit_targetData})',
+                                description: 'Check inputs and statistics of the sampler.',
+                                options: [
+                                    { name: 'fit_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_train' }, 
+                                    { name: 'fit_targetData', label: 'Target Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y_train' }
+                                ]
+                            },
+                            'fit_resample': {
+                                name: 'fit_resample',
+                                label: 'Fit and resample',
+                                code: '${fit_res_allocateX}, ${fit_res_allocatey} = ${model}.fit_resample(${fit_res_featureData}, ${fit_res_targetData})',
+                                description: 'Resample the dataset.',
+                                options: [
+                                    { name: 'fit_res_allocateX', label: 'Allocate feature', component: ['input'], placeholder: 'New variable', value: 'X_res' },
+                                    { name: 'fit_res_allocatey', label: 'Allocate target', component: ['input'], placeholder: 'New variable', value: 'y_res' },
+                                    { name: 'fit_res_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_train' },
+                                    { name: 'fit_res_targetData', label: 'Target Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y_train' }
                                 ]
                             }
                         }

@@ -87,7 +87,8 @@ define([
                         { id: 'add_row', label: 'Add row', selection: FRAME_SELECT_TYPE.NONE, menuType: FRAME_EDIT_TYPE.ADD_ROW },
                         { id: 'delete', label: 'Delete', selection: FRAME_SELECT_TYPE.MULTI, menuType: FRAME_EDIT_TYPE.DROP },
                         { id: 'rename', label: 'Rename', selection: FRAME_SELECT_TYPE.NONE, menuType: FRAME_EDIT_TYPE.RENAME },
-                        { id: 'asType', label: 'As type', selection: FRAME_SELECT_TYPE.NONE, axis: FRAME_AXIS.COLUMN, menuType: FRAME_EDIT_TYPE.AS_TYPE },
+                        { id: 'as_type', label: 'As type', selection: FRAME_SELECT_TYPE.NONE, axis: FRAME_AXIS.COLUMN, menuType: FRAME_EDIT_TYPE.AS_TYPE },
+                        { id: 'to_datetime', label: 'To Datetime', selection: FRAME_SELECT_TYPE.SINGLE, axis: FRAME_AXIS.COLUMN, menuType: FRAME_EDIT_TYPE.TO_DATETIME },
                         { id: 'replace', label: 'Replace', selection: FRAME_SELECT_TYPE.SINGLE, axis: FRAME_AXIS.COLUMN, menuType: FRAME_EDIT_TYPE.REPLACE },
                         { id: 'discretize', label: 'Discretize', selection: FRAME_SELECT_TYPE.SINGLE, axis: FRAME_AXIS.COLUMN, numeric_only: true, menuType: FRAME_EDIT_TYPE.DISCRETIZE }
                     ]
@@ -618,6 +619,7 @@ define([
                     case FRAME_EDIT_TYPE.RENAME:
                     case FRAME_EDIT_TYPE.REPLACE:
                     case FRAME_EDIT_TYPE.AS_TYPE:
+                    case FRAME_EDIT_TYPE.TO_DATETIME:
                     case FRAME_EDIT_TYPE.DISCRETIZE:
                     case FRAME_EDIT_TYPE.DATA_SHIFT:
                     case FRAME_EDIT_TYPE.SORT_INDEX:
@@ -721,6 +723,10 @@ define([
                 if (content.filltype === 'value' && content.fillvalue === '') {
                     $(this.wrapSelector('.vp-inner-popup-fillvalue')).focus();
                     return;
+                }
+            } else if (type === FRAME_EDIT_TYPE.TO_DATETIME) {
+                if (content.newcol === '') {
+                    $(this.wrapSelector('.vp-inner-popup-todt-new-col')).focus();
                 }
             }
             // run check modules for outliers and load codes
@@ -1105,6 +1111,70 @@ define([
                         $(that.wrapSelector('.vp-inner-popup-value-row')).hide();
                         $(that.wrapSelector('.vp-inner-popup-fill-row')).hide();
                     }
+                });
+            } else if (menuType === FRAME_EDIT_TYPE.TO_DATETIME) {
+                // bind event for selecting format
+                $(this.wrapSelector('.vp-inner-popup-todt-format')).on('change', function() {
+                    let format = $(this).val();
+                    if (format === 'auto') {
+                        $(that.wrapSelector('.vp-inner-popup-todt-dayfirst')).prop('disabled', false);
+                    } else {
+                        $(that.wrapSelector('.vp-inner-popup-todt-dayfirst')).prop('disabled', true);
+                        $(that.wrapSelector('.vp-inner-popup-todt-dayfirst')).val('');
+                    }
+
+                    if (format === 'typing') {
+                        $(that.wrapSelector('.vp-inner-popup-todt-format-typing')).prop('disabled', false);
+                    } else {
+                        $(that.wrapSelector('.vp-inner-popup-todt-format-typing')).prop('disabled', true);
+                    }
+                });
+
+                // Add column set event
+                $(this.wrapSelector('.vp-inner-popup-todt-addcol')).on('click', function() {
+                    let dateTypeList = [ // df[col].dt[{dateType}]
+                        { label: 'Year', value: 'year' },
+                        { label: 'Month', value: 'month' },
+                        { label: 'Day', value: 'day' },
+                        { label: 'Date', value: 'date' },
+                        { label: 'DayOfWeek', value: 'dayofweek' },
+                        { label: 'DayOfYear', value: 'dayofyear' },
+                        { label: 'DaysInMonth', value: 'daysinmonth' },
+                        { label: 'Quarter', value: 'quarter' },
+                        { label: 'Time', value: 'time' },
+                        { label: 'Hour', value: 'hour' },
+                        { label: 'Minute', value: 'minute' },
+                        { label: 'Second', value: 'second' },
+                        { label: 'Nanosecond', value: 'nanosecond' },
+                    ];
+                    let dateTypeOptionTag = new com_String();
+                    dateTypeList.forEach(opt => {
+                        dateTypeOptionTag.appendFormat('<option value="{0}">{1}</option>', opt.value, opt.label);
+                    });
+
+                    let addColItemTag = $(`<div class="vp-inner-popup-todt-addcol-item">
+                        <input type="text" class="vp-input vp-inner-popup-todt-addcol-colname" placeholder="Type column name" value="year" />
+                        <select class="vp-select vp-inner-popup-todt-addcol-type">
+                            ${dateTypeOptionTag.toString()}
+                        </select>
+                        <span class="vp-icon-close-small vp-inner-popup-todt-addcol-del mt5 vp-cursor"></span>
+                    </div>`);
+                    $(that.wrapSelector('.vp-inner-popup-todt-addcol-content')).append(addColItemTag);
+                    $(addColItemTag)[0].scrollIntoView();
+
+                    // bind event for selecting date type option
+                    $(that.wrapSelector('.vp-inner-popup-todt-addcol-type')).off('change');
+                    $(that.wrapSelector('.vp-inner-popup-todt-addcol-type')).on('change', function() {
+                        let dateTypeVal = $(this).val();
+                        $(this).parent().find('.vp-inner-popup-todt-addcol-colname').val(dateTypeVal);
+                    });
+                    
+                    // bind event for deleting
+                    $(that.wrapSelector('.vp-inner-popup-todt-addcol-del')).off('click');
+                    $(that.wrapSelector('.vp-inner-popup-todt-addcol-del')).on('click', function() {
+                        // delete item
+                        $(this).closest('.vp-inner-popup-todt-addcol-item').remove();
+                    });
                 });
             }
             
@@ -2113,6 +2183,74 @@ define([
             return content.toString();
         }
 
+        renderToDatetime() {
+            var content = new com_String();
+            let formatList = [
+                { label: 'Auto', value: 'auto' },
+                { label: '%Y/%m/%d', value: '%Y/%m/%d' },
+                { label: '%Y-%m-%d', value: '%Y-%m-%d' },
+                { label: '%y/%m/%d', value: '%y/%m/%d' },
+                { label: '%y-%m-%d', value: '%y-%m-%d' },
+                { label: '%d/%m/%Y', value: '%d/%m/%Y' },
+                { label: '%d-%m-%Y', value: '%d-%m-%Y' },
+                { label: '%d/%m/%y', value: '%d/%m/%y' },
+                { label: '%d-%m-%y', value: '%d-%m-%y' },
+                { label: 'Typing', value: 'typing' }
+            ];
+            let formatOptionTag = new com_String();
+            formatList.forEach(opt => {
+                formatOptionTag.appendFormat('<option value="{0}">{1}</option>', opt.value, opt.label);
+            });
+
+            content.appendFormat(`<div class="vp-inner-popup-todt vp-grid-box">
+                <div class="vp-grid-col-110">
+                    <label>Target column</label>
+                    <input type="text" class="vp-input" value="{0}" readonly />
+                </div>
+                <div class="vp-grid-col-110">
+                    <label>Format</label>
+                    <div>
+                        <select class="vp-inner-popup-todt-format">
+                        {1}
+                        </select>
+                        <input type="text" class="vp-input vp-inner-popup-todt-format-typing" value="" placeholder="Type format" disabled/>
+                    </div>
+                </div>
+                <div class="vp-grid-col-110">
+                    <label>Day first</label>
+                    <select class="vp-inner-popup-todt-dayfirst">
+                        <option value="">Select option...</option>
+                        <option value="True">True</option>
+                        <option value="False">False</option>
+                    </select>
+                </div>
+                <hr style="margin: 5px 0;"/>
+                <div class="vp-grid-col-110">
+                    <label class="vp-orange-text">New column</label>
+                    <input type="text" class="vp-input vp-inner-popup-todt-new-col" value="{2}" placeholder="Type new column" />
+                </div>
+                <label class="vp-bold">
+                    Add sub-columns using date type
+                </label>
+                <div class="vp-inner-popup-todt-addcol-box vp-grid-border-box">
+                    <div class="vp-inner-popup-todt-addcol-head">
+                        <label>New column name</label>
+                        <label>Date type</label>
+                        <label></label>
+                    </div>
+                    <div class="vp-inner-popup-todt-addcol-content vp-scrollbar">   
+
+                    </div>
+                    <button class="vp-button vp-inner-popup-todt-addcol">+ Add column</button>
+                </div>
+            </div>
+            `, this.state.selected[0].label, formatOptionTag.toString(), this.state.selected[0].label);
+            
+            // set content
+            $(this.wrapSelector('.vp-inner-popup-body')).html(content.toString());
+            return content.toString();
+        }
+
         renderFillNAPage() {
             var content = new com_String();
             content.appendFormatLine('<div class="{0}">', 'vp-inner-popup-fillna-page');
@@ -2453,6 +2591,11 @@ define([
                 case FRAME_EDIT_TYPE.AS_TYPE:
                     title = 'Convert type';
                     content = this.renderAsType();
+                    break;
+                case FRAME_EDIT_TYPE.TO_DATETIME:
+                    title = 'Convert to Datetime';
+                    size = { width: 500, height: 450 };
+                    content = this.renderToDatetime();
                     break;
                 case FRAME_EDIT_TYPE.FILL_NA:
                     title = 'Fill NA';
@@ -2822,6 +2965,22 @@ define([
                             };
                         }
                     });
+                    break;
+                case FRAME_EDIT_TYPE.TO_DATETIME:
+                    content['format'] = $(this.wrapSelector('.vp-inner-popup-todt-format')).val();
+                    content['format_typing'] = $(this.wrapSelector('.vp-inner-popup-todt-format-typing')).val();
+                    content['dayfirst'] = $(this.wrapSelector('.vp-inner-popup-todt-dayfirst')).val();
+                    content['newcol'] = $(this.wrapSelector('.vp-inner-popup-todt-new-col')).val();
+                    var colList = [];
+                    var addcolItemTags = $(this.wrapSelector('.vp-inner-popup-todt-addcol-item'));
+                    addcolItemTags && addcolItemTags.each((idx, tag) => {
+                        let colName = $(tag).find('.vp-inner-popup-todt-addcol-colname').val();
+                        let dateType = $(tag).find('.vp-inner-popup-todt-addcol-type').val();
+                        if (colName !== '' && dateType !== '') {
+                            colList.push({ colName: colName, dateType: dateType });
+                        }
+                    });
+                    content['collist'] = colList;
                     break;
                 case FRAME_EDIT_TYPE.DISCRETIZE:
                     content['input'] = $(this.wrapSelector('.vp-inner-popup-input')).val();
@@ -3343,6 +3502,31 @@ define([
                     });
                     code.appendFormat("{0} = {1}.astype({{2}})", tempObj, tempObj, astypeStr.toString());
                     break;
+                case FRAME_EDIT_TYPE.TO_DATETIME:
+                    code.appendFormat("{0}['{1}'] = pd.to_datetime({2}[{3}]", tempObj, content['newcol'], tempObj, selectedName);
+                    let optionList = [];
+                    if (content['format'] === 'auto') {
+                        if (content['dayfirst'] !== '') {
+                            optionList.push(`dayfirst=${content['dayfirst']}`);
+                        }
+                    } else if (content['format'] === 'typing') {
+                        if (content['format_typing'] !== '') {
+                            optionList.push(`format='${content['format_typing']}'`);
+                        }
+                    } else {
+                        optionList.push(`format='${content['format']}'`);
+                    }
+                    if (optionList.length > 0) {
+                        code.appendFormat(', {0}', optionList.join(', '));
+                    }
+                    code.append(')');
+                    if (content['collist'].length > 0) {
+                        content['collist'].forEach(obj => {
+                            code.appendLine();
+                            code.appendFormat("{0}['{1}'] = {2}['{3}'].dt.{4}", tempObj, obj.colName, tempObj, content['newcol'], obj.dateType);
+                        });
+                    }
+                    break;
                 case FRAME_EDIT_TYPE.DISCRETIZE:
                     let newColumn = com_util.convertToStr(content['input'], content['inputastext']);
                     let method = content['type'];
@@ -3437,7 +3621,7 @@ define([
                             var indexList = data.index;
                             var dataList = data.data;
 
-                            columnList = columnList.map(col => { return { label: col.label, type: col.dtype, code: col.value } });
+                            columnList = columnList.map(col => { return { label: col.label, type: col.dtype, code: col.value, isNumeric: col.is_numeric } });
                             indexList = indexList.map(idx => { return { label: idx, code: idx } });
             
                             if (!more) {
@@ -3453,6 +3637,12 @@ define([
                                         while (colIdx < columnList.length) {
                                             let col = columnList[colIdx];
                                             let colCode = col.code.slice(0, colLevIdx + 1).join(',');
+                                            var colIcon = '';
+                                            if (col.isNumeric === true) {
+                                                colIcon = '<span class="vp-fe-table-column-isnumeric vp-icon-numeric" title="Numeric column"></span>';
+                                            } else {
+                                                colIcon = '<span class="vp-fe-table-column-isnumeric vp-icon-non-numeric" title="Non-numeric column"></span>';
+                                            }
                                             let nextCol = columnList[colIdx + 1];
                                             if (nextCol && nextCol.code.slice(0, colLevIdx + 1).join(',') === colCode) {
                                                 colSpan++;
@@ -3467,8 +3657,8 @@ define([
                                                 } else {
                                                     colClass = VP_FE_TABLE_COLUMN_GROUP;
                                                 }
-                                                table.appendFormatLine('<th data-code="({0})" data-axis="{1}" data-type="{2}" data-parent="{3}" data-label="{4}" class="{5} {6}" colspan="{7}">{8}</th>'
-                                                                , colCode, FRAME_AXIS.COLUMN, col.type, col.label[colLevIdx-1], col.label[colLevIdx], colClass, selected, colSpan, col.label[colLevIdx]);
+                                                table.appendFormatLine('<th data-code="({0})" data-axis="{1}" data-type="{2}" data-parent="{3}" data-label="{4}" class="{5} {6}" colspan="{7}">{8}<span>{9}</span></th>'
+                                                                , colCode, FRAME_AXIS.COLUMN, col.type, col.label[colLevIdx-1], col.label[colLevIdx], colClass, selected, colSpan, colIcon, col.label[colLevIdx]);
                                                 colSpan = 1;
                                             }
                                             colIdx++;
@@ -3487,12 +3677,18 @@ define([
                                     table.appendLine('<tr><th></th>');
                                     columnList && columnList.forEach(col => {
                                         var colCode = col.code;
+                                        var colIcon = '';
+                                        if (col.isNumeric === true) {
+                                            colIcon = '<span class="vp-fe-table-column-isnumeric vp-icon-numeric" title="Numeric column"></span>';
+                                        } else {
+                                            colIcon = '<span class="vp-fe-table-column-isnumeric vp-icon-non-numeric" title="Non-numeric column"></span>';
+                                        }
                                         var colClass = '';
                                         if (that.state.axis == FRAME_AXIS.COLUMN && that.state.selected.map(col=>col.code).includes(colCode)) {
                                             colClass = 'selected';
                                         }
-                                        table.appendFormatLine('<th data-code="{0}" data-axis="{1}" data-type="{2}" data-label="{3}" class="{4} {5}">{6}</th>'
-                                                                , colCode, FRAME_AXIS.COLUMN, col.type, col.label, VP_FE_TABLE_COLUMN, colClass, col.label);
+                                        table.appendFormatLine('<th data-code="{0}" data-axis="{1}" data-type="{2}" data-label="{3}" class="{4} {5}">{6}<span>{7}</span></th>'
+                                                                , colCode, FRAME_AXIS.COLUMN, col.type, col.label, VP_FE_TABLE_COLUMN, colClass, colIcon, col.label);
                                     });
                                     // // add column
                                     table.appendFormatLine('<th class="{0}"><div class="{1}"></div></th>', VP_FE_ADD_COLUMN, 'vp-icon-plus');
@@ -3713,6 +3909,7 @@ define([
         DROP: 3,
         RENAME: 2,
         AS_TYPE: 10,
+        TO_DATETIME: 19,
         REPLACE: 9,
         DISCRETIZE: 15,
 

@@ -148,13 +148,14 @@ define([
         },
         'barplot': {
             name: 'Bar Plot',
-            code: '${allocateTo} = sns.barplot(${data}${x}${y}${hue}${etc})',
+            code: '${allocateTo} = sns.barplot(${data}${x}${y}${hue}${orient}${etc})',
             description: 'Show point estimates and confidence intervals as rectangular bars.',
             options: [
                 { name: 'data', component: ['var_select'], var_type: ['DataFrame', 'Series', 'list'], usePair: true },
                 { name: 'x', component: ['col_select'], usePair: true },
                 { name: 'y', component: ['col_select'], usePair: true },
                 { name: 'hue', component: ['col_select'], usePair: true },
+                { name: 'orient', component: ['option_select'], usePair: true },
                 { name: 'allocateTo', label: 'Allocate To', component: ['input'], usePair: true }
             ]
         },

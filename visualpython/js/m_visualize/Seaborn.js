@@ -32,6 +32,7 @@ define([
 
             this.config.dataview = false;
             this.config.size = { width: 1064, height: 550 };
+            this.config.autoScroll = false;
             this.config.checkModules = ['plt', 'sns'];
             this.config.docs = 'https://seaborn.pydata.org/index.html';
 
@@ -201,6 +202,7 @@ define([
                     $(that.wrapSelector('#kde')).closest('.sb-option').show();
                     $(that.wrapSelector('#stat')).closest('.sb-option').show();
                 } else if (chartType == 'barplot') {
+                    $(that.wrapSelector('#orient')).closest('.sb-option').show();
                     $(that.wrapSelector('#showValues')).closest('.sb-option').show();
                     $(that.wrapSelector('#errorbar')).closest('.sb-option').show();
                     if (that.state.setXY === false) {
@@ -547,6 +549,7 @@ define([
                 $(page).find('#kde').closest('.sb-option').show();
                 $(page).find('#stat').closest('.sb-option').show();
             } else if (this.state.chartType == 'barplot') {
+                $(page).find('#orient').closest('.sb-option').show();
                 $(page).find('#showValues').closest('.sb-option').show();
                 $(page).find('#errorbar').closest('.sb-option').show();
                 if (this.state.setXY === false) {
@@ -890,7 +893,7 @@ define([
 
         generateCode(preview=false) {
             let { 
-                chartType, data, x, y, setXY, hue, kde, stat, 
+                chartType, data, x, y, setXY, hue, orient, kde, stat, 
                 showValues, showValuesPrecision, errorbar,
                 sortType, sortBy, sortHue, sortHueText,
                 userOption='', 

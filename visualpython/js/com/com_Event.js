@@ -207,8 +207,13 @@ define([], function() {
                             that.keyManager.keyCheck.shiftKey = false;
                         }
                         if (evt.keyCode == that.keyManager.keyCode.escKey) {
+                            // check if there is visible file navigation : FileNavigation
+                            if ($('.vp-filenavigation-base:visible').length > 0) {
+                                // close file navigation
+                                $('.vp-filenavigation-base:visible').remove();
+                            }
                             // check if there is visible data selector : DataSelector
-                            if ($('.vp-dataselector-base:visible').length > 0) {
+                            else if ($('.vp-dataselector-base:visible').length > 0) {
                                 // close data selector
                                 $('.vp-dataselector-base:visible').remove();
                             }

@@ -145,6 +145,7 @@
     top: 0;
     background-color: var(--vp-background-color);
     border-bottom: 1px solid var(--vp-border-gray-color);
+    border-right: 1px solid var(--vp-border-gray-color);
 
     text-align: right;
     text-overflow: ellipsis;
@@ -167,6 +168,12 @@
     cursor: pointer;
     /* background: var(--vp-light-gray-color); */
     /* background: rgba(66, 165, 245, 0.2); */
+}
+.vp-fe-table-column-isnumeric {
+    margin-right: 5px;
+    vertical-align: middle;
+    height: 15px;
+    line-height: 15px;
 }
 
 /* Row Hover */
@@ -301,6 +308,18 @@
 .vp-inner-popup-sortby-down {
     float: right;
     display: inline-block;
+}
+/* to datetime */
+.vp-inner-popup-todt-addcol-content {
+    display: grid;
+    row-gap: 5px;
+    max-height: 105px;
+}
+.vp-inner-popup-todt-addcol-head,
+.vp-inner-popup-todt-addcol-item {
+    display: grid;
+    grid-template-columns: 160px 160px auto;
+    column-gap: 5px;
 }
 
 /* UDF Editor - CodeMirror */

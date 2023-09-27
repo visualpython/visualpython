@@ -75,7 +75,8 @@ define([
                         'import matplotlib.pyplot as plt',
                         '%matplotlib inline',
                         'import seaborn as sns',
-                        'import plotly.express as px'
+                        'import plotly.express as px',
+                        'import pyarrow as pa'
                     ],
                     'matplotlib customizing': [
                         'import matplotlib.pyplot as plt',
@@ -132,7 +133,8 @@ define([
                             'from plotly.offline import init_notebook_mode',
                             'init_notebook_mode(connected=True)'
                         ]
-                    }
+                    },
+                    { library: 'pyarrow', alias:'pa' },
                 ]
             }
 
@@ -207,6 +209,10 @@ define([
                 },
                 'sm': {
                     code: 'import statsmodels.api as sm',
+                    type: 'package'
+                },
+                'pyarrow': {
+                    code: 'import pyarrow as pa',
                     type: 'package'
                 }
             }
@@ -845,7 +851,7 @@ define([
                             throw new Error('Error', response);
                         }
                     }).then(function (data) {
-                        resolve(data.info.version);
+                        resolve(data.info.version, data.releases);
                     }).catch(function(err) {
                         let errMsg = err.message;
                         if (errMsg.includes('Failed to fetch')) {
@@ -871,14 +877,32 @@ define([
                 packageName = 'jupyterlab-visualpython';
             }
             this.getPackageVersion(packageName).then(function(latestVersion) {
-                if (nowVersion === latestVersion) {
+                let showUpdater = false;
+                if (nowVersion !== latestVersion) {
+                    let nowVerParts = nowVersion.split('.').map(x => ~~x);
+                    let latVerParts = latestVersion.split('.').map(x => ~~x);
+                    if (packageName === 'visualpython' || latVerParts[0] < 3) {
+                        // show updater only for notebook extension (for v2.5.0)
+                        for (var i = 0; i < nowVerParts.length; i++) {
+                            const a = nowVerParts[i];
+                            const b = latVerParts[i];
+                            if (a < b) {
+                                showUpdater = true;
+                                break;
+                            } else if (a > b) {
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (showUpdater === false) {
                     // if it's already up to date
                     // hide version update icon
                     $('#vp_versionUpdater').hide();
-                    if (background) {
+                    if (background === true) {
                         ;
                     } else {
-                        let msg = com_util.formatString('Visual Python is up to date. ({0})', latestVersion);
+                        let msg = com_util.formatString('Visual Python is up to date. ({0})', nowVersion);
                         com_util.renderInfoModal(msg);
                     }
                     // update version_timestamp
@@ -1017,7 +1041,7 @@ define([
     /**
      * Version
      */
-    Config.version = "2.4.9";
+    Config.version = "2.5.0";
 
     /**
      * Type of mode
@@ -1068,11 +1092,11 @@ define([
     Config.ML_DATA_DICT = {
         'Data Preparation': [
             /** Encoding */
-            'OneHotEncoder', 'LabelEncoder', 'OrdinalEncoder', 'TargetEncoder', 'SMOTE',
+            'OneHotEncoder', 'LabelEncoder', 'OrdinalEncoder', 'TargetEncoder',
             /** Scaling */
             'StandardScaler', 'RobustScaler', 'MinMaxScaler', 'Normalizer', 'FunctionTransformer', 'PolynomialFeatures', 'KBinsDiscretizer',
             /** ETC */
-            'SimpleImputer', 'ColumnTransformer'
+            'SimpleImputer', 'SMOTE', 'ColumnTransformer'
         ],
         'Regression': [
             'LinearRegression', 'Ridge', 'Lasso', 'ElasticNet', 'SVR', 'DecisionTreeRegressor', 'RandomForestRegressor', 'GradientBoostingRegressor', 'XGBRegressor', 'LGBMRegressor', 'CatBoostRegressor',

@@ -643,7 +643,7 @@ define([
             page.appendFormatLine('<div class="{0}">', 'vp-gb-method-user');
             page.appendFormatLine('<label class="vp-bold">{0}</label>', 'User option');
             page.appendFormatLine('<input type="text" placeholder="{0}" id="vp_gbMethodUser"/>', 'Type user method');
-            page.appendFormatLine('<label><input id="vp_gbMethodUserAsText" type="checkbox" checked/><span>{0}</span></label>'
+            page.appendFormatLine('<label><input id="vp_gbMethodUserAsText" type="checkbox"/><span>{0}</span></label>'
                                 , 'Text');
             page.appendLine('<button id="vp_gbMethodUserAdd" class="vp-button">Add</button>');
             page.appendLine('</div>');

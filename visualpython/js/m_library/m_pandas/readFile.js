@@ -48,7 +48,8 @@ define([
                 'csv': 'csv',
                 'excel': 'xlsx',
                 'json': 'json',
-                'pickle': ''
+                'pickle': '',
+                'parquet': 'parquet'
             }
             this.dataPath = 'https://raw.githubusercontent.com/visualpython/visualpython/main/visualpython/data/sample_csv/';
             this.fileResultState = {
@@ -60,7 +61,8 @@ define([
                     'csv': 'pd_readCsv',
                     'excel': 'pd_readExcel',
                     'json': 'pd_readJson',
-                    'pickle': 'pd_readPickle'
+                    'pickle': 'pd_readPickle',
+                    'parquet': 'pd_readParquet'
                 },
                 selectedType: 'csv',
                 package: null
