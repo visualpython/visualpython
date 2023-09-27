@@ -850,7 +850,7 @@ define([
                             throw new Error('Error', response);
                         }
                     }).then(function (data) {
-                        resolve(data.info.version);
+                        resolve(data.info.version, data.releases);
                     }).catch(function(err) {
                         let errMsg = err.message;
                         if (errMsg.includes('Failed to fetch')) {
@@ -910,11 +910,27 @@ define([
                 packageName = 'jupyterlab-visualpython';
             }
             this.getPackageVersion(packageName).then(function(latestVersion) {
-                if (nowVersion === latestVersion) {
+                let showUpdater = false;
+                if (nowVersion !== latestVersion) {
+                    let nowVerParts = nowVersion.split('.').map(x => ~~x);
+                    let latVerParts = latestVersion.split('.').map(x => ~~x);
+                    if (packageName === 'visualpython') {
+                        // show updater only for notebook extension (for v2.5.0)
+                        for (var i = 0; i < nowVerParts.length; i++) {
+                            const a = nowVerParts[i];
+                            const b = latVerParts[i];
+                            if (a < b) {
+                                showUpdater = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (showUpdater === false) {
                     // if it's already up to date
                     // hide version update icon
                     $('#vp_versionUpdater').hide();
-                    if (background) {
+                    if (background === true) {
                         ;
                     } else {
                         let msg = com_util.formatString('Visual Python is up to date. ({0})', latestVersion);
