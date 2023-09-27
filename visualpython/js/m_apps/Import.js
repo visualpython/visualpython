@@ -175,9 +175,9 @@ define([
             let that = this;
             libraries && libraries.forEach((lib, idx) => {
                 if (lib.type == 'function') {
-                    page.appendLine(that.templateForFunction(idx, lib.i0, lib.i1, lib.checked === 'checked'));
+                    page.appendLine(that.templateForFunction(idx, lib.i0, lib.i1, (lib.checked === 'checked' || lib.checked === true)));
                 } else {
-                    page.appendLine(that.templateForModule(idx, lib.i0, lib.i1, lib.checked === 'checked'));
+                    page.appendLine(that.templateForModule(idx, lib.i0, lib.i1, (lib.checked === 'checked' || lib.checked === true)));
                 }
             });
             page.appendLine('</tbody>');
