@@ -22,27 +22,27 @@ define([
 
     const importTemplates = {
         'data-analysis': [
-            { i0: 'numpy',  i1: 'np', type: 'module'},
-            { i0: 'pandas',  i1: 'pd', type: 'module'},
+            { i0: 'numpy',  i1: 'np', type: 'module', checked: 'checked'},
+            { i0: 'pandas',  i1: 'pd', type: 'module', checked: 'checked'},
             { 
                 i0: 'matplotlib.pyplot', i1: 'plt', type: 'module'
                 , include: [
                     '%matplotlib inline'
-                ]
+                ], checked: 'checked'
             },
-            { i0: 'seaborn', i1: 'sns', type: 'module'},
+            { i0: 'seaborn', i1: 'sns', type: 'module', checked: 'checked'},
             {
                 i0: 'plotly.express', i1: 'px', type: 'module'
                 , include: [
                     'from plotly.offline import init_notebook_mode',
                     'init_notebook_mode(connected=True)'
-                ], checked: false
+                ], checked: ''
             },
-            { i0: 'pyarrow', i1: 'pa', type: 'module', checked: false},
+            { i0: 'pyarrow', i1: 'pa', type: 'module', checked: ''},
         ],
         'machine-learning': [
-            { i0: 'sklearn.model_selection',  i1: 'train_test_split', type: 'function' },
-            { i0: 'sklearn',  i1: 'metrics', type: 'function' }
+            { i0: 'sklearn.model_selection',  i1: 'train_test_split', type: 'function', checked: 'checked' },
+            { i0: 'sklearn',  i1: 'metrics', type: 'function', checked: 'checked' }
         ]
     }
 
@@ -175,9 +175,9 @@ define([
             let that = this;
             libraries && libraries.forEach((lib, idx) => {
                 if (lib.type == 'function') {
-                    page.appendLine(that.templateForFunction(idx, lib.i0, lib.i1, lib.checked));
+                    page.appendLine(that.templateForFunction(idx, lib.i0, lib.i1, lib.checked === 'checked'));
                 } else {
-                    page.appendLine(that.templateForModule(idx, lib.i0, lib.i1, lib.checked));
+                    page.appendLine(that.templateForModule(idx, lib.i0, lib.i1, lib.checked === 'checked'));
                 }
             });
             page.appendLine('</tbody>');
@@ -246,7 +246,7 @@ define([
                 if (pacI0 == "") {
                     continue;
                 }
-                if (pacChecked) {
+                if (pacChecked === true) {
                     if (sbCode.toString().trim().length > 0) {
                         sbCode.appendLine();
                     }
@@ -270,7 +270,7 @@ define([
                     }
                 }
                 
-                importMeta.push({ i0: pacI0, i1: pacI1, type: pacType, checked: pacChecked });
+                importMeta.push({ i0: pacI0, i1: pacI1, type: pacType, checked: (pacChecked?'checked':'') });
             }
             this.state.importMeta = importMeta;
 
