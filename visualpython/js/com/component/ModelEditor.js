@@ -510,7 +510,15 @@ define([
                     options: [
                         { name: 'importance_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_train' },
                         { name: 'importance_targetData', label: 'Target Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y_train' },
-                        { name: 'scoring', component: ['input'], usePair: true },
+                        { name: 'scoring', component: ['option_suggest'], usePair: true, type: 'text', 
+                            options: [
+                                'explained_variance', 'max_error', 'neg_mean_absolute_error', 'neg_mean_squared_error', 'neg_root_mean_squared_error',
+                                'neg_mean_squared_log_error', 'neg_median_absolute_error', 'r2', 'neg_mean_poisson_deviance', 'neg_mean_gamma_deviance',
+                                'neg_mean_absolute_percentage_error',
+                                'accuracy', 'balanced_accuracy', 'top_k_accuracy', 'average_precision', 'neg_brier_score',
+                                'f1', 'f1_micro', 'f1_macro', 'f1_weighted', 'f1_samples', 'neg_log_loss', 'precision', 'recall', 'jaccard', 
+                                'roc_auc', 'roc_auc_ovr', 'roc_auc_ovo', 'roc_auc_ovr_weighted', 'roc_auc_ovo_weighted'
+                            ] },
                         { name: 'sort', label: 'Sort data', component: ['bool_checkbox'], value: true, usePair: true },
                         { name: 'importance_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'importances' }
                     ]
@@ -524,7 +532,15 @@ define([
                     options: [
                         { name: 'importance_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_train' },
                         { name: 'importance_targetData', label: 'Target Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y_train' },
-                        { name: 'scoring', component: ['input'], usePair: true },
+                        { name: 'scoring', component: ['option_suggest'], usePair: true, type: 'text', 
+                            options: [
+                                'explained_variance', 'max_error', 'neg_mean_absolute_error', 'neg_mean_squared_error', 'neg_root_mean_squared_error',
+                                'neg_mean_squared_log_error', 'neg_median_absolute_error', 'r2', 'neg_mean_poisson_deviance', 'neg_mean_gamma_deviance',
+                                'neg_mean_absolute_percentage_error',
+                                'accuracy', 'balanced_accuracy', 'top_k_accuracy', 'average_precision', 'neg_brier_score',
+                                'f1', 'f1_micro', 'f1_macro', 'f1_weighted', 'f1_samples', 'neg_log_loss', 'precision', 'recall', 'jaccard', 
+                                'roc_auc', 'roc_auc_ovr', 'roc_auc_ovo', 'roc_auc_ovr_weighted', 'roc_auc_ovo_weighted'
+                            ] },
                         { name: 'sort', label: 'Sort data', component: ['bool_checkbox'], value: true, usePair: true },
                         { name: 'top_count', label: 'Top count', component: ['input_number'], min: 0, usePair: true }
                     ]
@@ -668,7 +684,44 @@ define([
                                 { name: 'cvs_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'scores' }
                             ]
                         },
-                        'permutation_importance': defaultInfos['permutation_importance'],
+                        'permutation_importance': {
+                            name: 'permutation_importance',
+                            label: 'Permutation importance',
+                            import: 'from sklearn.inspection import permutation_importance',
+                            code: '${importance_allocate} = vp_create_permutation_importances(${model}, ${importance_featureData}, ${importance_targetData}${scoring}${sort})',
+                            description: 'Permutation importance for feature evaluation.',
+                            options: [
+                                { name: 'importance_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_train' },
+                                { name: 'importance_targetData', label: 'Target Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y_train' },
+                                { name: 'scoring', component: ['option_suggest'], usePair: true, type: 'text', 
+                                    options: [
+                                        'explained_variance', 'max_error', 'neg_mean_absolute_error', 'neg_mean_squared_error', 'neg_root_mean_squared_error',
+                                        'neg_mean_squared_log_error', 'neg_median_absolute_error', 'r2', 'neg_mean_poisson_deviance', 'neg_mean_gamma_deviance',
+                                        'neg_mean_absolute_percentage_error'
+                                    ] },
+                                { name: 'sort', label: 'Sort data', component: ['bool_checkbox'], value: true, usePair: true },
+                                { name: 'importance_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'importances' }
+                            ]
+                        },
+                        'plot_permutation_importance': {
+                            name: 'plot_permutation_importance',
+                            label: 'Plot permutation importance',
+                            import: 'from sklearn.inspection import permutation_importance',
+                            code: 'vp_plot_permutation_importances(${model}, ${importance_featureData}, ${importance_targetData}${scoring}${sort}${top_count})',
+                            description: 'Permutation importance for feature evaluation.',
+                            options: [
+                                { name: 'importance_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_train' },
+                                { name: 'importance_targetData', label: 'Target Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y_train' },
+                                { name: 'scoring', component: ['option_suggest'], usePair: true, type: 'text', 
+                                    options: [
+                                        'explained_variance', 'max_error', 'neg_mean_absolute_error', 'neg_mean_squared_error', 'neg_root_mean_squared_error',
+                                        'neg_mean_squared_log_error', 'neg_median_absolute_error', 'r2', 'neg_mean_poisson_deviance', 'neg_mean_gamma_deviance',
+                                        'neg_mean_absolute_percentage_error'
+                                    ] },
+                                { name: 'sort', label: 'Sort data', component: ['bool_checkbox'], value: true, usePair: true },
+                                { name: 'top_count', label: 'Top count', component: ['input_number'], min: 0, usePair: true }
+                            ]
+                        },
                         'Coefficient': {
                             name: 'coef_',
                             label: 'Coefficient',
@@ -754,7 +807,44 @@ define([
                                 { name: 'auc_targetData', label: 'Target Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y_test' }
                             ]
                         },
-                        'permutation_importance': defaultInfos['permutation_importance']
+                        'permutation_importance': {
+                            name: 'permutation_importance',
+                            label: 'Permutation importance',
+                            import: 'from sklearn.inspection import permutation_importance',
+                            code: '${importance_allocate} = vp_create_permutation_importances(${model}, ${importance_featureData}, ${importance_targetData}${scoring}${sort})',
+                            description: 'Permutation importance for feature evaluation.',
+                            options: [
+                                { name: 'importance_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_train' },
+                                { name: 'importance_targetData', label: 'Target Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y_train' },
+                                { name: 'scoring', component: ['option_suggest'], usePair: true, type: 'text', 
+                                    options: [
+                                        'accuracy', 'balanced_accuracy', 'top_k_accuracy', 'average_precision', 'neg_brier_score',
+                                        'f1', 'f1_micro', 'f1_macro', 'f1_weighted', 'f1_samples', 'neg_log_loss', 'precision', 'recall', 'jaccard', 
+                                        'roc_auc', 'roc_auc_ovr', 'roc_auc_ovo', 'roc_auc_ovr_weighted', 'roc_auc_ovo_weighted'
+                                    ] },
+                                { name: 'sort', label: 'Sort data', component: ['bool_checkbox'], value: true, usePair: true },
+                                { name: 'importance_allocate', label: 'Allocate to', component: ['input'], placeholder: 'New variable', value: 'importances' }
+                            ]
+                        },
+                        'plot_permutation_importance': {
+                            name: 'plot_permutation_importance',
+                            label: 'Plot permutation importance',
+                            import: 'from sklearn.inspection import permutation_importance',
+                            code: 'vp_plot_permutation_importances(${model}, ${importance_featureData}, ${importance_targetData}${scoring}${sort}${top_count})',
+                            description: 'Permutation importance for feature evaluation.',
+                            options: [
+                                { name: 'importance_featureData', label: 'Feature Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'X_train' },
+                                { name: 'importance_targetData', label: 'Target Data', component: ['data_select'], var_type: ['DataFrame', 'Series', 'ndarray', 'list', 'dict'], value: 'y_train' },
+                                { name: 'scoring', component: ['option_suggest'], usePair: true, type: 'text', 
+                                    options: [
+                                        'accuracy', 'balanced_accuracy', 'top_k_accuracy', 'average_precision', 'neg_brier_score',
+                                        'f1', 'f1_micro', 'f1_macro', 'f1_weighted', 'f1_samples', 'neg_log_loss', 'precision', 'recall', 'jaccard', 
+                                        'roc_auc', 'roc_auc_ovr', 'roc_auc_ovo', 'roc_auc_ovr_weighted', 'roc_auc_ovo_weighted'
+                                    ] },
+                                { name: 'sort', label: 'Sort data', component: ['bool_checkbox'], value: true, usePair: true },
+                                { name: 'top_count', label: 'Top count', component: ['input_number'], min: 0, usePair: true }
+                            ]
+                        },
                     }
 
                     // feature importances
