@@ -1,0 +1,8 @@
+.jp-vp-icon {
+    background-image: url('./icon.svg');
+}
+/* lm-mod-hidden is not on appropriate tag when isVisible is false */
+.lm-mod-hidden[data-command="jupyterlab-visualpython:toggle-panel"] {
+    display: none !important;
+    cursor: default;
+}

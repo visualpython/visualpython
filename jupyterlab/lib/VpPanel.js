@@ -8,7 +8,7 @@ define([
 	'jquery-ui', 
 	'jquery-ui-css',
 	'codemirror/lib/codemirror', 
-	// __VP_CSS_LOADER__('codemirror/lib/codemirror'), // INTEGRATION: unified version of css loader 
+	'vp_base/lib/codemirror/lib/codemirror.css', // INTEGRATION: unified version of css loader 
 	'vp_base/js/loadVisualpython',
 	'vp_base/js/com/com_Config'
 ], function(
@@ -17,7 +17,7 @@ define([
 	text, css, $, 
 	ui, uiCss,
 	codemirror, 
-	// cmCss, 
+	cmCss, 
 	loadVisualpython, com_Config) {
 
 	const { 
@@ -41,9 +41,9 @@ define([
 			this.app = app;
 			this.vpFrame = loadVisualpython.initVisualpython();
 
-			this.id = 'visualpython_vpPanel';
+			this.id = 'jupyterlab-visualpython:panel';
 			// LabIcon with svg : @jupyterlab/ui-components/lib/icon/labicon.js
-			this.title.icon = new LabIcon({ name: 'visualpython:toggle', svgstr: vpIcon.default });
+			this.title.icon = new LabIcon({ name: 'jupyterlab-visualpython:toggle-icon', svgstr: vpIcon });
 			this.title.caption = 'Visual Python';
 			
 			// register node using jquery to element
