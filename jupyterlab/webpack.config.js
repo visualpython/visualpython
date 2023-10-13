@@ -11,6 +11,7 @@ module.exports = {
             "jquery-ui-css": path.resolve(__dirname, "lib/visualpython/lib/jquery/jquery-ui.min_org.css"),
             "codemirror":path.resolve(__dirname, "lib/visualpython/lib/codemirror"),
             "mathjaxutils": path.resolve(__dirname, "lib/visualpython/lib/mathjax/mathjaxutils"),
+            "marked": "marked"
         }           
     },
     module: {

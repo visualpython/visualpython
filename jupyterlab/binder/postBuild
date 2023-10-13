@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" perform a development install of visualpython
+""" perform a development install of jupyterlab-visualpython
 
     On Binder, this will run _after_ the environment has been fully created from
     the environment.yml in this directory.
@@ -31,6 +31,7 @@ _(sys.executable, "-m", "pip", "check")
 
 # install the labextension
 _(sys.executable, "-m", "pip", "install", "-e", ".")
+_(sys.executable, "-m", "jupyter", "labextension", "develop", "--overwrite", ".")
 
 # verify the environment the extension didn't break anything
 _(sys.executable, "-m", "pip", "check")
@@ -42,5 +43,5 @@ _("jupyter", "server", "extension", "list")
 _("jupyter", "labextension", "list")
 
 
-print("JupyterLab with visualpython is ready to run with:\n")
+print("JupyterLab with jupyterlab-visualpython is ready to run with:\n")
 print("\tjupyter lab\n")
