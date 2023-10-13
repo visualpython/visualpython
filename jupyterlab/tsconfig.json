@@ -2,16 +2,16 @@
     "compilerOptions": {
         "allowJs": true,
         "checkJs": false,
+        "allowSyntheticDefaultImports": true,
         "composite": true,
         "declaration": true,
         "esModuleInterop": true,
         "incremental": true,
         "module": "CommonJS",
         "outDir": "lib",
-        "rootDir": "src",
+        "rootDir": "lib",
         "strict": true,
-        "target": "es2017",
-        "types": []
+        "target": "ES2018"
     },
-    "include": ["src/*"]
+    "include": ["lib/*"]
 }

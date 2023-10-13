@@ -881,17 +881,14 @@ define([
                 if (nowVersion !== latestVersion) {
                     let nowVerParts = nowVersion.split('.').map(x => ~~x);
                     let latVerParts = latestVersion.split('.').map(x => ~~x);
-                    if (packageName === 'visualpython' || latVerParts[0] < 3) {
-                        // show updater only for notebook extension (for v2.5.0)
-                        for (var i = 0; i < nowVerParts.length; i++) {
-                            const a = nowVerParts[i];
-                            const b = latVerParts[i];
-                            if (a < b) {
-                                showUpdater = true;
-                                break;
-                            } else if (a > b) {
-                                break;
-                            }
+                    for (var i = 0; i < nowVerParts.length; i++) {
+                        const a = nowVerParts[i];
+                        const b = latVerParts[i];
+                        if (a < b) {
+                            showUpdater = true;
+                            break;
+                        } else if (a > b) {
+                            break;
                         }
                     }
                 }
@@ -1041,7 +1038,7 @@ define([
     /**
      * Version
      */
-    Config.version = "2.5.0";
+    Config.version = "3.0.0";
 
     /**
      * Type of mode

@@ -132,7 +132,7 @@ def vp_create_permutation_importances(model, X_train, y_train, scoring=None, sor
     else:
         feature_names = [ 'X{}'.format(i) for i in range(len(model.feature_importances_)) ]
                         
-    imp = permutation_importance(model, X_train, y_train, scoring)
+    imp = permutation_importance(model, X_train, y_train, scoring=scoring)
 
     df_i = _vp_pd.DataFrame(imp['importances_mean'], index=feature_names, columns=['Feature_importance'])
     df_i['Percentage'] = 100 * df_i['Feature_importance']
@@ -144,7 +144,7 @@ def vp_create_permutation_importances(model, X_train, y_train, scoring=None, sor
 # Visual Python: Machine Learning > Model Info
 ######
 def vp_plot_permutation_importances(model, X_train, y_train, scoring=None, sort=False, top_count=0):
-    df_i = vp_create_permutation_importances(model, X_train, y_train, scoring, sort)
+    df_i = vp_create_permutation_importances(model, X_train, y_train, scoring=scoring, sort=sort)
                         
     if sort: 
         if top_count > 0:

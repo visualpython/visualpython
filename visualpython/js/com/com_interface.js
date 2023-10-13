@@ -122,13 +122,23 @@ define([
                     var notebook = notebookPanel.content;
                     var notebookModel = notebook.model;
             
-                    var cellModel = notebookModel.contentFactory.createCell(type, {});				
-                    cellModel.value.text = command;
-            
-                    const newCellIndex = notebook.activeCellIndex + 1;
+                    // LAB 4.x: notebookPanel.content.contentFactory.createCodeCell / createMarkdownCell
+                    // var cellModel = notebookModel.contentFactory.createCell(type, {});
                     // 셀 추가
-                    notebookModel.cells.insert(newCellIndex, cellModel);				
-                    notebook.activeCellIndex = newCellIndex;
+                    // LAB 4.x: insert cell api 변경
+                    // notebookModel.cells.insert(newCellIndex, cellModel);				
+                    // notebook.activeCellIndex = newCellIndex;
+                    NotebookActions.insertBelow(notebook);
+                    try {
+                        NotebookActions.changeCellType(notebook, type);
+                    } catch(err) {
+                        vpLog.display(VP_LOG_TYPE.ERROR, err);
+                    }
+                    // let activeCellIndex = notebook.activeCellIndex;
+                    // let cell = notebookModel.cells.model.getCell(activeCellIndex);
+                    // cell.setSource(command);
+                    let activeCell = notebook.activeCell;
+                    activeCell.model.sharedModel.setSource(command);
             
                     if (exec == true) {
                         try{
@@ -147,16 +157,17 @@ define([
                         // add # before the lines
                         command = '#' + command.split('\n').join('\n#');
                     }
-
+                    
+                    // LAB 4.x: console insert and run
+                    widget.promptCell.model.sharedModel.setSource(command)
                     // execute or not
                     if (exec == true) {
                         // console allow only code cell
-                        var cellModel = widget.createCodeCell();
-                        cellModel.model.value.text = command;
-                        widget.addCell(cellModel);
-                        widget._execute(cellModel);
-                    } else {
-                        widget.promptCell.model.value.text = command;
+                        // var cellModel = widget.createCodeCell();
+                        // cellModel.model.value.text = command;
+                        // widget.addCell(cellModel);
+                        // widget._execute(cellModel);
+                        widget.execute()
                     }
                     widget.promptCell.inputArea.editor.focus();
                 }
@@ -263,15 +274,24 @@ define([
                         var notebookModel = notebook.model;
                 
                         var options = {	};
-                        var cellModel = notebookModel.contentFactory.createCell(type, options);				
-                        cellModel.value.text = command;
-                
-                        const newCellIndex = notebook.activeCellIndex + 1;
+                        // LAB 4.x: notebookPanel.content.contentFactory.createCodeCell / createMarkdownCell
+                        // var cellModel = notebookModel.contentFactory.createCell(type, options);				
                         // 셀 추가
-                        notebookModel.cells.insert(newCellIndex, cellModel);				
-                        notebook.activeCellIndex = newCellIndex;
-                
-                        var cell = notebook.activeCell;
+                        // LAB 4.x: insert cell api 변경
+                        // notebookModel.cells.insert(newCellIndex, cellModel);
+                        // notebook.activeCellIndex = newCellIndex;
+                        NotebookActions.insertBelow(notebook);
+                        try {
+                            NotebookActions.changeCellType(notebook, type);
+                        } catch(err) {
+                            vpLog.display(VP_LOG_TYPE.ERROR, err);
+                        }
+                        // let activeCellIndex = notebook.activeCellIndex;
+                        // let cell = notebookModel.cells.model.getCell(activeCellIndex);
+                        // cell.setSource(command);
+                        let activeCell = notebook.activeCell;
+                        activeCell.model.sharedModel.setSource(command);
+
                         if (exec == true) {
                             try{
                                 NotebookActions.run(notebook, sessionContext);
@@ -280,9 +300,27 @@ define([
                             }
                         }
                     } else if (sessionType === 'console') {
-                        var console = notebookPanel.content;
-                        var cellModel = console.contentFactory.createCell(type, {});
-                        cellModel.value.text = command;
+                        // LAB 4.x: notebookPanel.console.contentFactory.createCodeCell
+                        // var console = notebookPanel.content;
+                        // var cellModel = console.contentFactory.createCell(type, {});
+                        var labConsole = notebookPanel.content;
+                        var widget = labConsole.widgets[0];
+                        if (type === 'markdown') {
+                            // add # before the lines
+                            command = '#' + command.split('\n').join('\n#');
+                        }
+                        
+                        // LAB 4.x: console insert and run
+                        widget.promptCell.model.sharedModel.setSource(command)
+                        // execute or not
+                        if (exec == true) {
+                            // console allow only code cell
+                            // var cellModel = widget.createCodeCell();
+                            // cellModel.model.value.text = command;
+                            // widget.addCell(cellModel);
+                            // widget._execute(cellModel);
+                            widget.execute()
+                        }
                     } 
                 } else {
                     // No session found
@@ -299,10 +337,13 @@ define([
 
         } else if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
             // LAB: TODO:
-            let activeCell = notebookPanel.content.activeCell;
-            let activeCellTop = $(activeCell.node).position().top;
-            // scroll to current cell
-            $(vpKernel.getLabNotebookPanel().content.activeCell.node)[0].scrollIntoView(true);
+            let sessionType = notebookPanel.sessionContext.type;
+            if (sessionType === 'notebook') {
+                let activeCell = notebookPanel.content.activeCell;
+                let activeCellTop = $(activeCell.node).position().top;
+                // scroll to current cell
+                $(notebookPanel.content.activeCell.node)[0].scrollIntoView(true);
+            }
         }
 
         com_util.renderSuccessMessage('Your code is successfully generated.');

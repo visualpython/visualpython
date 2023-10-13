@@ -14,12 +14,17 @@ global.__VP_RAW_LOADER__ = function(path) {
     return path;
 }
 
+const vpId = 'jupyterlab-visualpython:plugin';
+
+const { ICommandPalette } = require('@jupyterlab/apputils');
+
 global.$ = $;
 global.vpBase = path.resolve(__dirname, "lib") + '/';
 module.exports = [{
-    id: 'visualpython:entry',
+    id: vpId,
     autoStart: true,
-    activate: function (app) {
+    requires: [ICommandPalette],
+    activate: function (app, palette) {
         console.log(
             'JupyterLab extension visualpython is activated!'
         );
@@ -35,5 +40,30 @@ module.exports = [{
         // Add vp to the right area:
         var vpPanel = new VpPanel(app);
         app.shell.add(vpPanel, 'right', { rank: 900, type: 'Visual Python' });
+
+        // Add toggle button
+        let isVpVisible = app.name !== 'JupyterLab'; // compatible for notebook 7.x (hidden for jupyterlab)
+        let toggleCommand = 'jupyterlab-visualpython:toggle-panel';
+        let vpLabel = isVpVisible?'Toggle Visual Python':'';
+        app.commands.addCommand(toggleCommand, {
+            isEnabled: () => isVpVisible,
+            isVisible: () => isVpVisible,
+            iconClass: 'jp-vp-icon',
+            iconLabel: vpLabel,
+            execute: () => {
+                if (app.shell.rightCollapsed === true || $('#vp_wrapper').is(':visible') === false) {
+                    app.shell.activateById('vp_wrapper');
+                } else {
+                    app.shell.collapseRight();
+                }
+            }
+        });
+
+        // Add command palette
+        palette.addItem({
+            command: toggleCommand,
+            category: 'Visual Python',
+            label: 'Toggle Visual Python'
+        });
     }
 }];
