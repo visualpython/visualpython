@@ -1,0 +1,22 @@
+{
+    "jupyter.lab.toolbars": {
+        "Notebook": [
+            {
+                "name": "show-visualpython",
+                "command": "jupyterlab-visualpython:toggle-panel"
+            }
+        ]
+    },
+    "jupyter.lab.shortcuts": [
+        {
+            "command": "jupyterlab-visualpython:toggle-panel",
+            "keys": ["Accel Shift V"],
+            "selector": "body"
+        }
+    ],
+    "title": "jupyterlab-visualpython",
+    "description": "jupyterlab-visualpython plugin",
+    "type": "object",
+    "properties": {},
+    "additionalProperties": false
+}
