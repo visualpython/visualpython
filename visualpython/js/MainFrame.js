@@ -354,7 +354,7 @@ define([
                 $('#vp_wrapper').width(newVpWidth);
                 if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
                     // LAB: set parent width and position, min-width
-                    let target = $('#vp_wrapper').parent();
+                    let target = $('#vp_wrapper').closest('#jp-right-stack'); // compatible for notebook 7.x
                     let prevWidth = target[0].getBoundingClientRect().width;
                     let prevLeft = $(target).position().left;
                     let widthDiff = newVpWidth - vpWidth;
@@ -367,11 +367,23 @@ define([
                         vpLab.shell.collapseRight();
                         vpLab.shell.expandRight();
                     }
-                    let relativeSizes = vpLab.shell._hsplitPanel.layout.relativeSizes();
-                    let absoluteSizes = vpLab.shell._hsplitPanel.layout.absoluteSizes();
-                    let newSize = absoluteSizes[1] - widthDiff;
-                    let totalWidth = absoluteSizes.reduce((x, a) => x + a, 0);
-                    vpLab.shell._hsplitPanel.layout.setRelativeSizes([relativeSizes[0], newSize/totalWidth, newVpWidth/totalWidth]);
+                    if (vpLab.name === 'JupyterLab') {
+                        let splitLayout = vpLab.shell._hsplitPanel.layout;
+                        let relativeSizes = splitLayout.relativeSizes();
+                        let absoluteSizes = splitLayout.absoluteSizes();
+                        let newSize = absoluteSizes[1] - widthDiff;
+                        let totalWidth = absoluteSizes.reduce((x, a) => x + a, 0);
+                        splitLayout.setRelativeSizes([relativeSizes[0], newSize/totalWidth, newVpWidth/totalWidth]);
+                    } else {
+                        // compatible for notebook 7.x
+                        // vpLab.shell.layout.widgets[0]
+                        let splitLayout = vpLab.shell.layout.widgets[0];
+                        let relativeSizes = splitLayout.relativeSizes();
+                        let absoluteSizes = splitLayout.widgets.map(x => x.node.getBoundingClientRect().width);
+                        let newSize = absoluteSizes[1] - widthDiff;
+                        let totalWidth = absoluteSizes.reduce((x, a) => x + a, 0);
+                        splitLayout.setRelativeSizes([relativeSizes[0], newSize/totalWidth, newVpWidth/totalWidth]);
+                    }
                 } else {
                     $('#vp_wrapper').resizable({ minWidth: MENU_MIN_WIDTH + MENU_BOARD_SPACING });
                 }
@@ -384,7 +396,7 @@ define([
                 $('#vp_wrapper').width(newVpWidth);
                 if (vpConfig.extensionType === 'lab' || vpConfig.extensionType === 'lite') {
                     // LAB: set parent width and position, min-width
-                    let target = $('#vp_wrapper').parent();
+                    let target = $('#vp_wrapper').closest('#jp-right-stack'); // compatible for notebook 7.x
                     let prevWidth = target[0].getBoundingClientRect().width;
                     let prevLeft = $(target).position().left;
                     let widthDiff = newVpWidth - vpWidth;
@@ -397,11 +409,23 @@ define([
                         vpLab.shell.collapseRight();
                         vpLab.shell.expandRight();
                     }
-                    let relativeSizes = vpLab.shell._hsplitPanel.layout.relativeSizes();
-                    let absoluteSizes = vpLab.shell._hsplitPanel.layout.absoluteSizes();
-                    let newSize = absoluteSizes[1] - widthDiff;
-                    let totalWidth = absoluteSizes.reduce((x, a) => x + a, 0);
-                    vpLab.shell._hsplitPanel.layout.setRelativeSizes([relativeSizes[0], newSize/totalWidth, newVpWidth/totalWidth]);
+                    if (vpLab.name === 'JupyterLab') {
+                        let splitLayout = vpLab.shell._hsplitPanel.layout;
+                        let relativeSizes = splitLayout.relativeSizes();
+                        let absoluteSizes = splitLayout.absoluteSizes();
+                        let newSize = absoluteSizes[1] - widthDiff;
+                        let totalWidth = absoluteSizes.reduce((x, a) => x + a, 0);
+                        splitLayout.setRelativeSizes([relativeSizes[0], newSize/totalWidth, newVpWidth/totalWidth]);
+                    } else {
+                        // compatible for notebook 7.x
+                        // vpLab.shell.layout.widgets[0]
+                        let splitLayout = vpLab.shell.layout.widgets[0];
+                        let relativeSizes = splitLayout.relativeSizes();
+                        let absoluteSizes = splitLayout.widgets.map(x => x.node.getBoundingClientRect().width);
+                        let newSize = absoluteSizes[1] - widthDiff;
+                        let totalWidth = absoluteSizes.reduce((x, a) => x + a, 0);
+                        splitLayout.setRelativeSizes([relativeSizes[0], newSize/totalWidth, newVpWidth/totalWidth]);
+                    }
                 } else {
                     $('#vp_wrapper').resizable({ minWidth: VP_MIN_WIDTH });
                 }
