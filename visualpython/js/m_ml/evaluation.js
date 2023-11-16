@@ -276,8 +276,8 @@ define([
                 // }
                 if (r_squared) {
                     code = new com_String();
-                    code.appendLine("# R square");
-                    code.appendFormat("print('R square: {}'.format(metrics.r2_score({0}, {1})))", targetData, predictData);
+                    code.appendLine("# R squared");
+                    code.appendFormat("print('R squared: {}'.format(metrics.r2_score({0}, {1})))", targetData, predictData);
                     codeCells.push(code.toString());
                 }
                 if (mae) {
