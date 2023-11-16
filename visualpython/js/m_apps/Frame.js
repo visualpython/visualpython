@@ -2767,7 +2767,7 @@ define([
                                 var condText = $(condTextTag[i]).prop('checked');
                                 var operConn = $(operConnTag[i]).val();
                                 var condObj = {};
-                                if (col !== '' && oper !== '' && cond !== '') {
+                                if (col !== '' && oper !== '' && (oper == 'isnull()' || oper === 'notnull()' || cond !== '')) {
                                     condObj = {
                                         oper: oper,
                                         cond: com_util.convertToStr(cond, condText)
@@ -2808,7 +2808,7 @@ define([
                             var condText = $(condTextTag[i]).prop('checked');
                             var operConn = $(operConnTag[i]).val();
                             var condObj = {};
-                            if (col !== '' && oper !== '' && cond !== '') {
+                            if (col !== '' && oper !== '' && (oper == 'isnull()' || oper === 'notnull()' || cond !== '')) {
                                 condObj = {
                                     colName: col,
                                     oper: oper,
@@ -2861,7 +2861,7 @@ define([
                             var condText = $(condTextTag[i]).prop('checked');
                             var operConn = $(operConnTag[i]).val();
                             var condObj = {};
-                            if (col !== '' && oper !== '' && cond !== '') {
+                            if (col !== '' && oper !== '' && (oper == 'isnull()' || oper === 'notnull()' || cond !== '')) {
                                 condObj = {
                                     colName: col,
                                     oper: oper,
@@ -2894,7 +2894,7 @@ define([
                                 var condText = $(condTextTag[i]).prop('checked');
                                 var operConn = $(operConnTag[i]).val();
                                 var condObj = {};
-                                if (col !== '' && oper !== '' && cond !== '') {
+                                if (col !== '' && oper !== '' && (oper == 'isnull()' || oper === 'notnull()' || cond !== '')) {
                                     condObj = {
                                         oper: oper,
                                         cond: com_util.convertToStr(cond, condText)
