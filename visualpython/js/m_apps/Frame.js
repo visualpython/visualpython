@@ -115,10 +115,10 @@ define([
                     id: 'encoding',
                     label: 'Encoding',
                     axis: FRAME_AXIS.COLUMN,
-                    selection: FRAME_SELECT_TYPE.SINGLE, 
+                    selection: FRAME_SELECT_TYPE.MULTI, 
                     child: [
-                        { id: 'label_encoding', label: 'Label encoding', axis: FRAME_AXIS.COLUMN, selection: FRAME_SELECT_TYPE.SINGLE, menuType: FRAME_EDIT_TYPE.LABEL_ENCODING },
-                        { id: 'one_hot_encoding', label: 'Onehot encoding', axis: FRAME_AXIS.COLUMN, selection: FRAME_SELECT_TYPE.SINGLE, menuType: FRAME_EDIT_TYPE.ONE_HOT_ENCODING },
+                        { id: 'label_encoding', label: 'Label encoding', axis: FRAME_AXIS.COLUMN, selection: FRAME_SELECT_TYPE.MULTI, menuType: FRAME_EDIT_TYPE.LABEL_ENCODING },
+                        { id: 'one_hot_encoding', label: 'Onehot encoding', axis: FRAME_AXIS.COLUMN, selection: FRAME_SELECT_TYPE.MULTI, menuType: FRAME_EDIT_TYPE.ONE_HOT_ENCODING },
                     ]
                 },
                 {
@@ -3237,13 +3237,18 @@ define([
                     break;
                 case FRAME_EDIT_TYPE.LABEL_ENCODING:
                     if (axis == FRAME_AXIS.COLUMN) {
-                        let encodedColName = this.state.selected.map(col=> { 
+                        let encodedColNameList = this.state.selected.map(col=> { 
                             if (col.code !== col.label) {
-                                return com_util.formatString("'{0}'", col.label + '_label');
+                                return { 'origin': com_util.formatString("'{0}'", col.label), 'encoded': com_util.formatString("'{0}'", col.label + '_label') };
                             }
-                            return col.label + '_label' 
-                        }).join(',');
-                        code.appendFormat("{0}[{1}] = pd.Categorical({2}[{3}]).codes", tempObj, encodedColName, tempObj, selectedName);
+                            return { 'origin': col.label, 'encoded': col.label + '_label' };
+                        });
+                        encodedColNameList.forEach((encodedColObj, idx) => {
+                            if (idx > 0) {
+                                code.appendLine();
+                            }
+                            code.appendFormat("{0}[{1}] = pd.Categorical({2}[{3}]).codes", tempObj, encodedColObj['encoded'], tempObj, encodedColObj['origin']);
+                        });
                     }
                     break;
                 case FRAME_EDIT_TYPE.ONE_HOT_ENCODING:
