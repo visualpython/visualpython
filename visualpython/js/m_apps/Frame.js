@@ -968,6 +968,23 @@ define([
                     });
                 });
 
+                // change operator selection
+                $(document).off('change', this.wrapSelector('.vp-inner-popup-apply-oper-list'));
+                $(document).on('change', this.wrapSelector('.vp-inner-popup-apply-oper-list'), function () {
+                    var oper = $(this).val();
+                    var condTag = $(this).closest('td').find('.vp-inner-popup-apply-condition');
+                    var useTextTag = $(this).closest('td').find('.vp-inner-popup-apply-cond-usetext');
+
+                    // if operator is isnull(), notnull(), disable condition input
+                    if (oper == 'isnull()' || oper == 'notnull()') {
+                        $(condTag).prop('disabled', true);
+                        $(useTextTag).prop('disabled', true);
+                    } else {
+                        $(condTag).prop('disabled', false);
+                        $(useTextTag).prop('disabled', false);
+                    }
+                });
+
                 $(this.wrapSelector('.vp-inner-popup-toggle-else')).on('click', function() {
                     // toggle else on/off
                     let elseOn = $(this).attr('data-else'); // on / off
@@ -3343,7 +3360,21 @@ define([
                             let condCode = '';
                             obj.condList.forEach((condObj, idx) => {
                                 let { oper, cond, connector } = condObj;
-                                condCode += `(x ${oper} ${cond})`;
+                                if (oper === 'isnull()') {
+                                    condCode += `(pd.isnull(x))`;
+                                } else if (oper === 'notnull()') {
+                                    condCode += `(pd.notnull(x))`;
+                                } else if (oper === 'contains') {
+                                    condCode += `(${cond} in x)`;
+                                } else if (oper === 'not contains') {
+                                    condCode += `(${cond} not in x)`;
+                                } else if (oper === 'starts with') {
+                                    condCode += `(x.startswith(${cond}))`;
+                                } else if (oper === 'ends with') {
+                                    condCode += `(x.endswith(${cond}))`;
+                                } else {
+                                    condCode += `(x ${oper} ${cond})`;
+                                }
                                 if (connector !== undefined) {
                                     condCode += ` ${connector} `;
                                 }
@@ -3484,7 +3515,21 @@ define([
                             let condCode = '';
                             obj.condList.forEach((condObj, idx) => {
                                 let { oper, cond, connector } = condObj;
-                                condCode += `(x ${oper} ${cond})`;
+                                if (oper === 'isnull()') {
+                                    condCode += `pd.isnull(x)`;
+                                } else if (oper === 'notnull()') {
+                                    condCode += `pd.notnull(x)`;
+                                } else if (oper === 'contains') {
+                                    condCode += `(${cond} in x)`;
+                                } else if (oper === 'not contains') {
+                                    condCode += `(${cond} not in x)`;
+                                } else if (oper === 'starts with') {
+                                    condCode += `(x.startswith(${cond}))`;
+                                } else if (oper === 'ends with') {
+                                    condCode += `(x.endswith(${cond}))`;
+                                } else {
+                                    condCode += `(x ${oper} ${cond})`;
+                                }
                                 if (connector !== undefined) {
                                     condCode += ` ${connector} `;
                                 }
