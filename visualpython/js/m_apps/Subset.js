@@ -1810,6 +1810,10 @@ define([
                             rowSelection.append(')');
                         } else {
                             rowSelection.appendFormat('({0}', varName);
+                            if (colName == '.index') {
+                                // index
+                                rowSelection.append('.index');
+                            }
                             oper && rowSelection.appendFormat(' {0}', oper);
                             if (cond) {
                                 // condition value as text
@@ -1863,7 +1867,7 @@ define([
                             var colList = [];
                             for (var i = 0; i < colTags.length; i++) {
                                 var colValue = $(colTags[i]).data('code');
-                                if (colValue) {
+                                if (colValue !== undefined) {
                                     colList.push(colValue);
                                 }
                             }
@@ -1873,7 +1877,7 @@ define([
                                 $(this.wrapSelector('.' + VP_DS_TO_FRAME)).parent().show();
     
                                 // to frame
-                                if (this.state.toFrame) {
+                                if (this.state.toFrame === true) {
                                     colSelection.appendFormat('[{0}]', colList.toString());
                                     this.state.returnType = 'DataFrame';
                                 } else {
