@@ -130,7 +130,7 @@ def vp_create_permutation_importances(model, X_train, y_train, scoring=None, sor
     if isinstance(X_train, _vp_pd.core.frame.DataFrame):
         feature_names = X_train.columns
     else:
-        feature_names = [ 'X{}'.format(i) for i in range(len(model.feature_importances_)) ]
+        feature_names = [ 'X{}'.format(i) for i in range(X_train.shape[1]) ]
                         
     imp = permutation_importance(model, X_train, y_train, scoring=scoring)
 

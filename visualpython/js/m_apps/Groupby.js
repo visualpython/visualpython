@@ -177,7 +177,7 @@ define([
                 var colList = event.dataList;
                 that.state.display = colList;
 
-                if (colList && colList.length == 1) {
+                if ((colList && colList.length == 1) || that.state.method === 'size') {
                     $(that.wrapSelector('#vp_gbToFrame')).parent().show();
                 } else {
                     $(that.wrapSelector('#vp_gbToFrame')).parent().hide();
@@ -196,6 +196,12 @@ define([
                 var method = $(this).val();
                 that.state.method = method;
                 $(that.wrapSelector('#vp_gbMethod')).val(method);
+                
+                if (method === 'size' || (that.state.display && that.state.display.length == 1)) {
+                    $(that.wrapSelector('#vp_gbToFrame')).parent().show();
+                } else {
+                    $(that.wrapSelector('#vp_gbToFrame')).parent().hide();
+                }
             });
 
             // advanced checkbox event
@@ -744,7 +750,7 @@ define([
             // Display columns
             //====================================================================
             var colStr = '';
-            if (display) {
+            if (display && display.length > 0) {
                 if (toFrame || display.length > 1) {
                     // over 2 columns
                     colStr = '[[' + display.join(',') + ']]';
@@ -891,6 +897,10 @@ define([
                         methodStr.appendFormat('{0}(numeric_only=True)', method);
                     } else {
                         methodStr.appendFormat('{0}()', method);
+                        if (method === 'size' && toFrame === true) {
+                            // if to_Frame on size() method
+                            methodStr.append(".to_frame(name='size')");
+                        }
                     }
                 }
             }
