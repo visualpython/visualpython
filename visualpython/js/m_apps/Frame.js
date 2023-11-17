@@ -115,10 +115,10 @@ define([
                     id: 'encoding',
                     label: 'Encoding',
                     axis: FRAME_AXIS.COLUMN,
-                    selection: FRAME_SELECT_TYPE.SINGLE, 
+                    selection: FRAME_SELECT_TYPE.MULTI, 
                     child: [
-                        { id: 'label_encoding', label: 'Label encoding', axis: FRAME_AXIS.COLUMN, selection: FRAME_SELECT_TYPE.SINGLE, menuType: FRAME_EDIT_TYPE.LABEL_ENCODING },
-                        { id: 'one_hot_encoding', label: 'Onehot encoding', axis: FRAME_AXIS.COLUMN, selection: FRAME_SELECT_TYPE.SINGLE, menuType: FRAME_EDIT_TYPE.ONE_HOT_ENCODING },
+                        { id: 'label_encoding', label: 'Label encoding', axis: FRAME_AXIS.COLUMN, selection: FRAME_SELECT_TYPE.MULTI, menuType: FRAME_EDIT_TYPE.LABEL_ENCODING },
+                        { id: 'one_hot_encoding', label: 'Onehot encoding', axis: FRAME_AXIS.COLUMN, selection: FRAME_SELECT_TYPE.MULTI, menuType: FRAME_EDIT_TYPE.ONE_HOT_ENCODING },
                     ]
                 },
                 {
@@ -966,6 +966,23 @@ define([
                             });
                         }
                     });
+                });
+
+                // change operator selection
+                $(document).off('change', this.wrapSelector('.vp-inner-popup-apply-oper-list'));
+                $(document).on('change', this.wrapSelector('.vp-inner-popup-apply-oper-list'), function () {
+                    var oper = $(this).val();
+                    var condTag = $(this).closest('td').find('.vp-inner-popup-apply-condition');
+                    var useTextTag = $(this).closest('td').find('.vp-inner-popup-apply-cond-usetext');
+
+                    // if operator is isnull(), notnull(), disable condition input
+                    if (oper == 'isnull()' || oper == 'notnull()') {
+                        $(condTag).prop('disabled', true);
+                        $(useTextTag).prop('disabled', true);
+                    } else {
+                        $(condTag).prop('disabled', false);
+                        $(useTextTag).prop('disabled', false);
+                    }
                 });
 
                 $(this.wrapSelector('.vp-inner-popup-toggle-else')).on('click', function() {
@@ -2767,7 +2784,7 @@ define([
                                 var condText = $(condTextTag[i]).prop('checked');
                                 var operConn = $(operConnTag[i]).val();
                                 var condObj = {};
-                                if (col !== '' && oper !== '' && cond !== '') {
+                                if (col !== '' && oper !== '' && (oper == 'isnull()' || oper === 'notnull()' || cond !== '')) {
                                     condObj = {
                                         oper: oper,
                                         cond: com_util.convertToStr(cond, condText)
@@ -2808,7 +2825,7 @@ define([
                             var condText = $(condTextTag[i]).prop('checked');
                             var operConn = $(operConnTag[i]).val();
                             var condObj = {};
-                            if (col !== '' && oper !== '' && cond !== '') {
+                            if (col !== '' && oper !== '' && (oper == 'isnull()' || oper === 'notnull()' || cond !== '')) {
                                 condObj = {
                                     colName: col,
                                     oper: oper,
@@ -2861,7 +2878,7 @@ define([
                             var condText = $(condTextTag[i]).prop('checked');
                             var operConn = $(operConnTag[i]).val();
                             var condObj = {};
-                            if (col !== '' && oper !== '' && cond !== '') {
+                            if (col !== '' && oper !== '' && (oper == 'isnull()' || oper === 'notnull()' || cond !== '')) {
                                 condObj = {
                                     colName: col,
                                     oper: oper,
@@ -2894,7 +2911,7 @@ define([
                                 var condText = $(condTextTag[i]).prop('checked');
                                 var operConn = $(operConnTag[i]).val();
                                 var condObj = {};
-                                if (col !== '' && oper !== '' && cond !== '') {
+                                if (col !== '' && oper !== '' && (oper == 'isnull()' || oper === 'notnull()' || cond !== '')) {
                                     condObj = {
                                         oper: oper,
                                         cond: com_util.convertToStr(cond, condText)
@@ -3237,13 +3254,18 @@ define([
                     break;
                 case FRAME_EDIT_TYPE.LABEL_ENCODING:
                     if (axis == FRAME_AXIS.COLUMN) {
-                        let encodedColName = this.state.selected.map(col=> { 
+                        let encodedColNameList = this.state.selected.map(col=> { 
                             if (col.code !== col.label) {
-                                return com_util.formatString("'{0}'", col.label + '_label');
+                                return { 'origin': com_util.formatString("'{0}'", col.label), 'encoded': com_util.formatString("'{0}'", col.label + '_label') };
                             }
-                            return col.label + '_label' 
-                        }).join(',');
-                        code.appendFormat("{0}[{1}] = pd.Categorical({2}[{3}]).codes", tempObj, encodedColName, tempObj, selectedName);
+                            return { 'origin': col.label, 'encoded': col.label + '_label' };
+                        });
+                        encodedColNameList.forEach((encodedColObj, idx) => {
+                            if (idx > 0) {
+                                code.appendLine();
+                            }
+                            code.appendFormat("{0}[{1}] = pd.Categorical({2}[{3}]).codes", tempObj, encodedColObj['encoded'], tempObj, encodedColObj['origin']);
+                        });
                     }
                     break;
                 case FRAME_EDIT_TYPE.ONE_HOT_ENCODING:
@@ -3338,7 +3360,21 @@ define([
                             let condCode = '';
                             obj.condList.forEach((condObj, idx) => {
                                 let { oper, cond, connector } = condObj;
-                                condCode += `(x ${oper} ${cond})`;
+                                if (oper === 'isnull()') {
+                                    condCode += `(pd.isnull(x))`;
+                                } else if (oper === 'notnull()') {
+                                    condCode += `(pd.notnull(x))`;
+                                } else if (oper === 'contains') {
+                                    condCode += `(${cond} in x)`;
+                                } else if (oper === 'not contains') {
+                                    condCode += `(${cond} not in x)`;
+                                } else if (oper === 'starts with') {
+                                    condCode += `(x.startswith(${cond}))`;
+                                } else if (oper === 'ends with') {
+                                    condCode += `(x.endswith(${cond}))`;
+                                } else {
+                                    condCode += `(x ${oper} ${cond})`;
+                                }
                                 if (connector !== undefined) {
                                     condCode += ` ${connector} `;
                                 }
@@ -3479,7 +3515,21 @@ define([
                             let condCode = '';
                             obj.condList.forEach((condObj, idx) => {
                                 let { oper, cond, connector } = condObj;
-                                condCode += `(x ${oper} ${cond})`;
+                                if (oper === 'isnull()') {
+                                    condCode += `pd.isnull(x)`;
+                                } else if (oper === 'notnull()') {
+                                    condCode += `pd.notnull(x)`;
+                                } else if (oper === 'contains') {
+                                    condCode += `(${cond} in x)`;
+                                } else if (oper === 'not contains') {
+                                    condCode += `(${cond} not in x)`;
+                                } else if (oper === 'starts with') {
+                                    condCode += `(x.startswith(${cond}))`;
+                                } else if (oper === 'ends with') {
+                                    condCode += `(x.endswith(${cond}))`;
+                                } else {
+                                    condCode += `(x ${oper} ${cond})`;
+                                }
                                 if (connector !== undefined) {
                                     condCode += ` ${connector} `;
                                 }
