@@ -167,6 +167,9 @@ To support technology and education so that anyone can leverage big data analyti
 **Vision** <br>
 To create an environment where everyone can learn and use big data analytical skills easily.
 
+## Korean Tutorial
+- [gitbook link to Korean tutorial](https://gaba42.gitbook.io/visual-python-documentation-kr/)
+
 ## Support Visual Python
 Love Visual Python? <br>
 Your support will help us continue to actively develop and improve Visual Python.☕
