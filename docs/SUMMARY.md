@@ -2,6 +2,12 @@
 
 * [Visual Python Manual](README.md)
 
+## GETTING STARTED
+
+* [Welcome to Visual Python](getting-started/welcome-to-visual-python.md)
+* [How to install](getting-started/how-to-install.md)
+* [Installing FAQ](getting-started/installing-faq.md)
+
 ## Data Analysis
 
 * [1. Import](data-analysis/1.-import.md)
