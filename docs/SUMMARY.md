@@ -7,6 +7,8 @@
 * [Welcome to Visual Python](getting-started/welcome-to-visual-python.md)
 * [How to install](getting-started/how-to-install.md)
 * [Installing FAQ](getting-started/installing-faq.md)
+* [Official homepage](https://visualpython.ai/)
+* [Link to Github](https://github.com/visualpython/visualpython)
 
 ## Data Analysis
 

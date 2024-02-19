@@ -1,8 +1,14 @@
 ---
-description: Visual Python 설명서에서는 Visual Python의 기본 기능과 사용 팁을 제공합니다.
+description: This manual introduces the basic usages and tips for using Visual Python.
 ---
 
 # Visual Python Manual
+
+Getting Started
+
+* [Welcome to Visual Python](getting-started/welcome-to-visual-python.md)
+* [How to install](getting-started/how-to-install.md)
+* [Installing FAQ](getting-started/installing-faq.md)
 
 Data Analysis
 
