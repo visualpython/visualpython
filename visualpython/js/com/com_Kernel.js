@@ -610,10 +610,14 @@ define([
          * @param {*} dataframe 
          * @returns 
          */
-        getRowList(dataframe) {
+        getRowList(dataframe, start_idx) {
             var that = this;
+            if (typeof start_idx === 'undefined') {
+                start_idx = 0;
+            }
+            
             return new Promise(function(resolve, reject) {
-                that.execute(com_util.formatString('_vp_print(_vp_get_rows_list({0}))', dataframe))
+                that.execute(com_util.formatString('_vp_print(_vp_get_rows_list({0}, {1}))', dataframe, start_idx))
                 .then(function(resultObj) {
                     resolve(resultObj);
                 }).catch(function(err) {
