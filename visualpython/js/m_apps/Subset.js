@@ -349,7 +349,7 @@ define([
                     let start = that.state.rowLimit;
                     let end = start + 10;
                     let subsetVariable = com_util.formatString('{0}.iloc[{1}:{2}]', that.state.pandasObject, start, end);
-                    vpKernel.getRowList(subsetVariable).then(function (resultObj) {
+                    vpKernel.getRowList(subsetVariable, start).then(function (resultObj) {
                         let { result } = resultObj;
                         var { list:rowList } = JSON.parse(result);
                         rowList = rowList.map(function (x) {
