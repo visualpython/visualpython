@@ -11,7 +11,7 @@ else:
     # from IPython.core.display is deprecated since IPython 7.14
     from IPython.display import display
 
-def _vp_get_rows_list(df):
+def _vp_get_rows_list(df, start_idx=0):
     """
     Get Rows List with Detail Information
     """
@@ -19,7 +19,8 @@ def _vp_get_rows_list(df):
     indexType = str(df.index.dtype)
     # make dict for rows info
     for i, r in enumerate(df.index):
-        rInfo = { 'label': r, 'value': r, 'location': i }
+        rInfo = { 'label': r, 'value': r, 'location': start_idx + i }
+        
         # value
         if type(r).__name__ == 'str':
             rInfo['value'] = "'{}'".format(r)
