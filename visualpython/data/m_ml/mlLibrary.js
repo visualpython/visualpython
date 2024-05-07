@@ -128,10 +128,10 @@ define([
         'prep-onehot': {
             name: 'OneHotEncoder',
             import: 'from sklearn.preprocessing import OneHotEncoder',
-            code: 'OneHotEncoder(${sparse}${handle_unknown}${etc})',
+            code: 'OneHotEncoder(${sparse_output}${handle_unknown}${etc})',
             returnType: 'OneHotEncoder',
             options: [
-                { name: 'sparse', component: ['bool_select'], default: 'False', usePair: true },
+                { name: 'sparse_output', component: ['bool_select'], default: 'True', value: 'False', usePair: true },
                 { name: 'handle_unknown', component: ['option_suggest'], usePair: true, 
                     options: ['error', 'ignore'], default: 'error' },
             ]
