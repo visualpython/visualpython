@@ -152,6 +152,7 @@ All skills from programmers, non-programmers, designers are welcomed.
 [<a href="https://github.com/llbtl" title="Hyewon Kang"><img src="https://github.com/llbtl.png" width="50px;"/></a>](https://github.com/llbtl)
 [<a href="https://github.com/blacklogicdev" title="Black Logic Dev"><img src="https://github.com/blacklogicdev.png" width="50px;"/></a>](https://github.com/blacklogicdev)
 [<a href="https://github.com/Minku-Koo" title="Minku Koo"><img src="https://github.com/Minku-Koo.png" width="50px;"/></a>](https://github.com/Minku-Koo)
+[<a href="https://github.com/8orrin9" title="Seokjun Jeong"><img src="https://github.com/8orrin9.png" width="50px;"/></a>](https://github.com/8orrin9)
 
 Whoever wants to contribute or join our community, <br/>
 You can contact us by creating issues on [Issue page](https://github.com/visualpython/visualpython/issues) or using [Discord server](https://discord.gg/PypQrBZWZv).
