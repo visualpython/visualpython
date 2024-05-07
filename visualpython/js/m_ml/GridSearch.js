@@ -49,7 +49,7 @@ define([
 
             this.modelTypeList = {
                 'Regression': ['ln-rgs', 'ridge', 'lasso', 'elasticnet', 'sv-rgs', 'dt-rgs', 'rf-rgs', 'gbm-rgs', 'xgb-rgs', 'lgbm-rgs', 'cb-rgs'],
-                'Classfication': ['lg-rgs', 'bern-nb', 'mulnom-nb', 'gaus-nb', 'sv-clf', 'dt-clf', 'rf-clf', 'gbm-clf', 'xgb-clf', 'lgbm-clf', 'cb-clf']
+                'Classification': ['lg-rgs', 'bern-nb', 'mulnom-nb', 'gaus-nb', 'sv-clf', 'dt-clf', 'rf-clf', 'gbm-clf', 'xgb-clf', 'lgbm-clf', 'cb-clf']
             }
 
 

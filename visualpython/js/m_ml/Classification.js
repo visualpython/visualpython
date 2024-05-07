@@ -50,7 +50,7 @@ define([
             this.modelConfig = ML_LIBRARIES;
 
             this.modelTypeList = {
-                'Classfication': ['lg-rgs', 'bern-nb', 'mulnom-nb', 'gaus-nb', 'sv-clf', 'dt-clf', 'rf-clf', 'gbm-clf', 'xgb-clf', 'lgbm-clf', 'cb-clf'],
+                'Classification': ['lg-rgs', 'bern-nb', 'mulnom-nb', 'gaus-nb', 'sv-clf', 'dt-clf', 'rf-clf', 'gbm-clf', 'xgb-clf', 'lgbm-clf', 'cb-clf'],
             }
 
 

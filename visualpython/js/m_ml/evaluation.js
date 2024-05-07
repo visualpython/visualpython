@@ -204,7 +204,7 @@ define([
             let needMarkdown = false;
 
             //====================================================================
-            // Classfication
+            // Classification
             //====================================================================
             if (modelType == 'clf') {
                 if (confusion_matrix) {
