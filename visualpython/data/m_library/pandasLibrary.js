@@ -206,7 +206,7 @@ define([
           },
           {
             "name": "sep",
-            "label": "Seperator",
+            "label": "Separator",
             "type": "text",
             "usePair": true
           },
@@ -304,7 +304,7 @@ define([
           },
           {
             "name": "sep",
-            "label": "Seperator",
+            "label": "Separator",
             "type": "text",
             "usePair": true
           },
@@ -4342,7 +4342,7 @@ define([
           },
           {
             "name": "prefix_sep",
-            "label": "Header Seperator",
+            "label": "Header Separator",
             "default": "_",
             "usePair": true
           },

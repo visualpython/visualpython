@@ -499,15 +499,15 @@ define([
                 return suggestInput.toTagString();
             });
 
-            // seperator suggest input
+            // separator suggest input
             $(this.wrapSelector('#sep')).replaceWith(function() {
-                // seperator list : 
+                // separator list : 
                 var sepList = [',', '|', '\\t', '\\n', ':', ';', '-', '_', '&', '/', '\\'];
                 var suggestInput = new SuggestInput();
                 suggestInput.setComponentID('sep');
                 suggestInput.addClass('vp-input vp-state');
                 suggestInput.setSuggestList(function() { return sepList; });
-                suggestInput.setPlaceholder('Input seperator');
+                suggestInput.setPlaceholder('Input separator');
                 return suggestInput.toTagString();
             });
         }

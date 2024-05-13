@@ -351,7 +351,7 @@ define([
                     ...codeCells
                 ];
             }
-            // return as seperated cells
+            // return as separated cells
             return codeCells;
         }
 
