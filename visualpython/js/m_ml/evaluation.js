@@ -158,6 +158,9 @@ define([
 
             $(page).find('.vp-upper-box').hide();
             $(page).find('.vp-upper-box.' + this.state.modelType).show();
+            
+            $(page).find('.vp-eval-box').hide();
+            $(page).find('.vp-eval-' + this.state.modelType).show(); 
 
             if (this.state.modelType == 'rgs') {
                 // Regression
