@@ -22,10 +22,9 @@ define([
     'vp_base/js/com/com_generatorV2',
     'vp_base/data/m_library/pandasLibrary',
     'vp_base/js/com/component/FileNavigation',
-    'vp_base/js/com/component/SuggestInput',
-    'vp_base/js/com/component/DataSelector'
+    'vp_base/js/com/component/SuggestInput'
 ], function(fileHtml, fileCss, com_String, com_util, com_Const, PopupComponent
-            , pdGen, pandasLibrary, FileNavigation, SuggestInput, DataSelector) {
+            , pdGen, pandasLibrary, FileNavigation, SuggestInput) {
 
     /**
      * File

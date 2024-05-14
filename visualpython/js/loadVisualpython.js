@@ -262,7 +262,7 @@ define([
         }
         _loadVpResource(cfg);
         vpConfig.checkVersionTimestamp();
-
+      
         if ((cfg.vp_section_display && vpFrame) 
             || vpConfig.extensionType === 'colab') { // CHROME: default to display vp
             vpFrame.openVp();
