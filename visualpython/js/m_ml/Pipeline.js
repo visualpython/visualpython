@@ -210,6 +210,7 @@ define([
                     $(that.wrapSelector(`.vp-pp-step-page:not([data-name="${name}"])`)).hide();
                     $(that.wrapSelector(`.vp-pp-step-page[data-name="${name}"]`)).show();
                     if (ppObj.useApp === true) {
+                        ppObj.app && that.handleAppView(name, ppObj.app);
                         ppObj.app && ppObj.app.open($(that.wrapSelector(`.vp-pp-step-page[data-name="${name}"]`)));
                     } else {
                         that.renderApp(name);
@@ -372,7 +373,7 @@ define([
             // click next button
             $(this.wrapSelector('.vp-pp-step-next:not(.disabled)')).on('click', function() {
                 let selectedTag = $(that.wrapSelector('.vp-pp-item.selected'));
-                let nextTagList = $(selectedTag).nextAll('.vp-pp-item[data-flag="enabled"]:visible')
+                let nextTagList = $(selectedTag).nextAll('.vp-pp-item[data-flag="enabled"]:visible');
                 $(nextTagList[0]).trigger('click');
             });
         }
@@ -561,6 +562,32 @@ define([
             switch (appId) {
                 case 'ml_dataSplit':
                     $(mlApp.wrapSelector('#inputData')).parent().hide();
+                    break;
+                case 'ml_evaluation':
+                    // for pipeline
+                    $(mlApp.wrapSelector('.vp-upper-box')).hide();
+                    $(mlApp.wrapSelector('.vp-upper-box.' + mlApp.state.modelType)).show();
+                    
+                    $(mlApp.wrapSelector('.vp-eval-box')).hide();
+                    $(mlApp.wrapSelector('.vp-eval-' + mlApp.state.modelType)).show(); 
+
+                    if (mlApp.state.modelType == 'rgs') {
+                        // Regression
+
+                    } else if (mlApp.state.modelType == 'clf') {
+                        // Classification
+                        // if (this.state.roc_curve == false && this.state.auc == false) {
+                        //     $(page).find('.vp-ev-model.roc-auc').prop('disabled', true);
+                        // }
+                    } else {
+                        // Clustering
+                        if (mlApp.state.silhouetteScore == false) {
+                            $(mlApp.wrapSelector('.vp-ev-model.silhouette')).prop('disabled', true);
+                        }
+                        if (mlApp.state.ari == false && mlApp.state.nmi == false) {
+                            $(mlApp.wrapSelector('.vp-ev-model.ari-nmi')).prop('disabled', true);
+                        }
+                    }
                     break;
             }
         }

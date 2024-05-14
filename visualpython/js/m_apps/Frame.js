@@ -3620,7 +3620,12 @@ define([
                             code.appendFormat(", limit={0}", content['limit']);
                         }
                     } else {
-                        code.appendFormat("{0}.{1}()", subsetObjStr, content['method']);
+                        if (content['method'] === 'mode') {
+                            // get mode()'s first element (mode returns Series)
+                            code.appendFormat("{0}.{1}()[0]", subsetObjStr, content['method']);
+                        } else {
+                            code.appendFormat("{0}.{1}()", subsetObjStr, content['method']);
+                        }
                     }
                     code.append(')');
                     break;

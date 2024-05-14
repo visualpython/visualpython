@@ -163,7 +163,7 @@ define([
                 {
                     name: 'sep',
                     type: 'text',
-                    label: 'Seperator'
+                    label: 'Separator'
                 },
                 {
                     name: 'names',
@@ -243,7 +243,7 @@ define([
                 {
                     name: 'sep',
                     type: 'text',
-                    label: 'Seperator'
+                    label: 'Separator'
                 },
                 {
                     name: 'na_rep',
@@ -3514,7 +3514,7 @@ define([
                 {
                     name: 'prefix_sep',
                     type: ['text'],
-                    label: 'Header Seperator',
+                    label: 'Header Separator',
                     default: '_'
                 },
                 {
