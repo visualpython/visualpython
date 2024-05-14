@@ -205,19 +205,19 @@ define([
             return {};
         }
         
-        getMenuLibrary(menuId, libraries=this.menuLibraries) {
+        getMenuLibrary(menuId, libraries=this.menuLibrariesFlatten) {
             for (var i=0; i < libraries.length; i++) {
                 var item = libraries[i];
                 if (item) {
                     if (item.id === menuId) {
                         return item;
                     }
-                    if (item.type === 'package') {
-                        var result = this.getMenuLibrary(menuId, item.item);
-                        if (result) {
-                            return result;
-                        }
-                    }
+                    // if (item.type === 'package') {
+                    //     var result = this.getMenuLibrary(menuId, item.item);
+                    //     if (result) {
+                    //         return result;
+                    //     }
+                    // }
                 }
             }
             return null;
@@ -252,7 +252,12 @@ define([
             var that = this;
             var body = group.getBody();
             var item = group.getItem();
+            var state = group.getState();
             item && item.forEach(child => {
+                // remember parent to navigate its parent menu
+                var category = state.category?(state.category + ' > ' + state.name):state.name;
+                child['category'] = category;
+
                 if (child.type == 'package') {
                     // packages : MenuGroup
                     var menuGroup = new MenuGroup($(body), child);
@@ -298,7 +303,7 @@ define([
             });
 
             let functionList = this.menuLibrariesFlatten.map(menu => {
-                return { label: menu.name, value: menu.name, ...menu }
+                return { label: menu.name, value: menu.name, dtype: menu.category, ...menu }
             });
             // render searchbox
             let searchBox = new SuggestInput();

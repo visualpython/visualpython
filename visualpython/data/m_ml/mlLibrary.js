@@ -128,10 +128,10 @@ define([
         'prep-onehot': {
             name: 'OneHotEncoder',
             import: 'from sklearn.preprocessing import OneHotEncoder',
-            code: 'OneHotEncoder(${sparse}${handle_unknown}${etc})',
+            code: 'OneHotEncoder(${sparse_output}${handle_unknown}${etc})',
             returnType: 'OneHotEncoder',
             options: [
-                { name: 'sparse', component: ['bool_select'], default: 'False', usePair: true },
+                { name: 'sparse_output', component: ['bool_select'], default: 'True', value: 'False', usePair: true },
                 { name: 'handle_unknown', component: ['option_suggest'], usePair: true, 
                     options: ['error', 'ignore'], default: 'error' },
             ]
@@ -490,8 +490,8 @@ define([
             code: 'DecisionTreeClassifier(${criterion}${max_depth}${min_samples_split}${random_state}${etc})',
             returnType: 'DecisionTreeClassifier',
             options: [
-                { name: 'criterion', component: ['option_select'], type: 'text', default: 'squared_error', type:'text',
-                    options: ['squared_error', 'friedman_mse', 'absolute_error', 'poisson'], usePair: true },
+                { name: 'criterion', component: ['option_select'], type: 'text', default: 'gini', type:'text',
+                    options: ['gini','entropy','log_loss'], usePair: true },
                 { name: 'max_depth', component: ['input_number'], placeholder: 'None', usePair: true },
                 { name: 'min_samples_split', component: ['input_number'], default: 2, usePair: true },
                 { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true }
@@ -505,7 +505,7 @@ define([
             options: [
                 { name: 'n_estimators', component: ['input_number'], default: 100, usePair: true },
                 { name: 'criterion', component: ['option_select'], type: 'text', default: 'gini', type:'text', usePair: true,
-                    options: ['gini', 'entropy'] },
+                    options: ['gini', 'entropy', 'log_loss'] },
                 { name: 'max_depth', component: ['input_number'], placeholder: 'None', usePair: true },
                 { name: 'min_samples_split', component: ['input_number'], default: 2, usePair: true },
                 { name: 'n_jobs', component: ['input_number'], placeholder: 'None', usePair: true },
@@ -518,12 +518,12 @@ define([
             code: 'GradientBoostingClassifier(${loss}${learning_rate}${n_estimators}${criterion}${random_state}${etc})',
             returnType: 'GradientBoostingClassifier',
             options: [
-                { name: 'loss', component: ['option_select'], type: 'text', default: 'deviance', type: 'text', usePair: true,
-                    options: ['deviance', 'exponential'] },
+                { name: 'loss', component: ['option_select'], type: 'text', default: 'log_loss', type: 'text', usePair: true,
+                    options: ['log_loss', 'exponential'] },
                 { name: 'learning_rate', component: ['input_number'], default: 0.1, usePair: true },
                 { name: 'n_estimators', component: ['input_number'], default: 100, usePair: true },
                 { name: 'criterion', component: ['option_select'], type: 'text', default: 'friedman_mse', type:'text', usePair: true,
-                    options: ['friedman_mse', 'squared_error', 'mse', 'mae'] },
+                    options: ['friedman_mse', 'squared_error'] },
                 { name: 'random_state', component: ['input_number'], placeholder: '123', usePair: true }
             ]
         },

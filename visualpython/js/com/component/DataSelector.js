@@ -59,6 +59,11 @@ define([
                 select: null,   // callback after selection from suggestInput (value, dtype)
                 allowDataType: null, // list of allowed data types
                 dataCategory: null,  // list of data category (use it for ml categories)
+                columnSelection: 'multiple',    // single/multi : allowed column selection 
+                returnFrameType: '',            // DataFrame/Series : required data type for DataFrame -> Series/DataFrame operation  
+                    // if Series, only one column selection is allowed and returns Series
+                    // if DataFrame, always returns DataFrame
+                    // if Empty(=== ''), if one column selected, returns Series / others, returns DataFrame
                 // additional options
                 boxClasses: '',
                 classes: '',
@@ -87,6 +92,9 @@ define([
                     this.prop.dataCategory = this.prop.allowDataType;
                 }
             }
+            if (this.prop.returnFrameType === 'Series') {
+                this.prop.columnSelection = 'single'; // only single selection allowed
+            }
 
             this.state = {
                 filterType: 'All',
@@ -98,6 +106,7 @@ define([
                 slicingEnd1: '',
                 slicingStart2: '',
                 slicingEnd2: '',
+                singleColumn: '',
                 ndRowType: 'slicing',
                 ndColType: 'slicing',
                 useIndex: false,
@@ -409,6 +418,19 @@ define([
             }
         }
 
+        templateForSingleSelector() {
+            return `
+            <div>
+                <label><input type="checkbox" id="useIndex" class="vp-state" ${this.state.useIndex===true?'checked':''}/> <span>Use Index</span></label>
+                <div class="vp-ds-df-singleselector" ${this.state.useIndex===true?'style="display:none;"':''}>
+                    <label class="w50">Column</label>
+                    <select id="singleColumn" class="vp-select vp-state w150">
+                    </select>
+                </div>
+            </div>
+            `
+        }
+
         templateForMultiSelector() {
             return `
                 <div class="vp-ds-df-option-box">
@@ -599,22 +621,93 @@ define([
 
             switch (dataType) {
                 case 'DataFrame':
-                    // render option page
-                    $(this.wrapSelector('.vp-ds-option-inner-box')).html(this.templateForMultiSelector());
                     // column selecting
-                    this._columnSelector = new MultiSelector(this.wrapSelector('.vp-ds-df-multiselector'),
-                        { mode: 'columns', parent: [data], selectedList: this.state.indexing, allowAdd: true }
-                    );
+                    if (this.prop.columnSelection === 'single') {
+                        // render option page
+                        $(this.wrapSelector('.vp-ds-option-inner-box')).html(this.templateForSingleSelector());
+                        // bind column source
+                        // com_generator.vp_bindColumnSource(this, 'data', ['singleColumn'], 'select', false, false);
+                        // vp_bindColumnSource(pageThis, targetId, columnInputIdList, tagType="input", columnWithEmpty=false, columnWithIndex=false)
+                        const columnInputIdList = ['singleColumn'];
+                        if (data === '') {
+                            // reset with no source
+                            columnInputIdList && columnInputIdList.forEach(columnInputId => {
+                                let defaultValue = that.state[columnInputId];
+                                if (defaultValue === null || defaultValue === undefined) {
+                                    defaultValue = '';
+                                }
+                                // option tags
+                                var tag = $('<select></select>').attr({
+                                    'id': columnInputId,
+                                    'class': 'vp-select vp-state'
+                                });
+                                $(that.wrapSelector('#' + columnInputId)).replaceWith(function() {
+                                    return $(tag);
+                                });
+                            });
+                            return ;
+                        }
+                        // get result and show on detail box
+                        vpKernel.getColumnList(data).then(function(resultObj) {
+                            try {
+                                let { result, type, msg } = resultObj;
+                                var { list } = JSON.parse(result);
 
+                                // columns using suggestInput
+                                columnInputIdList && columnInputIdList.forEach((columnInputId, idx) => {
+                                    let defaultValue = that.state[columnInputId];
+                                    if (defaultValue === null || defaultValue === undefined) {
+                                        defaultValue = '';
+                                    }
+                                    // create tag
+                                    var tag = $('<select></select>').attr({
+                                        'id': columnInputId,
+                                        'class': 'vp-select vp-state w150'
+                                    });
+                                    // make tag
+                                    list.forEach((listVar, idx) => {
+                                        var option = document.createElement('option');
+                                        $(option).attr({
+                                            'value':listVar.value,
+                                            'text':listVar.label,
+                                            'data-type':listVar.dtype
+                                        });
+                                        // cell metadata test : defaultValue as selected
+                                        if (listVar.value === defaultValue) {
+                                            $(option).prop('selected', true);
+                                        }
+                                        option.append(document.createTextNode(listVar.label));
+                                        $(tag).append(option);
+                                    });
+                                    $(that.wrapSelector('#' + columnInputId)).replaceWith(function() {
+                                        return $(tag);
+                                    });
+                                    $(that.wrapSelector('#' + columnInputId)).trigger('change');
+                                }).catch(function(err) {
+                                    vpLog.display(VP_LOG_TYPE.ERROR, 'com_generator - bindColumnSource error ', err)
+                                });
+                            } catch (e) {
+                                vpLog.display(VP_LOG_TYPE.ERROR, 'com_generator - bindColumnSource: not supported data type. ', e);
+                            }
+                        });
+                    } else {
+                        // render option page
+                        $(this.wrapSelector('.vp-ds-option-inner-box')).html(this.templateForMultiSelector());
+                        this._columnSelector = new MultiSelector(this.wrapSelector('.vp-ds-df-multiselector'),
+                            { mode: 'columns', parent: [data], selectedList: this.state.indexing, allowAdd: true }
+                        );
+                    }
                     // bind event
                     $(this.wrapSelector('#useIndex')).on('change', function() {
                         let checked = $(this).prop('checked');
                         that.state.useIndex = checked;
                         if (checked === true) {
                             $(that.wrapSelector('.vp-ds-df-multiselector')).hide();
+                            $(that.wrapSelector('.vp-ds-df-singleselector')).hide();
                             $(that.wrapSelector('.vp-ds-df-index-box')).show();
                         } else {
                             $(that.wrapSelector('.vp-ds-df-multiselector')).show();
+                            $(that.wrapSelector('.vp-ds-df-singleselector')).show();
                             $(that.wrapSelector('.vp-ds-df-index-box')).hide();
                         }
                     });
@@ -728,6 +821,7 @@ define([
             let {
                 data, dataType,
                 useIndex,
+                singleColumn,
                 slicingStart1, slicingEnd1,
                 slicingStart2, slicingEnd2,
                 ndRowType, ndColType
@@ -742,21 +836,39 @@ define([
                         code.append('.index');
                     } else {
                         // use column selector
-                        if (this._columnSelector != null) {
-                            let result = this._columnSelector.getDataList();
-                            this.state.indexing = result.map(obj => obj.code); // save state
-                            let columnList = [];
-                            result && result.forEach(obj => {
-                                columnList.push(obj.code);
-                            });
-                            if (columnList.length > 0) {
-                                if (columnList.length == 1) {
-                                    // return as Series
-                                    code.appendFormat('[{0}]', columnList.join(', '));
-                                    // change datatype to Series
-                                    this.state.returnDataType = 'Series';
-                                } else {
-                                    code.appendFormat('[[{0}]]', columnList.join(', '));
+                        if (this.prop.columnSelection === 'single') {
+                            // single selector
+                            if (this.prop.returnFrameType === 'DataFrame') {
+                                // return as DataFrame
+                                code.appendFormat('[[{0}]]', singleColumn);
+                            } else {
+                                // return as Series
+                                code.appendFormat('[{0}]', singleColumn);
+                                this.state.returnDataType = 'Series';
+                            }
+                        } else {
+                            // multiple selector
+                            if (this._columnSelector != null) {
+                                let result = this._columnSelector.getDataList();
+                                this.state.indexing = result.map(obj => obj.code); // save state
+                                let columnList = [];
+                                result && result.forEach(obj => {
+                                    columnList.push(obj.code);
+                                });
+                                if (columnList.length > 0) {
+                                    if (columnList.length == 1) {
+                                        if (this.prop.returnFrameType === 'DataFrame') {
+                                            // return as DataFrame
+                                            code.appendFormat('[[{0}]]', columnList.join(', '));
+                                        } else {
+                                            // return as Series
+                                            code.appendFormat('[{0}]', columnList.join(', '));
+                                            // change datatype to Series
+                                            this.state.returnDataType = 'Series';
+                                        }
+                                    } else {
+                                        code.appendFormat('[[{0}]]', columnList.join(', '));
+                                    }
                                 }
                             }
                         }

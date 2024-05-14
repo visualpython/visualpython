@@ -158,6 +158,9 @@ define([
 
             $(page).find('.vp-upper-box').hide();
             $(page).find('.vp-upper-box.' + this.state.modelType).show();
+            
+            $(page).find('.vp-eval-box').hide();
+            $(page).find('.vp-eval-' + this.state.modelType).show(); 
 
             if (this.state.modelType == 'rgs') {
                 // Regression
@@ -204,7 +207,7 @@ define([
             let needMarkdown = false;
 
             //====================================================================
-            // Classfication
+            // Classification
             //====================================================================
             if (modelType == 'clf') {
                 if (confusion_matrix) {
@@ -351,7 +354,7 @@ define([
                     ...codeCells
                 ];
             }
-            // return as seperated cells
+            // return as separated cells
             return codeCells;
         }
 

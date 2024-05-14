@@ -16,7 +16,10 @@ rm -rf lib/visualpython
 cp -r ../visualpython lib/visualpython
 
 # convert text-loader, raw-loader, css-loader
-grep -rl "__VP_TEXT_LOADER__" lib/visualpython/js/* | xargs sed -i "s/__VP_TEXT_LOADER__('\(.\+\)')\(.\+$\)/'!!text-loader!\1'\2/g"
+# __VP_TEXT_LOADER__('vp/path/textfile'), -> '!!text-loader!vp/path/textfile',
+# __VP_RAW_LOADER('vp/path/rawfile.json'),     -> 'vp/path/rawfile.json',
+# __VP_CSS_LOADER('vp/path/cssfile'),     -> 'vp/path/cssfile.css',
+grep -rl "__VP_TEXT_LOADER__" lib/visualpython/js/* | xargs sed -i "s/__VP_TEXT_LOADER__('\(.\+\)')\(.\+$\)/'\!\!text-loader\!\1'\2/g"
 grep -rl "__VP_RAW_LOADER__" lib/visualpython/js/* | xargs sed -i "s/__VP_RAW_LOADER__('\(.\+\)')\(.\+$\)/'\1'\2/g"
 grep -rl "__VP_CSS_LOADER__" lib/visualpython/js/* | xargs sed -i "s/__VP_CSS_LOADER__('\(.\+\)')\(.\+$\)/'\1.css'\2/g"
 

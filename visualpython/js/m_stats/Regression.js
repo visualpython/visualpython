@@ -58,6 +58,7 @@ define([
                 normTest: true,
                 histogram: true,
                 scatterplot: true,
+                rmse: false,
                 ...this.state
             };
 
@@ -259,7 +260,7 @@ define([
                 // Multi-collinearity
                 multiCollinearity,
                 // Residual option
-                statistics, normTest, histogram, scatterplot
+                statistics, normTest, histogram, scatterplot, rmse,
             } = this.state;
             let codeList = [];
             let code = new com_String();
@@ -697,7 +698,7 @@ define([
             }
 
             // Residual option
-            if (statistics === true || normTest === true || histogram === true || scatterplot === true) {
+            if (statistics === true || normTest === true || histogram === true || scatterplot === true || rmse === true) {
                 let residualTitle = 'Residual'
                 if (lastModelNum > 0) {
                     residualTitle += ' - Model ' + lastModelNum;
@@ -767,6 +768,14 @@ define([
                     code.appendLine();
                     code.appendLine("    plt.tight_layout()");
                     code.append("    plt.show()");
+                }
+                if (rmse === true) {
+                    code.appendLine();
+                    code.appendLine();
+                    code.appendLine("# RMSE (Root Mean Squared Error)");
+                    code.appendLine("_rmse = np.sqrt(_result.mse_resid)");
+                    code.appendLine("display(Markdown('### RMSE (Root Mean Squared Error)'))");
+                    code.append("display(Markdown(f'RMSE: {_rmse}'))");
                 }
             }
 

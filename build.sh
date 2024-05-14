@@ -11,8 +11,8 @@
 #=============================================================================
 # Set version and replace it
 #=============================================================================
-VP_ORG_VER=3.0.0
-VP_NEW_VER=3.0.1
+VP_ORG_VER=3.0.1
+VP_NEW_VER=3.0.2
 
 # update version info
 grep -REil "VP_ORG_VER=.+$" colab/build.colab.sh jupyterlab/build.jupyterlab.sh jupyternotebook/build.jupyternotebook.sh | xargs sed -i "s/VP_ORG_VER=.\+$/VP_ORG_VER=${VP_ORG_VER}/g"

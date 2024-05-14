@@ -343,10 +343,13 @@ define([
             $(this.wrapSelector('.select-row .vp-ds-select-box.left')).on('scroll', function() {
                 if ($(this).scrollTop() + $(this).innerHeight() >= ($(this)[0].scrollHeight - 2)) {
                     let scrollPos = $(this).scrollTop();
+                    if (that.state.rowLimit > that.state.rowList.length){
+                        return; // Prevents scroll from being fixed downwards
+                    }
                     let start = that.state.rowLimit;
                     let end = start + 10;
                     let subsetVariable = com_util.formatString('{0}.iloc[{1}:{2}]', that.state.pandasObject, start, end);
-                    vpKernel.getRowList(subsetVariable).then(function (resultObj) {
+                    vpKernel.getRowList(subsetVariable, start).then(function (resultObj) {
                         let { result } = resultObj;
                         var { list:rowList } = JSON.parse(result);
                         rowList = rowList.map(function (x) {
@@ -361,9 +364,9 @@ define([
                             rowList = rowList.map(function (x) {
                                 return {
                                     ...x,
-                                    label: x.location + '',
-                                    value: x.location + '',
-                                    code: x.location + '',
+                                    label: x.label + '',
+                                    value: x.value + '',
+                                    code: x.code + '',
                                 };
                             });
                         }

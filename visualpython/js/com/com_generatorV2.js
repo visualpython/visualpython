@@ -139,7 +139,7 @@ define([
         package.options && package.options.forEach(function(o, i) {
             var obj = JSON.parse(JSON.stringify(o));
             let newTag = vp_createTag(pageThis, obj, state);
-            if (obj.required) {
+            if (obj.required === true || obj.output === true) {
                 tblInput.append(newTag);
             } else {
                 tblOption.append(newTag);
@@ -147,6 +147,9 @@ define([
         });
 
         // TODO: userOption
+        if (package.code.includes('${etc}')) {
+            
+        }
 
         bindMultiSelector(pageThis);
         bindAutoComponentEvent(pageThis);
@@ -373,6 +376,8 @@ define([
                     allowDataType: obj.var_type, 
                     placeholder: obj.placeholder || 'Select data',
                     value: value,
+                    columnSelection: obj.columnSelection || 'multiple', // single / multiple
+                    returnFrameType: obj.returnFrameType || '',         // '' / DataFrame / Series
                     required: obj.required === true
                 });
                 content = $(dataSelector.toTagString());
@@ -887,7 +892,7 @@ define([
                     suggestInputX.addClass('vp-input vp-state');
                     suggestInputX.setNormalFilter(false);
                     suggestInputX.setValue(defaultValue);
-                    $(selector + ' #' + columnInputId).replaceWith(function() {
+                    $(pageThis.wrapSelector('#' + columnInputId)).replaceWith(function() {
                         return suggestInputX.toTagString();
                     });
                 } else {
@@ -896,7 +901,7 @@ define([
                         'id': columnInputId,
                         'class': 'vp-select vp-state'
                     });
-                    $(selector + ' #' + columnInputId).replaceWith(function() {
+                    $(pageThis.wrapSelector('#' + columnInputId)).replaceWith(function() {
                         return $(tag);
                     });
                 }
@@ -952,7 +957,7 @@ define([
                         suggestInputX.setSuggestList(function() { return list; }); //FIXME:
                         suggestInputX.setNormalFilter(false);
                         suggestInputX.setValue(defaultValue);
-                        $(selector + ' #' + columnInputId).replaceWith(function() {
+                        $(pageThis.wrapSelector('#' + columnInputId)).replaceWith(function() {
                             return suggestInputX.toTagString();
                         });
                     } else {
