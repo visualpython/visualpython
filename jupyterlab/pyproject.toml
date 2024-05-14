@@ -32,8 +32,12 @@ source = "nodejs"
 fields = ["description", "authors", "urls"]
 
 [tool.hatch.build.targets.sdist]
+ignore-vcs = true
 artifacts = ["jupyterlab-visualpython/labextension"]
 exclude = [".github", "binder", "build.jupyterlab.sh", "dev-build.jupyterlab.sh"]
+
+[tool.hatch.build.targets.wheel]
+only-include = ["jupyterlab-visualpython", "lib", "install.json"]
 
 [tool.hatch.build.targets.wheel.shared-data]
 "jupyterlab-visualpython/labextension" = "share/jupyter/labextensions/jupyterlab-visualpython"
