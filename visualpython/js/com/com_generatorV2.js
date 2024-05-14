@@ -139,7 +139,7 @@ define([
         package.options && package.options.forEach(function(o, i) {
             var obj = JSON.parse(JSON.stringify(o));
             let newTag = vp_createTag(pageThis, obj, state);
-            if (obj.required) {
+            if (obj.required === true || obj.output === true) {
                 tblInput.append(newTag);
             } else {
                 tblOption.append(newTag);
@@ -147,6 +147,9 @@ define([
         });
 
         // TODO: userOption
+        if (package.code.includes('${etc}')) {
+            
+        }
 
         bindMultiSelector(pageThis);
         bindAutoComponentEvent(pageThis);

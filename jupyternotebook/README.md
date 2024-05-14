@@ -47,7 +47,7 @@ pip install jupyterlab-visualpython
 
 Click orange square button on the right side of Jupyter Lab. 
 
-## Getting Started with Jupyter Notebook(>= 7.x)
+## Getting Started with Jupyter Notebook 7
 
 ### 1. Requirements
 
@@ -66,13 +66,13 @@ pip install jupyterlab-visualpython
 
 Click orange square button on the toolbar of Jupyter Notebook.
 
-## Getting Started with Jupyter Notebook(<=6.x.x)
+## Getting Started with Jupyter Notebook (for 6.x.x and older version)
 
 ### 1. Requirements
 
 Visual Python is an extension to Jupyter Notebook, so you must have Jupyter Notebook installed already. You need old version of Jupyter Notebook under version 6.x.x.<br>
 - Python version 3.x
-- Jupyter notebook environment <=6.x
+- Jupyter notebook environment <= 6.x
 
 ### 2. How to Install
 
@@ -152,6 +152,7 @@ All skills from programmers, non-programmers, designers are welcomed.
 [<a href="https://github.com/llbtl" title="Hyewon Kang"><img src="https://github.com/llbtl.png" width="50px;"/></a>](https://github.com/llbtl)
 [<a href="https://github.com/blacklogicdev" title="Black Logic Dev"><img src="https://github.com/blacklogicdev.png" width="50px;"/></a>](https://github.com/blacklogicdev)
 [<a href="https://github.com/Minku-Koo" title="Minku Koo"><img src="https://github.com/Minku-Koo.png" width="50px;"/></a>](https://github.com/Minku-Koo)
+[<a href="https://github.com/8orrin9" title="Andrew Jeong"><img src="https://github.com/8orrin9.png" width="50px;"/></a>](https://github.com/8orrin9)
 
 Whoever wants to contribute or join our community, <br/>
 You can contact us by creating issues on [Issue page](https://github.com/visualpython/visualpython/issues) or using [Discord server](https://discord.gg/PypQrBZWZv).
