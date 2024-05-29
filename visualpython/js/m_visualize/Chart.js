@@ -1207,8 +1207,8 @@ define([
                             type: 'text'
                         },
                         {
-                            key: 'label',
-                            name: 'legendLabel',
+                            key: 'labels',
+                            name: 'legendLabels',
                             type: 'var'
                         },
                         {
@@ -1244,7 +1244,7 @@ define([
                 { name: 'xlim', required: false },
                 { name: 'ylim', required: false },
                 { name: 'legendTitle', required: false },
-                { name: 'legendLabel', required: false },
+                { name: 'legendLabels', required: false },
                 { name: 'legendLoc', required: false },
                 { name: 'savefigpath', required: false }
             ];
