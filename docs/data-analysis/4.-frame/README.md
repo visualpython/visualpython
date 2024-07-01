@@ -6,19 +6,14 @@ description: Edit the Data Frame Easily Using Various Functions
 
 
 
-<figure><img src="../../.gitbook/assets/image (88).png" alt="" width="261"><figcaption></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (203).png" alt="" width="353"><figcaption></figcaption></figure>
 
-1. Click on the _**Frame**_ of Data Analysis
+1. Click _**Frame**_ _in **Data Analysis**_.
 
+<figure><img src="../../.gitbook/assets/image (204).png" alt="" width="563"><figcaption></figcaption></figure>
 
-
-<figure><img src="../../.gitbook/assets/image (89).png" alt=""><figcaption></figcaption></figure>
-
-2. Choose the data frame to work with from the _**DataFrame tab**_ at the top left.
-3. In the _**Allocate tab**_, you can specify a new variable name.
-
-&#x20;       3-1. If you check _**Inplace**_, it will directly modify the existing data frame without creating a new one.
-
+2. _**DataFrame**_: Select the dataframe you want to work with.
+3. _**Allocate to**_: Enter a variable name to assign to the dataframe after the operation. If _**Inplace**_ is checked, the existing variable name will be used.
 4. Click on the column directly to select one or multiple specific columns to work on.
 
 
